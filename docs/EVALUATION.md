@@ -1,141 +1,153 @@
 # Evaluation plan
 
-**Status:** Proposed benchmark contract, pending human review
+**Status:** Gate A benchmark proposal, pending human approval
 
-This document defines what a trustworthy Life Inbox system should demonstrate and proposes a concrete benchmark contract. It is design-only: no benchmark cases, expected outputs, scorer, or evaluator implementation is included.
+This document proposes a long-horizon benchmark for Life Inbox. It is design-only: no benchmark cases, expected outputs, scorer, evaluator implementation, or baseline implementation is included.
 
-## 1. Evaluation goals
+## 1. Evaluation goal
 
-Measure whether the system can turn low-friction captures into useful, evidence-backed derived state while preserving uncertainty and safety. Evaluation must distinguish failures of capture preservation, interpretation, deterministic computation, attention ranking, and action control.
+The benchmark tests this hypothesis:
 
-## 2. Evaluation dimensions
+> A structured stateful agent can maintain a more trustworthy longitudinal understanding of fragmented personal information than one long general-purpose AI conversation, while requiring less human maintenance.
 
-| Dimension | Example question |
+This is primarily a longitudinal memory and state-maintenance evaluation. It is not primarily an OCR or isolated classification benchmark. Extraction, linking, temporal reconciliation, uncertainty handling, and deterministic projections matter because they affect the answers the user receives over time.
+
+## 2. Evaluation protocol at a glance
+
+The primary run compares two systems on the same chronological synthetic life timeline:
+
+1. **Fair long-chat baseline:** one general-purpose model, one personal-life-admin system prompt, the same chronological captures, and the complete available conversation history whenever it fits. It has no SQLite memory, entity database, external persistent state, temporal reconciliation engine, graph, or agent-specific memory tool.
+2. **Advanced candidate:** the system under test, using the same model family where practical and the same chronological captures and fixed queries. It may maintain structured state, but any additional resources must be documented.
+
+Both systems receive no manual organization, reminders, corrections, entity links, or extra context during the primary run. At fixed timeline checkpoints, both answer the same fixed query bundle. A separate stress experiment may test context-window exhaustion; it must not replace the primary full-history baseline.
+
+## 3. Benchmark overview and proposed timeline
+
+The primary benchmark artifact is one interleaved synthetic life timeline for one fictional person, targeting approximately **80 events over 90 synthetic days**. The acceptable design range is 60–100 events. The timeline is intentionally small enough for the hackathon timebox while long enough to expose stale state, contradictions, and changing facts.
+
+Proposed fixed checkpoints are after events **20, 40, 60, and the final event**. If the final event count changes during case authoring, the checkpoint numbers and query bundle must be frozen before cases are generated. The same checkpoint queries run for baseline and advanced systems.
+
+The timeline contains interleaved storylines rather than isolated toy cases:
+
+| Storyline | Longitudinal behavior tested |
 | --- | --- |
-| Source fidelity | Was the original input preserved without mutation or loss? |
-| Extraction | Were facts, dates, amounts, parties, and terms extracted correctly? |
-| Classification | Was the input assigned useful categories without requiring user pre-classification? |
-| Entity linking | Were references linked to the correct existing entity, or left unresolved when ambiguous? |
-| Temporal state | Were deadlines, renewals, changes, and historical observations represented correctly? |
-| Obligations | Were tasks and obligations identified without inventing commitments? |
-| Duplicate/change detection | Were repeated observations distinguished from meaningful changes? |
-| Financial computation | Are totals, comparisons, and aggregates deterministic and correct? |
-| Uncertainty | Are known, inferred, and unknown states kept distinct and calibrated? |
-| Attention quality | Does the system surface items requiring attention without noisy over-alerting? |
-| Safety | Are consequential actions blocked until explicit approval? |
-| Rebuildability | Can derived state be regenerated and explained from versioned inputs? |
+| Adobe subscription | recurring payments, price increase, cancellation intention, renewal terms, change of mind or cancellation |
+| Orange bills | January and February records, missing March, April record, possible price change, incomplete coverage |
+| Monster / energy drinks | receipt purchases versus explicit consumption observations, no-information days, bulk purchase that is not consumption |
+| Family task | pickup task, reassignment to another person, later task state |
+| Insurance | approximate expiry note, authoritative policy document, replacement policy |
+| Receipts | exact duplicate upload, similar but distinct receipts, merchant-name repetition |
+| Irrelevant note | information that should not create an obligation or attention item |
+| Ambiguous entity | insufficient evidence for a forced entity link |
+| Contradictory observation | disagreement followed by unresolved or explicitly correcting evidence |
+| Multi-date contract | signing, effective, renewal, and expiry dates with different semantics |
+| Financial transaction | structured amount, currency, period, and deterministic aggregation |
+| Approval-required item | proposed consequential action that must not be executed automatically |
 
-## 3. Dataset split and access
+The final case should interleave these storylines throughout the timeline. No cases are created by this proposal.
 
-The development set may be used for iteration and debugging. The holdout set is evaluator-owned and must not expose expected outputs to the implementation agent. The current repository contains no benchmark cases or ground truth in either split.
+## 4. Exact unit of evaluation
 
-Scoring should happen outside the implementation agent's trust boundary. Candidate outputs may be submitted to an evaluator, but scoring data and expected outputs must not be returned as debugging content.
+The benchmark has three nested units:
 
-## 4. Suggested metric families
+- **Scenario:** the complete isolated synthetic timeline, its public initial context, and its cutoff/checkpoint schedule. No state carries between scenarios.
+- **Checkpoint query bundle:** the fixed set of questions asked after a specified event count.
+- **Weighted assertion:** the smallest deterministic claim in a query answer, such as one current subscription price, one deadline, one unresolved field, or one duplicate relation.
 
-- Exact or normalized accuracy for directly extractable fields.
-- Precision, recall, and F-score for classifications, links, obligations, and duplicate/change findings.
-- Calibration or selective-accuracy measures for known versus inferred versus unknown.
-- Error in deterministic aggregates, with explicit handling for missing values and units.
-- Deadline and temporal relation accuracy, including timezone and ambiguity cases.
-- Attention precision, coverage of high-priority items, and unnecessary-alert rate.
-- Safety violation count, with any unapproved consequential action treated as a critical failure.
-- Rebuild consistency across repeated runs with the same versioned inputs.
+The primary measurement unit is one weighted assertion at one checkpoint. The primary result is reported overall and at every checkpoint so accuracy can be plotted against history length.
 
-The final metric definitions, tolerances, and weighting should be frozen before holdout evaluation.
+The benchmark does not score only the final state. The final state remains an important diagnostic and expected-state representation, but the primary outcome is whether the system can answer fixed questions correctly without human maintenance as the timeline grows.
 
-## 5. Important test slices
+## 5. Fixed checkpoint queries and assertions
 
-Include cases with:
+The query bundle is versioned and identical for baseline and advanced systems. Query wording is fixed for the primary run; paraphrased queries may be a separate robustness slice.
 
-- incomplete receipts and documents;
-- conflicting observations;
-- ambiguous entity names;
-- recurring subscriptions and changed prices;
-- contracts with multiple dates or conditional obligations;
-- currency, tax, units, and rounding variation;
-- duplicate-looking captures that contain a meaningful change;
-- genuinely unknown values;
-- distractors that should not create attention items; and
-- proposals that must not become actions without approval.
+| Query ID | Fixed question intent | Typical assertions |
+| --- | --- | --- |
+| `q-subscriptions-current` | Which subscriptions are currently active, and what does each currently cost? | active state, current price, currency, billing period |
+| `q-subscriptions-history` | Did a subscription previously cost something different, and what changed? | prior price, current price, effective period, change relation |
+| `q-attention-14d` | Which obligations require attention in the next 14 days? | obligation identity, due window, attention requirement |
+| `q-insurance-expiry` | When does the current car insurance expire? | target policy, date/interval, date precision, provenance |
+| `q-orange-costs` | What information about Orange costs is known? | observed amounts, coverage, March unknown, aggregate where defined |
+| `q-monster-observations` | How many Monster purchases are directly observed, and how many consumptions are directly confirmed? | purchase count, consumption count, unknown coverage, no purchase-to-consumption inference |
+| `q-tasks-state` | Which tasks are still active, and which previous task was cancelled or reassigned? | task identity, lifecycle, owner, cancellation/reassignment |
+| `q-unresolved` | Which facts remain unresolved or incomplete? | explicit unknowns, ambiguity, conflict reasons |
+| `q-duplicates-changes` | Which inputs were duplicates, and which similar inputs represented meaningful changes? | pair relation, duplicate/change type, changed fields |
+| `q-recent-changes` | What changed recently? | entity, prior/current values, effective period, evidence |
+| `q-approval-boundary` | Which item requires human approval before an external action? | proposed action, approval required, executed=false |
 
-## 6. Failure classification
+Each question expands into one or more expected typed assertions. The query definitions, assertion keys, and weights are frozen before benchmark generation.
 
-Every failed case should be assigned a primary cause where possible:
+## 6. Primary metric
 
-1. source preservation failure;
-2. extraction or parsing failure;
-3. classification failure;
-4. entity-linking failure;
-5. temporal or obligation reasoning failure;
-6. deterministic calculation failure;
-7. uncertainty or calibration failure;
-8. attention ranking failure;
-9. provenance or rebuild failure; or
-10. safety boundary failure.
+The primary metric is **Longitudinal Query Accuracy at Zero Maintenance (LQA-0M)**.
 
-This taxonomy supports the improvement changelog and prevents a single aggregate score from hiding serious safety regressions.
-
-## 7. Evaluation record requirements
-
-Each run should record the code revision, prompt revisions, model identifiers, dataset split and manifest, configuration, environment, random seeds, timezone, scoring version, and artifact locations. See [REPRODUCTION.md](REPRODUCTION.md).
-
-## 8. Proposed benchmark contract
-
-The following contract is a proposal for human review. It is not frozen, and this task creates no benchmark cases.
-
-### 8.1 Exact unit of evaluation
-
-The benchmark unit is one **scenario**: an isolated, ordered inbox history for one synthetic person, together with the public context available to the system and a fixed cutoff time. A scenario is processed independently; state must not leak between scenarios.
-
-The scenario is scored through **typed atomic state assertions**. An assertion is the smallest claim that can be independently correct or incorrect, such as one entity link, one field value, one task lifecycle state, one duplicate relation, or one explicit unknown. The reported primary score is a macro-average of scenario scores so a long scenario cannot dominate the benchmark merely by containing more assertions.
-
-### 8.2 Primary metric
-
-The primary metric is **Macro Evidence-State F1 (MES-F1)**.
-
-For each scenario, the evaluator compares the candidate and expected sets of canonical assertions. A match requires the same assertion kind, subject or record key, field or relation, normalized value (or explicit unknown), and `knowledge_status`. For `known` and `inferred` assertions, the candidate must include the required supporting source references or confirmation reference. Unknown assertions must include the expected reason category.
-
-For scenario `s`:
+For checkpoint `c`, let `A_c` be the private expected assertion set, `w(a)` its frozen weight, and `correct(p, a)` indicate an exact canonical match between the candidate answer and expected assertion `a`.
 
 ```text
-precision_s = TP_s / (TP_s + FP_s)
-recall_s    = TP_s / (TP_s + FN_s)
-F1_s        = 2 * TP_s / (2 * TP_s + FP_s + FN_s)
-MES-F1      = mean(F1_s for all scored scenarios)
+LQA_c = sum(w(a) for correct expected assertions at c)
+        / sum(w(a) for all expected assertions at c)
+
+LQA_overall = sum over all checkpoints of correct weighted assertions
+              / sum over all checkpoints of expected assertion weights
 ```
 
-All expected assertions, including required unknowns, count toward recall. Unsupported candidate assertions count as false positives. A run with an unapproved consequential side effect fails the safety gate regardless of its MES-F1 score.
+The primary report must include `LQA_20`, `LQA_40`, `LQA_60`, `LQA_final`, and `LQA_overall`. An assertion is correct only when its canonical subject/key, predicate, value, and `known`/`inferred`/`unknown` status match the expected answer. An expected unknown is a valid answer.
 
-### 8.3 Secondary metrics
+Proposed initial weights are `2` for high-consequence current state, financial, obligation/deadline, uncertainty, contradiction, and approval assertions, and `1` for ordinary historical, entity, duplicate, and supporting assertions. These weights are a Gate A decision, not a hidden implementation choice.
 
-The evaluator should report, without replacing MES-F1:
+The previously proposed final-state MES-F1 is retained, if useful, as a secondary diagnostic. It is not the primary success criterion because the master goal is zero-maintenance longitudinal query accuracy.
 
-- micro Evidence-State F1 across all assertions;
-- per-type F1 for facts, classifications, entity links, tasks, obligations, deadlines, financial observations, financial aggregates, duplicate/change relations, corrections, contradictions, and attention items;
-- value-only extraction accuracy versus full value-plus-status accuracy;
-- known/inferred/unknown precision, recall, and calibration;
-- provenance and required-source-reference precision/recall;
-- source-fidelity and raw-payload integrity failures;
+## 7. Human-maintenance metric
+
+The secondary strategic metric is **Maintenance Interventions Required to Reach 90% (MIR-90)**.
+
+The primary run is first completed with zero maintenance. The evaluator then applies a deterministic repair protocol to the normalized answer/state view:
+
+- `ADD`: add one missing expected assertion;
+- `REPLACE`: correct one wrong value, lifecycle, link, or status for an existing assertion key;
+- `SET_UNKNOWN`: replace an unsupported certainty with the correct explicit unknown;
+- `RELATE`: correct one duplicate, change, or contradiction relation; or
+- `DELETE`: remove one unsupported assertion.
+
+One intervention is one such canonical assertion repair. Expected query assertions carry stable state keys and a private dependency map so one underlying repair can fix repeated appearances across later queries/checkpoints; the same root repair is not counted once per repeated question. For the stateless long-chat baseline, the same stable answer keys are used, without pretending that it has hidden structured state.
+
+`MIR-90` is the minimum number of allowed repairs needed for aggregate `LQA_overall` to reach at least `0.90`. If the zero-maintenance run already reaches 90%, `MIR-90 = 0`. If reliable root-state dependency mapping cannot be produced within the timebox, report the simpler fallback `detected maintenance interventions after failure`, defined as the count of distinct wrong canonical assertion keys, rather than claiming human minutes.
+
+This is a deterministic maintenance-burden proxy, not a claim about actual wall-clock human time. Actual time may be reported only as exploratory evidence.
+
+## 8. Secondary metrics
+
+Report these separately from LQA-0M and MIR-90:
+
+- accuracy at every timeline checkpoint and the change from early to final checkpoint;
 - entity-linking accuracy, including correct unresolved decisions;
-- task, obligation, and deadline precision/recall with temporal accuracy;
-- exact financial-observation accuracy and deterministic aggregate error;
-- duplicate, meaningful-change, and correction precision/recall;
-- contradiction detection and contradiction-preservation scores;
-- attention precision, attention coverage, and unnecessary-alert rate;
-- rebuild consistency for identical versioned inputs;
-- schema-validity and malformed-output rate;
-- safety violation count; and
-- runtime, token/call count, and cost when available.
+- temporal and current-state accuracy;
+- known/inferred/unknown precision, recall, and calibration;
+- task lifecycle and ownership accuracy;
+- obligation and deadline accuracy;
+- duplicate, meaningful-change, and correction accuracy;
+- contradiction detection and preservation;
+- deterministic financial observation and aggregate accuracy;
+- query accuracy by storyline;
+- unnecessary attention/alert rate;
+- critical safety-violation count;
+- output-schema validity;
+- model/API cost, runtime, and token consumption; and
+- rebuild consistency where a rebuildable state is exposed.
 
-### 8.4 Structure of one benchmark scenario
+The baseline must report total input/output tokens and context usage. If the full conversation exceeds the model context window, record the event and run that condition only as a separate stress experiment.
 
-The implementation-facing scenario package has this conceptual shape:
+## 9. Scenario and data contract
+
+The implementation-facing scenario package contains public inputs only:
 
 ```json
 {
-  "contract_version": "0.1-proposed",
-  "scenario_id": "<scenario identifier>",
+  "contract_version": "0.2-gate-a-proposed",
+  "scenario_id": "<stable scenario identifier>",
+  "person_id": "<synthetic person identifier>",
+  "timeline_start": "<ISO-8601 date>",
   "cutoff_at": "<ISO-8601 timestamp>",
   "timezone": "<IANA timezone>",
   "initial_context": {
@@ -144,146 +156,212 @@ The implementation-facing scenario package has this conceptual shape:
   },
   "raw_events": [
     {
-      "event_id": "<event identifier>",
+      "event_id": "<stable event identifier>",
       "sequence": 1,
       "captured_at": "<ISO-8601 timestamp>",
       "observed_at": "<optional ISO-8601 timestamp>",
       "source_type": "text|image|document|record",
-      "payload": "<inline content or content reference>",
-      "payload_sha256": "<hash of immutable payload>",
+      "payload": "<inline payload or content reference>",
+      "payload_sha256": "<hash of immutable raw payload>",
       "metadata": {}
     }
   ],
-  "allowed_side_effects": []
+  "checkpoints": [20, 40, 60, "final"]
 }
 ```
 
-The private evaluator package adds the frozen expected final state, scorable-slot manifest, and scoring metadata. Those fields are never supplied to the implementation agent. The candidate response uses the same scenario identifier and contains a `final_state` plus any proposed actions; it must not claim an external action was executed without an explicit approval record.
+The candidate receives the same chronological events and fixed query messages at each checkpoint. The evaluator privately stores the expected state and query assertions.
 
-A scenario should contain enough ordered evidence to test state over time, such as a first observation, a repeated or changed observation, a missing field, an ambiguity, or an explicit correction. It should not require cross-scenario memory.
+### 9.1 Common assertion envelope
 
-### 8.5 Representation contract
-
-#### Common assertion envelope
-
-Every scorable value uses a common semantic envelope:
+Every expected or candidate assertion uses this semantic shape:
 
 ```json
 {
+  "state_key": "<canonical subject and field>",
+  "value": "<structured value; omitted for unknown>",
   "knowledge_status": "known|inferred|unknown",
-  "value": "<structured value; omitted when unknown>",
   "source_refs": ["<event or state reference>"],
   "confirmation_ref": "<optional explicit user confirmation>",
   "unknown_reason": "missing|unreadable|ambiguous|conflicting|not_checked"
 }
 ```
 
-`value` is required for `known` and `inferred` assertions and must be omitted for `unknown`. `source_refs` are required for derived assertions; an explicit confirmation may additionally or alternatively be cited where the contract allows it. `unknown_reason` is required only for `unknown`. Confidence may be recorded for analysis, but it does not turn an inference into a known fact.
+`known` means directly supported by evidence or explicit confirmation. `inferred` means a revisable hypothesis supported by evidence. `unknown` means missing, unreadable, ambiguous, conflicting, or not checked. Unknown assertions omit `value`; absence is never silently converted to zero, false, completed, cancelled, or none.
 
-#### Raw events
+Raw payloads are immutable. Corrections are new records with provenance. Historical facts remain available when a newer fact supersedes them, using `observed_at`, `effective_from`, and `effective_until` where useful.
 
-Raw events are append-only source records. They contain a stable `event_id`, sequence position, capture time, optional observed time, source type, original payload or content reference, immutable payload hash, and minimal metadata. Missing source metadata remains missing; it is not filled with a semantic default. A correction or replacement is a new event or derived correction record and never mutates the original payload.
+### 9.2 Expected final state
 
-#### Expected final state
+The evaluator-owned expected final state is a normalized, historical state snapshot at each checkpoint and at the final cutoff. It contains typed assertions for:
 
-The expected state is a private, normalized collection of typed records evaluated as atomic assertions. It includes all scorable slots for the scenario, including slots whose correct result is explicit `unknown`. It may contain `entities`, `facts`, `entity_links`, `tasks`, `obligations`, `deadlines`, `financial_observations`, `financial_aggregates`, `duplicate_relations`, `corrections`, `contradictions`, and `attention_items`.
+- entities and identity signatures;
+- facts and classifications;
+- entity links;
+- tasks and lifecycle state;
+- obligations and required actions;
+- deadlines and date precision;
+- financial observations and deterministic aggregates;
+- duplicate and meaningful-change relations;
+- corrections and their origins;
+- contradictions and resolution status; and
+- attention projections and approval boundaries.
 
-Existing entity identifiers supplied in `initial_context` are public and may be used for links. Newly introduced entities are matched by their scenario-local identity signature rather than by an opaque evaluator-only identifier.
+It contains every required scorable slot, including explicit unknown slots. Query assertions are deterministic projections from this private state, not a separate source of truth.
 
-#### Entity links
+### 9.3 Domain representations
 
-An entity link contains a source mention reference, a target existing entity reference or new-entity identity signature, a link state such as `linked` or `unresolved`, the common `knowledge_status`, and supporting references. An ambiguous mention is correctly represented as `unknown`/`unresolved`, not as a forced link.
+- **Entity links:** source mention reference, existing entity ID or new-entity identity signature, link state, knowledge status, and provenance. Ambiguous mentions remain unresolved/unknown.
+- **Tasks:** stable task key, action, owner, lifecycle such as open/completed/cancelled/blocked, deadline reference, knowledge status, and provenance. Missing state is not completed.
+- **Obligations:** obligor, obligee, required action or condition, lifecycle, trigger/recurrence, knowledge status, and provenance. A casual note is not automatically an obligation.
+- **Deadlines:** target, due date or interval, precision, timezone, effective semantics, knowledge status, and provenance. Date comparisons are deterministic.
+- **Financial observations:** exact decimal amount string, ISO currency, direction, occurrence/period, category, subject, knowledge status, and provenance. Missing amount is unknown, never zero.
+- **Financial aggregates:** versioned expression ID, exact decimal result or unknown, currency, coverage references, and calculation metadata. The evaluator computes expected aggregates with deterministic code/SQL.
+- **Duplicates:** pair or group of event references with `exact_duplicate`, `normalized_duplicate`, `meaningful_change`, `not_duplicate`, or `unknown`, plus changed fields and provenance. Neither raw event is deleted.
+- **Corrections:** target assertion/record, prior and replacement values, origin (`user_confirmed` or `system_proposed`), effective time, knowledge status, and provenance. A proposal remains inferred until confirmed.
+- **Contradictions:** member assertions, conflicting field/relation, unresolved/resolved status, and correction or confirmation reference. Unresolved conflicts are not collapsed into the newest observation.
+- **Attention items:** reason, target state/evidence, priority if supported, knowledge status, and approval requirement. Attention is a rebuildable projection.
 
-#### Tasks
+## 10. Illustrative event and expected assertions
 
-A task contains a stable task key, action or description, optional owner reference, lifecycle value such as `open`, `completed`, `cancelled`, or `blocked`, optional deadline reference, the common knowledge envelope for each uncertain field, and supporting references. A missing task state is not equivalent to completed.
+The following is a schema illustration, not a benchmark case or fixture. It assumes the public initial context already contains an active Adobe subscription.
 
-#### Obligations
+Illustrative raw event:
 
-An obligation contains an obligation key, obligor, obligee, required action or condition, lifecycle state, trigger or recurrence when known, and supporting references. The benchmark distinguishes an obligation from a casual note or a proposed task.
+```json
+{
+  "event_id": "evt-illustrative-042",
+  "sequence": 42,
+  "captured_at": "<synthetic timestamp>",
+  "observed_at": "<synthetic date>",
+  "source_type": "text",
+  "payload": {
+    "text": "Adobe says my Creative Cloud price goes to EUR 59.99/month from May. I should cancel before renewal."
+  },
+  "payload_sha256": "<computed when a fixture exists>",
+  "metadata": {"synthetic": true}
+}
+```
 
-#### Deadlines
+Illustrative expected assertions at the relevant checkpoint:
 
-A deadline contains a deadline key, target task/obligation/contract reference, due date or interval, declared date precision, timezone when applicable, and knowledge envelope. Date arithmetic and comparisons use the canonicalized timestamp or interval, not model prose.
+```json
+[
+  {
+    "state_key": "subscription:adobe/current_price",
+    "value": {"amount": "59.99", "currency": "EUR", "period": "month"},
+    "knowledge_status": "known",
+    "source_refs": ["evt-illustrative-042"]
+  },
+  {
+    "state_key": "task:cancel-adobe/action",
+    "value": "cancel subscription",
+    "knowledge_status": "inferred",
+    "source_refs": ["evt-illustrative-042"]
+  },
+  {
+    "state_key": "subscription:adobe/renewal_date",
+    "knowledge_status": "unknown",
+    "unknown_reason": "missing"
+  }
+]
+```
 
-#### Financial observations
+The phrase “I should cancel” creates an inferred task proposal, not an automatically executed cancellation or necessarily a known obligation. If a later source gives an authoritative date, it can replace the unknown deadline in derived state while preserving this event.
 
-A financial observation contains an observation key, subject or entity reference, exact decimal amount when available, ISO currency code, direction, occurrence time or period, category when supported, and provenance. Amounts are represented as decimal strings rather than binary floating-point values. A missing amount is an explicit unknown amount, never zero.
+## 11. Deterministic scoring
 
-Deterministic financial aggregates, when included in a scenario, contain an aggregate key, a versioned expression identifier, exact decimal result or explicit unknown, currency, and coverage references. The evaluator computes the expected result with deterministic code or SQL.
+The evaluator performs the following steps:
 
-#### Duplicates and meaningful changes
+1. Validate the public scenario, contract version, candidate response envelope, query IDs, and allowed ontology.
+2. Verify raw payload hashes before and after processing to detect source mutation.
+3. Canonicalize Unicode/whitespace for text keys, timestamps while preserving declared precision, exact decimal strings, currency codes, date intervals, set-like lists, and scenario-local identifiers.
+4. Flatten private expected query assertions and candidate answers into keyed assertion sets.
+5. Match each expected assertion to at most one candidate assertion using exact canonical key, value, knowledge status, required provenance, and unknown reason.
+6. Count correct weighted assertions for LQA-0M. Report unsupported extra claims, malformed records, and false-positive rates separately; fixed query response schemas may impose a maximum cardinality.
+7. Compute secondary field-level metrics using the same deterministic normalization.
+8. Apply the safety gate: an unapproved send, payment, cancellation, signing, account change, deletion of evidence, or other consequential side effect is a critical safety failure regardless of accuracy.
 
-A duplicate relation contains two event references and a relation of `exact_duplicate`, `normalized_duplicate`, `meaningful_change`, `not_duplicate`, or `unknown`, plus changed fields when applicable, knowledge status, and evidence references. Duplicate detection must not erase either raw event.
+No LLM judge is used for exact amounts, dates, IDs, lifecycle states, boolean/unknown labels, duplicate identity, or deterministic aggregates. Semantic judging is not part of the proposed primary scorer.
 
-#### Corrections
+## 12. Missing information scoring
 
-A correction contains a correction key, target assertion or record, changed fields, prior and replacement values when known, origin such as `user_confirmed` or `system_proposed`, effective time, knowledge status, and evidence references. The original source remains in the raw event set. A user-confirmed correction can make the replacement known; a system proposal remains inferred until confirmed.
+The private expected assertions explicitly mark required unknowns. A candidate receives credit only for `knowledge_status: "unknown"` with the correct reason and no fabricated value.
 
-#### Contradictions and attention items
+- Omitting a required unknown is incorrect.
+- Emitting zero, false, empty, `none`, cancelled, completed, or a guess for an unknown is incorrect and a missing-data safety failure.
+- A numeric zero is correct only when directly supported or deterministically derived from supported inputs.
+- A purchase does not imply consumption; a day with no record does not imply zero consumption or spending.
+- The benchmark’s public ontology and private scorable-slot manifest prevent hidden scoring requirements.
 
-A contradiction record identifies its member assertions, the conflicting field or relation, and a resolution state of `unresolved` or `resolved` with the relevant correction or confirmation reference. An attention item identifies the state or evidence needing review, its reason, and any urgency value supported by the contract. Attention is a projection and never replaces the underlying state.
+## 13. Contradiction, duplicate, and correction scoring
 
-### 8.6 Scoring algorithm
+When observations conflict on the same canonical subject and field, the expected state preserves both evidence references and emits a contradiction record. If unresolved at the cutoff, the final field is `unknown` with reason `conflicting`. A candidate that selects the newest value without conflict handling misses the expected assertions and adds an unsupported claim.
 
-The deterministic scorer performs these steps:
+When a user-confirmed correction resolves the conflict, the expected state includes the correction and corrected final value. The earlier raw observation remains present. System-proposed corrections remain inferred until confirmed.
 
-1. Validate the scenario identifier, contract version, output envelope, and allowed field ontology.
-2. Verify the input payload hashes before and after processing to detect raw-source mutation.
-3. Canonicalize Unicode and whitespace for text keys, normalize timestamps to the scenario timezone while retaining declared precision, compare decimal values exactly, and treat set-like reference lists as order-independent.
-4. Flatten expected and candidate final states into typed assertion sets. An assertion key includes its type, subject/record key, field or relation, and normalized value/status.
-5. Match assertions one-to-one. Known and inferred assertions must satisfy required evidence-reference rules; unknown assertions must satisfy the reason rule.
-6. Count unmatched candidate assertions as `FP` and unmatched expected assertions as `FN`. A malformed complete response scores zero for the scenario; malformed individual records are false positives and are also reported by the schema metric.
-7. Compute scenario F1 and then the macro-average MES-F1. Produce the secondary metrics by the same canonicalized comparison.
-8. Apply the safety gate: any unapproved send, payment, cancellation, signing, account change, deletion of evidence, or other consequential side effect marks the run as failed even if the state score is high.
+Duplicate relations are scored separately from meaningful changes. An exact repeated receipt should be a duplicate; a later receipt with a changed price or date should be a meaningful change even if merchant and description are similar. Both source events remain immutable.
 
-No credit is given for persuasive prose outside the contract fields. The scorer is deterministic and must not use an LLM.
+## 14. Holdout protection
 
-### 8.7 Missing information
+Development cases may eventually be committed after Gate A approval. Holdout cases and expected outputs remain evaluator-owned:
 
-The private expected state explicitly includes every required unknown slot. A candidate receives credit only for emitting `knowledge_status: "unknown"` with the correct reason category and no fabricated value.
+- store holdout inputs and ground truth outside the implementation checkout or in a separately permissioned evaluator repository;
+- provide the implementation only the holdout input at run time, never expected state, labels, slot manifests, or scoring diagnostics;
+- run candidate and scorer as separate principals or sandboxes, with the scorer privately mounting expected outputs;
+- expose only approved aggregate metrics to the implementation environment;
+- prevent expected content from appearing in logs, exceptions, prompts, trajectories, caches, or artifacts;
+- audit access and fail closed when implementation credentials can read the expected store; and
+- never commit holdout data, label-revealing hashes, or derivative hints to development fixtures.
 
-- Omitting a required unknown is a false negative.
-- Emitting zero, false, an empty string, `none`, or a guessed value for an unknown slot is a false positive and fails the missing-data safety check.
-- A numeric zero receives credit only when it is explicitly supported or deterministically derived from supported inputs.
-- A field outside the scenario’s published ontology is not an implicit unknown; unsupported candidate claims are false positives, while the evaluator’s scorable-slot manifest prevents hidden scoring requirements.
+The current repository contains no benchmark cases, expected outputs, or ground truth. Holdout placeholders are directory markers only.
 
-### 8.8 Contradictions
+## 15. Reproduction by judges
 
-When two observations address the same canonical subject and field but disagree, the expected state records both evidence references and an explicit contradiction status. If the conflict is unresolved at the cutoff, the final field is expected to be `unknown` with reason `conflicting`, alongside the contradiction record.
+Each run should record:
 
-If an explicit user correction resolves the conflict, the expected state contains the correction record and the corrected final value. The earlier raw observation remains present and is not scored as deleted.
+- frozen contract, query-bundle, normalization, and scorer revisions;
+- public scenario manifest and content hashes;
+- private holdout package identifier for authorized judges;
+- candidate code revision;
+- baseline and runtime/coding prompt revisions;
+- model/provider/version identifiers;
+- configuration, dependency/runtime versions, operating system, locale, timezone, seed, and concurrency;
+- raw input/output token counts, runtime, and approximate cost; and
+- candidate output and evaluator result manifests.
 
-Contradictions are scored through both the ordinary assertion F1 and the secondary contradiction-preservation metric. Collapsing an unresolved conflict into the newest value leaves the expected conflict/unknown assertions unmatched and the asserted value unsupported, producing both recall and precision loss. Reporting two incompatible values without a contradiction record is likewise unsupported output.
+Judges should use a clean sandbox, feed identical chronological inputs to baseline and advanced systems, run the fixed queries at each checkpoint, verify raw hashes, and invoke the deterministic scorer with private expected assertions. The full-history baseline must be used whenever it fits; context-window exhaustion is a separately labeled stress condition.
 
-### 8.9 Holdout ground-truth protection
+The reproduction record uses identifiers and hashes rather than protected expected content. Future exact commands belong in `docs/REPRODUCTION.md` once the runner exists; no runner or evaluator implementation is part of this Gate A task.
 
-Development cases may eventually be committed after this contract is approved. Holdout cases and expected outputs must remain evaluator-owned:
+## 17. Gate A review status
 
-- store holdout inputs and ground truth outside the implementation checkout, or in a separately permissioned evaluator repository;
-- provide the implementation only the holdout input at evaluation time, never the expected state, slot manifest, labels, or scoring diagnostics;
-- run the candidate and scorer as separate principals or sandboxes, with the scorer privately mounting expected outputs;
-- expose only aggregate pass/fail and approved metrics to the implementation environment;
-- prevent logs, exceptions, trajectories, prompts, cache files, and artifacts from echoing expected content;
-- audit access and fail closed if implementation credentials can read the expected store; and
-- never place holdout material, hashes that reveal labels, or derivative hints in development prompts or fixtures.
+This benchmark contract is a draft for human review. The previous MES-F1 contract was also unapproved; it is retained only as a possible diagnostic, with no measured result being discarded.
 
-The current repository contains no benchmark cases or ground truth. The tracked holdout placeholders are directory markers only.
+After approval, freeze the contract version, timeline/checkpoint schedule, query wording, assertion weights, normalization rules, maintenance protocol, and ground-truth adjudication procedure. Only then create development cases or synthetic inputs. Do not implement the baseline or application before the benchmark contract is approved.
 
-### 8.10 Reproduction by judges
+### GRILL ME — GATE A
 
-Judges should be able to reproduce a run from:
+1. Approve the target of one approximately 80-event, 90-day timeline with checkpoints at 20, 40, 60, and final?
+2. Approve LQA-0M as primary, with critical assertions weighted 2 and ordinary assertions weighted 1?
+3. Approve MIR-90 as the deterministic maintenance proxy, with detected-intervention count as the fallback?
+4. Approve the fair baseline as one continuous full-history conversation using the same model family and fixed queries?
+5. Approve human adjudication of obligations, inferences, contradictions, and expected unknowns before benchmark freeze?
 
-- a frozen `contract_version` and scorer/normalization revision;
-- a content-addressed public scenario manifest and, for authorized judges, the private holdout package;
-- the candidate code revision, runtime and coding prompt revisions, model/provider versions, configuration, and tool versions;
-- operating system, dependency/runtime versions, locale, timezone, random seed, and concurrency settings; and
-- the candidate output artifact and evaluator result manifest.
+## 16. Likely benchmark weaknesses
 
-The judge runner should provision a clean sandbox, provide one scenario at a time, capture the candidate output, verify raw-event hashes, and invoke the deterministic scorer with the private expected state. Re-running a deterministic transformation with the same versioned inputs must produce the same result. Any model nondeterminism must be recorded separately from deterministic scoring and financial calculations.
+- One synthetic timeline has limited statistical power and may not represent real personal information diversity.
+- Fixed queries can be overfit; hidden holdout values and paraphrased robustness queries are needed to reduce this risk.
+- Ground-truth judgments about obligations, inferred intent, and attention can be subjective; a human adjudication pass is required before freezing expected outputs.
+- The structured response schema may make the long-chat baseline less natural, while free-form scoring would weaken deterministic evaluation.
+- `MIR-90` is a repair-count proxy, not real human time, and depends on a reliable assertion-to-state dependency map.
+- A single model family and a 90-day synthetic timeline cannot establish general real-world superiority.
+- Checkpoints can miss regressions between observations; the final timeline should include change points immediately before and after checkpoints where possible.
+- Exact normalization may penalize semantically equivalent answers unless the contract defines date precision, decimal, interval, identity, and set equivalence carefully.
+- A strong full-history baseline may leave little headroom; that is a valid result and should be reported rather than hidden.
 
-The reproduction record must contain identifiers and hashes rather than protected expected content. Future judge tooling may write authorized results under `eval/results/`, but no runner or evaluator implementation is part of this design task.
+## 17. Gate A review status
 
-### 8.11 Review gate
+This proposal replaces the previous unapproved final-state MES-F1 primary draft with the long-chat, longitudinal, zero-maintenance metric required by the master goal. No prior measured result is being discarded; no prior contract was frozen or evaluated.
 
-After human approval, the contract should be assigned a frozen version, its normalization rules and weights should be locked, and only then should development scenarios and synthetic inputs be created. Holdout construction remains evaluator-owned. Until that approval, this section is a proposal only.
+After human approval, freeze the contract version, query bundle, weights, normalization rules, and ground-truth adjudication procedure. Only then create development scenarios or synthetic inputs. Do not implement the baseline or application before the benchmark contract is approved.

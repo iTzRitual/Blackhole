@@ -1,6 +1,6 @@
 # Benchmark boundary
 
-This directory defines the intended boundary between development cases and evaluator-controlled holdout material. The proposed benchmark contract is documented in [docs/EVALUATION.md](../docs/EVALUATION.md#8-proposed-benchmark-contract) and is pending human review. This directory contains no benchmark cases or expected outputs yet.
+This directory defines the intended boundary between development cases and evaluator-controlled holdout material. The Gate A benchmark contract proposal is documented in [docs/EVALUATION.md](../docs/EVALUATION.md#17-gate-a-review-status) and is pending human review. It centers on one interleaved, approximately 80-event synthetic life timeline, a fair long-chat baseline, fixed checkpoint queries, and zero-maintenance longitudinal accuracy. This directory contains no benchmark cases or expected outputs yet.
 
 ## Layout
 
@@ -32,9 +32,10 @@ The holdout split is not a second development directory. In an actual benchmark 
 - holdout data should not be committed to the implementation repository.
 
 The tracked placeholders in this scaffold contain no cases, labels, or ground truth. A `.gitkeep` file is only a directory marker.
+
 ## Contract status
 
-The proposed contract defines source modalities, stable scenario identifiers, permitted metadata, expected-output granularity, uncertainty labels, and scoring rules. It also specifies how conflicts, missing data, units, dates, provenance, and user-approval boundaries are represented.
+The proposed contract defines source modalities, stable scenario identifiers, permitted metadata, expected-output granularity, uncertainty labels, fixed checkpoint queries, longitudinal scoring, maintenance interventions, and evaluator boundaries. It also specifies how conflicts, missing data, units, dates, provenance, and user-approval boundaries are represented.
 
 After human approval, the contract should be versioned and frozen before development cases or synthetic inputs are added. Holdout construction remains evaluator-owned.
 
