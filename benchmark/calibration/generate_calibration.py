@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the non-scored Life Inbox benchmark-size calibration data.
+"""Generate the non-scored Blackhole benchmark-size calibration data.
 
 This utility creates synthetic raw histories and calibration-only oracle data.
 It is deliberately not an application runner, baseline, or evaluator.

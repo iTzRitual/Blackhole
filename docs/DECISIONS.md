@@ -81,3 +81,51 @@ This is a lightweight decision record. Each entry captures the current design di
 - **Decision:** Before freezing the final benchmark length, run a separate non-scored calibration with 50-, 100-, 200-, and 400-event prefixes. Keep ten evolving storylines and prioritize state churn—updates, corrections, contradictions, supersession, cancellations, missing periods, duplicates, and ambiguity—over raw event count. Prefer the smallest approximately 150–200-event primary that shows repeatable degradation while remaining within usable context and the hackathon budget; keep a larger track secondary.
 - **Consequences:** Calibration artifacts and a visible calibration-only oracle may be stored under `benchmark/calibration/`, but they are not final ground truth and cannot tune the baseline prompt. The selected model, tokenizer, context limit, correctness readout, runtime, and cost must be recorded before Gate A freeze.
 - **Revisit when:** The fixed-prompt calibration shows no meaningful degradation through 400 events, the selected model/context changes, or the human owner approves a different primary/stress policy.
+
+## D-010 — Blackhole framing and low-friction interaction
+
+- **Status:** Accepted for design
+- **Context:** Traditional productivity tools can turn capture into a second organizational task, especially for people with high executive-function friction, attention overload, forgetfulness, or low tolerance for setup.
+- **Decision:** Use the product name **Blackhole** with the descriptor **“A zero-organization life inbox.”** The product principle is **CAPTURE NOW. ORGANIZE LATER.** Normal capture should be silent by default; interruption is reserved for useful attention items; observations should be factual and non-judgmental. ADHD may be referenced as an example of user need, without medical claims or treatment/diagnosis language.
+- **Consequences:** The capture path should minimize classification questions and properties. Attention ranking, reminders, and advice must be evaluated for usefulness and tone rather than volume. Existing repository paths are not renamed for branding.
+- **Revisit when:** User research shows that a different framing reduces capture friction without adding organizational overhead or making unsupported medical claims.
+
+## D-011 — Isolate state maintenance from OCR in the primary benchmark
+
+- **Status:** Proposed for Gate A review
+- **Context:** The main hypothesis concerns longitudinal state maintenance, not the quality of an OCR or vision subsystem.
+- **Decision:** Represent receipt, document, and image-derived modalities with synthetic text or normalized extracted content in the primary benchmark. Real uploads may be demonstrated separately; OCR/vision errors are not a primary benchmark confound.
+- **Consequences:** Benchmark failures are more attributable to state changes, provenance, uncertainty, linking, temporal reconciliation, and projections. A separate modality slice can be added later without changing the primary metric.
+- **Revisit when:** A validated modality pipeline becomes part of the product hypothesis and can be evaluated without masking state-maintenance behavior.
+
+## D-012 — Use unweighted per-query LQA-0M with false-positive penalties
+
+- **Status:** Proposed for Gate A review
+- **Context:** Weighting critical assertions inside the primary average can make the headline score depend on arbitrary category weights, while unsupported assertions need an explicit penalty.
+- **Decision:** For each fixed query, compute `TP`, `FP`, and `FN` over canonical assertions and use `TP / (TP + FP + FN)`. If both expected and produced assertion sets are empty, the query score is `1.0`; if only one is empty, the non-empty side creates false positives or false negatives and the score is `0.0`. LQA-0M is the unweighted arithmetic mean of all fixed query scores across primary checkpoints. Critical categories and safety violations are reported separately.
+- **Consequences:** Hallucinated or unsupported claims lower the primary score. Precision, recall, and F1 remain useful diagnostics, but arbitrary 2:1 primary weights are removed.
+- **Revisit when:** Human review identifies a deterministic, non-arbitrary aggregation rule that better reflects user risk without hiding false assertions.
+
+## D-013 — Use DSCR for zero-maintenance correction burden
+
+- **Status:** Proposed for Gate A review
+- **Context:** A minimum-repair optimization such as MIR-90 is too expensive for the hackathon and can overstate repeated query failures caused by one root defect.
+- **Decision:** Use **Distinct State Corrections Required (DSCR)**: after the zero-maintenance run, count distinct underlying state defects a human would need to correct. Multiple query failures caused by one defect count once. Report total DSCR, DSCR per 100 captured events, and correction categories. Do not equate DSCR with human minutes.
+- **Consequences:** The secondary metric focuses on persistent state quality and is feasible to adjudicate. Exploratory wall-clock maintenance time may be reported separately but is not the contract metric.
+- **Revisit when:** A later evaluation can measure actual maintenance effort reproducibly without replacing root-defect accounting.
+
+## D-014 — Freeze a fair exact-model long-chat baseline
+
+- **Status:** Proposed for Gate A review
+- **Context:** The advanced system's structured state, deterministic tools, and retrieval are intentional experimental treatments; weakening the comparison baseline would invalidate the comparison.
+- **Decision:** The baseline is one continuous general-purpose AI conversation receiving the same chronological captures and fixed checkpoint questions, with complete history whenever it fits and one frozen reasonable personal-life-admin prompt. Use the same exact semantic runtime model for baseline and advanced calls where practical, not merely the same model family. The baseline receives no hidden state, database, summary, retrieval, or specialized reconciliation tool.
+- **Consequences:** Resource, token, latency, and cost differences must be reported transparently. The baseline prompt is frozen before calibration and cannot be tuned against individual calibration failures.
+- **Revisit when:** The exact model is technically unavailable to both systems or a human-approved fairness protocol changes the treatment comparison.
+
+## D-015 — Generate final benchmark state from a deterministic synthetic world
+
+- **Status:** Proposed for Gate A review
+- **Context:** Manually authoring and checking hundreds of final assertions is error-prone and burdens the human owner.
+- **Decision:** Author final cases from explicit storyline/state-machine rules: canonical hidden world state → chronological user-facing events → deterministic checkpoint ground truth. Human review focuses on storyline semantics, transition rules, query definitions, subjective inference rules, critical transitions, and explicit unknown/contradiction cases. The implementation agent must not access protected holdout ground truth.
+- **Consequences:** Final case generation is reproducible and easier to audit. Subjective expectations still require human adjudication, and generated development data must remain separate from evaluator-owned holdout material.
+- **Revisit when:** A hand-authored case demonstrates a material behavior that cannot be represented transparently by the synthetic-world rules.

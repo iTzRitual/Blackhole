@@ -42,8 +42,11 @@ context limit and actual tokenizer must be recorded before Gate A is frozen.
 
 No model correctness score is reported here. The repository does not yet pin a
 model/provider/context configuration, and no baseline or evaluator has been
-implemented. Reporting a score from the coding agent itself would not be a
-valid measurement of the intended runtime setup.
+implemented. The frozen prompt and run matrix are prepared in
+[`prompts/runtime/baseline-v1.md`](../../../prompts/runtime/baseline-v1.md) and
+[`RUNTIME_CALIBRATION.md`](RUNTIME_CALIBRATION.md). Reporting a score from the
+coding agent itself would not be a valid measurement of the intended runtime
+setup.
 
 The authorized calibration run should use one unchanged prompt and one fixed
 query bundle at all four sizes. Compare typed answers with the calibration-only
@@ -83,3 +86,8 @@ context-stress result and should not replace the realistic primary. If no
 degradation appears through 400, review churn design with the human owner
 before increasing event count; do not inflate the benchmark solely to exhaust
 the context window.
+
+An approximately 800-event continuation is not generated or run yet. It may be
+considered once, only if the actual 400-event run fits comfortably, remains
+practical, and shows little degradation; it remains calibration evidence and
+cannot replace the realistic primary benchmark.

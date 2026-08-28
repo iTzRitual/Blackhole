@@ -2,7 +2,7 @@
 
 **Status:** Gate A benchmark proposal with size calibration, pending human approval
 
-This document proposes a long-horizon benchmark for Life Inbox. It is design-only:
+This document proposes a long-horizon benchmark for Blackhole. It is design-only:
 no final benchmark cases, final expected outputs, scorer, evaluator implementation,
 baseline implementation, or application implementation is included. The separate
 size-calibration artifacts are non-scored synthetic inputs and are not the final
@@ -15,23 +15,26 @@ The benchmark tests this hypothesis:
 > A structured stateful agent can maintain a more trustworthy longitudinal understanding of fragmented personal information than one long general-purpose AI conversation, while requiring less human maintenance.
 
 This is primarily a longitudinal memory and state-maintenance evaluation. It is not
-primarily an OCR or isolated classification benchmark. Extraction, linking, temporal
-reconciliation, uncertainty handling, and deterministic projections matter because
-they affect the answers the user receives over time.
+primarily an OCR, vision, or isolated classification benchmark. Receipt, document,
+image-derived, and other modalities may be represented by synthetic text or
+normalized extracted content so that primary errors measure state maintenance,
+linking, temporal reconciliation, uncertainty handling, and deterministic
+projections rather than OCR quality.
 
 ## 2. Evaluation protocol at a glance
 
 The primary run compares two systems on the same chronological synthetic life
 timeline:
 
-1. **Fair long-chat baseline:** one general-purpose model, one personal-life-admin
-   system prompt, the same chronological captures, and the complete available
-   conversation history whenever it fits. It has no SQLite memory, entity database,
-   external persistent state, temporal reconciliation engine, graph, or
-   agent-specific memory tool.
-2. **Advanced candidate:** the system under test, using the same model family where
-   practical and the same chronological captures and fixed queries. It may maintain
-   structured state, but any additional resources must be documented.
+1. **Fair long-chat baseline:** one general-purpose model, one frozen reasonable
+   personal-life-admin system prompt, the same chronological captures, and the
+   complete available conversation history whenever it fits. It has no SQLite
+   memory, entity database, external persistent state, temporal reconciliation
+   engine, graph, or agent-specific memory tool.
+2. **Advanced candidate:** the system under test, using the same exact semantic
+   runtime model where practical and the same chronological captures and fixed
+   queries. It may maintain structured state, but any additional resources must be
+   documented as the experimental treatment.
 
 Both systems receive no manual organization, reminders, corrections, entity links, or
 extra context during the primary run. At fixed timeline checkpoints, both answer the
@@ -56,9 +59,9 @@ and its explicit decision rule are in
 
 Once the length is selected, the final timeline should use fixed checkpoints at
 approximately 25%, 50%, 75%, and the final event. Exact event counts, checkpoints,
-query wording, and assertion weights must be frozen before final development cases
-are authored. The calibration data is not a final case and does not supply final
-ground truth.
+query wording, empty-answer behavior, and canonicalization rules must be frozen
+before final development cases are authored. The calibration data is not a final
+case and does not supply final ground truth.
 
 The proposed final case contains interleaved storylines rather than isolated toy
 cases:
@@ -89,13 +92,14 @@ The benchmark has three nested units:
   and its cutoff/checkpoint schedule. No state carries between scenarios.
 - **Checkpoint query bundle:** the fixed set of questions asked after a specified
   event count.
-- **Weighted assertion:** the smallest deterministic claim in a query answer, such
+- **Atomic assertion:** the smallest deterministic claim in a query answer, such
   as one current subscription price, one deadline, one unresolved field, or one
   duplicate relation.
 
-The primary measurement unit is one weighted assertion at one checkpoint. The
-primary result is reported overall and at every checkpoint so accuracy can be plotted
-against history length.
+The primary measurement unit is one canonical assertion comparison within one fixed
+query at one checkpoint. The primary result is reported overall and at every
+checkpoint so accuracy can be plotted against history length. Assertions are not
+arbitrarily weighted in the primary score.
 
 The benchmark does not score only the final state. The final state remains an
 important diagnostic and expected-state representation, but the primary outcome is
@@ -123,73 +127,79 @@ robustness slice.
 | `q-approval-boundary` | Which item requires human approval before an external action? | proposed action, approval required, executed=false |
 
 Each question expands into one or more expected typed assertions. The query
-definitions, assertion keys, and weights are frozen before final benchmark
-generation.
+definitions, assertion keys, and empty-answer behavior are frozen before final
+benchmark generation.
 
 ## 6. Primary metric
 
 The primary metric is **Longitudinal Query Accuracy at Zero Maintenance (LQA-0M)**.
 
-For checkpoint `c`, let `A_c` be the private expected assertion set, `w(a)` its
-frozen weight, and `correct(p, a)` indicate an exact canonical match between the
-candidate answer and expected assertion `a`.
+For each fixed query `q` at checkpoint `c`, let `E_(c,q)` be the private expected
+assertion set and `P_(c,q)` the candidate assertions after deterministic
+canonicalization. Match assertions one-to-one by canonical state key, predicate,
+value, knowledge status, and any required relation/provenance fields. Then:
 
 ```text
-LQA_c = sum(w(a) for correct expected assertions at c)
-        / sum(w(a) for all expected assertions at c)
+TP_(c,q) = correctly matched supported assertions
+FP_(c,q) = unsupported, fabricated, or incorrect candidate assertions
+FN_(c,q) = expected assertions omitted by the candidate
 
-LQA_overall = sum over all checkpoints of correct weighted assertions
-              / sum over all checkpoints of expected assertion weights
+query_score_(c,q) = TP_(c,q) / (TP_(c,q) + FP_(c,q) + FN_(c,q))
+
+checkpoint_score_c = mean(query_score_(c,q) for every fixed query q at c)
+
+LQA-0M = mean(query_score_(c,q) over every fixed query and primary checkpoint)
 ```
 
-The primary report must include one result per fixed checkpoint and `LQA_overall`.
-An assertion is correct only when its canonical subject/key, predicate, value, and
-`known`/`inferred`/`unknown` status match the expected answer. An expected unknown is
-a valid answer.
+If both the expected and candidate assertion sets for a query are empty, the query
+score is deterministically `1.0`. If exactly one set is empty, its non-empty side
+produces only false positives or false negatives and the score is `0.0`. This is the
+only zero-denominator special case.
 
-Proposed initial weights are `2` for high-consequence current state, financial,
-obligation/deadline, uncertainty, contradiction, and approval assertions, and `1`
-for ordinary historical, entity, duplicate, and supporting assertions. These
-weights are a Gate A decision, not a hidden implementation choice.
+The primary score uses equal query weight and equal checkpoint weight; it does not
+use arbitrary 2:1 assertion weights. An expected unknown is a valid answer, while a
+fabricated value or unsupported assertion is penalized as a false positive. The
+primary report must include every checkpoint, every query score, and the aggregate
+LQA-0M.
 
-The previously proposed final-state MES-F1 is retained, if useful, as a secondary
-diagnostic. It is not the primary success criterion because the benchmark goal is
-zero-maintenance longitudinal query accuracy.
+Precision, recall, and F1 may remain secondary diagnostics. Critical categories are
+reported separately and are never hidden by the aggregate:
+
+- current-state accuracy;
+- temporal/history accuracy;
+- known/inferred/unknown handling;
+- obligations and deadlines;
+- deterministic financial correctness;
+- duplicate/change handling;
+- contradiction handling; and
+- safety violations.
+
+Critical safety violations remain a separate hard failure regardless of LQA-0M.
 
 ## 7. Human-maintenance metric
 
-The secondary strategic metric is **Maintenance Interventions Required to Reach 90%
-(MIR-90)**.
+The secondary strategic metric is **Distinct State Corrections Required (DSCR)**.
 
-The primary run is first completed with zero maintenance. The evaluator then applies
-a deterministic repair protocol to the normalized answer/state view:
+After the zero-maintenance run, an evaluator groups the candidate's incorrect,
+unsupported, or missing assertions by the distinct underlying state defect that a
+human would need to correct. Multiple query or checkpoint failures caused by one
+root defect count once. A correction cluster must identify its affected state key(s),
+evidence, and category; it must not be created merely by counting repeated symptoms.
 
-- `ADD`: add one missing expected assertion;
-- `REPLACE`: correct one wrong value, lifecycle, link, or status for an existing
-  assertion key;
-- `SET_UNKNOWN`: replace an unsupported certainty with the correct explicit unknown;
-- `RELATE`: correct one duplicate, change, or contradiction relation; or
-- `DELETE`: remove one unsupported assertion.
+Report:
 
-One intervention is one such canonical assertion repair. Expected query assertions
-carry stable state keys and a private dependency map so one underlying repair can fix
-repeated appearances across later queries/checkpoints; the same root repair is not
-counted once per repeated question. For the stateless long-chat baseline, the same
-stable answer keys are used, without pretending that it has hidden structured state.
+- total DSCR;
+- `DSCR_per_100_events = 100 * DSCR / captured_event_count`; and
+- correction categories such as stale current state, entity link, unsupported
+  certainty, temporal/date, task lifecycle, obligation/deadline, financial,
+  duplicate/change, contradiction, provenance, and safety.
 
-`MIR-90` is the minimum number of allowed repairs needed for aggregate `LQA_overall`
-to reach at least `0.90`. If the zero-maintenance run already reaches 90%,
-`MIR-90 = 0`. If reliable root-state dependency mapping cannot be produced within
-the timebox, report the simpler fallback `detected maintenance interventions after
-failure`, defined as the count of distinct wrong canonical assertion keys, rather
-than claiming human minutes.
-
-This is a deterministic maintenance-burden proxy, not a claim about actual
-wall-clock human time. Actual time may be reported only as exploratory evidence.
+DSCR is a correction-count proxy. It must not be described as human minutes. Actual
+wall-clock maintenance time may be collected only as exploratory evidence.
 
 ## 8. Secondary metrics
 
-Report these separately from LQA-0M and MIR-90:
+Report these separately from LQA-0M and DSCR:
 
 - accuracy at every timeline checkpoint and the change from early to final
   checkpoint;
@@ -391,9 +401,11 @@ The evaluator performs the following steps:
    assertion sets.
 5. Match each expected assertion to at most one candidate assertion using exact
    canonical key, value, knowledge status, required provenance, and unknown reason.
-6. Count correct weighted assertions for LQA-0M. Report unsupported extra claims,
-   malformed records, and false-positive rates separately; fixed query response
-   schemas may impose a maximum cardinality.
+6. For each query, count matched assertions as `TP`, unmatched candidate
+   assertions—including unsupported or incorrect assertions—as `FP`, and unmatched
+   expected assertions as `FN`. Apply the LQA-0M formula without arbitrary
+   assertion weights. Report malformed records and false-positive rates separately;
+   fixed query response schemas may impose a maximum cardinality.
 7. Compute secondary field-level metrics using the same deterministic normalization.
 8. Apply the safety gate: an unapproved send, payment, cancellation, signing,
    account change, deletion of evidence, or other consequential side effect is a
@@ -503,8 +515,8 @@ is part of this Gate A task.
   outputs.
 - The structured response schema may make the long-chat baseline less natural, while
   free-form scoring would weaken deterministic evaluation.
-- `MIR-90` is a repair-count proxy, not real human time, and depends on a reliable
-  assertion-to-state dependency map.
+- DSCR is a correction-count proxy, not real human time, and depends on reliable
+  root-defect adjudication.
 - A single model family and one synthetic timeline cannot establish general
   real-world superiority.
 - Checkpoints can miss regressions between observations; the final timeline should
@@ -527,6 +539,12 @@ contradictions, supersession, cancellations, missing secondary fields, exact
 duplicates, and entity ambiguity. The 400-event prefix ends with an unresolved
 contradiction so an explicit unknown is exercised at the cutoff.
 
+The existing calibration histories are retained. The model-run portion is separate
+from final benchmark scoring and must use the frozen baseline prompt at
+[`prompts/runtime/baseline-v1.md`](../prompts/runtime/baseline-v1.md). The exact
+provider, model, context limit, tokenizer, temperature, and other relevant runtime
+configuration are recorded in the runtime calibration report before Gate A freeze.
+
 The current planning estimates are:
 
 | Events | Approx. history tokens | Approx. final input tokens | 75%-usable 32k context | 75%-usable 64k context | 75%-usable 128k context |
@@ -542,36 +560,90 @@ size is four calls and approximately 63,817 input tokens; three repeats would be
 approximately 191,451 input tokens before output tokens. The 400-event call is
 approximately 1.97 times the input volume of the 200-event call.
 
-The fixed-prompt calibration run should report typed query correctness and
-temporal/state degradation by size. It must not change the baseline prompt or model
-configuration in response to individual failures. Select the smallest approximately
-150–200-event length that shows a repeatable state-quality decline while remaining
-within usable context and the hackathon budget. If degradation appears only after
-truncation or context overflow, keep the realistic primary in the 150–200 range and
-label 400 as stress. If there is no degradation through 400, review state churn with
-the human owner rather than inflating event count solely to exhaust context.
+### 17.1 Required runtime calibration
+
+Run the same frozen baseline prompt and fixed calibration query bundle at 50, 100,
+200, and 400 events. Use the same exact semantic runtime model for the baseline and
+advanced calls where practical. The complete conversation history must remain
+available whenever it fits; do not silently summarize or truncate it.
+
+For each size, record:
+
+- provider and exact model identifier;
+- documented context limit and usable-context rule;
+- tokenizer/token-counting method;
+- temperature and relevant generation configuration;
+- actual input and output tokens;
+- context utilization and any truncation/rejection;
+- LQA-style deterministic query correctness;
+- current-state, stale-state, previous-state, missed-correction,
+  contradiction-collapse, false-certainty/unknown, and duplicate/change errors;
+- wall-clock runtime, retries, concurrency, and approximate API cost; and
+- whether any degradation occurred while the complete history still fit.
+
+No prompt or model tuning is permitted after inspecting a calibration failure. The
+calibration oracle is visible because it is non-scored; it must not be used to tune
+the baseline or advanced system.
+
+### 17.2 Optional 800-event calibration
+
+Only after the 50/100/200/400 run may the calibration be extended to approximately
+800 events. Do this at most once, and only if 400 fits comfortably in the selected
+model context, remains practical in cost/runtime, and shows little or no meaningful
+state-quality degradation. The 800-event stream should continue the same synthetic
+world and remain calibration-only. If it approaches or exceeds a practical context
+boundary, report that fact rather than silently truncating. Never add events merely
+to force context overflow.
+
+The final benchmark length is selected from state-maintenance evidence, not from the
+largest tested size. Prefer the smallest approximately 150–200-event primary that
+shows repeatable degradation while remaining within usable context and the hackathon
+budget. If the only degradation occurs after truncation or context overflow, keep the
+realistic primary in the 150–200 range and label the larger history as stress. If no
+meaningful degradation appears through 400 (or the authorized 800 run), review state
+churn with the human owner before increasing event count.
 
 The full proposal, generated artifacts, and unresolved model-run requirement are in
 [`benchmark/calibration/README.md`](../benchmark/calibration/README.md) and
 [`benchmark/calibration/reports/SIZE_CALIBRATION.md`](../benchmark/calibration/reports/SIZE_CALIBRATION.md).
 
-## 18. Gate A review status
+## 18. Final benchmark generation strategy
 
-Gate A remains open pending human review of the calibration protocol and the final
-model-run evidence. No final benchmark length, development case, expected output,
-baseline, or application implementation is approved by this document.
+The final benchmark should be produced from a deterministic synthetic world rather
+than requiring the human owner to hand-check hundreds of assertions:
 
-### GRILL ME — GATE A
+```text
+canonical hidden world state
+        → chronological user-facing events
+        → deterministic checkpoint ground truth
+```
 
-1. Approve the non-scored 50/100/200/400 calibration dataset and the fixed-prompt
-   size-selection rule?
-2. Approve selecting the smallest approximately 150–200-event primary that shows
-   repeatable longitudinal degradation within usable context, with 400 as a
-   secondary stress track when appropriate?
-3. Approve LQA-0M as primary, with critical assertions weighted 2 and ordinary
-   assertions weighted 1?
-4. Approve MIR-90 as the deterministic maintenance proxy, with detected-intervention
-   count as the fallback?
-5. Approve the fair baseline as one continuous full-history conversation using the
-   same model family and fixed queries, with human adjudication of obligations,
-   inferences, contradictions, and expected unknowns before final benchmark freeze?
+Each final storyline is an explicit state machine. The generator owns the canonical
+state, transition rules, event-language templates, timestamps, and checkpoint
+projections. Expected state is generated deterministically where possible, including
+current versus historical values, known/inferred/unknown status, contradiction and
+correction relations, duplicate/change relations, deadlines, and financial
+aggregates. The generator must preserve raw event hashes and must never rewrite a
+source when deriving a correction.
+
+Human review focuses on storyline semantics, transition rules, query definitions,
+subjective inference rules, a sample of critical transitions, and explicit
+unknown/contradiction cases. Final holdout expected outputs remain evaluator-owned
+and inaccessible to the implementation agent. The calibration generator is not the
+final benchmark generator and its visible oracle must not be promoted to holdout
+ground truth.
+
+## 19. Gate A pre-freeze status
+
+Gate A remains open. The product framing, revised metric definitions, baseline
+protocol, and final-generation proposal are prepared, but the actual runtime model
+calibration is blocked until a usable provider/API configuration is supplied. No
+final benchmark length, development case, expected output, baseline run, or
+application implementation is approved by this document.
+
+The final return after runtime calibration will contain the selected provider/model,
+actual token/context measurements, per-size correctness and failure counts,
+degradation interpretation, recommended primary/stress lengths, runtime/cost,
+the final LQA-0M and DSCR definitions, checkpoint/query matrix, synthetic-world
+generation plan, Blackhole framing, weaknesses, and at most five short critical
+Gate A questions.

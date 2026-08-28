@@ -91,7 +91,8 @@ python benchmark/calibration/generate_calibration.py
 The command regenerates the four deterministic prefixes and the separate,
 calibration-only oracle. Record the resulting manifest and file hashes, the
 selected model/provider/version, tokenizer, documented context limit, fixed
-prompt revision, exact token counts, context utilization, query-correctness
-readout, degradation observations, runtime, retries, and cost. The visible
-calibration oracle is not final benchmark ground truth and must not be copied
-into development or holdout packages.
+prompt revision (`baseline-v1`), exact token counts, context utilization,
+query-correctness readout, degradation observations, runtime, retries, and cost
+in [`benchmark/calibration/reports/RUNTIME_CALIBRATION.md`](../benchmark/calibration/reports/RUNTIME_CALIBRATION.md).
+The visible calibration oracle is not final benchmark ground truth and must not
+be copied into development or holdout packages.
