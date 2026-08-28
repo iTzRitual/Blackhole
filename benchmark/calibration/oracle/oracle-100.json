@@ -1,0 +1,724 @@
+{
+  "contract_version": "0.1-calibration-not-scored",
+  "dataset": "life-inbox-size-calibration",
+  "event_count": 100,
+  "final_state": {
+    "s01": {
+      "entity": "Aster",
+      "field": "mode",
+      "current": {
+        "value": "active",
+        "knowledge_status": "known",
+        "source_ref": "cal-0091"
+      },
+      "previous": {
+        "value": "quiet",
+        "knowledge_status": "known",
+        "unknown_reason": null
+      },
+      "secondary_field": {
+        "field": "mode_secondary",
+        "knowledge_status": "unknown",
+        "unknown_reason": "missing"
+      },
+      "last_event_id": "cal-0091",
+      "observed_event_count": 10,
+      "observation_dates": [
+        "2026-01-05",
+        "2026-01-08",
+        "2026-01-11",
+        "2026-01-15",
+        "2026-01-18",
+        "2026-01-21",
+        "2026-01-25",
+        "2026-01-28",
+        "2026-01-31",
+        "2026-02-04"
+      ]
+    },
+    "s02": {
+      "entity": "Beryl",
+      "field": "window",
+      "current": {
+        "value": "afternoon",
+        "knowledge_status": "known",
+        "source_ref": "cal-0096"
+      },
+      "previous": {
+        "value": "morning",
+        "knowledge_status": "known",
+        "unknown_reason": null
+      },
+      "secondary_field": {
+        "field": "window_secondary",
+        "knowledge_status": "unknown",
+        "unknown_reason": "missing"
+      },
+      "last_event_id": "cal-0096",
+      "observed_event_count": 10,
+      "observation_dates": [
+        "2026-01-05",
+        "2026-01-10",
+        "2026-01-13",
+        "2026-01-16",
+        "2026-01-18",
+        "2026-01-23",
+        "2026-01-26",
+        "2026-01-30",
+        "2026-02-01",
+        "2026-02-05"
+      ]
+    },
+    "s03": {
+      "entity": "Cinder",
+      "field": "access",
+      "current": {
+        "value": "enabled",
+        "knowledge_status": "known",
+        "source_ref": "cal-0092"
+      },
+      "previous": {
+        "value": "enabled",
+        "knowledge_status": "known",
+        "unknown_reason": null
+      },
+      "secondary_field": {
+        "field": "access_secondary",
+        "knowledge_status": "unknown",
+        "unknown_reason": "missing"
+      },
+      "last_event_id": "cal-0092",
+      "observed_event_count": 9,
+      "observation_dates": [
+        "2026-01-05",
+        "2026-01-08",
+        "2026-01-14",
+        "2026-01-16",
+        "2026-01-19",
+        "2026-01-22",
+        "2026-01-27",
+        "2026-02-01",
+        "2026-02-04"
+      ]
+    },
+    "s04": {
+      "entity": "Dune",
+      "field": "route",
+      "current": {
+        "value": "west",
+        "knowledge_status": "known",
+        "source_ref": "cal-0097"
+      },
+      "previous": {
+        "value": "north",
+        "knowledge_status": "known",
+        "unknown_reason": null
+      },
+      "secondary_field": {
+        "field": "route_secondary",
+        "knowledge_status": "unknown",
+        "unknown_reason": "missing"
+      },
+      "last_event_id": "cal-0097",
+      "observed_event_count": 10,
+      "observation_dates": [
+        "2026-01-06",
+        "2026-01-10",
+        "2026-01-12",
+        "2026-01-17",
+        "2026-01-19",
+        "2026-01-23",
+        "2026-01-25",
+        "2026-01-31",
+        "2026-02-01",
+        "2026-02-06"
+      ]
+    },
+    "s05": {
+      "entity": "Ember",
+      "field": "tier",
+      "current": {
+        "value": "basic",
+        "knowledge_status": "known",
+        "source_ref": "cal-0093"
+      },
+      "previous": {
+        "value": "pro",
+        "knowledge_status": "known",
+        "unknown_reason": null
+      },
+      "secondary_field": {
+        "field": "tier_secondary",
+        "knowledge_status": "unknown",
+        "unknown_reason": "missing"
+      },
+      "last_event_id": "cal-0093",
+      "observed_event_count": 9,
+      "observation_dates": [
+        "2026-01-06",
+        "2026-01-09",
+        "2026-01-13",
+        "2026-01-15",
+        "2026-01-19",
+        "2026-01-26",
+        "2026-01-28",
+        "2026-02-02",
+        "2026-02-04"
+      ]
+    },
+    "s06": {
+      "entity": "Flint",
+      "field": "status",
+      "current": {
+        "value": "scheduled",
+        "knowledge_status": "known",
+        "source_ref": "cal-0098"
+      },
+      "previous": {
+        "value": "scheduled",
+        "knowledge_status": "known",
+        "unknown_reason": null
+      },
+      "secondary_field": {
+        "field": "status_secondary",
+        "knowledge_status": "unknown",
+        "unknown_reason": "missing"
+      },
+      "last_event_id": "cal-0098",
+      "observed_event_count": 9,
+      "observation_dates": [
+        "2026-01-06",
+        "2026-01-10",
+        "2026-01-14",
+        "2026-01-20",
+        "2026-01-24",
+        "2026-01-27",
+        "2026-01-30",
+        "2026-02-02",
+        "2026-02-06"
+      ]
+    },
+    "s07": {
+      "entity": "Grove",
+      "field": "assignment",
+      "current": {
+        "value": "Mira",
+        "knowledge_status": "inferred",
+        "source_ref": "cal-0087"
+      },
+      "previous": {
+        "value": "unassigned",
+        "knowledge_status": "inferred",
+        "unknown_reason": null
+      },
+      "secondary_field": {
+        "field": "assignment_secondary",
+        "knowledge_status": "unknown",
+        "unknown_reason": "missing"
+      },
+      "last_event_id": "cal-0087",
+      "observed_event_count": 8,
+      "observation_dates": [
+        "2026-01-07",
+        "2026-01-09",
+        "2026-01-12",
+        "2026-01-16",
+        "2026-01-22",
+        "2026-01-25",
+        "2026-01-29",
+        "2026-02-02"
+      ]
+    },
+    "s08": {
+      "entity": "Halo",
+      "field": "registration",
+      "current": {
+        "value": "confirmed",
+        "knowledge_status": "known",
+        "source_ref": "cal-0099"
+      },
+      "previous": {
+        "value": "pending",
+        "knowledge_status": "known",
+        "unknown_reason": null
+      },
+      "secondary_field": {
+        "field": "registration_secondary",
+        "knowledge_status": "unknown",
+        "unknown_reason": "missing"
+      },
+      "last_event_id": "cal-0099",
+      "observed_event_count": 10,
+      "observation_dates": [
+        "2026-01-07",
+        "2026-01-11",
+        "2026-01-13",
+        "2026-01-18",
+        "2026-01-20",
+        "2026-01-24",
+        "2026-01-27",
+        "2026-01-31",
+        "2026-02-03",
+        "2026-02-06"
+      ]
+    },
+    "s09": {
+      "entity": "Iris",
+      "field": "contact",
+      "current": {
+        "value": "South",
+        "knowledge_status": "known",
+        "source_ref": "cal-0095"
+      },
+      "previous": {
+        "value": "North",
+        "knowledge_status": "known",
+        "unknown_reason": null
+      },
+      "secondary_field": {
+        "field": "contact_secondary",
+        "knowledge_status": "unknown",
+        "unknown_reason": "missing"
+      },
+      "last_event_id": "cal-0095",
+      "observed_event_count": 10,
+      "observation_dates": [
+        "2026-01-07",
+        "2026-01-09",
+        "2026-01-14",
+        "2026-01-15",
+        "2026-01-21",
+        "2026-01-23",
+        "2026-01-28",
+        "2026-01-29",
+        "2026-02-03",
+        "2026-02-05"
+      ]
+    },
+    "s10": {
+      "entity": "Jade",
+      "field": "appointment",
+      "current": {
+        "value": "moved",
+        "knowledge_status": "known",
+        "source_ref": "cal-0100"
+      },
+      "previous": {
+        "value": "open",
+        "knowledge_status": "known",
+        "unknown_reason": null
+      },
+      "secondary_field": {
+        "field": "appointment_secondary",
+        "knowledge_status": "unknown",
+        "unknown_reason": "missing"
+      },
+      "last_event_id": "cal-0100",
+      "observed_event_count": 10,
+      "observation_dates": [
+        "2026-01-08",
+        "2026-01-11",
+        "2026-01-12",
+        "2026-01-17",
+        "2026-01-21",
+        "2026-01-24",
+        "2026-01-26",
+        "2026-01-30",
+        "2026-02-03",
+        "2026-02-07"
+      ]
+    }
+  },
+  "diagnostics": {
+    "correction_event_ids": [
+      "cal-0041",
+      "cal-0082"
+    ],
+    "contradiction_event_ids": [
+      "cal-0037",
+      "cal-0074"
+    ],
+    "ambiguous_link_event_ids": [
+      "cal-0047",
+      "cal-0094"
+    ],
+    "duplicate_pairs": [
+      {
+        "event_id": "cal-0053",
+        "duplicate_of": "cal-0045"
+      }
+    ],
+    "relation_count": 92,
+    "missing_periods": {
+      "s01": {
+        "max_gap_days_between_observations": 4,
+        "secondary_field": "mode_secondary"
+      },
+      "s02": {
+        "max_gap_days_between_observations": 5,
+        "secondary_field": "window_secondary"
+      },
+      "s03": {
+        "max_gap_days_between_observations": 6,
+        "secondary_field": "access_secondary"
+      },
+      "s04": {
+        "max_gap_days_between_observations": 6,
+        "secondary_field": "route_secondary"
+      },
+      "s05": {
+        "max_gap_days_between_observations": 7,
+        "secondary_field": "tier_secondary"
+      },
+      "s06": {
+        "max_gap_days_between_observations": 6,
+        "secondary_field": "status_secondary"
+      },
+      "s07": {
+        "max_gap_days_between_observations": 6,
+        "secondary_field": "assignment_secondary"
+      },
+      "s08": {
+        "max_gap_days_between_observations": 5,
+        "secondary_field": "registration_secondary"
+      },
+      "s09": {
+        "max_gap_days_between_observations": 6,
+        "secondary_field": "contact_secondary"
+      },
+      "s10": {
+        "max_gap_days_between_observations": 5,
+        "secondary_field": "appointment_secondary"
+      }
+    }
+  },
+  "query_bundle": [
+    {
+      "query_id": "current-s01",
+      "prompt": "What is the current mode for Aster? Return the value and whether it is known, inferred, or unknown.",
+      "kind": "current",
+      "storyline_id": "s01"
+    },
+    {
+      "query_id": "current-s02",
+      "prompt": "What is the current window for Beryl? Return the value and whether it is known, inferred, or unknown.",
+      "kind": "current",
+      "storyline_id": "s02"
+    },
+    {
+      "query_id": "current-s03",
+      "prompt": "What is the current access for Cinder? Return the value and whether it is known, inferred, or unknown.",
+      "kind": "current",
+      "storyline_id": "s03"
+    },
+    {
+      "query_id": "current-s04",
+      "prompt": "What is the current route for Dune? Return the value and whether it is known, inferred, or unknown.",
+      "kind": "current",
+      "storyline_id": "s04"
+    },
+    {
+      "query_id": "current-s05",
+      "prompt": "What is the current tier for Ember? Return the value and whether it is known, inferred, or unknown.",
+      "kind": "current",
+      "storyline_id": "s05"
+    },
+    {
+      "query_id": "current-s06",
+      "prompt": "What is the current status for Flint? Return the value and whether it is known, inferred, or unknown.",
+      "kind": "current",
+      "storyline_id": "s06"
+    },
+    {
+      "query_id": "current-s07",
+      "prompt": "What is the current assignment for Grove? Return the value and whether it is known, inferred, or unknown.",
+      "kind": "current",
+      "storyline_id": "s07"
+    },
+    {
+      "query_id": "current-s08",
+      "prompt": "What is the current registration for Halo? Return the value and whether it is known, inferred, or unknown.",
+      "kind": "current",
+      "storyline_id": "s08"
+    },
+    {
+      "query_id": "current-s09",
+      "prompt": "What is the current contact for Iris? Return the value and whether it is known, inferred, or unknown.",
+      "kind": "current",
+      "storyline_id": "s09"
+    },
+    {
+      "query_id": "current-s10",
+      "prompt": "What is the current appointment for Jade? Return the value and whether it is known, inferred, or unknown.",
+      "kind": "current",
+      "storyline_id": "s10"
+    },
+    {
+      "query_id": "missing-secondary-fields",
+      "prompt": "Which secondary field is not observed for each calibration storyline? Do not treat its absence as zero or false.",
+      "kind": "missing"
+    },
+    {
+      "query_id": "prior-values",
+      "prompt": "For each storyline, report the immediately preceding observed value before the current value, or unknown when none exists.",
+      "kind": "previous"
+    },
+    {
+      "query_id": "event-relations",
+      "prompt": "Report the counts and references for duplicate, correction, contradiction, and ambiguous-link events.",
+      "kind": "relations"
+    }
+  ],
+  "query_answers": [
+    {
+      "query_id": "current-s01",
+      "assertions": [
+        {
+          "state_key": "s01/mode/current",
+          "value": "active",
+          "knowledge_status": "known",
+          "source_ref": "cal-0091"
+        }
+      ]
+    },
+    {
+      "query_id": "current-s02",
+      "assertions": [
+        {
+          "state_key": "s02/window/current",
+          "value": "afternoon",
+          "knowledge_status": "known",
+          "source_ref": "cal-0096"
+        }
+      ]
+    },
+    {
+      "query_id": "current-s03",
+      "assertions": [
+        {
+          "state_key": "s03/access/current",
+          "value": "enabled",
+          "knowledge_status": "known",
+          "source_ref": "cal-0092"
+        }
+      ]
+    },
+    {
+      "query_id": "current-s04",
+      "assertions": [
+        {
+          "state_key": "s04/route/current",
+          "value": "west",
+          "knowledge_status": "known",
+          "source_ref": "cal-0097"
+        }
+      ]
+    },
+    {
+      "query_id": "current-s05",
+      "assertions": [
+        {
+          "state_key": "s05/tier/current",
+          "value": "basic",
+          "knowledge_status": "known",
+          "source_ref": "cal-0093"
+        }
+      ]
+    },
+    {
+      "query_id": "current-s06",
+      "assertions": [
+        {
+          "state_key": "s06/status/current",
+          "value": "scheduled",
+          "knowledge_status": "known",
+          "source_ref": "cal-0098"
+        }
+      ]
+    },
+    {
+      "query_id": "current-s07",
+      "assertions": [
+        {
+          "state_key": "s07/assignment/current",
+          "value": "Mira",
+          "knowledge_status": "inferred",
+          "source_ref": "cal-0087"
+        }
+      ]
+    },
+    {
+      "query_id": "current-s08",
+      "assertions": [
+        {
+          "state_key": "s08/registration/current",
+          "value": "confirmed",
+          "knowledge_status": "known",
+          "source_ref": "cal-0099"
+        }
+      ]
+    },
+    {
+      "query_id": "current-s09",
+      "assertions": [
+        {
+          "state_key": "s09/contact/current",
+          "value": "South",
+          "knowledge_status": "known",
+          "source_ref": "cal-0095"
+        }
+      ]
+    },
+    {
+      "query_id": "current-s10",
+      "assertions": [
+        {
+          "state_key": "s10/appointment/current",
+          "value": "moved",
+          "knowledge_status": "known",
+          "source_ref": "cal-0100"
+        }
+      ]
+    },
+    {
+      "query_id": "missing-secondary-fields",
+      "assertions": [
+        {
+          "state_key": "s01/mode_secondary",
+          "field": "mode_secondary",
+          "knowledge_status": "unknown",
+          "unknown_reason": "missing"
+        },
+        {
+          "state_key": "s02/window_secondary",
+          "field": "window_secondary",
+          "knowledge_status": "unknown",
+          "unknown_reason": "missing"
+        },
+        {
+          "state_key": "s03/access_secondary",
+          "field": "access_secondary",
+          "knowledge_status": "unknown",
+          "unknown_reason": "missing"
+        },
+        {
+          "state_key": "s04/route_secondary",
+          "field": "route_secondary",
+          "knowledge_status": "unknown",
+          "unknown_reason": "missing"
+        },
+        {
+          "state_key": "s05/tier_secondary",
+          "field": "tier_secondary",
+          "knowledge_status": "unknown",
+          "unknown_reason": "missing"
+        },
+        {
+          "state_key": "s06/status_secondary",
+          "field": "status_secondary",
+          "knowledge_status": "unknown",
+          "unknown_reason": "missing"
+        },
+        {
+          "state_key": "s07/assignment_secondary",
+          "field": "assignment_secondary",
+          "knowledge_status": "unknown",
+          "unknown_reason": "missing"
+        },
+        {
+          "state_key": "s08/registration_secondary",
+          "field": "registration_secondary",
+          "knowledge_status": "unknown",
+          "unknown_reason": "missing"
+        },
+        {
+          "state_key": "s09/contact_secondary",
+          "field": "contact_secondary",
+          "knowledge_status": "unknown",
+          "unknown_reason": "missing"
+        },
+        {
+          "state_key": "s10/appointment_secondary",
+          "field": "appointment_secondary",
+          "knowledge_status": "unknown",
+          "unknown_reason": "missing"
+        }
+      ]
+    },
+    {
+      "query_id": "prior-values",
+      "assertions": [
+        {
+          "state_key": "s01/mode/previous",
+          "value": "quiet",
+          "knowledge_status": "known",
+          "unknown_reason": null
+        },
+        {
+          "state_key": "s02/window/previous",
+          "value": "morning",
+          "knowledge_status": "known",
+          "unknown_reason": null
+        },
+        {
+          "state_key": "s03/access/previous",
+          "value": "enabled",
+          "knowledge_status": "known",
+          "unknown_reason": null
+        },
+        {
+          "state_key": "s04/route/previous",
+          "value": "north",
+          "knowledge_status": "known",
+          "unknown_reason": null
+        },
+        {
+          "state_key": "s05/tier/previous",
+          "value": "pro",
+          "knowledge_status": "known",
+          "unknown_reason": null
+        },
+        {
+          "state_key": "s06/status/previous",
+          "value": "scheduled",
+          "knowledge_status": "known",
+          "unknown_reason": null
+        },
+        {
+          "state_key": "s07/assignment/previous",
+          "value": "unassigned",
+          "knowledge_status": "inferred",
+          "unknown_reason": null
+        },
+        {
+          "state_key": "s08/registration/previous",
+          "value": "pending",
+          "knowledge_status": "known",
+          "unknown_reason": null
+        },
+        {
+          "state_key": "s09/contact/previous",
+          "value": "North",
+          "knowledge_status": "known",
+          "unknown_reason": null
+        },
+        {
+          "state_key": "s10/appointment/previous",
+          "value": "open",
+          "knowledge_status": "known",
+          "unknown_reason": null
+        }
+      ]
+    },
+    {
+      "query_id": "event-relations",
+      "relation_summary": {
+        "correction_count": 2,
+        "contradiction_count": 2,
+        "ambiguous_link_count": 2,
+        "duplicate_count": 1
+      }
+    }
+  ],
+  "scoring_note": "Calibration oracle only. These assertions are not part of the final benchmark and must not be used to tune a baseline prompt."
+}

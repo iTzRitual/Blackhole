@@ -73,3 +73,11 @@ This is a lightweight decision record. Each entry captures the current design di
 - **Decision:** Attention items are rebuildable projections over facts, uncertainty, obligations, deadlines, conflicts, and approvals.
 - **Consequences:** An item leaving the attention view does not delete the underlying evidence or state.
 - **Revisit when:** User research demonstrates a durable need for a manually managed attention state, with provenance preserved.
+
+## D-009 — Calibrate benchmark length before freezing Gate A
+
+- **Status:** Proposed for Gate A review
+- **Context:** A short timeline may fail to expose longitudinal state-maintenance errors in a strong long-context model, while an oversized timeline can measure context exhaustion rather than state quality.
+- **Decision:** Before freezing the final benchmark length, run a separate non-scored calibration with 50-, 100-, 200-, and 400-event prefixes. Keep ten evolving storylines and prioritize state churn—updates, corrections, contradictions, supersession, cancellations, missing periods, duplicates, and ambiguity—over raw event count. Prefer the smallest approximately 150–200-event primary that shows repeatable degradation while remaining within usable context and the hackathon budget; keep a larger track secondary.
+- **Consequences:** Calibration artifacts and a visible calibration-only oracle may be stored under `benchmark/calibration/`, but they are not final ground truth and cannot tune the baseline prompt. The selected model, tokenizer, context limit, correctness readout, runtime, and cost must be recorded before Gate A freeze.
+- **Revisit when:** The fixed-prompt calibration shows no meaningful degradation through 400 events, the selected model/context changes, or the human owner approves a different primary/stress policy.

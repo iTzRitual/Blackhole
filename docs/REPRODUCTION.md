@@ -78,3 +78,20 @@ Before calling an evaluation result reproducible, confirm:
 - raw evidence is unchanged;
 - the output artifact can be located; and
 - holdout ground truth was never included in the implementation-facing artifacts.
+
+## 7. Non-scored size calibration
+
+The pre-freeze calibration dataset is reproducible without the application or
+evaluator. From the repository root, run:
+
+```text
+python benchmark/calibration/generate_calibration.py
+```
+
+The command regenerates the four deterministic prefixes and the separate,
+calibration-only oracle. Record the resulting manifest and file hashes, the
+selected model/provider/version, tokenizer, documented context limit, fixed
+prompt revision, exact token counts, context utilization, query-correctness
+readout, degradation observations, runtime, retries, and cost. The visible
+calibration oracle is not final benchmark ground truth and must not be copied
+into development or holdout packages.

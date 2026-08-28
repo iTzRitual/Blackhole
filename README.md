@@ -6,7 +6,7 @@ The system is intended to do the organizing later: extract facts, classify input
 
 ## Status
 
-This repository is currently in the benchmark-design phase for the micro1 Agentic Workflows Hackathon. Benchmark contract design, development benchmark cases, synthetic inputs, and evaluator design are now in scope. Application implementation, baseline implementation, infrastructure, executable evaluation code, and holdout ground truth remain intentionally out of scope.
+This repository is currently in the benchmark-design phase for the micro1 Agentic Workflows Hackathon. Benchmark contract design, development benchmark cases, synthetic inputs, and evaluator design are now in scope. A separate non-scored benchmark-size calibration is present, while the final Gate A length remains open. Application implementation, baseline implementation, infrastructure, executable evaluation code, and holdout ground truth remain intentionally out of scope.
 
 ## Design principles
 

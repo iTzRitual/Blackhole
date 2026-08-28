@@ -1,0 +1,45 @@
+{
+  "dataset": "life-inbox-size-calibration",
+  "version": "0.1",
+  "scored": false,
+  "seed_label": "life-inbox-size-calibration-v1",
+  "event_counts": [
+    50,
+    100,
+    200,
+    400
+  ],
+  "storyline_ids": [
+    "s01",
+    "s02",
+    "s03",
+    "s04",
+    "s05",
+    "s06",
+    "s07",
+    "s08",
+    "s09",
+    "s10"
+  ],
+  "storyline_count": 10,
+  "schedule_length": 40,
+  "history_files": [
+    "histories/history-050.jsonl",
+    "histories/history-100.jsonl",
+    "histories/history-200.jsonl",
+    "histories/history-400.jsonl"
+  ],
+  "oracle_files": [
+    "oracle/oracle-050.json",
+    "oracle/oracle-100.json",
+    "oracle/oracle-200.json",
+    "oracle/oracle-400.json"
+  ],
+  "oracle_sha256": {
+    "50": "04164d711e7e2595d51f773ba0e74dae59f47e4a0d65f626fd9a632390c22524",
+    "100": "9af653475ed60097dafd0c70b34b3f80639c21ac57df70cc8bf51bf14e90b73b",
+    "200": "6c6eaddafec52c167b7167525c213f8b2d745e1d0afa599ad3d3ae691ae3b0dd",
+    "400": "e1c1c75997129dcc5cf37293d7cc4f651b89b7054111db5532cf7e4c0adbc46c"
+  },
+  "ground_truth_boundary": "Calibration-only oracle data is separate from benchmark/dev and benchmark/holdout. It must not be used to tune baseline prompts."
+}

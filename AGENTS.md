@@ -2,7 +2,9 @@
 
 ## Current repository phase
 
-This repository is in the benchmark-design phase. Benchmark contract design, development benchmark cases, synthetic inputs, and evaluator design are allowed in this phase. Do not add application code, baseline implementation, production infrastructure, executable evaluation implementation, holdout cases, holdout expected outputs, or ground truth unless the project owner explicitly changes the scope.
+This repository is in the benchmark-design phase. Benchmark contract design, development benchmark cases, synthetic inputs, and evaluator design are allowed in this phase. Do not add application code, baseline implementation, production infrastructure, executable evaluation implementation, holdout cases, holdout expected outputs, or final benchmark ground truth unless the project owner explicitly changes the scope.
+
+The human-authorized size-calibration step is a narrow exception: non-scored synthetic histories and their visible calibration-only oracle may live under `benchmark/calibration/`. That oracle is not final benchmark ground truth, must remain separate from `benchmark/dev/` and `benchmark/holdout/`, and must not be used to tune a baseline prompt.
 
 The remaining empty directories are represented by placeholders so Git can preserve the intended layout. A placeholder is not permission to begin implementing the corresponding subsystem. Development benchmark content must follow the approved contract; evaluator-owned holdout material remains outside the implementation-agent trust boundary.
 
@@ -14,7 +16,7 @@ The remaining empty directories are represented by placeholders so Git can prese
 4. **Deterministic work is executable work.** Arithmetic, date calculations, comparisons, duplicate checks, and financial aggregation must be performed by deterministic code or SQL when implementation begins. LLMs may interpret or propose; they are not the calculator of record.
 5. **Consequential actions require approval.** Sending, paying, cancelling, signing, changing an account, deleting evidence, or making another consequential external change must wait for explicit user confirmation.
 6. **Evidence and provenance matter.** Derived facts should be traceable to the source material and the transformation that produced them.
-7. **Protect the benchmark.** Never inspect, modify, copy, summarize, infer from, or expose holdout expected outputs. Keep evaluator-owned holdout material outside implementation-agent access in real runs; the current repository contains no ground truth.
+7. **Protect the benchmark.** Never inspect, modify, copy, summarize, infer from, or expose holdout expected outputs. Keep evaluator-owned holdout material outside implementation-agent access in real runs; the current repository contains no final or holdout ground truth. The explicit calibration-only oracle is not a holdout substitute and must not leak into final benchmark artifacts.
 
 ## Working rules
 
