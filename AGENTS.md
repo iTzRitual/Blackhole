@@ -2,9 +2,9 @@
 
 ## Current repository phase
 
-This repository is in the documentation and design-scaffolding phase. Do not add application code, production infrastructure, benchmark cases, benchmark expected outputs, or evaluation implementation unless the project owner explicitly changes the scope.
+This repository is in the benchmark-design phase. Benchmark contract design, development benchmark cases, synthetic inputs, and evaluator design are allowed in this phase. Do not add application code, baseline implementation, production infrastructure, executable evaluation implementation, holdout cases, holdout expected outputs, or ground truth unless the project owner explicitly changes the scope.
 
-The empty directories are represented by placeholders so Git can preserve the intended layout. A placeholder is not permission to begin implementing the corresponding subsystem.
+The remaining empty directories are represented by placeholders so Git can preserve the intended layout. A placeholder is not permission to begin implementing the corresponding subsystem. Development benchmark content must follow the approved contract; evaluator-owned holdout material remains outside the implementation-agent trust boundary.
 
 ## Non-negotiable invariants
 
@@ -28,9 +28,9 @@ The empty directories are represented by placeholders so Git can preserve the in
 - When a requirement is ambiguous, document the assumption and its risk rather than inventing hidden behavior.
 - Do not claim evaluation success without a reproducible run record and clearly identified inputs.
 
-## Before implementation begins
+## Before application or baseline implementation begins
 
-Any move from scaffolding to implementation should first establish:
+Any move from benchmark design to application or baseline implementation should first establish:
 
 - the source and derived-state boundaries;
 - the representation of known, inferred, and unknown values;
@@ -243,8 +243,8 @@ Do not rewrite or squash away experiment history during active development unles
 
 A meaningful task is not complete until the agent has checked:
 
-- implementation completed;
-- relevant tests pass;
+- the requested design or implementation work is complete;
+- relevant tests or validation checks pass when applicable;
 - evaluation was run when behavior changed;
 - evaluation output was saved;
 - trajectory summary was updated;

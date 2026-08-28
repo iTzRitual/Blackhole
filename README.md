@@ -6,7 +6,7 @@ The system is intended to do the organizing later: extract facts, classify input
 
 ## Status
 
-This repository is currently a documentation-only scaffold for the micro1 Agentic Workflows Hackathon. Product implementation, benchmark data, and evaluation code are intentionally not present yet.
+This repository is currently in the benchmark-design phase for the micro1 Agentic Workflows Hackathon. Benchmark contract design, development benchmark cases, synthetic inputs, and evaluator design are now in scope. Application implementation, baseline implementation, infrastructure, executable evaluation code, and holdout ground truth remain intentionally out of scope.
 
 ## Design principles
 
@@ -35,6 +35,6 @@ This repository is currently a documentation-only scaffold for the micro1 Agenti
 
 ## Scope of this phase
 
-This phase establishes shared language, safety invariants, evaluation boundaries, and reproducibility expectations. It does not define an application schema or commit to a particular framework, database, model provider, or user interface.
+This phase establishes the benchmark contract, development-data conventions, evaluator boundaries, shared safety invariants, and reproducibility expectations. It does not implement the application or baseline, add production infrastructure, or expose evaluator-owned holdout ground truth. It also does not commit to a particular application framework, database, model provider, or user interface.
 
 Read [AGENTS.md](AGENTS.md) before changing the repository. The design context is in [docs/PRODUCT_SPEC.md](docs/PRODUCT_SPEC.md), [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), and [docs/EVALUATION.md](docs/EVALUATION.md).
