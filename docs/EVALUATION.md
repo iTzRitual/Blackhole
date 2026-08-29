@@ -907,3 +907,63 @@ Decision: **KEEP** deterministic selective completeness. It exceeds the
 predeclared threshold through LQA improvement of `+0.0473590067` and DSCR
 reduction of `4`, with no material protected-category, schema, safety, or
 source-integrity regression. Do not start another experiment in this task.
+
+## 27. Advanced Experiment 005 evidence
+
+Experiment 005 tested whether the projection boundary could use semantic
+evidence from true duplicate captures without treating those captures as new
+occurrences. The public, checkpoint-aware audit found exactly three meaningful
+losses in E004: Streamly's `next_renewal`, GymFlex's `expiry_date`, and the bank
+standing-order `approved` state. No benchmark, expected output, query bundle,
+response contract, evaluator, baseline, calibration artifact, or holdout
+material was changed.
+
+The implementation derives an undirected component graph only from
+`exact_duplicate`, `normalized_duplicate`, and `duplicate` relations. The
+earliest event by sequence is canonical; all member IDs are recorded in the
+derived component table. Evidence is consolidated per subject/predicate. Equal
+values are unioned without double-counting, additional predicates survive,
+unresolved conflicts remain unknown, and only an unambiguous terminal
+correction/supersession chain can resolve conflicting values. Similar captures,
+meaningful changes, contradictions, and task reassignment are not collapsed.
+The mode is opt-in as `--duplicate-evidence consolidate` and is versioned as
+`experiment-005-duplicate-evidence-projection-v1`.
+
+Neutral tests covered identical evidence, added predicates, unresolved
+conflicts, similar-not-duplicate boundaries, meaningful changes, duplicate
+chains, unknown preservation, explicit correction, and rebuildability. The
+full replay formed 24 components containing 72 events, including 48
+non-canonical members; it recovered 51 observations from duplicate-source
+captures and consolidated 36 identical observations. The count audit recorded
+200 raw events, 48 duplicate relation edges, 24 single-occurrence component
+units, and 287 input observations versus 251 projected observation groups;
+projected groups did not increase. It made zero provider calls.
+
+The standard non-official 50-event FAST replay remained `LQA-0M=0.8888888889`,
+`DSCR=4`, with no hard failure. The full public replay improved from the kept
+E004 result of `LQA-0M=0.8630770101` / `DSCR=41` to
+`LQA-0M=0.8695006212` / `DSCR=40`, with checkpoint scores
+`0.8888888889 / 0.8713728401 / 0.8321654040 / 0.8855753519` and totals
+`TP=330, FP=35, FN=45`. Current-state improved from `0.7222222222` to
+`0.7407407407`, temporal-history from `0.8730158730` to `0.8888888889`, and
+safety from `0.75` to `0.7708333333`. Financial, duplicate/change, entity
+resolution, relation reconciliation, and unknown-state metrics did not
+regress. Schema validity, source integrity, and the deterministic safety scan
+passed.
+
+The candidate, scorer result, FAST comparison, and runtime evidence are
+recorded at
+[`eval/results/experiment-005-duplicate-evidence-full-candidate.json`](../eval/results/experiment-005-duplicate-evidence-full-candidate.json),
+[`eval/results/experiment-005-duplicate-evidence-full.json`](../eval/results/experiment-005-duplicate-evidence-full.json),
+[`eval/results/experiment-005-duplicate-evidence-fast.json`](../eval/results/experiment-005-duplicate-evidence-fast.json),
+and
+[`trajectories/runtime/experiment-005-duplicate-evidence-full/`](../trajectories/runtime/experiment-005-duplicate-evidence-full/).
+The coding trajectory is
+[`trajectories/coding/016-experiment-005-duplicate-evidence/`](../trajectories/coding/016-experiment-005-duplicate-evidence/).
+
+Decision: **KEEP** duplicate-aware evidence consolidation. It recovers all
+three audited projection losses, improves LQA-0M by `+0.0064236111`, reduces
+DSCR by `1`, and satisfies the predeclared financial, duplicate/change,
+entity, relation, unknown-state, schema, safety, and source-integrity guards.
+This is the last benchmark-optimization experiment for the frozen development
+track; no E006 benchmark-optimization experiment is started.

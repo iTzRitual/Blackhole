@@ -72,7 +72,7 @@ Blackhole never reads or persists provider credentials.”
 
 ## 3:15–4:00 — What we measured
 
-**On screen:** Open `eval/results/experiment-004-deterministic-full.json` and
+**On screen:** Open `eval/results/experiment-005-duplicate-evidence-full.json` and
 highlight the advanced result and checkpoint table.
 
 **Voiceover:**
@@ -80,12 +80,13 @@ highlight the advanced result and checkpoint table.
 “The fair public development benchmark is frozen at 200 events with checkpoints
 at 50, 100, 150, and 200. The official stateless baseline is
 `LQA-0M 0.3014914553`, with DSCR 277. The latest kept advanced replay is
-Experiment 004 at `0.8630770101`, with DSCR 41. That is an absolute LQA-0M
-delta of `0.5615855548`; it is development evidence, not a holdout or
+Experiment 005 at `0.8695006212`, with DSCR 40. That is an absolute LQA-0M
+delta of `0.5680091659`; it is development evidence, not a holdout or
 production claim. The advanced checkpoint scores are 0.8889, 0.8714, 0.8322,
-and 0.8599. We do not claim monotonic degradation. The measured interpretation
-is narrower: long-context access alone is not the same thing as a structured,
-rebuildable memory system.”
+and 0.8856. Duplicate evidence consolidation recovers predicate-level evidence
+without double-counting occurrences. We do not claim monotonic degradation. The
+measured interpretation is narrower: long-context access alone is not the same
+thing as a structured, rebuildable memory system.”
 
 ## 4:00–4:30 — Honest close
 
@@ -96,10 +97,10 @@ folders.
 
 “The product is intentionally a scoped hackathon slice, not production
 infrastructure. The public benchmark, response contract, baseline, and
-calibration evidence remain frozen. Experiment 004 shows that a small generic
-raw-source completeness pass can repair explicit omissions while leaving
-unsupported detail unresolved; Experiment 003's bounded retrieval remains the
-relation-reconciliation predecessor. The repository includes reproducible
-demo commands, deterministic tests, runtime evidence, and a judge-facing
-reproduction protocol. Blackhole makes capture easy first, then makes state
-trustworthy enough to review.”
+calibration evidence remain frozen. Experiment 005 shows that duplicate
+captures can contribute additional predicate evidence while unresolved
+disagreement remains unknown; Experiment 004's completeness pass and
+Experiment 003's bounded retrieval remain preserved predecessors. The
+repository includes reproducible demo commands, deterministic tests, runtime
+evidence, and a judge-facing reproduction protocol. Blackhole makes capture
+easy first, then makes state trustworthy enough to review.”

@@ -352,3 +352,65 @@ deterministically, added 8 observations including 1 correction, and made zero
 provider calls. It improved LQA-0M from `0.8157180034` to `0.8630770101` and
 reduced DSCR from `45` to `41`. Raw sources, the frozen benchmark, evaluator,
 official baseline, and holdout boundary remain unchanged.
+
+## 15. Experiment 005 duplicate-aware evidence consolidation
+
+Experiment 005 addresses a narrow projection loss: a true duplicate capture may
+contain a valid predicate that is absent from the canonical capture. The raw
+event and raw observation remain immutable. Consolidation is a versioned,
+rebuildable derived step between relation state and current-state
+reconciliation:
+
+```text
+immutable raw events and observations
+                |
+                v
+true duplicate relation components
+                |
+                v
+predicate-scoped evidence consolidation
+                |
+                v
+current / temporal reconciliation
+                |
+                v
+deterministic public response projection
+```
+
+Only `exact_duplicate`, `normalized_duplicate`, and `duplicate` edges create a
+component. The graph is undirected for component construction, and the earliest
+capture by sequence is the stable canonical member. The derived
+`duplicate_components` table records the component identifier, canonical event,
+and every member event ID for provenance and rebuild auditing. Similar captures,
+meaningful changes, corrections, contradictions, and task reassignment edges
+remain outside component construction.
+
+Within one component, observations are grouped by subject and predicate. Equal
+value/status evidence becomes one projected fact with unioned supporting
+references; additional predicates are retained. Unresolved value conflicts
+project to `unknown` with `conflicting` rather than selecting a latest value.
+An explicit terminal correction or supersession may resolve a chain when its
+support is unambiguous. Unknown evidence is not upgraded implicitly. No
+duplicate component increases purchase, bill, task, financial, consumption, or
+duplicate-event counts.
+
+The behavior is opt-in through `--duplicate-evidence consolidate`, uses the
+version `experiment-005-duplicate-evidence-projection-v1`, and leaves the
+previous projection mode available for comparison. The kept public replay
+formed 24 components containing 72 events, with 48 non-canonical members; 51
+observations were recovered from duplicate-source captures and 36 identical
+observations were consolidated. The count audit recorded 200 raw events, 48
+duplicate relation edges, 24 single-occurrence component units, and a
+reduction from 287 input observations to 251 projected observation groups;
+projected groups did not increase. It made zero provider calls. The frozen
+benchmark, expected output, response contract, evaluator, official baseline,
+calibration evidence, and holdout boundary remain unchanged.
+
+The full replay improved LQA-0M from `0.8630770101` to `0.8695006212` and DSCR
+from `41` to `40`, with checkpoint scores
+`0.8888888889 / 0.8713728401 / 0.8321654040 / 0.8855753519`. It recovered three
+audited final-state facts: Streamly's next renewal, GymFlex's expiry date, and
+the bank standing-order approval state. Financial, duplicate/change, entity,
+and relation metrics did not regress; unknown-state metrics, schema validity,
+safety, and source integrity passed. This remains an application experiment,
+not a new benchmark or baseline.

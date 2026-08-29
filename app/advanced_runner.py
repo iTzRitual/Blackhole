@@ -37,7 +37,7 @@ from app.relation_recovery import (
     retrieved_relation_replacements,
 )
 from app.response_projector import ResponseProjector
-from app.state_store import StateStore
+from app.state_store import DUPLICATE_EVIDENCE_PROJECTION_VERSION, StateStore
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -260,6 +260,8 @@ def replay_model_output(path: Path) -> dict[str, Any]:
 def run(args: argparse.Namespace) -> int:
     if args.batch_size < 1:
         raise SystemExit("--batch-size must be at least 1")
+    duplicate_evidence_mode = getattr(args, "duplicate_evidence", "none")
+    duplicate_evidence_enabled = duplicate_evidence_mode == "consolidate"
     for path_name in ("scenario", "query_bundle", "response_contract", "output", "trajectory"):
         setattr(args, path_name, getattr(args, path_name).resolve())
     if args.replay_extraction is not None:
@@ -303,6 +305,11 @@ def run(args: argparse.Namespace) -> int:
         "querying": "deterministic public response projection from SQLite state; optional fresh model query is diagnostic only",
         "relation_recovery": args.relation_recovery,
         "relation_recovery_calls": [],
+        "duplicate_evidence": duplicate_evidence_mode,
+        "duplicate_evidence_projection_version": (
+            DUPLICATE_EVIDENCE_PROJECTION_VERSION if duplicate_evidence_enabled else None
+        ),
+        "duplicate_evidence_totals": {},
         "completeness": args.completeness,
         "completeness_batches": [],
         "completeness_totals": {
@@ -417,7 +424,7 @@ def run(args: argparse.Namespace) -> int:
                             json.dumps(retrieved, ensure_ascii=False, indent=2) + "\n",
                             encoding="utf-8",
                         )
-                    projection_run = store.rebuild_projection()
+                    projection_run = store.rebuild_projection(duplicate_evidence=duplicate_evidence_enabled)
                     metadata["projection_runs"].append(projection_run)
                     if args.completeness != "none":
                         pre_completion_snapshot = store.snapshot()
@@ -465,7 +472,7 @@ def run(args: argparse.Namespace) -> int:
                         }
                         metadata["completeness_totals"]["captures_repaired_deterministically"] += len(repaired_event_ids)
                         if completion_inserted:
-                            projection_run = store.rebuild_projection()
+                            projection_run = store.rebuild_projection(duplicate_evidence=duplicate_evidence_enabled)
                             metadata["projection_runs"].append(projection_run)
 
                         post_completion_snapshot = store.snapshot()
@@ -559,7 +566,7 @@ def run(args: argparse.Namespace) -> int:
                                     }
                                 )
                             if any(item["inserted_observation_count"] for item in verifier_records):
-                                projection_run = store.rebuild_projection()
+                                projection_run = store.rebuild_projection(duplicate_evidence=duplicate_evidence_enabled)
                                 metadata["projection_runs"].append(projection_run)
 
                         final_snapshot = store.snapshot()
@@ -714,6 +721,8 @@ def run(args: argparse.Namespace) -> int:
         "history_observations": len(store_snapshot["history"]),
         "relationships": len(store_snapshot["relationships"]),
     }
+    metadata["duplicate_evidence_totals"] = store_snapshot.get("duplicate_evidence_stats", {})
+    metadata["final_state_counts"]["duplicate_components"] = len(store_snapshot.get("duplicate_components", []))
     metadata["finished_at"] = iso_now()
     args.output.write_text(json.dumps(candidate, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({"run_id": args.run_id, "output": str(args.output.relative_to(ROOT)), "trajectory": str(args.trajectory.relative_to(ROOT)), "checkpoints": checkpoints, "usage_totals": usage_totals}, sort_keys=True))
@@ -749,6 +758,12 @@ def main() -> int:
         choices=["none", "deterministic", "verifier"],
         default="none",
         help="optional selective raw-source completeness treatment",
+    )
+    parser.add_argument(
+        "--duplicate-evidence",
+        choices=["none", "consolidate"],
+        default="none",
+        help="consolidate semantic observations across true duplicate components",
     )
     return run(parser.parse_args())
 

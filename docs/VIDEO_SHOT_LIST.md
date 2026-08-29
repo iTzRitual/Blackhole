@@ -11,8 +11,8 @@
 | 2:00–2:30 | Ask | Run “What changed recently?” then “What information is incomplete?” | Query-scoped deterministic projections |
 | 2:30–2:50 | Architecture | Show architecture flow in `docs/ARCHITECTURE.md` | Raw → observations → rebuildable state → attention |
 | 2:50–3:15 | Safety/runtime | Show approval card and provider boundary docs | No consequential action; CLI owns auth |
-| 3:15–3:45 | Results | Show `eval/results/experiment-004-deterministic-full.json` | Advanced replay and checkpoints |
-| 3:45–4:00 | Caveat | Show Experiment 004 completeness result and Experiment 003's remaining relation-detail limitation in changelog/decision log | Honest measured limitation |
+| 3:15–3:45 | Results | Show `eval/results/experiment-005-duplicate-evidence-full.json` | Advanced replay and checkpoints |
+| 3:45–4:00 | Caveat | Show Experiment 005 duplicate-evidence result, with Experiment 004 completeness and Experiment 003 relation-detail evidence in the changelog/decision log | Honest measured limitation |
 | 4:00–4:30 | Reproduction | Show README commands and trajectory directories | Judges can run the local demo and inspect evidence |
 
 ## Capture checklist

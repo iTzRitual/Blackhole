@@ -320,8 +320,8 @@ implementation checkout or trajectory.
 The product-phase deterministic comparison snapshot is recorded in
 `eval/results/final-comparison-v1.json`; it references the unchanged official
 `baseline-v1` artifact and the preceding kept advanced replay. The current
-Experiment 004 result is recorded below, with Experiment 003 preserved as the
-preceding kept replay. Both provide checkpoint values,
+Experiment 005 result is recorded below, with Experiment 004 and Experiment
+003 preserved as preceding kept replays. Each provides checkpoint values,
 category metrics, and runtime caveats for their respective phase. The
 representative product/runtime behavior is described in
 `trajectories/runtime/013-demo-simple-capture/` through
@@ -352,3 +352,31 @@ human-authorized runs, but was not used for this result because deterministic
 FAST and full replay already met the keep threshold. A verifier run must use a
 fresh scoped local CLI call and must not receive expected output or evaluator
 internals.
+
+## 16. Experiment 005 duplicate-evidence replay
+
+Experiment 005 reuses the recorded public Experiment 001 extraction, the
+Experiment 003 retrieval treatment, and the Experiment 004 deterministic
+completeness treatment. It enables only the new generic duplicate-evidence
+projection mode; it makes no provider calls:
+
+```text
+python -m app.advanced_runner --scenario benchmark/dev/cases/scenario-001.json --query-bundle benchmark/dev/query-bundle-v2.json --response-contract benchmark/dev/response-contract-v2.json --max-events 50 --batch-size 50 --replay-extraction-dir trajectories/runtime/experiment-001-full-v1 --output eval/results/experiment-005-duplicate-evidence-fast-candidate.json --trajectory trajectories/runtime/experiment-005-duplicate-evidence-fast --run-id experiment-005-duplicate-evidence-fast --label "EXPERIMENT 005 / DUPLICATE-AWARE EVIDENCE / DEV FAST / NOT OFFICIAL SCORE" --semantic-reasoning high --relation-recovery retrieval --completeness deterministic --duplicate-evidence consolidate
+python -m eval.score_slice --scenario benchmark/dev/cases/scenario-001.json --expected benchmark/dev/expected/scenario-001.json --candidate eval/results/experiment-005-duplicate-evidence-fast-candidate.json --response-contract benchmark/dev/response-contract-v2.json --output eval/results/experiment-005-duplicate-evidence-fast.json --checkpoint 50 --query-ids q-subscriptions-current,q-subscriptions-history,q-attention-14d,q-recent-changes
+```
+
+The standard FAST result is diagnostic only. The justified frozen public replay
+uses all four approved checkpoints:
+
+```text
+python -m app.advanced_runner --scenario benchmark/dev/cases/scenario-001.json --query-bundle benchmark/dev/query-bundle-v2.json --response-contract benchmark/dev/response-contract-v2.json --max-events 200 --batch-size 50 --replay-extraction-dir trajectories/runtime/experiment-001-full-v1 --output eval/results/experiment-005-duplicate-evidence-full-candidate.json --trajectory trajectories/runtime/experiment-005-duplicate-evidence-full --run-id experiment-005-duplicate-evidence-full --label "EXPERIMENT 005 / DUPLICATE-AWARE EVIDENCE / FROZEN 200-EVENT PUBLIC REPLAY" --semantic-reasoning high --relation-recovery retrieval --completeness deterministic --duplicate-evidence consolidate
+python eval/score.py --scenario benchmark/dev/cases/scenario-001.json --expected benchmark/dev/expected/scenario-001.json --candidate eval/results/experiment-005-duplicate-evidence-full-candidate.json --response-contract benchmark/dev/response-contract-v2.json --output eval/results/experiment-005-duplicate-evidence-full.json
+```
+
+The replay records duplicate-component metadata, consolidation counts, and the
+derived SQLite state under
+`trajectories/runtime/experiment-005-duplicate-evidence-full/`. The public
+expected output is used only by the local development scorer. A judge must
+mount holdout expected output privately and must never copy it into an
+implementation checkout, prompt, trajectory, or result artifact. The official
+`baseline-v1` result and all frozen benchmark artifacts remain unchanged.

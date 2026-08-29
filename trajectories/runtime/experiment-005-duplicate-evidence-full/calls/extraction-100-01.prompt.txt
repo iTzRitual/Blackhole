@@ -1,0 +1,2450 @@
+# Blackhole advanced Experiment 001 semantic runtime v1
+
+You are a scoped semantic interpreter for Blackhole. Blackhole owns durable
+state; you do not own memory, and you must not pretend that a persistent chat
+is the database. The caller supplies immutable captures, a deterministic state
+projection, and the public response contract.
+
+## Non-negotiable rules
+
+- Treat every capture as immutable evidence. Never rewrite or delete an older
+  capture.
+- Use only evidence supplied in the current task and the public ontology.
+- Distinguish `known`, `inferred`, and `unknown`. Missing, ambiguous,
+  contradictory, unreadable, or unobserved information is not zero, false,
+  empty, completed, cancelled, or absent.
+- A later observation replaces an earlier value only when the evidence clearly
+  indicates a supersession or correction. Mark the operation as `supersede` or
+  `correction` and identify the earlier event when possible.
+- Preserve unresolved contradictions with operation `contradiction`; do not
+  silently choose a winner.
+- Do not infer consumption from purchases, payment from an intention, or an
+  external action from a proposal.
+- Emit source event IDs in `source_refs`. Never invent evaluator-internal IDs,
+  expected answers, benchmark aliases, or hidden state.
+- Return JSON only. Do not include prose, markdown fences, `state_key`, or
+  fields not requested by the task.
+
+## Extraction response
+
+For extraction, return:
+
+```json
+{
+  "observations": [
+    {
+      "event_id": "evt-001",
+      "subject": "public ontology subject",
+      "predicate": "public ontology predicate",
+      "knowledge_status": "known|inferred|unknown",
+      "value": "required for known/inferred",
+      "unknown_reason": "required for unknown",
+      "operation": "set|supersede|correction|contradiction|duplicate",
+      "supersedes_event_id": "evt-000",
+      "source_refs": ["evt-001"]
+    }
+  ],
+  "relationships": [
+    {
+      "source_event_id": "evt-002",
+      "target_event_id": "evt-001",
+      "relation_type": "exact_duplicate|normalized_duplicate|meaningful_change|similar_not_duplicate",
+      "changed_fields": [],
+      "duplicate_group": "optional-group-id",
+      "note": "optional concise evidence note"
+    }
+  ]
+}
+```
+
+Emit atomic observations for facts relevant to the supplied public query
+bundle, including explicit unknown or conflict facts. Use public subject and
+predicate IDs exactly when available. Use `capture:<event_id>` only for an
+event-level subject that has no public entity. Do not emit an observation merely
+because a field is absent; emit an unknown observation only when the capture or
+state explicitly supports that missing/ambiguous conclusion.
+
+For relationships, orient `source_event_id` as the later duplicate/change
+capture and `target_event_id` as the earlier related capture. A duplicate is a
+captured event that repeats an earlier event; an explicit correction or changed
+value is not a duplicate.
+
+## Query projection response
+
+For query projection, return the exact public `response-contract-v2` envelope
+requested by the caller. Every assertion must be atomic and contain only public
+`subject`, `predicate`, `knowledge_status`, `source_refs`, and the applicable
+`value`, `unknown_reason`, or `confirmation_ref`. Never emit `state_key`,
+grouped reports, prose fields, unsupported totals, or claims of consequential
+execution. Cite the state evidence's source refs. Include only supported
+assertions, while preserving current/history, known/inferred/unknown, and
+missing-versus-zero distinctions.
+
+
+TASK: semantic extraction for the new chronological capture batch.
+Read only the captures in this batch as source evidence. The prior projection is a hint for linking and supersession, not an oracle. Return one JSON object with `observations` and `relationships`; do not answer any user query.
+
+PUBLIC RESPONSE CONTRACT (ontology only):
+{
+  "response_contract": "response-contract-v2",
+  "public_ontology": {
+    "subjects": [
+      {
+        "id": "streamly",
+        "kind": "subscription",
+        "aliases": [
+          "Streamly",
+          "Streamly subscription"
+        ]
+      },
+      {
+        "id": "orange_mobile",
+        "kind": "service",
+        "aliases": [
+          "Orange Mobile",
+          "Orange bill",
+          "Orange"
+        ]
+      },
+      {
+        "id": "marketone",
+        "kind": "merchant",
+        "aliases": [
+          "MarketOne",
+          "Market One",
+          "protein bars"
+        ]
+      },
+      {
+        "id": "parcel_pickup_1",
+        "kind": "task",
+        "aliases": [
+          "parcel pickup",
+          "original parcel pickup",
+          "first parcel pickup"
+        ]
+      },
+      {
+        "id": "parcel_pickup_2",
+        "kind": "task",
+        "aliases": [
+          "replacement parcel",
+          "replacement parcel pickup",
+          "second parcel pickup"
+        ]
+      },
+      {
+        "id": "library_return_1",
+        "kind": "task",
+        "aliases": [
+          "library return",
+          "library books",
+          "return library books"
+        ]
+      },
+      {
+        "id": "school_form_1",
+        "kind": "task",
+        "aliases": [
+          "school form",
+          "school form submission"
+        ]
+      },
+      {
+        "id": "streamly_cancellation_task",
+        "kind": "task",
+        "aliases": [
+          "cancel Streamly",
+          "Streamly cancellation"
+        ]
+      },
+      {
+        "id": "roadsure",
+        "kind": "insurance",
+        "aliases": [
+          "RoadSure",
+          "RoadSure policy",
+          "car insurance"
+        ]
+      },
+      {
+        "id": "gymflex",
+        "kind": "contract",
+        "aliases": [
+          "GymFlex",
+          "GymFlex contract"
+        ]
+      },
+      {
+        "id": "homefix",
+        "kind": "observation",
+        "aliases": [
+          "HomeFix",
+          "HomeFix quote",
+          "HomeFix appointment"
+        ]
+      },
+      {
+        "id": "bank_standing_order",
+        "kind": "action",
+        "aliases": [
+          "bank standing order",
+          "standing order"
+        ]
+      },
+      {
+        "id": "transfer_sam",
+        "kind": "action",
+        "aliases": [
+          "transfer to Sam",
+          "Sam transfer",
+          "transfer Sam"
+        ]
+      },
+      {
+        "id": "jordan",
+        "kind": "person_reference",
+        "aliases": [
+          "Jordan",
+          "unqualified Jordan"
+        ]
+      },
+      {
+        "id": "jordan_lee",
+        "kind": "person",
+        "aliases": [
+          "Jordan Lee"
+        ]
+      },
+      {
+        "id": "jordan_kim",
+        "kind": "person",
+        "aliases": [
+          "Jordan Kim"
+        ]
+      },
+      {
+        "id": "alex",
+        "kind": "person",
+        "aliases": [
+          "Alex"
+        ]
+      },
+      {
+        "id": "sam",
+        "kind": "person",
+        "aliases": [
+          "Sam"
+        ]
+      },
+      {
+        "id": "scenario",
+        "kind": "aggregate",
+        "aliases": [
+          "scenario",
+          "timeline",
+          "overall history"
+        ]
+      }
+    ],
+    "dynamic_subjects": [
+      {
+        "pattern": "capture:<event_id>",
+        "kind": "capture",
+        "aliases": [
+          "<event_id>"
+        ]
+      }
+    ],
+    "predicates": [
+      {
+        "id": "billing_period",
+        "aliases": [
+          "billing period",
+          "recurrence",
+          "monthly",
+          "per month"
+        ]
+      },
+      {
+        "id": "cancellation_intent",
+        "aliases": [
+          "cancellation intent",
+          "cancel intention",
+          "intention to cancel"
+        ]
+      },
+      {
+        "id": "cancellation_requested",
+        "aliases": [
+          "cancellation requested",
+          "cancel request"
+        ]
+      },
+      {
+        "id": "currency",
+        "aliases": [
+          "currency",
+          "currency code"
+        ]
+      },
+      {
+        "id": "current_price",
+        "aliases": [
+          "current price",
+          "current cost",
+          "current monthly cost",
+          "monthly cost"
+        ]
+      },
+      {
+        "id": "last_charge",
+        "aliases": [
+          "last charge",
+          "last directly observed charge"
+        ]
+      },
+      {
+        "id": "status",
+        "aliases": [
+          "status",
+          "current status",
+          "current state",
+          "lifecycle"
+        ]
+      },
+      {
+        "id": "historical_price",
+        "aliases": [
+          "historical price",
+          "price history",
+          "previous price",
+          "price changes"
+        ]
+      },
+      {
+        "id": "termination_date",
+        "aliases": [
+          "termination date",
+          "cancellation date"
+        ]
+      },
+      {
+        "id": "price_effective",
+        "aliases": [
+          "price effective",
+          "price effective date",
+          "price change effective date"
+        ]
+      },
+      {
+        "id": "next_renewal",
+        "aliases": [
+          "next renewal",
+          "renewal date"
+        ]
+      },
+      {
+        "id": "needs_attention",
+        "aliases": [
+          "needs attention",
+          "attention",
+          "requires attention",
+          "open deadline"
+        ]
+      },
+      {
+        "id": "effective_date",
+        "aliases": [
+          "effective date",
+          "effective from"
+        ]
+      },
+      {
+        "id": "expiry_date",
+        "aliases": [
+          "expiry date",
+          "expiration date",
+          "expires"
+        ]
+      },
+      {
+        "id": "policy_id",
+        "aliases": [
+          "policy id",
+          "policy number"
+        ]
+      },
+      {
+        "id": "premium",
+        "aliases": [
+          "premium",
+          "insurance premium"
+        ]
+      },
+      {
+        "id": "beneficiary",
+        "aliases": [
+          "beneficiary"
+        ]
+      },
+      {
+        "id": "claim_number",
+        "aliases": [
+          "claim number"
+        ]
+      },
+      {
+        "id": "observed_bill_count",
+        "aliases": [
+          "observed bill count",
+          "number of observed bills"
+        ]
+      },
+      {
+        "id": "observed_total",
+        "aliases": [
+          "observed total",
+          "observed spending total",
+          "sum of observed bills"
+        ]
+      },
+      {
+        "id": "observed_periods",
+        "aliases": [
+          "observed periods",
+          "billed periods"
+        ]
+      },
+      {
+        "id": "missing_periods",
+        "aliases": [
+          "missing periods",
+          "periods with no bill"
+        ]
+      },
+      {
+        "id": "unobserved_periods",
+        "aliases": [
+          "unobserved periods",
+          "unknown bill periods"
+        ]
+      },
+      {
+        "id": "current_amount",
+        "aliases": [
+          "current amount",
+          "current amount due"
+        ]
+      },
+      {
+        "id": "purchase_count",
+        "aliases": [
+          "purchase count",
+          "number of purchases"
+        ]
+      },
+      {
+        "id": "purchased_total",
+        "aliases": [
+          "purchased total",
+          "purchase total",
+          "purchase spending total"
+        ]
+      },
+      {
+        "id": "confirmed_consumption_quantity",
+        "aliases": [
+          "confirmed consumption quantity",
+          "consumed quantity"
+        ]
+      },
+      {
+        "id": "consumption_observation_count",
+        "aliases": [
+          "consumption observation count",
+          "number of consumption observations"
+        ]
+      },
+      {
+        "id": "explicit_zero_is_supported",
+        "aliases": [
+          "explicit zero is supported",
+          "explicit zero"
+        ]
+      },
+      {
+        "id": "unobserved_consumption",
+        "aliases": [
+          "unobserved consumption",
+          "missing consumption observations"
+        ]
+      },
+      {
+        "id": "deadline",
+        "aliases": [
+          "deadline",
+          "due date",
+          "due"
+        ]
+      },
+      {
+        "id": "owner",
+        "aliases": [
+          "owner",
+          "assignee",
+          "responsible person"
+        ]
+      },
+      {
+        "id": "blocker",
+        "aliases": [
+          "blocker",
+          "blocking issue"
+        ]
+      },
+      {
+        "id": "entity_link",
+        "aliases": [
+          "entity link",
+          "identity link",
+          "person link"
+        ]
+      },
+      {
+        "id": "relationship",
+        "aliases": [
+          "relationship",
+          "relation",
+          "duplicate relation",
+          "change relation"
+        ]
+      },
+      {
+        "id": "duplicate_event_count",
+        "aliases": [
+          "duplicate event count",
+          "duplicate capture count",
+          "duplicate upload count"
+        ]
+      },
+      {
+        "id": "duplicate_group_count",
+        "aliases": [
+          "duplicate group count",
+          "number of duplicate groups"
+        ]
+      },
+      {
+        "id": "meaningful_change_event_count",
+        "aliases": [
+          "meaningful change event count",
+          "meaningful change count"
+        ]
+      },
+      {
+        "id": "quoted_amount",
+        "aliases": [
+          "quoted amount",
+          "quote amount"
+        ]
+      },
+      {
+        "id": "historical_status",
+        "aliases": [
+          "historical status",
+          "old status",
+          "previous status"
+        ]
+      },
+      {
+        "id": "approval_required",
+        "aliases": [
+          "approval required",
+          "requires approval"
+        ]
+      },
+      {
+        "id": "approved",
+        "aliases": [
+          "approved",
+          "approval granted"
+        ]
+      },
+      {
+        "id": "executed",
+        "aliases": [
+          "executed",
+          "was executed"
+        ]
+      },
+      {
+        "id": "approval_scope",
+        "aliases": [
+          "approval scope",
+          "what requires approval"
+        ]
+      },
+      {
+        "id": "amount",
+        "aliases": [
+          "amount",
+          "cost",
+          "price",
+          "total"
+        ]
+      }
+    ]
+  },
+  "unknown_reason": {
+    "allowed_categories": [
+      "ambiguous_person",
+      "conflicting",
+      "unreadable",
+      "not_available",
+      "no_capture_for_period",
+      "no_consumption_observation",
+      "not_stated",
+      "missing"
+    ],
+    "natural_language": "A concise natural-language reason is accepted and deterministically mapped to one of the categories when a listed phrase is present. Otherwise the normalized reason is compared literally."
+  },
+  "predicate_value_shapes": {
+    "current_price": "object {amount, currency, billing_period}",
+    "last_charge": "object {amount, currency}",
+    "observed_total": "object {amount, currency}",
+    "current_amount": "object {amount, currency}",
+    "purchased_total": "object {amount, currency}",
+    "premium": "object {amount, currency}",
+    "quoted_amount": "object {amount, currency}",
+    "amount": "object {amount, currency} when currency is observed; otherwise preserve the explicitly observed scalar",
+    "relationship": "object {relation_type, source_event_id, target_event_id, and any explicitly supported detail fields}",
+    "entity_link": "object describing the supported entity-link status and candidates",
+    "needs_attention": "object {reason, plus the relevant deadline or approval/execution facts}",
+    "observed_periods": "array of YYYY-MM periods",
+    "missing_periods": "array of YYYY-MM periods",
+    "unobserved_periods": "array of YYYY-MM periods"
+  },
+  "value_normalization": {
+    "enum_field_aliases": {
+      "relation_type": {
+        "exact_duplicate": [
+          "exact duplicate"
+        ],
+        "normalized_duplicate": [
+          "normalized duplicate"
+        ],
+        "meaningful_change": [
+          "meaningful change"
+        ],
+        "similar_not_duplicate": [
+          "similar not duplicate"
+        ]
+      },
+      "status": {
+        "not_started": [
+          "not started"
+        ],
+        "in_progress": [
+          "in progress"
+        ],
+        "needs_review": [
+          "needs review"
+        ]
+      }
+    },
+    "object_field_aliases": {
+      "amount": [
+        "amount_eur",
+        "cost_eur",
+        "price_eur",
+        "monthly_cost_eur",
+        "total_eur",
+        "observed_total_eur",
+        "latest_charged_eur",
+        "announced_monthly_eur"
+      ],
+      "currency": [
+        "currency_code"
+      ],
+      "billing_period": [
+        "period",
+        "recurrence"
+      ],
+      "deadline": [
+        "due_date",
+        "due"
+      ],
+      "owner": [
+        "assignee",
+        "responsible_person"
+      ],
+      "source_event_id": [
+        "source",
+        "source_capture_id"
+      ],
+      "target_event_id": [
+        "target",
+        "target_capture_id"
+      ],
+      "relation_type": [
+        "relation",
+        "relationship"
+      ],
+      "duplicate_group": [
+        "duplicate_group_id"
+      ]
+    }
+  }
+}
+
+PRIOR DETERMINISTIC PROJECTION:
+{
+  "projection_version": "experiment-005-duplicate-evidence-projection-v1",
+  "current_facts": [
+    {
+      "subject": "bank_standing_order",
+      "predicate": "executed",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-040"
+      ],
+      "latest_sequence": 40,
+      "value": false
+    },
+    {
+      "subject": "bank_standing_order",
+      "predicate": "status",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-010"
+      ],
+      "latest_sequence": 10,
+      "value": "proposed"
+    },
+    {
+      "subject": "capture:evt-006",
+      "predicate": "amount",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-006"
+      ],
+      "latest_sequence": 6,
+      "value": {
+        "amount": "11.2",
+        "currency": "eur"
+      }
+    },
+    {
+      "subject": "capture:evt-016",
+      "predicate": "amount",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-016"
+      ],
+      "latest_sequence": 16,
+      "value": {
+        "amount": "11.2",
+        "currency": "eur"
+      }
+    },
+    {
+      "subject": "capture:evt-017",
+      "predicate": "entity_link",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-017"
+      ],
+      "latest_sequence": 17,
+      "value": {
+        "candidate": "jordan_lee",
+        "status": "resolved"
+      }
+    },
+    {
+      "subject": "capture:evt-026",
+      "predicate": "amount",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-026"
+      ],
+      "latest_sequence": 26,
+      "value": {
+        "amount": "11.4",
+        "currency": "eur"
+      }
+    },
+    {
+      "subject": "capture:evt-036",
+      "predicate": "amount",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-036"
+      ],
+      "latest_sequence": 36,
+      "value": {
+        "amount": "11.2",
+        "currency": "eur"
+      }
+    },
+    {
+      "subject": "capture:evt-037",
+      "predicate": "entity_link",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-037"
+      ],
+      "latest_sequence": 37,
+      "value": {
+        "candidate": "jordan_kim",
+        "status": "resolved"
+      }
+    },
+    {
+      "subject": "capture:evt-046",
+      "predicate": "amount",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-046"
+      ],
+      "latest_sequence": 46,
+      "value": {
+        "amount": "11.2",
+        "currency": "eur"
+      }
+    },
+    {
+      "subject": "gymflex",
+      "predicate": "contract_id",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-049"
+      ],
+      "latest_sequence": 49,
+      "value": "gym-new"
+    },
+    {
+      "subject": "gymflex",
+      "predicate": "effective_date",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-009"
+      ],
+      "latest_sequence": 9,
+      "value": "2026-02-01"
+    },
+    {
+      "subject": "gymflex",
+      "predicate": "executed",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-049"
+      ],
+      "latest_sequence": 49,
+      "value": true
+    },
+    {
+      "subject": "gymflex",
+      "predicate": "historical_price",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-029"
+      ],
+      "latest_sequence": 29,
+      "value": {
+        "amount": "29",
+        "billing_period": "monthly",
+        "currency": "eur"
+      }
+    },
+    {
+      "subject": "gymflex",
+      "predicate": "next_renewal",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-019"
+      ],
+      "latest_sequence": 19,
+      "value": "2027-01-31"
+    },
+    {
+      "subject": "gymflex",
+      "predicate": "signed_date",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-049"
+      ],
+      "latest_sequence": 49,
+      "value": "2026-02-15"
+    },
+    {
+      "subject": "gymflex",
+      "predicate": "status",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-049"
+      ],
+      "latest_sequence": 49,
+      "value": "signed"
+    },
+    {
+      "subject": "homefix",
+      "predicate": "deadline",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-038"
+      ],
+      "latest_sequence": 38,
+      "value": "2026-02-12"
+    },
+    {
+      "subject": "homefix",
+      "predicate": "quoted_amount",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-008"
+      ],
+      "latest_sequence": 8,
+      "value": {
+        "amount": "180",
+        "currency": "eur"
+      }
+    },
+    {
+      "subject": "jordan",
+      "predicate": "entity_link",
+      "knowledge_status": "unknown",
+      "source_refs": [
+        "evt-047"
+      ],
+      "latest_sequence": 47,
+      "unknown_reason": "ambiguous_person"
+    },
+    {
+      "subject": "marketone",
+      "predicate": "confirmed_consumption_quantity",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-023"
+      ],
+      "latest_sequence": 23,
+      "value": 2
+    },
+    {
+      "subject": "marketone",
+      "predicate": "consumption_observation_count",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-023"
+      ],
+      "latest_sequence": 23,
+      "value": 1
+    },
+    {
+      "subject": "marketone",
+      "predicate": "purchase_count",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-043"
+      ],
+      "latest_sequence": 43,
+      "value": 1
+    },
+    {
+      "subject": "marketone",
+      "predicate": "purchased_total",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-043"
+      ],
+      "latest_sequence": 43,
+      "value": {
+        "amount": "18",
+        "currency": "eur"
+      }
+    },
+    {
+      "subject": "marketone",
+      "predicate": "unobserved_consumption",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-033"
+      ],
+      "latest_sequence": 33,
+      "value": [
+        "2026-01-12"
+      ]
+    },
+    {
+      "subject": "orange_mobile",
+      "predicate": "missing_periods",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-032"
+      ],
+      "latest_sequence": 32,
+      "value": [
+        "2026-04"
+      ]
+    },
+    {
+      "subject": "orange_mobile",
+      "predicate": "observed_bill_count",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-042"
+      ],
+      "latest_sequence": 42,
+      "value": 1
+    },
+    {
+      "subject": "orange_mobile",
+      "predicate": "observed_periods",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-042"
+      ],
+      "latest_sequence": 42,
+      "value": [
+        "2026-05"
+      ]
+    },
+    {
+      "subject": "orange_mobile",
+      "predicate": "observed_total",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-042"
+      ],
+      "latest_sequence": 42,
+      "value": {
+        "amount": "31.9",
+        "currency": "eur"
+      }
+    },
+    {
+      "subject": "orange_mobile",
+      "predicate": "unobserved_periods",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-032"
+      ],
+      "latest_sequence": 32,
+      "value": [
+        "2026-04"
+      ]
+    },
+    {
+      "subject": "parcel_pickup_1",
+      "predicate": "deadline",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-004"
+      ],
+      "latest_sequence": 4,
+      "value": "2026-01-12"
+    },
+    {
+      "subject": "parcel_pickup_1",
+      "predicate": "owner",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-014"
+      ],
+      "latest_sequence": 14,
+      "value": "sam"
+    },
+    {
+      "subject": "parcel_pickup_1",
+      "predicate": "status",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-034"
+      ],
+      "latest_sequence": 34,
+      "value": "cancelled"
+    },
+    {
+      "subject": "parcel_pickup_2",
+      "predicate": "deadline",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-044"
+      ],
+      "latest_sequence": 44,
+      "value": "2026-02-25"
+    },
+    {
+      "subject": "parcel_pickup_2",
+      "predicate": "owner",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-044"
+      ],
+      "latest_sequence": 44,
+      "value": "alex"
+    },
+    {
+      "subject": "parcel_pickup_2",
+      "predicate": "status",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-044"
+      ],
+      "latest_sequence": 44,
+      "value": "open"
+    },
+    {
+      "subject": "roadsure",
+      "predicate": "effective_date",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-045"
+      ],
+      "latest_sequence": 45,
+      "value": "2026-07-01"
+    },
+    {
+      "subject": "roadsure",
+      "predicate": "expiry_date",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-045"
+      ],
+      "latest_sequence": 45,
+      "value": "2027-06-30"
+    },
+    {
+      "subject": "roadsure",
+      "predicate": "policy_id",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-045"
+      ],
+      "latest_sequence": 45,
+      "value": "rs-new"
+    },
+    {
+      "subject": "roadsure",
+      "predicate": "status",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-045"
+      ],
+      "latest_sequence": 45,
+      "value": "active"
+    },
+    {
+      "subject": "scenario",
+      "predicate": "approval_required",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-050"
+      ],
+      "latest_sequence": 50,
+      "value": true
+    },
+    {
+      "subject": "scenario",
+      "predicate": "approval_scope",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-050"
+      ],
+      "latest_sequence": 50,
+      "value": "send or change anything"
+    },
+    {
+      "subject": "streamly",
+      "predicate": "billing_period",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-001"
+      ],
+      "latest_sequence": 1,
+      "value": "monthly"
+    },
+    {
+      "subject": "streamly",
+      "predicate": "cancellation_intent",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-041"
+      ],
+      "latest_sequence": 41,
+      "value": false
+    },
+    {
+      "subject": "streamly",
+      "predicate": "cancellation_requested",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-031"
+      ],
+      "latest_sequence": 31,
+      "value": false
+    },
+    {
+      "subject": "streamly",
+      "predicate": "current_price",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-001"
+      ],
+      "latest_sequence": 1,
+      "value": {
+        "amount": "12",
+        "billing_period": "monthly",
+        "currency": "eur"
+      }
+    },
+    {
+      "subject": "streamly",
+      "predicate": "historical_price",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-021"
+      ],
+      "latest_sequence": 21,
+      "value": {
+        "amount": "14",
+        "billing_period": "monthly",
+        "currency": "eur"
+      }
+    },
+    {
+      "subject": "streamly",
+      "predicate": "last_charge",
+      "knowledge_status": "unknown",
+      "source_refs": [
+        "evt-011"
+      ],
+      "latest_sequence": 11,
+      "unknown_reason": "not_stated"
+    },
+    {
+      "subject": "streamly",
+      "predicate": "status",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-001"
+      ],
+      "latest_sequence": 1,
+      "value": "active"
+    },
+    {
+      "subject": "transfer_sam",
+      "predicate": "amount",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-030"
+      ],
+      "latest_sequence": 30,
+      "value": {
+        "amount": "50",
+        "currency": "eur"
+      }
+    },
+    {
+      "subject": "transfer_sam",
+      "predicate": "executed",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-030"
+      ],
+      "latest_sequence": 30,
+      "value": false
+    },
+    {
+      "subject": "transfer_sam",
+      "predicate": "status",
+      "knowledge_status": "known",
+      "source_refs": [
+        "evt-030"
+      ],
+      "latest_sequence": 30,
+      "value": "proposed"
+    }
+  ],
+  "relationships": [
+    {
+      "source_event_id": "evt-014",
+      "target_event_id": "evt-004",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "owner"
+      ],
+      "duplicate_group": null,
+      "note": "Sam replaces Alex as handler."
+    },
+    {
+      "source_event_id": "evt-015",
+      "target_event_id": "evt-005",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "expiry_date"
+      ],
+      "duplicate_group": null,
+      "note": "Unconfirmed alternative expiry claim."
+    },
+    {
+      "source_event_id": "evt-017",
+      "target_event_id": "evt-007",
+      "relation_type": "similar_not_duplicate",
+      "changed_fields": [
+        "entity_link"
+      ],
+      "duplicate_group": null,
+      "note": "Jordan Lee is identified in a school context; earlier Jordan was unqualified."
+    },
+    {
+      "source_event_id": "evt-018",
+      "target_event_id": "evt-008",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "deadline"
+      ],
+      "duplicate_group": null,
+      "note": "Conflicting, non-authoritative HomeFix date."
+    },
+    {
+      "source_event_id": "evt-025",
+      "target_event_id": "evt-005",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": [],
+      "duplicate_group": null,
+      "note": "Confirms the same RS-OLD expiry date."
+    },
+    {
+      "source_event_id": "evt-025",
+      "target_event_id": "evt-015",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "expiry_date"
+      ],
+      "duplicate_group": null,
+      "note": "Authoritative confirmation resolves the unconfirmed alternative."
+    },
+    {
+      "source_event_id": "evt-028",
+      "target_event_id": "evt-018",
+      "relation_type": "similar_not_duplicate",
+      "changed_fields": [],
+      "duplicate_group": null,
+      "note": "Repeats the same non-authoritative HomeFix date."
+    },
+    {
+      "source_event_id": "evt-034",
+      "target_event_id": "evt-024",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "status"
+      ],
+      "duplicate_group": null,
+      "note": "Pending pickup was cancelled."
+    },
+    {
+      "source_event_id": "evt-037",
+      "target_event_id": "evt-007",
+      "relation_type": "similar_not_duplicate",
+      "changed_fields": [
+        "entity_link"
+      ],
+      "duplicate_group": null,
+      "note": "Jordan Kim is identified in a climbing-club context; earlier Jordan was unqualified."
+    },
+    {
+      "source_event_id": "evt-038",
+      "target_event_id": "evt-008",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "deadline"
+      ],
+      "duplicate_group": null,
+      "note": "Explicit correction of the original HomeFix appointment date."
+    },
+    {
+      "source_event_id": "evt-041",
+      "target_event_id": "evt-031",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "cancellation_intent"
+      ],
+      "duplicate_group": null,
+      "note": "Cancellation intention was withdrawn."
+    },
+    {
+      "source_event_id": "evt-043",
+      "target_event_id": "evt-003",
+      "relation_type": "similar_not_duplicate",
+      "changed_fields": [
+        "amount"
+      ],
+      "duplicate_group": null,
+      "note": "A later MarketOne purchase, not a duplicate receipt."
+    },
+    {
+      "source_event_id": "evt-045",
+      "target_event_id": "evt-035",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "status"
+      ],
+      "duplicate_group": null,
+      "note": "RoadSure quote became a signed active policy."
+    },
+    {
+      "source_event_id": "evt-045",
+      "target_event_id": "evt-005",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "effective_date",
+        "expiry_date",
+        "policy_id"
+      ],
+      "duplicate_group": null,
+      "note": "RS-NEW replaces the earlier RS-OLD policy for the later coverage period."
+    },
+    {
+      "source_event_id": "evt-048",
+      "target_event_id": "evt-008",
+      "relation_type": "similar_not_duplicate",
+      "changed_fields": [],
+      "duplicate_group": null,
+      "note": "Later HomeFix note repeats the quoted amount."
+    },
+    {
+      "source_event_id": "evt-049",
+      "target_event_id": "evt-039",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "executed",
+        "status"
+      ],
+      "duplicate_group": null,
+      "note": "Replacement GymFlex contract was signed."
+    },
+    {
+      "source_event_id": "evt-016",
+      "target_event_id": "evt-006",
+      "relation_type": "exact_duplicate",
+      "changed_fields": [],
+      "duplicate_group": "corner-r-1001",
+      "note": null
+    },
+    {
+      "source_event_id": "evt-026",
+      "target_event_id": "evt-006",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "amount"
+      ],
+      "duplicate_group": "corner-r-1001",
+      "note": "Explicit correction from 11.20 EUR to 11.40 EUR."
+    },
+    {
+      "source_event_id": "evt-046",
+      "target_event_id": "evt-036",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": [],
+      "duplicate_group": "corner-r-1002",
+      "note": null
+    }
+  ],
+  "recent_captures": [
+    {
+      "event_id": "evt-061",
+      "sequence": 61,
+      "observed_at": "2026-01-25",
+      "source_type": "subscription"
+    },
+    {
+      "event_id": "evt-062",
+      "sequence": 62,
+      "observed_at": "2026-01-25",
+      "source_type": "receipt"
+    },
+    {
+      "event_id": "evt-063",
+      "sequence": 63,
+      "observed_at": "2026-01-25",
+      "source_type": "receipt"
+    },
+    {
+      "event_id": "evt-064",
+      "sequence": 64,
+      "observed_at": "2026-01-26",
+      "source_type": "text"
+    },
+    {
+      "event_id": "evt-065",
+      "sequence": 65,
+      "observed_at": "2026-01-26",
+      "source_type": "text"
+    },
+    {
+      "event_id": "evt-066",
+      "sequence": 66,
+      "observed_at": "2026-01-26",
+      "source_type": "receipt"
+    },
+    {
+      "event_id": "evt-067",
+      "sequence": 67,
+      "observed_at": "2026-01-27",
+      "source_type": "text"
+    },
+    {
+      "event_id": "evt-068",
+      "sequence": 68,
+      "observed_at": "2026-01-27",
+      "source_type": "text"
+    },
+    {
+      "event_id": "evt-069",
+      "sequence": 69,
+      "observed_at": "2026-01-27",
+      "source_type": "document"
+    },
+    {
+      "event_id": "evt-070",
+      "sequence": 70,
+      "observed_at": "2026-01-28",
+      "source_type": "text"
+    },
+    {
+      "event_id": "evt-071",
+      "sequence": 71,
+      "observed_at": "2026-01-28",
+      "source_type": "text"
+    },
+    {
+      "event_id": "evt-072",
+      "sequence": 72,
+      "observed_at": "2026-01-28",
+      "source_type": "text"
+    },
+    {
+      "event_id": "evt-073",
+      "sequence": 73,
+      "observed_at": "2026-01-29",
+      "source_type": "text"
+    },
+    {
+      "event_id": "evt-074",
+      "sequence": 74,
+      "observed_at": "2026-01-29",
+      "source_type": "task-note"
+    },
+    {
+      "event_id": "evt-075",
+      "sequence": 75,
+      "observed_at": "2026-01-29",
+      "source_type": "document"
+    },
+    {
+      "event_id": "evt-076",
+      "sequence": 76,
+      "observed_at": "2026-01-30",
+      "source_type": "receipt"
+    },
+    {
+      "event_id": "evt-077",
+      "sequence": 77,
+      "observed_at": "2026-01-30",
+      "source_type": "text"
+    },
+    {
+      "event_id": "evt-078",
+      "sequence": 78,
+      "observed_at": "2026-01-30",
+      "source_type": "text"
+    },
+    {
+      "event_id": "evt-079",
+      "sequence": 79,
+      "observed_at": "2026-01-31",
+      "source_type": "text"
+    },
+    {
+      "event_id": "evt-080",
+      "sequence": 80,
+      "observed_at": "2026-01-31",
+      "source_type": "text"
+    },
+    {
+      "event_id": "evt-081",
+      "sequence": 81,
+      "observed_at": "2026-01-31",
+      "source_type": "document"
+    },
+    {
+      "event_id": "evt-082",
+      "sequence": 82,
+      "observed_at": "2026-02-01",
+      "source_type": "receipt"
+    },
+    {
+      "event_id": "evt-083",
+      "sequence": 83,
+      "observed_at": "2026-02-01",
+      "source_type": "text"
+    },
+    {
+      "event_id": "evt-084",
+      "sequence": 84,
+      "observed_at": "2026-02-01",
+      "source_type": "task-note"
+    },
+    {
+      "event_id": "evt-085",
+      "sequence": 85,
+      "observed_at": "2026-02-02",
+      "source_type": "text"
+    },
+    {
+      "event_id": "evt-086",
+      "sequence": 86,
+      "observed_at": "2026-02-02",
+      "source_type": "receipt"
+    },
+    {
+      "event_id": "evt-087",
+      "sequence": 87,
+      "observed_at": "2026-02-02",
+      "source_type": "text"
+    },
+    {
+      "event_id": "evt-088",
+      "sequence": 88,
+      "observed_at": "2026-02-03",
+      "source_type": "document"
+    },
+    {
+      "event_id": "evt-089",
+      "sequence": 89,
+      "observed_at": "2026-02-03",
+      "source_type": "document"
+    },
+    {
+      "event_id": "evt-090",
+      "sequence": 90,
+      "observed_at": "2026-02-03",
+      "source_type": "text"
+    },
+    {
+      "event_id": "evt-091",
+      "sequence": 91,
+      "observed_at": "2026-02-04",
+      "source_type": "text"
+    },
+    {
+      "event_id": "evt-092",
+      "sequence": 92,
+      "observed_at": "2026-02-04",
+      "source_type": "receipt"
+    },
+    {
+      "event_id": "evt-093",
+      "sequence": 93,
+      "observed_at": "2026-02-04",
+      "source_type": "text"
+    },
+    {
+      "event_id": "evt-094",
+      "sequence": 94,
+      "observed_at": "2026-02-05",
+      "source_type": "task-note"
+    },
+    {
+      "event_id": "evt-095",
+      "sequence": 95,
+      "observed_at": "2026-02-05",
+      "source_type": "document"
+    },
+    {
+      "event_id": "evt-096",
+      "sequence": 96,
+      "observed_at": "2026-02-05",
+      "source_type": "receipt"
+    },
+    {
+      "event_id": "evt-097",
+      "sequence": 97,
+      "observed_at": "2026-02-06",
+      "source_type": "document"
+    },
+    {
+      "event_id": "evt-098",
+      "sequence": 98,
+      "observed_at": "2026-02-06",
+      "source_type": "text"
+    },
+    {
+      "event_id": "evt-099",
+      "sequence": 99,
+      "observed_at": "2026-02-06",
+      "source_type": "document"
+    },
+    {
+      "event_id": "evt-100",
+      "sequence": 100,
+      "observed_at": "2026-02-07",
+      "source_type": "text"
+    }
+  ]
+}
+
+NEW CAPTURES:
+[
+  {
+    "event_id": "evt-051",
+    "sequence": 51,
+    "captured_at": "2026-01-21T11:00:00+01:00",
+    "observed_at": "2026-01-21",
+    "source_type": "receipt",
+    "payload": {
+      "text": "The next Streamly charge was 14.00 EUR."
+    },
+    "payload_sha256": "9b854b1d19588442a48203df1400f7ab7ffbc9bcd8b9da9f02f156c071d41b9e",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-052",
+    "sequence": 52,
+    "captured_at": "2026-01-22T12:00:00+01:00",
+    "observed_at": "2026-01-22",
+    "source_type": "receipt",
+    "payload": {
+      "text": "Orange Mobile bill for 2026-06: 31.90 EUR."
+    },
+    "payload_sha256": "a2a0aedd5fa260d900a5d0fe27d2c98138cd7d68f7c23575688e24b656d2f7eb",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-053",
+    "sequence": 53,
+    "captured_at": "2026-01-22T13:00:00+01:00",
+    "observed_at": "2026-01-22",
+    "source_type": "text",
+    "payload": {
+      "text": "I ate one bar from the second pack."
+    },
+    "payload_sha256": "705463b95145baf4ae5eee80bf18baf82f706250ea6227da5c2b874f2b4409ff",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-054",
+    "sequence": 54,
+    "captured_at": "2026-01-22T14:00:00+01:00",
+    "observed_at": "2026-01-22",
+    "source_type": "text",
+    "payload": {
+      "text": "Alex picked up the replacement parcel."
+    },
+    "payload_sha256": "050fe5a556b0d963241e690cfcab60d61b3e80778a1619bb53b62a12d27feafe",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-055",
+    "sequence": 55,
+    "captured_at": "2026-01-23T15:00:00+01:00",
+    "observed_at": "2026-01-23",
+    "source_type": "document",
+    "payload": {
+      "text": "The new RoadSure premium is 42.00 EUR per month."
+    },
+    "payload_sha256": "cbf80b3e4a2c75c7c5b5b04b1a679381100c6a825ff5def46388e4b8cdd3fa67",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-056",
+    "sequence": 56,
+    "captured_at": "2026-01-23T08:00:00+01:00",
+    "observed_at": "2026-01-23",
+    "source_type": "receipt",
+    "payload": {
+      "text": "Corner Mart receipt R-1002 has a changed date and total: 12.20 EUR on 2026-01-09."
+    },
+    "payload_sha256": "d63d2ed541749582e7dde9db7fa38ef3321c5bd3814572698614ff425527ac88",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-057",
+    "sequence": 57,
+    "captured_at": "2026-01-23T09:00:00+01:00",
+    "observed_at": "2026-01-23",
+    "source_type": "text",
+    "payload": {
+      "text": "Jordan Lee confirmed the school deadline."
+    },
+    "payload_sha256": "258a19bd340ad86a9d51511452f302706a5e39d8c2c58cd4feec12252de39133",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-058",
+    "sequence": 58,
+    "captured_at": "2026-01-24T10:00:00+01:00",
+    "observed_at": "2026-01-24",
+    "source_type": "document",
+    "payload": {
+      "text": "A HomeFix invoice draft says 240.00 EUR instead."
+    },
+    "payload_sha256": "181a74f1642dc9eeb74d90308fdfa8de9bf10e967989d6835f316b9d05f923e6",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-059",
+    "sequence": 59,
+    "captured_at": "2026-01-24T11:00:00+01:00",
+    "observed_at": "2026-01-24",
+    "source_type": "document",
+    "payload": {
+      "text": "GYM-NEW renews on 2027-02-28."
+    },
+    "payload_sha256": "87f3033628f2c55cf25761ee004a4ab14addc796b5467157bb2266ba425c0ffb",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-060",
+    "sequence": 60,
+    "captured_at": "2026-01-24T12:00:00+01:00",
+    "observed_at": "2026-01-24",
+    "source_type": "text",
+    "payload": {
+      "text": "The weather observation is irrelevant to my obligations."
+    },
+    "payload_sha256": "8d04d3c3f7ce337d764b639a37c1e03a11294c811ce567ed1b09ece80ad9016a",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-061",
+    "sequence": 61,
+    "captured_at": "2026-01-25T13:00:00+01:00",
+    "observed_at": "2026-01-25",
+    "source_type": "subscription",
+    "payload": {
+      "text": "Streamly now costs 16.00 EUR each month."
+    },
+    "payload_sha256": "c7bbf29990709cc5e43baec6d67730a83a29f57334952faa4975022540b1f0fa",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-062",
+    "sequence": 62,
+    "captured_at": "2026-01-25T14:00:00+01:00",
+    "observed_at": "2026-01-25",
+    "source_type": "receipt",
+    "payload": {
+      "text": "Orange Mobile bill for 2026-07: 31.90 EUR."
+    },
+    "payload_sha256": "e26e059ab5081ad75274f705b7746733cdbf123fe828a3f3449aa1954bf64eb7",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-063",
+    "sequence": 63,
+    "captured_at": "2026-01-25T15:00:00+01:00",
+    "observed_at": "2026-01-25",
+    "source_type": "receipt",
+    "payload": {
+      "text": "MarketOne receipt: 2 bars for 6.00 EUR."
+    },
+    "payload_sha256": "0c0da510f976bfc50da687f3196ed307e182035ff231facbc95c2bde10a860db",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-064",
+    "sequence": 64,
+    "captured_at": "2026-01-26T08:00:00+01:00",
+    "observed_at": "2026-01-26",
+    "source_type": "text",
+    "payload": {
+      "text": "The replacement parcel was returned, so pickup is open again."
+    },
+    "payload_sha256": "d818db56e0af7c464ada69ad1867be1cec3e184d70e35eb612dfb2a24c2f9d96",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-065",
+    "sequence": 65,
+    "captured_at": "2026-01-26T09:00:00+01:00",
+    "observed_at": "2026-01-26",
+    "source_type": "text",
+    "payload": {
+      "text": "A RoadSure card shows RS-NEW, not the old policy."
+    },
+    "payload_sha256": "f2420161443c7d9695d47d1bf6c36d2035702be4238bd0ea668ea5f08f5bd3d2",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-066",
+    "sequence": 66,
+    "captured_at": "2026-01-26T10:00:00+01:00",
+    "observed_at": "2026-01-26",
+    "source_type": "receipt",
+    "payload": {
+      "text": "A normalized copy of receipt R-1002 was captured."
+    },
+    "payload_sha256": "d5878699d753de5fc997314b6f1cc2614613587fb532ed40a02d5c4142ba7127",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-067",
+    "sequence": 67,
+    "captured_at": "2026-01-27T11:00:00+01:00",
+    "observed_at": "2026-01-27",
+    "source_type": "text",
+    "payload": {
+      "text": "I wrote only Jordan, with no surname or context."
+    },
+    "payload_sha256": "e007e44bbaafbd06135f45e08136dca59d484bb9a60a638863a51635609ae03b",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-068",
+    "sequence": 68,
+    "captured_at": "2026-01-27T12:00:00+01:00",
+    "observed_at": "2026-01-27",
+    "source_type": "text",
+    "payload": {
+      "text": "I confirmed the HomeFix amount is 220.00 EUR after checking the email."
+    },
+    "payload_sha256": "d748f914aad34941240379e58ef7fdeaf66026aac3700e08eb30b4aef7e1f018",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-069",
+    "sequence": 69,
+    "captured_at": "2026-01-27T13:00:00+01:00",
+    "observed_at": "2026-01-27",
+    "source_type": "document",
+    "payload": {
+      "text": "GYM-NEW costs 31.00 EUR monthly."
+    },
+    "payload_sha256": "670ee70896f6a410be594c229d56827dff0af90b6672976b51d7f5d65f6c367e",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-070",
+    "sequence": 70,
+    "captured_at": "2026-01-28T14:00:00+01:00",
+    "observed_at": "2026-01-28",
+    "source_type": "text",
+    "payload": {
+      "text": "Withdraw the proposed transfer to Sam."
+    },
+    "payload_sha256": "911446f9311fbbcf9837f6a831ad8e4a93c121aad5f0ef59ca0b6bd34e794533",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-071",
+    "sequence": 71,
+    "captured_at": "2026-01-28T15:00:00+01:00",
+    "observed_at": "2026-01-28",
+    "source_type": "text",
+    "payload": {
+      "text": "Please cancel Streamly at the end of February; this is a request."
+    },
+    "payload_sha256": "915d89f4411f4aeff0123680b17de944a7edfa465d9511050d556a94e7a904d7",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-072",
+    "sequence": 72,
+    "captured_at": "2026-01-28T08:00:00+01:00",
+    "observed_at": "2026-01-28",
+    "source_type": "text",
+    "payload": {
+      "text": "No Orange Mobile bill was captured for 2026-08; coverage is missing, not zero."
+    },
+    "payload_sha256": "983cf8bdca0365221949cb05b5152491e2099a5169a4cfa9b60eac4be066b0f7",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-073",
+    "sequence": 73,
+    "captured_at": "2026-01-29T09:00:00+01:00",
+    "observed_at": "2026-01-29",
+    "source_type": "text",
+    "payload": {
+      "text": "I ate two bars."
+    },
+    "payload_sha256": "e6fe63b751a97c62ff55c304fc7838ce6a0dd7f43e39fa662100836110d8285f",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-074",
+    "sequence": 74,
+    "captured_at": "2026-01-29T10:00:00+01:00",
+    "observed_at": "2026-01-29",
+    "source_type": "task-note",
+    "payload": {
+      "text": "Sam is now responsible for the replacement parcel."
+    },
+    "payload_sha256": "d6133ff0462a370d597981c4f43989633ce75b124998f5bfb0514bfd88a6e047",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-075",
+    "sequence": 75,
+    "captured_at": "2026-01-29T11:00:00+01:00",
+    "observed_at": "2026-01-29",
+    "source_type": "document",
+    "payload": {
+      "text": "The old RoadSure cancellation date was not printed clearly."
+    },
+    "payload_sha256": "ed251f34d7e9a2c2c2c687aca357d72fd88edd29f07074ad3e5237cb5d5cbbc6",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-076",
+    "sequence": 76,
+    "captured_at": "2026-01-30T12:00:00+01:00",
+    "observed_at": "2026-01-30",
+    "source_type": "receipt",
+    "payload": {
+      "text": "Corner Mart receipt R-1003: 8.00 EUR on 2026-01-12."
+    },
+    "payload_sha256": "7238697e2cd6f5faba14237dd43623606ee92f95a936c25992226d152d4222b7",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-077",
+    "sequence": 77,
+    "captured_at": "2026-01-30T13:00:00+01:00",
+    "observed_at": "2026-01-30",
+    "source_type": "text",
+    "payload": {
+      "text": "Jordan Kim will bring climbing shoes."
+    },
+    "payload_sha256": "df406e57da3405de17884fa9d817dded1166fb33d873c1e802a1328326347b6b",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-078",
+    "sequence": 78,
+    "captured_at": "2026-01-30T14:00:00+01:00",
+    "observed_at": "2026-01-30",
+    "source_type": "text",
+    "payload": {
+      "text": "HomeFix appointment remains scheduled for 2026-02-12."
+    },
+    "payload_sha256": "781063ef33a640424e6c69fa48b44deea63dc962f693266e386920fadff91f40",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-079",
+    "sequence": 79,
+    "captured_at": "2026-01-31T15:00:00+01:00",
+    "observed_at": "2026-01-31",
+    "source_type": "text",
+    "payload": {
+      "text": "The old GymFlex terms are historical."
+    },
+    "payload_sha256": "1ea0198ba110e3d4aa8a4f7648ef18e03dd6842eeb52c11099004a2b9cd49c49",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-080",
+    "sequence": 80,
+    "captured_at": "2026-01-31T08:00:00+01:00",
+    "observed_at": "2026-01-31",
+    "source_type": "text",
+    "payload": {
+      "text": "The bank standing-order change is still only a proposal."
+    },
+    "payload_sha256": "cc4f54625f4ad408e3c4875ec176b8ce5e2a86f038ff3e57107eeaa33764ae20",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-081",
+    "sequence": 81,
+    "captured_at": "2026-01-31T09:00:00+01:00",
+    "observed_at": "2026-01-31",
+    "source_type": "document",
+    "payload": {
+      "text": "Streamly cancellation was confirmed for 2026-02-28."
+    },
+    "payload_sha256": "9a51ebefdc9ceec64676ff31c67fada4e339756746bb2e43763e6d517207f9a0",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-082",
+    "sequence": 82,
+    "captured_at": "2026-02-01T10:00:00+01:00",
+    "observed_at": "2026-02-01",
+    "source_type": "receipt",
+    "payload": {
+      "text": "Orange Mobile bill for 2026-09: 33.90 EUR."
+    },
+    "payload_sha256": "a1c4e16ab36459c00c18d72da99cf9347825edbd607c1fe6a491cba3519c7236",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-083",
+    "sequence": 83,
+    "captured_at": "2026-02-01T11:00:00+01:00",
+    "observed_at": "2026-02-01",
+    "source_type": "text",
+    "payload": {
+      "text": "I did not record whether I ate a bar on February 10."
+    },
+    "payload_sha256": "0dc219055aacf6f625369849591f4152c962bf6a374d13e431e986b6a4e48137",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-084",
+    "sequence": 84,
+    "captured_at": "2026-02-01T12:00:00+01:00",
+    "observed_at": "2026-02-01",
+    "source_type": "task-note",
+    "payload": {
+      "text": "Alex will take the replacement parcel task back."
+    },
+    "payload_sha256": "1828f4197001c2aeeb02256690c67f4fbe3ff5caf6cebae646d3600b385248b0",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-085",
+    "sequence": 85,
+    "captured_at": "2026-02-02T13:00:00+01:00",
+    "observed_at": "2026-02-02",
+    "source_type": "text",
+    "payload": {
+      "text": "RoadSure confirmed RS-OLD was superseded when RS-NEW started."
+    },
+    "payload_sha256": "c18e65f9ed7b13127cba0914f08849b9170c8cc46d733460f307eb48dbb4cf1a",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-086",
+    "sequence": 86,
+    "captured_at": "2026-02-02T14:00:00+01:00",
+    "observed_at": "2026-02-02",
+    "source_type": "receipt",
+    "payload": {
+      "text": "Corner Mart receipt R-1004: 8.50 EUR on 2026-01-13."
+    },
+    "payload_sha256": "b789073104df1da35236c265a290255eb6212a6241cadf553b9abcbd92494ee3",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-087",
+    "sequence": 87,
+    "captured_at": "2026-02-02T15:00:00+01:00",
+    "observed_at": "2026-02-02",
+    "source_type": "text",
+    "payload": {
+      "text": "A message from Jordan needs a reply, but the recipient is unclear."
+    },
+    "payload_sha256": "b47c18a996f9ff08ddbf7ce13ee6d19bddde826df10ce9a920cebeb69c65479a",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-088",
+    "sequence": 88,
+    "captured_at": "2026-02-03T08:00:00+01:00",
+    "observed_at": "2026-02-03",
+    "source_type": "document",
+    "payload": {
+      "text": "A later HomeFix note lists 250.00 EUR."
+    },
+    "payload_sha256": "4a0dc3b0c89e8a41eb024379f39587a85d2baf4a4576d07e8ff422d1c1b0a132",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-089",
+    "sequence": 89,
+    "captured_at": "2026-02-03T09:00:00+01:00",
+    "observed_at": "2026-02-03",
+    "source_type": "document",
+    "payload": {
+      "text": "GYM-NEW became effective on 2026-03-01."
+    },
+    "payload_sha256": "8a9e0793664da868c8f482b2823c480d82037ebae3195ffb4bf5c7226044b267",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-090",
+    "sequence": 90,
+    "captured_at": "2026-02-03T10:00:00+01:00",
+    "observed_at": "2026-02-03",
+    "source_type": "text",
+    "payload": {
+      "text": "I saw rain on the walk."
+    },
+    "payload_sha256": "c529353b3c36c4f2a1523b75132ccd33d299a58beb6066306c3932875bd746be",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-091",
+    "sequence": 91,
+    "captured_at": "2026-02-04T11:00:00+01:00",
+    "observed_at": "2026-02-04",
+    "source_type": "text",
+    "payload": {
+      "text": "I reactivated Streamly after all."
+    },
+    "payload_sha256": "1564126ed3256fa3f1e5f9447528a6e82ebdb50f1e29c8c17ce88085b2450a00",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-092",
+    "sequence": 92,
+    "captured_at": "2026-02-04T12:00:00+01:00",
+    "observed_at": "2026-02-04",
+    "source_type": "receipt",
+    "payload": {
+      "text": "Orange Mobile bill for 2026-10: 33.90 EUR."
+    },
+    "payload_sha256": "f3b7889205a14938a4c6c5c166ea283c6e70b4c3b780e352b90a8ce62d26ab3a",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-093",
+    "sequence": 93,
+    "captured_at": "2026-02-04T13:00:00+01:00",
+    "observed_at": "2026-02-04",
+    "source_type": "text",
+    "payload": {
+      "text": "I ate three bars from the pantry."
+    },
+    "payload_sha256": "da14517fac7549a45dd8d3459e0f07358253ac06ae4e8ecf0adc27528cbf225c",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-094",
+    "sequence": 94,
+    "captured_at": "2026-02-05T14:00:00+01:00",
+    "observed_at": "2026-02-05",
+    "source_type": "task-note",
+    "payload": {
+      "text": "The replacement parcel deadline moved to 2026-03-05."
+    },
+    "payload_sha256": "b0833d320324c9de0f1040f7d548d5acf3e662ac433a32839617a2ffc6448c65",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-095",
+    "sequence": 95,
+    "captured_at": "2026-02-05T15:00:00+01:00",
+    "observed_at": "2026-02-05",
+    "source_type": "document",
+    "payload": {
+      "text": "RS-NEW is the current RoadSure policy."
+    },
+    "payload_sha256": "f2bf9e32b9225a700f81d8663e3e2afacd7fa499f8dad564017694efcaf3fc7f",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-096",
+    "sequence": 96,
+    "captured_at": "2026-02-05T08:00:00+01:00",
+    "observed_at": "2026-02-05",
+    "source_type": "receipt",
+    "payload": {
+      "text": "Receipt R-1003 was uploaded a second time unchanged."
+    },
+    "payload_sha256": "11b232f891b4fbb21316bf7227483ca9ab2cefccd3df579df2debc6bf211fb77",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-097",
+    "sequence": 97,
+    "captured_at": "2026-02-06T09:00:00+01:00",
+    "observed_at": "2026-02-06",
+    "source_type": "document",
+    "payload": {
+      "text": "Jordan Lee is the sender of the school message."
+    },
+    "payload_sha256": "b8ebb7a09aa497e8bd51a53d841fda7d2841d4410ae021b954239fda905ff71d",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-098",
+    "sequence": 98,
+    "captured_at": "2026-02-06T10:00:00+01:00",
+    "observed_at": "2026-02-06",
+    "source_type": "text",
+    "payload": {
+      "text": "I have not resolved whether HomeFix is 220.00 or 250.00 EUR."
+    },
+    "payload_sha256": "d1225f7b89f6f5991220edebdf866622f80dbbc24434e2e0be010ebe8be567b6",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-099",
+    "sequence": 99,
+    "captured_at": "2026-02-06T11:00:00+01:00",
+    "observed_at": "2026-02-06",
+    "source_type": "document",
+    "payload": {
+      "text": "The signed date for GYM-NEW is 2026-02-15."
+    },
+    "payload_sha256": "870e4254b1b76235315513221d91c7c23e9d0ebbcf607a454619c790a7fab1ff",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  },
+  {
+    "event_id": "evt-100",
+    "sequence": 100,
+    "captured_at": "2026-02-07T12:00:00+01:00",
+    "observed_at": "2026-02-07",
+    "source_type": "text",
+    "payload": {
+      "text": "I approve preparing a draft, not sending or changing an account."
+    },
+    "payload_sha256": "f7c7118c7cf5573381a22047db2e9dd6bb34b041a1b4df2e8385fb79562d1f0c",
+    "metadata": {
+      "synthetic": true,
+      "source_channel": "capture"
+    }
+  }
+]

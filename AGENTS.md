@@ -18,13 +18,19 @@ The human-authorized size-calibration step is a narrow exception: non-scored syn
 
 For the pre-freeze runtime calibration, a versioned baseline prompt and non-scored model calls are allowed once the human supplies a usable provider configuration. The primary MVP runtime is subscription-first: use an already-installed, already-authenticated local agent CLI when available, let that CLI own authentication, and never request, read, copy, export, or persist provider tokens. Direct API-key integrations are not required for this phase. Do not commit credential values, silently change the prompt after observing failures, or turn calibration outputs into scored benchmark results.
 
-The current kept advanced reference is Experiment 004: generic raw-source
-completeness scanning and deterministic completion, with LQA-0M
-`0.8630770101` and DSCR `41`. Its selective verifier was implemented and
-validated with neutral fixtures but was not needed for the kept public replay;
-the run made zero provider calls. Experiment 003 remains preserved as the
-preceding kept relation-reconciliation result at LQA-0M `0.8157180034` and
-DSCR `45`.
+The current kept advanced reference is Experiment 005: duplicate-aware
+evidence consolidation at the projection boundary, with LQA-0M
+`0.8695006212` and DSCR `40`. It preserves raw history, uses only true
+duplicate relation types, and made zero provider calls in the recorded public
+replay. Experiment 004 remains preserved as the preceding kept completeness
+result at LQA-0M `0.8630770101` and DSCR `41`; Experiment 003 remains preserved
+as the preceding relation-reconciliation milestone at LQA-0M `0.8157180034`
+and DSCR `45`.
+
+Experiment 005 is the last benchmark-optimization experiment for the frozen
+development track. No E006 benchmark-optimization task is authorized by this
+record; later work must be explicitly scoped as post-freeze generalization or
+another human-approved direction.
 
 The data and infrastructure directories that remain empty are represented by
 placeholders so Git can preserve the intended layout. The `app/` directory may
