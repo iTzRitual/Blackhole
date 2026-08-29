@@ -96,7 +96,8 @@
   const showToast = (message, kind = "") => {
     const region = $("#toast-region");
     window.clearTimeout(state.toastTimer);
-    region.innerHTML = `<div class="toast${kind ? ` is-${escapeHtml(kind)}` : ""}" role="status">${escapeHtml(message)}</div>`;
+    const icon = kind === "error" ? "attention" : "check";
+    region.innerHTML = `<div class="toast${kind ? ` is-${escapeHtml(kind)}` : ""}" role="status"><span class="toast-icon"><svg viewBox="0 0 24 24"><use href="#icon-${icon}"></use></svg></span><span>${escapeHtml(message)}</span></div>`;
     state.toastTimer = window.setTimeout(() => { region.innerHTML = ""; }, kind === "error" ? 5200 : 3600);
   };
 
@@ -115,7 +116,7 @@
     try {
       payload = await response.json();
     } catch (_error) {
-      throw new Error("The local demo returned an unreadable response.");
+      throw new Error("Blackhole returned an unreadable response.");
     }
     if (!response.ok) throw new Error(payload.error || "Request failed");
     return payload;
@@ -186,19 +187,6 @@
     </section>`).join("");
   };
 
-  const renderCaptures = (captures) => {
-    const element = $("#recent-captures");
-    $("#recent-count").textContent = String(captures?.length || 0);
-    if (!captures || !captures.length) {
-      renderEmpty(element, "No captures yet.");
-      return;
-    }
-    element.innerHTML = captures.map((capture) => `<div class="recent-row">
-      <span class="recent-seq">#${escapeHtml(capture.sequence)}</span>
-      <div><p class="recent-text">${escapeHtml(capture.text || "Untitled capture")}</p><p class="recent-meta">${escapeHtml(capture.observed_at || "Date unknown")} · ${escapeHtml(pretty(capture.source_type || "source"))}</p></div>
-    </div>`).join("");
-  };
-
   const renderMemorySummary = (stateData) => {
     const counts = stateData.counts || {};
     $("#memory-summary").innerHTML = [
@@ -216,8 +204,6 @@
     renderEmpty($("#attention-list"), "Attention is unavailable offline.", "attention");
     $("#memory-summary").innerHTML = `<span class="summary-pill">Unavailable offline</span>`;
     renderEmpty($("#memory-sections"), "Memory is unavailable offline.", "attention");
-    $("#recent-count").textContent = "—";
-    renderEmpty($("#recent-captures"), "Recent captures are unavailable offline.", "attention");
   };
 
   const renderState = (stateData) => {
@@ -230,9 +216,7 @@
     renderAttention(attention);
     renderMemory(stateData.memory || {});
     renderMemorySummary(stateData);
-    renderCaptures(stateData.recent_captures || []);
-    const provider = stateData.provider || {};
-    setConnectionStatus("Local demo", navigator.onLine ? "online" : "offline", provider.message || "The local demo is informational only.");
+    setConnectionStatus("Connected", navigator.onLine ? "online" : "offline");
   };
 
   const refreshState = async () => {
@@ -241,7 +225,7 @@
       renderState(payload.state || {});
       return true;
     } catch (error) {
-      setConnectionStatus("Offline shell", "offline", error.message);
+      setConnectionStatus("Offline", "offline", error.message);
       if (!state.hasRemoteState) renderUnavailableState();
       return false;
     }
@@ -283,7 +267,6 @@
     $("#file-input").value = "";
     $("#attachment-preview").hidden = true;
     $("#attachment-preview").innerHTML = "";
-    $("#composer-note").textContent = "Private by default";
   };
 
   const renderAttachment = () => {
@@ -292,15 +275,13 @@
     if (!attachment) {
       preview.hidden = true;
       preview.innerHTML = "";
-      $("#composer-note").textContent = "Private by default";
       return;
     }
     const visual = attachment.isImage && state.objectUrl
       ? `<span class="attachment-thumb"><img src="${escapeHtml(state.objectUrl)}" alt="Preview of ${escapeHtml(attachment.name)}"></span>`
       : `<span class="attachment-file-icon"><svg viewBox="0 0 24 24"><use href="#icon-file"></use></svg></span>`;
-    preview.innerHTML = `${visual}<span class="attachment-info"><p class="attachment-name">${escapeHtml(attachment.name)}</p><p class="attachment-detail">${escapeHtml(formatBytes(attachment.size))} · bytes stay local in this prototype</p></span><button id="remove-attachment" class="icon-button attachment-remove" type="button" aria-label="Remove ${escapeHtml(attachment.name)}"><svg viewBox="0 0 24 24"><use href="#icon-close"></use></svg></button>`;
+    preview.innerHTML = `${visual}<span class="attachment-info"><p class="attachment-name">${escapeHtml(attachment.name)}</p><p class="attachment-detail">${escapeHtml(formatBytes(attachment.size))}</p></span><button id="remove-attachment" class="icon-button attachment-remove" type="button" aria-label="Remove ${escapeHtml(attachment.name)}"><svg viewBox="0 0 24 24"><use href="#icon-close"></use></svg></button>`;
     preview.hidden = false;
-    $("#composer-note").textContent = "Attachment ready · add a note";
     $("#remove-attachment").addEventListener("click", clearAttachment);
   };
 
@@ -322,12 +303,12 @@
       try {
         input.value = await file.text();
         resizeTextarea();
-        setFeedback("Text loaded into the note. Selecting the file did not submit it.");
+        setFeedback("");
       } catch (_error) {
-        setFeedback("File ready. Add a note before saving; its bytes stay local here.");
+        setFeedback("");
       }
     } else {
-      setFeedback("Attachment ready. Add context if you want, then save the note.");
+      setFeedback("");
     }
     input.focus();
   };
@@ -363,34 +344,28 @@
   const animateCaptureSuccess = async () => {
     const composer = $("#composer");
     const input = $("#capture-input");
+    const vortex = $("#capture-vortex");
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) {
       input.classList.add("is-fading");
       await new Promise((resolve) => window.setTimeout(resolve, 90));
     } else {
       composer.classList.add("is-collapsing");
-      await new Promise((resolve) => window.setTimeout(resolve, 330));
+      vortex.classList.add("is-active");
+      await new Promise((resolve) => window.setTimeout(resolve, 620));
     }
     composer.classList.remove("is-collapsing");
+    vortex.classList.remove("is-active");
     input.classList.remove("is-fading");
-  };
-
-  const renderMilestoneProgress = () => {
-    const count = localState.localCaptureCount;
-    $("#capture-relief-count").textContent = String(count);
-    const next = milestones.find((milestone) => milestone > count);
-    $("#next-milestone").textContent = next ? `Next: ${next}` : "A lot of room";
   };
 
   const celebrateMilestoneIfNeeded = () => {
     const count = localState.localCaptureCount;
-    if (!milestones.includes(count) || localState.celebrated.includes(count)) return;
+    if (!milestones.includes(count) || localState.celebrated.includes(count)) return false;
     localState.celebrated.push(count);
     persistLocalState();
-    $("#milestone-message").textContent = `${count} things off your mind.`;
-    $("#milestone-card").hidden = false;
-    window.clearTimeout(state.milestoneTimer);
-    state.milestoneTimer = window.setTimeout(() => { $("#milestone-card").hidden = true; }, 6200);
+    showToast(`${count} things off your mind.`);
+    return true;
   };
 
   const submitCapture = async (event) => {
@@ -399,7 +374,7 @@
     const submit = $("#submit-capture");
     const text = input.value.trim();
     if (!text) {
-      setFeedback(state.attachment ? "Add a note before saving. Attachment bytes are not uploaded by this demo." : "Write something first, or keep it for later.", "error");
+      setFeedback(state.attachment ? "Add a note before saving." : "Write something first, or keep it for later.", "error");
       input.focus();
       return;
     }
@@ -421,10 +396,8 @@
       clearAttachment();
       localState.localCaptureCount += 1;
       persistLocalState();
-      renderMilestoneProgress();
-      celebrateMilestoneIfNeeded();
-      setFeedback(attachment ? "Note saved. Attachment bytes were not uploaded." : "Saved.", "success");
-      showToast(attachment ? "+1 off your mind · note saved" : "+1 off your mind");
+      setFeedback("");
+      if (!celebrateMilestoneIfNeeded()) showToast("+1 off your mind");
       await refreshState();
     } catch (error) {
       setFeedback(navigator.onLine ? "Couldn't save that. Try again." : "Couldn't save that while offline. Your text is still here.", "error");
@@ -474,13 +447,13 @@
   };
 
   const resetDemo = async () => {
-    if (!window.confirm("Reset the local demo to its seeded state?")) return;
+    if (!window.confirm("Reset Blackhole to its initial state?")) return;
     try {
       await api("/api/reset", { method: "POST", body: "{}" });
-      setFeedback("Demo reset.", "success");
+      showToast("Blackhole reset");
       await refreshState();
     } catch (error) {
-      setFeedback(error.message || "Couldn't reset the demo.", "error");
+      showToast(error.message || "Couldn't reset Blackhole.", "error");
     }
     closeTopMenu();
   };
@@ -509,7 +482,6 @@
   $("#install-button").addEventListener("click", triggerInstall);
   $("#install-action").addEventListener("click", triggerInstall);
   $("#reset-demo").addEventListener("click", resetDemo);
-  $("#dismiss-milestone").addEventListener("click", () => { $("#milestone-card").hidden = true; });
   $("#ask-form").addEventListener("submit", (event) => { event.preventDefault(); ask($("#ask-input").value); });
   $$(".question-chip").forEach((button) => button.addEventListener("click", () => {
     $("#ask-input").value = button.dataset.question || "";
@@ -522,8 +494,8 @@
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") { closeAttachmentMenu(); closeTopMenu(); }
   });
-  window.addEventListener("online", () => { setConnectionStatus("Online · local demo", "online"); refreshState(); });
-  window.addEventListener("offline", () => setConnectionStatus("Offline shell", "offline", "The app shell is available; captures need a connection to save."));
+  window.addEventListener("online", () => { setConnectionStatus("Connected", "online"); refreshState(); });
+  window.addEventListener("offline", () => setConnectionStatus("Offline", "offline", "Captures need a connection to save."));
   window.addEventListener("beforeinstallprompt", (event) => {
     event.preventDefault();
     state.installPrompt = event;
@@ -540,7 +512,6 @@
   });
 
   if (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true) document.documentElement.classList.add("is-standalone");
-  renderMilestoneProgress();
   resizeTextarea();
   showView(window.location.hash.slice(1), false);
   refreshState();
