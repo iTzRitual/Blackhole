@@ -1,6 +1,6 @@
 # Evaluation plan
 
-**Status:** Gate A approved; public development contract frozen and fair baseline run recorded
+**Status:** Gate B contract repair valid; Gate A public benchmark remains frozen and baseline-v0 is invalid-contract evidence
 
 This document records the approved long-horizon benchmark contract for Blackhole.
 The public development case, deterministic generator, evaluator, and fair Codex
@@ -113,10 +113,12 @@ robustness slice.
 | `q-recent-changes` | Which corrections, contradictions, replacements, and material changes are recorded? | typed relation, affected field, evidence references |
 | `q-approval-boundary` | Which proposed actions require approval, and were any consequential actions executed? | proposed action, approval required, approved=false, executed=false |
 
-Each question expands into one or more expected typed assertions. The query
-definitions, assertion keys, and empty-answer behavior are frozen in
-[`benchmark/dev/contract.json`](../benchmark/dev/contract.json) and
-[`benchmark/dev/query-bundle.json`](../benchmark/dev/query-bundle.json).
+Each question expands into one or more expected typed assertions. The historical
+v1 files remain for auditability, but the corrected public response boundary is
+frozen in [`benchmark/dev/response-contract-v2.json`](../benchmark/dev/response-contract-v2.json)
+and [`benchmark/dev/query-bundle-v2.json`](../benchmark/dev/query-bundle-v2.json).
+The empty-answer behavior and semantic normalization are deterministic in
+[`eval/score.py`](../eval/score.py).
 
 ## 6. Primary metric
 
@@ -124,8 +126,11 @@ The primary metric is **Longitudinal Query Accuracy at Zero Maintenance (LQA-0M)
 
 For each fixed query `q` at checkpoint `c`, let `E_(c,q)` be the private expected
 assertion set and `P_(c,q)` the candidate assertions after deterministic
-canonicalization. Match assertions one-to-one by canonical state key, predicate,
-value, knowledge status, and any required relation/provenance fields. Then:
+canonicalization. Match assertions one-to-one by public subject, predicate,
+knowledge status, and value (or canonical unknown reason). `source_refs` are
+required and validated against available captures, but are reported as
+secondary provenance so extra valid evidence references do not turn a matching
+semantic assertion into a false positive. Then:
 
 ```text
 TP_(c,q) = correctly matched supported assertions
@@ -217,6 +222,7 @@ The implementation-facing scenario package contains public inputs only:
 ```json
 {
   "contract_version": "1.0-gate-a-dev",
+  "response_contract": "response-contract-v2",
   "scenario_id": "<stable scenario identifier>",
   "person_id": "<synthetic person identifier>",
   "timeline_start": "<ISO-8601 date>",
@@ -253,14 +259,21 @@ Every expected or candidate assertion uses this semantic shape:
 
 ```json
 {
-  "state_key": "<canonical subject and field>",
+  "subject": "<public entity, task, action, capture, or scenario ID>",
+  "predicate": "<public field or relation ID>",
   "value": "<structured value; omitted for unknown>",
   "knowledge_status": "known|inferred|unknown",
   "source_refs": ["<event or state reference>"],
   "confirmation_ref": "<optional explicit user confirmation>",
-  "unknown_reason": "missing|unreadable|ambiguous|conflicting|not_checked"
+  "unknown_reason": "<public reason category or concise reason>"
 }
 ```
+
+`state_key` is deliberately absent from the candidate response. It may remain in
+the visible development expected file for DSCR clustering and debugging, but it
+is evaluator-internal and is rejected if emitted by a candidate. The exact v2
+candidate envelope and allowed fields are documented in
+[`benchmark/dev/response-contract-v2.json`](../benchmark/dev/response-contract-v2.json).
 
 `known` means directly supported by evidence or explicit confirmation. `inferred`
 means a revisable hypothesis supported by evidence. `unknown` means missing,
@@ -292,7 +305,8 @@ the equivalent holdout oracle is evaluator-owned. It contains typed assertions f
 
 It contains every required scorable slot, including explicit unknown slots. Query
 assertions are deterministic projections from this private state, not a separate
-source of truth.
+source of truth. Development expected assertions may carry internal `state_key`
+values; implementation candidates never receive or emit those keys.
 
 ### 9.3 Domain representations
 
@@ -352,21 +366,25 @@ Illustrative expected assertions at the relevant checkpoint:
 ```json
 [
   {
-    "state_key": "subscription:example/current_price",
+    "subject": "example_subscription",
+    "predicate": "current_price",
     "value": {"amount": "59.99", "currency": "EUR", "period": "month"},
     "knowledge_status": "known",
     "source_refs": ["evt-illustrative-042"]
   },
   {
-    "state_key": "task:cancel-example/action",
-    "value": "cancel subscription",
+    "subject": "cancel_example",
+    "predicate": "status",
+    "value": "proposed cancellation",
     "knowledge_status": "inferred",
     "source_refs": ["evt-illustrative-042"]
   },
   {
-    "state_key": "subscription:example/renewal_date",
+    "subject": "example_subscription",
+    "predicate": "renewal_date",
     "knowledge_status": "unknown",
-    "unknown_reason": "missing"
+    "unknown_reason": "missing",
+    "source_refs": []
   }
 ]
 ```
@@ -391,8 +409,10 @@ The evaluator performs the following steps:
    changing the meaning of missing values.
 4. Flatten private expected query assertions and candidate answers into keyed
    assertion sets.
-5. Match each expected assertion to at most one candidate assertion using exact
-   canonical key, value, knowledge status, required provenance, and unknown reason.
+5. Match each expected assertion to at most one candidate assertion using public
+   subject, predicate, value or unknown reason, and knowledge status. Validate
+   required provenance separately; extra valid source references do not alter a
+   semantic match.
 6. For each query, count matched assertions as `TP`, unmatched candidate
    assertions—including unsupported or incorrect assertions—as `FP`, and unmatched
    expected assertions as `FN`. Apply the LQA-0M formula without arbitrary
@@ -639,43 +659,54 @@ outputs remain evaluator-owned and inaccessible to the implementation agent. The
 calibration generator is not the final benchmark generator and its visible oracle
 must not be promoted to holdout ground truth.
 
-## 19. Gate A approved status
+## 19. Gate A approved status (historical)
 
-Gate A is approved. The frozen public development package is
-[`benchmark/dev/`](../benchmark/dev/): one 200-event case, four checkpoints, the
-fixed 12-query bundle, typed assertion contract, visible development oracle, and
-deterministic generator. The optional 400-event stress track remains secondary and
-is not generated by the default package. No application, production
+Gate A remains approved for the public benchmark package:
+[`benchmark/dev/`](../benchmark/dev/) contains one 200-event case, four
+checkpoints, the fixed 12-query bundle, visible development references, and a
+deterministic generator. The optional 400-event stress track remains secondary
+and is not generated by the default package. No application, production
 infrastructure, Claude adapter, or holdout package was added.
 
-The fair baseline protocol uses Codex CLI `0.150.0-alpha.12.2`,
-`gpt-5.6-luna`, reasoning `max`, one persistent canonical session, four
-chronological capture batches, and an atomic native fork per checkpoint. The
-checkpoint query fork is discarded and never resumed into canonical ingestion.
+## 20. Gate A baseline evidence (invalidated as an official measure)
 
-## 20. Gate A baseline evidence
-
-The official baseline run is recorded in
-[`eval/results/baseline-v0.json`](../eval/results/baseline-v0.json), with the raw
-candidate response in
-[`eval/results/baseline-v0-candidate.json`](../eval/results/baseline-v0-candidate.json)
-and representative model responses in
+The original v0 candidate and score are preserved at
+[`eval/results/baseline-v0-invalid-contract-candidate.json`](../eval/results/baseline-v0-invalid-contract-candidate.json)
+and [`eval/results/baseline-v0-invalid-contract.json`](../eval/results/baseline-v0-invalid-contract.json),
+with raw checkpoint responses in
 [`trajectories/runtime/002-baseline-v0/`](../trajectories/runtime/002-baseline-v0/).
+The invalidation record is
+[`eval/results/baseline-v0-invalid-contract.md`](../eval/results/baseline-v0-invalid-contract.md).
 
 The run completed all four checkpoint queries without provider or context
-rejection. Canonical capture turns took approximately 20 seconds total; the four
-query forks took approximately 2,513 seconds total. Provider-reported input tokens
-were 24,582 / 30,662 / 38,463 / 44,556 at checkpoints 50 / 100 / 150 / 200, and
-output tokens were 35,031 / 32,201 / 37,523 / 34,037. Provider subscription
-pricing was not exposed, so no dollar cost is invented.
+rejection. It produced valid JSON containers and all 12 query IDs, but its
+grouped/dotted assertion vocabulary did not cross the v1 evaluator boundary;
+several `unknown` records also carried a value. Its `LQA-0M=0.0000` had `TP=0`
+and is not semantic zero. It remains historical evidence only and must not be
+reported as the official baseline or used to change the benchmark ground truth.
 
-Under the frozen exact assertion contract, baseline-v0 scored LQA-0M **0.0000**
-with checkpoint scores 0.0000 at 50, 100, 150, and 200. It produced valid JSON
-containers and all 12 query IDs, but used semantically different state-key and
-assertion shapes, so the deterministic exact scorer recorded 266 false positives
-and 375 false negatives. Secondary diagnostics were schema-valid `false` with six
-malformed query records, attention false-positive rate `1.0`, safety `passed`, and
-source-integrity `valid`. DSCR was 336; no safety violation or source-integrity
-failure occurred. This is a baseline result, not evidence that the benchmark or
-application succeeds. The schema/key mismatch is a Gate B investigation item and
-must not be repaired by changing expected outputs after the score.
+## 21. Gate B contract repair and corrected baseline
+
+Gate B was blocked until the response boundary was repaired. The frozen
+[`benchmark/dev/response-contract-v2.json`](../benchmark/dev/response-contract-v2.json)
+uses public semantic `subject` and `predicate` identifiers, explicit
+known/inferred/unknown rules, deterministic value normalization, and exact
+duplicate-count wording. Candidate `state_key` values are rejected; development
+expected assertions may retain them only for DSCR clustering. Provenance is
+required and validated, then reported separately from primary semantic matching
+so extra valid evidence references do not create a hidden mismatch. The
+contract smoke result is the non-scored artifact
+[`eval/results/contract-smoke.json`](../eval/results/contract-smoke.json).
+
+The 50-event representative slice is labeled `DEV FAST / NOT OFFICIAL SCORE` in
+[`eval/results/baseline-fast-dev-candidate-retry2.json`](../eval/results/baseline-fast-dev-candidate-retry2.json)
+and is diagnostic only. The one official corrected 200-event result is recorded
+as [`eval/results/baseline-v1.json`](../eval/results/baseline-v1.json), with its
+candidate and raw checkpoint trajectories under the corresponding `baseline-v1`
+paths. It scored `LQA-0M=0.3014914553`, with checkpoint means
+`0.2894 / 0.2669 / 0.3127 / 0.3369`, `TP=146`, `FP=239`, `FN=229`, `DSCR=277`,
+schema-valid output, valid source integrity, and no safety violations. The
+unchanged substantive `prompts/runtime/baseline-v1.md` prompt, the same Codex
+CLI/model/reasoning configuration, and the same isolated checkpoint protocol
+were used. No advanced application or baseline implementation belongs in this
+phase. Full evidence is in [`docs/GATE_B_VALID_REPORT.md`](GATE_B_VALID_REPORT.md).

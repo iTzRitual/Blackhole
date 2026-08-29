@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Blackhole response-contract-v2 checkpoint response",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["response_contract", "scenario_id", "checkpoint", "queries"],
+  "properties": {
+    "response_contract": {"type": "string", "const": "response-contract-v2"},
+    "scenario_id": {"type": "string", "minLength": 1},
+    "checkpoint": {"type": "integer", "enum": [50, 100, 150, 200]},
+    "queries": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["assertions"],
+        "properties": {
+          "assertions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["subject", "predicate", "knowledge_status", "source_refs"],
+              "properties": {
+                "subject": {"type": "string", "minLength": 1},
+                "predicate": {"type": "string", "minLength": 1},
+                "value": {},
+                "knowledge_status": {"type": "string", "enum": ["known", "inferred", "unknown"]},
+                "source_refs": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+                "unknown_reason": {"type": "string", "minLength": 1},
+                "confirmation_ref": {"type": "string", "minLength": 1}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

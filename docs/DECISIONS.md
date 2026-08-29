@@ -178,10 +178,18 @@ This is a lightweight decision record. Each entry captures the current design di
 - **Consequences:** Results are deterministic and auditable, but a candidate that invents a different assertion vocabulary is penalized rather than semantically remapped. Development expected output is visible for local scorer work; holdout expected output remains evaluator-owned.
 - **Revisit when:** Human review finds a contract ambiguity before holdout construction. Do not change expected outputs merely because an implementation disagrees.
 
-## D-022 — Record the Codex baseline as a benchmark treatment
+## D-022 — Record the Codex baseline as a benchmark treatment (historical)
 
-- **Status:** Accepted for Gate A evidence
+- **Status:** Historical Gate A execution; invalidated as an official semantic baseline measure
 - **Context:** The benchmark needs a fair, reproducible comparator before advanced application work begins.
 - **Decision:** Use Codex CLI `0.150.0-alpha.12.2`, model `gpt-5.6-luna`, reasoning effort `max`, existing subscription authentication, a fresh empty workspace, read-only execution, the frozen `baseline-v1` prompt, one canonical session, and isolated checkpoint forks. The baseline receives no Blackhole state, database, expected output, evaluator internals, or special tools.
-- **Consequences:** The official run completed all four checkpoints but produced a deterministic LQA-0M of 0.0000 because its assertion keys/shapes did not match the frozen contract. It incurred approximately 2,513 seconds of query-fork runtime and reported no safety or source-integrity failure. The result is preserved as evidence and is a Gate B analysis item, not a reason to rewrite ground truth.
+- **Consequences:** The recorded run completed all four checkpoints but produced a deterministic LQA-0M of 0.0000 because its assertion keys/shapes did not match the frozen contract. It incurred approximately 2,513 seconds of query-fork runtime and reported no safety or source-integrity failure. The result is preserved as invalid-contract evidence and is a Gate B analysis item, not a reason to rewrite ground truth.
 - **Revisit when:** A future human-approved baseline protocol changes the public response contract or provider configuration. Any rerun must be versioned and must not overwrite this result silently.
+
+## D-023 — Repair the public baseline response boundary
+
+- **Status:** Validated for Gate B execution; supersedes the candidate-facing response boundary in D-021
+- **Context:** The Gate A v0 run used grouped semantic summaries and evaluator-oriented dotted `state_key` values, while the scorer required a different assertion identity. The resulting `LQA-0M=0.0000` had no true positives and also contained malformed `unknown` assertions with values, so it was not a valid semantic baseline.
+- **Decision:** Preserve v0 as invalid-contract evidence and freeze `response-contract-v2`. Candidate assertions use public `subject`, `predicate`, `knowledge_status`, `source_refs`, and value/unknown fields. The deterministic scorer canonicalizes only public ontology aliases and declared value formats; it rejects candidate `state_key` fields. Source references remain required and validated, but provenance is reported separately from primary semantic matching so extra valid evidence does not mask state quality. Duplicate-event wording explicitly excludes each original event.
+- **Consequences:** A reasonable general-purpose baseline can be scored without access to evaluator-internal IDs or expected values. Development expected output may retain internal keys solely for DSCR clustering. A non-scored smoke fixture tests raw parsing through canonicalization and evaluation. The substantive `baseline-v1` prompt remains unchanged; only the runner/schema instruction is versioned. The corrected 200-event run is recorded separately and is schema-valid.
+- **Revisit when:** A human review finds a public ontology or normalization ambiguity, a future benchmark needs a new assertion type, or the provider configuration changes. Never repair a semantic disagreement by changing expected ground truth without human review.

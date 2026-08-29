@@ -1,0 +1,23 @@
+{
+  "status": "non-scored-contract-smoke",
+  "parser": {
+    "correct_output_parsed": true,
+    "parse_error": null
+  },
+  "correct": {
+    "semantic_score": 1.0,
+    "schema_valid": true,
+    "totals": {
+      "tp": 6,
+      "fp": 0,
+      "fn": 0
+    }
+  },
+  "malformed": {
+    "schema_valid": false,
+    "schema_errors": [
+      "checkpoint 5/q-smoke: malformed query"
+    ],
+    "malformed_assertion_count": 1
+  }
+}

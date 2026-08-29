@@ -21,10 +21,11 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SCENARIO = ROOT / "benchmark" / "dev" / "cases" / "scenario-001.json"
 DEFAULT_PROMPT = ROOT / "prompts" / "runtime" / "baseline-v1.md"
-DEFAULT_RUNNER_PROMPT = ROOT / "prompts" / "runtime" / "baseline-runner-v1.md"
-DEFAULT_QUERY_BUNDLE = ROOT / "benchmark" / "dev" / "query-bundle.json"
-DEFAULT_OUTPUT = ROOT / "eval" / "results" / "baseline-v0-candidate.json"
-DEFAULT_TRAJECTORY = ROOT / "trajectories" / "runtime" / "002-baseline-v0"
+DEFAULT_RUNNER_PROMPT = ROOT / "prompts" / "runtime" / "baseline-runner-v2.md"
+DEFAULT_QUERY_BUNDLE = ROOT / "benchmark" / "dev" / "query-bundle-v2.json"
+DEFAULT_RESPONSE_CONTRACT = ROOT / "benchmark" / "dev" / "response-contract-v2.json"
+DEFAULT_OUTPUT = ROOT / "eval" / "results" / "baseline-v1-candidate.json"
+DEFAULT_TRAJECTORY = ROOT / "trajectories" / "runtime" / "003-baseline-v1"
 MODEL = "gpt-5.6-luna"
 REASONING_EFFORT = "max"
 DEFAULT_TIMEOUT_SECONDS = 900
@@ -136,18 +137,38 @@ def capture_batch(events: list[dict[str, Any]], checkpoint: int) -> str:
     )
 
 
-def query_prompt(query_bundle: dict[str, Any], checkpoint: int) -> str:
+def query_prompt(
+    query_bundle: dict[str, Any],
+    response_contract: dict[str, Any],
+    scenario_id: str,
+    checkpoint: int,
+    query_ids: list[str],
+) -> str:
+    selected_queries = {
+        query_id: query_bundle.get("queries", {}).get(query_id)
+        for query_id in query_ids
+        if query_id in query_bundle.get("queries", {})
+    }
     return (
         "CHECKPOINT QUERY — read-only fork\n"
         f"The canonical ingestion history currently contains captures 1 through {checkpoint}.\n"
-        "Use only the inherited conversation and the fixed query bundle below.\n"
-        "Return one JSON object and no prose outside it. Include every query exactly once.\n"
-        "The exact response shape is {contract_version, scenario_id, checkpoint, queries}.\n"
+        "Use only the inherited conversation and the public contract/query bundle below.\n"
+        "Return one JSON object and no prose outside it. Include every supplied query exactly once.\n"
+        "The exact response shape is {response_contract, scenario_id, checkpoint, queries}.\n"
         "queries MUST be an object keyed by query_id, never an array. Each value is\n"
-        "{assertions: [...]}. Each assertion MUST use state_key, knowledge_status,\n"
-        "source_refs, and optionally value, unknown_reason, confirmation_ref. Do not\n"
-        "add type, subject, or prose fields.\n"
-        + json.dumps({"checkpoint": checkpoint, "query_bundle": query_bundle}, ensure_ascii=False, indent=2)
+        "{assertions: [...]}. Each assertion MUST use public subject, public predicate,\n"
+        "knowledge_status, source_refs, and the v2 value/unknown rules. Never emit\n"
+        "state_key, type, grouped reports, or prose fields.\n"
+        + json.dumps(
+            {
+                "checkpoint": checkpoint,
+                "scenario_id": scenario_id,
+                "response_contract": response_contract,
+                "query_bundle": {"response_contract": query_bundle.get("response_contract"), "queries": selected_queries},
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
         + "\n"
     )
 
@@ -176,17 +197,28 @@ def parse_json_document(text: str) -> tuple[dict[str, Any] | None, str | None]:
 
 def output_text(result: dict[str, Any], output_path: Path) -> str:
     if output_path.exists():
-        return output_path.read_text(encoding="utf-8")
+        file_text = output_path.read_text(encoding="utf-8")
+        parsed, _error = parse_json_document(file_text)
+        if parsed is not None:
+            return file_text
+    event_texts: list[str] = []
     for event in reversed(result.get("events", [])):
         item = event.get("item")
         if not isinstance(item, dict) or item.get("type") != "agent_message":
             continue
         text = item.get("text")
         if isinstance(text, str):
-            return text
+            event_texts.append(text)
+            continue
         content = item.get("content")
         if isinstance(content, str):
-            return content
+            event_texts.append(content)
+    for text in event_texts:
+        parsed, _error = parse_json_document(text)
+        if parsed is not None:
+            return text
+    if event_texts:
+        return max(event_texts, key=len)
     return ""
 
 
@@ -248,19 +280,33 @@ def run(args: argparse.Namespace) -> int:
     cli = shutil.which("codex")
     if not cli:
         raise SystemExit("codex CLI was not found on PATH")
+    for path_name in ("scenario", "prompt", "runner_prompt", "query_bundle", "response_contract", "output", "trajectory"):
+        setattr(args, path_name, getattr(args, path_name).resolve())
     scenario = load_json(args.scenario)
     baseline_prompt = args.prompt.read_text(encoding="utf-8")
     runner_prompt = args.runner_prompt.read_text(encoding="utf-8")
     query_bundle = load_json(args.query_bundle)
+    response_contract = load_json(args.response_contract)
     public_events = scenario["raw_events"][: args.max_events]
     checkpoints = [checkpoint for checkpoint in scenario["checkpoints"] if checkpoint <= args.max_events]
     if not checkpoints or checkpoints[-1] != args.max_events:
         raise SystemExit("--max-events must end at an approved checkpoint")
+    available_query_ids = list(query_bundle.get("queries", {}).keys())
+    if args.query_ids:
+        query_ids = [item.strip() for item in args.query_ids.split(",") if item.strip()]
+        unknown_query_ids = [item for item in query_ids if item not in available_query_ids]
+        if unknown_query_ids:
+            raise SystemExit(f"unknown query IDs: {','.join(unknown_query_ids)}")
+    else:
+        query_ids = available_query_ids
+    if not query_ids:
+        raise SystemExit("at least one query ID is required")
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.trajectory.mkdir(parents=True, exist_ok=True)
     metadata: dict[str, Any] = {
-        "run_id": "baseline-v0",
+        "run_id": args.run_id,
+        "label": args.label,
         "started_at": iso_now(),
         "provider": "Codex CLI",
         "cli_path_basename": Path(cli).name,
@@ -268,18 +314,20 @@ def run(args: argparse.Namespace) -> int:
         "reasoning_effort": REASONING_EFFORT,
         "sandbox": "read-only",
         "scenario_id": scenario["scenario_id"],
+        "response_contract": response_contract.get("response_contract"),
         "contract_version": scenario["contract_version"],
         "event_count": args.max_events,
         "checkpoints": checkpoints,
         "batching": "one chronological capture batch per checkpoint segment; one persistent canonical session",
         "checkpoint_isolation": "native Codex CLI fork; query fork is never resumed",
-        "structured_response": "prompt-constrained JSON; response-schema.json is validated by the deterministic evaluator",
+        "structured_response": "prompt-constrained JSON; response-contract-v2 is validated by the deterministic evaluator",
+        "query_ids": query_ids,
         "canonical_thread_id": None,
         "turns": [],
         "checkpoint_runs": {},
     }
     candidate: dict[str, Any] = {
-        "contract_version": scenario["contract_version"],
+        "response_contract": response_contract.get("response_contract"),
         "scenario_id": scenario["scenario_id"],
         "checkpoints": {},
         "run_metadata": metadata,
@@ -315,7 +363,7 @@ def run(args: argparse.Namespace) -> int:
             query_result = run_cli(
                 fork_command(cli, canonical_id)
                 + ["-o", str(raw_query_path), "-"],
-                query_prompt(query_bundle, checkpoint),
+                query_prompt(query_bundle, response_contract, scenario["scenario_id"], checkpoint, query_ids),
                 args.timeout,
             )
             fork_id = query_result.get("thread_id")
@@ -331,7 +379,7 @@ def run(args: argparse.Namespace) -> int:
             raw_text = output_text(query_result, raw_query_path)
             parsed, parse_error = parse_json_document(raw_text)
             if parsed is None:
-                parsed = {"contract_version": scenario["contract_version"], "scenario_id": scenario["scenario_id"], "checkpoint": checkpoint, "queries": {}}
+                parsed = {"response_contract": response_contract.get("response_contract"), "scenario_id": scenario["scenario_id"], "checkpoint": checkpoint, "queries": {}}
             query_map = parsed.get("queries") if isinstance(parsed.get("queries"), dict) else {}
             # Accept a common model formatting slip without interpreting its
             # assertions.  The evaluator still validates every assertion field.
@@ -351,7 +399,6 @@ def run(args: argparse.Namespace) -> int:
                 "trajectory_output": str(trajectory_output.relative_to(ROOT)),
             }
             metadata["checkpoint_runs"][str(checkpoint)] = fork_record
-            previous_end = checkpoint
 
     metadata["finished_at"] = iso_now()
     args.output.write_text(json.dumps(candidate, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -372,9 +419,13 @@ def main() -> int:
     parser.add_argument("--prompt", type=Path, default=DEFAULT_PROMPT)
     parser.add_argument("--runner-prompt", type=Path, default=DEFAULT_RUNNER_PROMPT)
     parser.add_argument("--query-bundle", type=Path, default=DEFAULT_QUERY_BUNDLE)
+    parser.add_argument("--response-contract", type=Path, default=DEFAULT_RESPONSE_CONTRACT)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--trajectory", type=Path, default=DEFAULT_TRAJECTORY)
     parser.add_argument("--max-events", type=int, default=200)
+    parser.add_argument("--query-ids", help="comma-separated query IDs for a labeled development slice")
+    parser.add_argument("--run-id", default="baseline-v1")
+    parser.add_argument("--label", default="OFFICIAL")
     parser.add_argument("--timeout", type=int, default=DEFAULT_TIMEOUT_SECONDS)
     args = parser.parse_args()
     return run(args)

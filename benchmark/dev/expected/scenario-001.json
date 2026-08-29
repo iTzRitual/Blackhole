@@ -1,5 +1,6 @@
 {
   "contract_version": "1.0-gate-a-dev",
+  "response_contract": "response-contract-v2",
   "scenario_id": "blackhole-dev-001-state-churn",
   "event_count": 200,
   "raw_event_hashes": {
@@ -214,7 +215,9 @@
             "source_refs": [
               "evt-001"
             ],
-            "value": "month"
+            "value": "month",
+            "subject": "streamly",
+            "predicate": "billing_period"
           },
           {
             "state_key": "subscription:streamly/cancellation_intent",
@@ -222,7 +225,9 @@
             "source_refs": [
               "evt-041"
             ],
-            "value": false
+            "value": false,
+            "subject": "streamly",
+            "predicate": "cancellation_intent"
           },
           {
             "state_key": "subscription:streamly/cancellation_requested",
@@ -230,7 +235,9 @@
             "source_refs": [
               "evt-031"
             ],
-            "value": false
+            "value": false,
+            "subject": "streamly",
+            "predicate": "cancellation_requested"
           },
           {
             "state_key": "subscription:streamly/currency",
@@ -238,7 +245,9 @@
             "source_refs": [
               "evt-001"
             ],
-            "value": "EUR"
+            "value": "EUR",
+            "subject": "streamly",
+            "predicate": "currency"
           },
           {
             "state_key": "subscription:streamly/current_price",
@@ -250,7 +259,9 @@
               "amount": "14.00",
               "currency": "EUR",
               "billing_period": "month"
-            }
+            },
+            "subject": "streamly",
+            "predicate": "current_price"
           },
           {
             "state_key": "subscription:streamly/last_charge",
@@ -261,7 +272,9 @@
             "value": {
               "amount": "12.00",
               "currency": "EUR"
-            }
+            },
+            "subject": "streamly",
+            "predicate": "last_charge"
           },
           {
             "state_key": "subscription:streamly/status",
@@ -269,7 +282,9 @@
             "source_refs": [
               "evt-001"
             ],
-            "value": "active"
+            "value": "active",
+            "subject": "streamly",
+            "predicate": "status"
           }
         ]
       },
@@ -285,7 +300,9 @@
               "amount": "12.00",
               "currency": "EUR",
               "billing_period": "month"
-            }
+            },
+            "subject": "streamly",
+            "predicate": "historical_price"
           },
           {
             "state_key": "history:subscription:streamly/price/2",
@@ -297,7 +314,9 @@
               "amount": "14.00",
               "currency": "EUR",
               "billing_period": "month"
-            }
+            },
+            "subject": "streamly",
+            "predicate": "historical_price"
           }
         ]
       },
@@ -313,7 +332,9 @@
             "value": {
               "reason": "approval required",
               "executed": false
-            }
+            },
+            "subject": "bank_standing_order",
+            "predicate": "needs_attention"
           },
           {
             "state_key": "attention:action:transfer-sam",
@@ -325,7 +346,9 @@
             "value": {
               "reason": "approval required",
               "executed": false
-            }
+            },
+            "subject": "transfer_sam",
+            "predicate": "needs_attention"
           }
         ]
       },
@@ -337,7 +360,9 @@
             "source_refs": [
               "evt-045"
             ],
-            "value": "2026-07-01"
+            "value": "2026-07-01",
+            "subject": "roadsure",
+            "predicate": "effective_date"
           },
           {
             "state_key": "insurance:current/expiry_date",
@@ -345,7 +370,9 @@
             "source_refs": [
               "evt-045"
             ],
-            "value": "2027-06-30"
+            "value": "2027-06-30",
+            "subject": "roadsure",
+            "predicate": "expiry_date"
           },
           {
             "state_key": "insurance:current/policy_id",
@@ -353,7 +380,9 @@
             "source_refs": [
               "evt-045"
             ],
-            "value": "RS-NEW"
+            "value": "RS-NEW",
+            "subject": "roadsure",
+            "predicate": "policy_id"
           },
           {
             "state_key": "insurance:current/status",
@@ -361,7 +390,9 @@
             "source_refs": [
               "evt-045"
             ],
-            "value": "active"
+            "value": "active",
+            "subject": "roadsure",
+            "predicate": "status"
           }
         ]
       },
@@ -376,7 +407,9 @@
               "evt-022",
               "evt-042"
             ],
-            "value": 4
+            "value": 4,
+            "subject": "orange_mobile",
+            "predicate": "observed_bill_count"
           },
           {
             "state_key": "finance:orange/observed_total",
@@ -390,7 +423,9 @@
             "value": {
               "amount": "121.60",
               "currency": "EUR"
-            }
+            },
+            "subject": "orange_mobile",
+            "predicate": "observed_total"
           },
           {
             "state_key": "finance:orange/observed_periods",
@@ -406,7 +441,9 @@
               "2026-02",
               "2026-03",
               "2026-05"
-            ]
+            ],
+            "subject": "orange_mobile",
+            "predicate": "observed_periods"
           },
           {
             "state_key": "finance:orange/missing_periods",
@@ -416,7 +453,9 @@
             ],
             "value": [
               "2026-04"
-            ]
+            ],
+            "subject": "orange_mobile",
+            "predicate": "missing_periods"
           },
           {
             "state_key": "finance:orange/unobserved_periods",
@@ -424,7 +463,9 @@
             "source_refs": [
               "evt-032"
             ],
-            "unknown_reason": "no_capture_for_period"
+            "unknown_reason": "no_capture_for_period",
+            "subject": "orange_mobile",
+            "predicate": "unobserved_periods"
           },
           {
             "state_key": "finance:orange/current_amount",
@@ -435,7 +476,9 @@
             "value": {
               "amount": "31.90",
               "currency": "EUR"
-            }
+            },
+            "subject": "orange_mobile",
+            "predicate": "current_amount"
           }
         ]
       },
@@ -448,7 +491,9 @@
               "evt-003",
               "evt-043"
             ],
-            "value": 2
+            "value": 2,
+            "subject": "marketone",
+            "predicate": "purchase_count"
           },
           {
             "state_key": "finance:marketone/purchased_total",
@@ -460,7 +505,9 @@
             "value": {
               "amount": "27.00",
               "currency": "EUR"
-            }
+            },
+            "subject": "marketone",
+            "predicate": "purchased_total"
           },
           {
             "state_key": "finance:marketone/confirmed_consumption_quantity",
@@ -469,7 +516,9 @@
               "evt-013",
               "evt-023"
             ],
-            "value": 3
+            "value": 3,
+            "subject": "marketone",
+            "predicate": "confirmed_consumption_quantity"
           },
           {
             "state_key": "finance:marketone/consumption_observation_count",
@@ -478,13 +527,17 @@
               "evt-013",
               "evt-023"
             ],
-            "value": 2
+            "value": 2,
+            "subject": "marketone",
+            "predicate": "consumption_observation_count"
           },
           {
             "state_key": "finance:marketone/explicit_zero_is_supported",
             "knowledge_status": "known",
             "source_refs": [],
-            "value": false
+            "value": false,
+            "subject": "marketone",
+            "predicate": "explicit_zero_is_supported"
           },
           {
             "state_key": "finance:marketone/unobserved_consumption",
@@ -492,7 +545,9 @@
             "source_refs": [
               "evt-033"
             ],
-            "unknown_reason": "no_consumption_observation"
+            "unknown_reason": "no_consumption_observation",
+            "subject": "marketone",
+            "predicate": "unobserved_consumption"
           }
         ]
       },
@@ -504,7 +559,9 @@
             "source_refs": [
               "evt-041"
             ],
-            "value": "cancelled"
+            "value": "cancelled",
+            "subject": "streamly_cancellation_task",
+            "predicate": "status"
           },
           {
             "state_key": "task:parcel-pickup-1/deadline",
@@ -512,7 +569,9 @@
             "source_refs": [
               "evt-004"
             ],
-            "value": "2026-01-12"
+            "value": "2026-01-12",
+            "subject": "parcel_pickup_1",
+            "predicate": "deadline"
           },
           {
             "state_key": "task:parcel-pickup-1/lifecycle",
@@ -520,7 +579,9 @@
             "source_refs": [
               "evt-034"
             ],
-            "value": "cancelled"
+            "value": "cancelled",
+            "subject": "parcel_pickup_1",
+            "predicate": "status"
           },
           {
             "state_key": "task:parcel-pickup-1/owner",
@@ -528,7 +589,9 @@
             "source_refs": [
               "evt-014"
             ],
-            "value": "Sam"
+            "value": "Sam",
+            "subject": "parcel_pickup_1",
+            "predicate": "owner"
           },
           {
             "state_key": "task:parcel-pickup-2/deadline",
@@ -536,7 +599,9 @@
             "source_refs": [
               "evt-044"
             ],
-            "value": "2026-02-25"
+            "value": "2026-02-25",
+            "subject": "parcel_pickup_2",
+            "predicate": "deadline"
           },
           {
             "state_key": "task:parcel-pickup-2/lifecycle",
@@ -544,7 +609,9 @@
             "source_refs": [
               "evt-044"
             ],
-            "value": "open"
+            "value": "open",
+            "subject": "parcel_pickup_2",
+            "predicate": "status"
           },
           {
             "state_key": "task:parcel-pickup-2/owner",
@@ -552,7 +619,9 @@
             "source_refs": [
               "evt-044"
             ],
-            "value": "Alex"
+            "value": "Alex",
+            "subject": "parcel_pickup_2",
+            "predicate": "owner"
           },
           {
             "state_key": "relation:rel-evt-014",
@@ -568,7 +637,9 @@
               "changed_fields": [
                 "owner"
               ]
-            }
+            },
+            "subject": "capture:evt-014",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-034",
@@ -584,7 +655,9 @@
               "changed_fields": [
                 "lifecycle"
               ]
-            }
+            },
+            "subject": "capture:evt-034",
+            "predicate": "relationship"
           }
         ]
       },
@@ -596,7 +669,9 @@
             "source_refs": [
               "evt-007"
             ],
-            "unknown_reason": "ambiguous_person"
+            "unknown_reason": "ambiguous_person",
+            "subject": "capture:evt-007",
+            "predicate": "entity_link"
           },
           {
             "state_key": "entity-link:mention-003",
@@ -604,7 +679,9 @@
             "source_refs": [
               "evt-027"
             ],
-            "unknown_reason": "ambiguous_person"
+            "unknown_reason": "ambiguous_person",
+            "subject": "capture:evt-027",
+            "predicate": "entity_link"
           },
           {
             "state_key": "entity-link:mention-005",
@@ -612,7 +689,9 @@
             "source_refs": [
               "evt-047"
             ],
-            "unknown_reason": "ambiguous_person"
+            "unknown_reason": "ambiguous_person",
+            "subject": "capture:evt-047",
+            "predicate": "entity_link"
           }
         ]
       },
@@ -630,7 +709,9 @@
               "source_event_id": "evt-016",
               "target_event_id": "evt-006",
               "duplicate_group": "corner-r-1001"
-            }
+            },
+            "subject": "capture:evt-016",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-026",
@@ -647,7 +728,9 @@
                 "amount"
               ],
               "duplicate_group": "corner-r-1001"
-            }
+            },
+            "subject": "capture:evt-026",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-046",
@@ -661,7 +744,9 @@
               "source_event_id": "evt-046",
               "target_event_id": "evt-036",
               "duplicate_group": "corner-r-1002"
-            }
+            },
+            "subject": "capture:evt-046",
+            "predicate": "relationship"
           },
           {
             "state_key": "duplicate_event_count",
@@ -670,7 +755,9 @@
               "evt-016",
               "evt-046"
             ],
-            "value": 2
+            "value": 2,
+            "subject": "scenario",
+            "predicate": "duplicate_event_count"
           },
           {
             "state_key": "duplicate_group_count",
@@ -679,7 +766,9 @@
               "evt-016",
               "evt-046"
             ],
-            "value": 2
+            "value": 2,
+            "subject": "scenario",
+            "predicate": "duplicate_group_count"
           },
           {
             "state_key": "meaningful_change_event_count",
@@ -687,7 +776,9 @@
             "source_refs": [
               "evt-026"
             ],
-            "value": 1
+            "value": 1,
+            "subject": "scenario",
+            "predicate": "meaningful_change_event_count"
           }
         ]
       },
@@ -699,7 +790,9 @@
             "source_refs": [
               "evt-049"
             ],
-            "value": "GYM-NEW"
+            "value": "GYM-NEW",
+            "subject": "gymflex",
+            "predicate": "contract_id"
           },
           {
             "state_key": "contract:gymflex/current/effective_date",
@@ -707,7 +800,9 @@
             "source_refs": [
               "evt-049"
             ],
-            "value": "2026-03-01"
+            "value": "2026-03-01",
+            "subject": "gymflex",
+            "predicate": "effective_date"
           },
           {
             "state_key": "contract:gymflex/current/expiry_date",
@@ -715,7 +810,9 @@
             "source_refs": [
               "evt-019"
             ],
-            "value": "2027-01-31"
+            "value": "2027-01-31",
+            "subject": "gymflex",
+            "predicate": "expiry_date"
           },
           {
             "state_key": "contract:gymflex/current/fee",
@@ -727,7 +824,9 @@
               "amount": "29.00",
               "currency": "EUR",
               "billing_period": "month"
-            }
+            },
+            "subject": "gymflex",
+            "predicate": "fee"
           },
           {
             "state_key": "contract:gymflex/current/renewal_date",
@@ -735,7 +834,9 @@
             "source_refs": [
               "evt-019"
             ],
-            "value": "2027-01-31"
+            "value": "2027-01-31",
+            "subject": "gymflex",
+            "predicate": "renewal_date"
           },
           {
             "state_key": "contract:gymflex/current/signed_date",
@@ -743,7 +844,9 @@
             "source_refs": [
               "evt-049"
             ],
-            "value": "2026-02-15"
+            "value": "2026-02-15",
+            "subject": "gymflex",
+            "predicate": "signed_date"
           },
           {
             "state_key": "contract:gymflex/current/status",
@@ -751,7 +854,9 @@
             "source_refs": [
               "evt-049"
             ],
-            "value": "active"
+            "value": "active",
+            "subject": "gymflex",
+            "predicate": "status"
           },
           {
             "state_key": "contract:gymflex/old_status",
@@ -759,7 +864,9 @@
             "source_refs": [
               "evt-049"
             ],
-            "value": "superseded"
+            "value": "superseded",
+            "subject": "gymflex",
+            "predicate": "historical_status"
           }
         ]
       },
@@ -771,7 +878,9 @@
             "source_refs": [
               "evt-050"
             ],
-            "value": true
+            "value": true,
+            "subject": "bank_standing_order",
+            "predicate": "approval_required"
           },
           {
             "state_key": "action:bank-standing-order/approved",
@@ -779,7 +888,9 @@
             "source_refs": [
               "evt-050"
             ],
-            "value": false
+            "value": false,
+            "subject": "bank_standing_order",
+            "predicate": "approved"
           },
           {
             "state_key": "action:bank-standing-order/executed",
@@ -787,7 +898,9 @@
             "source_refs": [
               "evt-040"
             ],
-            "value": false
+            "value": false,
+            "subject": "bank_standing_order",
+            "predicate": "executed"
           },
           {
             "state_key": "action:bank-standing-order/lifecycle",
@@ -795,7 +908,9 @@
             "source_refs": [
               "evt-010"
             ],
-            "value": "proposed"
+            "value": "proposed",
+            "subject": "bank_standing_order",
+            "predicate": "status"
           },
           {
             "state_key": "action:transfer-sam/amount",
@@ -806,7 +921,9 @@
             "value": {
               "amount": "50.00",
               "currency": "EUR"
-            }
+            },
+            "subject": "transfer_sam",
+            "predicate": "amount"
           },
           {
             "state_key": "action:transfer-sam/approval_required",
@@ -814,7 +931,9 @@
             "source_refs": [
               "evt-050"
             ],
-            "value": true
+            "value": true,
+            "subject": "transfer_sam",
+            "predicate": "approval_required"
           },
           {
             "state_key": "action:transfer-sam/approved",
@@ -822,7 +941,9 @@
             "source_refs": [
               "evt-050"
             ],
-            "value": false
+            "value": false,
+            "subject": "transfer_sam",
+            "predicate": "approved"
           },
           {
             "state_key": "action:transfer-sam/executed",
@@ -830,7 +951,9 @@
             "source_refs": [
               "evt-040"
             ],
-            "value": false
+            "value": false,
+            "subject": "transfer_sam",
+            "predicate": "executed"
           },
           {
             "state_key": "action:transfer-sam/lifecycle",
@@ -838,7 +961,9 @@
             "source_refs": [
               "evt-030"
             ],
-            "value": "proposed"
+            "value": "proposed",
+            "subject": "transfer_sam",
+            "predicate": "status"
           }
         ]
       },
@@ -858,7 +983,9 @@
               "changed_fields": [
                 "appointment_date"
               ]
-            }
+            },
+            "subject": "capture:evt-018",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-021",
@@ -874,7 +1001,9 @@
               "changed_fields": [
                 "amount"
               ]
-            }
+            },
+            "subject": "capture:evt-021",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-028",
@@ -890,7 +1019,9 @@
               "changed_fields": [
                 "appointment_date"
               ]
-            }
+            },
+            "subject": "capture:evt-028",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-038",
@@ -906,7 +1037,9 @@
               "changed_fields": [
                 "appointment_date"
               ]
-            }
+            },
+            "subject": "capture:evt-038",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-045",
@@ -922,7 +1055,9 @@
                 "policy_id",
                 "effective_date"
               ]
-            }
+            },
+            "subject": "capture:evt-045",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-049",
@@ -938,7 +1073,9 @@
                 "contract_id",
                 "effective_date"
               ]
-            }
+            },
+            "subject": "capture:evt-049",
+            "predicate": "relationship"
           }
         ]
       }
@@ -952,7 +1089,9 @@
             "source_refs": [
               "evt-001"
             ],
-            "value": "month"
+            "value": "month",
+            "subject": "streamly",
+            "predicate": "billing_period"
           },
           {
             "state_key": "subscription:streamly/cancellation_intent",
@@ -960,7 +1099,9 @@
             "source_refs": [
               "evt-091"
             ],
-            "value": false
+            "value": false,
+            "subject": "streamly",
+            "predicate": "cancellation_intent"
           },
           {
             "state_key": "subscription:streamly/cancellation_requested",
@@ -968,7 +1109,9 @@
             "source_refs": [
               "evt-091"
             ],
-            "value": false
+            "value": false,
+            "subject": "streamly",
+            "predicate": "cancellation_requested"
           },
           {
             "state_key": "subscription:streamly/currency",
@@ -976,7 +1119,9 @@
             "source_refs": [
               "evt-001"
             ],
-            "value": "EUR"
+            "value": "EUR",
+            "subject": "streamly",
+            "predicate": "currency"
           },
           {
             "state_key": "subscription:streamly/current_price",
@@ -988,7 +1133,9 @@
               "amount": "16.00",
               "currency": "EUR",
               "billing_period": "month"
-            }
+            },
+            "subject": "streamly",
+            "predicate": "current_price"
           },
           {
             "state_key": "subscription:streamly/last_charge",
@@ -999,7 +1146,9 @@
             "value": {
               "amount": "14.00",
               "currency": "EUR"
-            }
+            },
+            "subject": "streamly",
+            "predicate": "last_charge"
           },
           {
             "state_key": "subscription:streamly/status",
@@ -1007,7 +1156,9 @@
             "source_refs": [
               "evt-091"
             ],
-            "value": "active"
+            "value": "active",
+            "subject": "streamly",
+            "predicate": "status"
           },
           {
             "state_key": "subscription:streamly/termination_date",
@@ -1015,7 +1166,9 @@
             "source_refs": [
               "evt-081"
             ],
-            "value": "2026-02-28"
+            "value": "2026-02-28",
+            "subject": "streamly",
+            "predicate": "termination_date"
           }
         ]
       },
@@ -1031,7 +1184,9 @@
               "amount": "12.00",
               "currency": "EUR",
               "billing_period": "month"
-            }
+            },
+            "subject": "streamly",
+            "predicate": "historical_price"
           },
           {
             "state_key": "history:subscription:streamly/price/2",
@@ -1043,7 +1198,9 @@
               "amount": "14.00",
               "currency": "EUR",
               "billing_period": "month"
-            }
+            },
+            "subject": "streamly",
+            "predicate": "historical_price"
           },
           {
             "state_key": "history:subscription:streamly/price/3",
@@ -1055,7 +1212,9 @@
               "amount": "16.00",
               "currency": "EUR",
               "billing_period": "month"
-            }
+            },
+            "subject": "streamly",
+            "predicate": "historical_price"
           }
         ]
       },
@@ -1071,7 +1230,9 @@
             "value": {
               "reason": "approval required",
               "executed": false
-            }
+            },
+            "subject": "bank_standing_order",
+            "predicate": "needs_attention"
           },
           {
             "state_key": "attention:action:transfer-sam",
@@ -1083,7 +1244,9 @@
             "value": {
               "reason": "approval required",
               "executed": false
-            }
+            },
+            "subject": "transfer_sam",
+            "predicate": "needs_attention"
           }
         ]
       },
@@ -1095,7 +1258,9 @@
             "source_refs": [
               "evt-045"
             ],
-            "value": "2026-07-01"
+            "value": "2026-07-01",
+            "subject": "roadsure",
+            "predicate": "effective_date"
           },
           {
             "state_key": "insurance:current/expiry_date",
@@ -1103,7 +1268,9 @@
             "source_refs": [
               "evt-045"
             ],
-            "value": "2027-06-30"
+            "value": "2027-06-30",
+            "subject": "roadsure",
+            "predicate": "expiry_date"
           },
           {
             "state_key": "insurance:current/policy_id",
@@ -1111,7 +1278,9 @@
             "source_refs": [
               "evt-095"
             ],
-            "value": "RS-NEW"
+            "value": "RS-NEW",
+            "subject": "roadsure",
+            "predicate": "policy_id"
           },
           {
             "state_key": "insurance:current/premium",
@@ -1123,7 +1292,9 @@
               "amount": "42.00",
               "currency": "EUR",
               "billing_period": "month"
-            }
+            },
+            "subject": "roadsure",
+            "predicate": "premium"
           },
           {
             "state_key": "insurance:current/status",
@@ -1131,7 +1302,9 @@
             "source_refs": [
               "evt-045"
             ],
-            "value": "active"
+            "value": "active",
+            "subject": "roadsure",
+            "predicate": "status"
           }
         ]
       },
@@ -1150,7 +1323,9 @@
               "evt-082",
               "evt-092"
             ],
-            "value": 8
+            "value": 8,
+            "subject": "orange_mobile",
+            "predicate": "observed_bill_count"
           },
           {
             "state_key": "finance:orange/observed_total",
@@ -1168,7 +1343,9 @@
             "value": {
               "amount": "253.20",
               "currency": "EUR"
-            }
+            },
+            "subject": "orange_mobile",
+            "predicate": "observed_total"
           },
           {
             "state_key": "finance:orange/observed_periods",
@@ -1192,7 +1369,9 @@
               "2026-07",
               "2026-09",
               "2026-10"
-            ]
+            ],
+            "subject": "orange_mobile",
+            "predicate": "observed_periods"
           },
           {
             "state_key": "finance:orange/missing_periods",
@@ -1204,7 +1383,9 @@
             "value": [
               "2026-04",
               "2026-08"
-            ]
+            ],
+            "subject": "orange_mobile",
+            "predicate": "missing_periods"
           },
           {
             "state_key": "finance:orange/unobserved_periods",
@@ -1213,7 +1394,9 @@
               "evt-032",
               "evt-072"
             ],
-            "unknown_reason": "no_capture_for_period"
+            "unknown_reason": "no_capture_for_period",
+            "subject": "orange_mobile",
+            "predicate": "unobserved_periods"
           },
           {
             "state_key": "finance:orange/current_amount",
@@ -1224,7 +1407,9 @@
             "value": {
               "amount": "33.90",
               "currency": "EUR"
-            }
+            },
+            "subject": "orange_mobile",
+            "predicate": "current_amount"
           }
         ]
       },
@@ -1238,7 +1423,9 @@
               "evt-043",
               "evt-063"
             ],
-            "value": 3
+            "value": 3,
+            "subject": "marketone",
+            "predicate": "purchase_count"
           },
           {
             "state_key": "finance:marketone/purchased_total",
@@ -1251,7 +1438,9 @@
             "value": {
               "amount": "33.00",
               "currency": "EUR"
-            }
+            },
+            "subject": "marketone",
+            "predicate": "purchased_total"
           },
           {
             "state_key": "finance:marketone/confirmed_consumption_quantity",
@@ -1263,7 +1452,9 @@
               "evt-073",
               "evt-093"
             ],
-            "value": 9
+            "value": 9,
+            "subject": "marketone",
+            "predicate": "confirmed_consumption_quantity"
           },
           {
             "state_key": "finance:marketone/consumption_observation_count",
@@ -1275,13 +1466,17 @@
               "evt-073",
               "evt-093"
             ],
-            "value": 5
+            "value": 5,
+            "subject": "marketone",
+            "predicate": "consumption_observation_count"
           },
           {
             "state_key": "finance:marketone/explicit_zero_is_supported",
             "knowledge_status": "known",
             "source_refs": [],
-            "value": false
+            "value": false,
+            "subject": "marketone",
+            "predicate": "explicit_zero_is_supported"
           },
           {
             "state_key": "finance:marketone/unobserved_consumption",
@@ -1290,7 +1485,9 @@
               "evt-033",
               "evt-083"
             ],
-            "unknown_reason": "no_consumption_observation"
+            "unknown_reason": "no_consumption_observation",
+            "subject": "marketone",
+            "predicate": "unobserved_consumption"
           }
         ]
       },
@@ -1302,7 +1499,9 @@
             "source_refs": [
               "evt-041"
             ],
-            "value": "cancelled"
+            "value": "cancelled",
+            "subject": "streamly_cancellation_task",
+            "predicate": "status"
           },
           {
             "state_key": "task:parcel-pickup-1/deadline",
@@ -1310,7 +1509,9 @@
             "source_refs": [
               "evt-004"
             ],
-            "value": "2026-01-12"
+            "value": "2026-01-12",
+            "subject": "parcel_pickup_1",
+            "predicate": "deadline"
           },
           {
             "state_key": "task:parcel-pickup-1/lifecycle",
@@ -1318,7 +1519,9 @@
             "source_refs": [
               "evt-034"
             ],
-            "value": "cancelled"
+            "value": "cancelled",
+            "subject": "parcel_pickup_1",
+            "predicate": "status"
           },
           {
             "state_key": "task:parcel-pickup-1/owner",
@@ -1326,7 +1529,9 @@
             "source_refs": [
               "evt-014"
             ],
-            "value": "Sam"
+            "value": "Sam",
+            "subject": "parcel_pickup_1",
+            "predicate": "owner"
           },
           {
             "state_key": "task:parcel-pickup-2/deadline",
@@ -1334,7 +1539,9 @@
             "source_refs": [
               "evt-094"
             ],
-            "value": "2026-03-05"
+            "value": "2026-03-05",
+            "subject": "parcel_pickup_2",
+            "predicate": "deadline"
           },
           {
             "state_key": "task:parcel-pickup-2/lifecycle",
@@ -1342,7 +1549,9 @@
             "source_refs": [
               "evt-064"
             ],
-            "value": "open"
+            "value": "open",
+            "subject": "parcel_pickup_2",
+            "predicate": "status"
           },
           {
             "state_key": "task:parcel-pickup-2/owner",
@@ -1350,7 +1559,9 @@
             "source_refs": [
               "evt-084"
             ],
-            "value": "Alex"
+            "value": "Alex",
+            "subject": "parcel_pickup_2",
+            "predicate": "owner"
           },
           {
             "state_key": "relation:rel-evt-014",
@@ -1366,7 +1577,9 @@
               "changed_fields": [
                 "owner"
               ]
-            }
+            },
+            "subject": "capture:evt-014",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-034",
@@ -1382,7 +1595,9 @@
               "changed_fields": [
                 "lifecycle"
               ]
-            }
+            },
+            "subject": "capture:evt-034",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-064",
@@ -1398,7 +1613,9 @@
               "changed_fields": [
                 "lifecycle"
               ]
-            }
+            },
+            "subject": "capture:evt-064",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-074",
@@ -1413,7 +1630,9 @@
               "changed_fields": [
                 "owner"
               ]
-            }
+            },
+            "subject": "capture:evt-074",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-084",
@@ -1428,7 +1647,9 @@
               "changed_fields": [
                 "owner"
               ]
-            }
+            },
+            "subject": "capture:evt-084",
+            "predicate": "relationship"
           }
         ]
       },
@@ -1440,7 +1661,9 @@
             "source_refs": [
               "evt-007"
             ],
-            "unknown_reason": "ambiguous_person"
+            "unknown_reason": "ambiguous_person",
+            "subject": "capture:evt-007",
+            "predicate": "entity_link"
           },
           {
             "state_key": "homefix:quoted_amount",
@@ -1449,7 +1672,9 @@
               "evt-048",
               "evt-098"
             ],
-            "unknown_reason": "conflicting"
+            "unknown_reason": "conflicting",
+            "subject": "homefix",
+            "predicate": "quoted_amount"
           },
           {
             "state_key": "entity-link:mention-003",
@@ -1457,7 +1682,9 @@
             "source_refs": [
               "evt-027"
             ],
-            "unknown_reason": "ambiguous_person"
+            "unknown_reason": "ambiguous_person",
+            "subject": "capture:evt-027",
+            "predicate": "entity_link"
           },
           {
             "state_key": "entity-link:mention-005",
@@ -1465,7 +1692,9 @@
             "source_refs": [
               "evt-047"
             ],
-            "unknown_reason": "ambiguous_person"
+            "unknown_reason": "ambiguous_person",
+            "subject": "capture:evt-047",
+            "predicate": "entity_link"
           },
           {
             "state_key": "entity-link:mention-007",
@@ -1473,7 +1702,9 @@
             "source_refs": [
               "evt-067"
             ],
-            "unknown_reason": "ambiguous_person"
+            "unknown_reason": "ambiguous_person",
+            "subject": "capture:evt-067",
+            "predicate": "entity_link"
           },
           {
             "state_key": "insurance:old_cancellation_date",
@@ -1481,7 +1712,9 @@
             "source_refs": [
               "evt-075"
             ],
-            "unknown_reason": "unreadable"
+            "unknown_reason": "unreadable",
+            "subject": "roadsure",
+            "predicate": "old_cancellation_date"
           },
           {
             "state_key": "entity-link:mention-009",
@@ -1489,7 +1722,9 @@
             "source_refs": [
               "evt-087"
             ],
-            "unknown_reason": "ambiguous_person"
+            "unknown_reason": "ambiguous_person",
+            "subject": "capture:evt-087",
+            "predicate": "entity_link"
           }
         ]
       },
@@ -1507,7 +1742,9 @@
               "source_event_id": "evt-016",
               "target_event_id": "evt-006",
               "duplicate_group": "corner-r-1001"
-            }
+            },
+            "subject": "capture:evt-016",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-026",
@@ -1524,7 +1761,9 @@
                 "amount"
               ],
               "duplicate_group": "corner-r-1001"
-            }
+            },
+            "subject": "capture:evt-026",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-046",
@@ -1538,7 +1777,9 @@
               "source_event_id": "evt-046",
               "target_event_id": "evt-036",
               "duplicate_group": "corner-r-1002"
-            }
+            },
+            "subject": "capture:evt-046",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-056",
@@ -1556,7 +1797,9 @@
                 "date"
               ],
               "duplicate_group": "corner-r-1002"
-            }
+            },
+            "subject": "capture:evt-056",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-066",
@@ -1570,7 +1813,9 @@
               "source_event_id": "evt-066",
               "target_event_id": "evt-056",
               "duplicate_group": "corner-r-1002"
-            }
+            },
+            "subject": "capture:evt-066",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-096",
@@ -1584,7 +1829,9 @@
               "source_event_id": "evt-096",
               "target_event_id": "evt-076",
               "duplicate_group": "corner-r-1003"
-            }
+            },
+            "subject": "capture:evt-096",
+            "predicate": "relationship"
           },
           {
             "state_key": "duplicate_event_count",
@@ -1595,7 +1842,9 @@
               "evt-066",
               "evt-096"
             ],
-            "value": 4
+            "value": 4,
+            "subject": "scenario",
+            "predicate": "duplicate_event_count"
           },
           {
             "state_key": "duplicate_group_count",
@@ -1606,7 +1855,9 @@
               "evt-066",
               "evt-096"
             ],
-            "value": 3
+            "value": 3,
+            "subject": "scenario",
+            "predicate": "duplicate_group_count"
           },
           {
             "state_key": "meaningful_change_event_count",
@@ -1615,7 +1866,9 @@
               "evt-026",
               "evt-056"
             ],
-            "value": 2
+            "value": 2,
+            "subject": "scenario",
+            "predicate": "meaningful_change_event_count"
           }
         ]
       },
@@ -1627,7 +1880,9 @@
             "source_refs": [
               "evt-049"
             ],
-            "value": "GYM-NEW"
+            "value": "GYM-NEW",
+            "subject": "gymflex",
+            "predicate": "contract_id"
           },
           {
             "state_key": "contract:gymflex/current/effective_date",
@@ -1635,7 +1890,9 @@
             "source_refs": [
               "evt-089"
             ],
-            "value": "2026-03-01"
+            "value": "2026-03-01",
+            "subject": "gymflex",
+            "predicate": "effective_date"
           },
           {
             "state_key": "contract:gymflex/current/expiry_date",
@@ -1643,7 +1900,9 @@
             "source_refs": [
               "evt-059"
             ],
-            "value": "2027-02-28"
+            "value": "2027-02-28",
+            "subject": "gymflex",
+            "predicate": "expiry_date"
           },
           {
             "state_key": "contract:gymflex/current/fee",
@@ -1655,7 +1914,9 @@
               "amount": "31.00",
               "currency": "EUR",
               "billing_period": "month"
-            }
+            },
+            "subject": "gymflex",
+            "predicate": "fee"
           },
           {
             "state_key": "contract:gymflex/current/renewal_date",
@@ -1663,7 +1924,9 @@
             "source_refs": [
               "evt-059"
             ],
-            "value": "2027-02-28"
+            "value": "2027-02-28",
+            "subject": "gymflex",
+            "predicate": "renewal_date"
           },
           {
             "state_key": "contract:gymflex/current/signed_date",
@@ -1671,7 +1934,9 @@
             "source_refs": [
               "evt-099"
             ],
-            "value": "2026-02-15"
+            "value": "2026-02-15",
+            "subject": "gymflex",
+            "predicate": "signed_date"
           },
           {
             "state_key": "contract:gymflex/current/status",
@@ -1679,7 +1944,9 @@
             "source_refs": [
               "evt-049"
             ],
-            "value": "active"
+            "value": "active",
+            "subject": "gymflex",
+            "predicate": "status"
           },
           {
             "state_key": "contract:gymflex/old_status",
@@ -1687,7 +1954,9 @@
             "source_refs": [
               "evt-079"
             ],
-            "value": "superseded"
+            "value": "superseded",
+            "subject": "gymflex",
+            "predicate": "historical_status"
           }
         ]
       },
@@ -1699,7 +1968,9 @@
             "source_refs": [
               "evt-050"
             ],
-            "value": true
+            "value": true,
+            "subject": "bank_standing_order",
+            "predicate": "approval_required"
           },
           {
             "state_key": "action:bank-standing-order/approval_scope",
@@ -1707,7 +1978,9 @@
             "source_refs": [
               "evt-100"
             ],
-            "value": "draft_only"
+            "value": "draft_only",
+            "subject": "bank_standing_order",
+            "predicate": "approval_scope"
           },
           {
             "state_key": "action:bank-standing-order/approved",
@@ -1715,7 +1988,9 @@
             "source_refs": [
               "evt-100"
             ],
-            "value": false
+            "value": false,
+            "subject": "bank_standing_order",
+            "predicate": "approved"
           },
           {
             "state_key": "action:bank-standing-order/executed",
@@ -1723,7 +1998,9 @@
             "source_refs": [
               "evt-100"
             ],
-            "value": false
+            "value": false,
+            "subject": "bank_standing_order",
+            "predicate": "executed"
           },
           {
             "state_key": "action:bank-standing-order/lifecycle",
@@ -1731,7 +2008,9 @@
             "source_refs": [
               "evt-080"
             ],
-            "value": "proposed"
+            "value": "proposed",
+            "subject": "bank_standing_order",
+            "predicate": "status"
           },
           {
             "state_key": "action:transfer-sam/amount",
@@ -1742,7 +2021,9 @@
             "value": {
               "amount": "50.00",
               "currency": "EUR"
-            }
+            },
+            "subject": "transfer_sam",
+            "predicate": "amount"
           },
           {
             "state_key": "action:transfer-sam/approval_required",
@@ -1750,7 +2031,9 @@
             "source_refs": [
               "evt-050"
             ],
-            "value": true
+            "value": true,
+            "subject": "transfer_sam",
+            "predicate": "approval_required"
           },
           {
             "state_key": "action:transfer-sam/approved",
@@ -1758,7 +2041,9 @@
             "source_refs": [
               "evt-050"
             ],
-            "value": false
+            "value": false,
+            "subject": "transfer_sam",
+            "predicate": "approved"
           },
           {
             "state_key": "action:transfer-sam/executed",
@@ -1766,7 +2051,9 @@
             "source_refs": [
               "evt-070"
             ],
-            "value": false
+            "value": false,
+            "subject": "transfer_sam",
+            "predicate": "executed"
           },
           {
             "state_key": "action:transfer-sam/lifecycle",
@@ -1774,7 +2061,9 @@
             "source_refs": [
               "evt-070"
             ],
-            "value": "withdrawn"
+            "value": "withdrawn",
+            "subject": "transfer_sam",
+            "predicate": "status"
           }
         ]
       },
@@ -1794,7 +2083,9 @@
               "changed_fields": [
                 "appointment_date"
               ]
-            }
+            },
+            "subject": "capture:evt-018",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-021",
@@ -1810,7 +2101,9 @@
               "changed_fields": [
                 "amount"
               ]
-            }
+            },
+            "subject": "capture:evt-021",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-028",
@@ -1826,7 +2119,9 @@
               "changed_fields": [
                 "appointment_date"
               ]
-            }
+            },
+            "subject": "capture:evt-028",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-038",
@@ -1842,7 +2137,9 @@
               "changed_fields": [
                 "appointment_date"
               ]
-            }
+            },
+            "subject": "capture:evt-038",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-045",
@@ -1858,7 +2155,9 @@
                 "policy_id",
                 "effective_date"
               ]
-            }
+            },
+            "subject": "capture:evt-045",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-049",
@@ -1874,7 +2173,9 @@
                 "contract_id",
                 "effective_date"
               ]
-            }
+            },
+            "subject": "capture:evt-049",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-058",
@@ -1890,7 +2191,9 @@
               "changed_fields": [
                 "quoted_amount"
               ]
-            }
+            },
+            "subject": "capture:evt-058",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-061",
@@ -1906,7 +2209,9 @@
               "changed_fields": [
                 "amount"
               ]
-            }
+            },
+            "subject": "capture:evt-061",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-068",
@@ -1922,7 +2227,9 @@
               "changed_fields": [
                 "quoted_amount"
               ]
-            }
+            },
+            "subject": "capture:evt-068",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-088",
@@ -1938,7 +2245,9 @@
               "changed_fields": [
                 "quoted_amount"
               ]
-            }
+            },
+            "subject": "capture:evt-088",
+            "predicate": "relationship"
           }
         ]
       }
@@ -1952,7 +2261,9 @@
             "source_refs": [
               "evt-001"
             ],
-            "value": "month"
+            "value": "month",
+            "subject": "streamly",
+            "predicate": "billing_period"
           },
           {
             "state_key": "subscription:streamly/cancellation_intent",
@@ -1960,7 +2271,9 @@
             "source_refs": [
               "evt-131"
             ],
-            "value": false
+            "value": false,
+            "subject": "streamly",
+            "predicate": "cancellation_intent"
           },
           {
             "state_key": "subscription:streamly/cancellation_requested",
@@ -1968,7 +2281,9 @@
             "source_refs": [
               "evt-121"
             ],
-            "value": false
+            "value": false,
+            "subject": "streamly",
+            "predicate": "cancellation_requested"
           },
           {
             "state_key": "subscription:streamly/currency",
@@ -1976,7 +2291,9 @@
             "source_refs": [
               "evt-001"
             ],
-            "value": "EUR"
+            "value": "EUR",
+            "subject": "streamly",
+            "predicate": "currency"
           },
           {
             "state_key": "subscription:streamly/current_price",
@@ -1988,7 +2305,9 @@
               "amount": "18.00",
               "currency": "EUR",
               "billing_period": "month"
-            }
+            },
+            "subject": "streamly",
+            "predicate": "current_price"
           },
           {
             "state_key": "subscription:streamly/last_charge",
@@ -1999,7 +2318,9 @@
             "value": {
               "amount": "18.00",
               "currency": "EUR"
-            }
+            },
+            "subject": "streamly",
+            "predicate": "last_charge"
           },
           {
             "state_key": "subscription:streamly/price_effective",
@@ -2007,7 +2328,9 @@
             "source_refs": [
               "evt-111"
             ],
-            "value": "2026-03-01"
+            "value": "2026-03-01",
+            "subject": "streamly",
+            "predicate": "price_effective"
           },
           {
             "state_key": "subscription:streamly/status",
@@ -2015,7 +2338,9 @@
             "source_refs": [
               "evt-091"
             ],
-            "value": "active"
+            "value": "active",
+            "subject": "streamly",
+            "predicate": "status"
           },
           {
             "state_key": "subscription:streamly/termination_date",
@@ -2023,7 +2348,9 @@
             "source_refs": [
               "evt-081"
             ],
-            "value": "2026-02-28"
+            "value": "2026-02-28",
+            "subject": "streamly",
+            "predicate": "termination_date"
           }
         ]
       },
@@ -2039,7 +2366,9 @@
               "amount": "12.00",
               "currency": "EUR",
               "billing_period": "month"
-            }
+            },
+            "subject": "streamly",
+            "predicate": "historical_price"
           },
           {
             "state_key": "history:subscription:streamly/price/2",
@@ -2051,7 +2380,9 @@
               "amount": "14.00",
               "currency": "EUR",
               "billing_period": "month"
-            }
+            },
+            "subject": "streamly",
+            "predicate": "historical_price"
           },
           {
             "state_key": "history:subscription:streamly/price/3",
@@ -2063,7 +2394,9 @@
               "amount": "16.00",
               "currency": "EUR",
               "billing_period": "month"
-            }
+            },
+            "subject": "streamly",
+            "predicate": "historical_price"
           },
           {
             "state_key": "history:subscription:streamly/price/4",
@@ -2075,7 +2408,9 @@
               "amount": "18.00",
               "currency": "EUR",
               "billing_period": "month"
-            }
+            },
+            "subject": "streamly",
+            "predicate": "historical_price"
           }
         ]
       },
@@ -2091,7 +2426,9 @@
             "value": {
               "reason": "open task deadline",
               "deadline": "2026-03-05"
-            }
+            },
+            "subject": "parcel_pickup_2",
+            "predicate": "needs_attention"
           },
           {
             "state_key": "attention:action:bank-standing-order",
@@ -2104,7 +2441,9 @@
             "value": {
               "reason": "approval required",
               "executed": false
-            }
+            },
+            "subject": "bank_standing_order",
+            "predicate": "needs_attention"
           },
           {
             "state_key": "attention:action:transfer-sam",
@@ -2116,7 +2455,9 @@
             "value": {
               "reason": "approval required",
               "executed": false
-            }
+            },
+            "subject": "transfer_sam",
+            "predicate": "needs_attention"
           }
         ]
       },
@@ -2128,7 +2469,9 @@
             "source_refs": [
               "evt-145"
             ],
-            "unknown_reason": "not_stated"
+            "unknown_reason": "not_stated",
+            "subject": "roadsure",
+            "predicate": "beneficiary"
           },
           {
             "state_key": "insurance:current/claim_number",
@@ -2136,7 +2479,9 @@
             "source_refs": [
               "evt-115"
             ],
-            "unknown_reason": "unreadable"
+            "unknown_reason": "unreadable",
+            "subject": "roadsure",
+            "predicate": "claim_number"
           },
           {
             "state_key": "insurance:current/effective_date",
@@ -2144,7 +2489,9 @@
             "source_refs": [
               "evt-045"
             ],
-            "value": "2026-07-01"
+            "value": "2026-07-01",
+            "subject": "roadsure",
+            "predicate": "effective_date"
           },
           {
             "state_key": "insurance:current/expiry_date",
@@ -2152,7 +2499,9 @@
             "source_refs": [
               "evt-135"
             ],
-            "value": "2027-06-30"
+            "value": "2027-06-30",
+            "subject": "roadsure",
+            "predicate": "expiry_date"
           },
           {
             "state_key": "insurance:current/policy_id",
@@ -2160,7 +2509,9 @@
             "source_refs": [
               "evt-095"
             ],
-            "value": "RS-NEW"
+            "value": "RS-NEW",
+            "subject": "roadsure",
+            "predicate": "policy_id"
           },
           {
             "state_key": "insurance:current/premium",
@@ -2172,7 +2523,9 @@
               "amount": "42.00",
               "currency": "EUR",
               "billing_period": "month"
-            }
+            },
+            "subject": "roadsure",
+            "predicate": "premium"
           },
           {
             "state_key": "insurance:current/status",
@@ -2180,7 +2533,9 @@
             "source_refs": [
               "evt-125"
             ],
-            "value": "active"
+            "value": "active",
+            "subject": "roadsure",
+            "predicate": "status"
           }
         ]
       },
@@ -2203,7 +2558,9 @@
               "evt-122",
               "evt-142"
             ],
-            "value": 12
+            "value": 12,
+            "subject": "orange_mobile",
+            "predicate": "observed_bill_count"
           },
           {
             "state_key": "finance:orange/observed_total",
@@ -2225,7 +2582,9 @@
             "value": {
               "amount": "394.80",
               "currency": "EUR"
-            }
+            },
+            "subject": "orange_mobile",
+            "predicate": "observed_total"
           },
           {
             "state_key": "finance:orange/observed_periods",
@@ -2257,7 +2616,9 @@
               "2026-12",
               "2027-01",
               "2027-03"
-            ]
+            ],
+            "subject": "orange_mobile",
+            "predicate": "observed_periods"
           },
           {
             "state_key": "finance:orange/missing_periods",
@@ -2271,7 +2632,9 @@
               "2026-04",
               "2026-08",
               "2027-02"
-            ]
+            ],
+            "subject": "orange_mobile",
+            "predicate": "missing_periods"
           },
           {
             "state_key": "finance:orange/unobserved_periods",
@@ -2281,7 +2644,9 @@
               "evt-072",
               "evt-132"
             ],
-            "unknown_reason": "no_capture_for_period"
+            "unknown_reason": "no_capture_for_period",
+            "subject": "orange_mobile",
+            "predicate": "unobserved_periods"
           },
           {
             "state_key": "finance:orange/current_amount",
@@ -2292,7 +2657,9 @@
             "value": {
               "amount": "35.90",
               "currency": "EUR"
-            }
+            },
+            "subject": "orange_mobile",
+            "predicate": "current_amount"
           }
         ]
       },
@@ -2308,7 +2675,9 @@
               "evt-103",
               "evt-133"
             ],
-            "value": 5
+            "value": 5,
+            "subject": "marketone",
+            "predicate": "purchase_count"
           },
           {
             "state_key": "finance:marketone/purchased_total",
@@ -2323,7 +2692,9 @@
             "value": {
               "amount": "75.00",
               "currency": "EUR"
-            }
+            },
+            "subject": "marketone",
+            "predicate": "purchased_total"
           },
           {
             "state_key": "finance:marketone/confirmed_consumption_quantity",
@@ -2337,7 +2708,9 @@
               "evt-123",
               "evt-143"
             ],
-            "value": 13
+            "value": 13,
+            "subject": "marketone",
+            "predicate": "confirmed_consumption_quantity"
           },
           {
             "state_key": "finance:marketone/consumption_observation_count",
@@ -2351,7 +2724,9 @@
               "evt-123",
               "evt-143"
             ],
-            "value": 7
+            "value": 7,
+            "subject": "marketone",
+            "predicate": "consumption_observation_count"
           },
           {
             "state_key": "finance:marketone/explicit_zero_is_supported",
@@ -2359,7 +2734,9 @@
             "source_refs": [
               "evt-143"
             ],
-            "value": true
+            "value": true,
+            "subject": "marketone",
+            "predicate": "explicit_zero_is_supported"
           },
           {
             "state_key": "finance:marketone/unobserved_consumption",
@@ -2369,7 +2746,9 @@
               "evt-083",
               "evt-113"
             ],
-            "unknown_reason": "no_consumption_observation"
+            "unknown_reason": "no_consumption_observation",
+            "subject": "marketone",
+            "predicate": "unobserved_consumption"
           }
         ]
       },
@@ -2381,7 +2760,9 @@
             "source_refs": [
               "evt-131"
             ],
-            "value": "cancelled"
+            "value": "cancelled",
+            "subject": "streamly_cancellation_task",
+            "predicate": "status"
           },
           {
             "state_key": "task:library-return-1/deadline",
@@ -2389,7 +2770,9 @@
             "source_refs": [
               "evt-104"
             ],
-            "value": "2026-02-18"
+            "value": "2026-02-18",
+            "subject": "library_return_1",
+            "predicate": "deadline"
           },
           {
             "state_key": "task:library-return-1/lifecycle",
@@ -2397,7 +2780,9 @@
             "source_refs": [
               "evt-114"
             ],
-            "value": "completed"
+            "value": "completed",
+            "subject": "library_return_1",
+            "predicate": "status"
           },
           {
             "state_key": "task:library-return-1/owner",
@@ -2405,7 +2790,9 @@
             "source_refs": [
               "evt-104"
             ],
-            "value": "Sam"
+            "value": "Sam",
+            "subject": "library_return_1",
+            "predicate": "owner"
           },
           {
             "state_key": "task:parcel-pickup-1/deadline",
@@ -2413,7 +2800,9 @@
             "source_refs": [
               "evt-004"
             ],
-            "value": "2026-01-12"
+            "value": "2026-01-12",
+            "subject": "parcel_pickup_1",
+            "predicate": "deadline"
           },
           {
             "state_key": "task:parcel-pickup-1/lifecycle",
@@ -2421,7 +2810,9 @@
             "source_refs": [
               "evt-034"
             ],
-            "value": "cancelled"
+            "value": "cancelled",
+            "subject": "parcel_pickup_1",
+            "predicate": "status"
           },
           {
             "state_key": "task:parcel-pickup-1/owner",
@@ -2429,7 +2820,9 @@
             "source_refs": [
               "evt-014"
             ],
-            "value": "Sam"
+            "value": "Sam",
+            "subject": "parcel_pickup_1",
+            "predicate": "owner"
           },
           {
             "state_key": "task:parcel-pickup-2/deadline",
@@ -2437,7 +2830,9 @@
             "source_refs": [
               "evt-094"
             ],
-            "value": "2026-03-05"
+            "value": "2026-03-05",
+            "subject": "parcel_pickup_2",
+            "predicate": "deadline"
           },
           {
             "state_key": "task:parcel-pickup-2/lifecycle",
@@ -2445,7 +2840,9 @@
             "source_refs": [
               "evt-134"
             ],
-            "value": "open"
+            "value": "open",
+            "subject": "parcel_pickup_2",
+            "predicate": "status"
           },
           {
             "state_key": "task:parcel-pickup-2/owner",
@@ -2453,7 +2850,9 @@
             "source_refs": [
               "evt-144"
             ],
-            "value": "Sam"
+            "value": "Sam",
+            "subject": "parcel_pickup_2",
+            "predicate": "owner"
           },
           {
             "state_key": "relation:rel-evt-014",
@@ -2469,7 +2868,9 @@
               "changed_fields": [
                 "owner"
               ]
-            }
+            },
+            "subject": "capture:evt-014",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-034",
@@ -2485,7 +2886,9 @@
               "changed_fields": [
                 "lifecycle"
               ]
-            }
+            },
+            "subject": "capture:evt-034",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-064",
@@ -2501,7 +2904,9 @@
               "changed_fields": [
                 "lifecycle"
               ]
-            }
+            },
+            "subject": "capture:evt-064",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-074",
@@ -2516,7 +2921,9 @@
               "changed_fields": [
                 "owner"
               ]
-            }
+            },
+            "subject": "capture:evt-074",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-084",
@@ -2531,7 +2938,9 @@
               "changed_fields": [
                 "owner"
               ]
-            }
+            },
+            "subject": "capture:evt-084",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-134",
@@ -2546,7 +2955,9 @@
               "changed_fields": [
                 "lifecycle"
               ]
-            }
+            },
+            "subject": "capture:evt-134",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-144",
@@ -2561,7 +2972,9 @@
               "changed_fields": [
                 "owner"
               ]
-            }
+            },
+            "subject": "capture:evt-144",
+            "predicate": "relationship"
           }
         ]
       },
@@ -2573,7 +2986,9 @@
             "source_refs": [
               "evt-007"
             ],
-            "unknown_reason": "ambiguous_person"
+            "unknown_reason": "ambiguous_person",
+            "subject": "capture:evt-007",
+            "predicate": "entity_link"
           },
           {
             "state_key": "homefix:quoted_amount",
@@ -2582,7 +2997,9 @@
               "evt-048",
               "evt-148"
             ],
-            "unknown_reason": "conflicting"
+            "unknown_reason": "conflicting",
+            "subject": "homefix",
+            "predicate": "quoted_amount"
           },
           {
             "state_key": "entity-link:mention-003",
@@ -2590,7 +3007,9 @@
             "source_refs": [
               "evt-027"
             ],
-            "unknown_reason": "ambiguous_person"
+            "unknown_reason": "ambiguous_person",
+            "subject": "capture:evt-027",
+            "predicate": "entity_link"
           },
           {
             "state_key": "entity-link:mention-005",
@@ -2598,7 +3017,9 @@
             "source_refs": [
               "evt-047"
             ],
-            "unknown_reason": "ambiguous_person"
+            "unknown_reason": "ambiguous_person",
+            "subject": "capture:evt-047",
+            "predicate": "entity_link"
           },
           {
             "state_key": "entity-link:mention-007",
@@ -2606,7 +3027,9 @@
             "source_refs": [
               "evt-067"
             ],
-            "unknown_reason": "ambiguous_person"
+            "unknown_reason": "ambiguous_person",
+            "subject": "capture:evt-067",
+            "predicate": "entity_link"
           },
           {
             "state_key": "insurance:old_cancellation_date",
@@ -2614,7 +3037,9 @@
             "source_refs": [
               "evt-075"
             ],
-            "unknown_reason": "unreadable"
+            "unknown_reason": "unreadable",
+            "subject": "roadsure",
+            "predicate": "old_cancellation_date"
           },
           {
             "state_key": "entity-link:mention-009",
@@ -2622,7 +3047,9 @@
             "source_refs": [
               "evt-087"
             ],
-            "unknown_reason": "ambiguous_person"
+            "unknown_reason": "ambiguous_person",
+            "subject": "capture:evt-087",
+            "predicate": "entity_link"
           },
           {
             "state_key": "entity-link:mention-011",
@@ -2630,7 +3057,9 @@
             "source_refs": [
               "evt-107"
             ],
-            "unknown_reason": "ambiguous_person"
+            "unknown_reason": "ambiguous_person",
+            "subject": "capture:evt-107",
+            "predicate": "entity_link"
           },
           {
             "state_key": "insurance:current/claim_number",
@@ -2638,7 +3067,9 @@
             "source_refs": [
               "evt-115"
             ],
-            "unknown_reason": "unreadable"
+            "unknown_reason": "unreadable",
+            "subject": "roadsure",
+            "predicate": "claim_number"
           },
           {
             "state_key": "entity-link:mention-013",
@@ -2646,7 +3077,9 @@
             "source_refs": [
               "evt-127"
             ],
-            "unknown_reason": "ambiguous_person"
+            "unknown_reason": "ambiguous_person",
+            "subject": "capture:evt-127",
+            "predicate": "entity_link"
           },
           {
             "state_key": "insurance:current/beneficiary",
@@ -2654,7 +3087,9 @@
             "source_refs": [
               "evt-145"
             ],
-            "unknown_reason": "not_stated"
+            "unknown_reason": "not_stated",
+            "subject": "roadsure",
+            "predicate": "beneficiary"
           },
           {
             "state_key": "entity-link:mention-015",
@@ -2662,7 +3097,9 @@
             "source_refs": [
               "evt-147"
             ],
-            "unknown_reason": "ambiguous_person"
+            "unknown_reason": "ambiguous_person",
+            "subject": "capture:evt-147",
+            "predicate": "entity_link"
           }
         ]
       },
@@ -2680,7 +3117,9 @@
               "source_event_id": "evt-016",
               "target_event_id": "evt-006",
               "duplicate_group": "corner-r-1001"
-            }
+            },
+            "subject": "capture:evt-016",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-026",
@@ -2697,7 +3136,9 @@
                 "amount"
               ],
               "duplicate_group": "corner-r-1001"
-            }
+            },
+            "subject": "capture:evt-026",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-046",
@@ -2711,7 +3152,9 @@
               "source_event_id": "evt-046",
               "target_event_id": "evt-036",
               "duplicate_group": "corner-r-1002"
-            }
+            },
+            "subject": "capture:evt-046",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-056",
@@ -2729,7 +3172,9 @@
                 "date"
               ],
               "duplicate_group": "corner-r-1002"
-            }
+            },
+            "subject": "capture:evt-056",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-066",
@@ -2743,7 +3188,9 @@
               "source_event_id": "evt-066",
               "target_event_id": "evt-056",
               "duplicate_group": "corner-r-1002"
-            }
+            },
+            "subject": "capture:evt-066",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-096",
@@ -2757,7 +3204,9 @@
               "source_event_id": "evt-096",
               "target_event_id": "evt-076",
               "duplicate_group": "corner-r-1003"
-            }
+            },
+            "subject": "capture:evt-096",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-106",
@@ -2774,7 +3223,9 @@
                 "tax_line"
               ],
               "duplicate_group": "corner-r-1004"
-            }
+            },
+            "subject": "capture:evt-106",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-126",
@@ -2788,7 +3239,9 @@
               "source_event_id": "evt-126",
               "target_event_id": "evt-116",
               "note": "different receipt identifier and purchase"
-            }
+            },
+            "subject": "capture:evt-126",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-136",
@@ -2802,7 +3255,9 @@
               "source_event_id": "evt-136",
               "target_event_id": "evt-126",
               "duplicate_group": "corner-r-1005"
-            }
+            },
+            "subject": "capture:evt-136",
+            "predicate": "relationship"
           },
           {
             "state_key": "duplicate_event_count",
@@ -2814,7 +3269,9 @@
               "evt-096",
               "evt-136"
             ],
-            "value": 5
+            "value": 5,
+            "subject": "scenario",
+            "predicate": "duplicate_event_count"
           },
           {
             "state_key": "duplicate_group_count",
@@ -2826,7 +3283,9 @@
               "evt-096",
               "evt-136"
             ],
-            "value": 4
+            "value": 4,
+            "subject": "scenario",
+            "predicate": "duplicate_group_count"
           },
           {
             "state_key": "meaningful_change_event_count",
@@ -2836,7 +3295,9 @@
               "evt-056",
               "evt-106"
             ],
-            "value": 3
+            "value": 3,
+            "subject": "scenario",
+            "predicate": "meaningful_change_event_count"
           }
         ]
       },
@@ -2848,7 +3309,9 @@
             "source_refs": [
               "evt-109"
             ],
-            "value": "GYM-NEW"
+            "value": "GYM-NEW",
+            "subject": "gymflex",
+            "predicate": "contract_id"
           },
           {
             "state_key": "contract:gymflex/current/effective_date",
@@ -2856,7 +3319,9 @@
             "source_refs": [
               "evt-129"
             ],
-            "value": "2026-03-01"
+            "value": "2026-03-01",
+            "subject": "gymflex",
+            "predicate": "effective_date"
           },
           {
             "state_key": "contract:gymflex/current/expiry_date",
@@ -2864,7 +3329,9 @@
             "source_refs": [
               "evt-059"
             ],
-            "value": "2027-02-28"
+            "value": "2027-02-28",
+            "subject": "gymflex",
+            "predicate": "expiry_date"
           },
           {
             "state_key": "contract:gymflex/current/fee",
@@ -2876,7 +3343,9 @@
               "amount": "31.00",
               "currency": "EUR",
               "billing_period": "month"
-            }
+            },
+            "subject": "gymflex",
+            "predicate": "fee"
           },
           {
             "state_key": "contract:gymflex/current/renewal_date",
@@ -2884,7 +3353,9 @@
             "source_refs": [
               "evt-119"
             ],
-            "value": "2027-02-28"
+            "value": "2027-02-28",
+            "subject": "gymflex",
+            "predicate": "renewal_date"
           },
           {
             "state_key": "contract:gymflex/current/signed_date",
@@ -2892,7 +3363,9 @@
             "source_refs": [
               "evt-099"
             ],
-            "value": "2026-02-15"
+            "value": "2026-02-15",
+            "subject": "gymflex",
+            "predicate": "signed_date"
           },
           {
             "state_key": "contract:gymflex/current/status",
@@ -2900,7 +3373,9 @@
             "source_refs": [
               "evt-049"
             ],
-            "value": "active"
+            "value": "active",
+            "subject": "gymflex",
+            "predicate": "status"
           },
           {
             "state_key": "contract:gymflex/old_status",
@@ -2908,7 +3383,9 @@
             "source_refs": [
               "evt-139"
             ],
-            "value": "superseded"
+            "value": "superseded",
+            "subject": "gymflex",
+            "predicate": "historical_status"
           }
         ]
       },
@@ -2920,7 +3397,9 @@
             "source_refs": [
               "evt-050"
             ],
-            "value": true
+            "value": true,
+            "subject": "bank_standing_order",
+            "predicate": "approval_required"
           },
           {
             "state_key": "action:bank-standing-order/approval_scope",
@@ -2928,7 +3407,9 @@
             "source_refs": [
               "evt-100"
             ],
-            "value": "draft_only"
+            "value": "draft_only",
+            "subject": "bank_standing_order",
+            "predicate": "approval_scope"
           },
           {
             "state_key": "action:bank-standing-order/approved",
@@ -2936,7 +3417,9 @@
             "source_refs": [
               "evt-130"
             ],
-            "value": false
+            "value": false,
+            "subject": "bank_standing_order",
+            "predicate": "approved"
           },
           {
             "state_key": "action:bank-standing-order/executed",
@@ -2944,7 +3427,9 @@
             "source_refs": [
               "evt-140"
             ],
-            "value": false
+            "value": false,
+            "subject": "bank_standing_order",
+            "predicate": "executed"
           },
           {
             "state_key": "action:bank-standing-order/lifecycle",
@@ -2952,7 +3437,9 @@
             "source_refs": [
               "evt-130"
             ],
-            "value": "proposed"
+            "value": "proposed",
+            "subject": "bank_standing_order",
+            "predicate": "status"
           },
           {
             "state_key": "action:transfer-sam/amount",
@@ -2963,7 +3450,9 @@
             "value": {
               "amount": "50.00",
               "currency": "EUR"
-            }
+            },
+            "subject": "transfer_sam",
+            "predicate": "amount"
           },
           {
             "state_key": "action:transfer-sam/approval_required",
@@ -2971,7 +3460,9 @@
             "source_refs": [
               "evt-050"
             ],
-            "value": true
+            "value": true,
+            "subject": "transfer_sam",
+            "predicate": "approval_required"
           },
           {
             "state_key": "action:transfer-sam/approved",
@@ -2979,7 +3470,9 @@
             "source_refs": [
               "evt-050"
             ],
-            "value": false
+            "value": false,
+            "subject": "transfer_sam",
+            "predicate": "approved"
           },
           {
             "state_key": "action:transfer-sam/executed",
@@ -2987,7 +3480,9 @@
             "source_refs": [
               "evt-150"
             ],
-            "value": false
+            "value": false,
+            "subject": "transfer_sam",
+            "predicate": "executed"
           },
           {
             "state_key": "action:transfer-sam/lifecycle",
@@ -2995,7 +3490,9 @@
             "source_refs": [
               "evt-150"
             ],
-            "value": "withdrawn"
+            "value": "withdrawn",
+            "subject": "transfer_sam",
+            "predicate": "status"
           }
         ]
       },
@@ -3015,7 +3512,9 @@
               "changed_fields": [
                 "appointment_date"
               ]
-            }
+            },
+            "subject": "capture:evt-018",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-021",
@@ -3031,7 +3530,9 @@
               "changed_fields": [
                 "amount"
               ]
-            }
+            },
+            "subject": "capture:evt-021",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-028",
@@ -3047,7 +3548,9 @@
               "changed_fields": [
                 "appointment_date"
               ]
-            }
+            },
+            "subject": "capture:evt-028",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-038",
@@ -3063,7 +3566,9 @@
               "changed_fields": [
                 "appointment_date"
               ]
-            }
+            },
+            "subject": "capture:evt-038",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-045",
@@ -3079,7 +3584,9 @@
                 "policy_id",
                 "effective_date"
               ]
-            }
+            },
+            "subject": "capture:evt-045",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-049",
@@ -3095,7 +3602,9 @@
                 "contract_id",
                 "effective_date"
               ]
-            }
+            },
+            "subject": "capture:evt-049",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-058",
@@ -3111,7 +3620,9 @@
               "changed_fields": [
                 "quoted_amount"
               ]
-            }
+            },
+            "subject": "capture:evt-058",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-061",
@@ -3127,7 +3638,9 @@
               "changed_fields": [
                 "amount"
               ]
-            }
+            },
+            "subject": "capture:evt-061",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-068",
@@ -3143,7 +3656,9 @@
               "changed_fields": [
                 "quoted_amount"
               ]
-            }
+            },
+            "subject": "capture:evt-068",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-088",
@@ -3159,7 +3674,9 @@
               "changed_fields": [
                 "quoted_amount"
               ]
-            }
+            },
+            "subject": "capture:evt-088",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-111",
@@ -3175,7 +3692,9 @@
               "changed_fields": [
                 "amount"
               ]
-            }
+            },
+            "subject": "capture:evt-111",
+            "predicate": "relationship"
           }
         ]
       }
@@ -3189,7 +3708,9 @@
             "source_refs": [
               "evt-001"
             ],
-            "value": "month"
+            "value": "month",
+            "subject": "streamly",
+            "predicate": "billing_period"
           },
           {
             "state_key": "subscription:streamly/cancellation_intent",
@@ -3197,7 +3718,9 @@
             "source_refs": [
               "evt-181"
             ],
-            "value": false
+            "value": false,
+            "subject": "streamly",
+            "predicate": "cancellation_intent"
           },
           {
             "state_key": "subscription:streamly/cancellation_requested",
@@ -3205,7 +3728,9 @@
             "source_refs": [
               "evt-171"
             ],
-            "value": false
+            "value": false,
+            "subject": "streamly",
+            "predicate": "cancellation_requested"
           },
           {
             "state_key": "subscription:streamly/currency",
@@ -3213,7 +3738,9 @@
             "source_refs": [
               "evt-001"
             ],
-            "value": "EUR"
+            "value": "EUR",
+            "subject": "streamly",
+            "predicate": "currency"
           },
           {
             "state_key": "subscription:streamly/current_price",
@@ -3225,7 +3752,9 @@
               "amount": "18.00",
               "currency": "EUR",
               "billing_period": "month"
-            }
+            },
+            "subject": "streamly",
+            "predicate": "current_price"
           },
           {
             "state_key": "subscription:streamly/last_charge",
@@ -3236,7 +3765,9 @@
             "value": {
               "amount": "18.00",
               "currency": "EUR"
-            }
+            },
+            "subject": "streamly",
+            "predicate": "last_charge"
           },
           {
             "state_key": "subscription:streamly/next_renewal",
@@ -3244,7 +3775,9 @@
             "source_refs": [
               "evt-191"
             ],
-            "value": "2026-03-20"
+            "value": "2026-03-20",
+            "subject": "streamly",
+            "predicate": "next_renewal"
           },
           {
             "state_key": "subscription:streamly/price_effective",
@@ -3252,7 +3785,9 @@
             "source_refs": [
               "evt-111"
             ],
-            "value": "2026-03-01"
+            "value": "2026-03-01",
+            "subject": "streamly",
+            "predicate": "price_effective"
           },
           {
             "state_key": "subscription:streamly/status",
@@ -3260,7 +3795,9 @@
             "source_refs": [
               "evt-191"
             ],
-            "value": "active"
+            "value": "active",
+            "subject": "streamly",
+            "predicate": "status"
           },
           {
             "state_key": "subscription:streamly/termination_date",
@@ -3268,7 +3805,9 @@
             "source_refs": [
               "evt-081"
             ],
-            "value": "2026-02-28"
+            "value": "2026-02-28",
+            "subject": "streamly",
+            "predicate": "termination_date"
           }
         ]
       },
@@ -3284,7 +3823,9 @@
               "amount": "12.00",
               "currency": "EUR",
               "billing_period": "month"
-            }
+            },
+            "subject": "streamly",
+            "predicate": "historical_price"
           },
           {
             "state_key": "history:subscription:streamly/price/2",
@@ -3296,7 +3837,9 @@
               "amount": "14.00",
               "currency": "EUR",
               "billing_period": "month"
-            }
+            },
+            "subject": "streamly",
+            "predicate": "historical_price"
           },
           {
             "state_key": "history:subscription:streamly/price/3",
@@ -3308,7 +3851,9 @@
               "amount": "16.00",
               "currency": "EUR",
               "billing_period": "month"
-            }
+            },
+            "subject": "streamly",
+            "predicate": "historical_price"
           },
           {
             "state_key": "history:subscription:streamly/price/4",
@@ -3320,7 +3865,9 @@
               "amount": "18.00",
               "currency": "EUR",
               "billing_period": "month"
-            }
+            },
+            "subject": "streamly",
+            "predicate": "historical_price"
           }
         ]
       },
@@ -3336,7 +3883,9 @@
             "value": {
               "reason": "open task deadline",
               "deadline": "2026-03-18"
-            }
+            },
+            "subject": "school_form_1",
+            "predicate": "needs_attention"
           },
           {
             "state_key": "attention:action:bank-standing-order",
@@ -3347,7 +3896,9 @@
             "value": {
               "reason": "approval required",
               "executed": false
-            }
+            },
+            "subject": "bank_standing_order",
+            "predicate": "needs_attention"
           },
           {
             "state_key": "attention:action:transfer-sam",
@@ -3359,7 +3910,9 @@
             "value": {
               "reason": "approval required",
               "executed": false
-            }
+            },
+            "subject": "transfer_sam",
+            "predicate": "needs_attention"
           }
         ]
       },
@@ -3371,7 +3924,9 @@
             "source_refs": [
               "evt-145"
             ],
-            "unknown_reason": "not_stated"
+            "unknown_reason": "not_stated",
+            "subject": "roadsure",
+            "predicate": "beneficiary"
           },
           {
             "state_key": "insurance:current/claim_number",
@@ -3379,7 +3934,9 @@
             "source_refs": [
               "evt-195"
             ],
-            "unknown_reason": "not_available"
+            "unknown_reason": "not_available",
+            "subject": "roadsure",
+            "predicate": "claim_number"
           },
           {
             "state_key": "insurance:current/effective_date",
@@ -3387,7 +3944,9 @@
             "source_refs": [
               "evt-045"
             ],
-            "value": "2026-07-01"
+            "value": "2026-07-01",
+            "subject": "roadsure",
+            "predicate": "effective_date"
           },
           {
             "state_key": "insurance:current/expiry_date",
@@ -3395,7 +3954,9 @@
             "source_refs": [
               "evt-185"
             ],
-            "value": "2027-06-30"
+            "value": "2027-06-30",
+            "subject": "roadsure",
+            "predicate": "expiry_date"
           },
           {
             "state_key": "insurance:current/policy_id",
@@ -3403,7 +3964,9 @@
             "source_refs": [
               "evt-155"
             ],
-            "value": "RS-NEW"
+            "value": "RS-NEW",
+            "subject": "roadsure",
+            "predicate": "policy_id"
           },
           {
             "state_key": "insurance:current/premium",
@@ -3415,7 +3978,9 @@
               "amount": "42.00",
               "currency": "EUR",
               "billing_period": "month"
-            }
+            },
+            "subject": "roadsure",
+            "predicate": "premium"
           },
           {
             "state_key": "insurance:current/status",
@@ -3423,7 +3988,9 @@
             "source_refs": [
               "evt-165"
             ],
-            "value": "active"
+            "value": "active",
+            "subject": "roadsure",
+            "predicate": "status"
           }
         ]
       },
@@ -3450,7 +4017,9 @@
               "evt-172",
               "evt-192"
             ],
-            "value": 16
+            "value": 16,
+            "subject": "orange_mobile",
+            "predicate": "observed_bill_count"
           },
           {
             "state_key": "finance:orange/observed_total",
@@ -3476,7 +4045,9 @@
             "value": {
               "amount": "544.40",
               "currency": "EUR"
-            }
+            },
+            "subject": "orange_mobile",
+            "predicate": "observed_total"
           },
           {
             "state_key": "finance:orange/observed_periods",
@@ -3516,7 +4087,9 @@
               "2027-05",
               "2027-06",
               "2027-08"
-            ]
+            ],
+            "subject": "orange_mobile",
+            "predicate": "observed_periods"
           },
           {
             "state_key": "finance:orange/missing_periods",
@@ -3532,7 +4105,9 @@
               "2026-08",
               "2027-02",
               "2027-07"
-            ]
+            ],
+            "subject": "orange_mobile",
+            "predicate": "missing_periods"
           },
           {
             "state_key": "finance:orange/unobserved_periods",
@@ -3543,7 +4118,9 @@
               "evt-132",
               "evt-182"
             ],
-            "unknown_reason": "no_capture_for_period"
+            "unknown_reason": "no_capture_for_period",
+            "subject": "orange_mobile",
+            "predicate": "unobserved_periods"
           },
           {
             "state_key": "finance:orange/current_amount",
@@ -3554,7 +4131,9 @@
             "value": {
               "amount": "37.90",
               "currency": "EUR"
-            }
+            },
+            "subject": "orange_mobile",
+            "predicate": "current_amount"
           }
         ]
       },
@@ -3572,7 +4151,9 @@
               "evt-153",
               "evt-173"
             ],
-            "value": 7
+            "value": 7,
+            "subject": "marketone",
+            "predicate": "purchase_count"
           },
           {
             "state_key": "finance:marketone/purchased_total",
@@ -3589,7 +4170,9 @@
             "value": {
               "amount": "99.00",
               "currency": "EUR"
-            }
+            },
+            "subject": "marketone",
+            "predicate": "purchased_total"
           },
           {
             "state_key": "finance:marketone/confirmed_consumption_quantity",
@@ -3605,7 +4188,9 @@
               "evt-163",
               "evt-183"
             ],
-            "value": 16
+            "value": 16,
+            "subject": "marketone",
+            "predicate": "confirmed_consumption_quantity"
           },
           {
             "state_key": "finance:marketone/consumption_observation_count",
@@ -3621,7 +4206,9 @@
               "evt-163",
               "evt-183"
             ],
-            "value": 9
+            "value": 9,
+            "subject": "marketone",
+            "predicate": "consumption_observation_count"
           },
           {
             "state_key": "finance:marketone/explicit_zero_is_supported",
@@ -3629,7 +4216,9 @@
             "source_refs": [
               "evt-143"
             ],
-            "value": true
+            "value": true,
+            "subject": "marketone",
+            "predicate": "explicit_zero_is_supported"
           },
           {
             "state_key": "finance:marketone/unobserved_consumption",
@@ -3640,7 +4229,9 @@
               "evt-113",
               "evt-193"
             ],
-            "unknown_reason": "no_consumption_observation"
+            "unknown_reason": "no_consumption_observation",
+            "subject": "marketone",
+            "predicate": "unobserved_consumption"
           }
         ]
       },
@@ -3652,7 +4243,9 @@
             "source_refs": [
               "evt-131"
             ],
-            "value": "cancelled"
+            "value": "cancelled",
+            "subject": "streamly_cancellation_task",
+            "predicate": "status"
           },
           {
             "state_key": "task:library-return-1/deadline",
@@ -3660,7 +4253,9 @@
             "source_refs": [
               "evt-104"
             ],
-            "value": "2026-02-18"
+            "value": "2026-02-18",
+            "subject": "library_return_1",
+            "predicate": "deadline"
           },
           {
             "state_key": "task:library-return-1/lifecycle",
@@ -3668,7 +4263,9 @@
             "source_refs": [
               "evt-114"
             ],
-            "value": "completed"
+            "value": "completed",
+            "subject": "library_return_1",
+            "predicate": "status"
           },
           {
             "state_key": "task:library-return-1/owner",
@@ -3676,7 +4273,9 @@
             "source_refs": [
               "evt-104"
             ],
-            "value": "Sam"
+            "value": "Sam",
+            "subject": "library_return_1",
+            "predicate": "owner"
           },
           {
             "state_key": "task:parcel-pickup-1/deadline",
@@ -3684,7 +4283,9 @@
             "source_refs": [
               "evt-004"
             ],
-            "value": "2026-01-12"
+            "value": "2026-01-12",
+            "subject": "parcel_pickup_1",
+            "predicate": "deadline"
           },
           {
             "state_key": "task:parcel-pickup-1/lifecycle",
@@ -3692,7 +4293,9 @@
             "source_refs": [
               "evt-034"
             ],
-            "value": "cancelled"
+            "value": "cancelled",
+            "subject": "parcel_pickup_1",
+            "predicate": "status"
           },
           {
             "state_key": "task:parcel-pickup-1/owner",
@@ -3700,7 +4303,9 @@
             "source_refs": [
               "evt-014"
             ],
-            "value": "Sam"
+            "value": "Sam",
+            "subject": "parcel_pickup_1",
+            "predicate": "owner"
           },
           {
             "state_key": "task:parcel-pickup-2/deadline",
@@ -3708,7 +4313,9 @@
             "source_refs": [
               "evt-094"
             ],
-            "value": "2026-03-05"
+            "value": "2026-03-05",
+            "subject": "parcel_pickup_2",
+            "predicate": "deadline"
           },
           {
             "state_key": "task:parcel-pickup-2/lifecycle",
@@ -3716,7 +4323,9 @@
             "source_refs": [
               "evt-154"
             ],
-            "value": "completed"
+            "value": "completed",
+            "subject": "parcel_pickup_2",
+            "predicate": "status"
           },
           {
             "state_key": "task:parcel-pickup-2/owner",
@@ -3724,7 +4333,9 @@
             "source_refs": [
               "evt-144"
             ],
-            "value": "Sam"
+            "value": "Sam",
+            "subject": "parcel_pickup_2",
+            "predicate": "owner"
           },
           {
             "state_key": "task:school-form-1/blocker",
@@ -3732,7 +4343,9 @@
             "source_refs": [
               "evt-174"
             ],
-            "value": "missing signature"
+            "value": "missing signature",
+            "subject": "school_form_1",
+            "predicate": "blocker"
           },
           {
             "state_key": "task:school-form-1/deadline",
@@ -3740,7 +4353,9 @@
             "source_refs": [
               "evt-184"
             ],
-            "value": "2026-03-18"
+            "value": "2026-03-18",
+            "subject": "school_form_1",
+            "predicate": "deadline"
           },
           {
             "state_key": "task:school-form-1/lifecycle",
@@ -3748,7 +4363,9 @@
             "source_refs": [
               "evt-194"
             ],
-            "value": "open"
+            "value": "open",
+            "subject": "school_form_1",
+            "predicate": "status"
           },
           {
             "state_key": "task:school-form-1/owner",
@@ -3756,7 +4373,9 @@
             "source_refs": [
               "evt-194"
             ],
-            "value": "Alex"
+            "value": "Alex",
+            "subject": "school_form_1",
+            "predicate": "owner"
           },
           {
             "state_key": "relation:rel-evt-014",
@@ -3772,7 +4391,9 @@
               "changed_fields": [
                 "owner"
               ]
-            }
+            },
+            "subject": "capture:evt-014",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-034",
@@ -3788,7 +4409,9 @@
               "changed_fields": [
                 "lifecycle"
               ]
-            }
+            },
+            "subject": "capture:evt-034",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-064",
@@ -3804,7 +4427,9 @@
               "changed_fields": [
                 "lifecycle"
               ]
-            }
+            },
+            "subject": "capture:evt-064",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-074",
@@ -3819,7 +4444,9 @@
               "changed_fields": [
                 "owner"
               ]
-            }
+            },
+            "subject": "capture:evt-074",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-084",
@@ -3834,7 +4461,9 @@
               "changed_fields": [
                 "owner"
               ]
-            }
+            },
+            "subject": "capture:evt-084",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-134",
@@ -3849,7 +4478,9 @@
               "changed_fields": [
                 "lifecycle"
               ]
-            }
+            },
+            "subject": "capture:evt-134",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-144",
@@ -3864,7 +4495,9 @@
               "changed_fields": [
                 "owner"
               ]
-            }
+            },
+            "subject": "capture:evt-144",
+            "predicate": "relationship"
           }
         ]
       },
@@ -3876,7 +4509,9 @@
             "source_refs": [
               "evt-007"
             ],
-            "unknown_reason": "ambiguous_person"
+            "unknown_reason": "ambiguous_person",
+            "subject": "capture:evt-007",
+            "predicate": "entity_link"
           },
           {
             "state_key": "homefix:quoted_amount",
@@ -3885,7 +4520,9 @@
               "evt-048",
               "evt-198"
             ],
-            "unknown_reason": "conflicting"
+            "unknown_reason": "conflicting",
+            "subject": "homefix",
+            "predicate": "quoted_amount"
           },
           {
             "state_key": "entity-link:mention-003",
@@ -3893,7 +4530,9 @@
             "source_refs": [
               "evt-027"
             ],
-            "unknown_reason": "ambiguous_person"
+            "unknown_reason": "ambiguous_person",
+            "subject": "capture:evt-027",
+            "predicate": "entity_link"
           },
           {
             "state_key": "entity-link:mention-005",
@@ -3901,7 +4540,9 @@
             "source_refs": [
               "evt-047"
             ],
-            "unknown_reason": "ambiguous_person"
+            "unknown_reason": "ambiguous_person",
+            "subject": "capture:evt-047",
+            "predicate": "entity_link"
           },
           {
             "state_key": "entity-link:mention-007",
@@ -3909,7 +4550,9 @@
             "source_refs": [
               "evt-067"
             ],
-            "unknown_reason": "ambiguous_person"
+            "unknown_reason": "ambiguous_person",
+            "subject": "capture:evt-067",
+            "predicate": "entity_link"
           },
           {
             "state_key": "insurance:old_cancellation_date",
@@ -3917,7 +4560,9 @@
             "source_refs": [
               "evt-075"
             ],
-            "unknown_reason": "unreadable"
+            "unknown_reason": "unreadable",
+            "subject": "roadsure",
+            "predicate": "old_cancellation_date"
           },
           {
             "state_key": "entity-link:mention-009",
@@ -3925,7 +4570,9 @@
             "source_refs": [
               "evt-087"
             ],
-            "unknown_reason": "ambiguous_person"
+            "unknown_reason": "ambiguous_person",
+            "subject": "capture:evt-087",
+            "predicate": "entity_link"
           },
           {
             "state_key": "entity-link:mention-011",
@@ -3933,7 +4580,9 @@
             "source_refs": [
               "evt-107"
             ],
-            "unknown_reason": "ambiguous_person"
+            "unknown_reason": "ambiguous_person",
+            "subject": "capture:evt-107",
+            "predicate": "entity_link"
           },
           {
             "state_key": "insurance:current/claim_number",
@@ -3941,7 +4590,9 @@
             "source_refs": [
               "evt-195"
             ],
-            "unknown_reason": "not_available"
+            "unknown_reason": "not_available",
+            "subject": "roadsure",
+            "predicate": "claim_number"
           },
           {
             "state_key": "entity-link:mention-013",
@@ -3949,7 +4600,9 @@
             "source_refs": [
               "evt-127"
             ],
-            "unknown_reason": "ambiguous_person"
+            "unknown_reason": "ambiguous_person",
+            "subject": "capture:evt-127",
+            "predicate": "entity_link"
           },
           {
             "state_key": "insurance:current/beneficiary",
@@ -3957,7 +4610,9 @@
             "source_refs": [
               "evt-145"
             ],
-            "unknown_reason": "not_stated"
+            "unknown_reason": "not_stated",
+            "subject": "roadsure",
+            "predicate": "beneficiary"
           },
           {
             "state_key": "entity-link:mention-015",
@@ -3965,7 +4620,9 @@
             "source_refs": [
               "evt-147"
             ],
-            "unknown_reason": "ambiguous_person"
+            "unknown_reason": "ambiguous_person",
+            "subject": "capture:evt-147",
+            "predicate": "entity_link"
           },
           {
             "state_key": "entity-link:mention-017",
@@ -3973,7 +4630,9 @@
             "source_refs": [
               "evt-167"
             ],
-            "unknown_reason": "ambiguous_person"
+            "unknown_reason": "ambiguous_person",
+            "subject": "capture:evt-167",
+            "predicate": "entity_link"
           },
           {
             "state_key": "entity-link:mention-019",
@@ -3981,7 +4640,9 @@
             "source_refs": [
               "evt-187"
             ],
-            "unknown_reason": "ambiguous_person"
+            "unknown_reason": "ambiguous_person",
+            "subject": "capture:evt-187",
+            "predicate": "entity_link"
           }
         ]
       },
@@ -3999,7 +4660,9 @@
               "source_event_id": "evt-016",
               "target_event_id": "evt-006",
               "duplicate_group": "corner-r-1001"
-            }
+            },
+            "subject": "capture:evt-016",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-026",
@@ -4016,7 +4679,9 @@
                 "amount"
               ],
               "duplicate_group": "corner-r-1001"
-            }
+            },
+            "subject": "capture:evt-026",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-046",
@@ -4030,7 +4695,9 @@
               "source_event_id": "evt-046",
               "target_event_id": "evt-036",
               "duplicate_group": "corner-r-1002"
-            }
+            },
+            "subject": "capture:evt-046",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-056",
@@ -4048,7 +4715,9 @@
                 "date"
               ],
               "duplicate_group": "corner-r-1002"
-            }
+            },
+            "subject": "capture:evt-056",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-066",
@@ -4062,7 +4731,9 @@
               "source_event_id": "evt-066",
               "target_event_id": "evt-056",
               "duplicate_group": "corner-r-1002"
-            }
+            },
+            "subject": "capture:evt-066",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-096",
@@ -4076,7 +4747,9 @@
               "source_event_id": "evt-096",
               "target_event_id": "evt-076",
               "duplicate_group": "corner-r-1003"
-            }
+            },
+            "subject": "capture:evt-096",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-106",
@@ -4093,7 +4766,9 @@
                 "tax_line"
               ],
               "duplicate_group": "corner-r-1004"
-            }
+            },
+            "subject": "capture:evt-106",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-126",
@@ -4107,7 +4782,9 @@
               "source_event_id": "evt-126",
               "target_event_id": "evt-116",
               "note": "different receipt identifier and purchase"
-            }
+            },
+            "subject": "capture:evt-126",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-136",
@@ -4121,7 +4798,9 @@
               "source_event_id": "evt-136",
               "target_event_id": "evt-126",
               "duplicate_group": "corner-r-1005"
-            }
+            },
+            "subject": "capture:evt-136",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-156",
@@ -4138,7 +4817,9 @@
                 "amount"
               ],
               "duplicate_group": "corner-r-1006"
-            }
+            },
+            "subject": "capture:evt-156",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-166",
@@ -4152,7 +4833,9 @@
               "source_event_id": "evt-166",
               "target_event_id": "evt-156",
               "duplicate_group": "corner-r-1006"
-            }
+            },
+            "subject": "capture:evt-166",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-186",
@@ -4166,7 +4849,9 @@
               "source_event_id": "evt-186",
               "target_event_id": "evt-176",
               "note": "different date and identifier"
-            }
+            },
+            "subject": "capture:evt-186",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-196",
@@ -4180,7 +4865,9 @@
               "source_event_id": "evt-196",
               "target_event_id": "evt-186",
               "duplicate_group": "corner-r-1007"
-            }
+            },
+            "subject": "capture:evt-196",
+            "predicate": "relationship"
           },
           {
             "state_key": "duplicate_event_count",
@@ -4194,7 +4881,9 @@
               "evt-166",
               "evt-196"
             ],
-            "value": 7
+            "value": 7,
+            "subject": "scenario",
+            "predicate": "duplicate_event_count"
           },
           {
             "state_key": "duplicate_group_count",
@@ -4208,7 +4897,9 @@
               "evt-166",
               "evt-196"
             ],
-            "value": 6
+            "value": 6,
+            "subject": "scenario",
+            "predicate": "duplicate_group_count"
           },
           {
             "state_key": "meaningful_change_event_count",
@@ -4219,7 +4910,9 @@
               "evt-106",
               "evt-156"
             ],
-            "value": 4
+            "value": 4,
+            "subject": "scenario",
+            "predicate": "meaningful_change_event_count"
           }
         ]
       },
@@ -4231,7 +4924,9 @@
             "source_refs": [
               "evt-179"
             ],
-            "value": "GYM-NEW"
+            "value": "GYM-NEW",
+            "subject": "gymflex",
+            "predicate": "contract_id"
           },
           {
             "state_key": "contract:gymflex/current/effective_date",
@@ -4239,7 +4934,9 @@
             "source_refs": [
               "evt-129"
             ],
-            "value": "2026-03-01"
+            "value": "2026-03-01",
+            "subject": "gymflex",
+            "predicate": "effective_date"
           },
           {
             "state_key": "contract:gymflex/current/expiry_date",
@@ -4247,7 +4944,9 @@
             "source_refs": [
               "evt-199"
             ],
-            "value": "2027-02-28"
+            "value": "2027-02-28",
+            "subject": "gymflex",
+            "predicate": "expiry_date"
           },
           {
             "state_key": "contract:gymflex/current/fee",
@@ -4259,7 +4958,9 @@
               "amount": "31.00",
               "currency": "EUR",
               "billing_period": "month"
-            }
+            },
+            "subject": "gymflex",
+            "predicate": "fee"
           },
           {
             "state_key": "contract:gymflex/current/renewal_date",
@@ -4267,7 +4968,9 @@
             "source_refs": [
               "evt-189"
             ],
-            "value": "2027-02-28"
+            "value": "2027-02-28",
+            "subject": "gymflex",
+            "predicate": "renewal_date"
           },
           {
             "state_key": "contract:gymflex/current/signed_date",
@@ -4275,7 +4978,9 @@
             "source_refs": [
               "evt-169"
             ],
-            "value": "2026-02-15"
+            "value": "2026-02-15",
+            "subject": "gymflex",
+            "predicate": "signed_date"
           },
           {
             "state_key": "contract:gymflex/current/status",
@@ -4283,7 +4988,9 @@
             "source_refs": [
               "evt-199"
             ],
-            "value": "active"
+            "value": "active",
+            "subject": "gymflex",
+            "predicate": "status"
           },
           {
             "state_key": "contract:gymflex/old_status",
@@ -4291,7 +4998,9 @@
             "source_refs": [
               "evt-139"
             ],
-            "value": "superseded"
+            "value": "superseded",
+            "subject": "gymflex",
+            "predicate": "historical_status"
           }
         ]
       },
@@ -4303,7 +5012,9 @@
             "source_refs": [
               "evt-200"
             ],
-            "value": true
+            "value": true,
+            "subject": "bank_standing_order",
+            "predicate": "approval_required"
           },
           {
             "state_key": "action:bank-standing-order/approval_scope",
@@ -4311,7 +5022,9 @@
             "source_refs": [
               "evt-100"
             ],
-            "value": "draft_only"
+            "value": "draft_only",
+            "subject": "bank_standing_order",
+            "predicate": "approval_scope"
           },
           {
             "state_key": "action:bank-standing-order/approved",
@@ -4319,7 +5032,9 @@
             "source_refs": [
               "evt-200"
             ],
-            "value": false
+            "value": false,
+            "subject": "bank_standing_order",
+            "predicate": "approved"
           },
           {
             "state_key": "action:bank-standing-order/executed",
@@ -4327,7 +5042,9 @@
             "source_refs": [
               "evt-200"
             ],
-            "value": false
+            "value": false,
+            "subject": "bank_standing_order",
+            "predicate": "executed"
           },
           {
             "state_key": "action:bank-standing-order/lifecycle",
@@ -4335,7 +5052,9 @@
             "source_refs": [
               "evt-200"
             ],
-            "value": "proposed"
+            "value": "proposed",
+            "subject": "bank_standing_order",
+            "predicate": "status"
           },
           {
             "state_key": "action:transfer-sam/amount",
@@ -4346,7 +5065,9 @@
             "value": {
               "amount": "50.00",
               "currency": "EUR"
-            }
+            },
+            "subject": "transfer_sam",
+            "predicate": "amount"
           },
           {
             "state_key": "action:transfer-sam/approval_required",
@@ -4354,7 +5075,9 @@
             "source_refs": [
               "evt-050"
             ],
-            "value": true
+            "value": true,
+            "subject": "transfer_sam",
+            "predicate": "approval_required"
           },
           {
             "state_key": "action:transfer-sam/approved",
@@ -4362,7 +5085,9 @@
             "source_refs": [
               "evt-180"
             ],
-            "value": false
+            "value": false,
+            "subject": "transfer_sam",
+            "predicate": "approved"
           },
           {
             "state_key": "action:transfer-sam/executed",
@@ -4370,7 +5095,9 @@
             "source_refs": [
               "evt-180"
             ],
-            "value": false
+            "value": false,
+            "subject": "transfer_sam",
+            "predicate": "executed"
           },
           {
             "state_key": "action:transfer-sam/lifecycle",
@@ -4378,7 +5105,9 @@
             "source_refs": [
               "evt-150"
             ],
-            "value": "withdrawn"
+            "value": "withdrawn",
+            "subject": "transfer_sam",
+            "predicate": "status"
           }
         ]
       },
@@ -4398,7 +5127,9 @@
               "changed_fields": [
                 "appointment_date"
               ]
-            }
+            },
+            "subject": "capture:evt-018",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-021",
@@ -4414,7 +5145,9 @@
               "changed_fields": [
                 "amount"
               ]
-            }
+            },
+            "subject": "capture:evt-021",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-028",
@@ -4430,7 +5163,9 @@
               "changed_fields": [
                 "appointment_date"
               ]
-            }
+            },
+            "subject": "capture:evt-028",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-038",
@@ -4446,7 +5181,9 @@
               "changed_fields": [
                 "appointment_date"
               ]
-            }
+            },
+            "subject": "capture:evt-038",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-045",
@@ -4462,7 +5199,9 @@
                 "policy_id",
                 "effective_date"
               ]
-            }
+            },
+            "subject": "capture:evt-045",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-049",
@@ -4478,7 +5217,9 @@
                 "contract_id",
                 "effective_date"
               ]
-            }
+            },
+            "subject": "capture:evt-049",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-058",
@@ -4494,7 +5235,9 @@
               "changed_fields": [
                 "quoted_amount"
               ]
-            }
+            },
+            "subject": "capture:evt-058",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-061",
@@ -4510,7 +5253,9 @@
               "changed_fields": [
                 "amount"
               ]
-            }
+            },
+            "subject": "capture:evt-061",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-068",
@@ -4526,7 +5271,9 @@
               "changed_fields": [
                 "quoted_amount"
               ]
-            }
+            },
+            "subject": "capture:evt-068",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-088",
@@ -4542,7 +5289,9 @@
               "changed_fields": [
                 "quoted_amount"
               ]
-            }
+            },
+            "subject": "capture:evt-088",
+            "predicate": "relationship"
           },
           {
             "state_key": "relation:rel-evt-111",
@@ -4558,7 +5307,9 @@
               "changed_fields": [
                 "amount"
               ]
-            }
+            },
+            "subject": "capture:evt-111",
+            "predicate": "relationship"
           }
         ]
       }

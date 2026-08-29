@@ -13,9 +13,15 @@ approval boundaries.
 
 ## Files
 
-- `contract.json` freezes the response, semantic, scoring, and access contract.
-- `query-bundle.json` is the exact query bundle supplied at every checkpoint.
-- `response-schema.json` documents the structured-response envelope and validation shape.
+- `response-contract-v2.json` is the frozen public semantic response boundary
+  used for the corrected baseline and future implementation submissions.
+- `query-bundle-v2.json` is the exact public query bundle supplied at every
+  checkpoint under v2.
+- `response-schema-v2.json` documents the v2 envelope and structural shape;
+  semantic validation is deterministic in `eval/score.py`.
+- `contract.json`, `query-bundle.json`, and `response-schema.json` are retained
+  as historical Gate A v1 artifacts. They are not used for official baseline
+  scoring.
 - `generate_benchmark.py` deterministically regenerates the public case and
   visible development expected output.
 - `cases/scenario-001.json` contains normalized chronological raw captures only.
@@ -28,6 +34,10 @@ The public case intentionally omits the generator's internal storyline labels,
 transition operations, and expected state. The development expected output is
 visible because it is for local development only. It must never be copied into a
 holdout package or made available to an implementation agent in a scored run.
+
+The v2 candidate boundary must not contain evaluator-internal `state_key`
+values. The visible development expected file may retain those keys for DSCR
+and debugging; holdout expected files remain evaluator-owned.
 
 ## Regeneration
 

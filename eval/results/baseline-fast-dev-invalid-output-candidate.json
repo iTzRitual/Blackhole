@@ -1,0 +1,99 @@
+{
+  "response_contract": "response-contract-v2",
+  "scenario_id": "blackhole-dev-001-state-churn",
+  "checkpoints": {
+    "50": {
+      "checkpoint": 50,
+      "queries": {}
+    }
+  },
+  "run_metadata": {
+    "run_id": "baseline-fast-dev",
+    "label": "DEV FAST / NOT OFFICIAL SCORE",
+    "started_at": "2026-08-29T07:31:06.267255+00:00",
+    "provider": "Codex CLI",
+    "cli_path_basename": "codex.EXE",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "sandbox": "read-only",
+    "scenario_id": "blackhole-dev-001-state-churn",
+    "response_contract": "response-contract-v2",
+    "contract_version": "1.0-gate-a-dev",
+    "event_count": 50,
+    "checkpoints": [
+      50
+    ],
+    "batching": "one chronological capture batch per checkpoint segment; one persistent canonical session",
+    "checkpoint_isolation": "native Codex CLI fork; query fork is never resumed",
+    "structured_response": "prompt-constrained JSON; response-contract-v2 is validated by the deterministic evaluator",
+    "query_ids": [
+      "q-subscriptions-current",
+      "q-tasks-state",
+      "q-duplicates-changes",
+      "q-unresolved"
+    ],
+    "canonical_thread_id": "01a04c6d-e7ed-71a0-9da2-bc5d8cd99081",
+    "turns": [
+      {
+        "kind": "capture",
+        "checkpoint": 50,
+        "returncode": 0,
+        "duration_seconds": 4.937,
+        "thread_id": "01a04c6d-e7ed-71a0-9da2-bc5d8cd99081",
+        "usage": {
+          "input_tokens": 21482,
+          "cached_input_tokens": 9984,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 39,
+          "reasoning_output_tokens": 28
+        },
+        "stderr": {
+          "line_count": 4,
+          "last_lines": [
+            "2026-08-29T07:31:06.421415Z  WARN codex_skills::interface: ignoring interface.icon_small: icon path with '..' must resolve under plugin assets/",
+            "2026-08-29T07:31:06.421446Z  WARN codex_skills::interface: ignoring interface.icon_large: icon path with '..' must resolve under plugin assets/",
+            "2026-08-29T07:31:06.433294Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell",
+            "2026-08-29T07:31:10.782472Z  WARN codex_core::tasks: failed to flush rollout after emitting terminal turn event: thread 01a04c6d-e7ed-71a0-9da2-bc5d8cd99081 not found"
+          ]
+        }
+      }
+    ],
+    "checkpoint_runs": {
+      "50": {
+        "canonical_thread_id": "01a04c6d-e7ed-71a0-9da2-bc5d8cd99081",
+        "fork_thread_id": "01a04c6d-fb3c-77c3-a1e6-23bfbc9f118e",
+        "atomic_fork": true,
+        "query": {
+          "returncode": 0,
+          "duration_seconds": 399.36,
+          "thread_id": "01a04c6d-fb3c-77c3-a1e6-23bfbc9f118e",
+          "usage": {
+            "input_tokens": 60767,
+            "cached_input_tokens": 39424,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 32513,
+            "reasoning_output_tokens": 31141
+          },
+          "stderr": {
+            "line_count": 6,
+            "last_lines": [
+              "2026-08-29T07:31:11.358374Z  WARN codex_skills::interface: ignoring interface.icon_large: icon path with '..' must resolve under plugin assets/",
+              "2026-08-29T07:31:11.375083Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell",
+              "2026-08-29T07:31:11.782885Z  WARN codex_skills::interface: ignoring interface.icon_small: icon path with '..' must resolve under plugin assets/",
+              "2026-08-29T07:31:11.782913Z  WARN codex_skills::interface: ignoring interface.icon_large: icon path with '..' must resolve under plugin assets/",
+              "2026-08-29T07:37:50.054675Z  WARN codex_core::hook_runtime: after_agent hook failed; continuing turn_id=01a04c6d-fc5a-7b13-aecb-e1960707e326 hook_name=legacy_notify error=The filename or extension is too long. (os error 206)"
+            ]
+          }
+        },
+        "discarded": true,
+        "parse_error": "model output was not a JSON object",
+        "response_contract": {
+          "parsed": false,
+          "query_count": 0,
+          "trajectory_output": "trajectories\\runtime\\fast-dev-050-rerun\\checkpoint-050.json"
+        }
+      }
+    },
+    "finished_at": "2026-08-29T07:37:50.569978+00:00"
+  }
+}

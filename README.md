@@ -40,12 +40,13 @@ summaries, and surface only items that need attention.
 ## Status
 
 This repository is in the benchmark-and-baseline phase for the micro1 Agentic
-Workflows Hackathon. Gate A is approved: the 200-event development contract,
-deterministic generator, evaluator, and fair Codex CLI baseline are frozen for
-this phase. The non-scored size-calibration sweep remains historical evidence;
-its recommended 200-event primary and optional 400-event stress track are now
-recorded as decisions. Advanced application implementation, production
-infrastructure, Claude integration, and holdout ground truth remain out of scope.
+Workflows Hackathon. Gate A's 200-event development package is frozen, and Gate
+B's baseline response/evaluator boundary is now valid. The prior
+`baseline-v0` result is preserved as invalid-contract evidence, not an official
+semantic baseline; the independent v2 contract smoke test passes and the
+corrected official baseline is recorded separately. Advanced application
+implementation, production infrastructure, Claude integration, and holdout
+ground truth remain out of scope.
 
 ## Design principles
 
@@ -76,11 +77,12 @@ infrastructure, Claude integration, and holdout ground truth remain out of scope
 
 ## Scope of this phase
 
-This phase freezes the public development benchmark and its deterministic scorer,
-and records one fair baseline run. It does not implement the Blackhole
-application, add production infrastructure, expose evaluator-owned holdout
-ground truth, or add a Claude adapter. The baseline is a benchmark treatment,
-not product memory or application code.
+This phase freezes the public development benchmark and deterministic scorer,
+repairs and measures the fair baseline contract, and records one corrected
+baseline run. It does not implement the Blackhole application, add production
+infrastructure, expose evaluator-owned holdout ground truth, or add a Claude
+adapter. The baseline is a benchmark treatment, not product memory or
+application code.
 
 Read [AGENTS.md](AGENTS.md) before changing the repository. The design context is
 in [docs/PRODUCT_SPEC.md](docs/PRODUCT_SPEC.md),

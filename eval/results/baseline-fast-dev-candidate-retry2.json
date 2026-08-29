@@ -1,0 +1,528 @@
+{
+  "response_contract": "response-contract-v2",
+  "scenario_id": "blackhole-dev-001-state-churn",
+  "checkpoints": {
+    "50": {
+      "checkpoint": 50,
+      "queries": {
+        "q-subscriptions-current": {
+          "assertions": [
+            {
+              "subject": "streamly",
+              "predicate": "status",
+              "knowledge_status": "known",
+              "value": "active",
+              "source_refs": [
+                "evt-001",
+                "evt-041"
+              ]
+            },
+            {
+              "subject": "streamly",
+              "predicate": "current_price",
+              "knowledge_status": "known",
+              "value": {
+                "amount": 12.0,
+                "currency": "EUR",
+                "billing_period": "monthly"
+              },
+              "source_refs": [
+                "evt-001"
+              ]
+            },
+            {
+              "subject": "streamly",
+              "predicate": "price_effective",
+              "knowledge_status": "unknown",
+              "unknown_reason": "not_stated",
+              "source_refs": [
+                "evt-021"
+              ]
+            },
+            {
+              "subject": "streamly",
+              "predicate": "cancellation_intent",
+              "knowledge_status": "known",
+              "value": false,
+              "source_refs": [
+                "evt-041"
+              ]
+            },
+            {
+              "subject": "streamly",
+              "predicate": "cancellation_requested",
+              "knowledge_status": "known",
+              "value": false,
+              "source_refs": [
+                "evt-031"
+              ]
+            }
+          ]
+        },
+        "q-tasks-state": {
+          "assertions": [
+            {
+              "subject": "parcel_pickup_1",
+              "predicate": "status",
+              "knowledge_status": "known",
+              "value": "cancelled",
+              "source_refs": [
+                "evt-034"
+              ]
+            },
+            {
+              "subject": "parcel_pickup_1",
+              "predicate": "owner",
+              "knowledge_status": "known",
+              "value": "sam",
+              "source_refs": [
+                "evt-014"
+              ]
+            },
+            {
+              "subject": "parcel_pickup_1",
+              "predicate": "deadline",
+              "knowledge_status": "known",
+              "value": "2026-01-12",
+              "source_refs": [
+                "evt-004"
+              ]
+            },
+            {
+              "subject": "parcel_pickup_1",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "meaningful_change",
+                "source_event_id": "evt-004",
+                "target_event_id": "evt-014",
+                "changed_fields": [
+                  "owner"
+                ]
+              },
+              "source_refs": [
+                "evt-004",
+                "evt-014"
+              ]
+            },
+            {
+              "subject": "parcel_pickup_2",
+              "predicate": "status",
+              "knowledge_status": "known",
+              "value": "not_started",
+              "source_refs": [
+                "evt-044"
+              ]
+            },
+            {
+              "subject": "parcel_pickup_2",
+              "predicate": "owner",
+              "knowledge_status": "known",
+              "value": "alex",
+              "source_refs": [
+                "evt-044"
+              ]
+            },
+            {
+              "subject": "parcel_pickup_2",
+              "predicate": "deadline",
+              "knowledge_status": "known",
+              "value": "2026-02-25",
+              "source_refs": [
+                "evt-044"
+              ]
+            },
+            {
+              "subject": "school_form_1",
+              "predicate": "status",
+              "knowledge_status": "unknown",
+              "unknown_reason": "not_stated",
+              "source_refs": [
+                "evt-017"
+              ]
+            },
+            {
+              "subject": "library_return_1",
+              "predicate": "status",
+              "knowledge_status": "unknown",
+              "unknown_reason": "no_capture_for_period",
+              "source_refs": []
+            },
+            {
+              "subject": "streamly_cancellation_task",
+              "predicate": "status",
+              "knowledge_status": "known",
+              "value": "cancelled",
+              "source_refs": [
+                "evt-041"
+              ]
+            },
+            {
+              "subject": "streamly_cancellation_task",
+              "predicate": "cancellation_requested",
+              "knowledge_status": "known",
+              "value": false,
+              "source_refs": [
+                "evt-031"
+              ]
+            },
+            {
+              "subject": "streamly_cancellation_task",
+              "predicate": "executed",
+              "knowledge_status": "known",
+              "value": false,
+              "source_refs": [
+                "evt-031"
+              ]
+            }
+          ]
+        },
+        "q-duplicates-changes": {
+          "assertions": [
+            {
+              "subject": "capture:evt-016",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "exact_duplicate",
+                "source_event_id": "evt-006",
+                "target_event_id": "evt-016"
+              },
+              "source_refs": [
+                "evt-006",
+                "evt-016"
+              ]
+            },
+            {
+              "subject": "capture:evt-046",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "exact_duplicate",
+                "source_event_id": "evt-036",
+                "target_event_id": "evt-046"
+              },
+              "source_refs": [
+                "evt-036",
+                "evt-046"
+              ]
+            },
+            {
+              "subject": "capture:evt-026",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "meaningful_change",
+                "source_event_id": "evt-006",
+                "target_event_id": "evt-026",
+                "changed_fields": [
+                  "amount"
+                ]
+              },
+              "source_refs": [
+                "evt-006",
+                "evt-026"
+              ]
+            },
+            {
+              "subject": "capture:evt-018",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "meaningful_change",
+                "source_event_id": "evt-008",
+                "target_event_id": "evt-018",
+                "changed_fields": [
+                  "appointment_date"
+                ]
+              },
+              "source_refs": [
+                "evt-008",
+                "evt-018"
+              ]
+            },
+            {
+              "subject": "capture:evt-038",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "meaningful_change",
+                "source_event_id": "evt-008",
+                "target_event_id": "evt-038",
+                "changed_fields": [
+                  "appointment_date"
+                ]
+              },
+              "source_refs": [
+                "evt-008",
+                "evt-038"
+              ]
+            },
+            {
+              "subject": "capture:evt-028",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "similar_not_duplicate",
+                "source_event_id": "evt-018",
+                "target_event_id": "evt-028"
+              },
+              "source_refs": [
+                "evt-018",
+                "evt-028"
+              ]
+            },
+            {
+              "subject": "scenario",
+              "predicate": "duplicate_event_count",
+              "knowledge_status": "known",
+              "value": 2,
+              "source_refs": [
+                "evt-006",
+                "evt-016",
+                "evt-036",
+                "evt-046"
+              ]
+            },
+            {
+              "subject": "scenario",
+              "predicate": "duplicate_group_count",
+              "knowledge_status": "known",
+              "value": 2,
+              "source_refs": [
+                "evt-006",
+                "evt-016",
+                "evt-036",
+                "evt-046"
+              ]
+            },
+            {
+              "subject": "scenario",
+              "predicate": "meaningful_change_event_count",
+              "knowledge_status": "known",
+              "value": 3,
+              "source_refs": [
+                "evt-008",
+                "evt-018",
+                "evt-026",
+                "evt-038"
+              ]
+            }
+          ]
+        },
+        "q-unresolved": {
+          "assertions": [
+            {
+              "subject": "streamly",
+              "predicate": "last_charge",
+              "knowledge_status": "unknown",
+              "unknown_reason": "not_stated",
+              "source_refs": [
+                "evt-011"
+              ]
+            },
+            {
+              "subject": "orange_mobile",
+              "predicate": "missing_periods",
+              "knowledge_status": "known",
+              "value": [
+                "2026-04"
+              ],
+              "source_refs": [
+                "evt-032"
+              ]
+            },
+            {
+              "subject": "marketone",
+              "predicate": "explicit_zero_is_supported",
+              "knowledge_status": "known",
+              "value": false,
+              "source_refs": [
+                "evt-033"
+              ]
+            },
+            {
+              "subject": "marketone",
+              "predicate": "unobserved_consumption",
+              "knowledge_status": "unknown",
+              "unknown_reason": "no_consumption_observation",
+              "source_refs": [
+                "evt-033"
+              ]
+            },
+            {
+              "subject": "jordan",
+              "predicate": "entity_link",
+              "knowledge_status": "unknown",
+              "unknown_reason": "ambiguous_person",
+              "source_refs": [
+                "evt-007",
+                "evt-017",
+                "evt-037",
+                "evt-047"
+              ]
+            },
+            {
+              "subject": "bank_standing_order",
+              "predicate": "approval_required",
+              "knowledge_status": "known",
+              "value": true,
+              "source_refs": [
+                "evt-010",
+                "evt-050"
+              ]
+            },
+            {
+              "subject": "bank_standing_order",
+              "predicate": "approved",
+              "knowledge_status": "unknown",
+              "unknown_reason": "not_stated",
+              "source_refs": [
+                "evt-050"
+              ]
+            },
+            {
+              "subject": "bank_standing_order",
+              "predicate": "executed",
+              "knowledge_status": "known",
+              "value": false,
+              "source_refs": [
+                "evt-010"
+              ]
+            },
+            {
+              "subject": "transfer_sam",
+              "predicate": "amount",
+              "knowledge_status": "known",
+              "value": {
+                "amount": 50.0,
+                "currency": "EUR"
+              },
+              "source_refs": [
+                "evt-030"
+              ]
+            },
+            {
+              "subject": "transfer_sam",
+              "predicate": "approval_required",
+              "knowledge_status": "known",
+              "value": true,
+              "source_refs": [
+                "evt-030",
+                "evt-050"
+              ]
+            },
+            {
+              "subject": "transfer_sam",
+              "predicate": "approved",
+              "knowledge_status": "unknown",
+              "unknown_reason": "not_stated",
+              "source_refs": [
+                "evt-050"
+              ]
+            },
+            {
+              "subject": "transfer_sam",
+              "predicate": "executed",
+              "knowledge_status": "known",
+              "value": false,
+              "source_refs": [
+                "evt-030"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  "run_metadata": {
+    "run_id": "baseline-fast-dev-retry2",
+    "label": "DEV FAST / NOT OFFICIAL SCORE",
+    "started_at": "2026-08-29T07:38:34.539130+00:00",
+    "provider": "Codex CLI",
+    "cli_path_basename": "codex.EXE",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "sandbox": "read-only",
+    "scenario_id": "blackhole-dev-001-state-churn",
+    "response_contract": "response-contract-v2",
+    "contract_version": "1.0-gate-a-dev",
+    "event_count": 50,
+    "checkpoints": [
+      50
+    ],
+    "batching": "one chronological capture batch per checkpoint segment; one persistent canonical session",
+    "checkpoint_isolation": "native Codex CLI fork; query fork is never resumed",
+    "structured_response": "prompt-constrained JSON; response-contract-v2 is validated by the deterministic evaluator",
+    "query_ids": [
+      "q-subscriptions-current",
+      "q-tasks-state",
+      "q-duplicates-changes",
+      "q-unresolved"
+    ],
+    "canonical_thread_id": "01a04c74-bf01-7501-8f6b-4dbe9613192c",
+    "turns": [
+      {
+        "kind": "capture",
+        "checkpoint": 50,
+        "returncode": 0,
+        "duration_seconds": 3.828,
+        "thread_id": "01a04c74-bf01-7501-8f6b-4dbe9613192c",
+        "usage": {
+          "input_tokens": 21469,
+          "cached_input_tokens": 12032,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 29,
+          "reasoning_output_tokens": 18
+        },
+        "stderr": {
+          "line_count": 5,
+          "last_lines": [
+            "2026-08-29T07:38:34.687729Z  WARN codex_skills::interface: ignoring interface.icon_small: icon path with '..' must resolve under plugin assets/",
+            "2026-08-29T07:38:34.687762Z  WARN codex_skills::interface: ignoring interface.icon_large: icon path with '..' must resolve under plugin assets/",
+            "2026-08-29T07:38:34.698750Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell",
+            "2026-08-29T07:38:35.074884Z  WARN codex_skills::interface: ignoring interface.icon_small: icon path with '..' must resolve under plugin assets/",
+            "2026-08-29T07:38:35.074913Z  WARN codex_skills::interface: ignoring interface.icon_large: icon path with '..' must resolve under plugin assets/"
+          ]
+        }
+      }
+    ],
+    "checkpoint_runs": {
+      "50": {
+        "canonical_thread_id": "01a04c74-bf01-7501-8f6b-4dbe9613192c",
+        "fork_thread_id": "01a04c74-cdfd-7bd2-a607-d03a5ed96c8c",
+        "atomic_fork": true,
+        "query": {
+          "returncode": 0,
+          "duration_seconds": 394.406,
+          "thread_id": "01a04c74-cdfd-7bd2-a607-d03a5ed96c8c",
+          "usage": {
+            "input_tokens": 28058,
+            "cached_input_tokens": 9984,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 32597,
+            "reasoning_output_tokens": 31114
+          },
+          "stderr": {
+            "line_count": 6,
+            "last_lines": [
+              "2026-08-29T07:38:38.529037Z  WARN codex_skills::interface: ignoring interface.icon_large: icon path with '..' must resolve under plugin assets/",
+              "2026-08-29T07:38:38.552818Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell",
+              "2026-08-29T07:38:38.915351Z  WARN codex_skills::interface: ignoring interface.icon_small: icon path with '..' must resolve under plugin assets/",
+              "2026-08-29T07:38:38.915401Z  WARN codex_skills::interface: ignoring interface.icon_large: icon path with '..' must resolve under plugin assets/",
+              "2026-08-29T07:45:12.447668Z  WARN codex_core::hook_runtime: after_agent hook failed; continuing turn_id=01a04c74-cf30-7df2-8d9e-9611735391a8 hook_name=legacy_notify error=The filename or extension is too long. (os error 206)"
+            ]
+          }
+        },
+        "discarded": true,
+        "parse_error": null,
+        "response_contract": {
+          "parsed": true,
+          "query_count": 4,
+          "trajectory_output": "trajectories\\runtime\\fast-dev-050-retry2\\checkpoint-050.json"
+        }
+      }
+    },
+    "finished_at": "2026-08-29T07:45:12.786733+00:00"
+  }
+}

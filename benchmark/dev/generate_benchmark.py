@@ -23,6 +23,7 @@ CASES_DIR = ROOT / "benchmark" / "dev" / "cases"
 EXPECTED_DIR = ROOT / "benchmark" / "dev" / "expected"
 
 CONTRACT_VERSION = "1.0-gate-a-dev"
+RESPONSE_CONTRACT = "response-contract-v2"
 SCENARIO_ID = "blackhole-dev-001-state-churn"
 BASE_DATE = date(2026, 1, 5)
 TIMEZONE = "Europe/Berlin"
@@ -657,6 +658,82 @@ def category_for_key(state_key: str) -> str:
     return "state_maintenance"
 
 
+TASK_SUBJECTS = {
+    "cancel-streamly": "streamly_cancellation_task",
+    "parcel-pickup-1": "parcel_pickup_1",
+    "parcel-pickup-2": "parcel_pickup_2",
+    "library-return-1": "library_return_1",
+    "school-form-1": "school_form_1",
+}
+
+ACTION_SUBJECTS = {
+    "bank-standing-order": "bank_standing_order",
+    "transfer-sam": "transfer_sam",
+}
+
+
+def public_slot_for_state_key(assertion: dict[str, Any]) -> tuple[str, str]:
+    """Return public semantic subject/predicate fields for an internal slot."""
+    state_key = assertion["state_key"]
+    value = assertion.get("value")
+    refs = assertion.get("source_refs", [])
+    if state_key.startswith("relation:"):
+        source_event_id = value.get("source_event_id") if isinstance(value, dict) else None
+        source_event_id = source_event_id or (refs[0] if refs else "unknown")
+        return f"capture:{source_event_id}", "relationship"
+    if state_key.startswith("entity-link:"):
+        return f"capture:{refs[0] if refs else 'unknown'}", "entity_link"
+    if state_key.startswith("attention:"):
+        base_key = state_key[len("attention:"):]
+        if base_key.startswith("task:"):
+            subject = TASK_SUBJECTS.get(base_key[len("task:"):], base_key[len("task:"):])
+        elif base_key.startswith("action:"):
+            subject = ACTION_SUBJECTS.get(base_key[len("action:"):], base_key[len("action:"):])
+        else:
+            subject, _predicate = public_slot_for_state_key({"state_key": base_key, "source_refs": refs})
+        return subject, "needs_attention"
+    if state_key in {"duplicate_event_count", "duplicate_group_count", "meaningful_change_event_count"}:
+        return "scenario", state_key
+    if state_key.startswith("history:subscription:streamly/"):
+        return "streamly", "historical_price"
+    if state_key.startswith("subscription:streamly/"):
+        return "streamly", state_key.rsplit("/", 1)[1]
+    if state_key.startswith("insurance:current/"):
+        return "roadsure", state_key.rsplit("/", 1)[1]
+    if state_key == "insurance:old_cancellation_date":
+        return "roadsure", "old_cancellation_date"
+    if state_key.startswith("finance:orange/"):
+        return "orange_mobile", state_key.rsplit("/", 1)[1]
+    if state_key.startswith("finance:marketone/"):
+        return "marketone", state_key.rsplit("/", 1)[1]
+    if state_key.startswith("task:"):
+        body = state_key[len("task:"):]
+        task_id, predicate = body.rsplit("/", 1)
+        return TASK_SUBJECTS.get(task_id, task_id), "status" if predicate == "lifecycle" else predicate
+    if state_key.startswith("contract:gymflex/current/"):
+        return "gymflex", state_key.rsplit("/", 1)[1]
+    if state_key == "contract:gymflex/old_status":
+        return "gymflex", "historical_status"
+    if state_key.startswith("action:"):
+        body = state_key[len("action:"):]
+        action_id, predicate = body.rsplit("/", 1)
+        return ACTION_SUBJECTS.get(action_id, action_id), "status" if predicate == "lifecycle" else predicate
+    if state_key == "homefix:quoted_amount":
+        return "homefix", "quoted_amount"
+    if ":" in state_key:
+        _prefix, body = state_key.split(":", 1)
+        return body.split("/", 1)[0], body.rsplit("/", 1)[-1]
+    return "scenario", state_key
+
+
+def publicize_assertion(assertion: dict[str, Any]) -> dict[str, Any]:
+    result = copy.deepcopy(assertion)
+    subject, predicate = public_slot_for_state_key(assertion)
+    result["subject"] = subject
+    result["predicate"] = predicate
+    return result
+
+
 def build_outputs() -> tuple[dict[str, Any], dict[str, Any]]:
     internal = build_internal_events()
     public = [public_event(event) for event in internal]
@@ -670,7 +747,10 @@ def build_outputs() -> tuple[dict[str, Any], dict[str, Any]]:
             checkpoint_world = copy.deepcopy(world)
             query_map: dict[str, Any] = {}
             for query_id, _question in QUERY_SPECS:
-                assertions = query_assertions(checkpoint_world, internal[: event["sequence"]], query_id)
+                assertions = [
+                    publicize_assertion(assertion)
+                    for assertion in query_assertions(checkpoint_world, internal[: event["sequence"]], query_id)
+                ]
                 query_map[query_id] = {"assertions": assertions}
                 for assertion in assertions:
                     key = assertion["state_key"]
@@ -689,6 +769,7 @@ def build_outputs() -> tuple[dict[str, Any], dict[str, Any]]:
 
     scenario = {
         "contract_version": CONTRACT_VERSION,
+        "response_contract": RESPONSE_CONTRACT,
         "scenario_id": SCENARIO_ID,
         "person_id": "person-dev-001",
         "timezone": TIMEZONE,
@@ -700,6 +781,7 @@ def build_outputs() -> tuple[dict[str, Any], dict[str, Any]]:
     }
     expected = {
         "contract_version": CONTRACT_VERSION,
+        "response_contract": RESPONSE_CONTRACT,
         "scenario_id": SCENARIO_ID,
         "event_count": EVENT_COUNT,
         "raw_event_hashes": {event["event_id"]: event["payload_sha256"] for event in public},

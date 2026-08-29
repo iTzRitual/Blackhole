@@ -1,5 +1,6 @@
 {
   "contract_version": "1.0-gate-a-dev",
+  "response_contract": "response-contract-v2",
   "scenario_id": "blackhole-dev-001-state-churn",
   "person_id": "person-dev-001",
   "timezone": "Europe/Berlin",

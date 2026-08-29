@@ -164,37 +164,49 @@ dollar cost. A result produced with another provider, model, reasoning setting,
 or CLI version is a different runtime configuration and must not be silently
 compared with this record.
 
-## 9. Gate A public development run
+## 9. Gate B corrected public development run (valid)
 
 From the repository root, after authenticating Codex outside this repository:
 
 ```text
 python benchmark/dev/generate_benchmark.py --check
-python baseline/run_baseline.py --timeout 1200
-python eval/score.py --scenario benchmark/dev/cases/scenario-001.json --expected benchmark/dev/expected/scenario-001.json --candidate eval/results/baseline-v0-candidate.json --output eval/results/baseline-v0.json
+python eval/contract_smoke.py
+python baseline/run_baseline.py --timeout 1200 --output eval/results/baseline-v1-candidate.json --trajectory trajectories/runtime/003-baseline-v1
+python eval/score.py --scenario benchmark/dev/cases/scenario-001.json --expected benchmark/dev/expected/scenario-001.json --candidate eval/results/baseline-v1-candidate.json --response-contract benchmark/dev/response-contract-v2.json --output eval/results/baseline-v1.json
 python -m unittest discover -s eval/tests -v
 ```
 
 The runner reads only the public scenario, `prompts/runtime/baseline-v1.md`, the
-runner protocol, and `benchmark/dev/query-bundle.json`. It uses the existing
-authenticated CLI subscription and does not read or persist provider tokens.
+v2 runner protocol, `benchmark/dev/query-bundle-v2.json`, and the public
+`response-contract-v2.json`. It uses the existing authenticated CLI subscription
+and does not read or persist provider tokens. The substantive `baseline-v1.md`
+prompt is unchanged by the contract repair.
 The evaluator reads the visible development expected output only for local
 development. A holdout run must provision its expected output outside the
 implementation checkout and must not reuse the public development command's
 paths or artifacts.
 
-The recorded Gate A artifacts are:
+The corrected-run artifacts are:
 
-- `eval/results/baseline-v0-candidate.json` — candidate envelope and safe provider
+- `eval/results/baseline-v1-candidate.json` — candidate envelope and safe provider
   run metadata;
-- `eval/results/baseline-v0.json` — deterministic score;
-- `trajectories/runtime/002-baseline-v0/checkpoint-050.json` through
-  `checkpoint-200.json` — model responses at isolated checkpoints; and
-- `benchmark/dev/contract.json` — frozen contract and semantic rules.
+- `eval/results/baseline-v1.json` — the single official corrected deterministic
+  score;
+- `trajectories/runtime/003-baseline-v1/checkpoint-050.json` through
+  `checkpoint-200.json` — model responses at isolated checkpoints;
+- `eval/results/contract-smoke.json` — non-scored parser/canonicalizer/evaluator
+  smoke evidence; and
+- `benchmark/dev/response-contract-v2.json` — frozen public response boundary.
 
-The official run completed all four checkpoints. It used approximately 20 seconds
-for canonical capture turns and 2,513 seconds for query forks, with provider input
-tokens 24,582 / 30,662 / 38,463 / 44,556 and output tokens 35,031 / 32,201 /
-37,523 / 34,037 at checkpoints 50 / 100 / 150 / 200. The deterministic result
-was LQA-0M 0.0000 and DSCR 336; this is preserved as a baseline observation and
-must not be converted into a ground-truth change.
+The earlier v0 artifacts remain preserved under the unmistakable names
+`eval/results/baseline-v0-invalid-contract-candidate.json` and
+`eval/results/baseline-v0-invalid-contract.json`, with the reason recorded in
+`eval/results/baseline-v0-invalid-contract.md`. Their `LQA-0M=0.0000` is not an
+official semantic baseline and must not be overwritten or reported as one.
+
+The 50-event representative run, when present, is a labeled `DEV FAST / NOT
+OFFICIAL SCORE` diagnostic and cannot replace the official four-checkpoint run.
+Record the corrected run's actual checkpoint scores, totals, schema validity,
+DSCR, provider input/output tokens, wall time, retries, and observed semantic
+failure categories in its result and trajectory summary. Do not invent dollar
+cost when the subscription runtime does not expose it.

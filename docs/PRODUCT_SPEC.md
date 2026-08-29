@@ -2,7 +2,7 @@
 
 **Product:** Blackhole
 **Descriptor:** A zero-organization life inbox.
-**Status:** Product design retained; Gate A approved, benchmark-and-baseline phase
+**Status:** Product design retained; Gate A benchmark frozen, Gate B baseline contract valid
 **Audience:** Product, engineering, evaluation, and agent-workflow contributors
 
 ## 1. Product intent
