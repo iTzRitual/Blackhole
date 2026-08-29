@@ -414,3 +414,82 @@ the bank standing-order approval state. Financial, duplicate/change, entity,
 and relation metrics did not regress; unknown-state metrics, schema validity,
 safety, and source integrity passed. This remains an application experiment,
 not a new benchmark or baseline.
+
+## 16. Deferred end-to-end ingestion boundary
+
+The product runtime now has one reusable backend boundary for turning saved
+captures into Blackhole-owned structured state. This is a product/architecture
+milestone after E005, not a new benchmark treatment.
+
+```text
+capture()
+  → immutable raw_events row
+  → derived processing_state = pending
+  → Saved.
+
+process_pending()
+  → chronological bounded batches
+  → semantic provider proposal
+  → public-contract normalization
+  → deterministic completeness
+  → deterministic/retrieval relation recovery
+  → duplicate-aware evidence projection
+  → rebuildable SQLite state
+```
+
+### Capture boundary
+
+`IngestionEngine.capture()` accepts text or a structured payload, validates it,
+allocates a sequence and event ID, inserts the raw event once, and returns a
+small `Saved.` result. It does not invoke `CodexCLIProvider`, add observations,
+add relationships, or rebuild semantic state. The raw event contains the
+captured source and capture metadata only; processing progress is not written
+back into its JSON.
+
+### Derived processing state
+
+`StateStore` creates a separate `processing_state` row for every new raw event.
+The row contains:
+
+| Field | Meaning |
+| --- | --- |
+| `event_id` | Immutable raw-event identity |
+| `status` | `pending`, `processing`, `processed`, or `failed` |
+| `processing_version` | Version of the runtime lifecycle |
+| `attempt_count` | Number of claimed processing attempts |
+| `last_attempted_at` | Last claim timestamp |
+| `last_successful_at` | Last successful completion timestamp, when present |
+| `last_error` | Bounded retryable failure description, when present |
+| `extractor_version` | Semantic extraction transformation used |
+| `completion_version` | Deterministic completeness transformation used |
+| `relation_recovery_version` | Relation-recovery transformation used |
+| `duplicate_projection_version` | Duplicate-evidence projection used |
+| `updated_at` | Last status update timestamp |
+
+Legacy databases are backfilled conservatively: rows with existing semantic
+observations are treated as processed, while source-only rows are pending. The
+legacy demo's historical `semantic_status` metadata is not authoritative.
+
+### Processing, retry, and idempotency
+
+`process_pending()` reads only pending rows, sorts by source sequence, and
+processes bounded batches. It stops after a failed batch so a later capture
+cannot become authoritative before an earlier one. `retry_failed()` explicitly
+reclaims failed rows and refuses to bypass an earlier unprocessed capture.
+
+The state store's stable observation and relationship fingerprints make retries
+safe after a partial derived write. Processed rows are skipped on subsequent
+runs, so a second `process_pending()` with no new captures makes no provider
+call and creates no new semantic effects, duplicate occurrence, relationship,
+task, or financial count. Current/history state remains rebuildable from raw
+events, observations, relationships, and versioned projection rules.
+
+### Provider and Ask boundary
+
+`CodexCLIProvider` wraps the existing subscription-first `app.provider` call.
+The local CLI owns authentication; Blackhole does not request, read, copy,
+export, or persist provider tokens. A fake provider can be injected for
+deterministic tests. `ensure_state_fresh()` is the future Ask integration point:
+it returns immediately when no pending work exists, otherwise processes the
+pending queue and reports whether the state is fresh. No frontend integration,
+background scheduling, or consequential action executor is included.

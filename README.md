@@ -29,9 +29,10 @@ Open `http://127.0.0.1:8080`. The demo has four views:
   same state.
 
 The seed is synthetic and separate from the frozen benchmark. It contains 14
-raw events, 27 semantic observations, and four relationships. A capture added
-through the UI is stored as an immutable raw event with `semantic_status:
-pending`; this demo does not silently call a model or execute an action.
+raw events, 27 semantic observations, and four relationships. The legacy demo
+capture helper does not silently call a model or execute an action; its
+historical `semantic_status` metadata is display-only. The authoritative
+deferred runtime uses a separate derived `processing_state` table.
 
 ## Product idea
 
@@ -52,6 +53,25 @@ minimal friction and later aims to:
 The design is intentionally quiet: `capture → saved` is the default interaction.
 Attention is reserved for deadlines, unresolved information, important changes,
 and decisions that need explicit approval.
+
+## Capture now, understand later
+
+The backend product loop is intentionally split:
+
+```text
+capture → immutable raw event → pending derived processing state → Saved.
+
+later: process pending → structured Blackhole state → query / attention / memory
+```
+
+`IngestionEngine.capture()` validates and appends the source, records a pending
+row outside the raw JSON, and returns without invoking a provider or rebuilding
+semantic state. `process_pending()` later handles bounded chronological batches
+through the existing semantic extraction, deterministic completeness, relation
+recovery, duplicate-aware consolidation, and rebuildable SQLite projection.
+`ensure_state_fresh()` is the backend boundary an Ask caller can use when it
+needs current state. Failures are recorded per capture and can be retried; no
+background scheduler is included.
 
 ## Non-negotiable boundaries
 
@@ -74,6 +94,12 @@ The current advanced application slice is intentionally scoped:
 - `app/state_store.py` — append-only SQLite raw events, payload hashes,
   structured observations and relationships, rebuildable projections, and an
   opt-in duplicate-evidence component layer;
+- `app/semantic.py` — shared public-contract normalization used by both the
+  kept runner and deferred runtime;
+- `app/ingestion_engine.py` — generic synchronous capture, derived processing
+  status, bounded deferred ingestion, retry, and ask-time freshness boundary;
+- `app/process_pending.py` — concise UI-independent processing command using
+  the externally authenticated Codex CLI when pending work exists;
 - `app/completeness.py` — generic raw-source evidence scanning and conservative
   selective completion helpers;
 - `app/response_projector.py` — generic, query-scoped deterministic projections;
@@ -123,7 +149,7 @@ for the preceding product-phase baseline comparison snapshot.
 | `prompts/` | Versioned runtime and coding prompt artifacts |
 | `benchmark/` | Calibration and public development benchmark boundaries |
 | `baseline/` | Fair stateless provider-baseline harness |
-| `app/` | Scoped Blackhole state slice and local demo |
+| `app/` | Scoped Blackhole state slice, deferred ingestion service, and local demo |
 | `data/synthetic/` | Committed synthetic demo inputs; no personal data |
 | `data/raw/` | Reserved raw-source location |
 | `eval/` | Deterministic scorer, tests, and result artifacts |

@@ -42,6 +42,13 @@ input
 Classification and organization are deferred. A user should not need to decide
 what an item is before preserving it.
 
+Operationally, Blackhole also follows **CAPTURE NOW. UNDERSTAND LATER.** The
+synchronous capture path validates the input, appends one immutable raw event,
+records a separate derived `pending` processing row, and returns `Saved.`. It
+does not call a semantic provider, classify the input, resolve entities, or
+rebuild semantic state during the capture interaction. A later processing run
+can make the capture useful to queries, attention, and memory.
+
 ## 4. Primary user job
 
 > “Let me put this somewhere safe now, and help me understand what it means when I have the attention to deal with it.”
@@ -166,6 +173,25 @@ structured output, supported model/reasoning selection, cancellation and
 timeouts, usage metadata, and raw trajectory capture. Runtime capability
 detection is authoritative: unsupported model or reasoning combinations must be
 reported rather than silently replaced.
+
+### Deferred ingestion and freshness
+
+The product-facing backend exposes a deferred ingestion service. `capture()` is
+cheap and provider-independent. `process_pending()` claims pending captures in
+sequence order, uses bounded batches, and runs the existing semantic extraction
+and deterministic state pipeline. Processing status is derived operational
+state, separate from raw source JSON, and records attempts, versions, success,
+and retryable errors.
+
+An Ask-like caller may call `ensure_state_fresh()` before reading structured
+state. For the MVP this processes all pending captures when any exist; it does
+not add a scheduler or require every future query to process everything. A
+failed batch stops later chronological work, preserves the previously valid
+projection, and leaves failed captures available to `retry_failed()`.
+
+Semantic detection of a payment, cancellation, signing, sending, or account
+change creates only a proposed derived action. The runtime never executes the
+consequential action without explicit user approval.
 
 ## 11. Non-goals for the initial product
 

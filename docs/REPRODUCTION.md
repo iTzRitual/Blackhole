@@ -380,3 +380,64 @@ expected output is used only by the local development scorer. A judge must
 mount holdout expected output privately and must never copy it into an
 implementation checkout, prompt, trajectory, or result artifact. The official
 `baseline-v1` result and all frozen benchmark artifacts remain unchanged.
+
+## 17. Deferred product-runtime ingestion
+
+The product runtime is separate from benchmark scoring. It requires raw captures
+and public ontology/configuration, not benchmark expected output, the evaluator,
+or score artifacts. Capture is exposed as a Python service API:
+
+```python
+import json
+from pathlib import Path
+
+from app.ingestion_engine import CodexCLIProvider, IngestionEngine
+
+contract = json.loads(Path("benchmark/dev/response-contract-v2.json").read_text())
+with CodexCLIProvider() as provider:
+    with IngestionEngine(
+        "data/runtime/state.sqlite",
+        contract=contract,
+        provider=provider,
+        batch_size=10,
+    ) as engine:
+        engine.capture("A neutral capture is saved immediately.")
+        result = engine.ensure_state_fresh()
+        snapshot = engine.snapshot()
+```
+
+`capture()` returns `Saved.` before any provider call. Authenticate the local
+Codex CLI outside Blackhole when pending work should be processed; Blackhole
+never reads or persists provider credentials. For a concise judge/development
+command, use:
+
+```text
+python -m app.process_pending --db data/runtime/state.sqlite --response-contract benchmark/dev/response-contract-v2.json --batch-size 10
+```
+
+The command reports pending, processed, and failed counts and returns non-zero
+when processing fails. `--retry-failed` explicitly retries failed captures.
+With no pending captures it exits without requiring a provider. It never prints
+raw model output or chain-of-thought.
+
+The mandatory neutral integration test is:
+
+```text
+python -m unittest app.tests.test_deferred_ingestion -v
+```
+
+It exercises immediate raw-only capture, chronological correction, unknown
+preservation, duplicate consolidation, idempotency, failure/retry, approval
+safety, and an empty processing command without benchmark data.
+
+For the mandatory frozen E005 regression check after the runtime refactor, use
+new output paths so the kept E005 result remains untouched:
+
+```text
+python -m app.advanced_runner --scenario benchmark/dev/cases/scenario-001.json --query-bundle benchmark/dev/query-bundle-v2.json --response-contract benchmark/dev/response-contract-v2.json --max-events 200 --batch-size 50 --replay-extraction-dir trajectories/runtime/experiment-001-full-v1 --output eval/results/deferred-ingestion-e005-regression-candidate.json --trajectory trajectories/runtime/017-deferred-ingestion-e005-regression --run-id deferred-ingestion-e005-regression --label "PRODUCT RUNTIME REGRESSION / FROZEN E005 REPLAY" --semantic-reasoning high --relation-recovery retrieval --completeness deterministic --duplicate-evidence consolidate
+python eval/score.py --scenario benchmark/dev/cases/scenario-001.json --expected benchmark/dev/expected/scenario-001.json --candidate eval/results/deferred-ingestion-e005-regression-candidate.json --response-contract benchmark/dev/response-contract-v2.json --output eval/results/deferred-ingestion-e005-regression.json
+```
+
+This is a regression validation, not a new scored experiment. The expected
+reference remains LQA-0M `0.8695006212` and DSCR `40`; the recorded regression
+result matches it exactly and uses no provider calls.

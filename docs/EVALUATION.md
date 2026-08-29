@@ -967,3 +967,32 @@ DSCR by `1`, and satisfies the predeclared financial, duplicate/change,
 entity, relation, unknown-state, schema, safety, and source-integrity guards.
 This is the last benchmark-optimization experiment for the frozen development
 track; no E006 benchmark-optimization experiment is started.
+
+## 28. Deferred product-runtime regression validation
+
+The deferred-ingestion milestone is a product/runtime refactor, not a new
+benchmark optimization experiment. It adds a generic `IngestionEngine`, a
+separate derived processing queue, and a shared semantic-normalization module.
+The frozen public E005 replay was rerun with the unchanged scenario, expected
+output, response contract, evaluator, retrieval treatment, deterministic
+completeness, and duplicate-evidence projection. Existing E005 result files
+were not overwritten.
+
+The regression artifact is
+[`eval/results/deferred-ingestion-e005-regression.json`](../eval/results/deferred-ingestion-e005-regression.json),
+with its candidate and runtime records under
+[`trajectories/runtime/017-deferred-ingestion-e005-regression/`](../trajectories/runtime/017-deferred-ingestion-e005-regression/).
+It matches the kept E005 metrics exactly: LQA-0M `0.8695006212469447`, DSCR
+`40`, and checkpoints `0.8888888888888888 / 0.8713728401228401 /
+0.8321654040404041 / 0.8855753519356461`. The replay used zero provider calls
+and zero provider tokens; schema, safety, and source-integrity checks passed.
+
+The neutral fake-provider integration evidence is recorded at
+[`app/tests/test_deferred_ingestion.py`](../app/tests/test_deferred_ingestion.py)
+and [`trajectories/runtime/017-deferred-ingestion-fake/`](../trajectories/runtime/017-deferred-ingestion-fake/).
+It verifies raw-only capture without a provider, chronological correction,
+explicit unknown state, duplicate consolidation without an extra occurrence,
+idempotency, failure/retry, bounded batches, ask-time freshness, and the
+approval boundary. No benchmark case, expected output, query bundle, response
+contract, evaluator behavior, baseline result, calibration evidence, UI asset,
+or prior experiment result was changed.

@@ -13,6 +13,8 @@ from typing import Any, Iterable
 PROJECTION_VERSION = "experiment-001-projection-v2"
 DUPLICATE_EVIDENCE_PROJECTION_VERSION = "experiment-005-duplicate-evidence-projection-v1"
 TRUE_DUPLICATE_RELATION_TYPES = frozenset({"exact_duplicate", "normalized_duplicate", "duplicate"})
+PROCESSING_STATE_VERSION = "blackhole-processing-state-v1"
+PROCESSING_STATUSES = frozenset({"pending", "processing", "processed", "failed"})
 
 
 def canonical_json(value: Any) -> str:
@@ -141,7 +143,42 @@ class StateStore:
                 member_count INTEGER NOT NULL CHECK(member_count > 1),
                 projection_run_id INTEGER NOT NULL REFERENCES projection_runs(projection_run_id)
             );
+
+            CREATE TABLE IF NOT EXISTS processing_state (
+                event_id TEXT PRIMARY KEY REFERENCES raw_events(event_id),
+                status TEXT NOT NULL CHECK(status IN ('pending', 'processing', 'processed', 'failed')),
+                processing_version TEXT NOT NULL,
+                attempt_count INTEGER NOT NULL DEFAULT 0 CHECK(attempt_count >= 0),
+                last_attempted_at TEXT,
+                last_successful_at TEXT,
+                last_error TEXT,
+                extractor_version TEXT,
+                completion_version TEXT,
+                relation_recovery_version TEXT,
+                duplicate_projection_version TEXT,
+                updated_at TEXT NOT NULL
+            );
             """
+        )
+        # Existing demo/replay databases predate the operational queue. Their
+        # semantic rows are already derived, so import them as processed;
+        # source-only rows become pending. New captures are inserted as
+        # pending in insert_raw_events below.
+        self.connection.execute(
+            """
+            INSERT OR IGNORE INTO processing_state(
+                event_id, status, processing_version, attempt_count,
+                last_attempted_at, last_successful_at, last_error,
+                extractor_version, completion_version, relation_recovery_version,
+                duplicate_projection_version, updated_at
+            )
+            SELECT r.event_id,
+                   CASE WHEN EXISTS (SELECT 1 FROM observations o WHERE o.event_id = r.event_id)
+                        THEN 'processed' ELSE 'pending' END,
+                   ?, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, ?
+            FROM raw_events r
+            """,
+            (PROCESSING_STATE_VERSION, utc_now()),
         )
         self.connection.commit()
 
@@ -186,9 +223,192 @@ class StateStore:
                     utc_now(),
                 ),
             )
+            self.connection.execute(
+                """
+                INSERT INTO processing_state(
+                    event_id, status, processing_version, attempt_count,
+                    last_attempted_at, last_successful_at, last_error,
+                    extractor_version, completion_version, relation_recovery_version,
+                    duplicate_projection_version, updated_at
+                ) VALUES (?, 'pending', ?, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, ?)
+                """,
+                (event_id, PROCESSING_STATE_VERSION, utc_now()),
+            )
             inserted += 1
         self.connection.commit()
         return inserted
+
+    @staticmethod
+    def _raw_event_from_row(row: sqlite3.Row) -> dict[str, Any]:
+        return json.loads(row["raw_json"])
+
+    def raw_event(self, event_id: str) -> dict[str, Any] | None:
+        """Return one immutable raw event without exposing derived state."""
+
+        row = self.connection.execute(
+            "SELECT raw_json FROM raw_events WHERE event_id = ?", (event_id,)
+        ).fetchone()
+        return self._raw_event_from_row(row) if row is not None else None
+
+    def raw_events(self, *, max_sequence: int | None = None) -> list[dict[str, Any]]:
+        """Return raw captures in source sequence order."""
+
+        if max_sequence is None:
+            rows = self.connection.execute(
+                "SELECT raw_json FROM raw_events ORDER BY sequence"
+            ).fetchall()
+        else:
+            rows = self.connection.execute(
+                "SELECT raw_json FROM raw_events WHERE sequence <= ? ORDER BY sequence",
+                (max_sequence,),
+            ).fetchall()
+        return [self._raw_event_from_row(row) for row in rows]
+
+    @staticmethod
+    def _processing_record(row: sqlite3.Row) -> dict[str, Any]:
+        return {
+            "event_id": row["event_id"],
+            "sequence": row["sequence"],
+            "status": row["status"],
+            "processing_version": row["processing_version"],
+            "attempt_count": row["attempt_count"],
+            "last_attempted_at": row["last_attempted_at"],
+            "last_successful_at": row["last_successful_at"],
+            "last_error": row["last_error"],
+            "extractor_version": row["extractor_version"],
+            "completion_version": row["completion_version"],
+            "relation_recovery_version": row["relation_recovery_version"],
+            "duplicate_projection_version": row["duplicate_projection_version"],
+            "updated_at": row["updated_at"],
+        }
+
+    def processing_status(self, event_id: str | None = None) -> dict[str, Any] | None:
+        """Return auditable derived processing state for one or all events."""
+
+        query = """
+            SELECT p.*, r.sequence
+            FROM processing_state p JOIN raw_events r ON r.event_id = p.event_id
+        """
+        if event_id is not None:
+            row = self.connection.execute(
+                query + " WHERE p.event_id = ?", (event_id,)
+            ).fetchone()
+            return self._processing_record(row) if row is not None else None
+        rows = self.connection.execute(query + " ORDER BY r.sequence").fetchall()
+        records = [self._processing_record(row) for row in rows]
+        counts = {status: 0 for status in sorted(PROCESSING_STATUSES)}
+        for record in records:
+            status = record["status"]
+            if status in counts:
+                counts[status] += 1
+        return {"counts": counts, "events": records}
+
+    def processing_events(self, *, statuses: Iterable[str] = ("pending",), limit: int | None = None) -> list[dict[str, Any]]:
+        """Return raw events whose derived processing status is selected."""
+
+        selected = [status for status in statuses if status in PROCESSING_STATUSES]
+        if not selected:
+            return []
+        placeholders = ",".join("?" for _ in selected)
+        query = f"""
+            SELECT r.raw_json
+            FROM processing_state p JOIN raw_events r ON r.event_id = p.event_id
+            WHERE p.status IN ({placeholders})
+            ORDER BY r.sequence
+        """
+        parameters: list[Any] = list(selected)
+        if limit is not None:
+            if limit < 0:
+                raise ValueError("limit must be non-negative")
+            query += " LIMIT ?"
+            parameters.append(limit)
+        return [self._raw_event_from_row(row) for row in self.connection.execute(query, parameters).fetchall()]
+
+    def claim_processing(
+        self,
+        event_ids: Iterable[str],
+        processing_version: str,
+        *,
+        include_failed: bool = False,
+    ) -> int:
+        """Atomically claim pending (or explicitly retried failed) events."""
+
+        statuses = ("pending", "failed") if include_failed else ("pending",)
+        placeholders = ",".join("?" for _ in statuses)
+        claimed = 0
+        for event_id in event_ids:
+            if not isinstance(event_id, str) or not event_id:
+                continue
+            cursor = self.connection.execute(
+                f"""
+                UPDATE processing_state
+                SET status = 'processing', processing_version = ?,
+                    attempt_count = attempt_count + 1,
+                    last_attempted_at = ?, last_error = NULL, updated_at = ?
+                WHERE event_id = ? AND status IN ({placeholders})
+                """,
+                (processing_version, utc_now(), utc_now(), event_id, *statuses),
+            )
+            claimed += int(cursor.rowcount > 0)
+        self.connection.commit()
+        return claimed
+
+    def mark_processed(
+        self,
+        event_ids: Iterable[str],
+        *,
+        processing_version: str,
+        extractor_version: str,
+        completion_version: str | None,
+        relation_recovery_version: str | None,
+        duplicate_projection_version: str | None,
+    ) -> int:
+        """Record successful derived processing without touching raw events."""
+
+        updated = 0
+        for event_id in event_ids:
+            cursor = self.connection.execute(
+                """
+                UPDATE processing_state
+                SET status = 'processed', processing_version = ?,
+                    last_successful_at = ?, last_error = NULL,
+                    extractor_version = ?, completion_version = ?,
+                    relation_recovery_version = ?, duplicate_projection_version = ?,
+                    updated_at = ?
+                WHERE event_id = ? AND status = 'processing'
+                """,
+                (
+                    processing_version,
+                    utc_now(),
+                    extractor_version,
+                    completion_version,
+                    relation_recovery_version,
+                    duplicate_projection_version,
+                    utc_now(),
+                    event_id,
+                ),
+            )
+            updated += int(cursor.rowcount > 0)
+        self.connection.commit()
+        return updated
+
+    def mark_failed(self, event_ids: Iterable[str], *, processing_version: str, error: str) -> int:
+        """Record a retryable failure while retaining every raw capture."""
+
+        safe_error = str(error).strip()[:1000] or "processing failed"
+        updated = 0
+        for event_id in event_ids:
+            cursor = self.connection.execute(
+                """
+                UPDATE processing_state
+                SET status = 'failed', processing_version = ?, last_error = ?, updated_at = ?
+                WHERE event_id = ? AND status = 'processing'
+                """,
+                (processing_version, safe_error, utc_now(), event_id),
+            )
+            updated += int(cursor.rowcount > 0)
+        self.connection.commit()
+        return updated
 
     def add_observations(self, observations: Iterable[dict[str, Any]], extractor_version: str) -> int:
         inserted = 0
@@ -940,10 +1160,13 @@ class StateStore:
             "event_index": [dict(row) for row in event_rows],
         }
 
-    def extraction_context(self) -> dict[str, Any]:
+    def extraction_context(self, *, max_sequence: int | None = None) -> dict[str, Any]:
         """Return a compact prior context for the next semantic batch."""
 
         snapshot = self.snapshot()
+        event_index = snapshot["event_index"]
+        if max_sequence is not None:
+            event_index = [event for event in event_index if event["sequence"] <= max_sequence]
         return {
             "projection_version": snapshot["projection_version"],
             "current_facts": snapshot["current_facts"],
@@ -955,6 +1178,6 @@ class StateStore:
                     "observed_at": event["observed_at"],
                     "source_type": event["source_type"],
                 }
-                for event in snapshot["event_index"][-40:]
+                for event in event_index[-40:]
             ],
         }
