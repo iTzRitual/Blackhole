@@ -7,10 +7,10 @@
 **Implementation freeze SHA:**
 `171a6cc1c656d6ab901f41bda8440ee5d59967e3`
 
-This SHA is the consolidated implementation/evidence commit. The final
-freeze-record commit that adds this document and the `implementation-freeze-v1`
-tag is documentation-only; it does not change application behavior. The tag is
-the repository handoff reference for the complete freeze record.
+This SHA is the consolidated implementation/evidence commit. The freeze-record
+and checklist-closure commits that follow are documentation-only; they do not
+change application behavior. The `implementation-freeze-v1` tag is the
+repository handoff reference for the complete freeze record.
 
 ## Frozen benchmark and evidence
 

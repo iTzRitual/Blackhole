@@ -21,7 +21,7 @@ items are facts verified in this checkout; unchecked items remain open.
   `171a6cc1c656d6ab901f41bda8440ee5d59967e3`.
 - [x] Confirm the final integrated worktree has no unintended changes before
   the documentation-only freeze record.
-- [ ] Create the final Git tag.
+- [x] Create the final Git tag: `implementation-freeze-v1`.
 - [ ] Add an explicit README “main failure mode” statement.
 - [ ] Add an explicit README “hot take” statement.
 
@@ -85,7 +85,7 @@ items are facts verified in this checkout; unchecked items remain open.
   credential-store data.
 - [x] Keep holdout expected outputs and evaluator-owned ground truth outside
   implementation-facing evidence.
-- [ ] Re-run credential hygiene on the final integrated tree.
+- [x] Re-run credential hygiene on the final integrated tree.
 - [ ] Review the final video, screenshots, logs, and repository history for
   personal data or credentials.
 
@@ -119,8 +119,8 @@ items are facts verified in this checkout; unchecked items remain open.
 - [x] Confirm no benchmark optimization was performed after freeze.
 - [x] Confirm the local CI-equivalent gate is green on the exact freeze SHA;
   no remote CI status is claimed here.
-- [ ] Confirm `git status --short` is clean on the exact submission SHA.
-- [ ] Create and record the final tag.
+- [x] Confirm `git status --short` is clean on the exact freeze-record SHA.
+- [x] Create and record the final tag: `implementation-freeze-v1`.
 
 ## Known finalization items from this audit
 

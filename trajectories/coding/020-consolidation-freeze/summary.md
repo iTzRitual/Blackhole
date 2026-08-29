@@ -121,5 +121,7 @@ KEEP/REVISE/REMOVE experiment decision.
 - Submission hardening merge: `bc4ef78` (`merge: add submission hardening`).
 - Consolidation/evidence commit: `171a6cc1c656d6ab901f41bda8440ee5d59967e3`
   (`docs: consolidate implementation freeze evidence`).
-- The documentation-only freeze-record commit and
+- Documentation-only freeze-record commit: `14528c6c7371b90ce0fcfe8766b057a4241350fb`
+  (`freeze: record implementation freeze`).
+- The final documentation-only checklist closure and
   `implementation-freeze-v1` tag target are reported in the final handoff.
