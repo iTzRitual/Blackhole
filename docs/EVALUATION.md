@@ -795,3 +795,62 @@ reset command, automated checks, and browser smoke evidence are documented in
 [`app/tests/test_demo.py`](../app/tests/test_demo.py), and the representative
 runtime trajectories. A demo capture is persisted as raw pending input; the
 demo does not invoke a provider or perform an external action.
+
+## 25. Advanced Experiment 003 evidence
+
+Experiment 003 tested retrieval-assisted relation reconciliation against the
+unchanged public 200-event benchmark. It did not change benchmark cases,
+expected values, query bundles, `response-contract-v2`, evaluator behavior,
+calibration evidence, or the official `baseline-v1`. It did not use holdout
+material, UI changes, or provider calls.
+
+The read-only audit found that explicit supersession/correction evidence was
+mostly already represented, but receipt identifiers and lineage were absent
+from structured observations while the extraction context exposed only recent
+capture metadata. Exact raw-payload hashes were not sufficient because
+semantically duplicate receipt captures used different wording. The first
+deterministic recovery variant passed neutral fixtures but produced no metric
+change: the standard 50-event FAST slice remained `LQA-0M=0.8888888889`,
+`DSCR=4`, and the relation-focused 50-event slice remained
+`LQA-0M=0.7407407407`, `DSCR=7`.
+
+The kept retrieval treatment used at most four earlier raw candidates per
+receipt-like relation source, selected by the first stable identifier. It ran
+the same deterministic recovery first, recorded candidate raw content and
+metadata per checkpoint, and used no model resolver. A first full replay
+exposed an interaction in the experiment's fallback coverage rule; that run is
+preserved as `experiment-003-retrieval-full.json`. The corrected v2 replay
+reached `LQA-0M=0.7937642219`, `DSCR=52`; the final v3 serialization/grouping
+correction reached the result below.
+
+The final v3 full public replay scored `LQA-0M=0.8157180034`, with checkpoint
+scores `0.8518518519 / 0.8189738502 / 0.7821654040 / 0.8098809075`, totals
+`TP=311, FP=37, FN=64`, and `DSCR=45` (`22.5` per 100 events). Relation
+reconciliation improved from `0.3169014085` (`TP=45, FP=52, FN=45`) to
+`0.6696428571` (`TP=75, FP=22, FN=15`). The checkpoint-200
+`q-duplicates-changes` score improved from `0.0666666667` to `0.8823529412`;
+the remaining mismatch is an expected narrative note for a similar receipt
+that the raw capture does not explicitly establish. Duplicate/change reached
+`1.0`; obligation/deadline, current-state, temporal-history, contradiction,
+and safety category metrics were unchanged. Schema, safety, and source
+integrity checks passed.
+
+The non-official relation-focused FAST result for the final treatment was
+`LQA-0M=0.962963`, `DSCR=1`, with no hard failure. The full candidate and
+scorer result are
+[`eval/results/experiment-003-retrieval-full-v3-candidate.json`](../eval/results/experiment-003-retrieval-full-v3-candidate.json)
+and
+[`eval/results/experiment-003-retrieval-full-v3.json`](../eval/results/experiment-003-retrieval-full-v3.json).
+The final runtime evidence, including per-checkpoint bounded candidate sets,
+is under
+[`trajectories/runtime/experiment-003-retrieval-full-v3/`](../trajectories/runtime/experiment-003-retrieval-full-v3/).
+The coding trajectory and deterministic/retrieval FAST evidence are under
+[`trajectories/coding/014-experiment-003-relations/`](../trajectories/coding/014-experiment-003-relations/)
+and the corresponding `experiment-003` paths in `eval/results/` and
+`trajectories/runtime/`.
+
+Decision: **KEEP** the bounded retrieval treatment. It meets the predeclared
+threshold through both LQA improvement (`+0.0664884135`) and DSCR reduction
+(`-27`), with no material category, safety, source-integrity, or schema
+regression. A selective provider resolver was not started; Experiment 004 is
+not part of this task.

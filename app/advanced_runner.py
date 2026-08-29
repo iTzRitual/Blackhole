@@ -19,6 +19,12 @@ from typing import Any
 from app.contract import PublicContract, canonical_value, canonical_unknown_reason, canonical_subject, canonical_predicate, normalize_text
 from app.provider import parse_repaired_json, structured_call
 from app.prompts import extraction_prompt, query_prompt
+from app.relation_recovery import (
+    DETERMINISTIC_RECOVERY_VERSION,
+    deterministic_relationships,
+    recovery_digest,
+    retrieved_relation_replacements,
+)
 from app.response_projector import ResponseProjector
 from app.state_store import StateStore
 
@@ -284,6 +290,8 @@ def run(args: argparse.Namespace) -> int:
         "architecture": "fresh scoped semantic calls plus SQLite append-only raw events and deterministic rebuildable projection",
         "ingestion": "one fresh semantic extraction call per chronological batch within each checkpoint segment",
         "querying": "deterministic public response projection from SQLite state; optional fresh model query is diagnostic only",
+        "relation_recovery": args.relation_recovery,
+        "relation_recovery_calls": [],
         "calls": [],
         "projection_runs": [],
     }
@@ -346,6 +354,45 @@ def run(args: argparse.Namespace) -> int:
                     )
                     store.add_observations(observations, EXTRACTOR_VERSION)
                     store.add_relationships(relationships, EXTRACTOR_VERSION)
+                    if args.relation_recovery == "deterministic":
+                        recovered = deterministic_relationships(store.connection)
+                        inserted = store.add_relationships(recovered, DETERMINISTIC_RECOVERY_VERSION)
+                        metadata["relation_recovery_calls"].append(
+                            {
+                                "checkpoint": checkpoint,
+                                "batch": batch_index // args.batch_size + 1,
+                                "candidate_count": len(recovered),
+                                "inserted_count": inserted,
+                                "candidate_digest": recovery_digest(recovered),
+                                "version": DETERMINISTIC_RECOVERY_VERSION,
+                            }
+                        )
+                    elif args.relation_recovery == "retrieval":
+                        recovered = deterministic_relationships(store.connection)
+                        deterministic_inserted = store.add_relationships(recovered, DETERMINISTIC_RECOVERY_VERSION)
+                        retrieved = retrieved_relation_replacements(store.connection, max_candidates=4)
+                        replacements = retrieved["replacements"]
+                        replacement_inserted = store.replace_relationships_for_sources(
+                            replacements,
+                            "experiment-003-retrieval-reconciliation-v1",
+                        )
+                        recovery_record = {
+                            "checkpoint": checkpoint,
+                            "batch": batch_index // args.batch_size + 1,
+                            "deterministic_candidate_count": len(recovered),
+                            "deterministic_inserted_count": deterministic_inserted,
+                            "candidate_set_count": len(retrieved["candidate_sets"]),
+                            "replacement_count": len(replacements),
+                            "replacement_inserted_count": replacement_inserted,
+                            "replacement_digest": retrieved["replacement_digest"],
+                            "max_candidates": retrieved["max_candidates"],
+                            "version": "experiment-003-retrieval-reconciliation-v1",
+                        }
+                        metadata["relation_recovery_calls"].append(recovery_record)
+                        (args.trajectory / f"relation-recovery-{checkpoint:03d}-{batch_index // args.batch_size + 1:02d}.json").write_text(
+                            json.dumps(retrieved, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8",
+                        )
                     projection_run = store.rebuild_projection()
                     metadata["projection_runs"].append(projection_run)
                 projected_snapshot = store.snapshot()
@@ -451,6 +498,12 @@ def main() -> int:
     parser.add_argument("--label", default="EXPERIMENT 001 / DEV FAST / NOT OFFICIAL SCORE")
     parser.add_argument("--timeout", type=int, default=900)
     parser.add_argument("--semantic-reasoning", choices=["max", "high", "medium"], default="max", help="Codex reasoning effort for semantic extraction; max is the default")
+    parser.add_argument(
+        "--relation-recovery",
+        choices=["none", "deterministic", "retrieval"],
+        default="none",
+        help="optional generic deterministic relation recovery variant",
+    )
     return run(parser.parse_args())
 
 

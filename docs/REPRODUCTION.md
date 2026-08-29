@@ -296,13 +296,33 @@ question returns a structured change section, and a capture returns `Saved.`.
 The automated equivalent is `app/tests/test_demo.py`; the browser smoke test is
 not a benchmark score.
 
-## 13. Final submission evidence
+## 13. Experiment 003 relation-reconciliation replay
 
-The final deterministic comparison is recorded in
-`eval/results/final-comparison-v1.json`. It references the unchanged official
-`baseline-v1` artifact and the latest kept deterministic advanced replay, with
-absolute and relative deltas, checkpoint values, category metrics, and runtime
-caveats. The representative product/runtime behavior is described in
+Experiment 003 reuses the recorded public Experiment 001 semantic extraction,
+then applies the generic deterministic fallback and bounded raw-capture
+candidate retrieval. It makes no provider calls and does not change the frozen
+benchmark or official baseline:
+
+```text
+python -m app.advanced_runner --scenario benchmark/dev/cases/scenario-001.json --query-bundle benchmark/dev/query-bundle-v2.json --response-contract benchmark/dev/response-contract-v2.json --max-events 200 --batch-size 50 --replay-extraction-dir trajectories/runtime/experiment-001-full-v1 --output eval/results/experiment-003-retrieval-full-v3-candidate.json --trajectory trajectories/runtime/experiment-003-retrieval-full-v3 --run-id experiment-003-retrieval-full-v3 --label "EXPERIMENT 003 / RETRIEVAL RELATION RECONCILIATION / FROZEN 200-EVENT PUBLIC REPLAY" --semantic-reasoning high --relation-recovery retrieval
+python eval/score.py --scenario benchmark/dev/cases/scenario-001.json --expected benchmark/dev/expected/scenario-001.json --candidate eval/results/experiment-003-retrieval-full-v3-candidate.json --response-contract benchmark/dev/response-contract-v2.json --output eval/results/experiment-003-retrieval-full-v3.json
+```
+
+The resulting development evidence is
+`eval/results/experiment-003-retrieval-full-v3.json`, with runtime records
+under `trajectories/runtime/experiment-003-retrieval-full-v3/`. Candidate
+retrieval is capped at four earlier raw captures per considered relation. A
+judge must mount holdout expected output privately and must not copy it into an
+implementation checkout or trajectory.
+
+## 14. Final submission evidence
+
+The product-phase deterministic comparison snapshot is recorded in
+`eval/results/final-comparison-v1.json`; it references the unchanged official
+`baseline-v1` artifact and the preceding kept advanced replay. The current
+Experiment 003 result is recorded above. Both provide checkpoint values,
+category metrics, and runtime caveats for their respective phase. The
+representative product/runtime behavior is described in
 `trajectories/runtime/013-demo-simple-capture/` through
 `trajectories/runtime/016-demo-correction-reassignment/`. The final validation
 checklist and exact presentation claims are in `docs/VIDEO_SCRIPT.md` and

@@ -51,6 +51,65 @@ class ResponseProjectorTests(unittest.TestCase):
         self.assertEqual(counts["duplicate_group_count"], 2)
         self.assertEqual(counts["meaningful_change_event_count"], 1)
 
+    def test_duplicate_relation_omits_empty_changed_fields(self) -> None:
+        snapshot = {
+            "current_facts": [],
+            "history": [
+                {"event_id": "receipt-a", "subject": "capture:receipt-a", "predicate": "amount"},
+                {"event_id": "receipt-b", "subject": "capture:receipt-b", "predicate": "amount"},
+            ],
+            "relationships": [
+                {
+                    "source_event_id": "receipt-b",
+                    "target_event_id": "receipt-a",
+                    "relation_type": "exact_duplicate",
+                    "changed_fields": [],
+                    "duplicate_group": "harbor-h-1",
+                }
+            ],
+        }
+        assertions = self.projector.project(snapshot, query_ids=["q-duplicates-changes"])["q-duplicates-changes"]["assertions"]
+        relation = next(item for item in assertions if item["predicate"] == "relationship")
+        self.assertNotIn("changed_fields", relation["value"])
+
+    def test_standalone_meaningful_change_is_not_counted_as_duplicate_group(self) -> None:
+        snapshot = {
+            "current_facts": [],
+            "history": [],
+            "relationships": [
+                {"source_event_id": "receipt-b", "target_event_id": "receipt-a", "relation_type": "exact_duplicate", "changed_fields": []},
+                {"source_event_id": "receipt-d", "target_event_id": "receipt-c", "relation_type": "meaningful_change", "changed_fields": ["amount"]},
+            ],
+        }
+        assertions = self.projector.project(snapshot, query_ids=["q-duplicates-changes"])["q-duplicates-changes"]["assertions"]
+        counts = {item["predicate"]: item["value"] for item in assertions if item["subject"] == "scenario"}
+        self.assertEqual(counts["duplicate_event_count"], 1)
+        self.assertEqual(counts["duplicate_group_count"], 1)
+
+    def test_meaningful_change_note_is_kept_in_state_but_not_public_duplicate_detail(self) -> None:
+        snapshot = {
+            "current_facts": [],
+            "history": [
+                {"event_id": "receipt-a", "subject": "capture:receipt-a", "predicate": "amount"},
+                {"event_id": "receipt-b", "subject": "capture:receipt-b", "predicate": "amount"},
+            ],
+            "relationships": [
+                {
+                    "source_event_id": "receipt-b",
+                    "target_event_id": "receipt-a",
+                    "relation_type": "meaningful_change",
+                    "changed_fields": ["amount"],
+                    "note": "a narrative explanation",
+                }
+            ],
+        }
+        relation = next(
+            item
+            for item in self.projector.project(snapshot, query_ids=["q-duplicates-changes"])["q-duplicates-changes"]["assertions"]
+            if item["predicate"] == "relationship"
+        )
+        self.assertNotIn("note", relation["value"])
+
     def test_entity_link_only_edges_are_not_capture_duplicate_evidence(self) -> None:
         snapshot = {
             "current_facts": [],

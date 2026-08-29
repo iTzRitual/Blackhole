@@ -691,10 +691,22 @@ class ResponseProjector:
         ]
         # A meaningful change can connect a later duplicate to the earlier
         # member of the same cluster (for example, a changed receipt followed
-        # by a normalized copy). Include those edges when counting connected
-        # duplicate groups, while keeping the event count restricted to
-        # explicit duplicate relations.
-        _, duplicate_groups = self._duplicate_components(duplicate_relations + meaningful_relations)
+        # by a normalized copy). Include only those change edges that touch a
+        # duplicate component; a standalone change is not itself a duplicate
+        # group. The event count remains restricted to explicit duplicates.
+        duplicate_event_ids = {
+            event_id
+            for relation in duplicate_relations
+            for event_id in (relation.get("source_event_id"), relation.get("target_event_id"))
+            if isinstance(event_id, str)
+        }
+        connected_changes = [
+            relation
+            for relation in meaningful_relations
+            if relation.get("source_event_id") in duplicate_event_ids
+            or relation.get("target_event_id") in duplicate_event_ids
+        ]
+        _, duplicate_groups = self._duplicate_components(duplicate_relations + connected_changes)
         aggregate_subject = self._aggregate_subject(snapshot)
         result = [
             self._fact(
@@ -727,11 +739,13 @@ class ResponseProjector:
                 "relation_type": relation.get("relation_type"),
                 "source_event_id": source,
                 "target_event_id": target,
-                "changed_fields": sorted(relation.get("changed_fields", [])),
             }
+            changed_fields = sorted(relation.get("changed_fields", []))
+            if changed_fields:
+                value["changed_fields"] = changed_fields
             if relation.get("duplicate_group") is not None:
                 value["duplicate_group"] = relation["duplicate_group"]
-            if relation.get("note") is not None:
+            if relation.get("note") is not None and str(relation.get("relation_type")).casefold() != "meaningful_change":
                 value["note"] = relation["note"]
             result.append(self._fact(f"capture:{source}", "relationship", "known", [source, target], value=value))
         return self._dedupe(result)

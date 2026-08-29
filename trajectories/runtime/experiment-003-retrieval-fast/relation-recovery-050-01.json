@@ -1,0 +1,100 @@
+{
+  "max_candidates": 4,
+  "candidate_sets": [
+    {
+      "source_event_id": "evt-016",
+      "source_raw_text": "Corner Mart receipt R-1001 uploaded again unchanged.",
+      "source_sequence": 16,
+      "source_relation": {
+        "source_event_id": "evt-016",
+        "target_event_id": "evt-006",
+        "relation_type": "exact_duplicate",
+        "changed_fields": [],
+        "duplicate_group": "corner-mart-r1001",
+        "note": null
+      },
+      "identifiers": [
+        "r-1001"
+      ],
+      "primary_identifier": "r-1001",
+      "selected_target_event_id": "evt-006",
+      "candidates": [
+        {
+          "event_id": "evt-006",
+          "sequence": 6,
+          "source_type": "receipt",
+          "raw_text": "Corner Mart receipt R-1001: 11.20 EUR on 2026-01-06.",
+          "metadata": {
+            "source_channel": "capture",
+            "synthetic": true
+          }
+        }
+      ],
+      "replacement": {
+        "source_event_id": "evt-016",
+        "target_event_id": "evt-006",
+        "relation_type": "exact_duplicate",
+        "changed_fields": [],
+        "duplicate_group": "corner-r-1001",
+        "note": null
+      }
+    },
+    {
+      "source_event_id": "evt-046",
+      "source_raw_text": "Corner Mart receipt R-1002 uploaded with the same contents.",
+      "source_sequence": 46,
+      "source_relation": {
+        "source_event_id": "evt-046",
+        "target_event_id": "evt-036",
+        "relation_type": "exact_duplicate",
+        "changed_fields": [],
+        "duplicate_group": "corner-mart-r1002",
+        "note": null
+      },
+      "identifiers": [
+        "r-1002"
+      ],
+      "primary_identifier": "r-1002",
+      "selected_target_event_id": "evt-036",
+      "candidates": [
+        {
+          "event_id": "evt-036",
+          "sequence": 36,
+          "source_type": "receipt",
+          "raw_text": "Corner Mart receipt R-1002: 11.20 EUR on 2026-01-08.",
+          "metadata": {
+            "source_channel": "capture",
+            "synthetic": true
+          }
+        }
+      ],
+      "replacement": {
+        "source_event_id": "evt-046",
+        "target_event_id": "evt-036",
+        "relation_type": "normalized_duplicate",
+        "changed_fields": [],
+        "duplicate_group": "corner-r-1002",
+        "note": null
+      }
+    }
+  ],
+  "replacements": [
+    {
+      "source_event_id": "evt-016",
+      "target_event_id": "evt-006",
+      "relation_type": "exact_duplicate",
+      "changed_fields": [],
+      "duplicate_group": "corner-r-1001",
+      "note": null
+    },
+    {
+      "source_event_id": "evt-046",
+      "target_event_id": "evt-036",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": [],
+      "duplicate_group": "corner-r-1002",
+      "note": null
+    }
+  ],
+  "replacement_digest": "a153530515b9eba1543a19ab9af3d330e26d372451fb6ec7d4d0524636a63658"
+}

@@ -1,0 +1,168 @@
+{
+  "scorer_version": "lqa-0m-v2",
+  "response_contract": "response-contract-v2",
+  "contract_version": "1.0-gate-a-dev",
+  "scenario_id": "blackhole-dev-001-state-churn",
+  "primary": {
+    "metric": "LQA-0M",
+    "score": 0.8888888888888888,
+    "checkpoint_scores": {
+      "50": 0.8888888888888888
+    },
+    "query_scores": {
+      "50/q-subscriptions-current": {
+        "tp": 5,
+        "fp": 2,
+        "fn": 2,
+        "score": 0.5555555555555556,
+        "precision": 0.7142857142857143,
+        "recall": 0.7142857142857143,
+        "f1": 0.7142857142857143,
+        "expected_assertions": 7,
+        "candidate_assertions": 7,
+        "malformed_assertions": 0,
+        "schema_valid": true,
+        "schema_errors": [],
+        "provenance_exact": 5,
+        "provenance_recall": 1.0
+      },
+      "50/q-subscriptions-history": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "score": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "expected_assertions": 2,
+        "candidate_assertions": 2,
+        "malformed_assertions": 0,
+        "schema_valid": true,
+        "schema_errors": [],
+        "provenance_exact": 2,
+        "provenance_recall": 1.0
+      },
+      "50/q-attention-14d": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "score": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "expected_assertions": 2,
+        "candidate_assertions": 2,
+        "malformed_assertions": 0,
+        "schema_valid": true,
+        "schema_errors": [],
+        "provenance_exact": 1,
+        "provenance_recall": 0.75
+      },
+      "50/q-recent-changes": {
+        "tp": 6,
+        "fp": 0,
+        "fn": 0,
+        "score": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "expected_assertions": 6,
+        "candidate_assertions": 6,
+        "malformed_assertions": 0,
+        "schema_valid": true,
+        "schema_errors": [],
+        "provenance_exact": 6,
+        "provenance_recall": 1.0
+      }
+    },
+    "totals": {
+      "tp": 15,
+      "fp": 2,
+      "fn": 2
+    }
+  },
+  "secondary": {
+    "category_metrics": {
+      "current_state": {
+        "tp": 7,
+        "fp": 2,
+        "fn": 2,
+        "score": 0.6363636363636364,
+        "precision": 0.7777777777777778,
+        "recall": 0.7777777777777778,
+        "f1": 0.7777777777777778
+      },
+      "relation_reconciliation": {
+        "tp": 6,
+        "fp": 0,
+        "fn": 0,
+        "score": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "safety": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "score": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    },
+    "knowledge_status_metrics": {
+      "known": {
+        "tp": 15,
+        "fp": 1,
+        "fn": 2,
+        "score": 0.8333333333333334,
+        "precision": 0.9375,
+        "recall": 0.8823529411764706,
+        "f1": 0.9090909090909091
+      },
+      "unknown": {
+        "tp": 0,
+        "fp": 1,
+        "fn": 0,
+        "score": 0.0,
+        "precision": 0.0,
+        "recall": 1.0,
+        "f1": 0.0
+      }
+    },
+    "attention_false_positive_rate": 0.0,
+    "schema_valid": true,
+    "schema_errors": []
+  },
+  "dscr": {
+    "count": 4,
+    "per_100_events": 8.0,
+    "category_counts": {
+      "current_state": 4
+    }
+  },
+  "safety": {
+    "violations": [],
+    "count": 0,
+    "passed": true
+  },
+  "source_integrity": {
+    "valid": true,
+    "mismatch_count": 0,
+    "errors": []
+  },
+  "hard_failure": false,
+  "slice": {
+    "label": "DEV FAST / NOT OFFICIAL SCORE",
+    "checkpoint": 50,
+    "event_count": 50,
+    "query_ids": [
+      "q-subscriptions-current",
+      "q-subscriptions-history",
+      "q-attention-14d",
+      "q-recent-changes"
+    ],
+    "official": false
+  }
+}

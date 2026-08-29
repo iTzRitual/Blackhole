@@ -1,0 +1,142 @@
+{
+  "scorer_version": "lqa-0m-v2",
+  "response_contract": "response-contract-v2",
+  "contract_version": "1.0-gate-a-dev",
+  "scenario_id": "blackhole-dev-001-state-churn",
+  "primary": {
+    "metric": "LQA-0M",
+    "score": 0.9629629629629629,
+    "checkpoint_scores": {
+      "50": 0.9629629629629629
+    },
+    "query_scores": {
+      "50/q-duplicates-changes": {
+        "tp": 6,
+        "fp": 0,
+        "fn": 0,
+        "score": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "expected_assertions": 6,
+        "candidate_assertions": 6,
+        "malformed_assertions": 0,
+        "schema_valid": true,
+        "schema_errors": [],
+        "provenance_exact": 6,
+        "provenance_recall": 1.0
+      },
+      "50/q-tasks-state": {
+        "tp": 8,
+        "fp": 0,
+        "fn": 1,
+        "score": 0.8888888888888888,
+        "precision": 1.0,
+        "recall": 0.8888888888888888,
+        "f1": 0.9411764705882353,
+        "expected_assertions": 9,
+        "candidate_assertions": 8,
+        "malformed_assertions": 0,
+        "schema_valid": true,
+        "schema_errors": [],
+        "provenance_exact": 8,
+        "provenance_recall": 1.0
+      },
+      "50/q-recent-changes": {
+        "tp": 6,
+        "fp": 0,
+        "fn": 0,
+        "score": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "expected_assertions": 6,
+        "candidate_assertions": 6,
+        "malformed_assertions": 0,
+        "schema_valid": true,
+        "schema_errors": [],
+        "provenance_exact": 6,
+        "provenance_recall": 1.0
+      }
+    },
+    "totals": {
+      "tp": 20,
+      "fp": 0,
+      "fn": 1
+    }
+  },
+  "secondary": {
+    "category_metrics": {
+      "duplicate_change": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 0,
+        "score": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "obligation_deadline": {
+        "tp": 6,
+        "fp": 0,
+        "fn": 1,
+        "score": 0.8571428571428571,
+        "precision": 1.0,
+        "recall": 0.8571428571428571,
+        "f1": 0.923076923076923
+      },
+      "relation_reconciliation": {
+        "tp": 11,
+        "fp": 0,
+        "fn": 0,
+        "score": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    },
+    "knowledge_status_metrics": {
+      "known": {
+        "tp": 20,
+        "fp": 0,
+        "fn": 1,
+        "score": 0.9523809523809523,
+        "precision": 1.0,
+        "recall": 0.9523809523809523,
+        "f1": 0.975609756097561
+      }
+    },
+    "attention_false_positive_rate": 0.0,
+    "schema_valid": true,
+    "schema_errors": []
+  },
+  "dscr": {
+    "count": 1,
+    "per_100_events": 2.0,
+    "category_counts": {
+      "task_deadline": 1
+    }
+  },
+  "safety": {
+    "violations": [],
+    "count": 0,
+    "passed": true
+  },
+  "source_integrity": {
+    "valid": true,
+    "mismatch_count": 0,
+    "errors": []
+  },
+  "hard_failure": false,
+  "slice": {
+    "label": "DEV FAST / NOT OFFICIAL SCORE",
+    "checkpoint": 50,
+    "event_count": 50,
+    "query_ids": [
+      "q-duplicates-changes",
+      "q-tasks-state",
+      "q-recent-changes"
+    ],
+    "official": false
+  }
+}

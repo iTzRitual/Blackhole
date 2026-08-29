@@ -277,6 +277,38 @@ class StateStore:
         self.connection.commit()
         return inserted
 
+    def replace_relationships_for_sources(
+        self,
+        relationships: Iterable[dict[str, Any]],
+        extractor_version: str,
+    ) -> int:
+        """Replace derived relationships for explicitly selected source events.
+
+        Raw events and semantic observations remain append-only. Relationship
+        rows are derived state, so a versioned reconciliation pass may replace
+        the rows for a source event before the projection is rebuilt. Callers
+        must pass only sources for which the replacement is complete and
+        unambiguous.
+        """
+
+        items = [item for item in relationships if isinstance(item, dict)]
+        source_event_ids = sorted(
+            {
+                item.get("source_event_id")
+                for item in items
+                if isinstance(item.get("source_event_id"), str) and item.get("source_event_id")
+            }
+        )
+        if not source_event_ids:
+            return 0
+        placeholders = ",".join("?" for _ in source_event_ids)
+        self.connection.execute(
+            f"DELETE FROM relationships WHERE source_event_id IN ({placeholders})",
+            source_event_ids,
+        )
+        self.connection.commit()
+        return self.add_relationships(items, extractor_version)
+
     def rebuild_projection(self) -> dict[str, Any]:
         observation_rows = self.connection.execute(
             """

@@ -1,0 +1,182 @@
+{
+  "max_candidates": 4,
+  "candidate_sets": [
+    {
+      "source_event_id": "evt-016",
+      "source_raw_text": "Corner Mart receipt R-1001 uploaded again unchanged.",
+      "source_sequence": 16,
+      "source_relation": {
+        "source_event_id": "evt-016",
+        "target_event_id": "evt-006",
+        "relation_type": "exact_duplicate",
+        "changed_fields": [],
+        "duplicate_group": "corner-r-1001",
+        "note": null
+      },
+      "identifiers": [
+        "r-1001"
+      ],
+      "primary_identifier": "r-1001",
+      "selected_target_event_id": "evt-006",
+      "candidates": [
+        {
+          "event_id": "evt-006",
+          "sequence": 6,
+          "source_type": "receipt",
+          "raw_text": "Corner Mart receipt R-1001: 11.20 EUR on 2026-01-06.",
+          "metadata": {
+            "source_channel": "capture",
+            "synthetic": true
+          }
+        }
+      ],
+      "replacement": null
+    },
+    {
+      "source_event_id": "evt-046",
+      "source_raw_text": "Corner Mart receipt R-1002 uploaded with the same contents.",
+      "source_sequence": 46,
+      "source_relation": {
+        "source_event_id": "evt-046",
+        "target_event_id": "evt-036",
+        "relation_type": "normalized_duplicate",
+        "changed_fields": [],
+        "duplicate_group": "corner-r-1002",
+        "note": null
+      },
+      "identifiers": [
+        "r-1002"
+      ],
+      "primary_identifier": "r-1002",
+      "selected_target_event_id": "evt-036",
+      "candidates": [
+        {
+          "event_id": "evt-036",
+          "sequence": 36,
+          "source_type": "receipt",
+          "raw_text": "Corner Mart receipt R-1002: 11.20 EUR on 2026-01-08.",
+          "metadata": {
+            "source_channel": "capture",
+            "synthetic": true
+          }
+        }
+      ],
+      "replacement": null
+    },
+    {
+      "source_event_id": "evt-066",
+      "source_raw_text": "A normalized copy of receipt R-1002 was captured.",
+      "source_sequence": 66,
+      "source_relation": {
+        "source_event_id": "evt-066",
+        "target_event_id": "evt-056",
+        "relation_type": "normalized_duplicate",
+        "changed_fields": [],
+        "duplicate_group": null,
+        "note": null
+      },
+      "identifiers": [
+        "r-1002"
+      ],
+      "primary_identifier": "r-1002",
+      "selected_target_event_id": "evt-056",
+      "candidates": [
+        {
+          "event_id": "evt-056",
+          "sequence": 56,
+          "source_type": "receipt",
+          "raw_text": "Corner Mart receipt R-1002 has a changed date and total: 12.20 EUR on 2026-01-09.",
+          "metadata": {
+            "source_channel": "capture",
+            "synthetic": true
+          }
+        },
+        {
+          "event_id": "evt-046",
+          "sequence": 46,
+          "source_type": "receipt",
+          "raw_text": "Corner Mart receipt R-1002 uploaded with the same contents.",
+          "metadata": {
+            "source_channel": "capture",
+            "synthetic": true
+          }
+        },
+        {
+          "event_id": "evt-036",
+          "sequence": 36,
+          "source_type": "receipt",
+          "raw_text": "Corner Mart receipt R-1002: 11.20 EUR on 2026-01-08.",
+          "metadata": {
+            "source_channel": "capture",
+            "synthetic": true
+          }
+        }
+      ],
+      "replacement": {
+        "source_event_id": "evt-066",
+        "target_event_id": "evt-056",
+        "relation_type": "normalized_duplicate",
+        "changed_fields": [],
+        "duplicate_group": "a-r-1002",
+        "note": null
+      }
+    },
+    {
+      "source_event_id": "evt-096",
+      "source_raw_text": "Receipt R-1003 was uploaded a second time unchanged.",
+      "source_sequence": 96,
+      "source_relation": {
+        "source_event_id": "evt-096",
+        "target_event_id": "evt-076",
+        "relation_type": "exact_duplicate",
+        "changed_fields": [],
+        "duplicate_group": "corner-mart-r1003",
+        "note": null
+      },
+      "identifiers": [
+        "r-1003"
+      ],
+      "primary_identifier": "r-1003",
+      "selected_target_event_id": "evt-076",
+      "candidates": [
+        {
+          "event_id": "evt-076",
+          "sequence": 76,
+          "source_type": "receipt",
+          "raw_text": "Corner Mart receipt R-1003: 8.00 EUR on 2026-01-12.",
+          "metadata": {
+            "source_channel": "capture",
+            "synthetic": true
+          }
+        }
+      ],
+      "replacement": {
+        "source_event_id": "evt-096",
+        "target_event_id": "evt-076",
+        "relation_type": "exact_duplicate",
+        "changed_fields": [],
+        "duplicate_group": "corner-r-1003",
+        "note": null
+      }
+    }
+  ],
+  "replacements": [
+    {
+      "source_event_id": "evt-066",
+      "target_event_id": "evt-056",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": [],
+      "duplicate_group": "a-r-1002",
+      "note": null
+    },
+    {
+      "source_event_id": "evt-096",
+      "target_event_id": "evt-076",
+      "relation_type": "exact_duplicate",
+      "changed_fields": [],
+      "duplicate_group": "corner-r-1003",
+      "note": null
+    }
+  ],
+  "replacement_digest": "7780614e4759865e67c3ce1c93c7db5d108dd257c9095dc13f9b90cf1461244c"
+}

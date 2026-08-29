@@ -1,0 +1,9 @@
+DETERMINISTIC QUERY PROJECTION
+{
+  "checkpoint": 50,
+  "query_ids": [
+    "q-duplicates-changes",
+    "q-tasks-state",
+    "q-recent-changes"
+  ]
+}

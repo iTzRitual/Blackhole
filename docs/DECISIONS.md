@@ -220,10 +220,10 @@ This is a lightweight decision record. Each entry captures the current design di
 
 ## D-027 — Defer relation-detail extraction work
 
-- **Status:** Accepted for the final product/submission phase
+- **Status:** Superseded by D-029 for the current advanced experiment phase
 - **Context:** A read-only audit compared the recorded E001 semantic extraction and SQLite relationship state with the public development relation expectations. The state contains substantial relation evidence, but several missing duplicate/change details are absent or have different target edges; they cannot all be recovered by deterministic projection alone.
 - **Decision:** Relation detail requires richer semantic extraction and is deferred. Do not launch another expensive provider extraction run for score pursuit. Continue with product/demo, reproducibility, and submission work using the validated generic projector.
-- **Consequences:** No Experiment 003 is launched, and no benchmark, expected output, response contract, evaluator, baseline, or calibration artifact changes. Relation-detail recall remains a documented limitation rather than an ungrounded implementation target.
+- **Consequences:** At the time of this decision, no Experiment 003 was launched, and no benchmark, expected output, response contract, evaluator, baseline, or calibration artifact changed. Relation-detail recall remained a documented limitation until a separately authorized experiment was defined.
 - **Revisit when:** A separately authorized extraction-quality experiment can define a new hypothesis, preserve the frozen benchmark and baseline, and fit the remaining submission schedule.
 
 ## D-028 — Keep the hackathon demo local and deterministic
@@ -233,3 +233,11 @@ This is a lightweight decision record. Each entry captures the current design di
 - **Decision:** Build a small stdlib local web demo over the existing SQLite state boundary. Use committed synthetic captures and structured observations for the seeded demonstration, expose capture/state/query/reset routes, and keep newly captured text raw-only with pending semantic status. Provider availability is discovery-only in the UI; semantic extraction remains a separately invoked subscription-first CLI workflow.
 - **Consequences:** Judges can run the product locally with a reset/seed command and inspect attention, memory, uncertainty, history, duplicate, and approval projections. The demo is not a production service, does not classify captures synchronously, and performs no consequential action.
 - **Revisit when:** Production deployment, multi-user isolation, document/OCR ingestion, or live semantic processing is explicitly authorized as a separate scope.
+
+## D-029 — Keep bounded raw-capture relation reconciliation
+
+- **Status:** Accepted for the current advanced experiment milestone
+- **Context:** Experiment 002's kept projector still had a measured relation-reconciliation weakness. The public audit showed that explicit supersession rows were mostly present, but receipt lineage, duplicate/change detail, and some target choices required earlier raw capture content that was not included in the structured extraction context.
+- **Decision:** Keep a generic, deterministic relation-recovery pass followed by bounded raw-capture candidate retrieval. Use only append-only SQLite inputs, the first stable source identifier, at most four earlier candidates, and a conservative lineage rule. Replace only the derived relationship rows for a source when the candidate set is unambiguous; preserve raw events and observations unchanged. Do not add a provider resolver when the deterministic retrieval treatment already meets the experiment threshold.
+- **Consequences:** The final public replay improved from `LQA-0M=0.7492295899` / `DSCR=72` to `LQA-0M=0.8157180034` / `DSCR=45`; relation reconciliation improved from `0.3169014085` to `0.6696428571`. No benchmark, expected output, response contract, evaluator, official baseline, or calibration artifact changed. Retrieval evidence is recorded per checkpoint with raw candidate content and metadata; no provider calls or tokens were used. This remains an application experiment, not a production ingestion or holdout result.
+- **Revisit when:** A genericity regression appears, a future experiment needs richer cross-entity resolution, a provider-assisted resolver is explicitly authorized, or the human owner changes the frozen benchmark or holdout boundary.

@@ -1,0 +1,1049 @@
+{
+  "observations": [
+    {
+      "event_id": "evt-151",
+      "subject": "streamly",
+      "predicate": "status",
+      "knowledge_status": "known",
+      "value": "active",
+      "operation": "duplicate",
+      "source_refs": [
+        "evt-151"
+      ]
+    },
+    {
+      "event_id": "evt-151",
+      "subject": "streamly",
+      "predicate": "cancellation_requested",
+      "knowledge_status": "known",
+      "value": false,
+      "operation": "duplicate",
+      "source_refs": [
+        "evt-151"
+      ]
+    },
+    {
+      "event_id": "evt-152",
+      "subject": "orange_mobile",
+      "predicate": "observed_bill_count",
+      "knowledge_status": "known",
+      "value": 1,
+      "operation": "set",
+      "source_refs": [
+        "evt-152"
+      ]
+    },
+    {
+      "event_id": "evt-152",
+      "subject": "orange_mobile",
+      "predicate": "observed_total",
+      "knowledge_status": "known",
+      "value": {
+        "amount": "35.90",
+        "currency": "eur"
+      },
+      "operation": "set",
+      "source_refs": [
+        "evt-152"
+      ]
+    },
+    {
+      "event_id": "evt-152",
+      "subject": "orange_mobile",
+      "predicate": "observed_periods",
+      "knowledge_status": "known",
+      "value": [
+        "2027-04"
+      ],
+      "operation": "set",
+      "source_refs": [
+        "evt-152"
+      ]
+    },
+    {
+      "event_id": "evt-153",
+      "subject": "marketone",
+      "predicate": "purchase_count",
+      "knowledge_status": "known",
+      "value": 1,
+      "operation": "set",
+      "source_refs": [
+        "evt-153"
+      ]
+    },
+    {
+      "event_id": "evt-153",
+      "subject": "marketone",
+      "predicate": "purchased_total",
+      "knowledge_status": "known",
+      "value": {
+        "amount": "15.00",
+        "currency": "eur"
+      },
+      "operation": "set",
+      "source_refs": [
+        "evt-153"
+      ]
+    },
+    {
+      "event_id": "evt-154",
+      "subject": "parcel_pickup_2",
+      "predicate": "status",
+      "knowledge_status": "known",
+      "value": "completed",
+      "operation": "duplicate",
+      "source_refs": [
+        "evt-154"
+      ]
+    },
+    {
+      "event_id": "evt-155",
+      "subject": "roadsure",
+      "predicate": "policy_id",
+      "knowledge_status": "known",
+      "value": "RS-NEW",
+      "operation": "duplicate",
+      "source_refs": [
+        "evt-155"
+      ]
+    },
+    {
+      "event_id": "evt-156",
+      "subject": "capture:evt-156",
+      "predicate": "amount",
+      "knowledge_status": "known",
+      "value": {
+        "amount": "22.00",
+        "currency": "eur"
+      },
+      "operation": "correction",
+      "supersedes_event_id": "evt-146",
+      "source_refs": [
+        "evt-156"
+      ]
+    },
+    {
+      "event_id": "evt-157",
+      "subject": "capture:evt-157",
+      "predicate": "entity_link",
+      "knowledge_status": "known",
+      "value": {
+        "candidate": "jordan_kim",
+        "status": "resolved"
+      },
+      "operation": "duplicate",
+      "source_refs": [
+        "evt-157"
+      ]
+    },
+    {
+      "event_id": "evt-158",
+      "subject": "homefix",
+      "predicate": "deadline",
+      "knowledge_status": "known",
+      "value": "2026-02-12",
+      "operation": "duplicate",
+      "source_refs": [
+        "evt-158"
+      ]
+    },
+    {
+      "event_id": "evt-159",
+      "subject": "gymflex",
+      "predicate": "expiry_date",
+      "knowledge_status": "known",
+      "value": "2027-02-28",
+      "operation": "set",
+      "source_refs": [
+        "evt-159"
+      ]
+    },
+    {
+      "event_id": "evt-161",
+      "subject": "streamly",
+      "predicate": "last_charge",
+      "knowledge_status": "known",
+      "value": {
+        "amount": "18.00",
+        "currency": "eur"
+      },
+      "operation": "set",
+      "source_refs": [
+        "evt-161"
+      ]
+    },
+    {
+      "event_id": "evt-162",
+      "subject": "orange_mobile",
+      "predicate": "observed_bill_count",
+      "knowledge_status": "known",
+      "value": 1,
+      "operation": "set",
+      "source_refs": [
+        "evt-162"
+      ]
+    },
+    {
+      "event_id": "evt-162",
+      "subject": "orange_mobile",
+      "predicate": "observed_total",
+      "knowledge_status": "known",
+      "value": {
+        "amount": "37.90",
+        "currency": "eur"
+      },
+      "operation": "set",
+      "source_refs": [
+        "evt-162"
+      ]
+    },
+    {
+      "event_id": "evt-162",
+      "subject": "orange_mobile",
+      "predicate": "observed_periods",
+      "knowledge_status": "known",
+      "value": [
+        "2027-05"
+      ],
+      "operation": "set",
+      "source_refs": [
+        "evt-162"
+      ]
+    },
+    {
+      "event_id": "evt-163",
+      "subject": "marketone",
+      "predicate": "confirmed_consumption_quantity",
+      "knowledge_status": "known",
+      "value": 1,
+      "operation": "set",
+      "source_refs": [
+        "evt-163"
+      ]
+    },
+    {
+      "event_id": "evt-163",
+      "subject": "marketone",
+      "predicate": "consumption_observation_count",
+      "knowledge_status": "known",
+      "value": 1,
+      "operation": "set",
+      "source_refs": [
+        "evt-163"
+      ]
+    },
+    {
+      "event_id": "evt-164",
+      "subject": "school_form_1",
+      "predicate": "status",
+      "knowledge_status": "known",
+      "value": "open",
+      "operation": "set",
+      "source_refs": [
+        "evt-164"
+      ]
+    },
+    {
+      "event_id": "evt-164",
+      "subject": "school_form_1",
+      "predicate": "owner",
+      "knowledge_status": "known",
+      "value": "alex",
+      "operation": "set",
+      "source_refs": [
+        "evt-164"
+      ]
+    },
+    {
+      "event_id": "evt-164",
+      "subject": "school_form_1",
+      "predicate": "deadline",
+      "knowledge_status": "known",
+      "value": "2026-03-18",
+      "operation": "set",
+      "source_refs": [
+        "evt-164"
+      ]
+    },
+    {
+      "event_id": "evt-165",
+      "subject": "roadsure",
+      "predicate": "policy_id",
+      "knowledge_status": "known",
+      "value": "RS-NEW",
+      "operation": "duplicate",
+      "source_refs": [
+        "evt-165"
+      ]
+    },
+    {
+      "event_id": "evt-165",
+      "subject": "roadsure",
+      "predicate": "historical_status",
+      "knowledge_status": "known",
+      "value": "historical",
+      "operation": "set",
+      "source_refs": [
+        "evt-165"
+      ]
+    },
+    {
+      "event_id": "evt-167",
+      "subject": "jordan",
+      "predicate": "entity_link",
+      "knowledge_status": "unknown",
+      "unknown_reason": "ambiguous_person",
+      "operation": "duplicate",
+      "source_refs": [
+        "evt-167"
+      ]
+    },
+    {
+      "event_id": "evt-167",
+      "subject": "jordan",
+      "predicate": "needs_attention",
+      "knowledge_status": "known",
+      "value": {
+        "reason": "message needs a reply; recipient is unclear"
+      },
+      "operation": "duplicate",
+      "source_refs": [
+        "evt-167"
+      ]
+    },
+    {
+      "event_id": "evt-168",
+      "subject": "homefix",
+      "predicate": "quoted_amount",
+      "knowledge_status": "unknown",
+      "unknown_reason": "conflicting",
+      "operation": "duplicate",
+      "source_refs": [
+        "evt-168"
+      ]
+    },
+    {
+      "event_id": "evt-170",
+      "subject": "bank_standing_order",
+      "predicate": "approval_required",
+      "knowledge_status": "known",
+      "value": true,
+      "operation": "set",
+      "source_refs": [
+        "evt-170"
+      ]
+    },
+    {
+      "event_id": "evt-171",
+      "subject": "streamly",
+      "predicate": "cancellation_intent",
+      "knowledge_status": "known",
+      "value": true,
+      "operation": "supersede",
+      "supersedes_event_id": "evt-151",
+      "source_refs": [
+        "evt-171"
+      ]
+    },
+    {
+      "event_id": "evt-172",
+      "subject": "orange_mobile",
+      "predicate": "observed_bill_count",
+      "knowledge_status": "known",
+      "value": 1,
+      "operation": "set",
+      "source_refs": [
+        "evt-172"
+      ]
+    },
+    {
+      "event_id": "evt-172",
+      "subject": "orange_mobile",
+      "predicate": "observed_total",
+      "knowledge_status": "known",
+      "value": {
+        "amount": "37.90",
+        "currency": "eur"
+      },
+      "operation": "set",
+      "source_refs": [
+        "evt-172"
+      ]
+    },
+    {
+      "event_id": "evt-172",
+      "subject": "orange_mobile",
+      "predicate": "observed_periods",
+      "knowledge_status": "known",
+      "value": [
+        "2027-06"
+      ],
+      "operation": "set",
+      "source_refs": [
+        "evt-172"
+      ]
+    },
+    {
+      "event_id": "evt-173",
+      "subject": "marketone",
+      "predicate": "purchase_count",
+      "knowledge_status": "known",
+      "value": 1,
+      "operation": "set",
+      "source_refs": [
+        "evt-173"
+      ]
+    },
+    {
+      "event_id": "evt-173",
+      "subject": "marketone",
+      "predicate": "purchased_total",
+      "knowledge_status": "known",
+      "value": {
+        "amount": "9.00",
+        "currency": "eur"
+      },
+      "operation": "set",
+      "source_refs": [
+        "evt-173"
+      ]
+    },
+    {
+      "event_id": "evt-174",
+      "subject": "school_form_1",
+      "predicate": "blocker",
+      "knowledge_status": "known",
+      "value": "missing signature",
+      "operation": "set",
+      "source_refs": [
+        "evt-174"
+      ]
+    },
+    {
+      "event_id": "evt-175",
+      "subject": "roadsure",
+      "predicate": "needs_attention",
+      "knowledge_status": "known",
+      "value": {
+        "reason": "renewal reminder for the current policy"
+      },
+      "operation": "set",
+      "source_refs": [
+        "evt-175"
+      ]
+    },
+    {
+      "event_id": "evt-176",
+      "subject": "capture:evt-176",
+      "predicate": "amount",
+      "knowledge_status": "known",
+      "value": {
+        "amount": "4.75",
+        "currency": "eur"
+      },
+      "operation": "set",
+      "source_refs": [
+        "evt-176"
+      ]
+    },
+    {
+      "event_id": "evt-177",
+      "subject": "capture:evt-177",
+      "predicate": "entity_link",
+      "knowledge_status": "known",
+      "value": {
+        "candidate": "jordan_lee",
+        "status": "resolved"
+      },
+      "operation": "set",
+      "source_refs": [
+        "evt-177"
+      ]
+    },
+    {
+      "event_id": "evt-178",
+      "subject": "homefix",
+      "predicate": "approved",
+      "knowledge_status": "known",
+      "value": false,
+      "operation": "set",
+      "source_refs": [
+        "evt-178"
+      ]
+    },
+    {
+      "event_id": "evt-179",
+      "subject": "gymflex",
+      "predicate": "status",
+      "knowledge_status": "known",
+      "value": "current",
+      "operation": "set",
+      "source_refs": [
+        "evt-179"
+      ]
+    },
+    {
+      "event_id": "evt-180",
+      "subject": "transfer_sam",
+      "predicate": "approved",
+      "knowledge_status": "known",
+      "value": false,
+      "operation": "set",
+      "source_refs": [
+        "evt-180"
+      ]
+    },
+    {
+      "event_id": "evt-181",
+      "subject": "streamly",
+      "predicate": "cancellation_intent",
+      "knowledge_status": "known",
+      "value": false,
+      "operation": "supersede",
+      "supersedes_event_id": "evt-171",
+      "source_refs": [
+        "evt-181"
+      ]
+    },
+    {
+      "event_id": "evt-182",
+      "subject": "orange_mobile",
+      "predicate": "missing_periods",
+      "knowledge_status": "known",
+      "value": [
+        "2027-07"
+      ],
+      "operation": "set",
+      "source_refs": [
+        "evt-182"
+      ]
+    },
+    {
+      "event_id": "evt-182",
+      "subject": "orange_mobile",
+      "predicate": "unobserved_periods",
+      "knowledge_status": "known",
+      "value": [
+        "2027-07"
+      ],
+      "operation": "set",
+      "source_refs": [
+        "evt-182"
+      ]
+    },
+    {
+      "event_id": "evt-183",
+      "subject": "marketone",
+      "predicate": "confirmed_consumption_quantity",
+      "knowledge_status": "known",
+      "value": 2,
+      "operation": "set",
+      "source_refs": [
+        "evt-183"
+      ]
+    },
+    {
+      "event_id": "evt-183",
+      "subject": "marketone",
+      "predicate": "consumption_observation_count",
+      "knowledge_status": "known",
+      "value": 1,
+      "operation": "set",
+      "source_refs": [
+        "evt-183"
+      ]
+    },
+    {
+      "event_id": "evt-184",
+      "subject": "school_form_1",
+      "predicate": "deadline",
+      "knowledge_status": "known",
+      "value": "2026-03-18",
+      "operation": "duplicate",
+      "source_refs": [
+        "evt-184"
+      ]
+    },
+    {
+      "event_id": "evt-185",
+      "subject": "roadsure",
+      "predicate": "expiry_date",
+      "knowledge_status": "known",
+      "value": "2027-06-30",
+      "operation": "supersede",
+      "supersedes_event_id": "evt-045",
+      "source_refs": [
+        "evt-185"
+      ]
+    },
+    {
+      "event_id": "evt-187",
+      "subject": "jordan",
+      "predicate": "entity_link",
+      "knowledge_status": "unknown",
+      "unknown_reason": "ambiguous_person",
+      "operation": "duplicate",
+      "source_refs": [
+        "evt-187"
+      ]
+    },
+    {
+      "event_id": "evt-187",
+      "subject": "jordan",
+      "predicate": "needs_attention",
+      "knowledge_status": "known",
+      "value": {
+        "reason": "message needs a reply; recipient is unclear"
+      },
+      "operation": "duplicate",
+      "source_refs": [
+        "evt-187"
+      ]
+    },
+    {
+      "event_id": "evt-188",
+      "subject": "homefix",
+      "predicate": "deadline",
+      "knowledge_status": "known",
+      "value": "2026-02-12",
+      "operation": "duplicate",
+      "source_refs": [
+        "evt-188"
+      ]
+    },
+    {
+      "event_id": "evt-189",
+      "subject": "roadsure",
+      "predicate": "needs_attention",
+      "knowledge_status": "known",
+      "value": {
+        "reason": "renewal reminder for the current policy",
+        "deadline": "2027-02-28"
+      },
+      "operation": "supersede",
+      "supersedes_event_id": "evt-175",
+      "source_refs": [
+        "evt-189"
+      ]
+    },
+    {
+      "event_id": "evt-191",
+      "subject": "streamly",
+      "predicate": "status",
+      "knowledge_status": "known",
+      "value": "active",
+      "operation": "duplicate",
+      "source_refs": [
+        "evt-191"
+      ]
+    },
+    {
+      "event_id": "evt-191",
+      "subject": "streamly",
+      "predicate": "next_renewal",
+      "knowledge_status": "known",
+      "value": "2026-03-20",
+      "operation": "set",
+      "source_refs": [
+        "evt-191"
+      ]
+    },
+    {
+      "event_id": "evt-191",
+      "subject": "streamly",
+      "predicate": "current_price",
+      "knowledge_status": "known",
+      "value": {
+        "amount": "18.00",
+        "currency": "eur",
+        "billing_period": "monthly"
+      },
+      "operation": "duplicate",
+      "source_refs": [
+        "evt-191"
+      ]
+    },
+    {
+      "event_id": "evt-192",
+      "subject": "orange_mobile",
+      "predicate": "observed_bill_count",
+      "knowledge_status": "known",
+      "value": 1,
+      "operation": "set",
+      "source_refs": [
+        "evt-192"
+      ]
+    },
+    {
+      "event_id": "evt-192",
+      "subject": "orange_mobile",
+      "predicate": "observed_total",
+      "knowledge_status": "known",
+      "value": {
+        "amount": "37.90",
+        "currency": "eur"
+      },
+      "operation": "set",
+      "source_refs": [
+        "evt-192"
+      ]
+    },
+    {
+      "event_id": "evt-192",
+      "subject": "orange_mobile",
+      "predicate": "observed_periods",
+      "knowledge_status": "known",
+      "value": [
+        "2027-08"
+      ],
+      "operation": "set",
+      "source_refs": [
+        "evt-192"
+      ]
+    },
+    {
+      "event_id": "evt-193",
+      "subject": "marketone",
+      "predicate": "unobserved_consumption",
+      "knowledge_status": "unknown",
+      "unknown_reason": "no_consumption_observation",
+      "operation": "set",
+      "source_refs": [
+        "evt-193"
+      ]
+    },
+    {
+      "event_id": "evt-194",
+      "subject": "school_form_1",
+      "predicate": "status",
+      "knowledge_status": "known",
+      "value": "open",
+      "operation": "duplicate",
+      "source_refs": [
+        "evt-194"
+      ]
+    },
+    {
+      "event_id": "evt-194",
+      "subject": "school_form_1",
+      "predicate": "owner",
+      "knowledge_status": "known",
+      "value": "alex",
+      "operation": "duplicate",
+      "source_refs": [
+        "evt-194"
+      ]
+    },
+    {
+      "event_id": "evt-195",
+      "subject": "roadsure",
+      "predicate": "claim_number",
+      "knowledge_status": "unknown",
+      "unknown_reason": "not_available",
+      "operation": "supersede",
+      "supersedes_event_id": "evt-115",
+      "source_refs": [
+        "evt-195"
+      ]
+    },
+    {
+      "event_id": "evt-197",
+      "subject": "capture:evt-197",
+      "predicate": "entity_link",
+      "knowledge_status": "known",
+      "value": {
+        "candidate": "jordan_kim",
+        "status": "resolved"
+      },
+      "operation": "duplicate",
+      "source_refs": [
+        "evt-197"
+      ]
+    },
+    {
+      "event_id": "evt-198",
+      "subject": "homefix",
+      "predicate": "quoted_amount",
+      "knowledge_status": "unknown",
+      "unknown_reason": "conflicting",
+      "operation": "duplicate",
+      "source_refs": [
+        "evt-198"
+      ]
+    },
+    {
+      "event_id": "evt-199",
+      "subject": "gymflex",
+      "predicate": "status",
+      "knowledge_status": "known",
+      "value": "active",
+      "operation": "supersede",
+      "supersedes_event_id": "evt-179",
+      "source_refs": [
+        "evt-199"
+      ]
+    },
+    {
+      "event_id": "evt-199",
+      "subject": "gymflex",
+      "predicate": "expiry_date",
+      "knowledge_status": "known",
+      "value": "2027-02-28",
+      "operation": "duplicate",
+      "source_refs": [
+        "evt-199"
+      ]
+    },
+    {
+      "event_id": "evt-200",
+      "subject": "bank_standing_order",
+      "predicate": "status",
+      "knowledge_status": "known",
+      "value": "proposed",
+      "operation": "set",
+      "source_refs": [
+        "evt-200"
+      ]
+    },
+    {
+      "event_id": "evt-200",
+      "subject": "bank_standing_order",
+      "predicate": "approved",
+      "knowledge_status": "known",
+      "value": false,
+      "operation": "set",
+      "source_refs": [
+        "evt-200"
+      ]
+    },
+    {
+      "event_id": "evt-200",
+      "subject": "bank_standing_order",
+      "predicate": "executed",
+      "knowledge_status": "known",
+      "value": false,
+      "operation": "duplicate",
+      "source_refs": [
+        "evt-200"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "source_event_id": "evt-151",
+      "target_event_id": "evt-091",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": []
+    },
+    {
+      "source_event_id": "evt-154",
+      "target_event_id": "evt-124",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": []
+    },
+    {
+      "source_event_id": "evt-155",
+      "target_event_id": "evt-045",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": []
+    },
+    {
+      "source_event_id": "evt-156",
+      "target_event_id": "evt-146",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "amount"
+      ]
+    },
+    {
+      "source_event_id": "evt-157",
+      "target_event_id": "evt-117",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": []
+    },
+    {
+      "source_event_id": "evt-158",
+      "target_event_id": "evt-108",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": []
+    },
+    {
+      "source_event_id": "evt-159",
+      "target_event_id": "evt-059",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": []
+    },
+    {
+      "source_event_id": "evt-161",
+      "target_event_id": "evt-141",
+      "relation_type": "similar_not_duplicate",
+      "changed_fields": []
+    },
+    {
+      "source_event_id": "evt-165",
+      "target_event_id": "evt-045",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "historical_status"
+      ]
+    },
+    {
+      "source_event_id": "evt-166",
+      "target_event_id": "evt-156",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": []
+    },
+    {
+      "source_event_id": "evt-167",
+      "target_event_id": "evt-087",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": []
+    },
+    {
+      "source_event_id": "evt-168",
+      "target_event_id": "evt-118",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": []
+    },
+    {
+      "source_event_id": "evt-171",
+      "target_event_id": "evt-151",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "cancellation_intent"
+      ]
+    },
+    {
+      "source_event_id": "evt-177",
+      "target_event_id": "evt-017",
+      "relation_type": "similar_not_duplicate",
+      "changed_fields": [
+        "context"
+      ]
+    },
+    {
+      "source_event_id": "evt-181",
+      "target_event_id": "evt-171",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "cancellation_intent"
+      ]
+    },
+    {
+      "source_event_id": "evt-184",
+      "target_event_id": "evt-164",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": []
+    },
+    {
+      "source_event_id": "evt-185",
+      "target_event_id": "evt-045",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "expiry_date"
+      ]
+    },
+    {
+      "source_event_id": "evt-186",
+      "target_event_id": "evt-176",
+      "relation_type": "similar_not_duplicate",
+      "changed_fields": []
+    },
+    {
+      "source_event_id": "evt-187",
+      "target_event_id": "evt-167",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": []
+    },
+    {
+      "source_event_id": "evt-188",
+      "target_event_id": "evt-158",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": []
+    },
+    {
+      "source_event_id": "evt-189",
+      "target_event_id": "evt-175",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "deadline"
+      ]
+    },
+    {
+      "source_event_id": "evt-191",
+      "target_event_id": "evt-151",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": []
+    },
+    {
+      "source_event_id": "evt-191",
+      "target_event_id": "evt-111",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": []
+    },
+    {
+      "source_event_id": "evt-193",
+      "target_event_id": "evt-113",
+      "relation_type": "similar_not_duplicate",
+      "changed_fields": [
+        "period"
+      ]
+    },
+    {
+      "source_event_id": "evt-195",
+      "target_event_id": "evt-115",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "unknown_reason"
+      ]
+    },
+    {
+      "source_event_id": "evt-196",
+      "target_event_id": "evt-176",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": []
+    },
+    {
+      "source_event_id": "evt-197",
+      "target_event_id": "evt-157",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": []
+    },
+    {
+      "source_event_id": "evt-198",
+      "target_event_id": "evt-168",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": []
+    },
+    {
+      "source_event_id": "evt-199",
+      "target_event_id": "evt-179",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "status"
+      ]
+    },
+    {
+      "source_event_id": "evt-199",
+      "target_event_id": "evt-159",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": []
+    },
+    {
+      "source_event_id": "evt-200",
+      "target_event_id": "evt-170",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "approved",
+        "status",
+        "executed"
+      ]
+    },
+    {
+      "source_event_id": "evt-200",
+      "target_event_id": "evt-040",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": []
+    }
+  ]
+}

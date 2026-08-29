@@ -92,20 +92,25 @@ material.
 Gate A is frozen at one public 200-event development scenario with checkpoints
 at 50, 100, 150, and 200. Gate B's `response-contract-v2` repair is valid. The
 official fair comparator remains `baseline-v1` at `LQA-0M=0.3014914553` with
-`DSCR=277`. The latest kept advanced replay is Experiment 002 at
-`LQA-0M=0.7492295899` with `DSCR=72`; it preserves the same frozen benchmark
-and has no safety or source-integrity failure.
+`DSCR=277`. The latest kept advanced replay is Experiment 003 at
+`LQA-0M=0.8157180034` with `DSCR=45`; it preserves the same frozen benchmark
+and has no safety or source-integrity failure. Experiment 002 remains preserved
+as the preceding kept replay at `LQA-0M=0.7492295899` with `DSCR=72`.
 
 Those are development measurements, not a claim of production readiness or
 holdout superiority. The public benchmark, calibration evidence, baseline
-artifacts, and evaluator behavior are preserved. Relation-detail extraction was
-audited before this product phase; the missing details were not recoverable
-from recorded state alone and richer extraction is deferred.
+artifacts, and evaluator behavior are preserved. Experiment 003 tested bounded
+raw-capture relation reconciliation; its current kept result is
+`LQA-0M=0.8157180034` with `DSCR=45`.
+The treatment remains experimental and does not expose holdout material or
+perform provider-assisted resolution.
 
 See [docs/EVALUATION.md](docs/EVALUATION.md) for the contract and metrics,
-[docs/REPRODUCTION.md](docs/REPRODUCTION.md) for judge-facing commands, and
-[eval/results/final-comparison-v1.json](eval/results/final-comparison-v1.json)
-for the final comparison artifact when the final gate has been run.
+[docs/REPRODUCTION.md](docs/REPRODUCTION.md) for judge-facing commands,
+[`eval/results/experiment-003-retrieval-full-v3.json`](eval/results/experiment-003-retrieval-full-v3.json)
+for the current advanced replay, and
+[`eval/results/final-comparison-v1.json`](eval/results/final-comparison-v1.json)
+for the preceding product-phase baseline comparison snapshot.
 
 ## Repository map
 

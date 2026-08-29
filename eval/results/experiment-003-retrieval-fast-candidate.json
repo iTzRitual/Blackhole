@@ -1,0 +1,343 @@
+{
+  "response_contract": "response-contract-v2",
+  "scenario_id": "blackhole-dev-001-state-churn",
+  "checkpoints": {
+    "50": {
+      "checkpoint": 50,
+      "queries": {
+        "q-subscriptions-current": {
+          "assertions": [
+            {
+              "subject": "streamly",
+              "predicate": "billing_period",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-001"
+              ],
+              "value": "month"
+            },
+            {
+              "subject": "streamly",
+              "predicate": "cancellation_intent",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-041"
+              ],
+              "value": false
+            },
+            {
+              "subject": "streamly",
+              "predicate": "cancellation_requested",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-031"
+              ],
+              "value": false
+            },
+            {
+              "subject": "streamly",
+              "predicate": "current_price",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-001"
+              ],
+              "value": {
+                "amount": "12",
+                "billing_period": "month",
+                "currency": "eur"
+              }
+            },
+            {
+              "subject": "streamly",
+              "predicate": "last_charge",
+              "knowledge_status": "unknown",
+              "source_refs": [
+                "evt-011"
+              ],
+              "unknown_reason": "not_stated"
+            },
+            {
+              "subject": "streamly",
+              "predicate": "status",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-001"
+              ],
+              "value": "active"
+            },
+            {
+              "subject": "streamly",
+              "predicate": "currency",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-001"
+              ],
+              "value": "eur"
+            }
+          ]
+        },
+        "q-subscriptions-history": {
+          "assertions": [
+            {
+              "subject": "streamly",
+              "predicate": "historical_price",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-001"
+              ],
+              "value": {
+                "amount": "12",
+                "billing_period": "month",
+                "currency": "eur"
+              }
+            },
+            {
+              "subject": "streamly",
+              "predicate": "historical_price",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-021"
+              ],
+              "value": {
+                "amount": "14",
+                "billing_period": "month",
+                "currency": "eur"
+              }
+            }
+          ]
+        },
+        "q-attention-14d": {
+          "assertions": [
+            {
+              "subject": "bank_standing_order",
+              "predicate": "needs_attention",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-040",
+                "evt-050"
+              ],
+              "value": {
+                "executed": false,
+                "reason": "approval required"
+              }
+            },
+            {
+              "subject": "transfer_sam",
+              "predicate": "needs_attention",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-030",
+                "evt-050"
+              ],
+              "value": {
+                "executed": false,
+                "reason": "approval required"
+              }
+            }
+          ]
+        },
+        "q-recent-changes": {
+          "assertions": [
+            {
+              "subject": "capture:evt-018",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-008",
+                "evt-018"
+              ],
+              "value": {
+                "changed_fields": [
+                  "appointment_date"
+                ],
+                "relation_type": "contradiction",
+                "source_event_id": "evt-018",
+                "target_event_id": "evt-008"
+              }
+            },
+            {
+              "subject": "capture:evt-028",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-018",
+                "evt-028"
+              ],
+              "value": {
+                "changed_fields": [
+                  "appointment_date"
+                ],
+                "relation_type": "contradiction",
+                "source_event_id": "evt-028",
+                "target_event_id": "evt-018"
+              }
+            },
+            {
+              "subject": "capture:evt-038",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-028",
+                "evt-038"
+              ],
+              "value": {
+                "changed_fields": [
+                  "appointment_date"
+                ],
+                "relation_type": "correction",
+                "source_event_id": "evt-038",
+                "target_event_id": "evt-028"
+              }
+            },
+            {
+              "subject": "capture:evt-021",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-001",
+                "evt-021"
+              ],
+              "value": {
+                "changed_fields": [
+                  "amount"
+                ],
+                "relation_type": "price_change",
+                "source_event_id": "evt-021",
+                "target_event_id": "evt-001"
+              }
+            },
+            {
+              "subject": "capture:evt-045",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-045"
+              ],
+              "value": {
+                "changed_fields": [
+                  "effective_date",
+                  "policy_id"
+                ],
+                "relation_type": "policy_replacement",
+                "source_event_id": "evt-045",
+                "target_event_id": null
+              }
+            },
+            {
+              "subject": "capture:evt-049",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-049"
+              ],
+              "value": {
+                "changed_fields": [
+                  "contract_id",
+                  "effective_date"
+                ],
+                "relation_type": "contract_replacement",
+                "source_event_id": "evt-049",
+                "target_event_id": null
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "run_metadata": {
+    "run_id": "experiment-003-retrieval-fast",
+    "label": "EXPERIMENT 003 / RETRIEVAL RECONCILIATION / DEV FAST / NOT OFFICIAL SCORE",
+    "started_at": "2026-08-29T12:23:52.991968+00:00",
+    "provider": "Codex CLI",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "runtime_mode": "subscription-first local authenticated CLI; no provider token access",
+    "scenario_id": "blackhole-dev-001-state-churn",
+    "response_contract": "response-contract-v2",
+    "contract_version": "1.0-gate-a-dev",
+    "event_count": 50,
+    "checkpoints": [
+      50
+    ],
+    "query_ids": [
+      "q-subscriptions-current",
+      "q-subscriptions-history",
+      "q-attention-14d",
+      "q-recent-changes"
+    ],
+    "architecture": "fresh scoped semantic calls plus SQLite append-only raw events and deterministic rebuildable projection",
+    "ingestion": "one fresh semantic extraction call per chronological batch within each checkpoint segment",
+    "querying": "deterministic public response projection from SQLite state; optional fresh model query is diagnostic only",
+    "relation_recovery": "retrieval",
+    "relation_recovery_calls": [
+      {
+        "checkpoint": 50,
+        "batch": 1,
+        "deterministic_candidate_count": 3,
+        "deterministic_inserted_count": 3,
+        "candidate_set_count": 2,
+        "replacement_count": 2,
+        "replacement_inserted_count": 2,
+        "replacement_digest": "a153530515b9eba1543a19ab9af3d330e26d372451fb6ec7d4d0524636a63658",
+        "max_candidates": 4,
+        "version": "experiment-003-retrieval-reconciliation-v1"
+      }
+    ],
+    "calls": [
+      {
+        "returncode": 0,
+        "duration_seconds": 0.0,
+        "thread_id": null,
+        "usage": null,
+        "stderr": {
+          "line_count": 0,
+          "last_lines": []
+        },
+        "model": "gpt-5.6-luna",
+        "reasoning_effort": "max",
+        "replayed": true,
+        "replay_path": "trajectories/runtime/experiment-001-full-v1/calls/extraction-050-01.raw.txt",
+        "kind": "extraction",
+        "prompt_path": "trajectories\\runtime\\experiment-003-retrieval-fast\\calls\\extraction-050-01.prompt.txt",
+        "raw_output_path": "trajectories\\runtime\\experiment-003-retrieval-fast\\calls\\extraction-050-01.raw.txt",
+        "parse_error": null
+      },
+      {
+        "returncode": 0,
+        "duration_seconds": 0.0,
+        "thread_id": null,
+        "usage": null,
+        "stderr": {
+          "line_count": 0,
+          "last_lines": []
+        },
+        "model": "deterministic-projection",
+        "reasoning_effort": "none",
+        "deterministic": true,
+        "kind": "query",
+        "prompt_path": "trajectories\\runtime\\experiment-003-retrieval-fast\\calls\\query-050.prompt.txt",
+        "raw_output_path": "trajectories\\runtime\\experiment-003-retrieval-fast\\calls\\query-050.raw.txt",
+        "parse_error": null
+      }
+    ],
+    "projection_runs": [
+      {
+        "projection_run_id": 1,
+        "projection_version": "experiment-001-projection-v2",
+        "input_digest": "10c7413e14879879ff3293a07d68b303b6d67ed5e3b0d695d67431b21bc2afb7"
+      }
+    ],
+    "usage_totals": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "reasoning_output_tokens": 0
+    },
+    "final_state_counts": {
+      "current_facts": 45,
+      "history_observations": 80,
+      "relationships": 22
+    },
+    "finished_at": "2026-08-29T12:23:53.122640+00:00"
+  }
+}

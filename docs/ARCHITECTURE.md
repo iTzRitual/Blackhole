@@ -260,3 +260,50 @@ authentication, while Blackhole never requests, reads, copies, exports, or
 persists provider credentials. No endpoint performs a consequential external
 action. The local demo database is ignored by Git and can be rebuilt with
 `python scripts/seed_demo.py --reset`.
+
+## 13. Experiment 003 relation reconciliation
+
+The current advanced experiment adds a narrow reconciliation layer after each
+semantic extraction batch:
+
+```text
+structured observations + model relations
+                    |
+                    v
+       deterministic fallback recovery
+                    |
+                    v
+ bounded raw candidates by primary identifier
+                    |
+                    v
+      versioned derived relationship replacement
+                    |
+                    v
+             rebuildable projection
+```
+
+`app/relation_recovery.py` first recovers only missing explicit
+supersession/correction edges and duplicate-marked identical payload edges.
+The retrieval treatment then considers only receipt-like relation sources with
+one existing relation, extracts the first stable identifier, and returns no
+more than four earlier raw candidates. Meaningful changes prefer the newest
+non-duplicate candidate; duplicate and similarity edges prefer the newest
+candidate. Relation type, changed fields, and duplicate-group details are
+derived conservatively from the source wording and candidate content. A
+provider resolver was not needed for the kept treatment.
+
+`StateStore.replace_relationships_for_sources()` changes derived relationship
+rows only; immutable raw events and structured observations remain intact. The
+relationship replacement and projection versions are recorded in the runtime
+trajectory, and each checkpoint has a retrieval record containing the bounded
+candidate IDs, raw text, metadata, selected target, and replacement digest.
+This preserves rebuildability because the runner can replay the same semantic
+outputs and deterministic recovery rules without evaluator data.
+
+The final public Experiment 003 replay improved from the kept Experiment 002
+result of `LQA-0M=0.7492295899` / `DSCR=72` to
+`LQA-0M=0.8157180034` / `DSCR=45`, while all other reported category metrics
+remained unchanged, source integrity and safety passed, and provider usage was
+zero. The result is development evidence only; Gate A, `response-contract-v2`,
+the official baseline, calibration evidence, and holdout boundaries remain
+unchanged.

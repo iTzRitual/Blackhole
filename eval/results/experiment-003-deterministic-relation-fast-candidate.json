@@ -1,0 +1,380 @@
+{
+  "response_contract": "response-contract-v2",
+  "scenario_id": "blackhole-dev-001-state-churn",
+  "checkpoints": {
+    "50": {
+      "checkpoint": 50,
+      "queries": {
+        "q-duplicates-changes": {
+          "assertions": [
+            {
+              "subject": "scenario",
+              "predicate": "duplicate_event_count",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-016",
+                "evt-046"
+              ],
+              "value": 2
+            },
+            {
+              "subject": "scenario",
+              "predicate": "duplicate_group_count",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-016",
+                "evt-046"
+              ],
+              "value": 2
+            },
+            {
+              "subject": "scenario",
+              "predicate": "meaningful_change_event_count",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-026"
+              ],
+              "value": 1
+            },
+            {
+              "subject": "capture:evt-016",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-006",
+                "evt-016"
+              ],
+              "value": {
+                "duplicate_group": "corner-mart-r1001",
+                "relation_type": "exact_duplicate",
+                "source_event_id": "evt-016",
+                "target_event_id": "evt-006"
+              }
+            },
+            {
+              "subject": "capture:evt-046",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-036",
+                "evt-046"
+              ],
+              "value": {
+                "duplicate_group": "corner-mart-r1002",
+                "relation_type": "exact_duplicate",
+                "source_event_id": "evt-046",
+                "target_event_id": "evt-036"
+              }
+            },
+            {
+              "subject": "capture:evt-026",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-006",
+                "evt-026"
+              ],
+              "value": {
+                "changed_fields": [
+                  "amount"
+                ],
+                "note": "explicit correction from 11.20 eur to 11.40 eur.",
+                "relation_type": "meaningful_change",
+                "source_event_id": "evt-026",
+                "target_event_id": "evt-006"
+              }
+            }
+          ]
+        },
+        "q-tasks-state": {
+          "assertions": [
+            {
+              "subject": "parcel_pickup_1",
+              "predicate": "deadline",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-004"
+              ],
+              "value": "2026-01-12"
+            },
+            {
+              "subject": "parcel_pickup_1",
+              "predicate": "owner",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-014"
+              ],
+              "value": "sam"
+            },
+            {
+              "subject": "parcel_pickup_1",
+              "predicate": "status",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-034"
+              ],
+              "value": "cancelled"
+            },
+            {
+              "subject": "parcel_pickup_2",
+              "predicate": "deadline",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-044"
+              ],
+              "value": "2026-02-25"
+            },
+            {
+              "subject": "parcel_pickup_2",
+              "predicate": "owner",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-044"
+              ],
+              "value": "alex"
+            },
+            {
+              "subject": "parcel_pickup_2",
+              "predicate": "status",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-044"
+              ],
+              "value": "open"
+            },
+            {
+              "subject": "capture:evt-014",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-004",
+                "evt-014"
+              ],
+              "value": {
+                "changed_fields": [
+                  "owner"
+                ],
+                "relation_type": "task_reassignment",
+                "source_event_id": "evt-014",
+                "target_event_id": "evt-004"
+              }
+            },
+            {
+              "subject": "capture:evt-034",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-024",
+                "evt-034"
+              ],
+              "value": {
+                "changed_fields": [
+                  "lifecycle"
+                ],
+                "relation_type": "task_cancellation",
+                "source_event_id": "evt-034",
+                "target_event_id": "evt-024"
+              }
+            }
+          ]
+        },
+        "q-recent-changes": {
+          "assertions": [
+            {
+              "subject": "capture:evt-018",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-008",
+                "evt-018"
+              ],
+              "value": {
+                "changed_fields": [
+                  "appointment_date"
+                ],
+                "relation_type": "contradiction",
+                "source_event_id": "evt-018",
+                "target_event_id": "evt-008"
+              }
+            },
+            {
+              "subject": "capture:evt-028",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-018",
+                "evt-028"
+              ],
+              "value": {
+                "changed_fields": [
+                  "appointment_date"
+                ],
+                "relation_type": "contradiction",
+                "source_event_id": "evt-028",
+                "target_event_id": "evt-018"
+              }
+            },
+            {
+              "subject": "capture:evt-038",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-028",
+                "evt-038"
+              ],
+              "value": {
+                "changed_fields": [
+                  "appointment_date"
+                ],
+                "relation_type": "correction",
+                "source_event_id": "evt-038",
+                "target_event_id": "evt-028"
+              }
+            },
+            {
+              "subject": "capture:evt-021",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-001",
+                "evt-021"
+              ],
+              "value": {
+                "changed_fields": [
+                  "amount"
+                ],
+                "relation_type": "price_change",
+                "source_event_id": "evt-021",
+                "target_event_id": "evt-001"
+              }
+            },
+            {
+              "subject": "capture:evt-045",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-045"
+              ],
+              "value": {
+                "changed_fields": [
+                  "effective_date",
+                  "policy_id"
+                ],
+                "relation_type": "policy_replacement",
+                "source_event_id": "evt-045",
+                "target_event_id": null
+              }
+            },
+            {
+              "subject": "capture:evt-049",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "source_refs": [
+                "evt-049"
+              ],
+              "value": {
+                "changed_fields": [
+                  "contract_id",
+                  "effective_date"
+                ],
+                "relation_type": "contract_replacement",
+                "source_event_id": "evt-049",
+                "target_event_id": null
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "run_metadata": {
+    "run_id": "experiment-003-deterministic-relation-fast",
+    "label": "EXPERIMENT 003 / DETERMINISTIC RECOVERY / RELATION FAST / NOT OFFICIAL SCORE",
+    "started_at": "2026-08-29T12:25:27.089545+00:00",
+    "provider": "Codex CLI",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "runtime_mode": "subscription-first local authenticated CLI; no provider token access",
+    "scenario_id": "blackhole-dev-001-state-churn",
+    "response_contract": "response-contract-v2",
+    "contract_version": "1.0-gate-a-dev",
+    "event_count": 50,
+    "checkpoints": [
+      50
+    ],
+    "query_ids": [
+      "q-duplicates-changes",
+      "q-tasks-state",
+      "q-recent-changes"
+    ],
+    "architecture": "fresh scoped semantic calls plus SQLite append-only raw events and deterministic rebuildable projection",
+    "ingestion": "one fresh semantic extraction call per chronological batch within each checkpoint segment",
+    "querying": "deterministic public response projection from SQLite state; optional fresh model query is diagnostic only",
+    "relation_recovery": "deterministic",
+    "relation_recovery_calls": [
+      {
+        "checkpoint": 50,
+        "batch": 1,
+        "candidate_count": 3,
+        "inserted_count": 3,
+        "candidate_digest": "4fca9e367062794d25ff6863e2f951be68ac6f87a8de7022abbb53150a9ebfcf",
+        "version": "experiment-003-deterministic-recovery-v1"
+      }
+    ],
+    "calls": [
+      {
+        "returncode": 0,
+        "duration_seconds": 0.0,
+        "thread_id": null,
+        "usage": null,
+        "stderr": {
+          "line_count": 0,
+          "last_lines": []
+        },
+        "model": "gpt-5.6-luna",
+        "reasoning_effort": "max",
+        "replayed": true,
+        "replay_path": "trajectories/runtime/experiment-001-full-v1/calls/extraction-050-01.raw.txt",
+        "kind": "extraction",
+        "prompt_path": "trajectories\\runtime\\experiment-003-deterministic-relation-fast\\calls\\extraction-050-01.prompt.txt",
+        "raw_output_path": "trajectories\\runtime\\experiment-003-deterministic-relation-fast\\calls\\extraction-050-01.raw.txt",
+        "parse_error": null
+      },
+      {
+        "returncode": 0,
+        "duration_seconds": 0.0,
+        "thread_id": null,
+        "usage": null,
+        "stderr": {
+          "line_count": 0,
+          "last_lines": []
+        },
+        "model": "deterministic-projection",
+        "reasoning_effort": "none",
+        "deterministic": true,
+        "kind": "query",
+        "prompt_path": "trajectories\\runtime\\experiment-003-deterministic-relation-fast\\calls\\query-050.prompt.txt",
+        "raw_output_path": "trajectories\\runtime\\experiment-003-deterministic-relation-fast\\calls\\query-050.raw.txt",
+        "parse_error": null
+      }
+    ],
+    "projection_runs": [
+      {
+        "projection_run_id": 1,
+        "projection_version": "experiment-001-projection-v2",
+        "input_digest": "ccf0b18c06f088f8d0b2adda3b7fcf58f16484d45e866cf857c970b751e68b07"
+      }
+    ],
+    "usage_totals": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "reasoning_output_tokens": 0
+    },
+    "final_state_counts": {
+      "current_facts": 45,
+      "history_observations": 80,
+      "relationships": 22
+    },
+    "finished_at": "2026-08-29T12:25:27.224432+00:00"
+  }
+}

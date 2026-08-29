@@ -72,20 +72,20 @@ Blackhole never reads or persists provider credentials.”
 
 ## 3:15–4:00 — What we measured
 
-**On screen:** Open `eval/results/final-comparison-v1.json` and highlight the
-baseline/advanced comparison and checkpoint table.
+**On screen:** Open `eval/results/experiment-003-retrieval-full-v3.json` and
+highlight the advanced result and checkpoint table.
 
 **Voiceover:**
 
 “The fair public development benchmark is frozen at 200 events with checkpoints
 at 50, 100, 150, and 200. The official stateless baseline is
 `LQA-0M 0.3014914553`, with DSCR 277. The latest kept advanced replay is
-`0.7492295899`, with DSCR 72. That is an absolute LQA-0M delta of
-`0.4477381346`; it is development evidence, not a holdout or production claim.
-The advanced checkpoint scores are 0.7963, 0.7523, 0.7064, and 0.7419. We do
-not claim monotonic degradation. The measured interpretation is narrower:
-long-context access alone is not the same thing as a structured, rebuildable
-memory system.”
+Experiment 003 at `0.8157180034`, with DSCR 45. That is an absolute LQA-0M
+delta of `0.5142265481`; it is development evidence, not a holdout or
+production claim. The advanced checkpoint scores are 0.8519, 0.8190, 0.7822,
+and 0.8099. We do not claim monotonic degradation. The measured interpretation
+is narrower: long-context access alone is not the same thing as a structured,
+rebuildable memory system.”
 
 ## 4:00–4:30 — Honest close
 
@@ -96,8 +96,9 @@ folders.
 
 “The product is intentionally a scoped hackathon slice, not production
 infrastructure. The public benchmark, response contract, baseline, and
-calibration evidence remain frozen. Relation-detail extraction was audited and
-deferred because the missing edges were not recoverable from recorded state
-alone. The repository includes reproducible demo commands, deterministic tests,
-runtime evidence, and a judge-facing reproduction protocol. Blackhole makes
-capture easy first, then makes state trustworthy enough to review.”
+calibration evidence remain frozen. Experiment 003 shows that bounded raw
+capture retrieval can repair a measurable part of relation reconciliation while
+leaving unsupported detail unresolved. The repository includes reproducible
+demo commands, deterministic tests, runtime evidence, and a judge-facing
+reproduction protocol. Blackhole makes capture easy first, then makes state
+trustworthy enough to review.”

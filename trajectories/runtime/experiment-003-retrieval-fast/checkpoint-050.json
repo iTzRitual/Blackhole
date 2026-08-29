@@ -1,0 +1,244 @@
+{
+  "response_contract": "response-contract-v2",
+  "scenario_id": "blackhole-dev-001-state-churn",
+  "checkpoint": 50,
+  "queries": {
+    "q-subscriptions-current": {
+      "assertions": [
+        {
+          "subject": "streamly",
+          "predicate": "billing_period",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": "month"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "cancellation_intent",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-041"
+          ],
+          "value": false
+        },
+        {
+          "subject": "streamly",
+          "predicate": "cancellation_requested",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-031"
+          ],
+          "value": false
+        },
+        {
+          "subject": "streamly",
+          "predicate": "current_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": {
+            "amount": "12",
+            "billing_period": "month",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "streamly",
+          "predicate": "last_charge",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-011"
+          ],
+          "unknown_reason": "not_stated"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": "active"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "currency",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": "eur"
+        }
+      ]
+    },
+    "q-subscriptions-history": {
+      "assertions": [
+        {
+          "subject": "streamly",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": {
+            "amount": "12",
+            "billing_period": "month",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "streamly",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-021"
+          ],
+          "value": {
+            "amount": "14",
+            "billing_period": "month",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    "q-attention-14d": {
+      "assertions": [
+        {
+          "subject": "bank_standing_order",
+          "predicate": "needs_attention",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-040",
+            "evt-050"
+          ],
+          "value": {
+            "executed": false,
+            "reason": "approval required"
+          }
+        },
+        {
+          "subject": "transfer_sam",
+          "predicate": "needs_attention",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-030",
+            "evt-050"
+          ],
+          "value": {
+            "executed": false,
+            "reason": "approval required"
+          }
+        }
+      ]
+    },
+    "q-recent-changes": {
+      "assertions": [
+        {
+          "subject": "capture:evt-018",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-008",
+            "evt-018"
+          ],
+          "value": {
+            "changed_fields": [
+              "appointment_date"
+            ],
+            "relation_type": "contradiction",
+            "source_event_id": "evt-018",
+            "target_event_id": "evt-008"
+          }
+        },
+        {
+          "subject": "capture:evt-028",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-018",
+            "evt-028"
+          ],
+          "value": {
+            "changed_fields": [
+              "appointment_date"
+            ],
+            "relation_type": "contradiction",
+            "source_event_id": "evt-028",
+            "target_event_id": "evt-018"
+          }
+        },
+        {
+          "subject": "capture:evt-038",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-028",
+            "evt-038"
+          ],
+          "value": {
+            "changed_fields": [
+              "appointment_date"
+            ],
+            "relation_type": "correction",
+            "source_event_id": "evt-038",
+            "target_event_id": "evt-028"
+          }
+        },
+        {
+          "subject": "capture:evt-021",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001",
+            "evt-021"
+          ],
+          "value": {
+            "changed_fields": [
+              "amount"
+            ],
+            "relation_type": "price_change",
+            "source_event_id": "evt-021",
+            "target_event_id": "evt-001"
+          }
+        },
+        {
+          "subject": "capture:evt-045",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-045"
+          ],
+          "value": {
+            "changed_fields": [
+              "effective_date",
+              "policy_id"
+            ],
+            "relation_type": "policy_replacement",
+            "source_event_id": "evt-045",
+            "target_event_id": null
+          }
+        },
+        {
+          "subject": "capture:evt-049",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-049"
+          ],
+          "value": {
+            "changed_fields": [
+              "contract_id",
+              "effective_date"
+            ],
+            "relation_type": "contract_replacement",
+            "source_event_id": "evt-049",
+            "target_event_id": null
+          }
+        }
+      ]
+    }
+  }
+}
