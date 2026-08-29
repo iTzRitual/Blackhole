@@ -1,0 +1,25 @@
+{
+  "name": "Blackhole — capture now, organize later",
+  "short_name": "Blackhole",
+  "description": "A quiet personal inbox for getting things out of your head.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#0e121a",
+  "background_color": "#0e121a",
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
