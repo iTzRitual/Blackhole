@@ -68,21 +68,29 @@ and hardening decisions open.
 
 The required no-provider commands were run after the documentation merge:
 
-- `python -m unittest discover -s app/tests`
-- `python -m compileall app baseline eval scripts`
-- `python benchmark/dev/generate_benchmark.py --check`
-- `python eval/contract_smoke.py`
-- `python scripts/qualification_check.py`
-- `git diff --check`
+- `python -m unittest discover -s app/tests`: 75 tests passed.
+- `python -m compileall app baseline eval scripts`: passed.
+- `python benchmark/dev/generate_benchmark.py --check`: 200 events and four
+  checkpoints checked.
+- `python eval/contract_smoke.py`: non-scored contract smoke passed.
+- `python scripts/qualification_check.py`: all hard checks passed; 26 coding
+  and 42 runtime trajectories were inventoried, with four understood warnings
+  for the preserved audit path and stale historical result artifacts.
+- `git diff --check`: passed.
+- `git diff --name-only implementation-freeze-v1..HEAD -- app baseline
+  benchmark eval prompts scripts app/tests`: no output; no runtime or benchmark
+  implementation change exists after the freeze.
 
-The final counts, qualification warnings, protected-path audit, runtime diff,
-merge SHAs, final master SHA, and push result are recorded in the final handoff.
+No provider call, baseline run, scorer run, benchmark replay, or evaluation
+artifact generation was performed.
 
 ## Result
 
-Pending final validation and normal push at the time this trajectory scaffold
-was created. The final result must be filled from observed command and Git
-output rather than inferred.
+Both approved branches were merged cleanly in the required order. The current
+master contains only the approved post-freeze documentation and audit evidence
+changes relative to `implementation-freeze-v1`; the runtime and benchmark
+boundaries are unchanged. The normal push result is recorded after it is
+observed.
 
 ## Regressions or unresolved issues
 
@@ -103,5 +111,8 @@ decision.
 - Reproduction content commit: `abb8f803a86aad23ac5579109f8700352ebeeb7b`.
 - Reproduction branch tip: `af0e1711e443a50b7ac790b63d2dbea6f418b143`.
 - Frozen-runtime audit tip: `59d19147c21f57869972298a300c380128b0a8df`.
-- Merge commits, final validation, and push status are recorded after the task
-  completes.
+- Reproduction merge commit: `75bd85d1ae048a8bc1d4bf3b0afc89b1722fc1ac`.
+- Audit merge commit: `3419ba3625b1469091dbdf3c78fbfbbcddcb2d93`.
+- Evidence/index/checklist commit: `6bdb4ef13b77f868ba417591c6857fa9ad913d98`.
+- Final documentation closeout commit and push status are recorded in the
+  final handoff.
