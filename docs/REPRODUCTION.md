@@ -495,3 +495,79 @@ The host tests cover first-run initialization, the home override, missing and
 ready provider states, safe serialization, raw-only capture, fake processing,
 idempotency, retry, configuration persistence, secret rejection, and database
 state across a host restart. They do not require a real Codex semantic call.
+
+## 19. Blackhole App + Host HTTP integration
+
+This product-runtime milestone is separate from benchmark scoring. It uses the
+same HostRuntime/StateStore boundary and the generic runtime contract; it does
+not read expected output, alter `response-contract-v2`, or rerun the official
+baseline.
+
+Initialize and run the local PWA host:
+
+```text
+python -m app.host init
+python -m app.web_app
+```
+
+Open `http://127.0.0.1:8080`. The supported flow is:
+
+```text
+POST /api/capture  -> immediate Saved. response and pending processing row
+POST /api/query    -> ensure_state_fresh -> deferred Codex -> rebuild -> bounded answer
+GET  /api/state    -> Host-owned Memory and Attention snapshot
+```
+
+The transport also exposes `GET /api/health`, `GET /api/host/status`,
+`GET /api/processing`, `POST /api/process`, and `POST /api/retry`. Ask should
+use the POST body `{"question":"..."}`. A provider failure while new captures
+are pending returns `code=state_not_fresh` and `state_available=true`; it does
+not claim that the state is fresh. With no pending work, existing structured
+state remains queryable without a provider.
+
+The normal bind is loopback. A deliberately limited trusted-LAN demonstration
+requires an explicit opt-in:
+
+```text
+python -m app.web_app --host 0.0.0.0 --port 8080 --trusted-lan-demo
+```
+
+This mode has no device authentication, pairing, revocable tokens, TLS, mDNS,
+cloud relay, tunnel support, or public-Internet safety. Use it only on a
+trusted private hackathon network. The PWA service worker caches shell assets
+but bypasses `/api/`, and attachment selection remains metadata/preview only;
+there is no arbitrary binary persistence, OCR, or offline capture sync.
+
+Run the deterministic integration tests:
+
+```text
+python -m unittest app.tests.test_web_host app.tests.test_pwa_static -v
+python -m unittest discover -s app/tests -v
+```
+
+`app.tests.test_web_host` uses temporary Blackhole Homes, real HostRuntime
+instances, and fake providers. It verifies immediate capture, pending state,
+Ask-time processing, idempotent Ask, safe missing-provider behavior, retry,
+secret/error redaction, traversal rejection, bind policy, and PWA asset routes.
+`app.tests.test_pwa_static` verifies manifest assets, client route usage, and
+service-worker API exclusion. The reusable neutral smoke harness is:
+
+```text
+python -m scripts.host_smoke --output trajectories/runtime/019-host-pwa-real-neutral/trace.json
+```
+
+It starts the real HTTP transport on a temporary Home, captures only the
+neutral synthetic Northstar Cloud storyline, asks one subscription-history
+question, and records safe HTTP payloads/timing. It uses the locally
+authenticated Codex CLI through HostRuntime when available; no token, raw
+stderr, chain-of-thought, benchmark entity, expected output, or evaluator
+artifact is recorded. Provider usage is reported as not exposed by the safe
+HTTP transport unless a future approved interface adds a non-secret usage
+summary. If the CLI is unavailable, the run is a safe provider-unavailable
+diagnostic rather than a scored result.
+
+The authentic runtime record, when the real smoke is executed, belongs under
+`trajectories/runtime/019-host-pwa-real-neutral/`. The coding decisions and
+validation record belong under
+`trajectories/coding/019-host-pwa-integration/`. This work is not Experiment
+006 and must not be interpreted as a benchmark optimization.

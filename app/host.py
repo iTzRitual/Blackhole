@@ -19,10 +19,14 @@ from app.codex_discovery import (
 )
 from app.ingestion_engine import CodexCLIProvider, IngestionEngine, SemanticProvider
 from app.runtime_config import RuntimeConfig
+from app.runtime_contract import runtime_contract
 from app.state_store import StateStore
 
 
 ROOT = Path(__file__).resolve().parents[1]
+# Kept as a named public-contract loader for benchmark tooling and callers that
+# explicitly request the frozen contract.  HostRuntime itself uses the
+# benchmark-independent runtime contract by default.
 DEFAULT_PUBLIC_CONTRACT = ROOT / "benchmark" / "dev" / "response-contract-v2.json"
 HOST_VERSION = "blackhole-host-v1"
 
@@ -138,7 +142,7 @@ class HostRuntime:
     ) -> None:
         config.validate()
         self.config = config
-        self.contract = copy.deepcopy(contract if contract is not None else load_public_contract())
+        self.contract = copy.deepcopy(contract if contract is not None else runtime_contract())
         self._provider = provider
         self._discovery_fn = discovery_fn or discover_codex
         self._provider_status_cache: ProviderStatus | None = None

@@ -601,11 +601,85 @@ executed by the host. Codex CLI is an internal semantic provider, not the
 host's durable memory; all authoritative state remains in Blackhole's
 rebuildable store.
 
-### Future transport, intentionally not implemented
+### Pre-integration transport boundary
 
-After the separate PWA worktree is ready, a transport may map domain routes to
-the host boundary: read status, capture, process/ensure freshness, read
-processing status, read state/attention, and query. This milestone does not
-implement HTTP, LAN exposure, pairing, device tokens, mDNS, HTTPS, remote
-access, tunnels, or a cloud relay. It also does not modify the PWA or its
-static server.
+The preceding Host Foundation milestone intentionally stopped before HTTP and
+PWA integration. The active same-origin transport is documented in section 18.
+Pairing, device tokens, mDNS, HTTPS, remote access, tunnels, cloud relay, and
+public networking remain outside scope.
+
+## 18. Blackhole App to Host HTTP integration
+
+The integrated local product keeps the ownership boundary explicit:
+
+```text
+BLACKHOLE APP (PWA)
+        |
+        | same-origin HTTP, domain routes only
+        v
+BLACKHOLE HOST (local HostRuntime)
+        |
+        +-- Blackhole Home / StateStore
+        +-- capture -> raw event + pending processing row
+        +-- Ask -> ensure_state_fresh()
+        +-- deterministic QueryService over the Host snapshot
+        `-- deferred semantic processing -> local Codex CLI
+```
+
+`app/web_app.py` is a transport adapter. It validates bounded JSON requests,
+serves only the PWA shell, and maps safe Host responses. It does not open the
+demo database, construct a Codex command, perform extraction, reconcile state,
+or read benchmark expected output. Each request obtains a HostRuntime over the
+configured Blackhole Home; a server-level lock serializes domain operations so
+the request-scoped SQLite connections do not race.
+
+The integrated domain routes are:
+
+| Route | Ownership and behavior |
+| --- | --- |
+| `GET /api/health` | Cheap transport/Host liveness check; no provider discovery or semantic work. |
+| `GET /api/host/status` | Safe Host/provider readiness and processing counts. |
+| `GET /api/processing` | Safe processing lifecycle status. |
+| `GET /api/state` | Memory and Attention derived from the Host snapshot; it does not silently process pending work. |
+| `POST /api/capture` | Validates text and supported attachment metadata, persists raw evidence immediately, and returns `Saved.` plus `pending`. |
+| `POST /api/process` | Explicitly processes pending captures and returns a bounded summary. |
+| `POST /api/retry` | Explicitly retries failed processing. |
+| `POST /api/query` | Validates a bounded question, calls `ensure_state_fresh()`, then routes to a deterministic QueryService. |
+| `GET /api/query?q=...` | Compatibility read route; the PWA uses the POST route. |
+
+The QueryService is database-free and receives only a Host snapshot. It reuses
+the deterministic `ResponseProjector` boundary and bounded question families
+from the earlier demo without reopening a second database. Runtime entities
+are not restricted to benchmark subject IDs: undeclared entities receive only a
+presentation kind when their observed predicates support one. This runtime
+contract is separate from the frozen `response-contract-v2` artifact.
+
+Capture remains `CAPTURE NOW. UNDERSTAND LATER.` The PWA posts to
+`/api/capture`, keeps its collapse/milestone interaction, and refreshes the
+Host state without waiting for Codex. Ask posts to `/api/query` and shows
+product-language loading while Host freshness work runs. A failed freshness
+attempt returns `state_not_fresh` with `state_available: true`; the client does
+not present stale state as fresh or expose model reasoning. Existing structured
+state remains queryable when there is no pending capture, even if the provider
+is unavailable.
+
+The normal server binds to `127.0.0.1` and is started after first-run setup:
+
+```text
+python -m app.host init
+python -m app.web_app
+```
+
+Non-loopback binding is refused unless the operator explicitly passes
+`--trusted-lan-demo`, for example:
+
+```text
+python -m app.web_app --host 0.0.0.0 --port 8080 --trusted-lan-demo
+```
+
+This is a trusted-private-network hackathon demo only. It has no device
+authentication, pairing, revocable tokens, TLS, mDNS, cloud relay, tunnel
+support, or public-Internet safety. The PWA service worker caches shell assets
+only and deliberately bypasses `/api/`; it makes no offline capture-sync
+claim. Attachment selection remains metadata/preview interaction and does not
+persist arbitrary bytes or perform OCR.

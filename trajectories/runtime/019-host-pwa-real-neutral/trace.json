@@ -1,0 +1,429 @@
+{
+  "kind": "neutral-real-host-pwa-equivalent-smoke",
+  "home": "C:\\Users\\natan\\AppData\\Local\\Temp\\blackhole-neutral-smoke-tb6o9nct",
+  "base_url": "http://127.0.0.1:3025",
+  "provider_usage": "not exposed by the safe HTTP transport",
+  "health": {
+    "status": 200,
+    "duration_seconds": 0.032,
+    "payload": {
+      "ok": true,
+      "host": true,
+      "version": "blackhole-host-v1"
+    }
+  },
+  "host_status_before": {
+    "status": 200,
+    "duration_seconds": 0.152,
+    "payload": {
+      "ok": true,
+      "status": {
+        "host": {
+          "ready": true,
+          "version": "blackhole-host-v1",
+          "database": "C:\\Users\\natan\\AppData\\Local\\Temp\\blackhole-neutral-smoke-tb6o9nct\\blackhole.db"
+        },
+        "provider": {
+          "type": "codex-cli",
+          "status": "READY",
+          "installed": true,
+          "authenticated": true,
+          "version": "codex-cli 0.150.0-alpha.12.2",
+          "auth_check_available": true,
+          "configured_runtime": true,
+          "ready": true
+        },
+        "processing": {
+          "pending": 0,
+          "processing": 0,
+          "processed": 0,
+          "failed": 0
+        }
+      }
+    }
+  },
+  "captures": [
+    {
+      "request": {
+        "path": "/api/capture",
+        "method": "POST",
+        "body": {
+          "text": "Northstar Cloud costs 18 EUR per month."
+        }
+      },
+      "response": {
+        "status": 200,
+        "duration_seconds": 0.014,
+        "payload": {
+          "ok": true,
+          "saved": true,
+          "message": "Saved.",
+          "capture": {
+            "event_id": "capture-c64616444d2b4ff2bf57a694f36396ba",
+            "sequence": 1
+          },
+          "processing": {
+            "status": "pending"
+          }
+        }
+      }
+    },
+    {
+      "request": {
+        "path": "/api/capture",
+        "method": "POST",
+        "body": {
+          "text": "Northstar Cloud will cost 22 EUR per month from 2027-03-01."
+        }
+      },
+      "response": {
+        "status": 200,
+        "duration_seconds": 0.014,
+        "payload": {
+          "ok": true,
+          "saved": true,
+          "message": "Saved.",
+          "capture": {
+            "event_id": "capture-a7012ee3d4ba4834a1b90c21d502091c",
+            "sequence": 2
+          },
+          "processing": {
+            "status": "pending"
+          }
+        }
+      }
+    }
+  ],
+  "processing_before_ask": {
+    "status": 200,
+    "duration_seconds": 0.008,
+    "payload": {
+      "ok": true,
+      "processing": {
+        "counts": {
+          "failed": 0,
+          "pending": 2,
+          "processed": 0,
+          "processing": 0
+        },
+        "events": [
+          {
+            "event_id": "capture-c64616444d2b4ff2bf57a694f36396ba",
+            "sequence": 1,
+            "status": "pending",
+            "processing_version": "blackhole-processing-state-v1",
+            "attempt_count": 0,
+            "last_attempted_at": null,
+            "last_successful_at": null,
+            "last_error": null,
+            "extractor_version": null,
+            "completion_version": null,
+            "relation_recovery_version": null,
+            "duplicate_projection_version": null,
+            "updated_at": "2026-08-29T17:16:03.820775+00:00"
+          },
+          {
+            "event_id": "capture-a7012ee3d4ba4834a1b90c21d502091c",
+            "sequence": 2,
+            "status": "pending",
+            "processing_version": "blackhole-processing-state-v1",
+            "attempt_count": 0,
+            "last_attempted_at": null,
+            "last_successful_at": null,
+            "last_error": null,
+            "extractor_version": null,
+            "completion_version": null,
+            "relation_recovery_version": null,
+            "duplicate_projection_version": null,
+            "updated_at": "2026-08-29T17:16:03.833884+00:00"
+          }
+        ]
+      }
+    }
+  },
+  "ask": {
+    "request": {
+      "path": "/api/query",
+      "method": "POST",
+      "body": {
+        "question": "What subscription price changes do I know?"
+      }
+    },
+    "response": {
+      "status": 200,
+      "duration_seconds": 29.531,
+      "payload": {
+        "ok": true,
+        "answer": {
+          "question": "What subscription price changes do I know?",
+          "mode": "subscription_history",
+          "sections": [
+            {
+              "title": "Subscription history",
+              "assertions": [
+                {
+                  "subject": "capture_capture_c64616444d2b4ff2bf57a694f36396ba",
+                  "predicate": "historical_price",
+                  "knowledge_status": "known",
+                  "source_refs": [
+                    "capture-c64616444d2b4ff2bf57a694f36396ba"
+                  ],
+                  "value": {
+                    "amount": "18",
+                    "billing_period": "month",
+                    "currency": "eur"
+                  }
+                },
+                {
+                  "subject": "capture_capture_a7012ee3d4ba4834a1b90c21d502091c",
+                  "predicate": "historical_price",
+                  "knowledge_status": "known",
+                  "source_refs": [
+                    "capture-a7012ee3d4ba4834a1b90c21d502091c"
+                  ],
+                  "value": {
+                    "amount": "22",
+                    "billing_period": "month",
+                    "currency": "eur"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "processing": {
+          "requested": 2,
+          "processed": 2,
+          "failed": 0,
+          "skipped": 0,
+          "observations_added": 3,
+          "relationships_added": 1,
+          "completions_added": 0,
+          "semantic_effects": 4,
+          "state_rebuilt": true,
+          "batches": 1,
+          "errors": [],
+          "processed_event_ids": [
+            "capture-c64616444d2b4ff2bf57a694f36396ba",
+            "capture-a7012ee3d4ba4834a1b90c21d502091c"
+          ],
+          "failed_event_ids": [],
+          "pending_count": 0,
+          "failed_count": 0,
+          "state_fresh": true,
+          "processing_count": 0,
+          "fresh": true
+        }
+      }
+    }
+  },
+  "state_after_ask": {
+    "status": 200,
+    "duration_seconds": 0.009,
+    "payload": {
+      "ok": true,
+      "state": {
+        "projection_version": "experiment-005-duplicate-evidence-projection-v1",
+        "counts": {
+          "captures": 2,
+          "current_facts": 3,
+          "relationships": 1
+        },
+        "attention": [],
+        "memory": {
+          "subscriptions": [
+            {
+              "subject": "capture_capture_a7012ee3d4ba4834a1b90c21d502091c",
+              "predicate": "current_price",
+              "knowledge_status": "known",
+              "source_refs": [
+                "capture-a7012ee3d4ba4834a1b90c21d502091c"
+              ],
+              "value": {
+                "amount": "22",
+                "billing_period": "month",
+                "currency": "eur"
+              }
+            },
+            {
+              "subject": "capture_capture_a7012ee3d4ba4834a1b90c21d502091c",
+              "predicate": "price_effective",
+              "knowledge_status": "known",
+              "source_refs": [
+                "capture-a7012ee3d4ba4834a1b90c21d502091c"
+              ],
+              "value": "2027-03-01"
+            },
+            {
+              "subject": "capture_capture_c64616444d2b4ff2bf57a694f36396ba",
+              "predicate": "current_price",
+              "knowledge_status": "known",
+              "source_refs": [
+                "capture-c64616444d2b4ff2bf57a694f36396ba"
+              ],
+              "value": {
+                "amount": "18",
+                "billing_period": "month",
+                "currency": "eur"
+              }
+            },
+            {
+              "subject": "capture_capture_a7012ee3d4ba4834a1b90c21d502091c",
+              "predicate": "currency",
+              "knowledge_status": "known",
+              "source_refs": [
+                "capture-a7012ee3d4ba4834a1b90c21d502091c"
+              ],
+              "value": "eur"
+            },
+            {
+              "subject": "capture_capture_a7012ee3d4ba4834a1b90c21d502091c",
+              "predicate": "billing_period",
+              "knowledge_status": "known",
+              "source_refs": [
+                "capture-a7012ee3d4ba4834a1b90c21d502091c"
+              ],
+              "value": "month"
+            },
+            {
+              "subject": "capture_capture_c64616444d2b4ff2bf57a694f36396ba",
+              "predicate": "currency",
+              "knowledge_status": "known",
+              "source_refs": [
+                "capture-c64616444d2b4ff2bf57a694f36396ba"
+              ],
+              "value": "eur"
+            },
+            {
+              "subject": "capture_capture_c64616444d2b4ff2bf57a694f36396ba",
+              "predicate": "billing_period",
+              "knowledge_status": "known",
+              "source_refs": [
+                "capture-c64616444d2b4ff2bf57a694f36396ba"
+              ],
+              "value": "month"
+            }
+          ],
+          "subscription_history": [
+            {
+              "subject": "capture_capture_c64616444d2b4ff2bf57a694f36396ba",
+              "predicate": "historical_price",
+              "knowledge_status": "known",
+              "source_refs": [
+                "capture-c64616444d2b4ff2bf57a694f36396ba"
+              ],
+              "value": {
+                "amount": "18",
+                "billing_period": "month",
+                "currency": "eur"
+              }
+            },
+            {
+              "subject": "capture_capture_a7012ee3d4ba4834a1b90c21d502091c",
+              "predicate": "historical_price",
+              "knowledge_status": "known",
+              "source_refs": [
+                "capture-a7012ee3d4ba4834a1b90c21d502091c"
+              ],
+              "value": {
+                "amount": "22",
+                "billing_period": "month",
+                "currency": "eur"
+              }
+            }
+          ],
+          "tasks": [],
+          "services": [],
+          "merchants": [],
+          "unknown": [],
+          "recent_changes": [],
+          "duplicates": [
+            {
+              "subject": "aggregate",
+              "predicate": "duplicate_event_count",
+              "knowledge_status": "known",
+              "source_refs": [],
+              "value": 0
+            },
+            {
+              "subject": "aggregate",
+              "predicate": "duplicate_group_count",
+              "knowledge_status": "known",
+              "source_refs": [],
+              "value": 0
+            },
+            {
+              "subject": "aggregate",
+              "predicate": "meaningful_change_event_count",
+              "knowledge_status": "known",
+              "source_refs": [],
+              "value": 0
+            }
+          ]
+        },
+        "approval": [],
+        "recent_captures": [
+          {
+            "event_id": "capture-a7012ee3d4ba4834a1b90c21d502091c",
+            "sequence": 2,
+            "observed_at": "2026-08-29",
+            "source_type": "text"
+          },
+          {
+            "event_id": "capture-c64616444d2b4ff2bf57a694f36396ba",
+            "sequence": 1,
+            "observed_at": "2026-08-29",
+            "source_type": "text"
+          }
+        ]
+      }
+    }
+  },
+  "processing_after_ask": {
+    "status": 200,
+    "duration_seconds": 0.007,
+    "payload": {
+      "ok": true,
+      "processing": {
+        "counts": {
+          "failed": 0,
+          "pending": 0,
+          "processed": 2,
+          "processing": 0
+        },
+        "events": [
+          {
+            "event_id": "capture-c64616444d2b4ff2bf57a694f36396ba",
+            "sequence": 1,
+            "status": "processed",
+            "processing_version": "blackhole-ingestion-v1",
+            "attempt_count": 1,
+            "last_attempted_at": "2026-08-29T17:16:03.950457+00:00",
+            "last_successful_at": "2026-08-29T17:16:33.370920+00:00",
+            "last_error": null,
+            "extractor_version": "blackhole-semantic-extractor-v1",
+            "completion_version": "experiment-004-deterministic-completion-v1",
+            "relation_recovery_version": "experiment-003-retrieval-reconciliation-v1",
+            "duplicate_projection_version": "experiment-005-duplicate-evidence-projection-v1",
+            "updated_at": "2026-08-29T17:16:33.370920+00:00"
+          },
+          {
+            "event_id": "capture-a7012ee3d4ba4834a1b90c21d502091c",
+            "sequence": 2,
+            "status": "processed",
+            "processing_version": "blackhole-ingestion-v1",
+            "attempt_count": 1,
+            "last_attempted_at": "2026-08-29T17:16:03.950457+00:00",
+            "last_successful_at": "2026-08-29T17:16:33.370920+00:00",
+            "last_error": null,
+            "extractor_version": "blackhole-semantic-extractor-v1",
+            "completion_version": "experiment-004-deterministic-completion-v1",
+            "relation_recovery_version": "experiment-003-retrieval-reconciliation-v1",
+            "duplicate_projection_version": "experiment-005-duplicate-evidence-projection-v1",
+            "updated_at": "2026-08-29T17:16:33.370920+00:00"
+          }
+        ]
+      }
+    }
+  }
+}
