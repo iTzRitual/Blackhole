@@ -713,9 +713,9 @@ schema-valid output, valid source integrity, and no safety violations. The
 unchanged substantive `prompts/runtime/baseline-v1.md` prompt, the same Codex
 CLI/model/reasoning configuration, and the same isolated checkpoint protocol
 were used. Gate B itself did not include advanced application implementation;
-the next authorized phase is advanced Blackhole application experimentation.
-That work must preserve the frozen benchmark, evaluator, official baseline, and
-calibration evidence. Full evidence is in
+at that historical transition point, the next authorized phase was advanced
+Blackhole application experimentation. That work had to preserve the frozen
+benchmark, evaluator, official baseline, and calibration evidence. Full evidence is in
 [`docs/GATE_B_VALID_REPORT.md`](GATE_B_VALID_REPORT.md).
 
 ## 22. Advanced Experiment 001 evidence

@@ -17,8 +17,10 @@ items are facts verified in this checkout; unchecked items remain open.
 - [x] The hardening branch's `eval/results/contract-smoke.json` has no
   committed diff from the pre-merge master version; the existing artifact was
   preserved rather than regenerated or overwritten as part of consolidation.
-- [ ] Record the final integrated implementation SHA.
-- [ ] Confirm the final integrated worktree has no unintended changes.
+- [x] Record the final integrated implementation SHA:
+  `171a6cc1c656d6ab901f41bda8440ee5d59967e3`.
+- [x] Confirm the final integrated worktree has no unintended changes before
+  the documentation-only freeze record.
 - [ ] Create the final Git tag.
 - [ ] Add an explicit README “main failure mode” statement.
 - [ ] Add an explicit README “hot take” statement.
@@ -37,8 +39,8 @@ items are facts verified in this checkout; unchecked items remain open.
   historical/superseded.
 - [ ] Regenerate the final comparison artifact after implementation and
   post-freeze generalization are frozen.
-- [ ] Ensure the final comparison points to E005 or the explicitly approved
-  post-freeze result, not the older E002 snapshot.
+- [ ] Ensure the future final comparison points to E005 or the explicitly
+  approved post-freeze result, not the older E002 snapshot.
 - [ ] Record the post-freeze generalization result, if authorized and run.
 - [ ] Confirm no benchmark optimization occurred after the final freeze.
 
@@ -55,7 +57,7 @@ items are facts verified in this checkout; unchecked items remain open.
   equivalents pass.
 - [ ] Test the complete reproduction commands from a clean environment after
   the integrated implementation SHA is frozen.
-- [ ] Verify all reproduction commands use repository-relative or user-supplied
+- [x] Verify all reproduction commands use repository-relative or user-supplied
   paths rather than developer-specific absolute paths.
 
 ## Agent trajectories
@@ -71,7 +73,7 @@ items are facts verified in this checkout; unchecked items remain open.
   completed.
 - [x] Update the index after final integration freeze; post-freeze
   generalization is intentionally not part of this task.
-- [ ] Ensure the removed/rejected experiment or treatment is mentioned in the
+- [x] Ensure the removed/rejected experiment or treatment is mentioned in the
   final submission narrative where relevant.
 
 ## Security and privacy
@@ -109,12 +111,14 @@ items are facts verified in this checkout; unchecked items remain open.
 
 ## Final freeze
 
-- [ ] Freeze the integrated implementation SHA.
+- [x] Freeze the integrated implementation SHA in
+  `docs/IMPLEMENTATION_FREEZE.md`.
 - [ ] Freeze the authorized post-freeze generalization result, if any.
 - [ ] Regenerate and inspect `final-comparison.json` or its approved successor.
-- [ ] Confirm baseline evidence remains unchanged.
-- [ ] Confirm no benchmark optimization was performed after freeze.
-- [ ] Confirm CI is green on the exact submission SHA.
+- [x] Confirm baseline evidence remains unchanged.
+- [x] Confirm no benchmark optimization was performed after freeze.
+- [x] Confirm the local CI-equivalent gate is green on the exact freeze SHA;
+  no remote CI status is claimed here.
 - [ ] Confirm `git status --short` is clean on the exact submission SHA.
 - [ ] Create and record the final tag.
 

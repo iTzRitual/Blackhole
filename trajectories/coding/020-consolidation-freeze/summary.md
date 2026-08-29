@@ -77,16 +77,29 @@ and post-freeze generalization work in this task.
 
 ## Evaluation performed
 
-The exact commands, counts, hashes, smoke result, and any remaining warnings
-are recorded in `docs/IMPLEMENTATION_FREEZE.md` and the final handoff. This
-trajectory is not itself a benchmark experiment and does not create a new
-scored result.
+- The full stdlib suite passed: 85 tests, including 75 application/qualification
+  tests and 10 evaluator tests.
+- Compilation, JavaScript syntax, benchmark-generator determinism, response
+  contract smoke, qualification inventory, PWA/Host checks, and `git diff
+  --check` passed.
+- A fresh-path deterministic E005 replay matched
+  `LQA-0M=0.8695006212469447` and `DSCR=40` with four checkpoints and zero
+  provider calls.
+- Protected hashes matched the recorded scenario, expected output, response
+  contract, official baseline, and E005 values.
+- One bounded neutral real smoke after consolidation passed HTTP health,
+  capture, Ask, processing, and state rebuild; it reproduced the known
+  novel-entity-linking limitation in about 20.7 seconds.
+- The exact counts, hashes, architecture boundary, and remaining warnings are
+  recorded in `docs/IMPLEMENTATION_FREEZE.md`. This trajectory is not itself a
+  benchmark experiment and does not create a new scored result.
 
 ## Result
 
-Pending final validation and freeze-tag creation at the time this scaffold was
-written. The final result and commit identifiers must be filled from observed
-Git and command output, not inferred.
+The approved product integration and hardening are consolidated and validated.
+The implementation-freeze SHA is
+`171a6cc1c656d6ab901f41bda8440ee5d59967e3`; the following freeze-record
+commit adds only documentation and the freeze tag.
 
 ## Regressions or unresolved issues
 
@@ -98,13 +111,15 @@ generalization remain outside this consolidation task.
 
 ## Final decision
 
-Pending final validation. This task is a consolidation/freeze operation, not a
-benchmark optimization experiment, so it has no KEEP/REVISE/REMOVE experiment
-decision.
+Freeze the consolidated implementation. This task is a consolidation/freeze
+operation, not a benchmark optimization experiment, so it has no
+KEEP/REVISE/REMOVE experiment decision.
 
 ## Related git commits
 
 - Product integration merge: `20e4540` (`merge: integrate Blackhole Host PWA`).
 - Submission hardening merge: `bc4ef78` (`merge: add submission hardening`).
-- Final consolidation and freeze-record commit identifiers are recorded here
-  after validation and tag creation.
+- Consolidation/evidence commit: `171a6cc1c656d6ab901f41bda8440ee5d59967e3`
+  (`docs: consolidate implementation freeze evidence`).
+- The documentation-only freeze-record commit and
+  `implementation-freeze-v1` tag target are reported in the final handoff.
