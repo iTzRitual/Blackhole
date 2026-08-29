@@ -2,117 +2,205 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#10161c">
-    <title>Blackhole — personal inbox</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#080910">
+    <meta name="background-color" content="#080910">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Blackhole">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="apple-touch-icon" href="/icons/icon.svg">
     <link rel="stylesheet" href="/styles.css">
+    <title>Blackhole — capture now</title>
   </head>
   <body>
+    <svg class="icon-sprite" aria-hidden="true" focusable="false">
+      <symbol id="icon-mark" viewBox="0 0 48 48">
+        <circle cx="24" cy="24" r="15" fill="#030407" stroke="currentColor" stroke-width="1.4" opacity=".52"></circle>
+        <circle cx="24" cy="24" r="12.5" fill="#020307" stroke="currentColor" stroke-width="1.8"></circle>
+        <ellipse cx="24" cy="24" rx="15.5" ry="12.2" fill="none" stroke="currentColor" stroke-width="1" opacity=".34" transform="rotate(-18 24 24)"></ellipse>
+      </symbol>
+      <symbol id="icon-capture" viewBox="0 0 24 24">
+        <path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+        <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.3" opacity=".45"></circle>
+      </symbol>
+      <symbol id="icon-attention" viewBox="0 0 24 24">
+        <path d="M12 4.4 20 19H4L12 4.4Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"></path>
+        <path d="M12 9v4.2M12 16.3v.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+      </symbol>
+      <symbol id="icon-memory" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="3.4" fill="currentColor"></circle>
+        <ellipse cx="12" cy="12" rx="9" ry="4.8" fill="none" stroke="currentColor" stroke-width="1.5" transform="rotate(-25 12 12)"></ellipse>
+        <ellipse cx="12" cy="12" rx="9" ry="4.8" fill="none" stroke="currentColor" stroke-width="1.5" transform="rotate(25 12 12)" opacity=".55"></ellipse>
+      </symbol>
+      <symbol id="icon-ask" viewBox="0 0 24 24">
+        <circle cx="10.8" cy="10.8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.7"></circle>
+        <path d="m15.4 15.4 4.4 4.4M8.5 10.8h4.6M10.8 8.5v4.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path>
+      </symbol>
+      <symbol id="icon-arrow-up" viewBox="0 0 24 24">
+        <path d="M12 18V6M7.5 10.5 12 6l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"></path>
+      </symbol>
+      <symbol id="icon-camera" viewBox="0 0 24 24">
+        <path d="M5 8.2h3l1.3-2h5.4l1.3 2h3a1.5 1.5 0 0 1 1.5 1.5v8.1A1.5 1.5 0 0 1 19 19.3H5a1.5 1.5 0 0 1-1.5-1.5V9.7A1.5 1.5 0 0 1 5 8.2Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
+        <circle cx="12" cy="13.5" r="3" fill="none" stroke="currentColor" stroke-width="1.6"></circle>
+      </symbol>
+      <symbol id="icon-photo" viewBox="0 0 24 24">
+        <rect x="4" y="4.5" width="16" height="15" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"></rect>
+        <circle cx="9" cy="9.2" r="1.5" fill="currentColor"></circle>
+        <path d="m5.5 17 4.2-4 2.8 2.3 2.1-2 3.9 3.7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+      </symbol>
+      <symbol id="icon-file" viewBox="0 0 24 24">
+        <path d="M7 3.8h6.6l3.4 3.4v13H7a1.5 1.5 0 0 1-1.5-1.5V5.3A1.5 1.5 0 0 1 7 3.8Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
+        <path d="M13.5 3.9v3.8h3.2M8.5 12h6.8M8.5 15.5h5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+      </symbol>
+      <symbol id="icon-close" viewBox="0 0 24 24">
+        <path d="m7 7 10 10M17 7 7 17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+      </symbol>
+      <symbol id="icon-more" viewBox="0 0 24 24">
+        <circle cx="5.5" cy="12" r="1.3" fill="currentColor"></circle>
+        <circle cx="12" cy="12" r="1.3" fill="currentColor"></circle>
+        <circle cx="18.5" cy="12" r="1.3" fill="currentColor"></circle>
+      </symbol>
+      <symbol id="icon-install" viewBox="0 0 24 24">
+        <path d="M12 4.5v10M8.2 10.8 12 14.6l3.8-3.8M5.5 18.5h13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path>
+      </symbol>
+      <symbol id="icon-check" viewBox="0 0 24 24">
+        <path d="m5.5 12.5 4.2 4.1 8.8-9" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"></path>
+      </symbol>
+      <symbol id="icon-orbit" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="3" fill="currentColor"></circle>
+        <ellipse cx="12" cy="12" rx="9" ry="4.6" fill="none" stroke="currentColor" stroke-width="1.4" transform="rotate(-28 12 12)"></ellipse>
+      </symbol>
+    </svg>
+
     <div class="app-shell">
       <header class="topbar">
-        <div>
-          <p class="eyebrow">ZERO-ORGANIZATION INBOX</p>
-          <h1>BLACKHOLE</h1>
-          <p class="tagline">Throw it in. Blackhole organizes it later.</p>
+        <button class="brand-button" type="button" data-view="capture" aria-label="Blackhole Capture">
+          <svg class="brand-mark" viewBox="0 0 48 48"><use href="#icon-mark"></use></svg>
+          <span class="brand-name">BLACKHOLE</span>
+        </button>
+        <div class="top-actions">
+          <span id="connection-status" class="sr-only" aria-live="polite">Connecting</span>
+          <button id="install-button" class="icon-button install-only" type="button" aria-label="Install Blackhole" title="Install Blackhole" hidden>
+            <svg viewBox="0 0 24 24"><use href="#icon-install"></use></svg>
+          </button>
+          <button id="menu-button" class="icon-button" type="button" aria-label="More options" aria-expanded="false" aria-controls="top-menu">
+            <svg viewBox="0 0 24 24"><use href="#icon-more"></use></svg>
+          </button>
+          <div id="top-menu" class="top-menu" role="menu" hidden>
+            <button id="install-action" class="menu-action install-only" type="button" role="menuitem" hidden>
+              <svg viewBox="0 0 24 24"><use href="#icon-install"></use></svg>
+              <span>Install app</span>
+            </button>
+            <button id="reset-demo" class="menu-action" type="button" role="menuitem">
+              <svg viewBox="0 0 24 24"><use href="#icon-orbit"></use></svg>
+              <span>Reset Blackhole</span>
+            </button>
+          </div>
         </div>
-        <div id="provider-status" class="status-pill" aria-live="polite">Checking runtime…</div>
       </header>
 
-      <main>
-        <section id="view-capture" class="view is-active" aria-labelledby="capture-title">
-          <div class="hero-copy">
-            <p class="kicker">CAPTURE WITHOUT CLASSIFYING</p>
-            <h2 id="capture-title">Get it out of your head.</h2>
-            <p>Notes, receipts, reminders, bills, and half-formed thoughts all go in the same place.</p>
-          </div>
-
-          <form id="capture-form" class="capture-card">
-            <label class="sr-only" for="capture-input">Capture</label>
-            <textarea id="capture-input" rows="5" placeholder="Type anything…" required></textarea>
-            <div class="capture-actions">
-              <label class="file-picker">
-                <span>＋ Add a text file</span>
-                <input id="file-input" type="file" accept=".txt,text/plain">
-              </label>
-              <button class="primary-button" type="submit">Save capture</button>
+      <main id="app-main">
+        <section id="view-capture" class="view view-capture is-active" aria-labelledby="capture-title">
+          <div class="capture-screen">
+            <div class="capture-intro">
+              <h1 id="capture-title">What's on your mind?</h1>
             </div>
-            <p id="capture-feedback" class="feedback" aria-live="polite"></p>
-          </form>
 
-          <div class="example-row" aria-label="Example captures">
-            <button class="example-chip" type="button" data-example="Remember to check the renewal email next week.">Try a reminder</button>
-            <button class="example-chip" type="button" data-example="Receipt: 14.50 EUR for the train.">Try a receipt</button>
-            <button class="example-chip" type="button" data-example="The quote did not include an amount.">Try an unknown</button>
+            <form id="capture-form" class="capture-form" novalidate>
+              <div class="composer-wrap">
+                <div id="composer" class="composer">
+                  <div id="attachment-preview" class="attachment-preview" hidden></div>
+                  <div class="composer-bar">
+                    <button id="attachment-button" class="round-button" type="button" aria-label="Add an attachment" aria-expanded="false" aria-controls="attachment-menu">
+                      <svg viewBox="0 0 24 24"><use href="#icon-capture"></use></svg>
+                    </button>
+                    <label class="sr-only" for="capture-input">Capture</label>
+                    <textarea id="capture-input" rows="1" maxlength="20000" placeholder="Throw anything in…" autocomplete="off" spellcheck="true"></textarea>
+                    <button id="submit-capture" class="send-button" type="submit" aria-label="Save capture">
+                      <svg viewBox="0 0 24 24"><use href="#icon-arrow-up"></use></svg>
+                    </button>
+                  </div>
+                </div>
+                <div id="attachment-menu" class="attachment-menu" role="menu" hidden>
+                  <button class="attachment-option" type="button" role="menuitem" data-attachment-mode="camera">
+                    <span class="option-icon"><svg viewBox="0 0 24 24"><use href="#icon-camera"></use></svg></span>
+                    <span><strong>Camera</strong></span>
+                  </button>
+                  <button class="attachment-option" type="button" role="menuitem" data-attachment-mode="photo">
+                    <span class="option-icon"><svg viewBox="0 0 24 24"><use href="#icon-photo"></use></svg></span>
+                    <span><strong>Photo library</strong></span>
+                  </button>
+                  <button class="attachment-option" type="button" role="menuitem" data-attachment-mode="file">
+                    <span class="option-icon"><svg viewBox="0 0 24 24"><use href="#icon-file"></use></svg></span>
+                    <span><strong>File</strong></span>
+                  </button>
+                </div>
+              </div>
+              <input id="file-input" class="file-input" type="file" tabindex="-1" aria-label="Choose an attachment">
+              <p id="capture-feedback" class="inline-feedback" aria-live="polite"></p>
+            </form>
+            <div id="capture-vortex" class="capture-vortex" aria-hidden="true"></div>
           </div>
-
-          <div class="demo-callout">
-            <span class="callout-mark">i</span>
-            <p>This local demo saves captures immediately as immutable raw events. The seeded memory below is deterministic; semantic interpretation is not silently run on capture.</p>
-          </div>
-
-          <div class="section-heading compact-heading">
-            <div>
-              <p class="kicker">RAW INBOX</p>
-              <h3>Recent captures</h3>
-            </div>
-            <button id="reset-demo" class="text-button" type="button">Reset demo</button>
-          </div>
-          <div id="recent-captures" class="capture-list"></div>
         </section>
 
         <section id="view-attention" class="view" aria-labelledby="attention-title" hidden>
-          <div class="section-heading">
-            <div>
-              <p class="kicker">A SHORT LIST</p>
-              <h2 id="attention-title">Needs attention</h2>
-              <p class="section-description">Deadlines and approval boundaries rise here; uncertainty stays visible in Memory.</p>
-            </div>
-            <span id="attention-count" class="count-badge">—</span>
+          <div class="screen-heading">
+            <p class="eyebrow">ATTENTION</p>
+            <h2 id="attention-title">Things that genuinely need you.</h2>
+            <p>Only deadlines, unresolved conflicts, and approval boundaries rise here.</p>
           </div>
-          <div id="attention-list" class="assertion-grid"></div>
+          <div id="attention-list" class="insight-list"></div>
         </section>
 
         <section id="view-memory" class="view" aria-labelledby="memory-title" hidden>
-          <div class="section-heading">
-            <div>
-              <p class="kicker">PERSISTENT STATE</p>
-              <h2 id="memory-title">What Blackhole knows</h2>
-              <p class="section-description">Current facts, history, uncertainty, and changes stay connected to their evidence.</p>
-            </div>
-            <span id="capture-count" class="count-badge">—</span>
+          <div class="screen-heading">
+            <p class="eyebrow">MEMORY</p>
+            <h2 id="memory-title">What Blackhole understands.</h2>
+            <p>Known facts, useful history, and uncertainty stay connected to their evidence.</p>
           </div>
+          <div id="memory-summary" class="memory-summary" aria-live="polite"></div>
           <div id="memory-sections" class="memory-grid"></div>
         </section>
 
         <section id="view-ask" class="view" aria-labelledby="ask-title" hidden>
-          <div class="hero-copy">
-            <p class="kicker">DETERMINISTIC LOOKUP</p>
+          <div class="screen-heading ask-heading">
+            <p class="eyebrow">ASK</p>
             <h2 id="ask-title">Ask Blackhole.</h2>
-            <p>Ask about the current state. The demo routes these questions to structured projections rather than a giant chat transcript.</p>
+            <p>Ask what you want to know. Answers stay concise and grounded in what is currently understood.</p>
           </div>
-          <form id="ask-form" class="ask-bar">
-            <label class="sr-only" for="ask-input">Question</label>
-            <input id="ask-input" type="search" placeholder="What changed recently?" autocomplete="off">
-            <button class="primary-button" type="submit">Ask</button>
+          <form id="ask-form" class="ask-form" novalidate>
+            <label class="sr-only" for="ask-input">Question for Blackhole</label>
+            <input id="ask-input" type="search" placeholder="What needs my attention?" autocomplete="off">
+            <button class="send-button" type="submit" aria-label="Ask Blackhole"><svg viewBox="0 0 24 24"><use href="#icon-arrow-up"></use></svg></button>
           </form>
           <div class="question-chips" aria-label="Suggested questions">
             <button type="button" class="question-chip" data-question="What needs my attention?">What needs my attention?</button>
-            <button type="button" class="question-chip" data-question="What subscriptions am I paying for?">What subscriptions am I paying for?</button>
             <button type="button" class="question-chip" data-question="What changed recently?">What changed recently?</button>
-            <button type="button" class="question-chip" data-question="What information is incomplete?">What information is incomplete?</button>
-            <button type="button" class="question-chip" data-question="What do we know about my recurring costs?">What do we know about my recurring costs?</button>
+            <button type="button" class="question-chip" data-question="What am I paying for?">What am I paying for?</button>
+            <button type="button" class="question-chip" data-question="What information is incomplete?">What's incomplete?</button>
           </div>
-          <div id="answer-output" class="answer-output" aria-live="polite">
-            <div class="empty-state"><span class="empty-icon">?</span><p>Choose a question to inspect the current state.</p></div>
+          <div id="answer-output" class="answer-output" aria-live="polite" aria-atomic="false">
+            <div class="empty-state"><span class="empty-icon"><svg viewBox="0 0 24 24"><use href="#icon-ask"></use></svg></span><p>Ask a question when you’re ready.</p></div>
           </div>
         </section>
       </main>
 
-      <nav class="bottom-nav" aria-label="Primary">
-        <button class="nav-item is-active" type="button" data-view="capture"><span class="nav-icon">＋</span><span>Capture</span></button>
-        <button class="nav-item" type="button" data-view="attention"><span class="nav-icon">!</span><span>Attention</span><span id="nav-attention" class="nav-count"></span></button>
-        <button class="nav-item" type="button" data-view="memory"><span class="nav-icon">◌</span><span>Memory</span></button>
-        <button class="nav-item" type="button" data-view="ask"><span class="nav-icon">⌕</span><span>Ask</span></button>
+      <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+
+      <nav class="bottom-nav" aria-label="Primary navigation">
+        <button class="nav-item is-active" type="button" data-view="capture" aria-current="page" aria-controls="view-capture">
+          <span class="nav-icon"><svg viewBox="0 0 24 24"><use href="#icon-capture"></use></svg></span><span>Capture</span>
+        </button>
+        <button class="nav-item" type="button" data-view="attention" aria-controls="view-attention">
+          <span class="nav-icon"><svg viewBox="0 0 24 24"><use href="#icon-attention"></use></svg></span><span>Attention</span><span id="nav-attention" class="nav-count" aria-label="0 items needing attention"></span>
+        </button>
+        <button class="nav-item" type="button" data-view="memory" aria-controls="view-memory">
+          <span class="nav-icon"><svg viewBox="0 0 24 24"><use href="#icon-memory"></use></svg></span><span>Memory</span>
+        </button>
+        <button class="nav-item" type="button" data-view="ask" aria-controls="view-ask">
+          <span class="nav-icon"><svg viewBox="0 0 24 24"><use href="#icon-ask"></use></svg></span><span>Ask</span>
+        </button>
       </nav>
     </div>
     <script src="/app.js" defer></script>
