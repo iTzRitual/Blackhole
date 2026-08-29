@@ -1,10 +1,10 @@
 # Evaluation plan
 
-**Status:** Gate B contract repair valid; Gate A public benchmark remains frozen; `baseline-v1` is the official baseline; next phase is advanced Blackhole application experimentation
+**Status:** Gate B contract repair valid; Gate A public benchmark remains frozen; `baseline-v1` is the official baseline; current phase is advanced Blackhole application experimentation
 
 This document records the approved long-horizon benchmark contract for Blackhole.
 The public development case, deterministic generator, evaluator, and fair Codex
-CLI baseline are now present. The next authorized phase is advanced Blackhole
+CLI baseline are now present. The current authorized phase is advanced Blackhole
 application experimentation. Production infrastructure, a Claude adapter, and
 evaluator-owned holdout material remain out of scope. The separate
 size-calibration artifacts are historical, non-scored inputs and are not final
@@ -715,3 +715,31 @@ the next authorized phase is advanced Blackhole application experimentation.
 That work must preserve the frozen benchmark, evaluator, official baseline, and
 calibration evidence. Full evidence is in
 [`docs/GATE_B_VALID_REPORT.md`](GATE_B_VALID_REPORT.md).
+
+## 22. Advanced Experiment 001 evidence
+
+The first authorized advanced application experiment keeps the Gate A
+benchmark, evaluator, `response-contract-v2`, calibration evidence, and
+official `baseline-v1` unchanged. It adds a scoped SQLite state store with
+immutable raw captures, structured observations and relationships, a
+rebuildable projection, and deterministic query projections. Fresh semantic
+calls are limited to structured extraction; arithmetic, dates, duplicate
+components, and response shaping remain code-owned.
+
+The non-official FAST result was LQA-0M `0.7222222222` with DSCR `10` on the
+four selected queries at 50 events. The full public 200-event replay scored
+LQA-0M `0.7492295899`, with checkpoint scores
+`0.7962962963 / 0.7523071836 / 0.7064078283 / 0.7419070513`, DSCR `72`, and
+`TP=279, FP=69, FN=96`. It was schema-valid, had no safety violations, and
+passed source-integrity checks. These are development experiment measurements,
+not a new official baseline or holdout result.
+
+The full result and replay evidence are in
+[`eval/results/experiment-001-full-v4.json`](../eval/results/experiment-001-full-v4.json)
+and [`trajectories/runtime/experiment-001-full-v4/`](../trajectories/runtime/experiment-001-full-v4/).
+The fresh semantic extraction record is under
+[`trajectories/runtime/experiment-001-full-v1/`](../trajectories/runtime/experiment-001-full-v1/).
+The measured failures, runtime usage, and KEEP decision are appended to
+[`IMPROVEMENT_CHANGELOG.md`](../IMPROVEMENT_CHANGELOG.md). The main remaining
+weakness is relation-detail recall; follow-up work requires a new authorized
+experiment and trajectory.

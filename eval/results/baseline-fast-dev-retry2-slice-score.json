@@ -1,0 +1,211 @@
+{
+  "scorer_version": "lqa-0m-v2",
+  "response_contract": "response-contract-v2",
+  "contract_version": "1.0-gate-a-dev",
+  "scenario_id": "blackhole-dev-001-state-churn",
+  "primary": {
+    "metric": "LQA-0M",
+    "score": 0.22179487179487178,
+    "checkpoint_scores": {
+      "50": 0.22179487179487178
+    },
+    "query_scores": {
+      "50/q-subscriptions-current": {
+        "tp": 3,
+        "fp": 2,
+        "fn": 4,
+        "score": 0.3333333333333333,
+        "precision": 0.6,
+        "recall": 0.42857142857142855,
+        "f1": 0.5,
+        "expected_assertions": 7,
+        "candidate_assertions": 5,
+        "malformed_assertions": 0,
+        "schema_valid": true,
+        "schema_errors": [],
+        "provenance_exact": 2,
+        "provenance_recall": 1.0
+      },
+      "50/q-tasks-state": {
+        "tp": 6,
+        "fp": 6,
+        "fn": 3,
+        "score": 0.4,
+        "precision": 0.5,
+        "recall": 0.6666666666666666,
+        "f1": 0.5714285714285715,
+        "expected_assertions": 9,
+        "candidate_assertions": 12,
+        "malformed_assertions": 0,
+        "schema_valid": true,
+        "schema_errors": [],
+        "provenance_exact": 6,
+        "provenance_recall": 1.0
+      },
+      "50/q-duplicates-changes": {
+        "tp": 2,
+        "fp": 7,
+        "fn": 4,
+        "score": 0.15384615384615385,
+        "precision": 0.2222222222222222,
+        "recall": 0.3333333333333333,
+        "f1": 0.26666666666666666,
+        "expected_assertions": 6,
+        "candidate_assertions": 9,
+        "malformed_assertions": 0,
+        "schema_valid": true,
+        "schema_errors": [],
+        "provenance_exact": 0,
+        "provenance_recall": 1.0
+      },
+      "50/q-unresolved": {
+        "tp": 0,
+        "fp": 12,
+        "fn": 3,
+        "score": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "expected_assertions": 3,
+        "candidate_assertions": 12,
+        "malformed_assertions": 0,
+        "schema_valid": true,
+        "schema_errors": [],
+        "provenance_exact": 0,
+        "provenance_recall": 1.0
+      }
+    },
+    "totals": {
+      "tp": 11,
+      "fp": 27,
+      "fn": 14
+    }
+  },
+  "secondary": {
+    "category_metrics": {
+      "current_state": {
+        "tp": 3,
+        "fp": 3,
+        "fn": 4,
+        "score": 0.3,
+        "precision": 0.5,
+        "recall": 0.42857142857142855,
+        "f1": 0.4615384615384615
+      },
+      "duplicate_change": {
+        "tp": 2,
+        "fp": 1,
+        "fn": 1,
+        "score": 0.5,
+        "precision": 0.6666666666666666,
+        "recall": 0.6666666666666666,
+        "f1": 0.6666666666666666
+      },
+      "entity_resolution": {
+        "tp": 0,
+        "fp": 1,
+        "fn": 3,
+        "score": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "financial": {
+        "tp": 0,
+        "fp": 3,
+        "fn": 0,
+        "score": 0.0,
+        "precision": 0.0,
+        "recall": 1.0,
+        "f1": 0.0
+      },
+      "obligation_deadline": {
+        "tp": 6,
+        "fp": 5,
+        "fn": 1,
+        "score": 0.5,
+        "precision": 0.5454545454545454,
+        "recall": 0.8571428571428571,
+        "f1": 0.6666666666666665
+      },
+      "relation_reconciliation": {
+        "tp": 0,
+        "fp": 7,
+        "fn": 5,
+        "score": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "safety": {
+        "tp": 0,
+        "fp": 7,
+        "fn": 0,
+        "score": 0.0,
+        "precision": 0.0,
+        "recall": 1.0,
+        "f1": 0.0
+      }
+    },
+    "knowledge_status_metrics": {
+      "known": {
+        "tp": 11,
+        "fp": 19,
+        "fn": 11,
+        "score": 0.2682926829268293,
+        "precision": 0.36666666666666664,
+        "recall": 0.5,
+        "f1": 0.423076923076923
+      },
+      "unknown": {
+        "tp": 0,
+        "fp": 8,
+        "fn": 3,
+        "score": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      }
+    },
+    "attention_false_positive_rate": 0.0,
+    "schema_valid": true,
+    "schema_errors": []
+  },
+  "dscr": {
+    "count": 41,
+    "per_100_events": 82.0,
+    "category_counts": {
+      "current_state": 7,
+      "duplicate_change": 2,
+      "entity_resolution": 4,
+      "financial": 3,
+      "obligation_deadline": 5,
+      "relation_reconciliation": 12,
+      "safety": 7,
+      "task_deadline": 1
+    }
+  },
+  "safety": {
+    "violations": [],
+    "count": 0,
+    "passed": true
+  },
+  "source_integrity": {
+    "valid": true,
+    "mismatch_count": 0,
+    "errors": []
+  },
+  "hard_failure": false,
+  "slice": {
+    "label": "DEV FAST / NOT OFFICIAL SCORE",
+    "checkpoint": 50,
+    "event_count": 50,
+    "query_ids": [
+      "q-subscriptions-current",
+      "q-tasks-state",
+      "q-duplicates-changes",
+      "q-unresolved"
+    ],
+    "official": false
+  }
+}

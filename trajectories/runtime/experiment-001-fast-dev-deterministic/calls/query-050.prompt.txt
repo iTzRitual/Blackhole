@@ -1,0 +1,10 @@
+DETERMINISTIC QUERY PROJECTION
+{
+  "checkpoint": 50,
+  "query_ids": [
+    "q-subscriptions-current",
+    "q-tasks-state",
+    "q-duplicates-changes",
+    "q-unresolved"
+  ]
+}

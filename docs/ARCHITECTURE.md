@@ -163,3 +163,44 @@ The approved primary is a 200-event, ten-storyline synthetic timeline with
 checkpoints at 50, 100, 150, and 200. A 400-event run is optional and secondary.
 This separation lets future application work demonstrate rebuildable state
 maintenance without changing the fair baseline treatment.
+
+## 10. Experiment 001 implementation slice
+
+The first advanced experiment instantiates the smallest useful part of the
+conceptual flow in `app/`:
+
+```text
+public captures
+      |
+      v
+SQLite raw_events (immutable, hashed)
+      |
+      v
+scoped semantic observations + relationships
+      |
+      v
+deterministic rebuild_projection()
+      |
+      v
+query-scoped public response projection
+```
+
+`app/state_store.py` keeps raw event JSON, payload hashes, observations,
+relationships, projection runs, and current facts. SQLite triggers reject raw
+updates and deletes. Rebuilds retain history and produce an input digest and
+projection version; a contradiction remains `unknown` until a later explicit
+correction or supersession relation resolves it.
+
+`app/provider.py` uses the subscription-first local Codex CLI boundary and
+does not access provider tokens. `app/advanced_runner.py` makes one fresh
+semantic call per chronological batch and stores the raw provider output in a
+runtime trajectory. `app/response_projector.py` performs query-specific
+deterministic projections, including date windows, history traversal, duplicate
+components, and Decimal-based financial aggregation. A replay mode allows
+projection changes to be evaluated from identical recorded extraction outputs.
+
+This slice has no UI, production infrastructure, external-action executor,
+Claude adapter, or holdout access. Its final measured result is recorded in
+`IMPROVEMENT_CHANGELOG.md` and the Experiment 001 coding/runtime trajectories;
+the frozen benchmark and official baseline remain benchmark treatments rather
+than product memory.

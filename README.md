@@ -45,9 +45,14 @@ and Gate B's response-contract repair is valid. The official `baseline-v1`
 result remains the accepted baseline at `LQA-0M=0.3014914553`; the prior
 `baseline-v0` result is preserved as invalid-contract evidence, not an official
 semantic baseline; the independent v2 contract smoke test passes and the
-corrected official baseline is recorded separately. The next authorized phase is
-advanced Blackhole application experimentation. Production infrastructure,
+corrected official baseline is recorded separately. The current authorized phase
+is advanced Blackhole application experimentation. Production infrastructure,
 Claude integration, and holdout ground truth remain out of scope.
+
+Experiment 001 has now completed its authorized 200-event milestone with a
+rebuildable SQLite state slice and deterministic public projections. Its
+non-official result is recorded in the experiment trajectory and changelog; it
+does not replace the frozen baseline or benchmark.
 
 ## Design principles
 
@@ -70,7 +75,7 @@ Claude integration, and holdout ground truth remain out of scope.
 | `prompts/` | Versioned runtime and coding prompt artifacts |
 | `benchmark/` | Calibration, development, and evaluator-controlled benchmark boundaries |
 | `baseline/` | Fair provider-baseline harness; not the Blackhole application |
-| `app/` | Reserved for a future product implementation |
+| `app/` | Scoped advanced application experiments; no production app yet |
 | `data/` | Reserved locations for synthetic and raw source data |
 | `eval/` | Deterministic development scorer and reproducible result artifacts |
 | `trajectories/` | Coding and runtime agent trace artifacts |
@@ -78,13 +83,12 @@ Claude integration, and holdout ground truth remain out of scope.
 
 ## Scope of the completed benchmark phase
 
-The completed phase froze the public development benchmark and deterministic
-scorer, repaired and measured the fair baseline contract, and recorded one
-corrected baseline run. It did not implement the Blackhole application, add
-production infrastructure, expose evaluator-owned holdout ground truth, or add
-a Claude adapter. The next phase may run scoped advanced Blackhole application
-experiments; the baseline remains a benchmark treatment, not product memory or
-application code.
+The completed benchmark phase froze the public development benchmark and
+deterministic scorer, repaired and measured the fair baseline contract, and
+recorded one corrected baseline run. The current advanced phase contains the
+scoped Experiment 001 state-projection slice, but still has no production
+infrastructure, evaluator-owned holdout access, or Claude adapter. The baseline
+remains a benchmark treatment, not product memory.
 
 Read [AGENTS.md](AGENTS.md) before changing the repository. The design context is
 in [docs/PRODUCT_SPEC.md](docs/PRODUCT_SPEC.md),

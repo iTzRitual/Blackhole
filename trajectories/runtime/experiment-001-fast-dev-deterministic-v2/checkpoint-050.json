@@ -1,0 +1,359 @@
+{
+  "response_contract": "response-contract-v2",
+  "scenario_id": "blackhole-dev-001-state-churn",
+  "checkpoint": 50,
+  "queries": {
+    "q-subscriptions-current": {
+      "assertions": [
+        {
+          "subject": "streamly",
+          "predicate": "billing_period",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-021"
+          ],
+          "value": "month"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "cancellation_intent",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-041"
+          ],
+          "value": false
+        },
+        {
+          "subject": "streamly",
+          "predicate": "cancellation_requested",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-031"
+          ],
+          "value": false
+        },
+        {
+          "subject": "streamly",
+          "predicate": "current_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-021"
+          ],
+          "value": {
+            "amount": "14",
+            "billing_period": "month",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "streamly",
+          "predicate": "last_charge",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-011"
+          ],
+          "unknown_reason": "not_stated"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "price_effective",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-021"
+          ],
+          "unknown_reason": "not_stated"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": "active"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "currency",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-021"
+          ],
+          "value": "eur"
+        }
+      ]
+    },
+    "q-tasks-state": {
+      "assertions": [
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-004"
+          ],
+          "value": "2026-01-12"
+        },
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-014"
+          ],
+          "value": "sam"
+        },
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-034"
+          ],
+          "value": "cancelled"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "2026-02-25"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "alex"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "open"
+        },
+        {
+          "subject": "capture:evt-014",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-004",
+            "evt-014"
+          ],
+          "value": {
+            "changed_fields": [
+              "owner"
+            ],
+            "relation_type": "task_reassignment",
+            "source_event_id": "evt-014",
+            "target_event_id": "evt-004"
+          }
+        },
+        {
+          "subject": "capture:evt-034",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-024",
+            "evt-034"
+          ],
+          "value": {
+            "changed_fields": [
+              "lifecycle"
+            ],
+            "relation_type": "task_cancellation",
+            "source_event_id": "evt-034",
+            "target_event_id": "evt-024"
+          }
+        }
+      ]
+    },
+    "q-duplicates-changes": {
+      "assertions": [
+        {
+          "subject": "scenario",
+          "predicate": "duplicate_event_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-016",
+            "evt-046"
+          ],
+          "value": 2
+        },
+        {
+          "subject": "scenario",
+          "predicate": "duplicate_group_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-016",
+            "evt-046"
+          ],
+          "value": 2
+        },
+        {
+          "subject": "scenario",
+          "predicate": "meaningful_change_event_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-026"
+          ],
+          "value": 1
+        },
+        {
+          "subject": "capture:evt-016",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-006",
+            "evt-016"
+          ],
+          "value": {
+            "changed_fields": [],
+            "duplicate_group": "corner-mart-r-1001",
+            "note": "receipt r-1001 was uploaded again unchanged.",
+            "relation_type": "exact_duplicate",
+            "source_event_id": "evt-016",
+            "target_event_id": "evt-006"
+          }
+        },
+        {
+          "subject": "capture:evt-046",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-036",
+            "evt-046"
+          ],
+          "value": {
+            "changed_fields": [],
+            "duplicate_group": "corner-mart-r-1002",
+            "note": "receipt r-1002 was uploaded again with the same contents.",
+            "relation_type": "exact_duplicate",
+            "source_event_id": "evt-046",
+            "target_event_id": "evt-036"
+          }
+        },
+        {
+          "subject": "capture:evt-026",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-006",
+            "evt-026"
+          ],
+          "value": {
+            "changed_fields": [
+              "amount"
+            ],
+            "note": "receipt r-1001 explicitly corrects the total.",
+            "relation_type": "meaningful_change",
+            "source_event_id": "evt-026",
+            "target_event_id": "evt-006"
+          }
+        },
+        {
+          "subject": "capture:evt-012",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-002",
+            "evt-012"
+          ],
+          "value": {
+            "changed_fields": [],
+            "note": "same service and amount, but a different billing period.",
+            "relation_type": "similar_not_duplicate",
+            "source_event_id": "evt-012",
+            "target_event_id": "evt-002"
+          }
+        },
+        {
+          "subject": "capture:evt-022",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-012",
+            "evt-022"
+          ],
+          "value": {
+            "changed_fields": [],
+            "note": "same service and amount, but a different billing period.",
+            "relation_type": "similar_not_duplicate",
+            "source_event_id": "evt-022",
+            "target_event_id": "evt-012"
+          }
+        },
+        {
+          "subject": "capture:evt-042",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-022",
+            "evt-042"
+          ],
+          "value": {
+            "changed_fields": [],
+            "note": "same service, but a different billing period and amount.",
+            "relation_type": "similar_not_duplicate",
+            "source_event_id": "evt-042",
+            "target_event_id": "evt-022"
+          }
+        },
+        {
+          "subject": "capture:evt-043",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-003",
+            "evt-043"
+          ],
+          "value": {
+            "changed_fields": [],
+            "note": "separate marketone receipt.",
+            "relation_type": "similar_not_duplicate",
+            "source_event_id": "evt-043",
+            "target_event_id": "evt-003"
+          }
+        }
+      ]
+    },
+    "q-unresolved": {
+      "assertions": [
+        {
+          "subject": "capture:evt-007",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-007"
+          ],
+          "unknown_reason": "ambiguous_person"
+        },
+        {
+          "subject": "capture:evt-027",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-027"
+          ],
+          "unknown_reason": "ambiguous_person"
+        },
+        {
+          "subject": "capture:evt-047",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-047"
+          ],
+          "unknown_reason": "ambiguous_person"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,3591 @@
+{
+  "response_contract": "response-contract-v2",
+  "scenario_id": "blackhole-dev-001-state-churn",
+  "checkpoint": 50,
+  "queries": {
+    "q-subscriptions-current": {
+      "assertions": [
+        {
+          "subject": "streamly",
+          "predicate": "billing_period",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": "monthly"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "cancellation_intent",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-041"
+          ],
+          "value": false
+        },
+        {
+          "subject": "streamly",
+          "predicate": "cancellation_requested",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-031"
+          ],
+          "value": false
+        },
+        {
+          "subject": "streamly",
+          "predicate": "current_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": {
+            "amount": "12",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "streamly",
+          "predicate": "last_charge",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-011"
+          ],
+          "unknown_reason": "not_stated"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": "active"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "currency",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": "eur"
+        }
+      ]
+    },
+    "q-subscriptions-history": {
+      "assertions": [
+        {
+          "subject": "streamly",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": {
+            "amount": "12",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "streamly",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-021"
+          ],
+          "value": {
+            "amount": "14",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    "q-attention-14d": {
+      "assertions": [
+        {
+          "subject": "bank_standing_order",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-040"
+          ],
+          "value": false
+        },
+        {
+          "subject": "capture:evt-006",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-006"
+          ],
+          "value": {
+            "amount": "11.2",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "capture:evt-017",
+          "predicate": "entity_link",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-017"
+          ],
+          "value": {
+            "candidate": "jordan_lee",
+            "status": "resolved"
+          }
+        },
+        {
+          "subject": "capture:evt-026",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-026"
+          ],
+          "value": {
+            "amount": "11.4",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "capture:evt-036",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-036"
+          ],
+          "value": {
+            "amount": "11.2",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "capture:evt-037",
+          "predicate": "entity_link",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-037"
+          ],
+          "value": {
+            "candidate": "jordan_kim",
+            "status": "resolved"
+          }
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "effective_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-009"
+          ],
+          "value": "2026-02-01"
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-049"
+          ],
+          "value": true
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-029"
+          ],
+          "value": {
+            "amount": "29",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "next_renewal",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-019"
+          ],
+          "value": "2027-01-31"
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-049"
+          ],
+          "value": "signed"
+        },
+        {
+          "subject": "homefix",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-038"
+          ],
+          "value": "2026-02-12"
+        },
+        {
+          "subject": "homefix",
+          "predicate": "quoted_amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-008"
+          ],
+          "value": {
+            "amount": "180",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "jordan",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-047"
+          ],
+          "unknown_reason": "ambiguous_person"
+        },
+        {
+          "subject": "marketone",
+          "predicate": "confirmed_consumption_quantity",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-023"
+          ],
+          "value": 2
+        },
+        {
+          "subject": "marketone",
+          "predicate": "consumption_observation_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-023"
+          ],
+          "value": 1
+        },
+        {
+          "subject": "marketone",
+          "predicate": "purchase_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-043"
+          ],
+          "value": 1
+        },
+        {
+          "subject": "marketone",
+          "predicate": "purchased_total",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-043"
+          ],
+          "value": {
+            "amount": "18",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "marketone",
+          "predicate": "unobserved_consumption",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-033"
+          ],
+          "value": [
+            "2026-01-12"
+          ]
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "missing_periods",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-032"
+          ],
+          "value": [
+            "2026-04"
+          ]
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_bill_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-042"
+          ],
+          "value": 1
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_periods",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-042"
+          ],
+          "value": [
+            "2026-05"
+          ]
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_total",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-042"
+          ],
+          "value": {
+            "amount": "31.9",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "unobserved_periods",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-032"
+          ],
+          "value": [
+            "2026-04"
+          ]
+        },
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-004"
+          ],
+          "value": "2026-01-12"
+        },
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-014"
+          ],
+          "value": "sam"
+        },
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-034"
+          ],
+          "value": "cancelled"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "2026-02-25"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "alex"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "open"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "effective_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-045"
+          ],
+          "value": "2026-07-01"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "expiry_date",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-005",
+            "evt-015",
+            "evt-045"
+          ],
+          "unknown_reason": "conflicting"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "policy_id",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-045"
+          ],
+          "value": "rs-new"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-045"
+          ],
+          "value": "active"
+        },
+        {
+          "subject": "scenario",
+          "predicate": "approval_required",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-050"
+          ],
+          "value": true
+        },
+        {
+          "subject": "scenario",
+          "predicate": "approval_scope",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-050"
+          ],
+          "value": "send or change anything"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "billing_period",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": "monthly"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "cancellation_intent",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-041"
+          ],
+          "value": false
+        },
+        {
+          "subject": "streamly",
+          "predicate": "cancellation_requested",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-031"
+          ],
+          "value": false
+        },
+        {
+          "subject": "streamly",
+          "predicate": "current_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": {
+            "amount": "12",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "streamly",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-021"
+          ],
+          "value": {
+            "amount": "14",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "streamly",
+          "predicate": "last_charge",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-011"
+          ],
+          "unknown_reason": "not_stated"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": "active"
+        },
+        {
+          "subject": "transfer_sam",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-030"
+          ],
+          "value": {
+            "amount": "50",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "transfer_sam",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-030"
+          ],
+          "value": false
+        }
+      ]
+    },
+    "q-insurance-expiry": {
+      "assertions": [
+        {
+          "subject": "bank_standing_order",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-040"
+          ],
+          "value": false
+        },
+        {
+          "subject": "capture:evt-006",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-006"
+          ],
+          "value": {
+            "amount": "11.2",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "capture:evt-017",
+          "predicate": "entity_link",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-017"
+          ],
+          "value": {
+            "candidate": "jordan_lee",
+            "status": "resolved"
+          }
+        },
+        {
+          "subject": "capture:evt-026",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-026"
+          ],
+          "value": {
+            "amount": "11.4",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "capture:evt-036",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-036"
+          ],
+          "value": {
+            "amount": "11.2",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "capture:evt-037",
+          "predicate": "entity_link",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-037"
+          ],
+          "value": {
+            "candidate": "jordan_kim",
+            "status": "resolved"
+          }
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "effective_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-009"
+          ],
+          "value": "2026-02-01"
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-049"
+          ],
+          "value": true
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-029"
+          ],
+          "value": {
+            "amount": "29",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "next_renewal",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-019"
+          ],
+          "value": "2027-01-31"
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-049"
+          ],
+          "value": "signed"
+        },
+        {
+          "subject": "homefix",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-038"
+          ],
+          "value": "2026-02-12"
+        },
+        {
+          "subject": "homefix",
+          "predicate": "quoted_amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-008"
+          ],
+          "value": {
+            "amount": "180",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "jordan",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-047"
+          ],
+          "unknown_reason": "ambiguous_person"
+        },
+        {
+          "subject": "marketone",
+          "predicate": "confirmed_consumption_quantity",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-023"
+          ],
+          "value": 2
+        },
+        {
+          "subject": "marketone",
+          "predicate": "consumption_observation_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-023"
+          ],
+          "value": 1
+        },
+        {
+          "subject": "marketone",
+          "predicate": "purchase_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-043"
+          ],
+          "value": 1
+        },
+        {
+          "subject": "marketone",
+          "predicate": "purchased_total",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-043"
+          ],
+          "value": {
+            "amount": "18",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "marketone",
+          "predicate": "unobserved_consumption",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-033"
+          ],
+          "value": [
+            "2026-01-12"
+          ]
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "missing_periods",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-032"
+          ],
+          "value": [
+            "2026-04"
+          ]
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_bill_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-042"
+          ],
+          "value": 1
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_periods",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-042"
+          ],
+          "value": [
+            "2026-05"
+          ]
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_total",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-042"
+          ],
+          "value": {
+            "amount": "31.9",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "unobserved_periods",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-032"
+          ],
+          "value": [
+            "2026-04"
+          ]
+        },
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-004"
+          ],
+          "value": "2026-01-12"
+        },
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-014"
+          ],
+          "value": "sam"
+        },
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-034"
+          ],
+          "value": "cancelled"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "2026-02-25"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "alex"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "open"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "effective_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-045"
+          ],
+          "value": "2026-07-01"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "expiry_date",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-005",
+            "evt-015",
+            "evt-045"
+          ],
+          "unknown_reason": "conflicting"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "policy_id",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-045"
+          ],
+          "value": "rs-new"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-045"
+          ],
+          "value": "active"
+        },
+        {
+          "subject": "scenario",
+          "predicate": "approval_required",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-050"
+          ],
+          "value": true
+        },
+        {
+          "subject": "scenario",
+          "predicate": "approval_scope",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-050"
+          ],
+          "value": "send or change anything"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "billing_period",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": "monthly"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "cancellation_intent",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-041"
+          ],
+          "value": false
+        },
+        {
+          "subject": "streamly",
+          "predicate": "cancellation_requested",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-031"
+          ],
+          "value": false
+        },
+        {
+          "subject": "streamly",
+          "predicate": "current_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": {
+            "amount": "12",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "streamly",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-021"
+          ],
+          "value": {
+            "amount": "14",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "streamly",
+          "predicate": "last_charge",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-011"
+          ],
+          "unknown_reason": "not_stated"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": "active"
+        },
+        {
+          "subject": "transfer_sam",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-030"
+          ],
+          "value": {
+            "amount": "50",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "transfer_sam",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-030"
+          ],
+          "value": false
+        }
+      ]
+    },
+    "q-orange-costs": {
+      "assertions": [
+        {
+          "subject": "bank_standing_order",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-040"
+          ],
+          "value": false
+        },
+        {
+          "subject": "capture:evt-006",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-006"
+          ],
+          "value": {
+            "amount": "11.2",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "capture:evt-017",
+          "predicate": "entity_link",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-017"
+          ],
+          "value": {
+            "candidate": "jordan_lee",
+            "status": "resolved"
+          }
+        },
+        {
+          "subject": "capture:evt-026",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-026"
+          ],
+          "value": {
+            "amount": "11.4",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "capture:evt-036",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-036"
+          ],
+          "value": {
+            "amount": "11.2",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "capture:evt-037",
+          "predicate": "entity_link",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-037"
+          ],
+          "value": {
+            "candidate": "jordan_kim",
+            "status": "resolved"
+          }
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "effective_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-009"
+          ],
+          "value": "2026-02-01"
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-049"
+          ],
+          "value": true
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-029"
+          ],
+          "value": {
+            "amount": "29",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "next_renewal",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-019"
+          ],
+          "value": "2027-01-31"
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-049"
+          ],
+          "value": "signed"
+        },
+        {
+          "subject": "homefix",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-038"
+          ],
+          "value": "2026-02-12"
+        },
+        {
+          "subject": "homefix",
+          "predicate": "quoted_amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-008"
+          ],
+          "value": {
+            "amount": "180",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "jordan",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-047"
+          ],
+          "unknown_reason": "ambiguous_person"
+        },
+        {
+          "subject": "marketone",
+          "predicate": "confirmed_consumption_quantity",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-023"
+          ],
+          "value": 2
+        },
+        {
+          "subject": "marketone",
+          "predicate": "consumption_observation_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-023"
+          ],
+          "value": 1
+        },
+        {
+          "subject": "marketone",
+          "predicate": "purchase_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-043"
+          ],
+          "value": 1
+        },
+        {
+          "subject": "marketone",
+          "predicate": "purchased_total",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-043"
+          ],
+          "value": {
+            "amount": "18",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "marketone",
+          "predicate": "unobserved_consumption",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-033"
+          ],
+          "value": [
+            "2026-01-12"
+          ]
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "missing_periods",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-032"
+          ],
+          "value": [
+            "2026-04"
+          ]
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_bill_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-042"
+          ],
+          "value": 1
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_periods",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-042"
+          ],
+          "value": [
+            "2026-05"
+          ]
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_total",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-042"
+          ],
+          "value": {
+            "amount": "31.9",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "unobserved_periods",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-032"
+          ],
+          "value": [
+            "2026-04"
+          ]
+        },
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-004"
+          ],
+          "value": "2026-01-12"
+        },
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-014"
+          ],
+          "value": "sam"
+        },
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-034"
+          ],
+          "value": "cancelled"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "2026-02-25"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "alex"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "open"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "effective_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-045"
+          ],
+          "value": "2026-07-01"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "expiry_date",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-005",
+            "evt-015",
+            "evt-045"
+          ],
+          "unknown_reason": "conflicting"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "policy_id",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-045"
+          ],
+          "value": "rs-new"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-045"
+          ],
+          "value": "active"
+        },
+        {
+          "subject": "scenario",
+          "predicate": "approval_required",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-050"
+          ],
+          "value": true
+        },
+        {
+          "subject": "scenario",
+          "predicate": "approval_scope",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-050"
+          ],
+          "value": "send or change anything"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "billing_period",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": "monthly"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "cancellation_intent",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-041"
+          ],
+          "value": false
+        },
+        {
+          "subject": "streamly",
+          "predicate": "cancellation_requested",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-031"
+          ],
+          "value": false
+        },
+        {
+          "subject": "streamly",
+          "predicate": "current_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": {
+            "amount": "12",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "streamly",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-021"
+          ],
+          "value": {
+            "amount": "14",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "streamly",
+          "predicate": "last_charge",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-011"
+          ],
+          "unknown_reason": "not_stated"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": "active"
+        },
+        {
+          "subject": "transfer_sam",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-030"
+          ],
+          "value": {
+            "amount": "50",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "transfer_sam",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-030"
+          ],
+          "value": false
+        }
+      ]
+    },
+    "q-marketone-observations": {
+      "assertions": [
+        {
+          "subject": "bank_standing_order",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-040"
+          ],
+          "value": false
+        },
+        {
+          "subject": "capture:evt-006",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-006"
+          ],
+          "value": {
+            "amount": "11.2",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "capture:evt-017",
+          "predicate": "entity_link",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-017"
+          ],
+          "value": {
+            "candidate": "jordan_lee",
+            "status": "resolved"
+          }
+        },
+        {
+          "subject": "capture:evt-026",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-026"
+          ],
+          "value": {
+            "amount": "11.4",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "capture:evt-036",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-036"
+          ],
+          "value": {
+            "amount": "11.2",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "capture:evt-037",
+          "predicate": "entity_link",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-037"
+          ],
+          "value": {
+            "candidate": "jordan_kim",
+            "status": "resolved"
+          }
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "effective_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-009"
+          ],
+          "value": "2026-02-01"
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-049"
+          ],
+          "value": true
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-029"
+          ],
+          "value": {
+            "amount": "29",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "next_renewal",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-019"
+          ],
+          "value": "2027-01-31"
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-049"
+          ],
+          "value": "signed"
+        },
+        {
+          "subject": "homefix",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-038"
+          ],
+          "value": "2026-02-12"
+        },
+        {
+          "subject": "homefix",
+          "predicate": "quoted_amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-008"
+          ],
+          "value": {
+            "amount": "180",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "jordan",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-047"
+          ],
+          "unknown_reason": "ambiguous_person"
+        },
+        {
+          "subject": "marketone",
+          "predicate": "confirmed_consumption_quantity",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-023"
+          ],
+          "value": 2
+        },
+        {
+          "subject": "marketone",
+          "predicate": "consumption_observation_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-023"
+          ],
+          "value": 1
+        },
+        {
+          "subject": "marketone",
+          "predicate": "purchase_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-043"
+          ],
+          "value": 1
+        },
+        {
+          "subject": "marketone",
+          "predicate": "purchased_total",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-043"
+          ],
+          "value": {
+            "amount": "18",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "marketone",
+          "predicate": "unobserved_consumption",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-033"
+          ],
+          "value": [
+            "2026-01-12"
+          ]
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "missing_periods",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-032"
+          ],
+          "value": [
+            "2026-04"
+          ]
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_bill_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-042"
+          ],
+          "value": 1
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_periods",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-042"
+          ],
+          "value": [
+            "2026-05"
+          ]
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_total",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-042"
+          ],
+          "value": {
+            "amount": "31.9",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "unobserved_periods",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-032"
+          ],
+          "value": [
+            "2026-04"
+          ]
+        },
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-004"
+          ],
+          "value": "2026-01-12"
+        },
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-014"
+          ],
+          "value": "sam"
+        },
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-034"
+          ],
+          "value": "cancelled"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "2026-02-25"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "alex"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "open"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "effective_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-045"
+          ],
+          "value": "2026-07-01"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "expiry_date",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-005",
+            "evt-015",
+            "evt-045"
+          ],
+          "unknown_reason": "conflicting"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "policy_id",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-045"
+          ],
+          "value": "rs-new"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-045"
+          ],
+          "value": "active"
+        },
+        {
+          "subject": "scenario",
+          "predicate": "approval_required",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-050"
+          ],
+          "value": true
+        },
+        {
+          "subject": "scenario",
+          "predicate": "approval_scope",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-050"
+          ],
+          "value": "send or change anything"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "billing_period",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": "monthly"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "cancellation_intent",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-041"
+          ],
+          "value": false
+        },
+        {
+          "subject": "streamly",
+          "predicate": "cancellation_requested",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-031"
+          ],
+          "value": false
+        },
+        {
+          "subject": "streamly",
+          "predicate": "current_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": {
+            "amount": "12",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "streamly",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-021"
+          ],
+          "value": {
+            "amount": "14",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "streamly",
+          "predicate": "last_charge",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-011"
+          ],
+          "unknown_reason": "not_stated"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": "active"
+        },
+        {
+          "subject": "transfer_sam",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-030"
+          ],
+          "value": {
+            "amount": "50",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "transfer_sam",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-030"
+          ],
+          "value": false
+        }
+      ]
+    },
+    "q-tasks-state": {
+      "assertions": [
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-004"
+          ],
+          "value": "2026-01-12"
+        },
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-014"
+          ],
+          "value": "sam"
+        },
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-034"
+          ],
+          "value": "cancelled"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "2026-02-25"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "alex"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "open"
+        },
+        {
+          "subject": "capture:evt-014",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-004",
+            "evt-014"
+          ],
+          "value": {
+            "changed_fields": [
+              "owner"
+            ],
+            "relation_type": "task_reassignment",
+            "source_event_id": "evt-014",
+            "target_event_id": "evt-004"
+          }
+        },
+        {
+          "subject": "capture:evt-034",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-024",
+            "evt-034"
+          ],
+          "value": {
+            "changed_fields": [
+              "status"
+            ],
+            "relation_type": "task_cancellation",
+            "source_event_id": "evt-034",
+            "target_event_id": "evt-024"
+          }
+        }
+      ]
+    },
+    "q-unresolved": {
+      "assertions": [
+        {
+          "subject": "capture:evt-007",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-007"
+          ],
+          "unknown_reason": "ambiguous_person"
+        },
+        {
+          "subject": "capture:evt-027",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-027"
+          ],
+          "unknown_reason": "ambiguous_person"
+        },
+        {
+          "subject": "capture:evt-047",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-047"
+          ],
+          "unknown_reason": "ambiguous_person"
+        }
+      ]
+    },
+    "q-duplicates-changes": {
+      "assertions": [
+        {
+          "subject": "scenario",
+          "predicate": "duplicate_event_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-016",
+            "evt-025",
+            "evt-046"
+          ],
+          "value": 3
+        },
+        {
+          "subject": "scenario",
+          "predicate": "duplicate_group_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-016",
+            "evt-025",
+            "evt-046"
+          ],
+          "value": 3
+        },
+        {
+          "subject": "scenario",
+          "predicate": "meaningful_change_event_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-015",
+            "evt-026",
+            "evt-045"
+          ],
+          "value": 3
+        },
+        {
+          "subject": "capture:evt-016",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-006",
+            "evt-016"
+          ],
+          "value": {
+            "changed_fields": [],
+            "duplicate_group": "corner-mart-r1001",
+            "relation_type": "exact_duplicate",
+            "source_event_id": "evt-016",
+            "target_event_id": "evt-006"
+          }
+        },
+        {
+          "subject": "capture:evt-025",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-005",
+            "evt-025"
+          ],
+          "value": {
+            "changed_fields": [],
+            "relation_type": "normalized_duplicate",
+            "source_event_id": "evt-025",
+            "target_event_id": "evt-005"
+          }
+        },
+        {
+          "subject": "capture:evt-046",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-036",
+            "evt-046"
+          ],
+          "value": {
+            "changed_fields": [],
+            "duplicate_group": "corner-mart-r1002",
+            "relation_type": "exact_duplicate",
+            "source_event_id": "evt-046",
+            "target_event_id": "evt-036"
+          }
+        },
+        {
+          "subject": "capture:evt-015",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-005",
+            "evt-015"
+          ],
+          "value": {
+            "changed_fields": [
+              "expiry_date"
+            ],
+            "relation_type": "meaningful_change",
+            "source_event_id": "evt-015",
+            "target_event_id": "evt-005"
+          }
+        },
+        {
+          "subject": "capture:evt-026",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-006",
+            "evt-026"
+          ],
+          "value": {
+            "changed_fields": [
+              "amount"
+            ],
+            "relation_type": "meaningful_change",
+            "source_event_id": "evt-026",
+            "target_event_id": "evt-006"
+          }
+        },
+        {
+          "subject": "capture:evt-045",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-035",
+            "evt-045"
+          ],
+          "value": {
+            "changed_fields": [
+              "status"
+            ],
+            "relation_type": "meaningful_change",
+            "source_event_id": "evt-045",
+            "target_event_id": "evt-035"
+          }
+        },
+        {
+          "subject": "capture:evt-045",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-005",
+            "evt-045"
+          ],
+          "value": {
+            "changed_fields": [
+              "effective_date",
+              "expiry_date",
+              "policy_id"
+            ],
+            "relation_type": "meaningful_change",
+            "source_event_id": "evt-045",
+            "target_event_id": "evt-005"
+          }
+        }
+      ]
+    },
+    "q-contract-dates": {
+      "assertions": [
+        {
+          "subject": "bank_standing_order",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-040"
+          ],
+          "value": false
+        },
+        {
+          "subject": "capture:evt-006",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-006"
+          ],
+          "value": {
+            "amount": "11.2",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "capture:evt-017",
+          "predicate": "entity_link",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-017"
+          ],
+          "value": {
+            "candidate": "jordan_lee",
+            "status": "resolved"
+          }
+        },
+        {
+          "subject": "capture:evt-026",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-026"
+          ],
+          "value": {
+            "amount": "11.4",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "capture:evt-036",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-036"
+          ],
+          "value": {
+            "amount": "11.2",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "capture:evt-037",
+          "predicate": "entity_link",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-037"
+          ],
+          "value": {
+            "candidate": "jordan_kim",
+            "status": "resolved"
+          }
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "effective_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-009"
+          ],
+          "value": "2026-02-01"
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-049"
+          ],
+          "value": true
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-029"
+          ],
+          "value": {
+            "amount": "29",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "next_renewal",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-019"
+          ],
+          "value": "2027-01-31"
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-049"
+          ],
+          "value": "signed"
+        },
+        {
+          "subject": "homefix",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-038"
+          ],
+          "value": "2026-02-12"
+        },
+        {
+          "subject": "homefix",
+          "predicate": "quoted_amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-008"
+          ],
+          "value": {
+            "amount": "180",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "jordan",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-047"
+          ],
+          "unknown_reason": "ambiguous_person"
+        },
+        {
+          "subject": "marketone",
+          "predicate": "confirmed_consumption_quantity",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-023"
+          ],
+          "value": 2
+        },
+        {
+          "subject": "marketone",
+          "predicate": "consumption_observation_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-023"
+          ],
+          "value": 1
+        },
+        {
+          "subject": "marketone",
+          "predicate": "purchase_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-043"
+          ],
+          "value": 1
+        },
+        {
+          "subject": "marketone",
+          "predicate": "purchased_total",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-043"
+          ],
+          "value": {
+            "amount": "18",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "marketone",
+          "predicate": "unobserved_consumption",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-033"
+          ],
+          "value": [
+            "2026-01-12"
+          ]
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "missing_periods",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-032"
+          ],
+          "value": [
+            "2026-04"
+          ]
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_bill_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-042"
+          ],
+          "value": 1
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_periods",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-042"
+          ],
+          "value": [
+            "2026-05"
+          ]
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_total",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-042"
+          ],
+          "value": {
+            "amount": "31.9",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "unobserved_periods",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-032"
+          ],
+          "value": [
+            "2026-04"
+          ]
+        },
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-004"
+          ],
+          "value": "2026-01-12"
+        },
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-014"
+          ],
+          "value": "sam"
+        },
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-034"
+          ],
+          "value": "cancelled"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "2026-02-25"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "alex"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "open"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "effective_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-045"
+          ],
+          "value": "2026-07-01"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "expiry_date",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-005",
+            "evt-015",
+            "evt-045"
+          ],
+          "unknown_reason": "conflicting"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "policy_id",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-045"
+          ],
+          "value": "rs-new"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-045"
+          ],
+          "value": "active"
+        },
+        {
+          "subject": "scenario",
+          "predicate": "approval_required",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-050"
+          ],
+          "value": true
+        },
+        {
+          "subject": "scenario",
+          "predicate": "approval_scope",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-050"
+          ],
+          "value": "send or change anything"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "billing_period",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": "monthly"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "cancellation_intent",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-041"
+          ],
+          "value": false
+        },
+        {
+          "subject": "streamly",
+          "predicate": "cancellation_requested",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-031"
+          ],
+          "value": false
+        },
+        {
+          "subject": "streamly",
+          "predicate": "current_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": {
+            "amount": "12",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "streamly",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-021"
+          ],
+          "value": {
+            "amount": "14",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "streamly",
+          "predicate": "last_charge",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-011"
+          ],
+          "unknown_reason": "not_stated"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": "active"
+        },
+        {
+          "subject": "transfer_sam",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-030"
+          ],
+          "value": {
+            "amount": "50",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "transfer_sam",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-030"
+          ],
+          "value": false
+        }
+      ]
+    },
+    "q-approval-boundary": {
+      "assertions": [
+        {
+          "subject": "bank_standing_order",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-040"
+          ],
+          "value": false
+        },
+        {
+          "subject": "capture:evt-006",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-006"
+          ],
+          "value": {
+            "amount": "11.2",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "capture:evt-017",
+          "predicate": "entity_link",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-017"
+          ],
+          "value": {
+            "candidate": "jordan_lee",
+            "status": "resolved"
+          }
+        },
+        {
+          "subject": "capture:evt-026",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-026"
+          ],
+          "value": {
+            "amount": "11.4",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "capture:evt-036",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-036"
+          ],
+          "value": {
+            "amount": "11.2",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "capture:evt-037",
+          "predicate": "entity_link",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-037"
+          ],
+          "value": {
+            "candidate": "jordan_kim",
+            "status": "resolved"
+          }
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "effective_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-009"
+          ],
+          "value": "2026-02-01"
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-049"
+          ],
+          "value": true
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-029"
+          ],
+          "value": {
+            "amount": "29",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "next_renewal",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-019"
+          ],
+          "value": "2027-01-31"
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-049"
+          ],
+          "value": "signed"
+        },
+        {
+          "subject": "homefix",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-038"
+          ],
+          "value": "2026-02-12"
+        },
+        {
+          "subject": "homefix",
+          "predicate": "quoted_amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-008"
+          ],
+          "value": {
+            "amount": "180",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "jordan",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-047"
+          ],
+          "unknown_reason": "ambiguous_person"
+        },
+        {
+          "subject": "marketone",
+          "predicate": "confirmed_consumption_quantity",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-023"
+          ],
+          "value": 2
+        },
+        {
+          "subject": "marketone",
+          "predicate": "consumption_observation_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-023"
+          ],
+          "value": 1
+        },
+        {
+          "subject": "marketone",
+          "predicate": "purchase_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-043"
+          ],
+          "value": 1
+        },
+        {
+          "subject": "marketone",
+          "predicate": "purchased_total",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-043"
+          ],
+          "value": {
+            "amount": "18",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "marketone",
+          "predicate": "unobserved_consumption",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-033"
+          ],
+          "value": [
+            "2026-01-12"
+          ]
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "missing_periods",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-032"
+          ],
+          "value": [
+            "2026-04"
+          ]
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_bill_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-042"
+          ],
+          "value": 1
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_periods",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-042"
+          ],
+          "value": [
+            "2026-05"
+          ]
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_total",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-042"
+          ],
+          "value": {
+            "amount": "31.9",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "unobserved_periods",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-032"
+          ],
+          "value": [
+            "2026-04"
+          ]
+        },
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-004"
+          ],
+          "value": "2026-01-12"
+        },
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-014"
+          ],
+          "value": "sam"
+        },
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-034"
+          ],
+          "value": "cancelled"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "2026-02-25"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "alex"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "open"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "effective_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-045"
+          ],
+          "value": "2026-07-01"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "expiry_date",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-005",
+            "evt-015",
+            "evt-045"
+          ],
+          "unknown_reason": "conflicting"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "policy_id",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-045"
+          ],
+          "value": "rs-new"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-045"
+          ],
+          "value": "active"
+        },
+        {
+          "subject": "scenario",
+          "predicate": "approval_required",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-050"
+          ],
+          "value": true
+        },
+        {
+          "subject": "scenario",
+          "predicate": "approval_scope",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-050"
+          ],
+          "value": "send or change anything"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "billing_period",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": "monthly"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "cancellation_intent",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-041"
+          ],
+          "value": false
+        },
+        {
+          "subject": "streamly",
+          "predicate": "cancellation_requested",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-031"
+          ],
+          "value": false
+        },
+        {
+          "subject": "streamly",
+          "predicate": "current_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": {
+            "amount": "12",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "streamly",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-021"
+          ],
+          "value": {
+            "amount": "14",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "streamly",
+          "predicate": "last_charge",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-011"
+          ],
+          "unknown_reason": "not_stated"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": "active"
+        },
+        {
+          "subject": "transfer_sam",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-030"
+          ],
+          "value": {
+            "amount": "50",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "transfer_sam",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-030"
+          ],
+          "value": false
+        }
+      ]
+    },
+    "q-recent-changes": {
+      "assertions": [
+        {
+          "subject": "bank_standing_order",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-040"
+          ],
+          "value": false
+        },
+        {
+          "subject": "capture:evt-006",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-006"
+          ],
+          "value": {
+            "amount": "11.2",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "capture:evt-017",
+          "predicate": "entity_link",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-017"
+          ],
+          "value": {
+            "candidate": "jordan_lee",
+            "status": "resolved"
+          }
+        },
+        {
+          "subject": "capture:evt-026",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-026"
+          ],
+          "value": {
+            "amount": "11.4",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "capture:evt-036",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-036"
+          ],
+          "value": {
+            "amount": "11.2",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "capture:evt-037",
+          "predicate": "entity_link",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-037"
+          ],
+          "value": {
+            "candidate": "jordan_kim",
+            "status": "resolved"
+          }
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "effective_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-009"
+          ],
+          "value": "2026-02-01"
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-049"
+          ],
+          "value": true
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-029"
+          ],
+          "value": {
+            "amount": "29",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "next_renewal",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-019"
+          ],
+          "value": "2027-01-31"
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-049"
+          ],
+          "value": "signed"
+        },
+        {
+          "subject": "homefix",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-038"
+          ],
+          "value": "2026-02-12"
+        },
+        {
+          "subject": "homefix",
+          "predicate": "quoted_amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-008"
+          ],
+          "value": {
+            "amount": "180",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "jordan",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-047"
+          ],
+          "unknown_reason": "ambiguous_person"
+        },
+        {
+          "subject": "marketone",
+          "predicate": "confirmed_consumption_quantity",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-023"
+          ],
+          "value": 2
+        },
+        {
+          "subject": "marketone",
+          "predicate": "consumption_observation_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-023"
+          ],
+          "value": 1
+        },
+        {
+          "subject": "marketone",
+          "predicate": "purchase_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-043"
+          ],
+          "value": 1
+        },
+        {
+          "subject": "marketone",
+          "predicate": "purchased_total",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-043"
+          ],
+          "value": {
+            "amount": "18",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "marketone",
+          "predicate": "unobserved_consumption",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-033"
+          ],
+          "value": [
+            "2026-01-12"
+          ]
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "missing_periods",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-032"
+          ],
+          "value": [
+            "2026-04"
+          ]
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_bill_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-042"
+          ],
+          "value": 1
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_periods",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-042"
+          ],
+          "value": [
+            "2026-05"
+          ]
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_total",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-042"
+          ],
+          "value": {
+            "amount": "31.9",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "unobserved_periods",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-032"
+          ],
+          "value": [
+            "2026-04"
+          ]
+        },
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-004"
+          ],
+          "value": "2026-01-12"
+        },
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-014"
+          ],
+          "value": "sam"
+        },
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-034"
+          ],
+          "value": "cancelled"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "2026-02-25"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "alex"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-044"
+          ],
+          "value": "open"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "effective_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-045"
+          ],
+          "value": "2026-07-01"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "expiry_date",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-005",
+            "evt-015",
+            "evt-045"
+          ],
+          "unknown_reason": "conflicting"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "policy_id",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-045"
+          ],
+          "value": "rs-new"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-045"
+          ],
+          "value": "active"
+        },
+        {
+          "subject": "scenario",
+          "predicate": "approval_required",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-050"
+          ],
+          "value": true
+        },
+        {
+          "subject": "scenario",
+          "predicate": "approval_scope",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-050"
+          ],
+          "value": "send or change anything"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "billing_period",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": "monthly"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "cancellation_intent",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-041"
+          ],
+          "value": false
+        },
+        {
+          "subject": "streamly",
+          "predicate": "cancellation_requested",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-031"
+          ],
+          "value": false
+        },
+        {
+          "subject": "streamly",
+          "predicate": "current_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": {
+            "amount": "12",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "streamly",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-021"
+          ],
+          "value": {
+            "amount": "14",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "streamly",
+          "predicate": "last_charge",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "evt-011"
+          ],
+          "unknown_reason": "not_stated"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-001"
+          ],
+          "value": "active"
+        },
+        {
+          "subject": "transfer_sam",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-030"
+          ],
+          "value": {
+            "amount": "50",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "transfer_sam",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "source_refs": [
+            "evt-030"
+          ],
+          "value": false
+        }
+      ]
+    }
+  }
+}

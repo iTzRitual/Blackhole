@@ -5,7 +5,7 @@
 Gate A remains frozen and Gate B's response-contract repair is valid. The
 frozen public development benchmark is one 200-event scenario with checkpoints
 at 50, 100, 150, and 200; `response-contract-v2` and the official `baseline-v1`
-result remain unchanged. The next authorized phase is advanced Blackhole
+result remain unchanged. The current authorized phase is advanced Blackhole
 application experimentation. Experiments may implement and evaluate scoped
 Blackhole application behavior, but must preserve the frozen benchmark,
 evaluator, baseline evidence, and calibration evidence.
@@ -18,13 +18,12 @@ The human-authorized size-calibration step is a narrow exception: non-scored syn
 
 For the pre-freeze runtime calibration, a versioned baseline prompt and non-scored model calls are allowed once the human supplies a usable provider configuration. The primary MVP runtime is subscription-first: use an already-installed, already-authenticated local agent CLI when available, let that CLI own authentication, and never request, read, copy, export, or persist provider tokens. Direct API-key integrations are not required for this phase. Do not commit credential values, silently change the prompt after observing failures, or turn calibration outputs into scored benchmark results.
 
-The remaining empty application, data, and infrastructure directories are
-represented by placeholders so Git can preserve the intended layout. A
-placeholder is not permission to build production infrastructure or a
-production subsystem; scoped advanced Blackhole application experiments are
-authorized in the next phase. Development benchmark content must follow the
-approved contract; evaluator-owned holdout material remains outside the
-implementation-agent trust boundary.
+The data and infrastructure directories that remain empty are represented by
+placeholders so Git can preserve the intended layout. The `app/` directory may
+contain scoped advanced-experiment code, but a placeholder is not permission to
+build production infrastructure or a production subsystem. Development
+benchmark content must follow the approved contract; evaluator-owned holdout
+material remains outside the implementation-agent trust boundary.
 
 ## Non-negotiable invariants
 

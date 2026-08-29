@@ -60,8 +60,9 @@ notes:
 
 The current public development runner and evaluator are implemented in
 [`baseline/run_baseline.py`](../baseline/run_baseline.py) and
-[`eval/score.py`](../eval/score.py). The checklist remains the handoff template
-for future holdout and advanced-system runs.
+[`eval/score.py`](../eval/score.py). The scoped advanced experiment runner is
+[`app/advanced_runner.py`](../app/advanced_runner.py); the checklist remains the
+handoff template for future holdout and advanced-system runs.
 
 ## 5. Determinism expectations
 
@@ -210,3 +211,32 @@ Record the corrected run's actual checkpoint scores, totals, schema validity,
 DSCR, provider input/output tokens, wall time, retries, and observed semantic
 failure categories in its result and trajectory summary. Do not invent dollar
 cost when the subscription runtime does not expose it.
+
+## 10. Experiment 001 state-projection replay
+
+Experiment 001 is an advanced application experiment, not a replacement for
+the fair baseline. It uses only the public development scenario and the frozen
+public response contract. A fresh semantic run requires an already-installed,
+already-authenticated Codex CLI and never receives expected output or holdout
+material:
+
+```text
+python -m app.advanced_runner --scenario benchmark/dev/cases/scenario-001.json --query-bundle benchmark/dev/query-bundle-v2.json --response-contract benchmark/dev/response-contract-v2.json --max-events 200 --batch-size 50 --semantic-reasoning high --output eval/results/experiment-001-full-v1-candidate.json --trajectory trajectories/runtime/experiment-001-full-v1 --run-id experiment-001-full-v1 --label "EXPERIMENT 001 / FROZEN 200-EVENT MILESTONE / HIGH EXTRACTION"
+python eval/score.py --scenario benchmark/dev/cases/scenario-001.json --expected benchmark/dev/expected/scenario-001.json --candidate eval/results/experiment-001-full-v1-candidate.json --response-contract benchmark/dev/response-contract-v2.json --output eval/results/experiment-001-full-v1.json
+```
+
+Projection revisions can be reproduced without provider calls from the
+recorded public extraction outputs:
+
+```text
+python -m app.advanced_runner --scenario benchmark/dev/cases/scenario-001.json --query-bundle benchmark/dev/query-bundle-v2.json --response-contract benchmark/dev/response-contract-v2.json --max-events 200 --batch-size 50 --replay-extraction-dir trajectories/runtime/experiment-001-full-v1 --output eval/results/experiment-001-full-v4-candidate.json --trajectory trajectories/runtime/experiment-001-full-v4 --run-id experiment-001-full-v4 --label "EXPERIMENT 001 / FROZEN 200-EVENT MILESTONE / PROJECTOR V4 GROUP REPLAY"
+python eval/score.py --scenario benchmark/dev/cases/scenario-001.json --expected benchmark/dev/expected/scenario-001.json --candidate eval/results/experiment-001-full-v4-candidate.json --response-contract benchmark/dev/response-contract-v2.json --output eval/results/experiment-001-full-v4.json
+```
+
+The replay uses the public development expected output only because this is a
+local diagnostic. A judge must mount holdout expected output privately and must
+not place it in the implementation checkout, prompt, trajectory, or result
+artifact. The final Experiment 001 replay is recorded at
+`eval/results/experiment-001-full-v4.json` and its runtime evidence is under
+`trajectories/runtime/experiment-001-full-v4/`; the fresh semantic provider
+usage is recorded under `experiment-001-full-v1`.

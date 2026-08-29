@@ -52,6 +52,20 @@ This file records material improvements to the product design, agent workflow, e
 - **Decision:** **KEEP** v2 contract, deterministic scorer, isolation protocol, and corrected baseline evidence; **REVISE/REMOVE** v0 only as an official measure while preserving its files as invalid historical evidence.
 - **Learning:** A nonzero, schema-valid result makes the remaining errors interpretable as semantic/recall/state failures. Public contract design must define both identifier vocabulary and deterministic value normalization before an official run.
 
+## 2026-08-29 — Experiment 001: append-only state projection
+
+- **Stage / experiment identifier:** Experiment 001, minimal Blackhole-owned durable state and deterministic projection.
+- **Problem observed:** The valid stateless baseline scored `LQA-0M=0.3014914553` with `DSCR=277`; current-state, temporal-history, and relation reconciliation errors suggested that a long provider conversation was not maintaining a reliable rebuildable state.
+- **Hypothesis:** Immutable raw captures plus structured observations/relationships and a deterministic rebuildable projection can improve longitudinal state quality without giving the model evaluator knowledge or relying on LLM arithmetic and date logic.
+- **What changed:** Added a scoped SQLite state store with immutable raw-event triggers, provenance/history, knowledge-status handling, contradiction/supersession logic, a subscription-first Codex extraction boundary, and a deterministic public response projector. Added replay support so projection revisions could be compared against the same recorded semantic extraction. Unsupported query families no longer fall back to a state dump.
+- **Evaluation method:** FAST DEV first, followed by the frozen public 200-event milestone. Fresh semantic extraction was performed only against public development captures; query and projection revisions were replayed deterministically. The unchanged `response-contract-v2` evaluator and public expected output produced the reported scores. No holdout data, evaluator changes, benchmark changes, or baseline prompt tuning were used.
+- **Metric before:** Official `baseline-v1`: LQA-0M `0.3014914553`, DSCR `277`. The four-query 50-event diagnostic slice was LQA-0M `0.2217948718`, DSCR `41`.
+- **Metric after:** FAST final deterministic replay: LQA-0M `0.7222222222`, DSCR `10`. Full v4 deterministic replay: LQA-0M `0.7492295899`, checkpoint scores `0.7962962963 / 0.7523071836 / 0.7064078283 / 0.7419070513`, DSCR `72`, and totals `TP=279, FP=69, FN=96`. Schema validity, safety, and source integrity all passed.
+- **Regressions:** The first full projector revision scored `0.1589548193` because a catch-all state dump created 1,900 false positives; it was removed. A fresh model-query replay scored `0.0990021008` and was not kept. The remaining full-v4 relation-reconciliation score is `0.3169014085`; duplicate/change relationship detail, contract-date recall, and some task/recent-change assertions remain weak. Fresh extraction used reasoning `high`, not `max`, because the latter was not practically usable for the 200-event run.
+- **Runtime/cost impact:** Four fresh semantic calls took `887.453` seconds and reported `132,514` input, `72,711` output, and `53,751` reasoning tokens. The 50-event live FAST run took about 220 seconds and reported `27,831` input, `19,151` output, and `15,020` reasoning tokens. Full-v4 projection replay made no provider calls. Subscription pricing was unavailable.
+- **Decision:** **KEEP** the Experiment 001 architecture as the current experimental slice. Do not change the frozen benchmark or official baseline, and do not start Experiment 002 in this task.
+- **Learning:** Durable state plus deterministic projection materially improved the public current/history/financial result and reduced defects. Relationship detail is now the clearest evidence-backed next target; the result should not be generalized to holdout performance or production readiness.
+
 ## Entry template
 
 Use one entry per meaningful improvement:
