@@ -31,10 +31,11 @@ not listed as a completed trajectory here.
 | 017-deferred-ingestion | Separate synchronous capture from later semantic processing | Product-runtime milestone; explicitly not Experiment 006 | `0c60da9` | [summary](trajectories/coding/017-deferred-ingestion/summary.md) |
 | 018-blackhole-host-foundation | Add the local Host foundation and safe CLI discovery | Product-runtime foundation; no new benchmark experiment | `11d8a04` | [summary](trajectories/coding/018-blackhole-host-foundation/summary.md) |
 | 019-global-skills-install | Install global coding/design skills for local agents | Global installation completed; no product/runtime change | `67e734e` | [summary](trajectories/coding/019-global-skills-install/summary.md) |
-| submission-001-hardening | Add offline qualification, CI, evidence index, and submission checklist | KEEP; five non-blocking warnings remain for finalization | `not recorded` | [summary](trajectories/coding/submission-001-hardening/summary.md) |
+| submission-001-hardening | Add offline qualification, CI, evidence index, and submission checklist | KEEP; five non-blocking warnings remain for finalization | `18b123f` | [summary](trajectories/coding/submission-001-hardening/summary.md) |
 
-The short commit IDs above were resolved from local Git history; the
-hardening commit is filled in after the final isolated commit.
+The short commit IDs above were resolved from local Git history. The hardening
+implementation is in `18b123f`; the small follow-up metadata commit records
+the final handoff state of this trajectory.
 
 ## Runtime trajectories
 

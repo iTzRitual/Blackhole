@@ -132,5 +132,7 @@ integration/generalization phase; do not merge this branch in this task.
 
 ## Related git commit
 
-The coherent commit is recorded in the final handoff and in this section once
-the isolated worktree is committed.
+The hardening implementation is in `18b123f`
+(`chore: add submission qualification gate and CI`). The follow-up metadata
+commit that records this final handoff state is reported with the completed
+branch tip.
