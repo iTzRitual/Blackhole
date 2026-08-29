@@ -743,3 +743,31 @@ The measured failures, runtime usage, and KEEP decision are appended to
 [`IMPROVEMENT_CHANGELOG.md`](../IMPROVEMENT_CHANGELOG.md). The main remaining
 weakness is relation-detail recall; follow-up work requires a new authorized
 experiment and trajectory.
+
+## 23. Advanced Experiment 002 evidence
+
+An implementation audit found benchmark-specific subject-name routing in the
+E001 deterministic projector. Experiment 002 replaced it with public ontology
+kind selection and generic query-family routing, then replayed the same
+recorded semantic extraction. It did not change the frozen benchmark,
+`response-contract-v2`, expected output, evaluator, official `baseline-v1`, or
+calibration evidence.
+
+The non-official 50-event FAST replay scored `LQA-0M=0.8888888889` with
+`DSCR=4`. The full public replay scored `LQA-0M=0.7492295899`, with checkpoint
+scores `0.7962962963 / 0.7523071836 / 0.7064078283 / 0.7419070513`,
+`DSCR=72`, and `TP=279, FP=69, FN=96`. It was schema-valid, passed source
+integrity, and had no safety violations. The full result is numerically
+identical to Experiment 001 and is repair evidence, not an official baseline
+result.
+
+The final artifacts are
+[`eval/results/experiment-002-generic-fast.json`](../eval/results/experiment-002-generic-fast.json),
+[`eval/results/experiment-002-generic-full.json`](../eval/results/experiment-002-generic-full.json),
+and the runtime evidence is under
+[`trajectories/runtime/experiment-002-generic-fast/`](../trajectories/runtime/experiment-002-generic-fast/)
+and
+[`trajectories/runtime/experiment-002-generic-full/`](../trajectories/runtime/experiment-002-generic-full/).
+The first overly broad generic relation filter was rejected after it counted
+entity-link-only chains as duplicates; the corrected rule restored the E001
+score exactly. No provider calls were made for either final replay.

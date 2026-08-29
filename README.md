@@ -54,6 +54,10 @@ rebuildable SQLite state slice and deterministic public projections. Its
 non-official result is recorded in the experiment trajectory and changelog; it
 does not replace the frozen baseline or benchmark.
 
+The follow-up genericity repair removes benchmark-specific subject routing from
+the projector while preserving that measured result. Its replay evidence is
+recorded separately and does not reopen Gate A or change the official baseline.
+
 ## Design principles
 
 - Capture requires minimal cognitive effort and no upfront taxonomy.

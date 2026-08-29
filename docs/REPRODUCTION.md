@@ -240,3 +240,22 @@ artifact. The final Experiment 001 replay is recorded at
 `eval/results/experiment-001-full-v4.json` and its runtime evidence is under
 `trajectories/runtime/experiment-001-full-v4/`; the fresh semantic provider
 usage is recorded under `experiment-001-full-v1`.
+
+## 11. Experiment 002 genericity replay
+
+Experiment 002 is a deterministic projector repair. It reuses the recorded
+public extraction outputs above, so it requires no provider configuration and
+makes no model calls:
+
+```text
+python -m app.advanced_runner --scenario benchmark/dev/cases/scenario-001.json --query-bundle benchmark/dev/query-bundle-v2.json --response-contract benchmark/dev/response-contract-v2.json --max-events 200 --batch-size 50 --replay-extraction-dir trajectories/runtime/experiment-001-full-v1 --output eval/results/experiment-002-generic-full-candidate.json --trajectory trajectories/runtime/experiment-002-generic-full --run-id experiment-002-generic-full --label "EXPERIMENT 002 / GENERIC PROJECTOR / FROZEN 200-EVENT PUBLIC REPLAY" --semantic-reasoning high
+python eval/score.py --scenario benchmark/dev/cases/scenario-001.json --expected benchmark/dev/expected/scenario-001.json --candidate eval/results/experiment-002-generic-full-candidate.json --response-contract benchmark/dev/response-contract-v2.json --output eval/results/experiment-002-generic-full.json
+```
+
+The FAST diagnostic uses the same replay mode with `--max-events 50` and the
+four selected public query IDs, followed by `eval.score_slice`; it is not an
+official score. The final full artifact is
+`eval/results/experiment-002-generic-full.json`, with runtime evidence under
+`trajectories/runtime/experiment-002-generic-full/`. Holdout expected output
+must remain privately mounted by the judge and must never be copied into an
+implementation checkout or trajectory.

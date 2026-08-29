@@ -66,6 +66,20 @@ This file records material improvements to the product design, agent workflow, e
 - **Decision:** **KEEP** the Experiment 001 architecture as the current experimental slice. Do not change the frozen benchmark or official baseline, and do not start Experiment 002 in this task.
 - **Learning:** Durable state plus deterministic projection materially improved the public current/history/financial result and reduced defects. Relationship detail is now the clearest evidence-backed next target; the result should not be generalized to holdout performance or production readiness.
 
+## 2026-08-29 — Experiment 002: generic state-projection repair
+
+- **Stage / experiment identifier:** Experiment 002, genericity repair for the E001 deterministic response projector.
+- **Problem observed:** An audit found that the committed projector selected several projections and query branches using literal public benchmark subject IDs and brand names. That violated the requirement that the state-maintenance mechanism represent generic Blackhole entities and state transitions.
+- **Hypothesis:** Selecting subjects by their public ontology kind, routing by query-family vocabulary, and using observation semantics for high-precision event relations will preserve E001's state-quality result without encoding one synthetic storyline.
+- **What changed:** Replaced named-subject routing with kind-driven subscription, service, merchant, insurance, observation, contract, and aggregate projections. Service and merchant aggregation now handles multiple subjects. Duplicate/change filtering uses capture structure and excludes entity-link-only endpoints. Added generic unit fixtures for subscription and change projections. No benchmark, expected output, response contract, evaluator, baseline, calibration, or holdout material changed.
+- **Evaluation method:** Fifteen application/evaluator unit tests, a labeled 50-event FAST replay, and a four-checkpoint public 200-event replay from the already-recorded E001 semantic extraction. The unchanged `response-contract-v2` evaluator scored both replays. No provider calls or prompt tuning were used.
+- **Metric before:** E001 final public replay `LQA-0M=0.7492295899`, `DSCR=72`; the projector had no independent genericity measurement.
+- **Metric after:** FAST diagnostic `LQA-0M=0.8888888889`, `DSCR=4`; full replay `LQA-0M=0.7492295899`, checkpoint scores `0.7962962963 / 0.7523071836 / 0.7064078283 / 0.7419070513`, `DSCR=72`, and `TP=279, FP=69, FN=96`. Schema validity, safety, and source-integrity checks passed. The full score is numerically identical to E001 and is not an official baseline result.
+- **Regressions:** The first generic duplicate rule counted entity-link-only similarity chains as capture duplicates, reducing the full replay to `LQA-0M=0.7472666121` and increasing DSCR to `82`. That revision was tightened using the generic `entity_link` predicate rule and replayed successfully. No unresolved regression remains from this repair.
+- **Runtime/cost impact:** Both final replays used zero provider input/output/reasoning tokens and completed as local deterministic replays in approximately two seconds per command invocation. The repair added no subscription cost or model calls.
+- **Decision:** **KEEP** the genericity repair. Preserve E001's prior artifacts and result unchanged; treat the new full artifact as reproducible repair evidence, not as a new official baseline.
+- **Learning:** Public ontology kinds and observation semantics are sufficient to remove benchmark-specific projector coupling while retaining the validated score. Relation-detail recall remains the next evidence-backed weakness, and any follow-up must use a new trajectory.
+
 ## Entry template
 
 Use one entry per meaningful improvement:

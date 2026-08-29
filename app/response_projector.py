@@ -30,6 +30,29 @@ class ResponseProjector:
     def _kind(self, subject: str) -> str | None:
         return self.subject_kinds.get(subject)
 
+    def _subjects_of_kind(self, snapshot: dict[str, Any], kind: str) -> list[str]:
+        """Return public subjects of a kind that are present or declared."""
+
+        subjects = {
+            subject
+            for subject, subject_kind in self.subject_kinds.items()
+            if subject_kind == kind
+        }
+        for collection in (snapshot.get("current_facts", []), snapshot.get("history", [])):
+            if not isinstance(collection, list):
+                continue
+            for item in collection:
+                if not isinstance(item, dict) or not isinstance(item.get("subject"), str):
+                    continue
+                subject = item["subject"]
+                if self._kind(subject) == kind:
+                    subjects.add(subject)
+        return sorted(subjects)
+
+    def _aggregate_subject(self, snapshot: dict[str, Any]) -> str:
+        subjects = self._subjects_of_kind(snapshot, "aggregate")
+        return subjects[0] if subjects else "aggregate"
+
     @staticmethod
     def _clean_value(value: Any) -> Any:
         """Apply small, public-value normalizations without changing meaning."""
@@ -198,14 +221,15 @@ class ResponseProjector:
         return [
             item
             for item in self._decompose_objects(self._effective_current(snapshot))
-            if item["subject"] == "streamly" and item["predicate"] in allowed
+            if self._kind(item["subject"]) == "subscription" and item["predicate"] in allowed
         ]
 
     def _subscription_history(self, snapshot: dict[str, Any]) -> list[dict[str, Any]]:
         result: list[dict[str, Any]] = []
         seen_values: set[str] = set()
         for item in sorted(self._history(snapshot), key=self._sequence):
-            if item.get("subject") != "streamly" or item.get("predicate") not in {"current_price", "historical_price"}:
+            subject = item.get("subject")
+            if not isinstance(subject, str) or self._kind(subject) != "subscription" or item.get("predicate") not in {"current_price", "historical_price"}:
                 continue
             if item.get("operation") == "duplicate" or item.get("knowledge_status") not in {"known", "inferred"}:
                 continue
@@ -218,7 +242,7 @@ class ResponseProjector:
             seen_values.add(key)
             result.append(
                 self._fact(
-                    "streamly",
+                    subject,
                     "historical_price",
                     str(item.get("knowledge_status", "known")),
                     list(item.get("source_refs", [str(item.get("event_id"))])),
@@ -282,8 +306,14 @@ class ResponseProjector:
                     )
                 )
 
-        scenario_facts = by_subject.get("scenario", {})
-        global_approval = scenario_facts.get("approval_required")
+        global_approval = next(
+            (
+                facts.get("approval_required")
+                for subject, facts in by_subject.items()
+                if self._kind(subject) == "aggregate" and facts.get("approval_required") is not None
+            ),
+            None,
+        )
         global_requires_approval = (
             global_approval is not None
             and global_approval.get("knowledge_status") in {"known", "inferred"}
@@ -321,7 +351,7 @@ class ResponseProjector:
         return [
             item
             for item in self._effective_current(snapshot)
-            if item["subject"] == "roadsure" and item["predicate"] in allowed
+            if self._kind(item["subject"]) == "insurance" and item["predicate"] in allowed
         ]
 
     @staticmethod
@@ -343,58 +373,70 @@ class ResponseProjector:
     def _render_number(number: Decimal) -> int | str:
         return int(number) if number == number.to_integral_value() else format(number, "f")
 
-    def _orange_costs(self, snapshot: dict[str, Any]) -> list[dict[str, Any]]:
+    def _service_costs(self, snapshot: dict[str, Any]) -> list[dict[str, Any]]:
         history = self._history(snapshot)
-        by_event: dict[str, list[dict[str, Any]]] = {}
+        by_subject_event: dict[str, dict[str, list[dict[str, Any]]]] = {}
         for item in history:
-            if item.get("subject") == "orange_mobile":
-                by_event.setdefault(str(item.get("event_id")), []).append(item)
-        bills: dict[str, dict[str, Any]] = {}
-        missing_periods: set[str] = set()
-        missing_refs: list[str] = []
-        unobserved_refs: list[str] = []
-        for event_id, items in by_event.items():
-            if any(item.get("operation") == "duplicate" for item in items):
+            subject = item.get("subject")
+            if not isinstance(subject, str) or self._kind(subject) != "service":
                 continue
-            periods: list[str] = []
-            amount_item: dict[str, Any] | None = None
-            for item in items:
-                if item.get("predicate") == "observed_periods" and item.get("knowledge_status") in {"known", "inferred"} and isinstance(item.get("value"), list):
-                    periods.extend(str(value) for value in item["value"] if isinstance(value, str))
-                if item.get("predicate") == "observed_total" and item.get("knowledge_status") in {"known", "inferred"} and self._decimal(item.get("value")) is not None:
-                    amount_item = item
-                if item.get("predicate") == "missing_periods" and item.get("knowledge_status") in {"known", "inferred"} and isinstance(item.get("value"), list):
-                    missing_periods.update(str(value) for value in item["value"] if isinstance(value, str))
-                    missing_refs.extend(item.get("source_refs", [event_id]))
-                if item.get("predicate") == "unobserved_periods":
-                    unobserved_refs.extend(item.get("source_refs", [event_id]))
-            if amount_item is None:
-                continue
-            key = periods[0] if periods else event_id
-            candidate = {
-                "event_id": event_id,
-                "sequence": self._sequence(amount_item),
-                "value": amount_item.get("value"),
-                "source_refs": list(amount_item.get("source_refs", [event_id])),
-            }
-            prior = bills.get(key)
-            if prior is None or candidate["sequence"] >= prior["sequence"]:
-                bills[key] = candidate
+            by_subject_event.setdefault(subject, {}).setdefault(str(item.get("event_id")), []).append(item)
 
-        refs = [ref for item in bills.values() for ref in item["source_refs"]]
-        totals = [self._decimal(item["value"]) for item in bills.values()]
-        currencies = [
-            item["value"].get("currency")
-            for item in bills.values()
-            if isinstance(item["value"], dict) and item["value"].get("currency") is not None
-        ]
         result: list[dict[str, Any]] = []
-        if bills:
-            result.append(self._fact("orange_mobile", "observed_bill_count", "known", refs, value=len(bills)))
+        for subject in sorted(by_subject_event):
+            by_event = by_subject_event[subject]
+            bills: dict[str, dict[str, Any]] = {}
+            missing_periods: set[str] = set()
+            missing_refs: list[str] = []
+            unobserved_refs: list[str] = []
+            for event_id, items in by_event.items():
+                if any(item.get("operation") == "duplicate" for item in items):
+                    continue
+                periods: list[str] = []
+                amount_item: dict[str, Any] | None = None
+                for item in items:
+                    refs = item.get("source_refs", [event_id])
+                    if not isinstance(refs, list):
+                        refs = [event_id]
+                    if item.get("predicate") == "observed_periods" and item.get("knowledge_status") in {"known", "inferred"} and isinstance(item.get("value"), list):
+                        periods.extend(str(value) for value in item["value"] if isinstance(value, str))
+                    if item.get("predicate") == "observed_total" and item.get("knowledge_status") in {"known", "inferred"} and self._decimal(item.get("value")) is not None:
+                        amount_item = item
+                    if item.get("predicate") == "missing_periods" and item.get("knowledge_status") in {"known", "inferred"} and isinstance(item.get("value"), list):
+                        missing_periods.update(str(value) for value in item["value"] if isinstance(value, str))
+                        missing_refs.extend(refs)
+                    if item.get("predicate") == "unobserved_periods":
+                        unobserved_refs.extend(refs)
+                if amount_item is None:
+                    continue
+                refs = amount_item.get("source_refs", [event_id])
+                if not isinstance(refs, list):
+                    refs = [event_id]
+                key = periods[0] if periods else event_id
+                candidate = {
+                    "event_id": event_id,
+                    "sequence": self._sequence(amount_item),
+                    "value": amount_item.get("value"),
+                    "source_refs": list(refs),
+                }
+                prior = bills.get(key)
+                if prior is None or candidate["sequence"] >= prior["sequence"]:
+                    bills[key] = candidate
+
+            if not bills:
+                continue
+            refs = [ref for item in bills.values() for ref in item["source_refs"]]
+            totals = [self._decimal(item["value"]) for item in bills.values()]
+            currencies = [
+                item["value"].get("currency")
+                for item in bills.values()
+                if isinstance(item["value"], dict) and item["value"].get("currency") is not None
+            ]
+            result.append(self._fact(subject, "observed_bill_count", "known", refs, value=len(bills)))
             if all(value is not None for value in totals) and currencies and len({str(value).casefold() for value in currencies}) == 1:
                 result.append(
                     self._fact(
-                        "orange_mobile",
+                        subject,
                         "observed_total",
                         "known",
                         refs,
@@ -403,13 +445,13 @@ class ResponseProjector:
                 )
             observed_periods = sorted(key for key in bills if key.startswith("20") and len(key) == 7)
             if observed_periods:
-                result.append(self._fact("orange_mobile", "observed_periods", "known", refs, value=observed_periods))
+                result.append(self._fact(subject, "observed_periods", "known", refs, value=observed_periods))
             if missing_periods:
-                result.append(self._fact("orange_mobile", "missing_periods", "known", missing_refs, value=sorted(missing_periods)))
+                result.append(self._fact(subject, "missing_periods", "known", missing_refs, value=sorted(missing_periods)))
             if unobserved_refs or missing_periods:
                 result.append(
                     self._fact(
-                        "orange_mobile",
+                        subject,
                         "unobserved_periods",
                         "unknown",
                         unobserved_refs or missing_refs,
@@ -417,108 +459,94 @@ class ResponseProjector:
                     )
                 )
             latest = max(bills.values(), key=lambda item: item["sequence"])
-            result.append(
-                self._fact(
-                    "orange_mobile",
-                    "current_amount",
-                    "known",
-                    latest["source_refs"],
-                    value=latest["value"],
-                )
-            )
+            result.append(self._fact(subject, "current_amount", "known", latest["source_refs"], value=latest["value"]))
         return result
 
-    def _marketone_observations(self, snapshot: dict[str, Any]) -> list[dict[str, Any]]:
+    def _merchant_observations(self, snapshot: dict[str, Any]) -> list[dict[str, Any]]:
         history = self._history(snapshot)
-        purchase_events: dict[str, dict[str, Any]] = {}
-        consumption: list[dict[str, Any]] = []
-        explicit_zero: list[dict[str, Any]] = []
-        unobserved_refs: list[str] = []
+        by_subject: dict[str, dict[str, Any]] = {}
         for item in history:
-            if item.get("subject") != "marketone" or item.get("operation") == "duplicate":
+            subject = item.get("subject")
+            if not isinstance(subject, str) or self._kind(subject) != "merchant" or item.get("operation") == "duplicate":
                 continue
             event_id = str(item.get("event_id"))
-            if item.get("predicate") in {"purchase_count", "purchased_total"} and item.get("knowledge_status") in {"known", "inferred"}:
-                purchase_events.setdefault(event_id, {})[item["predicate"]] = item
-            elif item.get("predicate") == "confirmed_consumption_quantity" and item.get("knowledge_status") in {"known", "inferred"} and self._decimal(item.get("value")) is not None:
-                consumption.append(item)
-            elif item.get("predicate") == "explicit_zero_is_supported" and item.get("knowledge_status") in {"known", "inferred"}:
-                explicit_zero.append(item)
-            elif item.get("predicate") == "unobserved_consumption":
-                unobserved_refs.extend(item.get("source_refs", [event_id]))
-
-        refs = [ref for event in purchase_events.values() for item in event.values() for ref in item.get("source_refs", [])]
-        result: list[dict[str, Any]] = []
-        if purchase_events:
-            result.append(
-                self._fact(
-                    "marketone",
-                    "purchase_count",
-                    "known",
-                    refs,
-                    value=self._render_number(sum(self._decimal(item.get("purchase_count", {}).get("value")) or Decimal(0) for item in purchase_events.values())),
-                )
+            bucket = by_subject.setdefault(
+                subject,
+                {"purchase_events": {}, "consumption": [], "explicit_zero": [], "unobserved_refs": []},
             )
-            purchase_amounts = [
-                self._decimal(item["purchased_total"].get("value"))
-                for item in purchase_events.values()
-                if "purchased_total" in item
-            ]
-            currencies = [
-                item["purchased_total"].get("value", {}).get("currency")
-                for item in purchase_events.values()
-                if "purchased_total" in item and isinstance(item["purchased_total"].get("value"), dict)
-            ]
-            if purchase_amounts and all(value is not None for value in purchase_amounts) and currencies and len({str(value).casefold() for value in currencies}) == 1:
+            if item.get("predicate") in {"purchase_count", "purchased_total"} and item.get("knowledge_status") in {"known", "inferred"}:
+                bucket["purchase_events"].setdefault(event_id, {})[item["predicate"]] = item
+            elif item.get("predicate") == "confirmed_consumption_quantity" and item.get("knowledge_status") in {"known", "inferred"} and self._decimal(item.get("value")) is not None:
+                bucket["consumption"].append(item)
+            elif item.get("predicate") == "explicit_zero_is_supported" and item.get("knowledge_status") in {"known", "inferred"}:
+                bucket["explicit_zero"].append(item)
+            elif item.get("predicate") == "unobserved_consumption":
+                refs = item.get("source_refs", [event_id])
+                bucket["unobserved_refs"].extend(refs if isinstance(refs, list) else [event_id])
+
+        result: list[dict[str, Any]] = []
+        for subject in sorted(by_subject):
+            bucket = by_subject[subject]
+            purchase_events = bucket["purchase_events"]
+            consumption = bucket["consumption"]
+            explicit_zero = bucket["explicit_zero"]
+            unobserved_refs = bucket["unobserved_refs"]
+            refs = [ref for event in purchase_events.values() for item in event.values() for ref in item.get("source_refs", [])]
+            if purchase_events:
                 result.append(
                     self._fact(
-                        "marketone",
-                        "purchased_total",
+                        subject,
+                        "purchase_count",
                         "known",
                         refs,
-                        value=self._amount_value(sum(value for value in purchase_amounts if value is not None), currencies[0]),
+                        value=self._render_number(sum(self._decimal(item.get("purchase_count", {}).get("value")) or Decimal(0) for item in purchase_events.values())),
                     )
                 )
-        consumption_refs = [ref for item in consumption for ref in item.get("source_refs", [])]
-        if consumption:
-            result.append(
-                self._fact(
-                    "marketone",
-                    "confirmed_consumption_quantity",
-                    "known",
-                    consumption_refs,
-                    value=self._render_number(sum(self._decimal(item.get("value")) or Decimal(0) for item in consumption)),
+                purchase_amounts = [
+                    self._decimal(item["purchased_total"].get("value"))
+                    for item in purchase_events.values()
+                    if "purchased_total" in item
+                ]
+                currencies = [
+                    item["purchased_total"].get("value", {}).get("currency")
+                    for item in purchase_events.values()
+                    if "purchased_total" in item and isinstance(item["purchased_total"].get("value"), dict)
+                ]
+                if purchase_amounts and all(value is not None for value in purchase_amounts) and currencies and len({str(value).casefold() for value in currencies}) == 1:
+                    result.append(
+                        self._fact(
+                            subject,
+                            "purchased_total",
+                            "known",
+                            refs,
+                            value=self._amount_value(sum(value for value in purchase_amounts if value is not None), currencies[0]),
+                        )
+                    )
+            consumption_refs = [ref for item in consumption for ref in item.get("source_refs", [])]
+            if consumption:
+                result.append(
+                    self._fact(
+                        subject,
+                        "confirmed_consumption_quantity",
+                        "known",
+                        consumption_refs,
+                        value=self._render_number(sum(self._decimal(item.get("value")) or Decimal(0) for item in consumption)),
+                    )
                 )
-            )
-            result.append(
-                self._fact(
-                    "marketone",
-                    "consumption_observation_count",
-                    "known",
-                    consumption_refs,
-                    value=len(consumption),
+                result.append(self._fact(subject, "consumption_observation_count", "known", consumption_refs, value=len(consumption)))
+                zero_supported = any(item.get("value") is True for item in explicit_zero)
+                zero_refs = [ref for item in explicit_zero for ref in item.get("source_refs", [])]
+                result.append(self._fact(subject, "explicit_zero_is_supported", "known", zero_refs or consumption_refs, value=zero_supported))
+            if unobserved_refs or consumption:
+                result.append(
+                    self._fact(
+                        subject,
+                        "unobserved_consumption",
+                        "unknown",
+                        unobserved_refs or consumption_refs,
+                        unknown_reason="no_consumption_observation",
+                    )
                 )
-            )
-            zero_supported = any(item.get("value") is True for item in explicit_zero)
-            result.append(
-                self._fact(
-                    "marketone",
-                    "explicit_zero_is_supported",
-                    "known",
-                    [ref for item in explicit_zero for ref in item.get("source_refs", [])] or consumption_refs,
-                    value=zero_supported,
-                )
-            )
-        if unobserved_refs or consumption:
-            result.append(
-                self._fact(
-                    "marketone",
-                    "unobserved_consumption",
-                    "unknown",
-                    unobserved_refs or consumption_refs,
-                    unknown_reason="no_consumption_observation",
-                )
-            )
         return result
 
     def _task_relationship(
@@ -614,32 +642,23 @@ class ResponseProjector:
                 union(source, target)
         return set(parent), len({find(item) for item in parent})
 
-    def _event_types(self, snapshot: dict[str, Any]) -> dict[str, str]:
-        return {
-            str(item.get("event_id")): str(item.get("source_type"))
-            for item in snapshot.get("event_index", [])
-            if isinstance(item, dict) and isinstance(item.get("event_id"), str)
-        }
-
     def _duplicates(self, snapshot: dict[str, Any]) -> list[dict[str, Any]]:
         relationships = [item for item in snapshot.get("relationships", []) if isinstance(item, dict)]
-        event_types = self._event_types(snapshot)
         event_subjects: dict[str, set[str]] = {}
+        event_predicates: dict[str, set[str]] = {}
         for item in self._history(snapshot):
             event_id = item.get("event_id")
             subject = item.get("subject")
             if isinstance(event_id, str) and isinstance(subject, str):
                 event_subjects.setdefault(event_id, set()).add(subject)
+                if item.get("predicate") is not None:
+                    event_predicates.setdefault(event_id, set()).add(str(item["predicate"]))
 
-        def strong_receipt_edge(relation: dict[str, Any]) -> bool:
+        def strong_event_edge(relation: dict[str, Any]) -> bool:
             source, target = relation.get("source_event_id"), relation.get("target_event_id")
-            if not event_types:
-                return isinstance(source, str) and isinstance(target, str)
             if not isinstance(source, str) or not isinstance(target, str):
                 return False
-            if event_types.get(source) != "receipt" or event_types.get(target) != "receipt":
-                return False
-            # A receipt relation is strong only when the extraction did not
+            # A capture relation is strong only when the extraction did not
             # also classify either capture as a persistent merchant/entity
             # fact. This removes a common model failure mode where an entire
             # merchant history is linked as a duplicate chain.
@@ -647,27 +666,28 @@ class ResponseProjector:
                 subjects = event_subjects.get(event_id, set())
                 if subjects and any(not subject.startswith("capture:") for subject in subjects):
                     return False
-            return (
-                True
-            )
+                predicates = event_predicates.get(event_id, set())
+                if predicates and predicates <= {"entity_link"}:
+                    return False
+            return True
 
         duplicate_relations = [
             relation
             for relation in relationships
             if str(relation.get("relation_type", "")).casefold() in {"exact_duplicate", "normalized_duplicate", "duplicate"}
-            and strong_receipt_edge(relation)
+            and strong_event_edge(relation)
         ]
         meaningful_relations = [
             relation
             for relation in relationships
             if str(relation.get("relation_type", "")).casefold() == "meaningful_change"
-            and strong_receipt_edge(relation)
+            and strong_event_edge(relation)
         ]
         similar_relations = [
             relation
             for relation in relationships
             if str(relation.get("relation_type", "")).casefold() == "similar_not_duplicate"
-            and strong_receipt_edge(relation)
+            and strong_event_edge(relation)
         ]
         # A meaningful change can connect a later duplicate to the earlier
         # member of the same cluster (for example, a changed receipt followed
@@ -675,23 +695,24 @@ class ResponseProjector:
         # duplicate groups, while keeping the event count restricted to
         # explicit duplicate relations.
         _, duplicate_groups = self._duplicate_components(duplicate_relations + meaningful_relations)
+        aggregate_subject = self._aggregate_subject(snapshot)
         result = [
             self._fact(
-                "scenario",
+                aggregate_subject,
                 "duplicate_event_count",
                 "known",
                 [str(item.get("source_event_id")) for item in duplicate_relations],
                 value=len(duplicate_relations),
             ),
             self._fact(
-                "scenario",
+                aggregate_subject,
                 "duplicate_group_count",
                 "known",
                 [str(item.get("source_event_id")) for item in duplicate_relations],
                 value=duplicate_groups,
             ),
             self._fact(
-                "scenario",
+                aggregate_subject,
                 "meaningful_change_event_count",
                 "known",
                 [str(item.get("source_event_id")) for item in meaningful_relations],
@@ -735,8 +756,9 @@ class ResponseProjector:
             if item.get("knowledge_status") != "unknown":
                 continue
             subject, predicate = item["subject"], item["predicate"]
-            if (subject, predicate) == ("homefix", "quoted_amount") or subject == "roadsure" and predicate in {"claim_number", "beneficiary", "termination_date"}:
-                output_predicate = "old_cancellation_date" if (subject, predicate) == ("roadsure", "termination_date") else predicate
+            kind = self._kind(subject)
+            if (kind == "observation" and predicate == "quoted_amount") or (kind == "insurance" and predicate in {"claim_number", "beneficiary", "termination_date"}):
+                output_predicate = "old_cancellation_date" if kind == "insurance" and predicate == "termination_date" else predicate
                 result.append(self._fact_from_state(item, predicate=output_predicate))
         return self._dedupe(result)
 
@@ -779,101 +801,110 @@ class ResponseProjector:
         history = self._history(snapshot)
         result: list[dict[str, Any]] = []
 
-        for predicate, changed_fields in (("deadline", ["appointment_date"]), ("quoted_amount", ["quoted_amount"])):
-            observations = [
+        for subject in self._subjects_of_kind(snapshot, "observation"):
+            subject_history = [item for item in history if item.get("subject") == subject]
+            for predicate, changed_fields in (("deadline", ["appointment_date"]), ("quoted_amount", ["quoted_amount"])):
+                observations = [item for item in subject_history if item.get("predicate") == predicate]
+                for item in sorted(observations, key=self._sequence):
+                    if item.get("operation") not in {"contradiction", "correction"}:
+                        continue
+                    target = self._prior_observation(observations, item)
+                    relation_type = "correction" if item.get("operation") == "correction" else "contradiction"
+                    result.append(self._change_fact(item, target, relation_type, changed_fields))
+
+        for subject in self._subjects_of_kind(snapshot, "subscription"):
+            price_observations = [
                 item
                 for item in history
-                if item.get("subject") == "homefix" and item.get("predicate") == predicate
-            ]
-            for item in sorted(observations, key=self._sequence):
-                if item.get("operation") not in {"contradiction", "correction"}:
-                    continue
-                target = self._prior_observation(observations, item)
-                relation_type = "correction" if item.get("operation") == "correction" else "contradiction"
-                result.append(self._change_fact(item, target, relation_type, changed_fields))
-
-        price_observations = [
-            item
-            for item in history
-            if item.get("subject") == "streamly"
-            and item.get("predicate") in {"current_price", "historical_price"}
-            and item.get("operation") != "duplicate"
-            and item.get("knowledge_status") in {"known", "inferred"}
-            and self._decimal(item.get("value")) is not None
-        ]
-        for item in sorted(price_observations, key=self._sequence):
-            target_price = self._prior_observation(price_observations, item)
-            if target_price is None or self._decimal(target_price.get("value")) == self._decimal(item.get("value")):
-                continue
-            prior_charges = [
-                candidate
-                for candidate in history
-                if candidate.get("subject") == "streamly"
-                and candidate.get("predicate") == "last_charge"
-                and candidate.get("operation") != "duplicate"
-                and candidate.get("knowledge_status") in {"known", "inferred"}
-                and self._sequence(candidate) < self._sequence(item)
-            ]
-            target = max(prior_charges, key=self._sequence) if prior_charges else target_price
-            result.append(self._change_fact(item, target, "price_change", ["amount"]))
-
-        by_event: dict[str, list[dict[str, Any]]] = {}
-        for item in history:
-            by_event.setdefault(str(item.get("event_id")), []).append(item)
-        policy_event = None
-        ordered_events = sorted(by_event.items(), key=lambda pair: min(self._sequence(item) for item in pair[1]))
-        for _, items in ordered_events:
-            policy_ids = [
-                item
-                for item in items
-                if item.get("subject") == "roadsure"
-                and item.get("predicate") == "policy_id"
+                if item.get("subject") == subject
+                and item.get("predicate") in {"current_price", "historical_price"}
+                and item.get("operation") != "duplicate"
                 and item.get("knowledge_status") in {"known", "inferred"}
+                and self._decimal(item.get("value")) is not None
             ]
-            effective = any(
-                item.get("subject") == "roadsure"
-                and item.get("predicate") == "effective_date"
-                for item in items
-            )
-            if policy_ids and effective and str(policy_ids[-1].get("value", "")).casefold() not in {"rs-old", "old"}:
-                policy_event = policy_ids[-1]
-                break
-        if policy_event is not None:
-            result.append(self._change_fact(policy_event, None, "policy_replacement", ["policy_id", "effective_date"]))
+            for item in sorted(price_observations, key=self._sequence):
+                target_price = self._prior_observation(price_observations, item)
+                if target_price is None or self._decimal(target_price.get("value")) == self._decimal(item.get("value")):
+                    continue
+                prior_charges = [
+                    candidate
+                    for candidate in history
+                    if candidate.get("subject") == subject
+                    and candidate.get("predicate") == "last_charge"
+                    and candidate.get("operation") != "duplicate"
+                    and candidate.get("knowledge_status") in {"known", "inferred"}
+                    and self._sequence(candidate) < self._sequence(item)
+                ]
+                target = max(prior_charges, key=self._sequence) if prior_charges else target_price
+                result.append(self._change_fact(item, target, "price_change", ["amount"]))
 
-        for _, items in ordered_events:
-            executed = next(
-                (
+        for subject in self._subjects_of_kind(snapshot, "insurance"):
+            subject_history = [item for item in history if item.get("subject") == subject]
+            by_event: dict[str, list[dict[str, Any]]] = {}
+            for item in subject_history:
+                by_event.setdefault(str(item.get("event_id")), []).append(item)
+            ordered_events = sorted(by_event.items(), key=lambda pair: min(self._sequence(item) for item in pair[1]))
+            prior_effective_policy_ids: set[str] = set()
+            for _, items in ordered_events:
+                policy_ids = [
                     item
                     for item in items
-                    if item.get("subject") == "gymflex"
-                    and item.get("predicate") == "executed"
-                    and item.get("value") is True
-                ),
-                None,
-            )
-            status = next(
-                (
-                    item
-                    for item in items
-                    if item.get("subject") == "gymflex"
-                    and item.get("predicate") == "status"
-                    and str(item.get("value")).casefold() in {"signed", "current", "active"}
-                ),
-                None,
-            )
-            if executed is None or status is None:
-                continue
-            earlier_false = any(
-                item.get("subject") == "gymflex"
-                and item.get("predicate") == "executed"
-                and item.get("value") is False
-                and self._sequence(item) < self._sequence(executed)
-                for item in history
-            )
-            if earlier_false:
-                result.append(self._change_fact(executed, None, "contract_replacement", ["contract_id", "effective_date"]))
-                break
+                    if item.get("predicate") == "policy_id"
+                    and item.get("knowledge_status") in {"known", "inferred"}
+                    and item.get("operation") != "duplicate"
+                ]
+                effective = any(item.get("predicate") == "effective_date" for item in items)
+                if not policy_ids or not effective:
+                    continue
+                current_ids = {
+                    json.dumps(self._clean_value(item.get("value")), ensure_ascii=False, sort_keys=True)
+                    for item in policy_ids
+                }
+                if prior_effective_policy_ids and not current_ids.issubset(prior_effective_policy_ids):
+                    policy_event = max(policy_ids, key=self._sequence)
+                    result.append(self._change_fact(policy_event, None, "policy_replacement", ["policy_id", "effective_date"]))
+                    break
+                prior_effective_policy_ids.update(current_ids)
+
+        for subject in self._subjects_of_kind(snapshot, "contract"):
+            subject_history = [item for item in history if item.get("subject") == subject]
+            by_event = {}
+            for item in subject_history:
+                by_event.setdefault(str(item.get("event_id")), []).append(item)
+            ordered_events = sorted(by_event.items(), key=lambda pair: min(self._sequence(item) for item in pair[1]))
+            for _, items in ordered_events:
+                executed = next(
+                    (
+                        item
+                        for item in items
+                        if item.get("predicate") == "executed"
+                        and item.get("knowledge_status") in {"known", "inferred"}
+                        and item.get("value") is True
+                    ),
+                    None,
+                )
+                status = next(
+                    (
+                        item
+                        for item in items
+                        if item.get("predicate") == "status"
+                        and item.get("knowledge_status") in {"known", "inferred"}
+                        and str(item.get("value")).casefold() in {"signed", "current", "active"}
+                    ),
+                    None,
+                )
+                if executed is None or status is None:
+                    continue
+                earlier_false = any(
+                    item.get("predicate") == "executed"
+                    and item.get("knowledge_status") in {"known", "inferred"}
+                    and item.get("value") is False
+                    and self._sequence(item) < self._sequence(executed)
+                    for item in subject_history
+                )
+                if earlier_false:
+                    result.append(self._change_fact(executed, None, "contract_replacement", ["contract_id", "effective_date"]))
+                    break
         return self._dedupe(result)
 
     def _contract_dates(self, snapshot: dict[str, Any]) -> list[dict[str, Any]]:
@@ -889,7 +920,7 @@ class ResponseProjector:
         }
         result: list[dict[str, Any]] = []
         for item in self._effective_current(snapshot):
-            if item.get("subject") != "gymflex" or item.get("predicate") not in mapping:
+            if self._kind(str(item.get("subject"))) != "contract" or item.get("predicate") not in mapping:
                 continue
             output = self._fact_from_state(item, predicate=mapping[item["predicate"]])
             if output.get("predicate") == "status" and output.get("knowledge_status") in {"known", "inferred"} and output.get("value") in {"signed", "current"}:
@@ -902,8 +933,8 @@ class ResponseProjector:
     def _approval(self, snapshot: dict[str, Any]) -> list[dict[str, Any]]:
         allowed = {"amount", "approval_required", "approval_scope", "approved", "executed", "status"}
         current = self._current_facts(snapshot)
-        global_approval = next((item for item in current if item["subject"] == "scenario" and item["predicate"] == "approval_required"), None)
-        global_scope = next((item for item in current if item["subject"] == "scenario" and item["predicate"] == "approval_scope"), None)
+        global_approval = next((item for item in current if self._kind(item["subject"]) == "aggregate" and item["predicate"] == "approval_required"), None)
+        global_scope = next((item for item in current if self._kind(item["subject"]) == "aggregate" and item["predicate"] == "approval_scope"), None)
         result: list[dict[str, Any]] = []
         for item in current:
             if self._kind(item["subject"]) != "action" or item["predicate"] not in allowed:
@@ -952,12 +983,12 @@ class ResponseProjector:
                 assertions = self._subscription_history(snapshot)
             elif "next 14" in question or "need attention" in question:
                 assertions = self._attention(snapshot)
-            elif "roadsure" in question:
+            elif "policy" in question or "insurance" in question:
                 assertions = self._insurance(snapshot)
-            elif "orange mobile" in question:
-                assertions = self._orange_costs(snapshot)
-            elif "marketone" in question:
-                assertions = self._marketone_observations(snapshot)
+            elif "bill" in question or "deterministic total" in question:
+                assertions = self._service_costs(snapshot)
+            elif "purchase" in question or "consumption" in question:
+                assertions = self._merchant_observations(snapshot)
             elif "which tasks" in question:
                 assertions = self._tasks(snapshot)
             elif "duplicate" in question or "meaningful change" in question:
@@ -966,7 +997,7 @@ class ResponseProjector:
                 assertions = self._recent_changes(snapshot)
             elif "unknown" in question or "ambiguous" in question or "contradictory" in question:
                 assertions = self._unresolved(snapshot)
-            elif "gymflex" in question:
+            elif "contract" in question:
                 assertions = self._contract_dates(snapshot)
             elif "approval" in question or "consequential" in question:
                 assertions = self._approval(snapshot)

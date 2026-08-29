@@ -1,0 +1,18 @@
+DETERMINISTIC QUERY PROJECTION
+{
+  "checkpoint": 100,
+  "query_ids": [
+    "q-subscriptions-current",
+    "q-subscriptions-history",
+    "q-attention-14d",
+    "q-insurance-expiry",
+    "q-orange-costs",
+    "q-marketone-observations",
+    "q-tasks-state",
+    "q-unresolved",
+    "q-duplicates-changes",
+    "q-contract-dates",
+    "q-approval-boundary",
+    "q-recent-changes"
+  ]
+}

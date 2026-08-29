@@ -196,11 +196,27 @@ does not access provider tokens. `app/advanced_runner.py` makes one fresh
 semantic call per chronological batch and stores the raw provider output in a
 runtime trajectory. `app/response_projector.py` performs query-specific
 deterministic projections, including date windows, history traversal, duplicate
-components, and Decimal-based financial aggregation. A replay mode allows
-projection changes to be evaluated from identical recorded extraction outputs.
+components, and Decimal-based financial aggregation. It selects subjects by
+public ontology kind and routes query families without embedding benchmark
+entity identifiers. A replay mode allows projection changes to be evaluated
+from identical recorded extraction outputs.
 
 This slice has no UI, production infrastructure, external-action executor,
 Claude adapter, or holdout access. Its final measured result is recorded in
 `IMPROVEMENT_CHANGELOG.md` and the Experiment 001 coding/runtime trajectories;
 the frozen benchmark and official baseline remain benchmark treatments rather
 than product memory.
+
+## 11. Experiment 002 genericity repair
+
+The follow-up audit removed named-subject coupling from the response projector.
+Service and merchant calculations are grouped by each subject's public kind,
+insurance and contract replacement detection is based on state transitions,
+and duplicate/change capture filtering uses event observation semantics. An
+entity-link-only event is not treated as receipt-like duplicate evidence merely
+because it has a relationship edge.
+
+The repair was replayed against the same recorded E001 semantic extraction and
+the unchanged public evaluator. It preserved the full 200-event result exactly
+(`LQA-0M=0.7492295899`, `DSCR=72`) and is recorded as experiment evidence, not
+as a new benchmark or baseline treatment.
