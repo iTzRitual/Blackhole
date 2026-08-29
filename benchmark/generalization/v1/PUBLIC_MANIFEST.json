@@ -1,0 +1,46 @@
+{
+  "manifest_version": "public-generalization-v1",
+  "set_id": "post-freeze-generalization-v1",
+  "implementation_freeze_tag": "implementation-freeze-v1",
+  "implementation_freeze_commit": "8d3b4ff7a1979540f2e65dd9b493f0731e006f72",
+  "implementation_freeze_recorded_sha": "171a6cc1c656d6ab901f41bda8440ee5d59967e3",
+  "scenario_ids": [
+    "g01",
+    "g02",
+    "g03"
+  ],
+  "event_counts": {
+    "g01": 80,
+    "g02": 80,
+    "g03": 80
+  },
+  "checkpoints": [
+    20,
+    40,
+    60,
+    80
+  ],
+  "query_ids": [
+    "q-subscriptions-current",
+    "q-subscriptions-history",
+    "q-attention-14d",
+    "q-insurance-current",
+    "q-service-costs",
+    "q-purchase-consumption",
+    "q-tasks-state",
+    "q-unresolved",
+    "q-duplicates-changes",
+    "q-contract-dates",
+    "q-approval-boundary",
+    "q-recent-changes"
+  ],
+  "response_contract_sha256": "c26d063189be0f44a7f099b49206d1731d0f933c60ece066c58630ce25ff0534",
+  "query_bundle_sha256": "6e5a0295b239f1029e2f38b713e1cba9f6ca6c921e9f712c5022b5f34814d366",
+  "public_case_sha256": {
+    "g01": "7d085476b63de804f6166e6b0e94491b3f0dbc537425816f3f7bfd5b44025eb6",
+    "g02": "2676f16f53636eb0613a427cc85e2a5dd2c9496d3e79096b172cfd225d788368",
+    "g03": "cf9d32d150dac64d34059cf07041d9e0a8d075fc827afad1b1758e9ecd5a2223"
+  },
+  "oracle_expected_outputs_statement": "Oracle expected outputs were frozen before runtime execution.",
+  "expected_outputs_absence_statement": "Expected outputs are intentionally absent from this branch."
+}

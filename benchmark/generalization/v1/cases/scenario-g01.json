@@ -1,0 +1,1061 @@
+{
+  "contract_version": "1.0-post-freeze-generalization-v1",
+  "response_contract": "response-contract-v2",
+  "scenario_id": "g01",
+  "person_id": "household-g01",
+  "timeline_start": "2026-04-01",
+  "cutoff_at": "2026-06-19T23:59:59+00:00",
+  "timezone": "UTC",
+  "initial_context": {
+    "entities": [],
+    "accepted_state": []
+  },
+  "raw_events": [
+    {
+      "event_id": "g01-e001",
+      "sequence": 1,
+      "captured_at": "2026-04-01T10:00:00+00:00",
+      "observed_at": "2026-04-01T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Moonbeam+ active: EUR 11.90 each month; next renewal 2026-04-30.",
+      "payload_sha256": "087FB5526051DCA4653B9BFC56700C2A0222640E206E0EDBD1B6E40E2B019332",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e002",
+      "sequence": 2,
+      "captured_at": "2026-04-02T10:00:00+00:00",
+      "observed_at": "2026-04-02T08:00:00+00:00",
+      "source_type": "invoice",
+      "payload": "Copperline Fiber invoice for 2026-04: EUR 42.00.",
+      "payload_sha256": "5B85E795B1B68A92A5BF92C3E3FC8636E39666B249BAE8569465A27F9978A740",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "invoice"
+      }
+    },
+    {
+      "event_id": "g01-e003",
+      "sequence": 3,
+      "captured_at": "2026-04-03T10:00:00+00:00",
+      "observed_at": "2026-04-03T08:00:00+00:00",
+      "source_type": "receipt",
+      "payload": "GreenGlass Market receipt, EUR 18.40, pantry staples and three coffee packs.",
+      "payload_sha256": "C7BEEC4B65E48A745F78864722E18B1A0B8512DDD2CDE440C3C88AE97FC5B0AE",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "receipt"
+      }
+    },
+    {
+      "event_id": "g01-e004",
+      "sequence": 4,
+      "captured_at": "2026-04-04T10:00:00+00:00",
+      "observed_at": "2026-04-04T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Used two of the coffee packs from the GreenGlass purchase.",
+      "payload_sha256": "1C0086E913032747EAE589ADF45EFBEB3A9D982295C8E4E6878DBC4D0C9F714B",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e005",
+      "sequence": 5,
+      "captured_at": "2026-04-05T10:00:00+00:00",
+      "observed_at": "2026-04-05T08:00:00+00:00",
+      "source_type": "policy",
+      "payload": "Emberline home cover, policy EL-4821, premium EUR 19.75 monthly, expiry 2026-12-31.",
+      "payload_sha256": "AE9AA49B74F8B1B5F90F88926A5659726E1363B5C6604BF2D7A92E46628F403D",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "policy"
+      }
+    },
+    {
+      "event_id": "g01-e006",
+      "sequence": 6,
+      "captured_at": "2026-04-06T10:00:00+00:00",
+      "observed_at": "2026-04-06T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Permit renewal is open. Devon Park owns it; due 2026-04-28.",
+      "payload_sha256": "F6CE160798E2E63678491B87E10FC3DC028916FA6356377E4567B8FE5450AD68",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e007",
+      "sequence": 7,
+      "captured_at": "2026-04-07T10:00:00+00:00",
+      "observed_at": "2026-04-07T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Mira should send the meter reading.",
+      "payload_sha256": "23487876408874116298434EEC21A4002F6C84B141CD222BB8AF89DA33EE780A",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e008",
+      "sequence": 8,
+      "captured_at": "2026-04-08T10:00:00+00:00",
+      "observed_at": "2026-04-08T08:00:00+00:00",
+      "source_type": "email",
+      "payload": "Moonbeam+ price notice: from 2026-05-01 the monthly price will be EUR 13.50.",
+      "payload_sha256": "FF347E57B10DDB5E25E76C0F8CC29417E65EE88BDF2E4C7B0BA26512223F7EB3",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "email"
+      }
+    },
+    {
+      "event_id": "g01-e009",
+      "sequence": 9,
+      "captured_at": "2026-04-09T10:00:00+00:00",
+      "observed_at": "2026-04-09T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "No Copperline invoice for 2026-05 has arrived yet.",
+      "payload_sha256": "D0514F14B366565C8349CFEB7FE4E1AA0E14AD39F0434AE8493E3B4F2464F14C",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e010",
+      "sequence": 10,
+      "captured_at": "2026-04-10T10:00:00+00:00",
+      "observed_at": "2026-04-10T08:00:00+00:00",
+      "source_type": "draft",
+      "payload": "Proposed change to the Copperline bank mandate: approval required; not approved and not executed.",
+      "payload_sha256": "261C09BA2BE1C25BCF9A0068375E616184E84A40CBA379A8BC2F6E9FA3C77519",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "draft"
+      }
+    },
+    {
+      "event_id": "g01-e011",
+      "sequence": 11,
+      "captured_at": "2026-04-11T10:00:00+00:00",
+      "observed_at": "2026-04-11T08:00:00+00:00",
+      "source_type": "invoice",
+      "payload": "Copperline Fiber invoice for 2026-04: EUR 42.00.",
+      "payload_sha256": "5B85E795B1B68A92A5BF92C3E3FC8636E39666B249BAE8569465A27F9978A740",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "invoice"
+      }
+    },
+    {
+      "event_id": "g01-e012",
+      "sequence": 12,
+      "captured_at": "2026-04-12T10:00:00+00:00",
+      "observed_at": "2026-04-12T08:00:00+00:00",
+      "source_type": "receipt",
+      "payload": "GreenGlass Market — 18,40 EUR — pantry staples and three coffee packs.",
+      "payload_sha256": "8F051A0C2DF064B51F676F04051C14A9074B87824F07D521EB45F8493225D2C4",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "receipt"
+      }
+    },
+    {
+      "event_id": "g01-e013",
+      "sequence": 13,
+      "captured_at": "2026-04-13T10:00:00+00:00",
+      "observed_at": "2026-04-13T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "The permit renewal is now assigned to Mira Solen, not Devon Park.",
+      "payload_sha256": "F307CB841AA85F837AA4E85E478B0FFDCF9AC4BB82C0EEFE32507CD404CA496A",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e014",
+      "sequence": 14,
+      "captured_at": "2026-04-14T10:00:00+00:00",
+      "observed_at": "2026-04-14T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "The April meter reading is not available.",
+      "payload_sha256": "047BC75E6FFC11EAA38A12A47D8EE147BC7776FC861132AEC9A004721E9DAD45",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e015",
+      "sequence": 15,
+      "captured_at": "2026-04-15T10:00:00+00:00",
+      "observed_at": "2026-04-15T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Zero coffee packs were used in the second April week.",
+      "payload_sha256": "C5A7C058DE2B646724CA2F455A7D87F744217F112224038E6A4B819A3D58479A",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e016",
+      "sequence": 16,
+      "captured_at": "2026-04-16T10:00:00+00:00",
+      "observed_at": "2026-04-16T08:00:00+00:00",
+      "source_type": "policy",
+      "payload": "The Emberline beneficiary is Mira Solen.",
+      "payload_sha256": "438F5E8B572C908CB5B2F56FC29D0DC160D8FA37639F559BFEEAD0212DB71F16",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "policy"
+      }
+    },
+    {
+      "event_id": "g01-e017",
+      "sequence": 17,
+      "captured_at": "2026-04-17T10:00:00+00:00",
+      "observed_at": "2026-04-17T08:00:00+00:00",
+      "source_type": "scan",
+      "payload": "The scanned Emberline beneficiary looks like Mira Sorin.",
+      "payload_sha256": "2790583696D8F7DB22ECFFF93C4283D87B9D537D7BC71BCA36E6D2270C6EF6FD",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "scan"
+      }
+    },
+    {
+      "event_id": "g01-e018",
+      "sequence": 18,
+      "captured_at": "2026-04-18T10:00:00+00:00",
+      "observed_at": "2026-04-18T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Actually, the permit deadline is 2026-04-30, not 2026-04-28.",
+      "payload_sha256": "0BCF3B39C196A3B74E62900D4AC2CE261179B391E8110D7BFC2F380D94A13DE1",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e019",
+      "sequence": 19,
+      "captured_at": "2026-04-19T10:00:00+00:00",
+      "observed_at": "2026-04-19T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Permit renewal is in progress.",
+      "payload_sha256": "4E3D841849B86450BA2E561C3D3D316C560799D427057916A18E7A2ACBFDD908",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e020",
+      "sequence": 20,
+      "captured_at": "2026-04-20T10:00:00+00:00",
+      "observed_at": "2026-04-20T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Mira Solen confirmed the permit deadline: 2026-04-30.",
+      "payload_sha256": "54F20F1C8DEAA5F0C6120843A264AC61A5651D846DB9C139C77315F5DE15507F",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e021",
+      "sequence": 21,
+      "captured_at": "2026-04-21T10:00:00+00:00",
+      "observed_at": "2026-04-21T08:00:00+00:00",
+      "source_type": "ledger",
+      "payload": "Moonbeam+ April charge: EUR 11.90.",
+      "payload_sha256": "D545B797A287701C4362890B7F579DC4E4C8F4E8077DA3837D9D52E6426C5325",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "ledger"
+      }
+    },
+    {
+      "event_id": "g01-e022",
+      "sequence": 22,
+      "captured_at": "2026-04-22T10:00:00+00:00",
+      "observed_at": "2026-04-22T08:00:00+00:00",
+      "source_type": "receipt",
+      "payload": "GreenGlass Market purchase: EUR 7.20 for fruit and soap.",
+      "payload_sha256": "8CC344923A702C4FE6DD35F2B8A0AF0317C353C35FEB24201378828C27721BA6",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "receipt"
+      }
+    },
+    {
+      "event_id": "g01-e023",
+      "sequence": 23,
+      "captured_at": "2026-04-23T10:00:00+00:00",
+      "observed_at": "2026-04-23T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "No coffee packs were used from that second GreenGlass purchase.",
+      "payload_sha256": "17CD428D8AB377DF84D65716947831EFA6A80627ABD6F8D2BFD2A9377DBCA18D",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e024",
+      "sequence": 24,
+      "captured_at": "2026-04-24T10:00:00+00:00",
+      "observed_at": "2026-04-24T08:00:00+00:00",
+      "source_type": "ledger",
+      "payload": "Copperline ledger note: April service total EUR 42.00.",
+      "payload_sha256": "B1F56EBFC03F6E276C7055E3CE0098CED91E97B6791A8BF875E9EFF2838BADAA",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "ledger"
+      }
+    },
+    {
+      "event_id": "g01-e025",
+      "sequence": 25,
+      "captured_at": "2026-04-25T10:00:00+00:00",
+      "observed_at": "2026-04-25T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Permit renewal completed; confirmation uploaded by Mira Solen.",
+      "payload_sha256": "E5EDE86B41F9465D3A00DA6EBAB0D219924C8257D3AA933D30C28C2B9201979F",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e026",
+      "sequence": 26,
+      "captured_at": "2026-04-26T10:00:00+00:00",
+      "observed_at": "2026-04-26T08:00:00+00:00",
+      "source_type": "policy",
+      "payload": "Emberline renewal notice: premium will become EUR 21.00 monthly from 2026-07-01.",
+      "payload_sha256": "30C30106B7121E981CBF0F99DE645866E59261E11B7A3B55244FBBC27AED7AE1",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "policy"
+      }
+    },
+    {
+      "event_id": "g01-e027",
+      "sequence": 27,
+      "captured_at": "2026-04-27T10:00:00+00:00",
+      "observed_at": "2026-04-15T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Backdated meter note: the reading observed on 2026-04-15 was zero kWh.",
+      "payload_sha256": "E5774CF3014C40032DAE0DFA236C1C507EA6B70652397EE7C76E0EEA8B1DFAF0",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e028",
+      "sequence": 28,
+      "captured_at": "2026-04-28T10:00:00+00:00",
+      "observed_at": "2026-04-28T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Meter visit opened, due 2026-05-12; owner not stated.",
+      "payload_sha256": "F0A255855217D18668D77AFBE15A89156A8AF8AB18A0C917650B1C1CE6709755",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e029",
+      "sequence": 29,
+      "captured_at": "2026-04-29T10:00:00+00:00",
+      "observed_at": "2026-04-29T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Mira Solen will handle the meter visit.",
+      "payload_sha256": "EC2A85090A3F78309085AE9E416A9D70AD6AE8CD756DAD644A27613229555416",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e030",
+      "sequence": 30,
+      "captured_at": "2026-04-30T10:00:00+00:00",
+      "observed_at": "2026-04-30T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Moonbeam+ next renewal is 2026-05-30.",
+      "payload_sha256": "37928F9E18281697A1B8DB00A7B473952FF73C1D81274DA87DFD03D3A2D24737",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e031",
+      "sequence": 31,
+      "captured_at": "2026-05-01T10:00:00+00:00",
+      "observed_at": "2026-05-01T08:00:00+00:00",
+      "source_type": "invoice",
+      "payload": "Copperline Fiber invoice for 2026-05: EUR 43.50.",
+      "payload_sha256": "0EBF8235BFB60C3DE53F48451C04CAA483FC2F92A8BA9B6BE24977CDE400B3A3",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "invoice"
+      }
+    },
+    {
+      "event_id": "g01-e032",
+      "sequence": 32,
+      "captured_at": "2026-05-02T10:00:00+00:00",
+      "observed_at": "2026-05-02T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "A Copperline payment for May is not shown in the bank list.",
+      "payload_sha256": "ED6BD757FB93746B92ED476C51E9C9A9A595D5DA62BDC88D6EA1BC2670135B4F",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e033",
+      "sequence": 33,
+      "captured_at": "2026-05-03T10:00:00+00:00",
+      "observed_at": "2026-05-03T08:00:00+00:00",
+      "source_type": "invoice",
+      "payload": "Copperline / 2026-05 / 43,50 EUR.",
+      "payload_sha256": "088674817A11744ED46D5DA80799AFC175E8A49850BAE229C78AA7C90C9A688D",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "invoice"
+      }
+    },
+    {
+      "event_id": "g01-e034",
+      "sequence": 34,
+      "captured_at": "2026-05-04T10:00:00+00:00",
+      "observed_at": "2026-05-04T08:00:00+00:00",
+      "source_type": "summary",
+      "payload": "A copied summary says the May Copperline bill was EUR 44.10.",
+      "payload_sha256": "F0645C1546E93B75BBCB0FAC16544AEF1288460FFD683BFEA52B4E0B55C08DE3",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "summary"
+      }
+    },
+    {
+      "event_id": "g01-e035",
+      "sequence": 35,
+      "captured_at": "2026-05-05T10:00:00+00:00",
+      "observed_at": "2026-05-05T08:00:00+00:00",
+      "source_type": "correction",
+      "payload": "Correction confirmed: the May Copperline bill is EUR 43.50; EUR 44.10 was a separate meter fee.",
+      "payload_sha256": "1D6BD9CD9D70DEF3881FAB784A129304CA319D413A5964CA77263AC94043C984",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "correction"
+      }
+    },
+    {
+      "event_id": "g01-e036",
+      "sequence": 36,
+      "captured_at": "2026-05-06T10:00:00+00:00",
+      "observed_at": "2026-05-06T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Moonbeam+ is active at EUR 13.50 per month from May.",
+      "payload_sha256": "DBACC4AD67E96D1858FFE9F42CA352766B4A8E007B8B59EDB64D2375DCCD0778",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e037",
+      "sequence": 37,
+      "captured_at": "2026-05-07T10:00:00+00:00",
+      "observed_at": "2026-05-07T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "The Copperline mandate proposal still needs approval; nothing was changed.",
+      "payload_sha256": "E23BDC6BF90F2390E44D94C3294B4B78174459B2393AC06C90F30EFE0BB725DB",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e038",
+      "sequence": 38,
+      "captured_at": "2026-05-08T10:00:00+00:00",
+      "observed_at": "2026-05-08T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Permit renewal is complete.",
+      "payload_sha256": "4A414F67FF049874557B3BBAE647D95C12BBF53905CD17696391C7190C01120F",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e039",
+      "sequence": 39,
+      "captured_at": "2026-05-09T10:00:00+00:00",
+      "observed_at": "2026-05-09T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Meter visit cancelled; no replacement appointment was recorded.",
+      "payload_sha256": "4A3C3D9081E34F80C99EC80372851B66705BE32C7F3D2C43AD6F8DC6D7B74943",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e040",
+      "sequence": 40,
+      "captured_at": "2026-05-10T10:00:00+00:00",
+      "observed_at": "2026-05-10T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Checkpoint note: open household items reviewed.",
+      "payload_sha256": "732A9F7142F95A89F870A74167DE8B7A414CBC3898A83E7ED42F9C686C037813",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e041",
+      "sequence": 41,
+      "captured_at": "2026-05-11T10:00:00+00:00",
+      "observed_at": "2026-05-11T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "No Copperline invoice for 2026-06 has arrived so far.",
+      "payload_sha256": "FC5E74D9B86C14425CA47AF486D9C78CDFD3F210D638571E03BBFC5FB9D2A4AA",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e042",
+      "sequence": 42,
+      "captured_at": "2026-05-12T10:00:00+00:00",
+      "observed_at": "2026-05-12T08:00:00+00:00",
+      "source_type": "receipt",
+      "payload": "GreenGlass Market purchase: EUR 31.00 for cleaning supplies.",
+      "payload_sha256": "A2333DB28A4CA0AC8BD3890C47D605F9BBDF12C3BE05864EB276D2903C5D5242",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "receipt"
+      }
+    },
+    {
+      "event_id": "g01-e043",
+      "sequence": 43,
+      "captured_at": "2026-05-13T10:00:00+00:00",
+      "observed_at": "2026-05-13T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Used one item from the EUR 31.00 GreenGlass purchase.",
+      "payload_sha256": "3962B241A0D9E765842F81ADB21045DE760A0852B1E92ADC84665A060E67783F",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e044",
+      "sequence": 44,
+      "captured_at": "2026-05-14T10:00:00+00:00",
+      "observed_at": "2026-05-14T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Mira should check the Emberline renewal.",
+      "payload_sha256": "7036247E15BD3241B65BE3870C69C7325DD31941EB0EF07CE10710530D1FA2B5",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e045",
+      "sequence": 45,
+      "captured_at": "2026-05-15T10:00:00+00:00",
+      "observed_at": "2026-05-15T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Emberline policy remains active through 2026-12-31.",
+      "payload_sha256": "34F4B7ACABD1CC987CAC49A0FD00DF96B2E4F6A98163796A6D508129DCC9B7B4",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e046",
+      "sequence": 46,
+      "captured_at": "2026-05-16T10:00:00+00:00",
+      "observed_at": "2026-05-16T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "The beneficiary field on the Emberline scan is unreadable.",
+      "payload_sha256": "65529B67ECBCA1A5BB5E38833AF21F5C2270ED7EA8D8EDF500144EE99159E943",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e047",
+      "sequence": 47,
+      "captured_at": "2026-05-17T10:00:00+00:00",
+      "observed_at": "2026-05-17T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Approval for the bank-mandate change has still not been granted.",
+      "payload_sha256": "F0425C9C426AD7D341C5A6429F0506888674B107BC355C6632D40302494D7A88",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e048",
+      "sequence": 48,
+      "captured_at": "2026-05-18T10:00:00+00:00",
+      "observed_at": "2026-05-18T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Permit renewal history: open, then in progress, then completed.",
+      "payload_sha256": "F2D4F5C640989D11A1B4A7ADD4C62F894FBB214CB3456A9A10BFCC928E8C2EEF",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e049",
+      "sequence": 49,
+      "captured_at": "2026-05-19T10:00:00+00:00",
+      "observed_at": "2026-05-19T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "No meter reading for May is recorded.",
+      "payload_sha256": "F585E7F34860161AEF28CFC1D2DBC55482B8FD48EFD8D0955B428E638CBB65D1",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e050",
+      "sequence": 50,
+      "captured_at": "2026-05-20T10:00:00+00:00",
+      "observed_at": "2026-05-20T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "The May Copperline invoice is marked paid in the ledger.",
+      "payload_sha256": "EA8101EFBB6981944FC2BAD4026B383EAA1CDEC9DC81B64C531B86DB01E5DEA0",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e051",
+      "sequence": 51,
+      "captured_at": "2026-05-21T10:00:00+00:00",
+      "observed_at": "2026-05-21T08:00:00+00:00",
+      "source_type": "ledger",
+      "payload": "GreenGlass ledger copy: EUR 31.00 cleaning supplies.",
+      "payload_sha256": "A46CA1413F310CE1516252447E75480AD67D467BB1ACA003CD090D0F2F28CE74",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "ledger"
+      }
+    },
+    {
+      "event_id": "g01-e052",
+      "sequence": 52,
+      "captured_at": "2026-05-22T10:00:00+00:00",
+      "observed_at": "2026-05-22T08:00:00+00:00",
+      "source_type": "receipt",
+      "payload": "GreenGlass shop purchase: EUR 30.50 for a different cleaning bundle.",
+      "payload_sha256": "6A841AECD8B8B8C55D513A751501D120E8D43315DDA25C5F4C3A693F950A3646",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "receipt"
+      }
+    },
+    {
+      "event_id": "g01-e053",
+      "sequence": 53,
+      "captured_at": "2026-05-23T10:00:00+00:00",
+      "observed_at": "2026-05-23T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "The May Moonbeam price notice was confirmed in the account email.",
+      "payload_sha256": "CF0201EEEEC1737462B2B27AF3C7FFE9DADABC8FCBA2FEB1BA18F855738D4738",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e054",
+      "sequence": 54,
+      "captured_at": "2026-05-24T10:00:00+00:00",
+      "observed_at": "2026-05-24T08:00:00+00:00",
+      "source_type": "invoice",
+      "payload": "Copperline Fiber invoice for 2026-06: EUR 45.00.",
+      "payload_sha256": "8567462DB7446A6F0AB64EB74D3C94E30F95E386C2FE60B488A2AA7EDB37BC4B",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "invoice"
+      }
+    },
+    {
+      "event_id": "g01-e055",
+      "sequence": 55,
+      "captured_at": "2026-05-25T10:00:00+00:00",
+      "observed_at": "2026-05-25T08:00:00+00:00",
+      "source_type": "invoice",
+      "payload": "Copperline Fiber invoice for 2026-06: EUR 45.00.",
+      "payload_sha256": "8567462DB7446A6F0AB64EB74D3C94E30F95E386C2FE60B488A2AA7EDB37BC4B",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "invoice"
+      }
+    },
+    {
+      "event_id": "g01-e056",
+      "sequence": 56,
+      "captured_at": "2026-05-26T10:00:00+00:00",
+      "observed_at": "2026-05-26T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "I might pause Moonbeam+ next month.",
+      "payload_sha256": "083BCDA38F5C2FF39759747C7AE716E51DF5BA716574B0D5503E5746DDC9C9FE",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e057",
+      "sequence": 57,
+      "captured_at": "2026-05-27T10:00:00+00:00",
+      "observed_at": "2026-05-27T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Do not pause Moonbeam+; the service remains active.",
+      "payload_sha256": "5E68FCD51708D8F9DCA125161B893046BF02B99108DD4BD3042A957EAEE2C596",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e058",
+      "sequence": 58,
+      "captured_at": "2026-05-28T10:00:00+00:00",
+      "observed_at": "2026-05-28T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "The cancelled meter visit is reopened for 2026-06-10; Devon Park owns it.",
+      "payload_sha256": "1755ADFB55A48C4EEDB2B3BB642B79B12C67880DC0C9286BF8B075FDBC7A051C",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e059",
+      "sequence": 59,
+      "captured_at": "2026-05-29T10:00:00+00:00",
+      "observed_at": "2026-05-29T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Mira says the permit renewal is already done.",
+      "payload_sha256": "1592A6FAF89977B81A907119F5D9E47655ACD6C29D11AD807B63A862D1DB6684",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e060",
+      "sequence": 60,
+      "captured_at": "2026-05-30T10:00:00+00:00",
+      "observed_at": "2026-05-30T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Checkpoint note: June household review.",
+      "payload_sha256": "3434B1583448490A4251176CC2D4BD350FDAD78425944E44CFBAC7A1EEC91420",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e061",
+      "sequence": 61,
+      "captured_at": "2026-05-31T10:00:00+00:00",
+      "observed_at": "2026-05-31T08:00:00+00:00",
+      "source_type": "policy",
+      "payload": "Emberline renewal pack repeats EUR 21.00 monthly from 2026-07-01.",
+      "payload_sha256": "EBEEA0B260ED08D8FCC0CB7BC46D11D32006FB82E79E1816C62E063AA1E058BA",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "policy"
+      }
+    },
+    {
+      "event_id": "g01-e062",
+      "sequence": 62,
+      "captured_at": "2026-06-01T10:00:00+00:00",
+      "observed_at": "2026-06-01T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Emberline policy status: active; expiry remains 2026-12-31.",
+      "payload_sha256": "C534FC05CF27AC4583A87121BC2AB58E661BD33EA3C95CF569641B6F0A9598B6",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e063",
+      "sequence": 63,
+      "captured_at": "2026-06-02T10:00:00+00:00",
+      "observed_at": "2026-06-02T08:00:00+00:00",
+      "source_type": "ledger",
+      "payload": "Moonbeam+ June charge: EUR 13.50; next renewal 2026-06-30.",
+      "payload_sha256": "984D5B5CA0EBDF255C5D95A9A5121EB512EE9AFB36033584C840EF577CE1FF65",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "ledger"
+      }
+    },
+    {
+      "event_id": "g01-e064",
+      "sequence": 64,
+      "captured_at": "2026-06-03T10:00:00+00:00",
+      "observed_at": "2026-06-03T08:00:00+00:00",
+      "source_type": "receipt",
+      "payload": "GreenGlass Market purchase: EUR 12.00 for four pantry items.",
+      "payload_sha256": "40F5C7032DDAB238B66731DA4B9EE72673139C6CE8DA1D3DC1CA9C037C4F3CE1",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "receipt"
+      }
+    },
+    {
+      "event_id": "g01-e065",
+      "sequence": 65,
+      "captured_at": "2026-06-04T10:00:00+00:00",
+      "observed_at": "2026-06-04T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Used two of the four items from the June GreenGlass purchase.",
+      "payload_sha256": "542E740FDD876AC1BD2BFC96A5F64629C882F9B2484E1251E8EEDB7DCDB545DB",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e066",
+      "sequence": 66,
+      "captured_at": "2026-06-05T10:00:00+00:00",
+      "observed_at": "2026-06-05T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "The Copperline bank-mandate proposal was withdrawn without execution.",
+      "payload_sha256": "FE6356521AF84DDDDAE4EB2C093FFD38A6770A0D79F04258B4DEB388234C5496",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e067",
+      "sequence": 67,
+      "captured_at": "2026-06-06T10:00:00+00:00",
+      "observed_at": "2026-06-06T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Moonbeam+ cancellation request was recorded for review, but service is still active.",
+      "payload_sha256": "539219303D3E2063F357D8CE71FDCB01D1CA2A00870EC7586861C2961703129B",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e068",
+      "sequence": 68,
+      "captured_at": "2026-06-07T10:00:00+00:00",
+      "observed_at": "2026-06-07T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "The Moonbeam+ cancellation request was rejected; no cancellation occurred.",
+      "payload_sha256": "7DB9ACAAB7717984F511C20BA2770864B60EABBA6A5144B5908CBFC9805AD871",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e069",
+      "sequence": 69,
+      "captured_at": "2026-06-08T10:00:00+00:00",
+      "observed_at": "2026-06-08T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Meter visit completed on 2026-06-10.",
+      "payload_sha256": "E21FD4AAD7D9D789A382F3CB9C92B462B97B569C8303CA9852002D34DD889EC8",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e070",
+      "sequence": 70,
+      "captured_at": "2026-06-09T10:00:00+00:00",
+      "observed_at": "2026-06-09T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "May meter reading was explicitly zero kWh.",
+      "payload_sha256": "9BF6DFEF411D94726B140A4190DA783E15171B1D466785A5A3486DC4AF6EDF80",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e071",
+      "sequence": 71,
+      "captured_at": "2026-06-10T10:00:00+00:00",
+      "observed_at": "2026-06-10T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "No approval was granted for the bank-mandate proposal.",
+      "payload_sha256": "36D5F6AD692C8DCAFFD2978A72E83F129C09D7B76BFEECF2099E678ED036CD3F",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e072",
+      "sequence": 72,
+      "captured_at": "2026-06-11T10:00:00+00:00",
+      "observed_at": "2026-06-11T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Emberline beneficiary scan still cannot be read.",
+      "payload_sha256": "60D29260A1A2832A0E3E44AA891B5E5348EB0E6AC131D82D593516ED33C3EA07",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e073",
+      "sequence": 73,
+      "captured_at": "2026-06-12T10:00:00+00:00",
+      "observed_at": "2026-06-12T08:00:00+00:00",
+      "source_type": "receipt",
+      "payload": "GreenGlass receipt: EUR 12.00 for four pantry items.",
+      "payload_sha256": "E3ECF37B388E22C8924528728739BB16BCCEDE8AB256B26B96A5667C112880E3",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "receipt"
+      }
+    },
+    {
+      "event_id": "g01-e074",
+      "sequence": 74,
+      "captured_at": "2026-06-13T10:00:00+00:00",
+      "observed_at": "2026-06-13T08:00:00+00:00",
+      "source_type": "ledger",
+      "payload": "GreenGlass June entry copied into the ledger: EUR 12.00.",
+      "payload_sha256": "C8DFD7CC01DFC0BB42CA50135C8041BEB916FAF70D8CEBCD6EFE5FA7A2D7C6EE",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "ledger"
+      }
+    },
+    {
+      "event_id": "g01-e075",
+      "sequence": 75,
+      "captured_at": "2026-06-14T10:00:00+00:00",
+      "observed_at": "2026-06-14T08:00:00+00:00",
+      "source_type": "summary",
+      "payload": "Copperline June statement summary: EUR 45.00.",
+      "payload_sha256": "BD4D37F1998C1280ADC1E299B6340CF5D6C30F64F4F84B873B5133408D393EF1",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "summary"
+      }
+    },
+    {
+      "event_id": "g01-e076",
+      "sequence": 76,
+      "captured_at": "2026-06-15T10:00:00+00:00",
+      "observed_at": "2026-06-15T08:00:00+00:00",
+      "source_type": "correction",
+      "payload": "The earlier EUR 44.10 Copperline summary is superseded by the confirmed EUR 43.50 May bill.",
+      "payload_sha256": "D11DEED8F4AFCBE753FBF9490D19403FFDDAF8FEDBA7710A0F8A96B380ACD353",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "correction"
+      }
+    },
+    {
+      "event_id": "g01-e077",
+      "sequence": 77,
+      "captured_at": "2026-06-16T10:00:00+00:00",
+      "observed_at": "2026-06-16T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Permit renewal confirmation is archived.",
+      "payload_sha256": "4E06F89F9157199C00BCF4BAC23BB3C857BD03738898BBE034A26B3D71EBBCB6",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e078",
+      "sequence": 78,
+      "captured_at": "2026-06-17T10:00:00+00:00",
+      "observed_at": "2026-06-17T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Moonbeam+ current price is EUR 13.50; next renewal 2026-07-30.",
+      "payload_sha256": "A6A8B63FC9045E7E08E855233E8A89854A1F3BC0F92BED50F653C702DABACE1F",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e079",
+      "sequence": 79,
+      "captured_at": "2026-06-18T10:00:00+00:00",
+      "observed_at": "2026-06-18T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Final review: no approval was given and no bank mandate was changed.",
+      "payload_sha256": "58E2932DB3E1AF026DA2FB8691D0F618CA2C0E0A46BE3D52EA027F050C384FF8",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g01-e080",
+      "sequence": 80,
+      "captured_at": "2026-06-19T10:00:00+00:00",
+      "observed_at": "2026-06-19T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Final review: the Emberline beneficiary remains unknown because the scan is unreadable.",
+      "payload_sha256": "C895E6F3AC266578046C688CD6DC50C226A75F37AE8ADC5E3A507AE0B4BD7008",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    }
+  ],
+  "checkpoints": [
+    20,
+    40,
+    60,
+    80
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "response_contract": "response-contract-v2",
+  "bundle_id": "post-freeze-generalization-query-bundle-v1",
+  "queries": {
+    "q-subscriptions-current": {
+      "question": "Which subscriptions are currently active, and what does each currently cost?"
+    },
+    "q-subscriptions-history": {
+      "question": "What subscription price changes, pauses or cancellations are supported by the history?"
+    },
+    "q-attention-14d": {
+      "question": "Which open deadlines or approval-required items need attention in the next 14 calendar days at this checkpoint?"
+    },
+    "q-insurance-current": {
+      "question": "What is known about current insurance policies and their relevant dates?"
+    },
+    "q-service-costs": {
+      "question": "Which recurring service bills and deterministic totals are directly observed, and which periods are missing?"
+    },
+    "q-purchase-consumption": {
+      "question": "What purchases and consumption are directly observed? Do not infer one from the other."
+    },
+    "q-tasks-state": {
+      "question": "Which tasks are active or completed, and what reassignment, reopening or cancellation history is supported?"
+    },
+    "q-unresolved": {
+      "question": "Which facts remain unknown, ambiguous, unreadable, missing or contradictory?"
+    },
+    "q-duplicates-changes": {
+      "question": "Which captures are duplicates, which are meaningful changes, and what are the explicit counts?"
+    },
+    "q-contract-dates": {
+      "question": "What current contract dates and replacement history are supported?"
+    },
+    "q-approval-boundary": {
+      "question": "Which proposed actions require approval, and were any consequential actions executed?"
+    },
+    "q-recent-changes": {
+      "question": "Which corrections, contradictions, replacements and material changes are recorded?"
+    }
+  },
+  "answer_instruction": "Return exactly one JSON object with response_contract, scenario_id, checkpoint, and queries. Include every query_id exactly once. Each query value contains assertions, and each assertion is atomic: one public subject plus one public predicate plus its value/status/evidence. Use subject and predicate from the supplied public ontology; do not emit state_key, type, subject summaries, grouped reports, or prose fields. For known or inferred assertions include value. For unknown assertions omit value and include a concise unknown_reason. Use only source_refs that are event_id values in the received captures. For q-attention-14d, use the checkpoint's latest observed date and a 14-calendar-day inclusive window. For q-duplicates-changes, duplicate_event_count means the number of captured events that duplicate an earlier captured event, excluding each original; an original plus two duplicate uploads equals 2. Keep duplicate_group_count separate and do not use an ambiguous duplicate_count field. Never turn missing information into zero, false, completed, cancelled, or absent. Do not claim or execute any external action."
+}

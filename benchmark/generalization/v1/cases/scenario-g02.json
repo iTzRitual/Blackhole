@@ -1,0 +1,1061 @@
+{
+  "contract_version": "1.0-post-freeze-generalization-v1",
+  "response_contract": "response-contract-v2",
+  "scenario_id": "g02",
+  "person_id": "household-g02",
+  "timeline_start": "2026-07-01",
+  "cutoff_at": "2026-09-18T23:59:59+00:00",
+  "timezone": "UTC",
+  "initial_context": {
+    "entities": [],
+    "accepted_state": []
+  },
+  "raw_events": [
+    {
+      "event_id": "g02-e001",
+      "sequence": 1,
+      "captured_at": "2026-07-01T10:00:00+00:00",
+      "observed_at": "2026-07-01T08:00:00+00:00",
+      "source_type": "task",
+      "payload": "Grant packet is open; Omar Kline owns it and the deadline is 2026-07-10.",
+      "payload_sha256": "C333DCC62510BFAAF1BD8524F6C84F0F24D67B0358C28B638BF1F72088E19163",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "task"
+      }
+    },
+    {
+      "event_id": "g02-e002",
+      "sequence": 2,
+      "captured_at": "2026-07-02T10:00:00+00:00",
+      "observed_at": "2026-07-02T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Clinic call is open, due 2026-07-16; owner not stated.",
+      "payload_sha256": "D785A051868C401B30A3A2262E28B926A29A3E7FA8284A3299A30648CFDDBC5E",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e003",
+      "sequence": 3,
+      "captured_at": "2026-07-03T10:00:00+00:00",
+      "observed_at": "2026-07-03T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Nina should sign it.",
+      "payload_sha256": "41E2415DE4AC69882171816F237867AC6E690BB2F9DF827644D3E8070A9E0B03",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e004",
+      "sequence": 4,
+      "captured_at": "2026-07-04T10:00:00+00:00",
+      "observed_at": "2026-07-04T08:00:00+00:00",
+      "source_type": "subscription",
+      "payload": "Harborlight Reading is active at EUR 8.00 per month; renewal 2026-07-31.",
+      "payload_sha256": "A1631912FBD1C3271677C70219B5B0F9888E16EA371F163E40703D3466A472BA",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "subscription"
+      }
+    },
+    {
+      "event_id": "g02-e005",
+      "sequence": 5,
+      "captured_at": "2026-07-05T10:00:00+00:00",
+      "observed_at": "2026-07-05T08:00:00+00:00",
+      "source_type": "invoice",
+      "payload": "SpruceGrid Energy invoice for 2026-07: EUR 61.20.",
+      "payload_sha256": "0020B99D9228F62D129A501C7E74B80D497121690766AAA5A0E563FDEB0D0365",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "invoice"
+      }
+    },
+    {
+      "event_id": "g02-e006",
+      "sequence": 6,
+      "captured_at": "2026-07-06T10:00:00+00:00",
+      "observed_at": "2026-07-06T08:00:00+00:00",
+      "source_type": "receipt",
+      "payload": "QuietStone Books purchase: EUR 24.00 for three journals.",
+      "payload_sha256": "0530F6E929567B742907E2AA0802104BFE8996071005DD9B27FC1A8CF55279F9",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "receipt"
+      }
+    },
+    {
+      "event_id": "g02-e007",
+      "sequence": 7,
+      "captured_at": "2026-07-07T10:00:00+00:00",
+      "observed_at": "2026-07-07T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Read two chapters from the books bought at QuietStone.",
+      "payload_sha256": "77D1778AABA4467A28AC37719AD2DF23FEE5F848995B352C905B386ECB06BAB9",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e008",
+      "sequence": 8,
+      "captured_at": "2026-07-08T10:00:00+00:00",
+      "observed_at": "2026-07-08T08:00:00+00:00",
+      "source_type": "draft",
+      "payload": "Proposed action: send the lease notice. Approval required; not approved and not executed.",
+      "payload_sha256": "02F33C2B61F4D9C34A5A30D57F523FAFC2FF0224B7624BC556EA07D2FD82DB10",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "draft"
+      }
+    },
+    {
+      "event_id": "g02-e009",
+      "sequence": 9,
+      "captured_at": "2026-07-09T10:00:00+00:00",
+      "observed_at": "2026-07-09T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Grant packet is reassigned to Nina Arden.",
+      "payload_sha256": "302C56C6FE2172D0048D09C0D89CDBA958ECA725AB62517C35422A3A6AEB4B57",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e010",
+      "sequence": 10,
+      "captured_at": "2026-07-10T10:00:00+00:00",
+      "observed_at": "2026-07-10T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Actually, the grant deadline is 2026-07-12, not 2026-07-10.",
+      "payload_sha256": "F389E822550C6583F5981498EC95CE8C5CB8A6A3DDB51381553D5AF8D4C8F97A",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e011",
+      "sequence": 11,
+      "captured_at": "2026-07-11T10:00:00+00:00",
+      "observed_at": "2026-07-11T08:00:00+00:00",
+      "source_type": "task",
+      "payload": "Grant packet is open; Omar Kline owns it and the deadline is 2026-07-10.",
+      "payload_sha256": "C333DCC62510BFAAF1BD8524F6C84F0F24D67B0358C28B638BF1F72088E19163",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "task"
+      }
+    },
+    {
+      "event_id": "g02-e012",
+      "sequence": 12,
+      "captured_at": "2026-07-12T10:00:00+00:00",
+      "observed_at": "2026-07-12T08:00:00+00:00",
+      "source_type": "receipt",
+      "payload": "QuietStone Books — 24,00 EUR — three journals.",
+      "payload_sha256": "80A6A8A9AFCEA3DDE368D6CA0ADD2BC0854F3346B7D261C047DFB6093F545085",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "receipt"
+      }
+    },
+    {
+      "event_id": "g02-e013",
+      "sequence": 13,
+      "captured_at": "2026-07-13T10:00:00+00:00",
+      "observed_at": "2026-07-13T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Nina asked about the packet; which Nina is not stated.",
+      "payload_sha256": "28F76CB03505D98623CCE7DC960B87A45D978EC987EA42DE416A3A39117FBCC1",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e014",
+      "sequence": 14,
+      "captured_at": "2026-07-14T10:00:00+00:00",
+      "observed_at": "2026-07-14T08:00:00+00:00",
+      "source_type": "policy",
+      "payload": "Cedarward policy CD-7330 is active, premium EUR 28.40, expiry 2026-12-31.",
+      "payload_sha256": "B791DB808FDD7FB89FA5D0DB56E30622FFFB3EE0C5279408002984B6F5B170ED",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "policy"
+      }
+    },
+    {
+      "event_id": "g02-e015",
+      "sequence": 15,
+      "captured_at": "2026-07-15T10:00:00+00:00",
+      "observed_at": "2026-07-15T08:00:00+00:00",
+      "source_type": "contract",
+      "payload": "Bellwether Studio agreement signed 2026-06-15, effective 2026-07-01, renews 2026-12-01, expires 2026-12-31.",
+      "payload_sha256": "9756C4AD7589F658F4AEEBEB559AE3C0813B293805757A93FC9EB18E408F95FE",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "contract"
+      }
+    },
+    {
+      "event_id": "g02-e016",
+      "sequence": 16,
+      "captured_at": "2026-07-16T10:00:00+00:00",
+      "observed_at": "2026-07-16T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Clinic call deadline moved to 2026-07-18.",
+      "payload_sha256": "0975A245870D04B85FE63D0DDFFD8428EDB38DF9C38716C8F9C1CC9E1AB28DCD",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e017",
+      "sequence": 17,
+      "captured_at": "2026-07-17T10:00:00+00:00",
+      "observed_at": "2026-07-17T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "The clinic call belongs to Nina Bell, not Nina Arden.",
+      "payload_sha256": "84E0467F04A716C63DFD23C1172FF704A9400ADAC78B24290624BCE0253B8A28",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e018",
+      "sequence": 18,
+      "captured_at": "2026-07-18T10:00:00+00:00",
+      "observed_at": "2026-07-18T08:00:00+00:00",
+      "source_type": "task",
+      "payload": "Grant packet submitted but marked needs review.",
+      "payload_sha256": "942CC1C4BD40B37177CF6ACC9EC3713C46E40772D6F9CF585EBA2ACFC744A16C",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "task"
+      }
+    },
+    {
+      "event_id": "g02-e019",
+      "sequence": 19,
+      "captured_at": "2026-07-19T10:00:00+00:00",
+      "observed_at": "2026-07-19T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "No SpruceGrid invoice for 2026-08 has arrived yet.",
+      "payload_sha256": "27EE2F193ED63322FC521F441EC7F5A165E93FA4C4A4C8265C19CF3FAC9897AB",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e020",
+      "sequence": 20,
+      "captured_at": "2026-07-20T10:00:00+00:00",
+      "observed_at": "2026-07-20T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Checkpoint note: tasks and household records reviewed.",
+      "payload_sha256": "1B452A1745CDCA05FC1D42DCC9BEC401264BFD03331003FF9A9A0DA39B800A03",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e021",
+      "sequence": 21,
+      "captured_at": "2026-07-21T10:00:00+00:00",
+      "observed_at": "2026-07-21T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "No SpruceGrid invoice for 2026-08 is in the folder.",
+      "payload_sha256": "AF5F0F54B187B98598294B0920577F649DEE0FA2637182309D17ADDF5D2A3DC6",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e022",
+      "sequence": 22,
+      "captured_at": "2026-07-22T10:00:00+00:00",
+      "observed_at": "2026-07-22T08:00:00+00:00",
+      "source_type": "ledger",
+      "payload": "SpruceGrid Energy bill copied into the ledger: EUR 61.20 for 2026-07.",
+      "payload_sha256": "972988B584EBB3A408AF895FDC648FDC899E024B876F5BFD0048F9AA407EF75E",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "ledger"
+      }
+    },
+    {
+      "event_id": "g02-e023",
+      "sequence": 23,
+      "captured_at": "2026-07-23T10:00:00+00:00",
+      "observed_at": "2026-07-23T08:00:00+00:00",
+      "source_type": "email",
+      "payload": "Harborlight Reading price notice: EUR 9.00 monthly from 2026-08-01.",
+      "payload_sha256": "33BB2A81608C899A9F71456DF44B1B7CA67CDCEF1442E4CB1A3E4EEFC52181AF",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "email"
+      }
+    },
+    {
+      "event_id": "g02-e024",
+      "sequence": 24,
+      "captured_at": "2026-07-24T10:00:00+00:00",
+      "observed_at": "2026-07-24T08:00:00+00:00",
+      "source_type": "receipt",
+      "payload": "QuietStone Books purchase: EUR 12.50 for one notebook.",
+      "payload_sha256": "959CDEF9717B649FC1458F7C69BD3E5FB40EAABCE3E112760388462E277F3A50",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "receipt"
+      }
+    },
+    {
+      "event_id": "g02-e025",
+      "sequence": 25,
+      "captured_at": "2026-07-25T10:00:00+00:00",
+      "observed_at": "2026-07-25T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "None of the notebook pages have been read.",
+      "payload_sha256": "7A12784A332EC6BAB7BAFE8C0B8B06431AB64496769E1F6388C2C64C17D1B771",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e026",
+      "sequence": 26,
+      "captured_at": "2026-07-26T10:00:00+00:00",
+      "observed_at": "2026-07-26T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Lease notice still needs approval; no send has happened.",
+      "payload_sha256": "B873286E486EF3A2A99C0BD24303C9D0AB356517FFBAC01B2F098A206053A48D",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e027",
+      "sequence": 27,
+      "captured_at": "2026-07-27T10:00:00+00:00",
+      "observed_at": "2026-07-27T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Nina said the form is done, but the person is not identified.",
+      "payload_sha256": "B860DBAEBAC067C916F030E0F344E7F2934C101EB07F5550AD886BB9A45367BC",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e028",
+      "sequence": 28,
+      "captured_at": "2026-07-28T10:00:00+00:00",
+      "observed_at": "2026-07-28T08:00:00+00:00",
+      "source_type": "policy",
+      "payload": "Cedarward beneficiary is Nina Arden.",
+      "payload_sha256": "CC36DF3B4782C099884CED1B9EE35BB1916266B196499318000B125D9C8E4C29",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "policy"
+      }
+    },
+    {
+      "event_id": "g02-e029",
+      "sequence": 29,
+      "captured_at": "2026-07-29T10:00:00+00:00",
+      "observed_at": "2026-07-29T08:00:00+00:00",
+      "source_type": "contract",
+      "payload": "Bellwether Studio replacement agreement proposed, effective 2026-09-01.",
+      "payload_sha256": "53FCFA891C29F76BDB770A868D2D46E67FBCDA20A5149AB293A41DCCEDC4CD99",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "contract"
+      }
+    },
+    {
+      "event_id": "g02-e030",
+      "sequence": 30,
+      "captured_at": "2026-07-30T10:00:00+00:00",
+      "observed_at": "2026-07-30T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Grant packet reopened after the reviewer returned it; new deadline 2026-07-22.",
+      "payload_sha256": "9B369DDE165553BE7B8BFC8D1E7384E2765AB3D674A9A5D6B117EBB890F30E34",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e031",
+      "sequence": 31,
+      "captured_at": "2026-07-31T10:00:00+00:00",
+      "observed_at": "2026-07-31T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Grant packet deadline changed to 2026-07-25.",
+      "payload_sha256": "FBE0A4463890085CF03F55E538EC92034822A331426677B705E387D5FBABCD55",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e032",
+      "sequence": 32,
+      "captured_at": "2026-08-01T10:00:00+00:00",
+      "observed_at": "2026-08-01T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Grant packet note mentions a missing signature but is not the same capture as the opening note.",
+      "payload_sha256": "57AA9AB92B4A1109D10A95FDA1D253705558AEF6782534808C2B8FDB9FCBAFE9",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e033",
+      "sequence": 33,
+      "captured_at": "2026-08-02T10:00:00+00:00",
+      "observed_at": "2026-08-02T08:00:00+00:00",
+      "source_type": "invoice",
+      "payload": "SpruceGrid Energy invoice for 2026-07: EUR 61.20.",
+      "payload_sha256": "0020B99D9228F62D129A501C7E74B80D497121690766AAA5A0E563FDEB0D0365",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "invoice"
+      }
+    },
+    {
+      "event_id": "g02-e034",
+      "sequence": 34,
+      "captured_at": "2026-08-03T10:00:00+00:00",
+      "observed_at": "2026-08-03T08:00:00+00:00",
+      "source_type": "ledger",
+      "payload": "QuietStone Books receipt copied into the ledger: EUR 12.50.",
+      "payload_sha256": "9815C13738B6E2D8AEAFC6DBF4A84717D254C4A3DCAE9597910E89452A8A2D18",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "ledger"
+      }
+    },
+    {
+      "event_id": "g02-e035",
+      "sequence": 35,
+      "captured_at": "2026-08-04T10:00:00+00:00",
+      "observed_at": "2026-08-04T08:00:00+00:00",
+      "source_type": "correction",
+      "payload": "Correction: the grant deadline is 2026-07-27, not 2026-07-25.",
+      "payload_sha256": "B7B361464EB29597BD239E2545B99BB96D33C43B11944C90B6D287E03669997A",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "correction"
+      }
+    },
+    {
+      "event_id": "g02-e036",
+      "sequence": 36,
+      "captured_at": "2026-08-05T10:00:00+00:00",
+      "observed_at": "2026-08-05T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Harborlight Reading is active at EUR 9.00 per month from August.",
+      "payload_sha256": "21A51D1571D5B9CA407E9E377A88C679CED1D221F20B0DA2C02F0F57506027F4",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e037",
+      "sequence": 37,
+      "captured_at": "2026-08-06T10:00:00+00:00",
+      "observed_at": "2026-08-06T08:00:00+00:00",
+      "source_type": "calendar",
+      "payload": "Clinic call completed on 2026-07-30.",
+      "payload_sha256": "769AEE8524839F54112E0781CD74D8C1DF445838E5627D8FE2D38392BE4C8282",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "calendar"
+      }
+    },
+    {
+      "event_id": "g02-e038",
+      "sequence": 38,
+      "captured_at": "2026-08-07T10:00:00+00:00",
+      "observed_at": "2026-08-07T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Clinic call reopened while a follow-up slot is arranged.",
+      "payload_sha256": "DD2CD9596E06C78DAFE41A531ED315D01F40E697C308C8F826A281DDD18EF85C",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e039",
+      "sequence": 39,
+      "captured_at": "2026-08-08T10:00:00+00:00",
+      "observed_at": "2026-08-08T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "The reopened clinic call is assigned to Omar Kline.",
+      "payload_sha256": "36D866743818CD934A294CB31C3901412FEDC8ABD74CE3A5D4F47075B7A6D613",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e040",
+      "sequence": 40,
+      "captured_at": "2026-08-09T10:00:00+00:00",
+      "observed_at": "2026-08-09T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Checkpoint note: August work queue reviewed.",
+      "payload_sha256": "79253CF9CDBB9023DF66850F707ECE604229A6A3017120C599F7D597526AD4FC",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e041",
+      "sequence": 41,
+      "captured_at": "2026-08-10T10:00:00+00:00",
+      "observed_at": "2026-08-10T08:00:00+00:00",
+      "source_type": "invoice",
+      "payload": "SpruceGrid Energy invoice for 2026-08: EUR 64.00.",
+      "payload_sha256": "ADB9E2F7B38F53C0B98FA0ECE437362EB7D2A786807644B7A333AB37DB86EC7F",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "invoice"
+      }
+    },
+    {
+      "event_id": "g02-e042",
+      "sequence": 42,
+      "captured_at": "2026-08-11T10:00:00+00:00",
+      "observed_at": "2026-08-11T08:00:00+00:00",
+      "source_type": "ledger",
+      "payload": "SpruceGrid / August / 64,00 EUR.",
+      "payload_sha256": "6B246B89C8780FC367BEDBFF4A379EB4C788CE96B55F0F8EC356D7236FC9585E",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "ledger"
+      }
+    },
+    {
+      "event_id": "g02-e043",
+      "sequence": 43,
+      "captured_at": "2026-08-12T10:00:00+00:00",
+      "observed_at": "2026-08-12T08:00:00+00:00",
+      "source_type": "receipt",
+      "payload": "QuietStone Books purchase: EUR 18.00 for a reference book.",
+      "payload_sha256": "4664D7DBF9121A1367BBCC8CE100E758495E236BFD54BEA176D26B52DD4BAEDF",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "receipt"
+      }
+    },
+    {
+      "event_id": "g02-e044",
+      "sequence": 44,
+      "captured_at": "2026-08-13T10:00:00+00:00",
+      "observed_at": "2026-08-13T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Read three chapters from the reference book.",
+      "payload_sha256": "A7C296324726A23A6819F457FA227765044C36EF69D312E493CC79948D5793AF",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e045",
+      "sequence": 45,
+      "captured_at": "2026-08-14T10:00:00+00:00",
+      "observed_at": "2026-08-14T08:00:00+00:00",
+      "source_type": "approval",
+      "payload": "The lease notice approval was denied; it was not sent.",
+      "payload_sha256": "4C79796A7053A4B75BCD6D575A5368CD0DD8E54CD7030463071FFA7D70B25D59",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "approval"
+      }
+    },
+    {
+      "event_id": "g02-e046",
+      "sequence": 46,
+      "captured_at": "2026-08-15T10:00:00+00:00",
+      "observed_at": "2026-08-15T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Grant packet cancelled because the funding round closed.",
+      "payload_sha256": "986A2D7B3080369897692B102E35881AE904077570CE3C1DAB569EEEAEC74181",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e047",
+      "sequence": 47,
+      "captured_at": "2026-08-16T10:00:00+00:00",
+      "observed_at": "2026-08-16T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Grant packet reopened for 2026-08-25; Toby Wren owns it.",
+      "payload_sha256": "F37D3E64FB991CE3EB5E99602A1F410A33090511724F20D183F4A2F951892CD1",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e048",
+      "sequence": 48,
+      "captured_at": "2026-08-17T10:00:00+00:00",
+      "observed_at": "2026-08-17T08:00:00+00:00",
+      "source_type": "correction",
+      "payload": "Price correction: Harborlight is EUR 9.00 from August; EUR 9.50 begins 2026-09-01.",
+      "payload_sha256": "500532A81170E3AA7285D69B0BDB8B0EF744E3090076F1DFDC230327B53F3333",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "correction"
+      }
+    },
+    {
+      "event_id": "g02-e049",
+      "sequence": 49,
+      "captured_at": "2026-08-18T10:00:00+00:00",
+      "observed_at": "2026-07-29T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Backdated clinic note: the call took place on 2026-07-29; this note was captured later.",
+      "payload_sha256": "D3DD81B78D904198C3EA49C36D7A2DEA88A501DC4BBF2B11EC729F721D3D90F3",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e050",
+      "sequence": 50,
+      "captured_at": "2026-08-19T10:00:00+00:00",
+      "observed_at": "2026-08-19T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Consumption of the August books is not stated.",
+      "payload_sha256": "D7C8EC007B4A7CDBE0F5CA6965B78E51029F66704BF888219D97A7062EFD662C",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e051",
+      "sequence": 51,
+      "captured_at": "2026-08-20T10:00:00+00:00",
+      "observed_at": "2026-08-20T08:00:00+00:00",
+      "source_type": "correction",
+      "payload": "Actually, Cedarward expires 2027-01-15, not 2026-12-31.",
+      "payload_sha256": "02919D36B7D37100C7E22885B391BE83820211CD7F90A5294A7820F72D282F5F",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "correction"
+      }
+    },
+    {
+      "event_id": "g02-e052",
+      "sequence": 52,
+      "captured_at": "2026-08-21T10:00:00+00:00",
+      "observed_at": "2026-08-21T08:00:00+00:00",
+      "source_type": "scan",
+      "payload": "The Cedarward beneficiary scan is unreadable.",
+      "payload_sha256": "03EB0BBF38CC7A6906F7D491264BAA95CF62561877ACDFE1A57FBF8F1A492045",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "scan"
+      }
+    },
+    {
+      "event_id": "g02-e053",
+      "sequence": 53,
+      "captured_at": "2026-08-22T10:00:00+00:00",
+      "observed_at": "2026-08-22T08:00:00+00:00",
+      "source_type": "contract",
+      "payload": "Bellwether replacement agreement signed 2026-08-22, effective 2026-09-01; old agreement ends 2026-08-31.",
+      "payload_sha256": "1DD1D22B56D3E9EADC5BDE143F009ED1C531884F8C9D1BC5D2856051B0A9B4D5",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "contract"
+      }
+    },
+    {
+      "event_id": "g02-e054",
+      "sequence": 54,
+      "captured_at": "2026-08-23T10:00:00+00:00",
+      "observed_at": "2026-08-23T08:00:00+00:00",
+      "source_type": "contract",
+      "payload": "Bellwether replacement agreement — signed 2026-08-22, effective 2026-09-01.",
+      "payload_sha256": "DB6114C58CFC1E2F284AA992C6AEBA001C875FFBBB7A5EE73E314491C6FD29B7",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "contract"
+      }
+    },
+    {
+      "event_id": "g02-e055",
+      "sequence": 55,
+      "captured_at": "2026-08-24T10:00:00+00:00",
+      "observed_at": "2026-08-24T08:00:00+00:00",
+      "source_type": "summary",
+      "payload": "A copied summary says the August SpruceGrid bill was EUR 65.25.",
+      "payload_sha256": "1D6240F6BC32901568C443875510867C17DE0265BEDF92C26494DE61597A625B",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "summary"
+      }
+    },
+    {
+      "event_id": "g02-e056",
+      "sequence": 56,
+      "captured_at": "2026-08-25T10:00:00+00:00",
+      "observed_at": "2026-08-25T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "SpruceGrid meter note: August total EUR 64.00, from a different capture.",
+      "payload_sha256": "8FA12F30AF0FDE440D4583831D99DB6952DE31BB9E3C3D1EAA32CFE05907724F",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e057",
+      "sequence": 57,
+      "captured_at": "2026-08-26T10:00:00+00:00",
+      "observed_at": "2026-08-26T08:00:00+00:00",
+      "source_type": "task",
+      "payload": "Clinic call cancelled pending a new slot.",
+      "payload_sha256": "16202A2A0E849D6FEFB10A6C0B59F024D0A7278141861531FD1CDAE2A2CE24B2",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "task"
+      }
+    },
+    {
+      "event_id": "g02-e058",
+      "sequence": 58,
+      "captured_at": "2026-08-27T10:00:00+00:00",
+      "observed_at": "2026-08-27T08:00:00+00:00",
+      "source_type": "task",
+      "payload": "Inventory check opened, due 2026-09-05; Nina Arden owns it.",
+      "payload_sha256": "D391AE9D9CFEB44C2A475AE084B1977140F5E55A5D740E13E7CE05B0AFF659B1",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "task"
+      }
+    },
+    {
+      "event_id": "g02-e059",
+      "sequence": 59,
+      "captured_at": "2026-08-28T10:00:00+00:00",
+      "observed_at": "2026-08-28T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Nina asked about the inventory check; which Nina is not stated.",
+      "payload_sha256": "1FF85FEB68FCACD0DCFBD37C1DB45465B85104732DB7D7D7DBA8073C7BC0A299",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e060",
+      "sequence": 60,
+      "captured_at": "2026-08-29T10:00:00+00:00",
+      "observed_at": "2026-08-29T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Checkpoint note: late-August review.",
+      "payload_sha256": "CFD03ED5C4A3E41C9C460C67F301D4130FA7E36736F13AC51161FEAFED1EF2A1",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e061",
+      "sequence": 61,
+      "captured_at": "2026-08-30T10:00:00+00:00",
+      "observed_at": "2026-08-30T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Harborlight September charge is not yet due; the August price remains EUR 9.00.",
+      "payload_sha256": "319C6ED7540A140C6EF470B01138B3D95AFF025B2A5D366F362583F435BA31F0",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e062",
+      "sequence": 62,
+      "captured_at": "2026-08-31T10:00:00+00:00",
+      "observed_at": "2026-08-31T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "QuietStone Books purchase: EUR 9.50 for a desk calendar.",
+      "payload_sha256": "D391AA5D74E14D7B090EFE4E251977564DA030CA6AA6CE27FFF33D0CC3ADED75",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e063",
+      "sequence": 63,
+      "captured_at": "2026-09-01T10:00:00+00:00",
+      "observed_at": "2026-09-01T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Read one book from the recent QuietStone purchases.",
+      "payload_sha256": "57570675BE7D4A6B3D1CB3326296547BF0D91D83C9E8022A43DDF18B4A399A42",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e064",
+      "sequence": 64,
+      "captured_at": "2026-09-02T10:00:00+00:00",
+      "observed_at": "2026-09-02T08:00:00+00:00",
+      "source_type": "receipt",
+      "payload": "Grant packet completed after the reopening; receipt filed.",
+      "payload_sha256": "A115B3619B49687493610E5342BCFBC0F1BCF33947B8A8E87F7F77CDE1E90959",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "receipt"
+      }
+    },
+    {
+      "event_id": "g02-e065",
+      "sequence": 65,
+      "captured_at": "2026-09-03T10:00:00+00:00",
+      "observed_at": "2026-09-03T08:00:00+00:00",
+      "source_type": "approval",
+      "payload": "The lease notice proposal was withdrawn; no notice was sent.",
+      "payload_sha256": "998308A4751E1C8B01BA94B48DBD43057F63CB7421E7F63B52BADAB4AC606C93",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "approval"
+      }
+    },
+    {
+      "event_id": "g02-e066",
+      "sequence": 66,
+      "captured_at": "2026-09-04T10:00:00+00:00",
+      "observed_at": "2026-09-04T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Clinic call reopened for 2026-09-08; Nina Bell owns it.",
+      "payload_sha256": "3C23340233FF1D80C46A417991717FD58BB65BF20C5CA004807134693014EE1F",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e067",
+      "sequence": 67,
+      "captured_at": "2026-09-05T10:00:00+00:00",
+      "observed_at": "2026-09-05T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Inventory check deadline changed to 2026-09-07.",
+      "payload_sha256": "3A84C24C0376038D546D1B1199E708785DB1BC00AD821EF205450A6C741784A4",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e068",
+      "sequence": 68,
+      "captured_at": "2026-09-06T10:00:00+00:00",
+      "observed_at": "2026-09-06T08:00:00+00:00",
+      "source_type": "contract",
+      "payload": "Bellwether renewal date changed to 2026-12-15 in the replacement agreement.",
+      "payload_sha256": "F83426F0845A7D3924D7282ECF76431A5B554D84C905C7E22EFF670BF78FB805",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "contract"
+      }
+    },
+    {
+      "event_id": "g02-e069",
+      "sequence": 69,
+      "captured_at": "2026-09-07T10:00:00+00:00",
+      "observed_at": "2026-09-07T08:00:00+00:00",
+      "source_type": "correction",
+      "payload": "Correction confirmed: the August SpruceGrid amount is EUR 64.00, not EUR 65.25.",
+      "payload_sha256": "5DA06AB83836B901E8F3EF1E3D0E476F2BAC96AD572AFBABF1D70D4F5C5A5108",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "correction"
+      }
+    },
+    {
+      "event_id": "g02-e070",
+      "sequence": 70,
+      "captured_at": "2026-09-08T10:00:00+00:00",
+      "observed_at": "2026-09-08T08:00:00+00:00",
+      "source_type": "ledger",
+      "payload": "SpruceGrid August amount remains EUR 64.00 in the ledger.",
+      "payload_sha256": "CD09180F27D53D109F8ED33FB5F29C97E4F564B1F6F25E9D576A6BF5E5C00A1F",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "ledger"
+      }
+    },
+    {
+      "event_id": "g02-e071",
+      "sequence": 71,
+      "captured_at": "2026-09-09T10:00:00+00:00",
+      "observed_at": "2026-09-09T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Cedarward policy remains active through 2027-01-15.",
+      "payload_sha256": "F0AF9ABC32DF57F07BDD851A865E5919BA4D0B9B6C270CF30E4A129CD1DBE28D",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e072",
+      "sequence": 72,
+      "captured_at": "2026-09-10T10:00:00+00:00",
+      "observed_at": "2026-09-10T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "No approval was granted and no lease notice was sent.",
+      "payload_sha256": "4E0C63534438BB407E4D0F1E4FD17842111E0C2ACAAA35DAEBF97A49B3360B70",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e073",
+      "sequence": 73,
+      "captured_at": "2026-09-11T10:00:00+00:00",
+      "observed_at": "2026-09-11T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "QuietStone Books purchase: EUR 10.00 for stationery.",
+      "payload_sha256": "7B23D1CCA5E571FCACA64C7A00D42611D6D45573706187ED9C8270D3382495E9",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e074",
+      "sequence": 74,
+      "captured_at": "2026-09-12T10:00:00+00:00",
+      "observed_at": "2026-09-12T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "The clinic call's 2026-07-29 outcome was a reminder, not completion.",
+      "payload_sha256": "2EBACEA80036E86CF22C4191127C022FB317E2321F48B558B8E56CD629C65D49",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e075",
+      "sequence": 75,
+      "captured_at": "2026-09-13T10:00:00+00:00",
+      "observed_at": "2026-09-13T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Grant packet completion receipt is archived.",
+      "payload_sha256": "D6D88FFC6FEE93EC48AE9915278FC6CFFAC1A170952DF01E550F1537D058E13B",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e076",
+      "sequence": 76,
+      "captured_at": "2026-09-14T10:00:00+00:00",
+      "observed_at": "2026-09-14T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Inventory check remains open; no completion capture exists.",
+      "payload_sha256": "87B7F47ADC0370A338F7E4A0EC3211A0FFE10AE81EEFC82FE24547337813C67E",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e077",
+      "sequence": 77,
+      "captured_at": "2026-09-15T10:00:00+00:00",
+      "observed_at": "2026-09-15T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Harborlight Reading is active at EUR 9.50 per month; next renewal 2026-09-30.",
+      "payload_sha256": "37907B5B74EB98FE6685BBBDA5EA2AECAE585F9BDCC089BFA9D4DD4239E68161",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e078",
+      "sequence": 78,
+      "captured_at": "2026-09-16T10:00:00+00:00",
+      "observed_at": "2026-09-16T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "No SpruceGrid invoice for 2026-09 has been captured.",
+      "payload_sha256": "B784B238C9CC3336FCCEA4211C83662EB3C5C395F6C8300823B37B00E5EF5091",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e079",
+      "sequence": 79,
+      "captured_at": "2026-09-17T10:00:00+00:00",
+      "observed_at": "2026-09-17T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Final review: no external lease-notice action was executed.",
+      "payload_sha256": "26DDDC68B65094A6944987D7366B3E5AD3CEA0209DBF23E62298888F7E577A1A",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g02-e080",
+      "sequence": 80,
+      "captured_at": "2026-09-18T10:00:00+00:00",
+      "observed_at": "2026-09-18T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Final review: a bare Nina reference remains unresolved.",
+      "payload_sha256": "8B807F2B695AC6903F53CABE0CD388B56D14F4BE47CBA670738D6F35F80A3CAE",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    }
+  ],
+  "checkpoints": [
+    20,
+    40,
+    60,
+    80
+  ]
+}

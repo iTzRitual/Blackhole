@@ -1,0 +1,1061 @@
+{
+  "contract_version": "1.0-post-freeze-generalization-v1",
+  "response_contract": "response-contract-v2",
+  "scenario_id": "g03",
+  "person_id": "household-g03",
+  "timeline_start": "2026-05-01",
+  "cutoff_at": "2026-07-19T23:59:59+00:00",
+  "timezone": "UTC",
+  "initial_context": {
+    "entities": [],
+    "accepted_state": []
+  },
+  "raw_events": [
+    {
+      "event_id": "g03-e001",
+      "sequence": 1,
+      "captured_at": "2026-05-01T10:00:00+00:00",
+      "observed_at": "2026-05-01T08:00:00+00:00",
+      "source_type": "contract",
+      "payload": "Driftwood Studio contract signed 2026-04-20, effective 2026-05-01, renews 2026-11-01, expires 2026-10-31.",
+      "payload_sha256": "34A100E6DDFABCD617A6EDF4D398ED412A18774D794799E48C1B0F2CC64C3650",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "contract"
+      }
+    },
+    {
+      "event_id": "g03-e002",
+      "sequence": 2,
+      "captured_at": "2026-05-02T10:00:00+00:00",
+      "observed_at": "2026-05-02T08:00:00+00:00",
+      "source_type": "policy",
+      "payload": "SableHarbor policy SH-9088 is active; premium EUR 33.10; expiry 2026-10-31.",
+      "payload_sha256": "710A98A728D95A23C0B3AF67551494619855AAF3FB7CFE5EC490E0B7ACF0528A",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "policy"
+      }
+    },
+    {
+      "event_id": "g03-e003",
+      "sequence": 3,
+      "captured_at": "2026-05-03T10:00:00+00:00",
+      "observed_at": "2026-05-03T08:00:00+00:00",
+      "source_type": "receipt",
+      "payload": "TideGlass Outlet purchase: EUR 46.80 for a ceramic set.",
+      "payload_sha256": "B77F35C03FF60E006E43D905023F6222BDAB5558D8046E6EBB7EBFBB081E63E2",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "receipt"
+      }
+    },
+    {
+      "event_id": "g03-e004",
+      "sequence": 4,
+      "captured_at": "2026-05-04T10:00:00+00:00",
+      "observed_at": "2026-05-04T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "One item from the TideGlass purchase was used.",
+      "payload_sha256": "3FF009D797A49ADBCED3A12F5FE70C6FFAFEDD90BCB1EFDE1D78139BD414BBC2",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e005",
+      "sequence": 5,
+      "captured_at": "2026-05-05T10:00:00+00:00",
+      "observed_at": "2026-05-05T08:00:00+00:00",
+      "source_type": "subscription",
+      "payload": "Silvermeadow Pass is active at EUR 15.00 monthly; next renewal 2026-05-31.",
+      "payload_sha256": "29A4975EEDC235B8A9B2A2654215E7898244ECED73DADC75527A6220A3EBE82C",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "subscription"
+      }
+    },
+    {
+      "event_id": "g03-e006",
+      "sequence": 6,
+      "captured_at": "2026-05-06T10:00:00+00:00",
+      "observed_at": "2026-05-06T08:00:00+00:00",
+      "source_type": "invoice",
+      "payload": "Marbleleaf Water invoice for 2026-05: EUR 28.00.",
+      "payload_sha256": "1D3B2EAFFA142FC7426BB70F55B0C1889B63D0C78AD759B85AC453428943F36A",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "invoice"
+      }
+    },
+    {
+      "event_id": "g03-e007",
+      "sequence": 7,
+      "captured_at": "2026-05-07T10:00:00+00:00",
+      "observed_at": "2026-05-07T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Claim follow-up is open; Pavel Ross owns it; due 2026-05-14.",
+      "payload_sha256": "5BE78A5F77A7FB1C55467CBD33F96D13BF8E29451E03E850B71737D94B49485A",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e008",
+      "sequence": 8,
+      "captured_at": "2026-05-08T10:00:00+00:00",
+      "observed_at": "2026-05-08T08:00:00+00:00",
+      "source_type": "draft",
+      "payload": "Proposed action: file the insurance claim. Approval required; not approved and not executed.",
+      "payload_sha256": "4E24A03E64CAC988DAD2ACA753CC0D83DBF049BBE4017CCAF39C4198FC941493",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "draft"
+      }
+    },
+    {
+      "event_id": "g03-e009",
+      "sequence": 9,
+      "captured_at": "2026-05-09T10:00:00+00:00",
+      "observed_at": "2026-05-09T08:00:00+00:00",
+      "source_type": "receipt",
+      "payload": "TideGlass Outlet purchase: EUR 46.80 for a ceramic set.",
+      "payload_sha256": "B77F35C03FF60E006E43D905023F6222BDAB5558D8046E6EBB7EBFBB081E63E2",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "receipt"
+      }
+    },
+    {
+      "event_id": "g03-e010",
+      "sequence": 10,
+      "captured_at": "2026-05-10T10:00:00+00:00",
+      "observed_at": "2026-04-28T08:00:00+00:00",
+      "source_type": "meter",
+      "payload": "Backdated water reading: observed 2026-04-28 at 12 cubic metres; captured later.",
+      "payload_sha256": "70AA7D50851931F3EF8113FE597A050C98B3FB286F00400F24B1EB4A21FE8411",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "meter"
+      }
+    },
+    {
+      "event_id": "g03-e011",
+      "sequence": 11,
+      "captured_at": "2026-05-11T10:00:00+00:00",
+      "observed_at": "2026-05-11T08:00:00+00:00",
+      "source_type": "contract",
+      "payload": "Driftwood Studio replacement offer announced, effective 2026-08-01.",
+      "payload_sha256": "C8D3A1DF5A5B219EE9500423C9FECC0EE066795D457E3DA96B53BF1B081C2251",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "contract"
+      }
+    },
+    {
+      "event_id": "g03-e012",
+      "sequence": 12,
+      "captured_at": "2026-05-12T10:00:00+00:00",
+      "observed_at": "2026-05-12T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "SableHarbor claim number is not stated in the policy papers.",
+      "payload_sha256": "27245B026C4B00E0E13E5C392C6DE0E31E0B2E2B30CEFB405E4E0D8F448ECD40",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e013",
+      "sequence": 13,
+      "captured_at": "2026-05-13T10:00:00+00:00",
+      "observed_at": "2026-05-13T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Lara will call the insurer.",
+      "payload_sha256": "A8168F9B14D081BF71C27B06A7C2FB425E42163278176618EEDB350A23C8BC1C",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e014",
+      "sequence": 14,
+      "captured_at": "2026-05-14T10:00:00+00:00",
+      "observed_at": "2026-05-14T08:00:00+00:00",
+      "source_type": "invoice",
+      "payload": "No Marbleleaf invoice for 2026-06 has arrived yet.",
+      "payload_sha256": "1114D87551A75CFC3B14E2E7135B5C2CB688EA1DD27B766AA99008972DDE5A9B",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "invoice"
+      }
+    },
+    {
+      "event_id": "g03-e015",
+      "sequence": 15,
+      "captured_at": "2026-05-15T10:00:00+00:00",
+      "observed_at": "2026-05-15T08:00:00+00:00",
+      "source_type": "task",
+      "payload": "Return package task is open; Lara Quill owns it; due 2026-05-18.",
+      "payload_sha256": "BA792E4CCA1082BD74FFAFD8FD4DB0A8AAD5D757113B3768A6044BBB4BD3B943",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "task"
+      }
+    },
+    {
+      "event_id": "g03-e016",
+      "sequence": 16,
+      "captured_at": "2026-05-16T10:00:00+00:00",
+      "observed_at": "2026-05-16T08:00:00+00:00",
+      "source_type": "invoice",
+      "payload": "Marbleleaf / May / 28,00 EUR.",
+      "payload_sha256": "A0CD24AFF2E2B7E914394505840E2228F51F3FC351DBEFCB6118410845D27030",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "invoice"
+      }
+    },
+    {
+      "event_id": "g03-e017",
+      "sequence": 17,
+      "captured_at": "2026-05-17T10:00:00+00:00",
+      "observed_at": "2026-05-17T08:00:00+00:00",
+      "source_type": "policy",
+      "payload": "The SableHarbor beneficiary is Lara Wells.",
+      "payload_sha256": "A995EFBF2CDEA3FBBF77DB2C1398B47DAF1A4F2A5B4A634C2495CA0E82DD7E00",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "policy"
+      }
+    },
+    {
+      "event_id": "g03-e018",
+      "sequence": 18,
+      "captured_at": "2026-05-18T10:00:00+00:00",
+      "observed_at": "2026-05-18T08:00:00+00:00",
+      "source_type": "scan",
+      "payload": "The policy scan says the SableHarbor beneficiary is Lara Quill.",
+      "payload_sha256": "AAC703BC352639A2DD6D900FAEFC57BA4B9DECE48241F75513387A025C7E31C8",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "scan"
+      }
+    },
+    {
+      "event_id": "g03-e019",
+      "sequence": 19,
+      "captured_at": "2026-05-19T10:00:00+00:00",
+      "observed_at": "2026-05-19T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Claim follow-up is reassigned to Lara Quill.",
+      "payload_sha256": "A202523D93302B778E00ACB983C8D78565DDD82A2A0DE0EBF263F8A5C10A8087",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e020",
+      "sequence": 20,
+      "captured_at": "2026-05-20T10:00:00+00:00",
+      "observed_at": "2026-05-20T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Checkpoint note: contracts and claims reviewed.",
+      "payload_sha256": "5F7B616C878F1D5158DAF47D82B66486086D0AD0DB102415AFDF259455C2B401",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e021",
+      "sequence": 21,
+      "captured_at": "2026-05-21T10:00:00+00:00",
+      "observed_at": "2026-05-21T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Marbleleaf June invoice is still absent.",
+      "payload_sha256": "E05164D3A8CC368A3C12540491E8DACB320A7295C862A27CD256F33E7A9FE067",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e022",
+      "sequence": 22,
+      "captured_at": "2026-05-22T10:00:00+00:00",
+      "observed_at": "2026-05-22T08:00:00+00:00",
+      "source_type": "receipt",
+      "payload": "TideGlass Outlet purchase: EUR 9.20 for a serving tray.",
+      "payload_sha256": "2FA3F8460028864189B98E896D24DA3E1ABE67014A6F17392595B1EECC9B94D1",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "receipt"
+      }
+    },
+    {
+      "event_id": "g03-e023",
+      "sequence": 23,
+      "captured_at": "2026-05-23T10:00:00+00:00",
+      "observed_at": "2026-05-23T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Zero items from the serving-tray purchase have been used.",
+      "payload_sha256": "A11891C423426044AA8F1B24BD0EE02D27EAE65D400A47BB3B2560F929081A7F",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e024",
+      "sequence": 24,
+      "captured_at": "2026-05-24T10:00:00+00:00",
+      "observed_at": "2026-05-24T08:00:00+00:00",
+      "source_type": "email",
+      "payload": "Silvermeadow Pass price changes to EUR 16.00 monthly from 2026-06-15.",
+      "payload_sha256": "402BBEFBE66786C9EE5672FC5B4E20719767253616C9490049651BA800E991FA",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "email"
+      }
+    },
+    {
+      "event_id": "g03-e025",
+      "sequence": 25,
+      "captured_at": "2026-05-25T10:00:00+00:00",
+      "observed_at": "2026-05-25T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Driftwood Studio agreement copy saved in the records.",
+      "payload_sha256": "750F037B725B6285F43F39DE2AC3ECBD792E6DAE4A85F80EF92571026CAF9DF1",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e026",
+      "sequence": 26,
+      "captured_at": "2026-05-26T10:00:00+00:00",
+      "observed_at": "2026-05-26T08:00:00+00:00",
+      "source_type": "task",
+      "payload": "Claim follow-up deadline moved to 2026-05-20.",
+      "payload_sha256": "1ACF2220A0EC1F60B430A98F64EA13FD93B6DD6A70E865FAD41D7C8310E02888",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "task"
+      }
+    },
+    {
+      "event_id": "g03-e027",
+      "sequence": 27,
+      "captured_at": "2026-05-27T10:00:00+00:00",
+      "observed_at": "2026-05-27T08:00:00+00:00",
+      "source_type": "correction",
+      "payload": "Actually, SableHarbor expires 2026-11-30, not 2026-10-31.",
+      "payload_sha256": "2B9783C3E5C8B8E5D297B1A073EF82721363F22042D4A6D028EB554913369A58",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "correction"
+      }
+    },
+    {
+      "event_id": "g03-e028",
+      "sequence": 28,
+      "captured_at": "2026-05-28T10:00:00+00:00",
+      "observed_at": "2026-05-28T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Replacement contract paperwork is being reviewed.",
+      "payload_sha256": "18CBF932A82C1DAA79DD8DAC358FFF3828C09CA17A837303C999DA476B34877D",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e029",
+      "sequence": 29,
+      "captured_at": "2026-05-29T10:00:00+00:00",
+      "observed_at": "2026-05-29T08:00:00+00:00",
+      "source_type": "approval",
+      "payload": "The claim filing proposal still needs approval; no filing occurred.",
+      "payload_sha256": "894FA4BB7F768BC3EF2E39804FC1D0E61634DEE35D99297FD92D77BB076231D8",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "approval"
+      }
+    },
+    {
+      "event_id": "g03-e030",
+      "sequence": 30,
+      "captured_at": "2026-05-30T10:00:00+00:00",
+      "observed_at": "2026-05-30T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Return package cancelled after the seller accepted the return.",
+      "payload_sha256": "4E402ED78B7AEF236D73614F18B8A2B2E7A4BBEC38B65FE63CF81E1317A2F71D",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e031",
+      "sequence": 31,
+      "captured_at": "2026-05-31T10:00:00+00:00",
+      "observed_at": "2026-05-31T08:00:00+00:00",
+      "source_type": "task",
+      "payload": "Return package reopened; new due date 2026-06-05.",
+      "payload_sha256": "DF802536BCECA15EFA87377DFE2DBF25CFDA446109110763A5B95F504AF7D10B",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "task"
+      }
+    },
+    {
+      "event_id": "g03-e032",
+      "sequence": 32,
+      "captured_at": "2026-06-01T10:00:00+00:00",
+      "observed_at": "2026-06-01T08:00:00+00:00",
+      "source_type": "receipt",
+      "payload": "TideGlass Outlet purchase: EUR 47.50 for a similar ceramic set.",
+      "payload_sha256": "CB83989739EA83AB66A60FDD6CFCDFEFC8C0BF2331F2843A06C554F5DBD49D39",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "receipt"
+      }
+    },
+    {
+      "event_id": "g03-e033",
+      "sequence": 33,
+      "captured_at": "2026-06-02T10:00:00+00:00",
+      "observed_at": "2026-06-02T08:00:00+00:00",
+      "source_type": "contract",
+      "payload": "Driftwood Studio contract signed 2026-04-20, effective 2026-05-01.",
+      "payload_sha256": "FBB6C1403BB39C064BE71B4C5B264503943F359F48520CB7C23AEED6E8D78E92",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "contract"
+      }
+    },
+    {
+      "event_id": "g03-e034",
+      "sequence": 34,
+      "captured_at": "2026-06-03T10:00:00+00:00",
+      "observed_at": "2026-06-03T08:00:00+00:00",
+      "source_type": "ledger",
+      "payload": "Marbleleaf May entry copied into the ledger: EUR 28.00.",
+      "payload_sha256": "BFD5278058901023241B663D48F49AA9C189B5217DA218240876F4BE08A4139F",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "ledger"
+      }
+    },
+    {
+      "event_id": "g03-e035",
+      "sequence": 35,
+      "captured_at": "2026-06-04T10:00:00+00:00",
+      "observed_at": "2026-06-04T08:00:00+00:00",
+      "source_type": "invoice",
+      "payload": "Marbleleaf Water invoice for 2026-06: EUR 31.00.",
+      "payload_sha256": "B6855592DDD501ECDDD97ED89632C8FB0C395C8C977B4C0616C4218114B7455A",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "invoice"
+      }
+    },
+    {
+      "event_id": "g03-e036",
+      "sequence": 36,
+      "captured_at": "2026-06-05T10:00:00+00:00",
+      "observed_at": "2026-06-05T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Claim follow-up is in progress.",
+      "payload_sha256": "4C307B0FDCC2499F047D97080E54AEB743E07F0CD7FE686CBD88FA8A775058F6",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e037",
+      "sequence": 37,
+      "captured_at": "2026-06-06T10:00:00+00:00",
+      "observed_at": "2026-06-06T08:00:00+00:00",
+      "source_type": "policy",
+      "payload": "SableHarbor claim number CL-4412 is recorded.",
+      "payload_sha256": "D502904DA20899158B52C60C7F8E37317110EDAB2C57A7FB91F8FAA4D984FCE2",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "policy"
+      }
+    },
+    {
+      "event_id": "g03-e038",
+      "sequence": 38,
+      "captured_at": "2026-06-07T10:00:00+00:00",
+      "observed_at": "2026-06-07T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "SableHarbor renewal notice: premium becomes EUR 35.00 monthly from 2026-08-01.",
+      "payload_sha256": "7CC155EF884710CCEAD26AF9D5BC99F99504A653979F33B12077AFC0E1E2293C",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e039",
+      "sequence": 39,
+      "captured_at": "2026-06-08T10:00:00+00:00",
+      "observed_at": "2026-06-08T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "A water-bill summary repeats the May total EUR 28.00 from a different source.",
+      "payload_sha256": "4D048DF05604A3703FBD2743C40330830ED910547DF4214D4D84AF9873380D83",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e040",
+      "sequence": 40,
+      "captured_at": "2026-06-09T10:00:00+00:00",
+      "observed_at": "2026-06-09T08:00:00+00:00",
+      "source_type": "contract",
+      "payload": "Checkpoint note: June claim review.",
+      "payload_sha256": "22A4C4B96248D1131BA2EBD1CB2214D4F8EC61EDD0D0139221B6F85A709E2D49",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "contract"
+      }
+    },
+    {
+      "event_id": "g03-e041",
+      "sequence": 41,
+      "captured_at": "2026-06-10T10:00:00+00:00",
+      "observed_at": "2026-06-10T08:00:00+00:00",
+      "source_type": "contract",
+      "payload": "Driftwood replacement contract signed 2026-06-10, effective 2026-08-01, renews 2026-12-01, expires 2027-07-31.",
+      "payload_sha256": "ACCC4F7CD5E35B31EF083D3A0BB82BC2B82C53B11120F995FB6786C3B6EFF4E4",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "contract"
+      }
+    },
+    {
+      "event_id": "g03-e042",
+      "sequence": 42,
+      "captured_at": "2026-06-11T10:00:00+00:00",
+      "observed_at": "2026-06-11T08:00:00+00:00",
+      "source_type": "policy",
+      "payload": "SableHarbor policy remains active; corrected expiry is 2026-11-30.",
+      "payload_sha256": "8A9B4F144D2DCA4DA15106EE10431DDD7B99E219DA5A2355A593BF56400AF8A4",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "policy"
+      }
+    },
+    {
+      "event_id": "g03-e043",
+      "sequence": 43,
+      "captured_at": "2026-06-12T10:00:00+00:00",
+      "observed_at": "2026-06-12T08:00:00+00:00",
+      "source_type": "receipt",
+      "payload": "TideGlass Outlet purchase: EUR 12.50 for a lamp.",
+      "payload_sha256": "50541A29FCC0914E6FB26953B24C777C79B527F97EDA33022BE1CEA0C305CEE2",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "receipt"
+      }
+    },
+    {
+      "event_id": "g03-e044",
+      "sequence": 44,
+      "captured_at": "2026-06-13T10:00:00+00:00",
+      "observed_at": "2026-06-13T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Used two items from the lamp purchase.",
+      "payload_sha256": "67CC166F5C11FB1F0491FAC60053DBC5438064A2700B72717C63315C9D31DDC0",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e045",
+      "sequence": 45,
+      "captured_at": "2026-06-14T10:00:00+00:00",
+      "observed_at": "2026-06-14T08:00:00+00:00",
+      "source_type": "receipt",
+      "payload": "TideGlass Outlet purchase: EUR 12.50 for a lamp.",
+      "payload_sha256": "50541A29FCC0914E6FB26953B24C777C79B527F97EDA33022BE1CEA0C305CEE2",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "receipt"
+      }
+    },
+    {
+      "event_id": "g03-e046",
+      "sequence": 46,
+      "captured_at": "2026-06-15T10:00:00+00:00",
+      "observed_at": "2026-06-15T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Claim follow-up cancelled after the insurer responded.",
+      "payload_sha256": "1E0047D7DFF7BEBAC7D3BCAA647F61DFF8056BF23F9802526A9269FBF882F236",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e047",
+      "sequence": 47,
+      "captured_at": "2026-06-16T10:00:00+00:00",
+      "observed_at": "2026-06-16T08:00:00+00:00",
+      "source_type": "task",
+      "payload": "Claim follow-up reopened for 2026-07-01; Pavel Ross owns it.",
+      "payload_sha256": "B4BD556FDCF4D47E13F4A917EF84F871835693B1C515D78E64203AEE42511279",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "task"
+      }
+    },
+    {
+      "event_id": "g03-e048",
+      "sequence": 48,
+      "captured_at": "2026-06-17T10:00:00+00:00",
+      "observed_at": "2026-06-17T08:00:00+00:00",
+      "source_type": "approval",
+      "payload": "No approval has been given for the insurance claim; nothing was filed.",
+      "payload_sha256": "95B2094CEA1894F5C0D9D54B139390042DE2D78BC3A9506A2AD84A57B776814A",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "approval"
+      }
+    },
+    {
+      "event_id": "g03-e049",
+      "sequence": 49,
+      "captured_at": "2026-06-18T10:00:00+00:00",
+      "observed_at": "2026-06-18T08:00:00+00:00",
+      "source_type": "invoice",
+      "payload": "Marbleleaf / June / 31,00 EUR.",
+      "payload_sha256": "14BC6D16BEF134DD3F0795ECF8273900FBFFB14E7FFE1F29AD6CBD3DAA2EFA3F",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "invoice"
+      }
+    },
+    {
+      "event_id": "g03-e050",
+      "sequence": 50,
+      "captured_at": "2026-06-19T10:00:00+00:00",
+      "observed_at": "2026-05-03T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Retroactive claim note: the incident occurred on 2026-05-03; captured 2026-06-19.",
+      "payload_sha256": "70B22AC247D5C128FC666E22C0D79F67393145343B40025642F04CD94C208D06",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e051",
+      "sequence": 51,
+      "captured_at": "2026-06-20T10:00:00+00:00",
+      "observed_at": "2026-06-20T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Return package completed on 2026-06-21.",
+      "payload_sha256": "3EF1B91E7B384BEFA16362491B0573046F34334AEBCDB89D2A2D29B9964EF56E",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e052",
+      "sequence": 52,
+      "captured_at": "2026-06-21T10:00:00+00:00",
+      "observed_at": "2026-06-21T08:00:00+00:00",
+      "source_type": "task",
+      "payload": "Renewal check task opened; due 2026-07-05; owner not stated.",
+      "payload_sha256": "0FA0E9565D6A1AF7B6644390CFB0DB5A2024066CCC6F534A51535A1BB375AB8F",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "task"
+      }
+    },
+    {
+      "event_id": "g03-e053",
+      "sequence": 53,
+      "captured_at": "2026-06-22T10:00:00+00:00",
+      "observed_at": "2026-06-22T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Lara should check the contract renewal.",
+      "payload_sha256": "F4F1180076D1F9D9ECCB560EA641E1FAC94B5296A94C48DFAC6DA5670F486B63",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e054",
+      "sequence": 54,
+      "captured_at": "2026-06-23T10:00:00+00:00",
+      "observed_at": "2026-06-23T08:00:00+00:00",
+      "source_type": "ledger",
+      "payload": "Silvermeadow June charge: EUR 16.00.",
+      "payload_sha256": "B9EF9C9821E9544B7644A3A4972C5860F563A7C5FE02946BE6B114CEAE0B3216",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "ledger"
+      }
+    },
+    {
+      "event_id": "g03-e055",
+      "sequence": 55,
+      "captured_at": "2026-06-24T10:00:00+00:00",
+      "observed_at": "2026-06-24T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "I might stop Silvermeadow Pass after this cycle.",
+      "payload_sha256": "9F2D1B164B0EED56428347873906D47CE0B19A77BA4C25321B79919A957BC35D",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e056",
+      "sequence": 56,
+      "captured_at": "2026-06-25T10:00:00+00:00",
+      "observed_at": "2026-06-25T08:00:00+00:00",
+      "source_type": "correction",
+      "payload": "Correction: Silvermeadow remains active; no cancellation was requested.",
+      "payload_sha256": "EC48D4CC3FB035F5ECA4BF8D02B352C75C3E7E4A143970857D9FAACE8CB5E1A6",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "correction"
+      }
+    },
+    {
+      "event_id": "g03-e057",
+      "sequence": 57,
+      "captured_at": "2026-06-26T10:00:00+00:00",
+      "observed_at": "2026-06-26T08:00:00+00:00",
+      "source_type": "scan",
+      "payload": "The SableHarbor beneficiary scan is unreadable.",
+      "payload_sha256": "6A550C5B445E16BB1538BBA54A97171741D83BF34AECB67CBC94AC1C298F880A",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "scan"
+      }
+    },
+    {
+      "event_id": "g03-e058",
+      "sequence": 58,
+      "captured_at": "2026-06-27T10:00:00+00:00",
+      "observed_at": "2026-06-27T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "The replacement Driftwood agreement is not effective until 2026-08-01.",
+      "payload_sha256": "36420A043314F50CB2DC99FE44D39F243608BF536013ED4AFEA2C07B477521C4",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e059",
+      "sequence": 59,
+      "captured_at": "2026-06-28T10:00:00+00:00",
+      "observed_at": "2026-06-28T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "TideGlass Outlet purchase: EUR 5.00 for a small bowl; consumption not stated.",
+      "payload_sha256": "2109B8823BAC2C412304FA370BF19122D8A83049904DB6155A2AB9AA1519C526",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e060",
+      "sequence": 60,
+      "captured_at": "2026-06-29T10:00:00+00:00",
+      "observed_at": "2026-06-29T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Checkpoint note: July records reviewed.",
+      "payload_sha256": "B42DABF622C3DA08060754148EC31B66D83A7B70D2AE254AC17C1E73A23E9BA0",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e061",
+      "sequence": 61,
+      "captured_at": "2026-06-30T10:00:00+00:00",
+      "observed_at": "2026-06-30T08:00:00+00:00",
+      "source_type": "invoice",
+      "payload": "Marbleleaf Water invoice for 2026-07: EUR 31.00.",
+      "payload_sha256": "E0553D6BDB5D203700B9C2BB81D4F962587D84735152D7982A51923214601003",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "invoice"
+      }
+    },
+    {
+      "event_id": "g03-e062",
+      "sequence": 62,
+      "captured_at": "2026-07-01T10:00:00+00:00",
+      "observed_at": "2026-07-01T08:00:00+00:00",
+      "source_type": "ledger",
+      "payload": "Marbleleaf / July / 31,00 EUR.",
+      "payload_sha256": "A81D1F222ABBC137DF2F2DC4B61D8545A5242A8C444585E486D79ABEBC0C1402",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "ledger"
+      }
+    },
+    {
+      "event_id": "g03-e063",
+      "sequence": 63,
+      "captured_at": "2026-07-02T10:00:00+00:00",
+      "observed_at": "2026-07-02T08:00:00+00:00",
+      "source_type": "summary",
+      "payload": "A preliminary July water note said EUR 33.00; the invoice is different.",
+      "payload_sha256": "EFF31DE4AE1C4E239923D005E156BB4FF1D55B1D9919F6782754A000029DC648",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "summary"
+      }
+    },
+    {
+      "event_id": "g03-e064",
+      "sequence": 64,
+      "captured_at": "2026-07-03T10:00:00+00:00",
+      "observed_at": "2026-07-03T08:00:00+00:00",
+      "source_type": "ledger",
+      "payload": "Silvermeadow July charge: EUR 16.00; next renewal 2026-07-31.",
+      "payload_sha256": "54205117061A3F63BDB4DB89E8F01BA24494E8B973D34E75A148C846049A0C9E",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "ledger"
+      }
+    },
+    {
+      "event_id": "g03-e065",
+      "sequence": 65,
+      "captured_at": "2026-07-04T10:00:00+00:00",
+      "observed_at": "2026-07-04T08:00:00+00:00",
+      "source_type": "approval",
+      "payload": "The insurance-claim filing proposal was withdrawn; no filing occurred.",
+      "payload_sha256": "FE561CEEA0377EAFAA81414C5A0235A4A2E9B7C81619DB9A24B3862CD22FB04A",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "approval"
+      }
+    },
+    {
+      "event_id": "g03-e066",
+      "sequence": 66,
+      "captured_at": "2026-07-05T10:00:00+00:00",
+      "observed_at": "2026-07-05T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Claim follow-up completed on 2026-07-01.",
+      "payload_sha256": "E6FCAE6BEED1FEFE03D030BFC9E5374DF97F8FAF84C86DC237A34E6EE5F7B805",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e067",
+      "sequence": 67,
+      "captured_at": "2026-07-06T10:00:00+00:00",
+      "observed_at": "2026-07-06T08:00:00+00:00",
+      "source_type": "task",
+      "payload": "Renewal check is reassigned to Lara Wells; due 2026-07-08.",
+      "payload_sha256": "3B18D1189612A03E334A63CF5CBF6743C6C77887A7BA5EC3FF998CF4D5790D6E",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "task"
+      }
+    },
+    {
+      "event_id": "g03-e068",
+      "sequence": 68,
+      "captured_at": "2026-07-07T10:00:00+00:00",
+      "observed_at": "2026-07-07T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Renewal check deadline changed to 2026-07-10.",
+      "payload_sha256": "BAF7089CF6B0FB11702923D4BB73DF51AE22646BF1D343D746864AE6D300D333",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e069",
+      "sequence": 69,
+      "captured_at": "2026-07-08T10:00:00+00:00",
+      "observed_at": "2026-07-08T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Renewal check remains open; no cancellation capture exists.",
+      "payload_sha256": "9E9F9ABD628CA1C37CB55B7D3E622163703561711AEB673F6E37B9FF009EE748",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e070",
+      "sequence": 70,
+      "captured_at": "2026-07-09T10:00:00+00:00",
+      "observed_at": "2026-07-09T08:00:00+00:00",
+      "source_type": "receipt",
+      "payload": "TideGlass Outlet purchase: EUR 13.30 for a vase.",
+      "payload_sha256": "1AE4F51A8BFC2E8520A7EE8A4B4AECF8C035B83407EFFFDB11D2FB216EA78F98",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "receipt"
+      }
+    },
+    {
+      "event_id": "g03-e071",
+      "sequence": 71,
+      "captured_at": "2026-07-10T10:00:00+00:00",
+      "observed_at": "2026-07-10T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Used one item from the vase purchase.",
+      "payload_sha256": "E8BCB6E512DC923F7260F4FC4491F9C841EFA9C62190E8E386DC24A53A4F0AA1",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e072",
+      "sequence": 72,
+      "captured_at": "2026-07-11T10:00:00+00:00",
+      "observed_at": "2026-07-11T08:00:00+00:00",
+      "source_type": "receipt",
+      "payload": "TideGlass / 13,30 EUR / vase.",
+      "payload_sha256": "E7ECDF39382DDC13566EEDC336F1EE4D061D28B72045C10186A9B1983DC7DAC8",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "receipt"
+      }
+    },
+    {
+      "event_id": "g03-e073",
+      "sequence": 73,
+      "captured_at": "2026-07-12T10:00:00+00:00",
+      "observed_at": "2026-07-12T08:00:00+00:00",
+      "source_type": "policy",
+      "payload": "SableHarbor claim CL-4412 is current; beneficiary remains unknown.",
+      "payload_sha256": "89CAD2629DE05C2490371C8876C8AE2D3B609CC6A8E1638F040C5D79E6470E95",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "policy"
+      }
+    },
+    {
+      "event_id": "g03-e074",
+      "sequence": 74,
+      "captured_at": "2026-07-13T10:00:00+00:00",
+      "observed_at": "2026-07-13T08:00:00+00:00",
+      "source_type": "contract",
+      "payload": "Driftwood replacement contract signed 2026-06-10, effective 2026-08-01.",
+      "payload_sha256": "00CD5CB553502A063916FFE021950A27AFEDB39E7B3FC36EC591A0D10FCE09DC",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "contract"
+      }
+    },
+    {
+      "event_id": "g03-e075",
+      "sequence": 75,
+      "captured_at": "2026-07-14T10:00:00+00:00",
+      "observed_at": "2026-07-14T08:00:00+00:00",
+      "source_type": "correction",
+      "payload": "Correction confirmed: the July Marbleleaf bill is EUR 31.00, not EUR 33.00.",
+      "payload_sha256": "A18BA2C279049E52ED4C38C17FAD4D72536196F0A6B4E181FC29FA81786D7814",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "correction"
+      }
+    },
+    {
+      "event_id": "g03-e076",
+      "sequence": 76,
+      "captured_at": "2026-07-15T10:00:00+00:00",
+      "observed_at": "2026-07-15T08:00:00+00:00",
+      "source_type": "approval",
+      "payload": "No approval was granted; the insurance claim was not filed.",
+      "payload_sha256": "223B0BFD02804FFEADAA17B1F8CBE4F4A4E2067DE506760D1CEAC7619958B041",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "approval"
+      }
+    },
+    {
+      "event_id": "g03-e077",
+      "sequence": 77,
+      "captured_at": "2026-07-16T10:00:00+00:00",
+      "observed_at": "2026-07-16T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "No Marbleleaf invoice for 2026-08 has been captured.",
+      "payload_sha256": "9EA20110213C717040BD5AAC334174F82072C605717799709496A8E1531CEE40",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e078",
+      "sequence": 78,
+      "captured_at": "2026-07-17T10:00:00+00:00",
+      "observed_at": "2026-07-17T08:00:00+00:00",
+      "source_type": "contract",
+      "payload": "Driftwood replacement contract dates: signed 2026-06-10, effective 2026-08-01, renewal 2026-12-01, expiry 2027-07-31.",
+      "payload_sha256": "E44877FE740F94322607711C92F35C2FB404BE8481C6B234EAEAC3DE7B3E3EEC",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "contract"
+      }
+    },
+    {
+      "event_id": "g03-e079",
+      "sequence": 79,
+      "captured_at": "2026-07-18T10:00:00+00:00",
+      "observed_at": "2026-07-18T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Silvermeadow Pass remains active; no cancellation was executed.",
+      "payload_sha256": "CC38817C597C1FE95C337E635B0CFD20A8320C70BCB8335837E424259758B7E1",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    },
+    {
+      "event_id": "g03-e080",
+      "sequence": 80,
+      "captured_at": "2026-07-19T10:00:00+00:00",
+      "observed_at": "2026-07-19T08:00:00+00:00",
+      "source_type": "note",
+      "payload": "Final review: the claim action remains unexecuted and the Lara reference is unresolved.",
+      "payload_sha256": "9A3F555A0B438CB0E629DC498A7FCA7992A0E6708C93D7D1908556843A115711",
+      "metadata": {
+        "language": "en",
+        "capture_channel": "note"
+      }
+    }
+  ],
+  "checkpoints": [
+    20,
+    40,
+    60,
+    80
+  ]
+}
