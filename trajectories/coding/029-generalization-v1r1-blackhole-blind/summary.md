@@ -96,4 +96,7 @@ benchmark score is computed.
 
 ## Related git commit
 
-Pending commit and push at summary-authoring time.
+Candidate and runtime evidence sealing commit:
+`94e635f15987c774797d7f86e6ea6e1e073cc677`.
+
+The branch `generalization/blind-blackhole-v1r1` was pushed to `origin`.
