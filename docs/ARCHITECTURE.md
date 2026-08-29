@@ -202,11 +202,11 @@ entity identifiers. A replay mode allows projection changes to be evaluated
 from identical recorded extraction outputs.
 
 The benchmark-facing experiment slice has no production infrastructure,
-external-action executor, Claude adapter, or holdout access. The repository now
-also includes the separate minimal local demo described in section 12; that UI
-is a deterministic presentation of synthetic state, not a production service
-or a replacement for the benchmark treatment. Its measured result is recorded
-in `IMPROVEMENT_CHANGELOG.md` and the Experiment 001/002 coding and runtime
+external-action executor, Claude adapter, or holdout access. The repository
+also retains the historical deterministic demo utility described in section 12;
+that utility is a presentation of synthetic state, not a production service or
+a replacement for the benchmark treatment. Its measured result is recorded in
+`IMPROVEMENT_CHANGELOG.md` and the Experiment 001/002 coding and runtime
 trajectories; the frozen benchmark and official baseline remain separate from
 product memory.
 
@@ -224,10 +224,11 @@ the unchanged public evaluator. It preserved the full 200-event result exactly
 (`LQA-0M=0.7492295899`, `DSCR=72`) and is recorded as experiment evidence, not
 as a new benchmark or baseline treatment.
 
-## 12. Minimal local demo
+## 12. Historical deterministic demo utility (superseded)
 
-The repository now includes a deliberately small local demonstration of the
-state boundary. It is a product slice, not production infrastructure:
+The repository retains a deliberately small local demonstration of the state
+boundary for reproducibility and historical trajectory evidence. It is not the
+current Host/PWA path or production infrastructure:
 
 ```text
 committed synthetic seed
@@ -248,18 +249,23 @@ structured attention, memory, and ask views
 `app/demo.py` seeds 14 synthetic captures covering current and historical
 subscription price, task reassignment and cancellation, an open deadline,
 observed and missing service periods, a purchase, a duplicate, an explicit
-unknown amount, and an unexecuted approval-gated action. `app/web_app.py` is a
-stdlib HTTP server with fixed static routes and JSON endpoints for state,
-queries, raw capture, and demo reset. The UI does not classify the capture or
-invoke a provider in the request path; it reports that the capture was saved and
-leaves its semantic status pending.
+unknown amount, and an unexecuted approval-gated action. The historical seed is
+rebuilt with `python scripts/seed_demo.py --reset` and defaults to
+`data/demo/state.sqlite`. The current `app/web_app.py` is the Host-owned
+same-origin transport described in section 18; it does not auto-seed this
+database or expose `POST /api/reset`.
 
-The `codex` status pill is discovery-only. The separate advanced runner remains
-the subscription-first semantic runtime: an installed local CLI owns login and
-authentication, while Blackhole never requests, reads, copies, exports, or
-persists provider credentials. No endpoint performs a consequential external
-action. The local demo database is ignored by Git and can be rebuilt with
-`python scripts/seed_demo.py --reset`.
+The historical UI did not classify a capture or invoke a provider in the
+request path; it reported that the capture was saved and left its semantic
+status pending.
+
+The historical `codex` status indicator was discovery-only. The separate
+advanced runner and current Host both use the subscription-first semantic
+runtime: an installed local CLI owns login and authentication, while Blackhole
+never requests, reads, copies, exports, or persists provider credentials. No
+endpoint performs a consequential external action. The integrated Host uses
+Blackhole Home and its own `blackhole.db`, not the historical seeded-demo
+database.
 
 ## 13. Experiment 003 relation reconciliation
 
