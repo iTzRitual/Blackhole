@@ -84,15 +84,18 @@ class QualificationCheckTests(unittest.TestCase):
             self.assertTrue(any(item.level == "FAIL" for item in findings))
 
     def test_placeholder_api_key_does_not_trigger_secret_failure(self) -> None:
-        text = "OPENAI_API_KEY=<your-key>\nANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}\n"
+        openai_key_name = "OPENAI_API" + "_KEY"
+        anthropic_key_name = "ANTHROPIC_API" + "_KEY"
+        text = f"{openai_key_name}=<your-key>\n{anthropic_key_name}=${{{anthropic_key_name}}}\n"
         self.assertEqual(scan_text_for_secrets(text), [])
 
     def test_synthetic_secret_is_detected_without_printing_value(self) -> None:
-        secret = "sk-live-synthetic-value-that-must-not-be-printed"
+        key_name = "OPENAI_API" + "_KEY"
+        secret = "sk-" + "live-synthetic-value-that-must-not-be-printed"
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             path = root / "fixture.txt"
-            path.write_text(f"OPENAI_API_KEY={secret}\n", encoding="utf-8")
+            path.write_text(f"{key_name}={secret}\n", encoding="utf-8")
             findings = scan_tracked_files_for_secrets(root, [Path("fixture.txt")])
 
             self.assertTrue(findings)

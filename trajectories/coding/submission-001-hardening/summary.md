@@ -68,15 +68,21 @@ without rewriting historical evidence.
   `summary.md` was not yet present. It also exposed the intended five
   non-blocking warnings: three stale named result artifacts and two stale
   final/current narrative references.
-- No implementation or validation failure remained after the summary was
-  added.
+- The first post-commit qualification run found that the new test source
+  itself contained a literal synthetic API-key/token fixture, which the
+  tracked-text scanner correctly rejected. The fixture was changed to assemble
+  the same values at test runtime; no real credential was involved.
+- No implementation or validation failure remained after that corrective
+  follow-up.
 
 ## Retries or changed approaches
 
 The initial metadata inspection used a PowerShell projection with both `DSCR`
 and `dscr` property names, which collide case-insensitively. It was replaced
 with a narrow Python JSON read for the exact result fields. No repository data
-was changed by the failed inspection.
+was changed by the failed inspection. A post-commit qualification retry also
+required splitting the synthetic test fixture into runtime string fragments to
+avoid scanning the fixture's source representation.
 
 ## Human feedback or checkpoints
 
@@ -133,6 +139,7 @@ integration/generalization phase; do not merge this branch in this task.
 ## Related git commit
 
 The hardening implementation is in `18b123f`
-(`chore: add submission qualification gate and CI`). The follow-up metadata
-commit that records this final handoff state is reported with the completed
-branch tip.
+(`chore: add submission qualification gate and CI`). The trajectory/index
+metadata is in `5a5ee46` (`docs: record submission hardening handoff`). The
+credential-fixture correction and final validation state are in the completed
+branch tip reported by the handoff.
