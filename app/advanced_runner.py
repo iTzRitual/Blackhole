@@ -17,6 +17,17 @@ from pathlib import Path
 from typing import Any
 
 from app.contract import PublicContract, canonical_value, canonical_unknown_reason, canonical_subject, canonical_predicate, normalize_text
+from app.completeness import (
+    DETERMINISTIC_COMPLETION_VERSION,
+    EVIDENCE_SCANNER_VERSION,
+    VERIFIER_VERSION,
+    detect_coverage_gaps,
+    deterministic_completions,
+    evidence_digest,
+    prepare_verifier_observations,
+    scan_raw_evidence,
+    verification_prompt,
+)
 from app.provider import parse_repaired_json, structured_call
 from app.prompts import extraction_prompt, query_prompt
 from app.relation_recovery import (
@@ -292,6 +303,19 @@ def run(args: argparse.Namespace) -> int:
         "querying": "deterministic public response projection from SQLite state; optional fresh model query is diagnostic only",
         "relation_recovery": args.relation_recovery,
         "relation_recovery_calls": [],
+        "completeness": args.completeness,
+        "completeness_batches": [],
+        "completeness_totals": {
+            "total_captures": len(events),
+            "captures_scanned": 0,
+            "captures_flagged": 0,
+            "captures_repaired_deterministically": 0,
+            "captures_sent_to_verifier": 0,
+            "verifier_no_change_count": 0,
+            "observations_added": 0,
+            "observations_replaced": 0,
+            "false_positive_verification_triggers": 0,
+        },
         "calls": [],
         "projection_runs": [],
     }
@@ -395,6 +419,209 @@ def run(args: argparse.Namespace) -> int:
                         )
                     projection_run = store.rebuild_projection()
                     metadata["projection_runs"].append(projection_run)
+                    if args.completeness != "none":
+                        pre_completion_snapshot = store.snapshot()
+                        evidence_records = [scan_raw_evidence(event) for event in batch]
+                        gap_records = [
+                            detect_coverage_gaps(event, evidence, pre_completion_snapshot, contract_document)
+                            for event, evidence in zip(batch, evidence_records)
+                        ]
+                        flagged = [record for record in gap_records if record.get("reasons")]
+                        metadata["completeness_totals"]["captures_scanned"] += len(batch)
+                        metadata["completeness_totals"]["captures_flagged"] += len(flagged)
+
+                        completion_proposals = [
+                            completion
+                            for event, gap in zip(batch, gap_records)
+                            if gap.get("reasons")
+                            for completion in deterministic_completions(event, gap, pre_completion_snapshot)
+                        ]
+                        normalized_completions = [
+                            normalized
+                            for item in completion_proposals
+                            for normalized in [
+                                normalize_observation(
+                                    item,
+                                    public_contract=public_contract,
+                                    batch_event_ids=batch_event_ids,
+                                    available_event_ids=available_event_ids,
+                                )
+                            ]
+                            if normalized is not None
+                        ]
+                        completion_inserted = store.add_observations(
+                            normalized_completions,
+                            DETERMINISTIC_COMPLETION_VERSION,
+                        )
+                        metadata["completeness_totals"]["observations_added"] += completion_inserted
+                        metadata["completeness_totals"]["observations_replaced"] += sum(
+                            item.get("operation") in {"correction", "supersede"}
+                            for item in normalized_completions
+                        )
+                        repaired_event_ids = {
+                            item.get("event_id")
+                            for item in normalized_completions
+                            if isinstance(item.get("event_id"), str)
+                        }
+                        metadata["completeness_totals"]["captures_repaired_deterministically"] += len(repaired_event_ids)
+                        if completion_inserted:
+                            projection_run = store.rebuild_projection()
+                            metadata["projection_runs"].append(projection_run)
+
+                        post_completion_snapshot = store.snapshot()
+                        residual_records: list[dict[str, Any]] = []
+                        for event, evidence, gap in zip(batch, evidence_records, gap_records):
+                            if not gap.get("reasons"):
+                                continue
+                            residual = detect_coverage_gaps(event, evidence, post_completion_snapshot, contract_document)
+                            residual["initial_reasons"] = gap.get("reasons", [])
+                            residual_records.append({"event": event, "evidence": evidence, "gap": residual})
+
+                        verifier_records: list[dict[str, Any]] = []
+                        if args.completeness == "verifier":
+                            metadata["completeness_totals"]["captures_sent_to_verifier"] += len(residual_records)
+                            for verifier_index, record in enumerate(residual_records, start=1):
+                                event = record["event"]
+                                evidence = record["evidence"]
+                                gap = record["gap"]
+                                verifier_request = verification_prompt(
+                                    event,
+                                    gap,
+                                    evidence,
+                                    post_completion_snapshot,
+                                    contract_document,
+                                )
+                                verification_name = (
+                                    f"verification-{checkpoint:03d}-{batch_index // args.batch_size + 1:02d}-"
+                                    f"{verifier_index:02d}"
+                                )
+                                verification_result = structured_call(
+                                    verifier_request,
+                                    temp_workspace=provider_workspace,
+                                    output_path=temp_root / f"{verification_name}.txt",
+                                    timeout=args.timeout,
+                                    reasoning_effort="high",
+                                )
+                                metadata["calls"].append(
+                                    write_call_trace(call_dir, verification_name, verifier_request, verification_result)
+                                )
+                                if (
+                                    verification_result.get("provider", {}).get("returncode") != 0
+                                    or verification_result.get("parse_error")
+                                    or not isinstance(verification_result.get("parsed"), dict)
+                                ):
+                                    raise SystemExit(
+                                        f"completeness verification failed for {verification_name}: "
+                                        f"{verification_result.get('parse_error') or verification_result.get('provider', {}).get('stderr')}"
+                                    )
+                                prepared = prepare_verifier_observations(
+                                    verification_result.get("parsed"),
+                                    event_id=str(event.get("event_id")),
+                                    evidence=evidence,
+                                    contract=contract_document,
+                                )
+                                normalized_verifier = [
+                                    normalized
+                                    for item in prepared["items"]
+                                    for normalized in [
+                                        normalize_observation(
+                                            item,
+                                            public_contract=public_contract,
+                                            batch_event_ids=batch_event_ids,
+                                            available_event_ids=available_event_ids,
+                                        )
+                                    ]
+                                    if normalized is not None
+                                ]
+                                verifier_inserted = store.add_observations(
+                                    normalized_verifier,
+                                    VERIFIER_VERSION,
+                                )
+                                metadata["completeness_totals"]["observations_added"] += verifier_inserted
+                                metadata["completeness_totals"]["observations_replaced"] += sum(
+                                    item.get("operation") in {"correction", "supersede"}
+                                    for item in normalized_verifier
+                                )
+                                if prepared["no_change"] or not normalized_verifier:
+                                    metadata["completeness_totals"]["verifier_no_change_count"] += 1
+                                if prepared["no_change"] and not normalized_verifier:
+                                    metadata["completeness_totals"]["false_positive_verification_triggers"] += 1
+                                verifier_records.append(
+                                    {
+                                        "event_id": event.get("event_id"),
+                                        "initial_reasons": gap.get("initial_reasons", []),
+                                        "residual_reasons": gap.get("reasons", []),
+                                        "no_change": prepared["no_change"],
+                                        "accepted_observation_count": len(normalized_verifier),
+                                        "inserted_observation_count": verifier_inserted,
+                                        "rejected": prepared["rejected"],
+                                        "call": verification_name,
+                                    }
+                                )
+                            if any(item["inserted_observation_count"] for item in verifier_records):
+                                projection_run = store.rebuild_projection()
+                                metadata["projection_runs"].append(projection_run)
+
+                        final_snapshot = store.snapshot()
+                        final_residual = []
+                        for record in residual_records:
+                            final_gap = detect_coverage_gaps(
+                                record["event"],
+                                record["evidence"],
+                                final_snapshot,
+                                contract_document,
+                            )
+                            final_residual.append(
+                                {
+                                    "event_id": record["event"].get("event_id"),
+                                    "reasons": final_gap.get("reasons", []),
+                                }
+                            )
+                        batch_record = {
+                            "checkpoint": checkpoint,
+                            "batch": batch_index // args.batch_size + 1,
+                            "scanner_version": EVIDENCE_SCANNER_VERSION,
+                            "completion_version": DETERMINISTIC_COMPLETION_VERSION,
+                            "verifier_version": VERIFIER_VERSION if args.completeness == "verifier" else None,
+                            "event_ids": [event.get("event_id") for event in batch],
+                            "scanned_count": len(batch),
+                            "flagged_count": len(flagged),
+                            "flagged_events": [
+                                {
+                                    "event_id": record.get("event_id"),
+                                    "reasons": record.get("reasons", []),
+                                    "mapping_count": len(record.get("mappings", [])),
+                                    "evidence_digest": evidence_digest(evidence),
+                                }
+                                for record, evidence in zip(gap_records, evidence_records)
+                                if record.get("reasons")
+                            ],
+                            "deterministic_proposal_count": len(normalized_completions),
+                            "deterministic_inserted_count": completion_inserted,
+                            "residual_events": [
+                                {
+                                    "event_id": item["event"].get("event_id"),
+                                    "reasons": item["gap"].get("reasons", []),
+                                }
+                                for item in residual_records
+                            ],
+                            "verifier_records": verifier_records,
+                            "final_residual": final_residual,
+                        }
+                        metadata["completeness_batches"].append(batch_record)
+                        (args.trajectory / f"completeness-{checkpoint:03d}-{batch_index // args.batch_size + 1:02d}.json").write_text(
+                            json.dumps(
+                                {
+                                    "evidence_records": evidence_records,
+                                    "gap_records": gap_records,
+                                    "batch_record": batch_record,
+                                },
+                                ensure_ascii=False,
+                                indent=2,
+                            )
+                            + "\n",
+                            encoding="utf-8",
+                        )
                 projected_snapshot = store.snapshot()
                 if args.use_query_model:
                     query_request = query_prompt(
@@ -469,6 +696,19 @@ def run(args: argparse.Namespace) -> int:
             if isinstance(value, int):
                 usage_totals[key] += value
     metadata["usage_totals"] = usage_totals
+    verification_calls = [call for call in metadata["calls"] if call.get("kind") == "verification"]
+    completeness_provider_usage = {
+        "calls": len(verification_calls),
+        "input_tokens": sum((call.get("usage") or {}).get("input_tokens", 0) for call in verification_calls if isinstance((call.get("usage") or {}).get("input_tokens", 0), int)),
+        "output_tokens": sum((call.get("usage") or {}).get("output_tokens", 0) for call in verification_calls if isinstance((call.get("usage") or {}).get("output_tokens", 0), int)),
+        "reasoning_output_tokens": sum((call.get("usage") or {}).get("reasoning_output_tokens", 0) for call in verification_calls if isinstance((call.get("usage") or {}).get("reasoning_output_tokens", 0), int)),
+        "runtime_seconds": sum(call.get("duration_seconds", 0.0) for call in verification_calls if isinstance(call.get("duration_seconds"), (int, float))),
+    }
+    metadata["completeness_totals"]["provider_calls"] = completeness_provider_usage["calls"]
+    metadata["completeness_totals"]["provider_input_tokens"] = completeness_provider_usage["input_tokens"]
+    metadata["completeness_totals"]["provider_output_tokens"] = completeness_provider_usage["output_tokens"]
+    metadata["completeness_totals"]["provider_reasoning_output_tokens"] = completeness_provider_usage["reasoning_output_tokens"]
+    metadata["completeness_totals"]["provider_runtime_seconds"] = completeness_provider_usage["runtime_seconds"]
     metadata["final_state_counts"] = {
         "current_facts": len(store_snapshot["current_facts"]),
         "history_observations": len(store_snapshot["history"]),
@@ -503,6 +743,12 @@ def main() -> int:
         choices=["none", "deterministic", "retrieval"],
         default="none",
         help="optional generic deterministic relation recovery variant",
+    )
+    parser.add_argument(
+        "--completeness",
+        choices=["none", "deterministic", "verifier"],
+        default="none",
+        help="optional selective raw-source completeness treatment",
     )
     return run(parser.parse_args())
 

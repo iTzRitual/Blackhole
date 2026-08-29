@@ -204,7 +204,7 @@ This is a lightweight decision record. Each entry captures the current design di
 
 ## D-025 — Keep Experiment 001's append-only state projection slice
 
-- **Status:** Accepted for the current advanced experiment milestone
+- **Status:** Accepted for the Experiment 001 milestone; remains foundational to D-030
 - **Context:** After Gate B, the first authorized application experiment needed to test whether Blackhole-owned durable state improves the frozen public benchmark without changing benchmark facts, the response contract, or the fair baseline.
 - **Decision:** Keep the smallest tested slice: SQLite-backed immutable raw captures; structured observations and relationships with known/inferred/unknown status; explicit provenance and history; deterministic rebuildable current-state projection; and deterministic, query-scoped public response projections. Use fresh scoped Codex CLI extraction calls only to propose structured interpretations. Keep financial arithmetic, date windows, duplicate grouping, and response shaping in code. Preserve replayable semantic outputs so projection revisions are comparable without new provider calls.
 - **Consequences:** Experiment 001's final public development replay scored `LQA-0M=0.7492295899` with `DSCR=72`, while the official baseline remains unchanged at `0.3014914553` / `277`. The approach preserves raw evidence and makes state rebuildable, but fresh semantic extraction remains costly and relation-detail recall is incomplete. This is an experimental application slice, not a production architecture or a new benchmark treatment.
@@ -236,8 +236,16 @@ This is a lightweight decision record. Each entry captures the current design di
 
 ## D-029 — Keep bounded raw-capture relation reconciliation
 
-- **Status:** Accepted for the current advanced experiment milestone
+- **Status:** Accepted for the Experiment 003 milestone; superseded as the current reference by D-030
 - **Context:** Experiment 002's kept projector still had a measured relation-reconciliation weakness. The public audit showed that explicit supersession rows were mostly present, but receipt lineage, duplicate/change detail, and some target choices required earlier raw capture content that was not included in the structured extraction context.
 - **Decision:** Keep a generic, deterministic relation-recovery pass followed by bounded raw-capture candidate retrieval. Use only append-only SQLite inputs, the first stable source identifier, at most four earlier candidates, and a conservative lineage rule. Replace only the derived relationship rows for a source when the candidate set is unambiguous; preserve raw events and observations unchanged. Do not add a provider resolver when the deterministic retrieval treatment already meets the experiment threshold.
 - **Consequences:** The final public replay improved from `LQA-0M=0.7492295899` / `DSCR=72` to `LQA-0M=0.8157180034` / `DSCR=45`; relation reconciliation improved from `0.3169014085` to `0.6696428571`. No benchmark, expected output, response contract, evaluator, official baseline, or calibration artifact changed. Retrieval evidence is recorded per checkpoint with raw candidate content and metadata; no provider calls or tokens were used. This remains an application experiment, not a production ingestion or holdout result.
 - **Revisit when:** A genericity regression appears, a future experiment needs richer cross-entity resolution, a provider-assisted resolver is explicitly authorized, or the human owner changes the frozen benchmark or holdout boundary.
+
+## D-030 — Keep selective raw-source completeness treatment
+
+- **Status:** Accepted for the current advanced experiment milestone
+- **Context:** Experiment 003 left a small set of defects where the raw capture explicitly contained a structural fact or lifecycle cue that was absent from same-capture observations. Other remaining defects were relation, semantic-role, projection, or non-recoverable-value errors and were outside this experiment.
+- **Decision:** Add a generic structural evidence scanner and conservative same-capture coverage detector. Apply deterministic derived completions only for unambiguous dates, identifiers, value-shape fields, and lifecycle states. Keep a versioned one-capture semantic verifier available for residual gaps, but do not invoke it when the deterministic treatment already meets the experiment threshold.
+- **Consequences:** The full public replay improved from `LQA-0M=0.8157180034` / `DSCR=45` to `LQA-0M=0.8630770101` / `DSCR=41`; temporal-history and current-state metrics improved, with no material relation, financial, duplicate/change, entity-resolution, schema, safety, or source-integrity regression. Six captures were repaired, eight observations were added including one correction, and provider usage was zero. Raw sources, the frozen benchmark, response contract, evaluator, official baseline, calibration evidence, and holdout boundary remain unchanged.
+- **Revisit when:** A later human-authorized experiment needs broader semantic completion, provider verification, or a different extraction/state boundary. Do not use the verifier or this treatment to infer holdout performance.

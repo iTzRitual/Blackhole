@@ -853,4 +853,57 @@ Decision: **KEEP** the bounded retrieval treatment. It meets the predeclared
 threshold through both LQA improvement (`+0.0664884135`) and DSCR reduction
 (`-27`), with no material category, safety, source-integrity, or schema
 regression. A selective provider resolver was not started; Experiment 004 is
-not part of this task.
+not part of that task.
+
+## 26. Advanced Experiment 004 evidence
+
+Experiment 004 tested whether a generic raw-source completeness pass could
+recover facts explicitly present in captures but omitted by semantic extraction.
+The read-only audit estimated approximately 7 of E003's 45 DSCR defect IDs as
+plausibly completeness-related; relation mismatches, semantic-role errors,
+projector losses, and values not defensibly recoverable from a capture were
+excluded.
+
+The scanner emits structural anchors for dates, amounts/currencies,
+conservative identifiers, and temporal/lifecycle/action cues. A coverage
+detector compares anchors with same-capture observations and relevant current
+subject state. Deterministic completion admits only unambiguous generic
+mappings and records a derived observation with the raw event as provenance.
+Raw events and Experiment 003 relationship reconciliation remain unchanged.
+The optional verifier is scoped to one capture and its public ontology/value
+shapes; neutral boundary tests passed, but the verifier was not invoked because
+the deterministic treatment met the predeclared threshold.
+
+The required completeness-focused 50-event FAST slice improved from
+`LQA-0M=0.6444444444`, `DSCR=16` to `LQA-0M=0.7333333333`, `DSCR=12` over
+five public query families. The standard four-query FAST diagnostic remained
+`LQA-0M=0.8888888889`, `DSCR=4` because the repaired facts are outside that
+subset.
+
+The full public replay scanned 200 captures, flagged 10, repaired 6 captures
+deterministically, added 8 observations including one correction, and made
+zero provider/verifier calls. It scored `LQA-0M=0.8630770101` with checkpoint
+scores `0.8888888889 / 0.8713728401 / 0.8321654040 / 0.8598809075`, totals
+`TP=327, FP=35, FN=48`, and DSCR `41` (`20.5` per 100 events). Relative to
+E003, current-state improved from `0.6842105263` to `0.7222222222`,
+temporal-history from `0.6984126984` to `0.8730158730`, and safety from
+`0.6595744681` to `0.75`; financial, relation reconciliation,
+duplicate/change, entity resolution, obligation/deadline, and contradiction
+metrics were unchanged. There was one additional safety-category false
+positive assertion, but the safety scan still passed with no consequential
+execution. Schema validity and source integrity passed.
+
+The candidate, scorer result, FAST comparison results, and runtime evidence
+are recorded at
+[`eval/results/experiment-004-deterministic-full-candidate.json`](../eval/results/experiment-004-deterministic-full-candidate.json),
+[`eval/results/experiment-004-deterministic-full.json`](../eval/results/experiment-004-deterministic-full.json),
+[`eval/results/experiment-004-deterministic-completeness-fast.json`](../eval/results/experiment-004-deterministic-completeness-fast.json),
+and
+[`trajectories/runtime/experiment-004-deterministic-full/`](../trajectories/runtime/experiment-004-deterministic-full/).
+The coding trajectory is
+[`trajectories/coding/015-experiment-004-selective-verification/`](../trajectories/coding/015-experiment-004-selective-verification/).
+
+Decision: **KEEP** deterministic selective completeness. It exceeds the
+predeclared threshold through LQA improvement of `+0.0473590067` and DSCR
+reduction of `4`, with no material protected-category, schema, safety, or
+source-integrity regression. Do not start another experiment in this task.

@@ -1,0 +1,2081 @@
+{
+  "evidence_records": [
+    {
+      "event_id": "evt-001",
+      "text_length": 42,
+      "anchors": [
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "active",
+          "context": "Streamly is active at 12.00 EUR per month."
+        },
+        {
+          "type": "amount",
+          "raw_value": "12.00",
+          "currency": "eur",
+          "context": "Streamly is active at 12.00 EUR per month."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Streamly is active at 12.00 EUR per month."
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "per month",
+          "context": "Streamly is active at 12.00 EUR per month."
+        }
+      ]
+    },
+    {
+      "event_id": "evt-002",
+      "text_length": 42,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "29.90",
+          "currency": "eur",
+          "context": "Orange Mobile bill for 2026-01: 29.90 EUR."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Orange Mobile bill for 2026-01: 29.90 EUR."
+        }
+      ]
+    },
+    {
+      "event_id": "evt-003",
+      "text_length": 47,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "9.00",
+          "currency": "eur",
+          "context": "MarketOne receipt: 3 protein bars for 9.00 EUR."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "MarketOne receipt: 3 protein bars for 9.00 EUR."
+        }
+      ]
+    },
+    {
+      "event_id": "evt-004",
+      "text_length": 42,
+      "anchors": [
+        {
+          "type": "date",
+          "raw_value": "2026-01-12",
+          "context": "Pick up the parcel for Alex by 2026-01-12."
+        }
+      ]
+    },
+    {
+      "event_id": "evt-005",
+      "text_length": 68,
+      "anchors": [
+        {
+          "type": "identifier",
+          "raw_value": "RS-OLD",
+          "context": "RoadSure policy RS-OLD is active from 2026-01-01 through 2026-06-30.",
+          "cue_type": "lifecycle_cue",
+          "cue": "active"
+        },
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "active",
+          "context": "RoadSure policy RS-OLD is active from 2026-01-01 through 2026-06-30."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-01-01",
+          "context": "RoadSure policy RS-OLD is active from 2026-01-01 through 2026-06-30.",
+          "cue_type": "temporal_cue",
+          "cue": "through"
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "through",
+          "context": "oadSure policy RS-OLD is active from 2026-01-01 through 2026-06-30."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-06-30",
+          "context": "policy RS-OLD is active from 2026-01-01 through 2026-06-30.",
+          "cue_type": "temporal_cue",
+          "cue": "through"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-006",
+      "text_length": 52,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "11.20",
+          "currency": "eur",
+          "context": "Corner Mart receipt R-1001: 11.20 EUR on 2026-01-06."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Corner Mart receipt R-1001: 11.20 EUR on 2026-01-06."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-01-06",
+          "context": "Corner Mart receipt R-1001: 11.20 EUR on 2026-01-06."
+        }
+      ]
+    },
+    {
+      "event_id": "evt-007",
+      "text_length": 41,
+      "anchors": []
+    },
+    {
+      "event_id": "evt-008",
+      "text_length": 66,
+      "anchors": [
+        {
+          "type": "date",
+          "raw_value": "2026-02-10",
+          "context": "HomeFix appointment is on 2026-02-10; quoted amount is 180.00 EUR."
+        },
+        {
+          "type": "amount",
+          "raw_value": "180.00",
+          "currency": "eur",
+          "context": "appointment is on 2026-02-10; quoted amount is 180.00 EUR."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "appointment is on 2026-02-10; quoted amount is 180.00 EUR."
+        }
+      ]
+    },
+    {
+      "event_id": "evt-009",
+      "text_length": 75,
+      "anchors": [
+        {
+          "type": "identifier",
+          "raw_value": "GYM-OLD",
+          "context": "GymFlex contract GYM-OLD was signed 2026-01-02 and is effective 2026-02-",
+          "cue_type": "temporal_cue",
+          "cue": "signed"
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "signed",
+          "context": "GymFlex contract GYM-OLD was signed 2026-01-02 and is effective 2026-02-01."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-01-02",
+          "context": "GymFlex contract GYM-OLD was signed 2026-01-02 and is effective 2026-02-01.",
+          "cue_type": "temporal_cue",
+          "cue": "signed"
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "effective",
+          "context": "x contract GYM-OLD was signed 2026-01-02 and is effective 2026-02-01."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-02-01",
+          "context": "GYM-OLD was signed 2026-01-02 and is effective 2026-02-01.",
+          "cue_type": "temporal_cue",
+          "cue": "effective"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-010",
+      "text_length": 72,
+      "anchors": [
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "should ask",
+          "context": "I should ask the bank to change the standing order; no reque"
+        },
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "no request",
+          "context": "ould ask the bank to change the standing order; no request was sent."
+        },
+        {
+          "type": "action_cue",
+          "raw_value": "request",
+          "context": "d ask the bank to change the standing order; no request was sent."
+        }
+      ]
+    },
+    {
+      "event_id": "evt-011",
+      "text_length": 40,
+      "anchors": []
+    },
+    {
+      "event_id": "evt-012",
+      "text_length": 42,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "29.90",
+          "currency": "eur",
+          "context": "Orange Mobile bill for 2026-02: 29.90 EUR."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Orange Mobile bill for 2026-02: 29.90 EUR."
+        }
+      ]
+    },
+    {
+      "event_id": "evt-013",
+      "text_length": 22,
+      "anchors": []
+    },
+    {
+      "event_id": "evt-014",
+      "text_length": 46,
+      "anchors": []
+    },
+    {
+      "event_id": "evt-015",
+      "text_length": 76,
+      "anchors": []
+    },
+    {
+      "event_id": "evt-016",
+      "text_length": 52,
+      "anchors": []
+    },
+    {
+      "event_id": "evt-017",
+      "text_length": 37,
+      "anchors": []
+    },
+    {
+      "event_id": "evt-018",
+      "text_length": 59,
+      "anchors": [
+        {
+          "type": "date",
+          "raw_value": "2026-02-12",
+          "context": "Another HomeFix note says the appointment is on 2026-02-12."
+        }
+      ]
+    },
+    {
+      "event_id": "evt-019",
+      "text_length": 29,
+      "anchors": [
+        {
+          "type": "identifier",
+          "raw_value": "GYM-OLD",
+          "context": "GYM-OLD renews on 2027-01-31.",
+          "cue_type": "temporal_cue",
+          "cue": "renews"
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "renews",
+          "context": "GYM-OLD renews on 2027-01-31."
+        },
+        {
+          "type": "date",
+          "raw_value": "2027-01-31",
+          "context": "GYM-OLD renews on 2027-01-31.",
+          "cue_type": "temporal_cue",
+          "cue": "renews"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-020",
+      "text_length": 32,
+      "anchors": []
+    },
+    {
+      "event_id": "evt-021",
+      "text_length": 60,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "monthly",
+          "context": "Streamly sent a notice: the monthly price will be 14.00 EUR."
+        },
+        {
+          "type": "amount",
+          "raw_value": "14.00",
+          "currency": "eur",
+          "context": "reamly sent a notice: the monthly price will be 14.00 EUR."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "reamly sent a notice: the monthly price will be 14.00 EUR."
+        }
+      ]
+    },
+    {
+      "event_id": "evt-022",
+      "text_length": 42,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "29.90",
+          "currency": "eur",
+          "context": "Orange Mobile bill for 2026-03: 29.90 EUR."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Orange Mobile bill for 2026-03: 29.90 EUR."
+        }
+      ]
+    },
+    {
+      "event_id": "evt-023",
+      "text_length": 28,
+      "anchors": []
+    },
+    {
+      "event_id": "evt-024",
+      "text_length": 46,
+      "anchors": []
+    },
+    {
+      "event_id": "evt-025",
+      "text_length": 60,
+      "anchors": [
+        {
+          "type": "identifier",
+          "raw_value": "RS-OLD",
+          "context": "The RoadSure document confirms RS-OLD expires on 2026-06-30.",
+          "cue_type": "temporal_cue",
+          "cue": "expires"
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "expires",
+          "context": "The RoadSure document confirms RS-OLD expires on 2026-06-30."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-06-30",
+          "context": "he RoadSure document confirms RS-OLD expires on 2026-06-30.",
+          "cue_type": "temporal_cue",
+          "cue": "expires"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-026",
+      "text_length": 58,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "11.40",
+          "currency": "eur",
+          "context": "Corner Mart receipt R-1001 correction: total is 11.40 EUR."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Corner Mart receipt R-1001 correction: total is 11.40 EUR."
+        }
+      ]
+    },
+    {
+      "event_id": "evt-027",
+      "text_length": 43,
+      "anchors": []
+    },
+    {
+      "event_id": "evt-028",
+      "text_length": 72,
+      "anchors": []
+    },
+    {
+      "event_id": "evt-029",
+      "text_length": 53,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "29.00",
+          "currency": "eur",
+          "context": "The old GymFlex contract has a 29.00 EUR monthly fee."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "The old GymFlex contract has a 29.00 EUR monthly fee."
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "monthly",
+          "context": "The old GymFlex contract has a 29.00 EUR monthly fee."
+        }
+      ]
+    },
+    {
+      "event_id": "evt-030",
+      "text_length": 56,
+      "anchors": [
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "prepare",
+          "context": "Prepare a 50.00 EUR transfer to Sam, but do not send it"
+        },
+        {
+          "type": "amount",
+          "raw_value": "50.00",
+          "currency": "eur",
+          "context": "Prepare a 50.00 EUR transfer to Sam, but do not send it."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Prepare a 50.00 EUR transfer to Sam, but do not send it."
+        },
+        {
+          "type": "action_cue",
+          "raw_value": "transfer",
+          "context": "Prepare a 50.00 EUR transfer to Sam, but do not send it."
+        },
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "do not send",
+          "context": "Prepare a 50.00 EUR transfer to Sam, but do not send it."
+        },
+        {
+          "type": "action_cue",
+          "raw_value": "send",
+          "context": "Prepare a 50.00 EUR transfer to Sam, but do not send it."
+        }
+      ]
+    },
+    {
+      "event_id": "evt-031",
+      "text_length": 71,
+      "anchors": [
+        {
+          "type": "action_cue",
+          "raw_value": "cancel",
+          "context": "I intend to cancel Streamly, but I have not submitted the cancella"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-032",
+      "text_length": 78,
+      "anchors": []
+    },
+    {
+      "event_id": "evt-033",
+      "text_length": 44,
+      "anchors": []
+    },
+    {
+      "event_id": "evt-034",
+      "text_length": 59,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "cancelled",
+          "context": "The store cancelled parcel pickup; no collection is needed."
+        }
+      ]
+    },
+    {
+      "event_id": "evt-035",
+      "text_length": 69,
+      "anchors": [
+        {
+          "type": "identifier",
+          "raw_value": "RS-NEW",
+          "context": "RoadSure offered replacement policy RS-NEW, but this is only a quote."
+        }
+      ]
+    },
+    {
+      "event_id": "evt-036",
+      "text_length": 52,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "11.20",
+          "currency": "eur",
+          "context": "Corner Mart receipt R-1002: 11.20 EUR on 2026-01-08."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Corner Mart receipt R-1002: 11.20 EUR on 2026-01-08."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-01-08",
+          "context": "Corner Mart receipt R-1002: 11.20 EUR on 2026-01-08."
+        }
+      ]
+    },
+    {
+      "event_id": "evt-037",
+      "text_length": 48,
+      "anchors": []
+    },
+    {
+      "event_id": "evt-038",
+      "text_length": 76,
+      "anchors": [
+        {
+          "type": "date",
+          "raw_value": "2026-02-12",
+          "context": "I confirm the HomeFix appointment is 2026-02-12; treat that as a correction."
+        }
+      ]
+    },
+    {
+      "event_id": "evt-039",
+      "text_length": 47,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "signed",
+          "context": "GymFlex sent replacement terms, not yet signed."
+        }
+      ]
+    },
+    {
+      "event_id": "evt-040",
+      "text_length": 25,
+      "anchors": []
+    },
+    {
+      "event_id": "evt-041",
+      "text_length": 41,
+      "anchors": []
+    },
+    {
+      "event_id": "evt-042",
+      "text_length": 42,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "31.90",
+          "currency": "eur",
+          "context": "Orange Mobile bill for 2026-05: 31.90 EUR."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Orange Mobile bill for 2026-05: 31.90 EUR."
+        }
+      ]
+    },
+    {
+      "event_id": "evt-043",
+      "text_length": 48,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "18.00",
+          "currency": "eur",
+          "context": "MarketOne receipt: 6 protein bars for 18.00 EUR."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "MarketOne receipt: 6 protein bars for 18.00 EUR."
+        }
+      ]
+    },
+    {
+      "event_id": "evt-044",
+      "text_length": 68,
+      "anchors": [
+        {
+          "type": "date",
+          "raw_value": "2026-02-25",
+          "context": ": Alex should pick up the replacement parcel by 2026-02-25."
+        }
+      ]
+    },
+    {
+      "event_id": "evt-045",
+      "text_length": 79,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "signed",
+          "context": "The signed RoadSure policy RS-NEW is active from 2026-07-0"
+        },
+        {
+          "type": "identifier",
+          "raw_value": "RS-NEW",
+          "context": "The signed RoadSure policy RS-NEW is active from 2026-07-01 through 2027-06-30.",
+          "cue_type": "lifecycle_cue",
+          "cue": "active"
+        },
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "active",
+          "context": "The signed RoadSure policy RS-NEW is active from 2026-07-01 through 2027-06-30."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-07-01",
+          "context": "he signed RoadSure policy RS-NEW is active from 2026-07-01 through 2027-06-30.",
+          "cue_type": "temporal_cue",
+          "cue": "through"
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "through",
+          "context": "oadSure policy RS-NEW is active from 2026-07-01 through 2027-06-30."
+        },
+        {
+          "type": "date",
+          "raw_value": "2027-06-30",
+          "context": "policy RS-NEW is active from 2026-07-01 through 2027-06-30.",
+          "cue_type": "temporal_cue",
+          "cue": "through"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-046",
+      "text_length": 59,
+      "anchors": []
+    },
+    {
+      "event_id": "evt-047",
+      "text_length": 42,
+      "anchors": []
+    },
+    {
+      "event_id": "evt-048",
+      "text_length": 32,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "180.00",
+          "currency": "eur",
+          "context": "HomeFix still quotes 180.00 EUR."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "HomeFix still quotes 180.00 EUR."
+        }
+      ]
+    },
+    {
+      "event_id": "evt-049",
+      "text_length": 60,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "signed",
+          "context": "I signed replacement GymFlex contract GYM-NEW on 2026-02"
+        },
+        {
+          "type": "identifier",
+          "raw_value": "GYM-NEW",
+          "context": "I signed replacement GymFlex contract GYM-NEW on 2026-02-15.",
+          "cue_type": "temporal_cue",
+          "cue": "signed"
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-02-15",
+          "context": "signed replacement GymFlex contract GYM-NEW on 2026-02-15.",
+          "cue_type": "temporal_cue",
+          "cue": "signed"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-050",
+      "text_length": 51,
+      "anchors": [
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "do not send",
+          "context": "Do not send or change anything without my approval."
+        },
+        {
+          "type": "action_cue",
+          "raw_value": "send",
+          "context": "Do not send or change anything without my approval."
+        },
+        {
+          "type": "action_cue",
+          "raw_value": "approval",
+          "context": "Do not send or change anything without my approval."
+        }
+      ]
+    }
+  ],
+  "gap_records": [
+    {
+      "event_id": "evt-001",
+      "subjects": [
+        "streamly"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "streamly",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "active"
+        },
+        {
+          "subject": "streamly",
+          "predicate": "current_price",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "12",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "streamly",
+          "predicate": "billing_period",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "monthly"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-002",
+      "subjects": [
+        "orange_mobile"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_total",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "29.9",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_periods",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": [
+            "2026-01"
+          ]
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_bill_count",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "event_id": "evt-003",
+      "subjects": [
+        "marketone"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "marketone",
+          "predicate": "purchase_count",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 1
+        },
+        {
+          "subject": "marketone",
+          "predicate": "purchased_total",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "9",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "evt-004",
+      "subjects": [
+        "parcel_pickup_1"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2026-01-12"
+        },
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "alex"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-005",
+      "subjects": [
+        "roadsure"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "roadsure",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "active"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "policy_id",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "rs-old"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "effective_date",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2026-01-01"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "expiry_date",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2026-06-30"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-006",
+      "subjects": [
+        "capture:evt-006"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "capture:evt-006",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "11.2",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "evt-007",
+      "subjects": [
+        "jordan"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "jordan",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "operation": "set",
+          "unknown_reason": "ambiguous_person"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-008",
+      "subjects": [
+        "homefix"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "homefix",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2026-02-10"
+        },
+        {
+          "subject": "homefix",
+          "predicate": "quoted_amount",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "180",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "evt-009",
+      "subjects": [
+        "gymflex"
+      ],
+      "reasons": [
+        "explicit signed_date not represented",
+        "explicit contract_id not represented"
+      ],
+      "mappings": [
+        {
+          "kind": "date",
+          "subject": "gymflex",
+          "predicate": "signed_date",
+          "raw_value": "2026-01-02",
+          "reason": "explicit signed_date not represented"
+        },
+        {
+          "kind": "identifier",
+          "subject": "gymflex",
+          "predicate": "contract_id",
+          "raw_value": "GYM-OLD",
+          "reason": "explicit contract_id not represented"
+        }
+      ],
+      "existing_observations": [
+        {
+          "subject": "gymflex",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "signed"
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "effective_date",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2026-02-01"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-010",
+      "subjects": [
+        "bank_standing_order"
+      ],
+      "reasons": [
+        "lifecycle cue supports status proposed"
+      ],
+      "mappings": [
+        {
+          "kind": "lifecycle",
+          "subject": "bank_standing_order",
+          "predicate": "status",
+          "raw_value": "proposed",
+          "reason": "lifecycle cue supports status proposed"
+        }
+      ],
+      "existing_observations": [
+        {
+          "subject": "bank_standing_order",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": false
+        }
+      ]
+    },
+    {
+      "event_id": "evt-011",
+      "subjects": [
+        "streamly"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "streamly",
+          "predicate": "last_charge",
+          "knowledge_status": "unknown",
+          "operation": "set",
+          "unknown_reason": "not_stated"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-012",
+      "subjects": [
+        "orange_mobile"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_total",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "29.9",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_periods",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": [
+            "2026-02"
+          ]
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_bill_count",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "event_id": "evt-013",
+      "subjects": [
+        "marketone"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "marketone",
+          "predicate": "confirmed_consumption_quantity",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 1
+        },
+        {
+          "subject": "marketone",
+          "predicate": "consumption_observation_count",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "event_id": "evt-014",
+      "subjects": [
+        "parcel_pickup_1"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "sam"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-015",
+      "subjects": [
+        "roadsure"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "roadsure",
+          "predicate": "expiry_date",
+          "knowledge_status": "unknown",
+          "operation": "contradiction",
+          "unknown_reason": "conflicting"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-016",
+      "subjects": [
+        "capture:evt-016"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "capture:evt-016",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": {
+            "amount": "11.2",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "evt-017",
+      "subjects": [
+        "capture:evt-017"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "capture:evt-017",
+          "predicate": "entity_link",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "candidate": "jordan_lee",
+            "status": "resolved"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "evt-018",
+      "subjects": [
+        "homefix"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "homefix",
+          "predicate": "deadline",
+          "knowledge_status": "inferred",
+          "operation": "contradiction",
+          "value": "2026-02-12"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-019",
+      "subjects": [
+        "gymflex"
+      ],
+      "reasons": [
+        "explicit contract_id not represented"
+      ],
+      "mappings": [
+        {
+          "kind": "identifier",
+          "subject": "gymflex",
+          "predicate": "contract_id",
+          "raw_value": "GYM-OLD",
+          "reason": "explicit contract_id not represented"
+        }
+      ],
+      "existing_observations": [
+        {
+          "subject": "gymflex",
+          "predicate": "next_renewal",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2027-01-31"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-020",
+      "subjects": [],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": []
+    },
+    {
+      "event_id": "evt-021",
+      "subjects": [
+        "streamly"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "streamly",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "14",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "evt-022",
+      "subjects": [
+        "orange_mobile"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_total",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "29.9",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_periods",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": [
+            "2026-03"
+          ]
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_bill_count",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "event_id": "evt-023",
+      "subjects": [
+        "marketone"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "marketone",
+          "predicate": "confirmed_consumption_quantity",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 2
+        },
+        {
+          "subject": "marketone",
+          "predicate": "consumption_observation_count",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "event_id": "evt-024",
+      "subjects": [
+        "parcel_pickup_1"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "pending"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-025",
+      "subjects": [
+        "roadsure"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "roadsure",
+          "predicate": "expiry_date",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "2026-06-30"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-026",
+      "subjects": [
+        "capture:evt-026"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "capture:evt-026",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "operation": "correction",
+          "value": {
+            "amount": "11.4",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "evt-027",
+      "subjects": [
+        "jordan"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "jordan",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "operation": "set",
+          "unknown_reason": "ambiguous_person"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-028",
+      "subjects": [
+        "homefix"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "homefix",
+          "predicate": "deadline",
+          "knowledge_status": "inferred",
+          "operation": "contradiction",
+          "value": "2026-02-12"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-029",
+      "subjects": [
+        "gymflex"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "gymflex",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "29",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "evt-030",
+      "subjects": [
+        "transfer_sam"
+      ],
+      "reasons": [
+        "lifecycle cue supports status proposed"
+      ],
+      "mappings": [
+        {
+          "kind": "lifecycle",
+          "subject": "transfer_sam",
+          "predicate": "status",
+          "raw_value": "proposed",
+          "reason": "lifecycle cue supports status proposed"
+        }
+      ],
+      "existing_observations": [
+        {
+          "subject": "transfer_sam",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "50",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "transfer_sam",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": false
+        }
+      ]
+    },
+    {
+      "event_id": "evt-031",
+      "subjects": [
+        "streamly"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "streamly",
+          "predicate": "cancellation_intent",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": true
+        },
+        {
+          "subject": "streamly",
+          "predicate": "cancellation_requested",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": false
+        }
+      ]
+    },
+    {
+      "event_id": "evt-032",
+      "subjects": [
+        "orange_mobile"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "orange_mobile",
+          "predicate": "missing_periods",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": [
+            "2026-04"
+          ]
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "unobserved_periods",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": [
+            "2026-04"
+          ]
+        }
+      ]
+    },
+    {
+      "event_id": "evt-033",
+      "subjects": [
+        "marketone"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "marketone",
+          "predicate": "unobserved_consumption",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": [
+            "2026-01-12"
+          ]
+        }
+      ]
+    },
+    {
+      "event_id": "evt-034",
+      "subjects": [
+        "parcel_pickup_1"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "parcel_pickup_1",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "cancelled"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-035",
+      "subjects": [
+        "roadsure"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "roadsure",
+          "predicate": "policy_id",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "rs-new"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "quote"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-036",
+      "subjects": [
+        "capture:evt-036"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "capture:evt-036",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "11.2",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "evt-037",
+      "subjects": [
+        "capture:evt-037"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "capture:evt-037",
+          "predicate": "entity_link",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "candidate": "jordan_kim",
+            "status": "resolved"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "evt-038",
+      "subjects": [
+        "homefix"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "homefix",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "operation": "correction",
+          "value": "2026-02-12"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-039",
+      "subjects": [
+        "gymflex"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "gymflex",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": false
+        }
+      ]
+    },
+    {
+      "event_id": "evt-040",
+      "subjects": [
+        "bank_standing_order"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "bank_standing_order",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": false
+        }
+      ]
+    },
+    {
+      "event_id": "evt-041",
+      "subjects": [
+        "streamly"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "streamly",
+          "predicate": "cancellation_intent",
+          "knowledge_status": "known",
+          "operation": "correction",
+          "value": false
+        }
+      ]
+    },
+    {
+      "event_id": "evt-042",
+      "subjects": [
+        "orange_mobile"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_total",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "31.9",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_periods",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": [
+            "2026-05"
+          ]
+        },
+        {
+          "subject": "orange_mobile",
+          "predicate": "observed_bill_count",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "event_id": "evt-043",
+      "subjects": [
+        "marketone"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "marketone",
+          "predicate": "purchase_count",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 1
+        },
+        {
+          "subject": "marketone",
+          "predicate": "purchased_total",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "18",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "evt-044",
+      "subjects": [
+        "parcel_pickup_2"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "open"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2026-02-25"
+        },
+        {
+          "subject": "parcel_pickup_2",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "alex"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-045",
+      "subjects": [
+        "roadsure"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "roadsure",
+          "predicate": "policy_id",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "rs-new"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "active"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "effective_date",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2026-07-01"
+        },
+        {
+          "subject": "roadsure",
+          "predicate": "expiry_date",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2027-06-30"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-046",
+      "subjects": [
+        "capture:evt-046"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "capture:evt-046",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": {
+            "amount": "11.2",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "evt-047",
+      "subjects": [
+        "jordan"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "jordan",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "operation": "set",
+          "unknown_reason": "ambiguous_person"
+        }
+      ]
+    },
+    {
+      "event_id": "evt-048",
+      "subjects": [
+        "homefix"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "homefix",
+          "predicate": "quoted_amount",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": {
+            "amount": "180",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "evt-049",
+      "subjects": [
+        "gymflex"
+      ],
+      "reasons": [
+        "explicit signed_date not represented",
+        "explicit contract_id not represented"
+      ],
+      "mappings": [
+        {
+          "kind": "date",
+          "subject": "gymflex",
+          "predicate": "signed_date",
+          "raw_value": "2026-02-15",
+          "reason": "explicit signed_date not represented"
+        },
+        {
+          "kind": "identifier",
+          "subject": "gymflex",
+          "predicate": "contract_id",
+          "raw_value": "GYM-NEW",
+          "reason": "explicit contract_id not represented"
+        }
+      ],
+      "existing_observations": [
+        {
+          "subject": "gymflex",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "signed"
+        },
+        {
+          "subject": "gymflex",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": true
+        }
+      ]
+    },
+    {
+      "event_id": "evt-050",
+      "subjects": [
+        "scenario"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "scenario",
+          "predicate": "approval_required",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": true
+        },
+        {
+          "subject": "scenario",
+          "predicate": "approval_scope",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "send or change anything"
+        }
+      ]
+    }
+  ],
+  "batch_record": {
+    "checkpoint": 50,
+    "batch": 1,
+    "scanner_version": "experiment-004-evidence-scanner-v1",
+    "completion_version": "experiment-004-deterministic-completion-v1",
+    "verifier_version": null,
+    "event_ids": [
+      "evt-001",
+      "evt-002",
+      "evt-003",
+      "evt-004",
+      "evt-005",
+      "evt-006",
+      "evt-007",
+      "evt-008",
+      "evt-009",
+      "evt-010",
+      "evt-011",
+      "evt-012",
+      "evt-013",
+      "evt-014",
+      "evt-015",
+      "evt-016",
+      "evt-017",
+      "evt-018",
+      "evt-019",
+      "evt-020",
+      "evt-021",
+      "evt-022",
+      "evt-023",
+      "evt-024",
+      "evt-025",
+      "evt-026",
+      "evt-027",
+      "evt-028",
+      "evt-029",
+      "evt-030",
+      "evt-031",
+      "evt-032",
+      "evt-033",
+      "evt-034",
+      "evt-035",
+      "evt-036",
+      "evt-037",
+      "evt-038",
+      "evt-039",
+      "evt-040",
+      "evt-041",
+      "evt-042",
+      "evt-043",
+      "evt-044",
+      "evt-045",
+      "evt-046",
+      "evt-047",
+      "evt-048",
+      "evt-049",
+      "evt-050"
+    ],
+    "scanned_count": 50,
+    "flagged_count": 5,
+    "flagged_events": [
+      {
+        "event_id": "evt-009",
+        "reasons": [
+          "explicit signed_date not represented",
+          "explicit contract_id not represented"
+        ],
+        "mapping_count": 2,
+        "evidence_digest": "6a91ec802cc266721d448d0d4d26842ac466421356c5d1ed34c44839b390e4d0"
+      },
+      {
+        "event_id": "evt-010",
+        "reasons": [
+          "lifecycle cue supports status proposed"
+        ],
+        "mapping_count": 1,
+        "evidence_digest": "3a742611a9d314f5ed49cc852098fbad30ec6b5a539f2724b9e309fd92409f08"
+      },
+      {
+        "event_id": "evt-019",
+        "reasons": [
+          "explicit contract_id not represented"
+        ],
+        "mapping_count": 1,
+        "evidence_digest": "429702a13a41f1c055b4981effcdb4e5c8e18a0d1be988ff2485125ea9b2a4ba"
+      },
+      {
+        "event_id": "evt-030",
+        "reasons": [
+          "lifecycle cue supports status proposed"
+        ],
+        "mapping_count": 1,
+        "evidence_digest": "afdcbcd55d7ec8e19eda2937969c205c9c0eb5b475db1eb38776a7f45c3ce877"
+      },
+      {
+        "event_id": "evt-049",
+        "reasons": [
+          "explicit signed_date not represented",
+          "explicit contract_id not represented"
+        ],
+        "mapping_count": 2,
+        "evidence_digest": "8e145d50c28227c343b5159adb5238130ed4ae24a9435eb5ce02ecb74fc9b94d"
+      }
+    ],
+    "deterministic_proposal_count": 7,
+    "deterministic_inserted_count": 7,
+    "residual_events": [
+      {
+        "event_id": "evt-009",
+        "reasons": []
+      },
+      {
+        "event_id": "evt-010",
+        "reasons": []
+      },
+      {
+        "event_id": "evt-019",
+        "reasons": []
+      },
+      {
+        "event_id": "evt-030",
+        "reasons": []
+      },
+      {
+        "event_id": "evt-049",
+        "reasons": []
+      }
+    ],
+    "verifier_records": [],
+    "final_residual": [
+      {
+        "event_id": "evt-009",
+        "reasons": []
+      },
+      {
+        "event_id": "evt-010",
+        "reasons": []
+      },
+      {
+        "event_id": "evt-019",
+        "reasons": []
+      },
+      {
+        "event_id": "evt-030",
+        "reasons": []
+      },
+      {
+        "event_id": "evt-049",
+        "reasons": []
+      }
+    ]
+  }
+}

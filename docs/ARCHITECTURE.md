@@ -263,8 +263,8 @@ action. The local demo database is ignored by Git and can be rebuilt with
 
 ## 13. Experiment 003 relation reconciliation
 
-The current advanced experiment adds a narrow reconciliation layer after each
-semantic extraction batch:
+Experiment 003 added a narrow reconciliation layer after each semantic
+extraction batch:
 
 ```text
 structured observations + model relations
@@ -307,3 +307,48 @@ remained unchanged, source integrity and safety passed, and provider usage was
 zero. The result is development evidence only; Gate A, `response-contract-v2`,
 the official baseline, calibration evidence, and holdout boundaries remain
 unchanged.
+
+## 14. Experiment 004 selective completeness treatment
+
+Experiment 004 adds a narrow raw-source completeness pass after the existing
+Experiment 003 relation-reconciliation pass and before the deterministic
+projection is queried:
+
+```text
+immutable raw capture
+          |
+          v
+generic structural anchors
+          |
+          v
+same-event coverage gaps
+          |
+          v
+deterministic derived completions
+          |
+          v
+rebuildable projection
+```
+
+`app/completeness.py` scans raw text for structural dates, amounts/currencies,
+conservative identifiers, and temporal/lifecycle/action cues. The scanner emits
+evidence anchors only; it does not turn every number or date into a semantic
+fact. The gap detector compares those anchors with observations from the same
+capture and the current subject state. A completion is admitted only for a
+generic, unambiguous mapping such as a contract identifier, an explicit signed
+date, a monthly billing-period field, or a clearly stated lifecycle status.
+
+Completions are derived observations with the original event as provenance and
+are passed through the existing public-contract normalization. They never mutate
+the raw event and do not alter Experiment 003 relationship reconciliation. The
+optional verifier prompt is versioned and restricted to one raw capture, its
+existing observations, structural anchors, public ontology/value shapes, and
+relevant current subject facts. It was covered by neutral fixtures but was not
+invoked in the kept replay because the deterministic treatment already met the
+experiment threshold.
+
+The full public replay scanned 200 captures, flagged 10, repaired 6 captures
+deterministically, added 8 observations including 1 correction, and made zero
+provider calls. It improved LQA-0M from `0.8157180034` to `0.8630770101` and
+reduced DSCR from `45` to `41`. Raw sources, the frozen benchmark, evaluator,
+official baseline, and holdout boundary remain unchanged.

@@ -320,10 +320,35 @@ implementation checkout or trajectory.
 The product-phase deterministic comparison snapshot is recorded in
 `eval/results/final-comparison-v1.json`; it references the unchanged official
 `baseline-v1` artifact and the preceding kept advanced replay. The current
-Experiment 003 result is recorded above. Both provide checkpoint values,
+Experiment 004 result is recorded below, with Experiment 003 preserved as the
+preceding kept replay. Both provide checkpoint values,
 category metrics, and runtime caveats for their respective phase. The
 representative product/runtime behavior is described in
 `trajectories/runtime/013-demo-simple-capture/` through
 `trajectories/runtime/016-demo-correction-reassignment/`. The final validation
 checklist and exact presentation claims are in `docs/VIDEO_SCRIPT.md` and
 `docs/VIDEO_SHOT_LIST.md`.
+
+## 15. Experiment 004 selective completeness replay
+
+Experiment 004 reuses the recorded public Experiment 001 semantic extraction
+and the unchanged Experiment 003 retrieval treatment. It then scans each raw
+capture for structural evidence and applies only deterministic, unambiguous
+derived completions. This replay makes no provider calls:
+
+```text
+python -m app.advanced_runner --scenario benchmark/dev/cases/scenario-001.json --query-bundle benchmark/dev/query-bundle-v2.json --response-contract benchmark/dev/response-contract-v2.json --max-events 200 --batch-size 50 --replay-extraction-dir trajectories/runtime/experiment-001-full-v1 --output eval/results/experiment-004-deterministic-full-candidate.json --trajectory trajectories/runtime/experiment-004-deterministic-full --run-id experiment-004-deterministic-full --label "EXPERIMENT 004 / DETERMINISTIC COMPLETENESS / FROZEN 200-EVENT PUBLIC REPLAY" --semantic-reasoning high --relation-recovery retrieval --completeness deterministic
+python eval/score.py --scenario benchmark/dev/cases/scenario-001.json --expected benchmark/dev/expected/scenario-001.json --candidate eval/results/experiment-004-deterministic-full-candidate.json --response-contract benchmark/dev/response-contract-v2.json --output eval/results/experiment-004-deterministic-full.json
+```
+
+The kept result is
+[`eval/results/experiment-004-deterministic-full.json`](../eval/results/experiment-004-deterministic-full.json).
+The runner records scanner versions, evidence digests, flagged captures,
+completion counts, projection runs, and provider usage in the candidate and
+under
+[`trajectories/runtime/experiment-004-deterministic-full/`](../trajectories/runtime/experiment-004-deterministic-full/).
+The optional `--completeness verifier` mode is implemented for future
+human-authorized runs, but was not used for this result because deterministic
+FAST and full replay already met the keep threshold. A verifier run must use a
+fresh scoped local CLI call and must not receive expected output or evaluator
+internals.
