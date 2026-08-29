@@ -1,0 +1,50 @@
+{
+  "manifest_version": "public-generalization-v1r1",
+  "set_id": "post-freeze-generalization-v1",
+  "set_revision": "v1r1",
+  "implementation_freeze_tag": "implementation-freeze-v1",
+  "implementation_freeze_commit": "8d3b4ff7a1979540f2e65dd9b493f0731e006f72",
+  "implementation_freeze_recorded_sha": "171a6cc1c656d6ab901f41bda8440ee5d59967e3",
+  "scenario_ids": [
+    "g01",
+    "g02",
+    "g03"
+  ],
+  "event_counts": {
+    "g01": 80,
+    "g02": 80,
+    "g03": 80
+  },
+  "checkpoints": [
+    20,
+    40,
+    60,
+    80
+  ],
+  "query_ids": [
+    "q-subscriptions-current",
+    "q-subscriptions-history",
+    "q-attention-14d",
+    "q-insurance-current",
+    "q-service-costs",
+    "q-purchase-consumption",
+    "q-tasks-state",
+    "q-unresolved",
+    "q-duplicates-changes",
+    "q-contract-dates",
+    "q-approval-boundary",
+    "q-recent-changes"
+  ],
+  "response_contract_sha256": "c26d063189be0f44a7f099b49206d1731d0f933c60ece066c58630ce25ff0534",
+  "query_bundle_sha256": "6e5a0295b239f1029e2f38b713e1cba9f6ca6c921e9f712c5022b5f34814d366",
+  "public_case_sha256": {
+    "g01": "c0dd1c6255c3591fb4467e8ac6bb4e46bffbd37661cf38bcb6ba67a9247a3cb5",
+    "g02": "22747fe3e01b4ed4ae41e5a0682cc584e72c487f7c9cff53a29d233d9d35f938",
+    "g03": "ca19c548d60c0a77ba742aa6c00532fac26d335dadcfdca86d209786744c3fec"
+  },
+  "repair_reason": "pre-runtime payload-container compatibility repair",
+  "repair_note": "V1R1 changes only the public payload container from string to {text: string} and recomputes dependent source hashes. Event text and all expected semantic assertions are unchanged.",
+  "pre_runtime_statement": "No provider/model call successfully consumed any generalization event before this schema repair.",
+  "expected_outputs_absence_statement": "Expected outputs remain absent from this branch.",
+  "oracle_absence_statement": "Generalization oracle, generator, audit, defect catalog, and expected-output material are absent from this branch."
+}
