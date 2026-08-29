@@ -8,17 +8,19 @@ product question: can an agent maintain useful personal state as everyday
 information changes over time without making capture another organizational
 task?
 
-## Try the local demo
+## Run the current local product
 
-The repository contains a small, deterministic, mobile-first web demo. It is
-deliberately local and dependency-light:
+The current product is a mobile-first PWA served by the local Blackhole Host.
+From the repository root, initialize the Host, run its safe readiness check,
+and start the same-origin web transport:
 
 ```text
-python scripts/seed_demo.py --reset
+python -m app.host init
+python -m app.host doctor
 python -m app.web_app --host 127.0.0.1 --port 8080
 ```
 
-Open `http://127.0.0.1:8080`. The demo has four views:
+Open `http://127.0.0.1:8080`. The PWA has four views:
 
 - **Capture** — one universal text box, with an optional small text-file import;
   the normal response is `Saved.`
@@ -28,11 +30,49 @@ Open `http://127.0.0.1:8080`. The demo has four views:
 - **Ask Blackhole** — a handful of deterministic structured lookups over the
   same state.
 
-The seed is synthetic and separate from the frozen benchmark. It contains 14
-raw events, 27 semantic observations, and four relationships. The legacy demo
-capture helper does not silently call a model or execute an action; its
-historical `semantic_status` metadata is display-only. The authoritative
-deferred runtime uses a separate derived `processing_state` table.
+`app.host init` creates `config.json` and `blackhole.db` inside Blackhole Home
+(`~/.blackhole/` by default). `doctor` reports safe Host, database, and Codex
+readiness metadata without semantic inference. Capture appends immutable raw
+evidence and returns `Saved.` even when Codex processing is unavailable. When
+pending captures exist, Ask needs an authenticated local Codex CLI to make the
+state fresh; a provider failure is reported without presenting stale state as
+fresh.
+
+Codex authentication is external to Blackhole. The current Host path does not
+require `OPENAI_API_KEY`; it discovers and invokes an already-installed local
+Codex CLI, while Blackhole never requests, reads, copies, exports, or persists
+provider tokens.
+
+### Optional trusted-LAN phone demonstration
+
+To open the PWA from a phone on a trusted private network, opt in explicitly:
+
+```text
+python -m app.web_app \
+  --host 0.0.0.0 \
+  --port 8080 \
+  --trusted-lan-demo
+```
+
+Warning: this is for a trusted private network only. It has no device
+authentication, pairing, or TLS, and is not safe for the Internet. It is not
+production remote access.
+
+## Historical deterministic demo utility
+
+The earlier seeded demo remains in the repository as reproducibility evidence
+for the deterministic presentation and its historical trajectories. It is not
+the current Host/PWA quickstart:
+
+```text
+python scripts/seed_demo.py --reset
+```
+
+By default this replaces the synthetic database at `data/demo/state.sqlite`.
+The utility and `app/demo.py` are provider-free and retain the earlier 14-event
+demo seed, but the current `app.web_app` does not auto-seed that database and
+does not expose `POST /api/reset`. The integrated Host uses Blackhole Home and
+its Host-owned `blackhole.db` instead.
 
 ## Product idea
 
@@ -89,8 +129,14 @@ background scheduler is included.
 
 ## What is implemented
 
-The current advanced application slice is intentionally scoped:
+The current integrated application slice is intentionally scoped:
 
+- `app/host.py` — `HostRuntime` ownership boundary plus the backend commands
+  `init`, `status`, `doctor`, `process`, and `retry`;
+- `app/runtime_config.py` — validated non-sensitive runtime configuration,
+  `BLACKHOLE_HOME`, and the default `~/.blackhole/` home;
+- `app/codex_discovery.py` — safe PATH, version, and external-login readiness
+  discovery for the local Codex CLI;
 - `app/state_store.py` — append-only SQLite raw events, payload hashes,
   structured observations and relationships, rebuildable projections, and an
   opt-in duplicate-evidence component layer;
@@ -98,22 +144,25 @@ The current advanced application slice is intentionally scoped:
   kept runner and deferred runtime;
 - `app/ingestion_engine.py` — generic synchronous capture, derived processing
   status, bounded deferred ingestion, retry, and ask-time freshness boundary;
-- `app/process_pending.py` — concise UI-independent processing command using
-  the externally authenticated Codex CLI when pending work exists;
+- `app/process_pending.py` — UI-independent processing command using the
+  externally authenticated Codex CLI when pending work exists;
+- `app/query_service.py` — bounded, database-free question projections over a
+  Host snapshot;
 - `app/completeness.py` — generic raw-source evidence scanning and conservative
   selective completion helpers;
 - `app/response_projector.py` — generic, query-scoped deterministic projections;
 - `app/provider.py` and `app/advanced_runner.py` — the subscription-first
   local Codex CLI boundary for separately authorized semantic runs;
-- `app/demo.py` and `app/web_app.py` — the local seeded demo and its small HTTP
-  surface;
-- `app/web/` — the mobile-first static interface; and
-- `scripts/seed_demo.py` — reproducible demo reset/seed.
+- `app/web_app.py` — the same-origin Host HTTP transport and static PWA server;
+- `app/web/` — the mobile-first PWA interface, manifest, and service worker; and
+- `app/demo.py` and `scripts/seed_demo.py` — the historical deterministic demo
+  utility, separate from the integrated Host database.
 
 This is not production infrastructure. There is no hosted service, account
 system, OCR pipeline, external-action executor, Claude adapter, or holdout
-package in this repository. The web demo's provider pill reports only whether a
-`codex` executable is discoverable; it never reads or persists authentication
+package in this repository. There is no pairing, device-authentication, TLS,
+remote-access, or public-Internet deployment boundary. The Host reports only
+safe provider readiness metadata and never reads or persists authentication
 material.
 
 ## Benchmark status
@@ -139,7 +188,8 @@ See [docs/EVALUATION.md](docs/EVALUATION.md) for the contract and metrics,
 [`eval/results/experiment-005-duplicate-evidence-full.json`](eval/results/experiment-005-duplicate-evidence-full.json)
 for the current advanced replay, and
 [`eval/results/final-comparison-v1.json`](eval/results/final-comparison-v1.json)
-for the preceding product-phase baseline comparison snapshot.
+for the historical/superseded product-phase baseline comparison snapshot, not
+the current final comparison.
 
 ## Repository map
 
@@ -149,7 +199,7 @@ for the preceding product-phase baseline comparison snapshot.
 | `prompts/` | Versioned runtime and coding prompt artifacts |
 | `benchmark/` | Calibration and public development benchmark boundaries |
 | `baseline/` | Fair stateless provider-baseline harness |
-| `app/` | Scoped Blackhole state slice, deferred ingestion service, and local demo |
+| `app/` | Host-owned runtime, deferred ingestion service, same-origin transport, PWA, and historical demo utility |
 | `data/synthetic/` | Committed synthetic demo inputs; no personal data |
 | `data/raw/` | Reserved raw-source location |
 | `eval/` | Deterministic scorer, tests, and result artifacts |

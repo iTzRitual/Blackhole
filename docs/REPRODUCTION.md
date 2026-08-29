@@ -2,6 +2,21 @@
 
 The goal of this document is to make a future implementation or benchmark result repeatable without exposing protected evaluation data.
 
+## Reproduction map
+
+Use the sections below according to the kind of reproduction being performed:
+
+- **A. Historical deterministic demo utility:** section 12. This preserves the
+  earlier seeded presentation and is not the current Host path.
+- **B. Current integrated Blackhole Host/PWA:** sections 18 and 19. These are
+  the normal judge-facing product setup and local transport instructions.
+- **C. Frozen benchmark reproduction:** sections 7, 9–11, and 13–16. These
+  preserve the public development benchmark, baseline, and historical
+  experiment replays.
+- **D. Real Codex smoke:** section 20. This is the only product validation path
+  here that may consume provider inference; normal documentation validation
+  does not run it.
+
 ## 1. Run identity
 
 Every run should have a stable identifier and record:
@@ -103,11 +118,12 @@ be copied into development or holdout packages.
 
 ## 8. Subscription-first CLI runtime
 
-The MVP does not require a direct OpenAI or Anthropic API key. The runtime
-controls a locally installed and authenticated agent CLI, while the CLI owns
-authentication. Blackhole must not request, read, copy, export, or persist
-provider tokens. A reproducer authenticates outside Blackhole and records only
-safe status and version metadata.
+The MVP does not require a direct OpenAI or Anthropic API key, and the current
+Host path does not require `OPENAI_API_KEY`. The runtime controls a locally
+installed and authenticated agent CLI, while the CLI owns authentication.
+Blackhole must not request, read, copy, export, or persist provider tokens. A
+reproducer authenticates outside Blackhole and records only safe status and
+version metadata.
 
 The verified local runtime for the Gate A calibration was:
 
@@ -260,41 +276,34 @@ official score. The final full artifact is
 must remain privately mounted by the judge and must never be copied into an
 implementation checkout or trajectory.
 
-## 12. Local demo reproduction
+## 12. Historical deterministic demo utility (superseded)
 
-The demo uses only the Python standard library and a committed synthetic seed.
-It is independent of the public benchmark and does not require provider
-authentication:
+This section preserves the earlier provider-free seeded presentation for
+reproducibility and historical trajectory evidence. It is not the current
+integrated Host/PWA quickstart and must not be used to infer current Host
+startup behavior.
+
+From the repository root, the historical utility can rebuild its committed
+synthetic database:
 
 ```text
 python scripts/seed_demo.py --reset
-python -m app.web_app --host 127.0.0.1 --port 8080
 ```
 
-Then open `http://127.0.0.1:8080`. The seed command replaces only the selected
-demo SQLite file under `data/demo/`; it does not touch benchmark, baseline, or
-evaluation artifacts. The server auto-seeds a missing demo database, serves the
-four static UI views, and exposes these local routes:
+By default the script replaces `data/demo/state.sqlite` with the synthetic
+seed. `app/demo.py` retains the deterministic helpers and the earlier 14-event
+presentation, including structured Attention, Memory, and Ask projections.
+This utility is separate from Blackhole Home and the integrated Host database.
 
-| Route | Purpose |
-| --- | --- |
-| `GET /api/state` | Current deterministic attention, memory, counts, and recent raw captures |
-| `GET /api/query?q=...` | One of the fixed structured demo query families |
-| `POST /api/capture` | Append one raw text capture with pending semantic status |
-| `POST /api/reset` | Rebuild the demo database from `data/synthetic/demo-seed.json` |
+The current `app.web_app` does not auto-seed this database and does not expose
+`POST /api/reset`; it opens the Host-owned SQLite database under
+`BLACKHOLE_HOME` instead. The old seeded-demo transport and its historical
+browser traces remain preserved as evidence, but the current product path is
+documented in sections 18 and 19.
 
-The capture endpoint stores text and optional filename metadata as a new raw
-event; it creates no semantic observation and performs no external action. The
-web demo checks only whether the `codex` executable is discoverable and does not
-read authentication files or tokens. For a semantic extraction run, use the
-separate `app.advanced_runner` commands above after authenticating the local
-provider outside Blackhole.
-
-The browser-facing smoke checks used during this phase verified that the page
-loads, the Attention and Memory views render seeded projections, a suggested Ask
-question returns a structured change section, and a capture returns `Saved.`.
-The automated equivalent is `app/tests/test_demo.py`; the browser smoke test is
-not a benchmark score.
+The automated historical checks are in `app/tests/test_demo.py`. They are
+deterministic product-history checks, not a benchmark score and not the normal
+Host/PWA reproduction path.
 
 ## 13. Experiment 003 relation-reconciliation replay
 
@@ -326,9 +335,9 @@ Experiment 005 result is recorded below, with Experiment 004 and Experiment
 category metrics, and runtime caveats for its respective phase. The
 representative product/runtime behavior is described in
 `trajectories/runtime/013-demo-simple-capture/` through
-`trajectories/runtime/016-demo-correction-reassignment/`. The final validation
-checklist and exact presentation claims are in `docs/VIDEO_SCRIPT.md` and
-`docs/VIDEO_SHOT_LIST.md`.
+`trajectories/runtime/016-demo-correction-reassignment/`. The existing
+`docs/VIDEO_SCRIPT.md` and `docs/VIDEO_SHOT_LIST.md` remain stale pending the
+post-freeze generalization story and are intentionally not rewritten here.
 
 ## 15. Experiment 004 selective completeness replay
 
@@ -382,11 +391,13 @@ mount holdout expected output privately and must never copy it into an
 implementation checkout, prompt, trajectory, or result artifact. The official
 `baseline-v1` result and all frozen benchmark artifacts remain unchanged.
 
-## 17. Deferred product-runtime ingestion
+## 17. Deferred ingestion API (backend milestone)
 
-The product runtime is separate from benchmark scoring. It requires raw captures
-and public ontology/configuration, not benchmark expected output, the evaluator,
-or score artifacts. Capture is exposed as a Python service API:
+This lower-level product-runtime API is separate from benchmark scoring. It
+requires raw captures and public ontology/configuration, not benchmark expected
+output, the evaluator, or score artifacts. The normal judge-facing product path
+is the Host/PWA quickstart in sections 18 and 19. The deferred service API is
+shown here for backend-level reproduction:
 
 ```python
 import json
@@ -443,29 +454,73 @@ This is a regression validation, not a new scored experiment. The expected
 reference remains LQA-0M `0.8695006212` and DSCR `40`; the recorded regression
 result matches it exactly and uses no provider calls.
 
-## 18. Blackhole Host foundation
+## 18. Current integrated Blackhole Host/PWA quickstart
 
-The Host foundation is a product-runtime milestone, not a benchmark
-experiment. It uses a separate Blackhole Home and can be initialized without
-Codex:
+This is the normal current product path. Blackhole App is a mobile-first PWA
+served by Blackhole Host, which owns the local Python runtime, `BLACKHOLE_HOME`,
+SQLite, and deferred ingestion. It is a product-runtime milestone, not a
+benchmark experiment.
+
+The repository uses only the Python standard library for this local path. From
+the repository root:
 
 ```text
 python -m app.host init
-python -m app.host status
 python -m app.host doctor
+python -m app.web_app --host 127.0.0.1 --port 8080
+```
+
+Then open `http://127.0.0.1:8080`. To use an explicit home instead of the
+default `~/.blackhole/`, pass the implemented `--home` option to each command:
+
+```text
+python -m app.host --home <blackhole-home> init
+python -m app.host --home <blackhole-home> doctor
+python -m app.web_app --home <blackhole-home> --host 127.0.0.1 --port 8080
+```
+
+`init` creates the versioned `config.json` and `blackhole.db` inside
+Blackhole Home. `doctor` performs safe Host, database, and provider-readiness
+checks without semantic inference. Configuration contains no provider
+credentials. Codex authentication is external: install and authenticate the
+local Codex CLI separately when pending captures need semantic processing. No
+`OPENAI_API_KEY` is required by this Host path, and Blackhole never reads or
+persists Codex auth material, tokens, cookies, or credential paths.
+
+The current flow is:
+
+```text
+Capture
+  -> HostRuntime.capture()
+  -> immutable raw event + pending processing row
+  -> immediate Saved.
+
+Later Ask
+  -> ensure_state_fresh()
+  -> process pending captures when needed through the local Codex CLI
+  -> deterministic, rebuildable state
+  -> bounded query projection
+  -> response
+```
+
+Capture does not invoke a provider, so it remains available when Codex is
+missing or unauthenticated. When pending captures exist, Ask requires an
+authenticated Codex CLI to make the state fresh; a failed freshness attempt is
+reported as `state_not_fresh` with existing state availability preserved. With
+no pending work, existing structured state remains queryable without a
+provider. Processing failures are concise and retryable; no background
+scheduler or consequential-action executor is included.
+
+The backend-only commands are also available for safe status and explicit
+processing operations:
+
+```text
+python -m app.host status
 python -m app.host process
 python -m app.host retry
 ```
 
-Set `BLACKHOLE_HOME` to run against an explicit local data directory. The
-default is `~/.blackhole/`. `config.json` and `blackhole.db` are created by
-`init`; tests must use temporary directories. The configuration contains no
-provider credentials. Authenticate Codex externally using the Codex CLI before
-processing pending work. Blackhole only discovers `codex` on PATH, reads its
-version, and invokes the safe `codex login status` command; it does not read or
-persist Codex auth material, tokens, cookies, or credential paths.
-
-The preferred Python boundary for future clients is:
+The preferred Python boundary for clients is:
 
 ```python
 from app.host import HostRuntime
@@ -477,41 +532,19 @@ with HostRuntime.open() as host:
     state = host.snapshot()
 ```
 
-`capture()` delegates to the deferred `IngestionEngine` and never performs a
-provider call. `process`, `retry`, and `ensure_state_fresh` delegate to that
-same engine; provider failures remain concise and retryable, and raw captures
-remain immutable. `status` and `doctor` do not run semantic inference. The
-host exposes domain operations only: no shell/exec endpoint, remote network,
-pairing, device token, mDNS, HTTPS, tunnel, or cloud relay exists in this
-milestone.
-
-Neutral host tests use fake discovery/provider implementations and temporary
-homes:
+Neutral Host tests use fake discovery/provider implementations and temporary
+homes, so they do not require a real Codex semantic call:
 
 ```text
 python -m unittest app.tests.test_host -v
 ```
 
-The host tests cover first-run initialization, the home override, missing and
-ready provider states, safe serialization, raw-only capture, fake processing,
-idempotency, retry, configuration persistence, secret rejection, and database
-state across a host restart. They do not require a real Codex semantic call.
+## 19. Current Blackhole App + Host HTTP transport
 
-## 19. Blackhole App + Host HTTP integration
-
-This product-runtime milestone is separate from benchmark scoring. It uses the
-same HostRuntime/StateStore boundary and the generic runtime contract; it does
-not read expected output, alter `response-contract-v2`, or rerun the official
-baseline.
-
-Initialize and run the local PWA host:
-
-```text
-python -m app.host init
-python -m app.web_app
-```
-
-Open `http://127.0.0.1:8080`. The supported flow is:
+This transport is separate from benchmark scoring. It uses the same
+HostRuntime/StateStore boundary and the generic runtime contract; it does not
+read expected output, alter `response-contract-v2`, or rerun the official
+baseline. The supported flow is:
 
 ```text
 POST /api/capture  -> immediate Saved. response and pending processing row
@@ -526,18 +559,22 @@ are pending returns `code=state_not_fresh` and `state_available=true`; it does
 not claim that the state is fresh. With no pending work, existing structured
 state remains queryable without a provider.
 
-The normal bind is loopback. A deliberately limited trusted-LAN demonstration
-requires an explicit opt-in:
+The normal bind is loopback. A deliberately limited trusted-LAN phone
+demonstration requires an explicit opt-in:
 
 ```text
-python -m app.web_app --host 0.0.0.0 --port 8080 --trusted-lan-demo
+python -m app.web_app \
+  --host 0.0.0.0 \
+  --port 8080 \
+  --trusted-lan-demo
 ```
 
-This mode has no device authentication, pairing, revocable tokens, TLS, mDNS,
-cloud relay, tunnel support, or public-Internet safety. Use it only on a
-trusted private hackathon network. The PWA service worker caches shell assets
-but bypasses `/api/`, and attachment selection remains metadata/preview only;
-there is no arbitrary binary persistence, OCR, or offline capture sync.
+Warning: trusted-LAN mode is for a trusted private network only. It has no
+device authentication, pairing, revocable tokens, or TLS, and is not
+Internet-safe. It is not production remote access. The PWA service worker
+caches shell assets but bypasses `/api/`, and attachment selection remains
+metadata/preview only; there is no arbitrary binary persistence, OCR, or
+offline capture sync.
 
 Run the deterministic integration tests:
 
@@ -551,20 +588,27 @@ instances, and fake providers. It verifies immediate capture, pending state,
 Ask-time processing, idempotent Ask, safe missing-provider behavior, retry,
 secret/error redaction, traversal rejection, bind policy, and PWA asset routes.
 `app.tests.test_pwa_static` verifies manifest assets, client route usage, and
-service-worker API exclusion. The reusable neutral smoke harness is:
+service-worker API exclusion.
+
+## 20. Real neutral Host/Codex smoke
+
+This is a real Host/PWA-equivalent smoke, not a benchmark score. Run it only
+when an authenticated Codex call is explicitly needed; normal documentation
+validation should use the safe commands and deterministic tests above and must
+not consume model inference. The harness is `scripts/host_smoke.py` and uses a
+temporary Blackhole Home unless `--home` is supplied:
 
 ```text
 python -m scripts.host_smoke --output trajectories/runtime/019-host-pwa-real-neutral/trace.json
 ```
 
-It starts the real HTTP transport on a temporary Home, captures only the
-neutral synthetic Northstar Cloud storyline, asks one subscription-history
-question, and records safe HTTP payloads/timing. It uses the locally
-authenticated Codex CLI through HostRuntime when available; no token, raw
-stderr, chain-of-thought, benchmark entity, expected output, or evaluator
-artifact is recorded. Provider usage is reported as not exposed by the safe
-HTTP transport unless a future approved interface adds a non-secret usage
-summary. If the CLI is unavailable, the run is a safe provider-unavailable
+It starts the real HTTP transport, captures a neutral synthetic Northstar Cloud
+storyline, asks one subscription-history question, and writes safe HTTP
+payloads and timing to the repository-relative output path. It uses the
+locally authenticated Codex CLI through HostRuntime when available; no token,
+raw stderr, chain-of-thought, benchmark entity, expected output, or evaluator
+artifact is recorded. Provider usage is not exposed by the safe HTTP transport.
+If the CLI is unavailable, the result is a safe provider-unavailable
 diagnostic rather than a scored result.
 
 The authentic runtime record, when the real smoke is executed, belongs under

@@ -48,6 +48,12 @@ items are facts verified in this checkout; unchecked items remain open.
 
 - [x] Keep `docs/REPRODUCTION.md` as the reproduction handoff and review it
   after integration edits land.
+- [x] Correct the current reproduction path to use the integrated Blackhole
+  Host/PWA, with explicit `BLACKHOLE_HOME` semantics, deferred processing, and
+  external Codex authentication; retain the seeded demo only as historical
+  deterministic evidence.
+- [x] Check the current Host/PWA quickstart, CLI options, and trusted-LAN
+  warning against the implemented commands without provider inference.
 - [x] Keep provider requirements explicit: subscription-first local Codex CLI,
   external authentication, and no Blackhole token access.
 - [x] Keep approximate runtime/token caveats documented where they are known;
