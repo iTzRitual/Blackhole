@@ -125,5 +125,7 @@ merge the branch, or push the oracle branch as part of this task.
 
 ## Related git commit
 
-The final public-seal commit SHA is recorded after commit completion in the
-handoff and by `git rev-parse HEAD` on this branch.
+`a2d8bae` — `benchmark: seal blind generalization public inputs`.
+
+This trajectory finalization is a documentation-only follow-up on the same
+public branch; the final branch HEAD is reported in the handoff.
