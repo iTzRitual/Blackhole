@@ -1,0 +1,40 @@
+name: Blackhole CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  deterministic-checks:
+    name: Deterministic checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # No project minimum is declared. The source uses Python 3.10+ union
+      # annotations and built-in generic types; 3.11 is the conservative CI
+      # target for the stdlib-only repository.
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run stdlib unit tests
+        run: python -m unittest discover -s . -p "test_*.py" -v
+
+      - name: Compile application and tooling
+        run: python -m compileall -q app eval scripts
+
+      - name: Check public benchmark generator
+        run: python benchmark/dev/generate_benchmark.py --check
+
+      - name: Run response-contract smoke test
+        run: python eval/contract_smoke.py
+
+      - name: Run submission qualification gate
+        run: python scripts/qualification_check.py
