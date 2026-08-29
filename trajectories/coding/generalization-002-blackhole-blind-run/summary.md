@@ -89,5 +89,7 @@ or an approved supported invocation.
 
 ## Related git commit
 
-None. The failed-attempt evidence and coding trajectory are uncommitted because
-the requested candidate gate could not be produced.
+`629c4c83c8e8bdb61314d6dd733211d14ffbdac0` (`generalization: preserve blind
+Blackhole run blocker`), pushed to `generalization/blind-blackhole-v1`. The
+commit contains only the coding trajectory and the preserved failed g01
+runtime evidence.
