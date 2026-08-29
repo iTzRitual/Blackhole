@@ -6,8 +6,8 @@ presenting the history as a linear success story. `python
 scripts/qualification_check.py --inventory` is the deterministic re-audit
 command; the snapshot below was taken from the same tree.
 
-The Host/PWA integration workstream in the separate integration worktree is
-not listed as a completed trajectory here.
+The Host/PWA integration and submission-hardening workstreams are included
+below. Their source branches and worktrees remain preserved for auditability.
 
 ## Coding trajectories
 
@@ -30,12 +30,17 @@ not listed as a completed trajectory here.
 | 016-experiment-005-duplicate-evidence | Consolidate evidence from true duplicate components | KEEP; current frozen-track reference LQA-0M `0.8695006212`, DSCR `40` | `46b6085` | [summary](trajectories/coding/016-experiment-005-duplicate-evidence/summary.md) |
 | 017-deferred-ingestion | Separate synchronous capture from later semantic processing | Product-runtime milestone; explicitly not Experiment 006 | `0c60da9` | [summary](trajectories/coding/017-deferred-ingestion/summary.md) |
 | 018-blackhole-host-foundation | Add the local Host foundation and safe CLI discovery | Product-runtime foundation; no new benchmark experiment | `11d8a04` | [summary](trajectories/coding/018-blackhole-host-foundation/summary.md) |
+| 019-host-pwa-integration | Connect the approved PWA to the Host through same-origin HTTP | KEEP; integrated product-runtime milestone, not E006 | `284fb61` | [summary](trajectories/coding/019-host-pwa-integration/summary.md) |
 | 019-global-skills-install | Install global coding/design skills for local agents | Global installation completed; no product/runtime change | `67e734e` | [summary](trajectories/coding/019-global-skills-install/summary.md) |
-| submission-001-hardening | Add offline qualification, CI, evidence index, and submission checklist | KEEP; five non-blocking warnings remain for finalization | `18b123f` | [summary](trajectories/coding/submission-001-hardening/summary.md) |
+| 020-consolidation-freeze | Consolidate approved workstreams and freeze the integrated implementation | Documentation, validation, and freeze evidence; not a benchmark experiment | pending | [summary](trajectories/coding/020-consolidation-freeze/summary.md) |
+| ui-001-mobile-pwa | Build the dependency-light mobile-first PWA in an isolated worktree | KEEP; UI workstream preserved and integrated | `0cc6653` | [summary](trajectories/coding/ui-001-mobile-pwa/summary.md) |
+| ui-002-reference-redesign | Correct the Capture surface against the approved mobile reference | KEEP; UI correction preserved and integrated | `0cc6653` | [summary](trajectories/coding/ui-002-reference-redesign/summary.md) |
+| submission-001-hardening | Add offline qualification, CI, evidence index, and submission checklist | KEEP; three non-blocking stale-artifact warnings remain for finalization | `18b123f` | [summary](trajectories/coding/submission-001-hardening/summary.md) |
 
 The short commit IDs above were resolved from local Git history. The hardening
 implementation is in `18b123f`; the small follow-up metadata commit records
-the final handoff state of this trajectory.
+the final handoff state of that trajectory. The integrated product merge is
+`20e4540`, and the hardening merge is `bc4ef78`.
 
 ## Runtime trajectories
 
@@ -55,9 +60,12 @@ the final handoff state of this trajectory.
 | 017-deferred-ingestion-fake | Exercise deferred capture/processing with neutral fake provider | Injected fake provider | Deterministic integration behavior; no benchmark score | [summary](trajectories/runtime/017-deferred-ingestion-fake/summary.md) |
 | 017-deferred-ingestion-e005-regression | Regression replay after deferred-ingestion refactor | None; deterministic replay | Matches E005 reference: LQA-0M `0.8695006212`, DSCR `40` | [runtime files](trajectories/runtime/017-deferred-ingestion-e005-regression/), [result](eval/results/deferred-ingestion-e005-regression.json) |
 | 018-host-foundation-e005-regression | Regression replay after Host foundation | None; deterministic replay | Matches E005 reference: LQA-0M `0.8695006212`, DSCR `40` | [runtime files](trajectories/runtime/018-host-foundation-e005-regression/), [result](eval/results/host-foundation-e005-regression.json) |
+| 019-host-pwa-real-neutral | Real neutral Host/PWA-equivalent smoke | Authenticated local Codex CLI | HTTP transport and deferred processing worked; novel-entity linking limitation recorded | [summary](trajectories/runtime/019-host-pwa-real-neutral/summary.md), [trace](trajectories/runtime/019-host-pwa-real-neutral/trace.json) |
+| 020-consolidation-real-neutral | Post-consolidation neutral Host/PWA-equivalent smoke | Authenticated local Codex CLI | HTTP transport and deferred processing worked; known novel-entity linking limitation reproduced | [summary](trajectories/runtime/020-consolidation-real-neutral/summary.md), [trace](trajectories/runtime/020-consolidation-real-neutral/trace.json) |
 | other recorded fast/replay directories | Intermediate extraction, projector, retry, and diagnostic runs | Mixed; recorded per directory | Preserved as historical evidence, including failed/invalid attempts | [runtime root](trajectories/runtime/) |
 
-The index does not require every runtime directory to have a root `summary.md`:
+The current filesystem inventory contains 23 coding trajectories and 42 runtime
+trajectories. The index does not require every runtime directory to have a root `summary.md`:
 the runtime inventory records whether a summary, prompt-like call file, raw
 trace, and other artifacts are present. No transcript is fabricated for a
 trajectory that has only the artifacts actually observed.
@@ -90,7 +98,11 @@ transcript, or recorded `*.raw.txt` provider output.
 | 016-experiment-005-duplicate-evidence | coding | yes | yes | n/a | no | 2 |
 | 017-deferred-ingestion | coding | yes | yes | n/a | no | 2 |
 | 018-blackhole-host-foundation | coding | yes | yes | n/a | no | 2 |
+| 019-host-pwa-integration | coding | yes | yes | n/a | no | 2 |
 | 019-global-skills-install | coding | yes | yes | n/a | no | 2 |
+| 020-consolidation-freeze | coding | yes | yes | n/a | no | 2 |
+| ui-001-mobile-pwa | coding | yes | yes | n/a | no | 2 |
+| ui-002-reference-redesign | coding | yes | yes | n/a | no | 2 |
 | submission-001-hardening | coding | yes | yes | n/a | no | 2 |
 
 ### Runtime trajectories
@@ -108,6 +120,8 @@ transcript, or recorded `*.raw.txt` provider output.
 | 017-deferred-ingestion-fake | runtime | no | yes | yes | no | 1 |
 | 017-final-advanced-replay | runtime | yes | yes | yes | yes | 22 |
 | 018-host-foundation-e005-regression | runtime | yes | no | yes | yes | 29 |
+| 019-host-pwa-real-neutral | runtime | no | yes | yes | yes | 2 |
+| 020-consolidation-real-neutral | runtime | no | yes | yes | yes | 2 |
 | experiment-001-fast-dev | runtime | yes | yes | yes | yes | 3 |
 | experiment-001-fast-dev-deterministic | runtime | yes | yes | yes | yes | 7 |
 | experiment-001-fast-dev-deterministic-v2 | runtime | yes | yes | yes | yes | 7 |

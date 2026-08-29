@@ -315,14 +315,15 @@ retrieval is capped at four earlier raw captures per considered relation. A
 judge must mount holdout expected output privately and must not copy it into an
 implementation checkout or trajectory.
 
-## 14. Final submission evidence
+## 14. Historical product-phase submission evidence (superseded)
 
-The product-phase deterministic comparison snapshot is recorded in
+The historical product-phase deterministic comparison snapshot is recorded in
 `eval/results/final-comparison-v1.json`; it references the unchanged official
-`baseline-v1` artifact and the preceding kept advanced replay. The current
+`baseline-v1` artifact and the superseded E002 advanced replay. It is retained
+for auditability and is not the current final comparison. The current
 Experiment 005 result is recorded below, with Experiment 004 and Experiment
 003 preserved as preceding kept replays. Each provides checkpoint values,
-category metrics, and runtime caveats for their respective phase. The
+category metrics, and runtime caveats for its respective phase. The
 representative product/runtime behavior is described in
 `trajectories/runtime/013-demo-simple-capture/` through
 `trajectories/runtime/016-demo-correction-reassignment/`. The final validation

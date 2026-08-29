@@ -1,12 +1,14 @@
 # Evaluation plan
 
-**Status:** Gate B contract repair valid; Gate A public benchmark remains frozen; `baseline-v1` is the official baseline; current phase is advanced Blackhole application experimentation
+**Status:** Gate B contract repair valid; Gate A public benchmark remains frozen; `baseline-v1` is the official baseline; the consolidated implementation is frozen
 
 This document records the approved long-horizon benchmark contract for Blackhole.
 The public development case, deterministic generator, evaluator, and fair Codex
-CLI baseline are now present. The current authorized phase is advanced Blackhole
-application experimentation. Production infrastructure, a Claude adapter, and
-evaluator-owned holdout material remain out of scope. The separate
+CLI baseline are now present. The consolidated implementation is frozen;
+post-freeze generalization and submission preparation require the boundaries
+documented in `AGENTS.md` and `docs/IMPLEMENTATION_FREEZE.md`. Production
+infrastructure, a Claude adapter, and evaluator-owned holdout material remain
+out of scope. The separate
 size-calibration artifacts are historical, non-scored inputs and are not final
 ground truth. The benchmark, evaluator, official baseline, and calibration
 evidence remain frozen during the transition.
@@ -772,22 +774,31 @@ The first overly broad generic relation filter was rejected after it counted
 entity-link-only chains as duplicates; the corrected rule restored the E001
 score exactly. No provider calls were made for either final replay.
 
-## 24. Final product-phase evidence
+## 24. Historical E002 product-phase evidence (superseded)
 
-The final product phase did not reopen Gate A or change the evaluator. The
-already-recorded public extraction was replayed once through the kept generic
-projector as a deterministic final check. The result is
+This section preserves the historical E002 product-phase replay for auditability.
+It did not reopen Gate A or change the evaluator, but it is not the current
+authoritative advanced result. The already-recorded public extraction was
+replayed once through the kept generic projector as a deterministic product
+phase check. The result is
 [`eval/results/final-advanced.json`](../eval/results/final-advanced.json), and
 the comparison with the unchanged official baseline is
 [`eval/results/final-comparison-v1.json`](../eval/results/final-comparison-v1.json).
 
-The final replay scored `LQA-0M=0.7492295898545899` with checkpoint scores
+This historical replay scored `LQA-0M=0.7492295898545899` with checkpoint scores
 `0.7962962962962963 / 0.7523071835571836 / 0.7064078282828282 /
 0.7419070512820513`, `TP=279`, `FP=69`, `FN=96`, and `DSCR=72`. It was
 schema-valid, source-integrity-valid, and safety-clean. It made zero provider
 calls. The official `baseline-v1` remains `LQA-0M=0.30149145529538973` and
 `DSCR=277`; the final comparison reports the absolute and relative deltas and
 the secondary category/status metrics.
+
+The current kept frozen-track reference is Experiment 005 at
+`LQA-0M=0.8695006212469447` and `DSCR=40`, recorded in
+[`eval/results/experiment-005-duplicate-evidence-full.json`](../eval/results/experiment-005-duplicate-evidence-full.json).
+No new authoritative final comparison is generated during this implementation
+freeze; that remains a later post-freeze submission task if explicitly
+authorized.
 
 The local web demo is not part of the benchmark score. Its deterministic seed,
 reset command, automated checks, and browser smoke evidence are documented in

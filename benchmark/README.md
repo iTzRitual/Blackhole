@@ -9,11 +9,10 @@ not generated here. The earlier non-scored [size calibration](calibration/README
 is retained as historical evidence. The public development case and visible
 development expected output are present; holdout material remains absent.
 
-Gate A and Gate B artifacts are frozen for the transition to the next
-authorized phase: advanced Blackhole application experimentation. Experiments
-may consume the public benchmark, but must not change its facts, expected
-values, response contract, evaluator behavior, official baseline, or
-calibration evidence.
+Gate A and Gate B artifacts remain frozen. The consolidated implementation is
+also frozen; any post-freeze generalization must be separately authorized and
+must not change the benchmark facts, expected values, response contract,
+evaluator behavior, official baseline, or calibration evidence.
 
 ## Layout
 

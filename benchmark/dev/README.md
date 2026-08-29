@@ -3,9 +3,10 @@
 This directory contains the frozen, public development slice approved for Gate
 A. It is design/evaluation material only. It does not implement Blackhole.
 
-Gate B response-contract repair is valid, and the next authorized phase is
-advanced Blackhole application experimentation. This public development slice
-remains frozen while that work proceeds.
+Gate B response-contract repair is valid, and the consolidated implementation
+is now frozen. This public development slice remains frozen; any post-freeze
+generalization must be separately authorized and must not change its facts,
+expected values, response contract, or evaluator behavior.
 
 The primary track is one deterministic 200-event scenario with ten interleaved
 storylines and checkpoint query bundles at events 50, 100, 150, and 200. The

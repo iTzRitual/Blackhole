@@ -5,10 +5,11 @@
 Gate A remains frozen and Gate B's response-contract repair is valid. The
 frozen public development benchmark is one 200-event scenario with checkpoints
 at 50, 100, 150, and 200; `response-contract-v2` and the official `baseline-v1`
-result remain unchanged. The current authorized phase is advanced Blackhole
-application experimentation. Experiments may implement and evaluate scoped
-Blackhole application behavior, but must preserve the frozen benchmark,
-evaluator, baseline evidence, and calibration evidence.
+result remain unchanged. The integrated Blackhole application is now in an
+implementation-freeze phase. Post-freeze work is limited to reproducible
+submission preparation and explicitly authorized generalization experiments;
+those experiments must preserve the frozen benchmark, evaluator, baseline
+evidence, calibration evidence, and the frozen runtime behavior.
 
 Production infrastructure, a Claude adapter, holdout cases, holdout expected
 outputs, and evaluator-owned holdout ground truth remain prohibited unless the
@@ -33,11 +34,13 @@ record; later work must be explicitly scoped as post-freeze generalization or
 another human-approved direction.
 
 The data and infrastructure directories that remain empty are represented by
-placeholders so Git can preserve the intended layout. The `app/` directory may
-contain scoped advanced-experiment code, but a placeholder is not permission to
-build production infrastructure or a production subsystem. Development
-benchmark content must follow the approved contract; evaluator-owned holdout
-material remains outside the implementation-agent trust boundary.
+placeholders so Git can preserve the intended layout. The `app/` directory
+contains the frozen scoped application implementation; post-freeze changes to
+it require explicit generalization scope and must not silently change the
+frozen runtime. A placeholder is not permission to build production
+infrastructure or a production subsystem. Development benchmark content must
+follow the approved contract; evaluator-owned holdout material remains outside
+the implementation-agent trust boundary.
 
 ## Non-negotiable invariants
 

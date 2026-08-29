@@ -1,9 +1,10 @@
 # Submission checklist
 
-This is an operational checklist for the final hours before submission. It is
-not final sign-off: the Host/PWA integration and post-freeze generalization
-are still outside this hardening worktree. Checked items are facts verified in
-this checkout; unchecked items remain open.
+This is an operational checklist for the final hours before submission. The
+approved Host/PWA integration and submission hardening are now consolidated on
+`master`; implementation freeze is being recorded. Post-freeze
+generalization, presentation, and external submission remain open. Checked
+items are facts verified in this checkout; unchecked items remain open.
 
 ## Repository
 
@@ -13,6 +14,9 @@ this checkout; unchecked items remain open.
   scripts/qualification_check.py`.
 - [x] Protected benchmark, evaluator, expected-output, runtime, and narrative
   files were not modified by this hardening workstream.
+- [x] The hardening branch's `eval/results/contract-smoke.json` has no
+  committed diff from the pre-merge master version; the existing artifact was
+  preserved rather than regenerated or overwritten as part of consolidation.
 - [ ] Record the final integrated implementation SHA.
 - [ ] Confirm the final integrated worktree has no unintended changes.
 - [ ] Create the final Git tag.
@@ -28,8 +32,9 @@ this checkout; unchecked items remain open.
 - [x] Preserve the current kept E005 evidence (`LQA-0M=0.8695006212469447`,
   `DSCR=40`).
 - [x] Do not run benchmark optimization in this hardening workstream.
-- [ ] Verify that all DEV score claims in final submission-facing narrative
-  point to the latest kept evidence.
+- [x] Verify that current DEV score claims in the submission-facing narrative
+  point to the latest kept E005 evidence; older E002 passages are explicitly
+  historical/superseded.
 - [ ] Regenerate the final comparison artifact after implementation and
   post-freeze generalization are frozen.
 - [ ] Ensure the final comparison points to E005 or the explicitly approved
@@ -62,9 +67,10 @@ this checkout; unchecked items remain open.
   do not fabricate full transcripts.
 - [x] Preserve failed/invalid attempts and their lessons, including the v0
   contract failure and superseded E002 final artifacts.
-- [ ] Add/finish the integration trajectory after the active integration task
-  actually completes.
-- [ ] Update the index after final integration/generalization freeze.
+- [x] Add/finish the integration trajectory after the active integration task
+  completed.
+- [x] Update the index after final integration freeze; post-freeze
+  generalization is intentionally not part of this task.
 - [ ] Ensure the removed/rejected experiment or treatment is mentioned in the
   final submission narrative where relevant.
 
@@ -122,11 +128,11 @@ These are intentionally documented rather than overwritten in this workstream:
   `LQA-0M=0.7492295899`, `DSCR=72`.
 - `eval/results/final-comparison-v1.json` compares the baseline with the older
   E002 replay, not current E005 (`LQA-0M=0.8695006212`, `DSCR=40`).
-- `docs/EVALUATION.md` section 24 still presents the E002 score as a “final”
-  product-phase result. It is a protected active narrative file for this goal.
-- `docs/REPRODUCTION.md` section 14 still points final submission evidence at
-  the older `final-comparison-v1.json` snapshot; its later E005 reproduction
-  section is current.
+- No authoritative final comparison is generated during this freeze; it
+  remains a later post-freeze submission task if explicitly authorized.
+- `docs/EVALUATION.md` section 24 and `docs/REPRODUCTION.md` section 14 now
+  label the older E002 material as historical/superseded and retain it for
+  auditability.
 
 ## Path and metric audit notes
 
@@ -136,15 +142,16 @@ These are intentionally documented rather than overwritten in this workstream:
   not reproduction instructions, and are not a submission blocker.
 - The official baseline references are consistent at approximately
   `LQA-0M=0.3014914553` / `DSCR=277`. The current E005 references are
-  consistent at `LQA-0M=0.8695006212` / `DSCR=40`. The inconsistency is the
-  older “final” E002 claim and pointer listed above; historical changelog
-  scores are expected and are not contradictions.
+  consistent at `LQA-0M=0.8695006212` / `DSCR=40`. The three stale named
+  artifacts are historical and are not contradictions in the current
+  narrative; historical changelog scores are expected and are not current
+  claims.
 
 ## Hardening gate result
 
 - [x] Qualification hard checks pass after the hardening trajectory summary is
   present.
-- [x] Qualification warnings are understood: three stale named artifacts and
-  two stale final/current narrative references.
+- [x] Qualification warnings are understood: three stale named artifacts
+  remain; the stale E002 narrative references were relabeled historical.
 - [x] Focused qualification tests pass (5 tests).
 - [ ] Re-run and record the final integrated-tree gate before submission.
