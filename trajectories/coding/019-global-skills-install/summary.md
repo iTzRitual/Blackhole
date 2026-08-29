@@ -63,4 +63,4 @@ KEEP.
 
 ## Related git commit
 
-`6e656ec` (`docs: record global skill installation`)
+`adada90` (`docs: record global skill installation`)
