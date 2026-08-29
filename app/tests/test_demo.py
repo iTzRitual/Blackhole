@@ -56,7 +56,7 @@ class DemoTests(unittest.TestCase):
             self.assertTrue(answer["sections"][0]["assertions"])
             self.assertTrue(all("source_refs" in item for item in answer["sections"][0]["assertions"]))
 
-    def test_local_http_surface_supports_state_query_capture_and_reset(self) -> None:
+    def test_local_http_surface_supports_state_and_capture_without_demo_reset(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             db_path = Path(directory) / "state.sqlite"
             seed_database(db_path)
@@ -75,15 +75,8 @@ class DemoTests(unittest.TestCase):
                 )
                 saved = json.load(urllib.request.urlopen(request))
                 self.assertTrue(saved["saved"])
-                reset = urllib.request.Request(
-                    f"{base_url}/api/reset",
-                    data=b"{}",
-                    headers={"Content-Type": "application/json"},
-                    method="POST",
-                )
-                json.load(urllib.request.urlopen(reset))
                 final_state = json.load(urllib.request.urlopen(f"{base_url}/api/state"))
-                self.assertEqual(final_state["state"]["counts"]["captures"], 14)
+                self.assertEqual(final_state["state"]["counts"]["captures"], 15)
             finally:
                 server.shutdown()
                 server.server_close()

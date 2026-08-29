@@ -118,7 +118,7 @@
     } catch (_error) {
       throw new Error("Blackhole returned an unreadable response.");
     }
-    if (!response.ok) throw new Error(payload.error || "Request failed");
+    if (!response.ok) throw new Error(payload.message || payload.error || "Request failed");
     return payload;
   };
 
@@ -422,12 +422,15 @@
     output.setAttribute("aria-busy", "true");
     output.innerHTML = `<div class="empty-state"><span class="empty-icon"><svg viewBox="0 0 24 24"><use href="#icon-orbit"></use></svg></span><p>Looking through your memory…</p></div>`;
     try {
-      const payload = await api(`/api/query?q=${encodeURIComponent(normalized)}`);
+      const payload = await api("/api/query", {
+        method: "POST",
+        body: JSON.stringify({ question: normalized }),
+      });
       const answer = payload.answer || {};
       const sections = Array.isArray(answer.sections) ? answer.sections : [];
       const sectionsHtml = sections.length
         ? sections.map(renderAnswerSection).join("")
-        : `<div class="empty-state"><p>No supported observations here.</p></div>`;
+        : `<div class="empty-state"><p>${escapeHtml(answer.message || "No supported observations here.")}</p></div>`;
       output.innerHTML = `<p class="answer-heading">${escapeHtml(pretty(answer.mode || "current state"))}</p>${sectionsHtml}`;
     } catch (error) {
       output.innerHTML = `<div class="empty-state"><span class="empty-icon"><svg viewBox="0 0 24 24"><use href="#icon-attention"></use></svg></span><p>${escapeHtml(error.message || "Couldn't answer that right now.")}</p></div>`;
@@ -443,18 +446,6 @@
     state.installPrompt = null;
     $("#install-button").hidden = true;
     $("#install-action").hidden = true;
-    closeTopMenu();
-  };
-
-  const resetDemo = async () => {
-    if (!window.confirm("Reset Blackhole to its initial state?")) return;
-    try {
-      await api("/api/reset", { method: "POST", body: "{}" });
-      showToast("Blackhole reset");
-      await refreshState();
-    } catch (error) {
-      showToast(error.message || "Couldn't reset Blackhole.", "error");
-    }
     closeTopMenu();
   };
 
@@ -481,7 +472,6 @@
   });
   $("#install-button").addEventListener("click", triggerInstall);
   $("#install-action").addEventListener("click", triggerInstall);
-  $("#reset-demo").addEventListener("click", resetDemo);
   $("#ask-form").addEventListener("submit", (event) => { event.preventDefault(); ask($("#ask-input").value); });
   $$(".question-chip").forEach((button) => button.addEventListener("click", () => {
     $("#ask-input").value = button.dataset.question || "";

@@ -14,7 +14,12 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from app.response_projector import ResponseProjector
+from app.query_service import (
+    DEFAULT_QUERY_BUNDLE,
+    answer_question_from_snapshot,
+    build_state_view,
+    projections,
+)
 from app.state_store import StateStore
 
 
@@ -22,20 +27,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SEED_PATH = ROOT / "data" / "synthetic" / "demo-seed.json"
 DEFAULT_DB_PATH = ROOT / "data" / "demo" / "state.sqlite"
 
-DEMO_QUERY_BUNDLE: dict[str, Any] = {
-    "queries": {
-        "q-subscriptions-current": {"question": "Which subscriptions are currently active, and what does each currently cost?"},
-        "q-subscriptions-history": {"question": "What subscription price changes are supported by the history?"},
-        "q-attention-14d": {"question": "Which open deadlines or approval-required items need attention in the next 14 calendar days at this checkpoint?"},
-        "q-service-costs": {"question": "Which bills and deterministic totals are directly observed, and which periods are missing?"},
-        "q-merchant-observations": {"question": "Which purchases and consumption observations are directly observed?"},
-        "q-tasks-state": {"question": "Which tasks are active or completed, and what reassignment or cancellation history is supported?"},
-        "q-unresolved": {"question": "Which facts remain unknown, ambiguous, unreadable, or contradictory?"},
-        "q-duplicates-changes": {"question": "Which captures are duplicates, which are meaningful changes, and what are the explicit counts?"},
-        "q-approval-boundary": {"question": "Which proposed actions require approval, and were any consequential actions executed?"},
-        "q-recent-changes": {"question": "Which corrections, contradictions, replacements, and material changes are recorded?"},
-    }
-}
+DEMO_QUERY_BUNDLE = DEFAULT_QUERY_BUNDLE
 
 
 def load_demo_seed(seed_path: Path = DEFAULT_SEED_PATH) -> dict[str, Any]:
@@ -154,8 +146,7 @@ def _raw_capture_view(store: StateStore) -> list[dict[str, Any]]:
 
 
 def _projections(snapshot: dict[str, Any]) -> dict[str, dict[str, list[dict[str, Any]]]]:
-    projector = ResponseProjector(demo_contract(), DEMO_QUERY_BUNDLE)
-    return projector.project(snapshot, query_ids=list(DEMO_QUERY_BUNDLE["queries"]))
+    return projections(snapshot, contract=demo_contract(), query_bundle=DEMO_QUERY_BUNDLE)
 
 
 def build_view(db_path: Path = DEFAULT_DB_PATH) -> dict[str, Any]:
@@ -165,29 +156,10 @@ def build_view(db_path: Path = DEFAULT_DB_PATH) -> dict[str, Any]:
     ensure_database(db_path)
     with StateStore(db_path) as store:
         snapshot = store.snapshot()
-        projections = _projections(snapshot)
-        return {
-            "provider": provider_status(),
-            "projection_version": snapshot["projection_version"],
-            "counts": {
-                "captures": len(snapshot["event_index"]),
-                "current_facts": len(snapshot["current_facts"]),
-                "relationships": len(snapshot["relationships"]),
-            },
-            "attention": projections["q-attention-14d"]["assertions"],
-            "memory": {
-                "subscriptions": projections["q-subscriptions-current"]["assertions"],
-                "subscription_history": projections["q-subscriptions-history"]["assertions"],
-                "tasks": projections["q-tasks-state"]["assertions"],
-                "services": projections["q-service-costs"]["assertions"],
-                "merchants": projections["q-merchant-observations"]["assertions"],
-                "unknown": projections["q-unresolved"]["assertions"],
-                "recent_changes": projections["q-recent-changes"]["assertions"],
-                "duplicates": projections["q-duplicates-changes"]["assertions"],
-            },
-            "approval": projections["q-approval-boundary"]["assertions"],
-            "recent_captures": _raw_capture_view(store),
-        }
+        view = build_state_view(snapshot, contract=demo_contract(), query_bundle=DEMO_QUERY_BUNDLE)
+        view["provider"] = provider_status()
+        view["recent_captures"] = _raw_capture_view(store)
+        return view
 
 
 def answer_question(question: str, db_path: Path = DEFAULT_DB_PATH) -> dict[str, Any]:
@@ -199,57 +171,11 @@ def answer_question(question: str, db_path: Path = DEFAULT_DB_PATH) -> dict[str,
     db_path = Path(db_path)
     ensure_database(db_path)
     with StateStore(db_path) as store:
-        projections = _projections(store.snapshot())
-
-    section_map = {
-        "attention": ("Needs attention", "q-attention-14d"),
-        "subscriptions": ("Subscriptions", "q-subscriptions-current"),
-        "history": ("Subscription history", "q-subscriptions-history"),
-        "tasks": ("Tasks", "q-tasks-state"),
-        "unknown": ("Incomplete information", "q-unresolved"),
-        "changes": ("Recent changes", "q-recent-changes"),
-        "duplicates": ("Duplicates and changes", "q-duplicates-changes"),
-        "approval": ("Approval boundary", "q-approval-boundary"),
-        "services": ("Recurring service costs", "q-service-costs"),
-        "merchants": ("Purchases and consumption", "q-merchant-observations"),
-    }
-    if "attention" in normalized or "need" in normalized:
-        selected = [section_map["attention"]]
-        mode = "attention"
-    elif "subscription" in normalized and ("change" in normalized or "history" in normalized):
-        selected = [section_map["history"]]
-        mode = "subscription_history"
-    elif "subscription" in normalized:
-        selected = [section_map["subscriptions"]]
-        mode = "subscriptions"
-    elif "incomplete" in normalized or "unknown" in normalized or "missing" in normalized:
-        selected = [section_map["unknown"]]
-        mode = "unknown"
-    elif "recurring" in normalized or "cost" in normalized or "paying" in normalized:
-        selected = [section_map["subscriptions"], section_map["services"], section_map["merchants"]]
-        mode = "recurring_costs"
-    elif "change" in normalized or "correction" in normalized:
-        selected = [section_map["changes"]]
-        mode = "changes"
-    elif "duplicate" in normalized:
-        selected = [section_map["duplicates"]]
-        mode = "duplicates"
-    elif "task" in normalized:
-        selected = [section_map["tasks"]]
-        mode = "tasks"
-    elif "approval" in normalized or "action" in normalized or "execute" in normalized:
-        selected = [section_map["approval"]]
-        mode = "approval"
-    else:
-        selected = [section_map["subscriptions"], section_map["tasks"], section_map["unknown"]]
-        mode = "current_state"
-
-    return {
-        "question": question.strip(),
-        "mode": mode,
-        "sections": [
-            {"title": title, "assertions": projections[query_id]["assertions"]}
-            for title, query_id in selected
-        ],
-        "provider": provider_status(),
-    }
+        answer = answer_question_from_snapshot(
+            question,
+            store.snapshot(),
+            contract=demo_contract(),
+            query_bundle=DEMO_QUERY_BUNDLE,
+        )
+    answer["provider"] = provider_status()
+    return answer
