@@ -217,3 +217,19 @@ This is a lightweight decision record. Each entry captures the current design di
 - **Decision:** Select subjects by the kind declared in the public response contract and route queries by generic query-family vocabulary. Use generic observation predicates and capture structure for relation filtering; exclude entity-link-only endpoints from duplicate/change capture projections. Do not encode benchmark entity identifiers, expected values, or named storylines in application logic.
 - **Consequences:** The repaired projector supports multiple subjects per public kind and preserves the E001 full replay exactly: `LQA-0M=0.7492295899`, `DSCR=72`, with the same checkpoint scores and totals. A first overly broad relation rule was rejected after it counted entity-link chains as duplicates. The official baseline, benchmark contract, expected output, and evaluator remain unchanged.
 - **Revisit when:** A human-authorized relation-reconciliation experiment, new public ontology, or broader application boundary requires different generic projection semantics. Any revision must preserve Gate A, `response-contract-v2`, official `baseline-v1`, calibration evidence, and holdout isolation.
+
+## D-027 — Defer relation-detail extraction work
+
+- **Status:** Accepted for the final product/submission phase
+- **Context:** A read-only audit compared the recorded E001 semantic extraction and SQLite relationship state with the public development relation expectations. The state contains substantial relation evidence, but several missing duplicate/change details are absent or have different target edges; they cannot all be recovered by deterministic projection alone.
+- **Decision:** Relation detail requires richer semantic extraction and is deferred. Do not launch another expensive provider extraction run for score pursuit. Continue with product/demo, reproducibility, and submission work using the validated generic projector.
+- **Consequences:** No Experiment 003 is launched, and no benchmark, expected output, response contract, evaluator, baseline, or calibration artifact changes. Relation-detail recall remains a documented limitation rather than an ungrounded implementation target.
+- **Revisit when:** A separately authorized extraction-quality experiment can define a new hypothesis, preserve the frozen benchmark and baseline, and fit the remaining submission schedule.
+
+## D-028 — Keep the hackathon demo local and deterministic
+
+- **Status:** Accepted for the final product/submission phase
+- **Context:** The validated SQLite state slice needed a user-visible demonstration without introducing production infrastructure, a second persistence boundary, or hidden provider behavior.
+- **Decision:** Build a small stdlib local web demo over the existing SQLite state boundary. Use committed synthetic captures and structured observations for the seeded demonstration, expose capture/state/query/reset routes, and keep newly captured text raw-only with pending semantic status. Provider availability is discovery-only in the UI; semantic extraction remains a separately invoked subscription-first CLI workflow.
+- **Consequences:** Judges can run the product locally with a reset/seed command and inspect attention, memory, uncertainty, history, duplicate, and approval projections. The demo is not a production service, does not classify captures synchronously, and performs no consequential action.
+- **Revisit when:** Production deployment, multi-user isolation, document/OCR ingestion, or live semantic processing is explicitly authorized as a separate scope.

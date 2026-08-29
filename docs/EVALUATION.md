@@ -771,3 +771,27 @@ and
 The first overly broad generic relation filter was rejected after it counted
 entity-link-only chains as duplicates; the corrected rule restored the E001
 score exactly. No provider calls were made for either final replay.
+
+## 24. Final product-phase evidence
+
+The final product phase did not reopen Gate A or change the evaluator. The
+already-recorded public extraction was replayed once through the kept generic
+projector as a deterministic final check. The result is
+[`eval/results/final-advanced.json`](../eval/results/final-advanced.json), and
+the comparison with the unchanged official baseline is
+[`eval/results/final-comparison-v1.json`](../eval/results/final-comparison-v1.json).
+
+The final replay scored `LQA-0M=0.7492295898545899` with checkpoint scores
+`0.7962962962962963 / 0.7523071835571836 / 0.7064078282828282 /
+0.7419070512820513`, `TP=279`, `FP=69`, `FN=96`, and `DSCR=72`. It was
+schema-valid, source-integrity-valid, and safety-clean. It made zero provider
+calls. The official `baseline-v1` remains `LQA-0M=0.30149145529538973` and
+`DSCR=277`; the final comparison reports the absolute and relative deltas and
+the secondary category/status metrics.
+
+The local web demo is not part of the benchmark score. Its deterministic seed,
+reset command, automated checks, and browser smoke evidence are documented in
+[`docs/REPRODUCTION.md`](REPRODUCTION.md),
+[`app/tests/test_demo.py`](../app/tests/test_demo.py), and the representative
+runtime trajectories. A demo capture is persisted as raw pending input; the
+demo does not invoke a provider or perform an external action.

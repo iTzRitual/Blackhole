@@ -201,11 +201,14 @@ public ontology kind and routes query families without embedding benchmark
 entity identifiers. A replay mode allows projection changes to be evaluated
 from identical recorded extraction outputs.
 
-This slice has no UI, production infrastructure, external-action executor,
-Claude adapter, or holdout access. Its final measured result is recorded in
-`IMPROVEMENT_CHANGELOG.md` and the Experiment 001 coding/runtime trajectories;
-the frozen benchmark and official baseline remain benchmark treatments rather
-than product memory.
+The benchmark-facing experiment slice has no production infrastructure,
+external-action executor, Claude adapter, or holdout access. The repository now
+also includes the separate minimal local demo described in section 12; that UI
+is a deterministic presentation of synthetic state, not a production service
+or a replacement for the benchmark treatment. Its measured result is recorded
+in `IMPROVEMENT_CHANGELOG.md` and the Experiment 001/002 coding and runtime
+trajectories; the frozen benchmark and official baseline remain separate from
+product memory.
 
 ## 11. Experiment 002 genericity repair
 
@@ -220,3 +223,40 @@ The repair was replayed against the same recorded E001 semantic extraction and
 the unchanged public evaluator. It preserved the full 200-event result exactly
 (`LQA-0M=0.7492295899`, `DSCR=72`) and is recorded as experiment evidence, not
 as a new benchmark or baseline treatment.
+
+## 12. Minimal local demo
+
+The repository now includes a deliberately small local demonstration of the
+state boundary. It is a product slice, not production infrastructure:
+
+```text
+committed synthetic seed
+        |
+        v
+SQLite raw_events (immutable, hashed)
+        |
+        v
+seeded semantic observations + relationships
+        |
+        v
+rebuild_projection()
+        |
+        v
+structured attention, memory, and ask views
+```
+
+`app/demo.py` seeds 14 synthetic captures covering current and historical
+subscription price, task reassignment and cancellation, an open deadline,
+observed and missing service periods, a purchase, a duplicate, an explicit
+unknown amount, and an unexecuted approval-gated action. `app/web_app.py` is a
+stdlib HTTP server with fixed static routes and JSON endpoints for state,
+queries, raw capture, and demo reset. The UI does not classify the capture or
+invoke a provider in the request path; it reports that the capture was saved and
+leaves its semantic status pending.
+
+The `codex` status pill is discovery-only. The separate advanced runner remains
+the subscription-first semantic runtime: an installed local CLI owns login and
+authentication, while Blackhole never requests, reads, copies, exports, or
+persists provider credentials. No endpoint performs a consequential external
+action. The local demo database is ignored by Git and can be rebuilt with
+`python scripts/seed_demo.py --reset`.

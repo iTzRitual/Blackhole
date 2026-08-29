@@ -1,100 +1,139 @@
 # Blackhole
 
-**A zero-organization life inbox.**
+Blackhole is a zero-organization personal inbox: capture a fragment now and
+let structured state, history, and attention emerge later.
 
-Blackhole is a low-friction place to capture fragmented everyday information:
-short text, receipts, documents, tasks, subscriptions, contracts, and financial
-observations. The repository path remains unchanged; the product framing is now
-Blackhole.
+It is a micro1 Agentic Workflows Hackathon submission focused on one difficult
+product question: can an agent maintain useful personal state as everyday
+information changes over time without making capture another organizational
+task?
 
-## Problem framing
+## Try the local demo
 
-Traditional productivity systems often make capture itself into a second task. A
-person wants to get something out of their head quickly, but a tool may first
-require choosing a database, folder, project, category, due date, priority, tags,
-or properties. That organizational overhead can be especially costly for people
-with high executive-function friction, attention overload, forgetfulness, or low
-tolerance for setup. ADHD is a strong example of this user need; Blackhole makes
-no claims to diagnose, treat, or improve any medical condition and is not medical
-assistance.
+The repository contains a small, deterministic, mobile-first web demo. It is
+deliberately local and dependency-light:
 
-Blackhole's principle is:
+```text
+python scripts/seed_demo.py --reset
+python -m app.web_app --host 127.0.0.1 --port 8080
+```
 
-> **CAPTURE NOW. ORGANIZE LATER.**
+Open `http://127.0.0.1:8080`. The demo has four views:
 
-The user should be able to submit a fragment without classifying it. Later, the
-system can extract facts, link entities, maintain state, identify obligations and
-deadlines, detect changes and duplicates, calculate deterministic financial
-summaries, and surface only items that need attention.
+- **Capture** — one universal text box, with an optional small text-file import;
+  the normal response is `Saved.`
+- **Attention** — an open deadline and an approval-gated proposed action;
+- **Memory** — current subscriptions, historical price, task reassignment and
+  cancellation, observed costs, missing periods, duplicates, and unknown data;
+- **Ask Blackhole** — a handful of deterministic structured lookups over the
+  same state.
 
-## UX principles
+The seed is synthetic and separate from the frozen benchmark. It contains 14
+raw events, 27 semantic observations, and four relationships. A capture added
+through the UI is stored as an immutable raw event with `semantic_status:
+pending`; this demo does not silently call a model or execute an action.
 
-- **SILENT BY DEFAULT:** normal capture should ideally be `input → saved`.
-  Capturing information should not require maintaining a conversation.
-- **INTERRUPT ONLY WHEN USEFUL:** proactive interruption is reserved for
-  deadlines, reminders, material unresolved conflicts, required decisions, and
-  important changes.
-- **OBSERVE, DO NOT JUDGE:** surface factual observations without moralizing about
-  behavior. Advice or interpretation is provided when explicitly requested.
+## Product idea
 
-## Status
+People routinely accumulate short notes, receipts, documents, tasks,
+subscriptions, contracts, and financial observations without wanting to choose
+a folder, project, tag, or schema first. Blackhole accepts those fragments with
+minimal friction and later aims to:
 
-This repository has completed the benchmark-and-baseline phase for the micro1
-Agentic Workflows Hackathon. Gate A's 200-event development package is frozen,
-and Gate B's response-contract repair is valid. The official `baseline-v1`
-result remains the accepted baseline at `LQA-0M=0.3014914553`; the prior
-`baseline-v0` result is preserved as invalid-contract evidence, not an official
-semantic baseline; the independent v2 contract smoke test passes and the
-corrected official baseline is recorded separately. The current authorized phase
-is advanced Blackhole application experimentation. Production infrastructure,
-Claude integration, and holdout ground truth remain out of scope.
+- extract facts and classifications;
+- link observations to existing entities;
+- preserve current state and longitudinal history;
+- distinguish known, inferred, and unknown information;
+- create tasks, obligations, and deadlines;
+- detect duplicates, corrections, and material changes;
+- aggregate deterministic financial observations; and
+- surface only items that require attention.
 
-Experiment 001 has now completed its authorized 200-event milestone with a
-rebuildable SQLite state slice and deterministic public projections. Its
-non-official result is recorded in the experiment trajectory and changelog; it
-does not replace the frozen baseline or benchmark.
+The design is intentionally quiet: `capture → saved` is the default interaction.
+Attention is reserved for deadlines, unresolved information, important changes,
+and decisions that need explicit approval.
 
-The follow-up genericity repair removes benchmark-specific subject routing from
-the projector while preserving that measured result. Its replay evidence is
-recorded separately and does not reopen Gate A or change the official baseline.
+## Non-negotiable boundaries
 
-## Design principles
+- Raw source records are immutable and remain available as evidence.
+- Derived state is versioned and rebuildable from raw inputs and transformation
+  rules.
+- Missing information stays unknown; it never becomes zero, false, empty, or
+  complete by default.
+- Arithmetic, date logic, duplicate checks, comparisons, and financial totals
+  belong to deterministic code or SQL, not an LLM response.
+- Sending, paying, cancelling, signing, changing an account, deleting evidence,
+  or another consequential action requires explicit user approval.
+- Holdout expected outputs remain evaluator-owned and outside the implementation
+  agent's trust boundary.
 
-- Capture requires minimal cognitive effort and no upfront taxonomy.
-- Raw source material is immutable and remains available as evidence.
-- Derived state is versioned and rebuildable from immutable sources.
-- Known, inferred, and unknown information remain distinguishable.
-- Missing data is not silently treated as zero, false, or complete.
-- Deterministic calculations belong in code or SQL, not in an LLM response.
-- No consequential action happens without explicit user approval.
-- Attention is a derived projection, not a replacement for evidence.
-- Benchmark holdout ground truth is evaluator-owned and protected from
-  implementation agents.
+## What is implemented
+
+The current advanced application slice is intentionally scoped:
+
+- `app/state_store.py` — append-only SQLite raw events, payload hashes,
+  structured observations and relationships, and rebuildable projections;
+- `app/response_projector.py` — generic, query-scoped deterministic projections;
+- `app/provider.py` and `app/advanced_runner.py` — the subscription-first
+  local Codex CLI boundary for separately authorized semantic runs;
+- `app/demo.py` and `app/web_app.py` — the local seeded demo and its small HTTP
+  surface;
+- `app/web/` — the mobile-first static interface; and
+- `scripts/seed_demo.py` — reproducible demo reset/seed.
+
+This is not production infrastructure. There is no hosted service, account
+system, OCR pipeline, external-action executor, Claude adapter, or holdout
+package in this repository. The web demo's provider pill reports only whether a
+`codex` executable is discoverable; it never reads or persists authentication
+material.
+
+## Benchmark status
+
+Gate A is frozen at one public 200-event development scenario with checkpoints
+at 50, 100, 150, and 200. Gate B's `response-contract-v2` repair is valid. The
+official fair comparator remains `baseline-v1` at `LQA-0M=0.3014914553` with
+`DSCR=277`. The latest kept advanced replay is Experiment 002 at
+`LQA-0M=0.7492295899` with `DSCR=72`; it preserves the same frozen benchmark
+and has no safety or source-integrity failure.
+
+Those are development measurements, not a claim of production readiness or
+holdout superiority. The public benchmark, calibration evidence, baseline
+artifacts, and evaluator behavior are preserved. Relation-detail extraction was
+audited before this product phase; the missing details were not recoverable
+from recorded state alone and richer extraction is deferred.
+
+See [docs/EVALUATION.md](docs/EVALUATION.md) for the contract and metrics,
+[docs/REPRODUCTION.md](docs/REPRODUCTION.md) for judge-facing commands, and
+[eval/results/final-comparison-v1.json](eval/results/final-comparison-v1.json)
+for the final comparison artifact when the final gate has been run.
 
 ## Repository map
 
 | Path | Purpose |
 | --- | --- |
-| `docs/` | Product, architecture, decision, evaluation, and reproduction documents |
+| `docs/` | Product, architecture, decisions, evaluation, reproduction, and video notes |
 | `prompts/` | Versioned runtime and coding prompt artifacts |
-| `benchmark/` | Calibration, development, and evaluator-controlled benchmark boundaries |
-| `baseline/` | Fair provider-baseline harness; not the Blackhole application |
-| `app/` | Scoped advanced application experiments; no production app yet |
-| `data/` | Reserved locations for synthetic and raw source data |
-| `eval/` | Deterministic development scorer and reproducible result artifacts |
-| `trajectories/` | Coding and runtime agent trace artifacts |
-| `scripts/` | Reserved location for future reproducibility tooling |
+| `benchmark/` | Calibration and public development benchmark boundaries |
+| `baseline/` | Fair stateless provider-baseline harness |
+| `app/` | Scoped Blackhole state slice and local demo |
+| `data/synthetic/` | Committed synthetic demo inputs; no personal data |
+| `data/raw/` | Reserved raw-source location |
+| `eval/` | Deterministic scorer, tests, and result artifacts |
+| `trajectories/` | Coding and representative runtime evidence |
+| `scripts/` | Reproduction helpers |
 
-## Scope of the completed benchmark phase
+## Development checks
 
-The completed benchmark phase froze the public development benchmark and
-deterministic scorer, repaired and measured the fair baseline contract, and
-recorded one corrected baseline run. The current advanced phase contains the
-scoped Experiment 001 state-projection slice, but still has no production
-infrastructure, evaluator-owned holdout access, or Claude adapter. The baseline
-remains a benchmark treatment, not product memory.
+From the repository root:
 
-Read [AGENTS.md](AGENTS.md) before changing the repository. The design context is
-in [docs/PRODUCT_SPEC.md](docs/PRODUCT_SPEC.md),
-[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), and
-[docs/EVALUATION.md](docs/EVALUATION.md).
+```text
+python -m unittest discover -s . -p "test_*.py" -v
+python benchmark/dev/generate_benchmark.py --check
+python eval/contract_smoke.py
+python -m compileall -q app eval scripts
+```
+
+Read [AGENTS.md](AGENTS.md) before making changes. The product contract is in
+[docs/PRODUCT_SPEC.md](docs/PRODUCT_SPEC.md), the trust boundaries are in
+[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), and the short demo narrative is
+in [docs/VIDEO_SCRIPT.md](docs/VIDEO_SCRIPT.md).

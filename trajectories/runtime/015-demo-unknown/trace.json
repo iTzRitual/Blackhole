@@ -1,0 +1,29 @@
+{
+  "trajectory_type": "representative_local_demo",
+  "case": "unknown_information",
+  "provider_calls": 0,
+  "state_before": {
+    "captures": 14,
+    "current_facts": 24,
+    "relationships": 4
+  },
+  "input": "What information is incomplete?",
+  "operations": [
+    {
+      "route": "GET /api/query?q=What%20information%20is%20incomplete%3F",
+      "mode": "unknown",
+      "section": "Incomplete information"
+    }
+  ],
+  "result": {
+    "subject": "repair_note",
+    "predicate": "quoted_amount",
+    "knowledge_status": "unknown",
+    "unknown_reason": "not_stated",
+    "source_refs": ["demo-013"],
+    "value_emitted": false
+  },
+  "state_after": {
+    "external_action": "none"
+  }
+}

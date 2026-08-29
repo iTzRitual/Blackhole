@@ -259,3 +259,51 @@ official score. The final full artifact is
 `trajectories/runtime/experiment-002-generic-full/`. Holdout expected output
 must remain privately mounted by the judge and must never be copied into an
 implementation checkout or trajectory.
+
+## 12. Local demo reproduction
+
+The demo uses only the Python standard library and a committed synthetic seed.
+It is independent of the public benchmark and does not require provider
+authentication:
+
+```text
+python scripts/seed_demo.py --reset
+python -m app.web_app --host 127.0.0.1 --port 8080
+```
+
+Then open `http://127.0.0.1:8080`. The seed command replaces only the selected
+demo SQLite file under `data/demo/`; it does not touch benchmark, baseline, or
+evaluation artifacts. The server auto-seeds a missing demo database, serves the
+four static UI views, and exposes these local routes:
+
+| Route | Purpose |
+| --- | --- |
+| `GET /api/state` | Current deterministic attention, memory, counts, and recent raw captures |
+| `GET /api/query?q=...` | One of the fixed structured demo query families |
+| `POST /api/capture` | Append one raw text capture with pending semantic status |
+| `POST /api/reset` | Rebuild the demo database from `data/synthetic/demo-seed.json` |
+
+The capture endpoint stores text and optional filename metadata as a new raw
+event; it creates no semantic observation and performs no external action. The
+web demo checks only whether the `codex` executable is discoverable and does not
+read authentication files or tokens. For a semantic extraction run, use the
+separate `app.advanced_runner` commands above after authenticating the local
+provider outside Blackhole.
+
+The browser-facing smoke checks used during this phase verified that the page
+loads, the Attention and Memory views render seeded projections, a suggested Ask
+question returns a structured change section, and a capture returns `Saved.`.
+The automated equivalent is `app/tests/test_demo.py`; the browser smoke test is
+not a benchmark score.
+
+## 13. Final submission evidence
+
+The final deterministic comparison is recorded in
+`eval/results/final-comparison-v1.json`. It references the unchanged official
+`baseline-v1` artifact and the latest kept deterministic advanced replay, with
+absolute and relative deltas, checkpoint values, category metrics, and runtime
+caveats. The representative product/runtime behavior is described in
+`trajectories/runtime/013-demo-simple-capture/` through
+`trajectories/runtime/016-demo-correction-reassignment/`. The final validation
+checklist and exact presentation claims are in `docs/VIDEO_SCRIPT.md` and
+`docs/VIDEO_SHOT_LIST.md`.

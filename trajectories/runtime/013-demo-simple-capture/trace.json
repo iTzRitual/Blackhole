@@ -1,0 +1,31 @@
+{
+  "trajectory_type": "representative_local_demo",
+  "case": "simple_capture",
+  "provider_calls": 0,
+  "state_before": {
+    "captures": 14,
+    "current_facts": 24,
+    "relationships": 4
+  },
+  "input": {
+    "text": "Remember to ask about the renewal date.",
+    "source_type": "text"
+  },
+  "operations": [
+    {
+      "route": "POST /api/capture",
+      "operation": "append_raw_event_and_rebuild_projection"
+    }
+  ],
+  "result": {
+    "event_id": "capture-0015",
+    "sequence": 15,
+    "semantic_status": "pending",
+    "observation_created": false,
+    "user_visible": "Saved."
+  },
+  "state_after": {
+    "captures": 15,
+    "new_capture_visible_in_recent_captures": true
+  }
+}

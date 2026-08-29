@@ -1,0 +1,105 @@
+{
+  "artifact_version": "final-comparison-v1",
+  "status": "public-development-evidence",
+  "generated_after": "final deterministic advanced replay",
+  "benchmark": {
+    "gate_a": "frozen",
+    "scenario_id": "blackhole-dev-001-state-churn",
+    "split": "public-development",
+    "event_count": 200,
+    "checkpoints": [50, 100, 150, 200],
+    "response_contract": "response-contract-v2",
+    "scenario_sha256": "7FED14D9A856071AD16732D125D54DD286726EA4640A0D1AA041BF6E5D05EB38",
+    "response_contract_sha256": "31DEDD4ADF1F0E2103CB8783C507D50263730708769FB4B9DD2ABAB98E499621"
+  },
+  "official_baseline": {
+    "run": "baseline-v1",
+    "artifact": "eval/results/baseline-v1.json",
+    "artifact_sha256": "654CC88E6A9402506F2C66602AFDBF764DA3DCD11EE01C6642B9F6F2AD166805",
+    "metric": "LQA-0M",
+    "lqa_0m": 0.30149145529538973,
+    "checkpoint_scores": {
+      "50": 0.28938492063492066,
+      "100": 0.26693214193214193,
+      "150": 0.3127209711288995,
+      "200": 0.33692778748559676
+    },
+    "totals": {"tp": 146, "fp": 239, "fn": 229},
+    "dscr": 277,
+    "category_scores": {
+      "contradiction": 0.75,
+      "current_state": 0.1506849315068493,
+      "duplicate_change": 0.8461538461538461,
+      "entity_resolution": 0.0,
+      "financial": 0.6842105263157895,
+      "obligation_deadline": 0.417910447761194,
+      "relation_reconciliation": 0.0,
+      "safety": 0.4666666666666667,
+      "state_maintenance": 0.0,
+      "temporal_history": 0.2988505747126437
+    },
+    "knowledge_status_scores": {"inferred": 0.0, "known": 0.2688588007736944, "unknown": 0.07291666666666667},
+    "attention_false_positive_rate": 1.0,
+    "schema_valid": true,
+    "source_integrity_valid": true,
+    "safety_passed": true
+  },
+  "latest_kept_advanced": {
+    "experiment": "Experiment 002 generic projector",
+    "run": "final-advanced-replay",
+    "artifact": "eval/results/final-advanced.json",
+    "candidate_artifact": "eval/results/final-advanced-candidate.json",
+    "reference_kept_result": "eval/results/experiment-002-generic-full.json",
+    "metric": "LQA-0M",
+    "lqa_0m": 0.7492295898545899,
+    "checkpoint_scores": {
+      "50": 0.7962962962962963,
+      "100": 0.7523071835571836,
+      "150": 0.7064078282828282,
+      "200": 0.7419070512820513
+    },
+    "totals": {"tp": 279, "fp": 69, "fn": 96},
+    "dscr": 72,
+    "category_scores": {
+      "contradiction": 1.0,
+      "current_state": 0.6842105263157895,
+      "duplicate_change": 0.7142857142857143,
+      "entity_resolution": 1.0,
+      "financial": 1.0,
+      "obligation_deadline": 0.75,
+      "relation_reconciliation": 0.31690140845070425,
+      "safety": 0.6595744680851063,
+      "temporal_history": 0.6984126984126984
+    },
+    "knowledge_status_scores": {"inferred": 0.0, "known": 0.5907928388746803, "unknown": 0.9230769230769231},
+    "attention_false_positive_rate": 0.0,
+    "schema_valid": true,
+    "source_integrity_valid": true,
+    "safety_passed": true,
+    "provider_calls_in_replay": 0,
+    "reported_replay_tokens": {"input": 0, "output": 0, "reasoning": 0}
+  },
+  "delta_advanced_minus_baseline": {
+    "lqa_0m_absolute": 0.44773813455920014,
+    "lqa_0m_relative_to_baseline": 1.4850773602207847,
+    "tp": 133,
+    "fp": -170,
+    "fn": -133,
+    "dscr_reduction": 205,
+    "dscr_relative_reduction": 0.7400722021660649
+  },
+  "runtime_caveats": {
+    "baseline_wall_seconds_approx": 2490.516,
+    "baseline_reported_tokens": {"input": 280425, "output": 205068},
+    "baseline_provider_pricing": "not exposed by the subscription runtime",
+    "advanced_replay_runtime": "local deterministic replay; no provider calls",
+    "advanced_replay_cost": "no additional provider usage",
+    "comparison_scope": "one public synthetic development scenario; not holdout or production evidence"
+  },
+  "limitations": [
+    "The final public benchmark is one synthetic 200-event scenario, so it has limited statistical power.",
+    "Checkpoint scores are not monotonic; the result does not claim monotonic long-context degradation.",
+    "Relation-detail recall remains the clearest measured weakness and richer semantic extraction was deferred.",
+    "The local web demo is a scoped product slice, not production infrastructure."
+  ]
+}

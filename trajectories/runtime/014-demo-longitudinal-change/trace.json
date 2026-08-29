@@ -1,0 +1,47 @@
+{
+  "trajectory_type": "representative_local_demo",
+  "case": "longitudinal_change",
+  "provider_calls": 0,
+  "state_before": {
+    "captures": 14,
+    "current_facts": 24,
+    "relationships": 4
+  },
+  "input": [
+    "What subscriptions am I paying for?",
+    "What subscription price changes are supported by the history?"
+  ],
+  "operations": [
+    {
+      "route": "GET /api/query",
+      "mode": "subscriptions",
+      "section": "Subscriptions"
+    },
+    {
+      "route": "GET /api/query",
+      "mode": "subscription_history",
+      "section": "Subscription history"
+    }
+  ],
+  "result": {
+    "current_price": {
+      "amount": 10.99,
+      "currency": "EUR",
+      "billing_period": "month",
+      "source_refs": ["demo-003"]
+    },
+    "last_charge": {
+      "amount": 8.99,
+      "currency": "EUR",
+      "source_refs": ["demo-002"]
+    },
+    "historical_prices": [
+      {"amount": 8.99, "currency": "EUR", "billing_period": "month", "source_refs": ["demo-001"]},
+      {"amount": 10.99, "currency": "EUR", "billing_period": "month", "source_refs": ["demo-003"]}
+    ]
+  },
+  "state_after": {
+    "history_preserved": true,
+    "external_action": "none"
+  }
+}

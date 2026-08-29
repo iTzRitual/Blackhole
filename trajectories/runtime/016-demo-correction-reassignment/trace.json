@@ -1,0 +1,35 @@
+{
+  "trajectory_type": "representative_local_demo",
+  "case": "correction_reassignment_history",
+  "provider_calls": 0,
+  "state_before": {
+    "captures": 14,
+    "current_facts": 24,
+    "relationships": 4
+  },
+  "input": [
+    "What tasks are active or completed, and what reassignment or cancellation history is supported?",
+    "What changed recently?"
+  ],
+  "operations": [
+    {"route": "GET /api/query", "mode": "tasks", "section": "Tasks"},
+    {"route": "GET /api/query", "mode": "changes", "section": "Recent changes"}
+  ],
+  "result": {
+    "task_current_state": {
+      "subject": "family_pickup",
+      "owner": "Sam",
+      "owner_source_refs": ["demo-005"],
+      "status": "cancelled",
+      "status_source_refs": ["demo-006"]
+    },
+    "relations": [
+      {"relation_type": "task_reassignment", "source_event_id": "demo-005", "target_event_id": "demo-004", "changed_fields": ["owner"]},
+      {"relation_type": "task_cancellation", "source_event_id": "demo-006", "target_event_id": "demo-004", "changed_fields": ["lifecycle"]}
+    ]
+  },
+  "state_after": {
+    "external_action": "none",
+    "source_history_preserved": true
+  }
+}

@@ -80,6 +80,34 @@ This file records material improvements to the product design, agent workflow, e
 - **Decision:** **KEEP** the genericity repair. Preserve E001's prior artifacts and result unchanged; treat the new full artifact as reproducible repair evidence, not as a new official baseline.
 - **Learning:** Public ontology kinds and observation semantics are sufficient to remove benchmark-specific projector coupling while retaining the validated score. Relation-detail recall remains the next evidence-backed weakness, and any follow-up must use a new trajectory.
 
+## 2026-08-29 — Final phase relation-detail audit
+
+- **Stage / experiment identifier:** Phase 1 bounded audit; Experiment 003 not launched.
+- **Problem observed:** Relation-detail recall was the weakest measured area. The recorded E001 extraction/state contained many relationships, but several missing expected duplicate/change edges were absent or represented with different targets.
+- **Hypothesis:** If the missing expected relation details were already present in the recorded structured state, a deterministic projection repair could improve them without new model calls.
+- **What changed:** Performed a read-only comparison of all recorded public extraction relationships, the SQLite relationship state, and the public development relation expectations. No application, benchmark, evaluator, prompt, or provider change was made.
+- **Evaluation method:** Deterministic relationship-row and expected-assertion audit over the recorded E001 public artifacts; no new provider extraction and no score rerun.
+- **Metric before:** Preserved E001 full replay `LQA-0M=0.7492295899`, `DSCR=72`, with relation-detail weakness documented.
+- **Metric after:** No implementation change and therefore no new metric. The audit established that deterministic-only recovery cannot supply all missing target edges.
+- **Regressions:** None; the frozen benchmark, baseline, and prior result remain unchanged.
+- **Runtime/cost impact:** Read-only local inspection; zero provider calls and no additional subscription cost.
+- **Decision:** **REVISE** the plan by deferring relation-detail extraction work. Do not launch Experiment 003; proceed to product/demo and submission work.
+- **Learning:** Relation detail requires richer semantic extraction and is deferred. Existing structured evidence is sufficient for the validated core but not for complete relation recall.
+
+## 2026-08-29 — Final product demo and submission scaffold
+
+- **Stage / experiment identifier:** Final product phase; deterministic local demo and submission evidence.
+- **Problem observed:** The validated state-projection core had no small user-facing surface that demonstrated universal capture, attention, persistent memory, uncertainty, and approval boundaries to a hackathon judge.
+- **Hypothesis:** A local stdlib web demo backed by the existing SQLite state boundary can make the core product behavior inspectable without adding production infrastructure or hidden provider behavior.
+- **What changed:** Added a committed synthetic 14-event demo seed, reset/seed command, append-only raw capture endpoint, deterministic state/query endpoints, and a mobile-first static UI. Added demo tests, reproduction notes, representative runtime evidence, and video/submission documentation.
+- **Evaluation method:** Automated demo unit/HTTP tests plus a rendered browser smoke check covering page load, Attention, Memory, Ask, and `Saved.` feedback. The demo was not scored against the frozen benchmark.
+- **Metric before:** No browser-facing demo; only the app state/projection experiment surface.
+- **Metric after:** Seed rebuilds 14 events, 27 observations, and four relationships; all demo tests passed; browser smoke check rendered the required views and capture feedback. No provider calls were made by the demo capture path.
+- **Regressions:** The demo intentionally leaves newly captured text semantically pending and supports only small text-file import; it is not a production ingestion or OCR system. Existing relation-detail recall remains deferred.
+- **Runtime/cost impact:** Local standard-library server and deterministic SQLite operations; no additional provider calls or subscription cost.
+- **Decision:** **KEEP** the local demo as a scoped product surface; do not infer production readiness from it.
+- **Learning:** A narrow capture-to-state surface makes the raw/derived/attention boundary legible while preserving the benchmark and baseline as separate evidence.
+
 ## Entry template
 
 Use one entry per meaningful improvement:
