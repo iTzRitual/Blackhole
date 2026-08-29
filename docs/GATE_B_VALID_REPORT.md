@@ -1,7 +1,8 @@
-# Gate B valid report
+# Historical Gate B valid report
 
-Status: `VALID`. This report closes the response/evaluator contract repair. It
-does not approve or implement the advanced Blackhole application.
+Status: `VALID` under the prior Gate A scope; historical evidence only. The
+current Gate A review is reopened under [`docs/GATE_A_PROPOSAL.md`](GATE_A_PROPOSAL.md).
+This report does not approve or implement the advanced Blackhole application.
 
 ## Why baseline-v0 was invalid
 

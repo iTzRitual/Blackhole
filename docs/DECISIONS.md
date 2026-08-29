@@ -154,25 +154,25 @@ This is a lightweight decision record. Each entry captures the current design di
 - **Consequences:** The result is non-scored calibration evidence, not final benchmark approval. The fixed configuration and outputs are recorded in the runtime trajectory and calibration report. The local CLI did not expose a documented context limit, so fit is reported empirically as accepted-without-warning rather than as a claimed percentage. A single run per size does not establish repeatability.
 - **Revisit when:** Human review changes the provider/model, repeated calibration changes the degradation conclusion, or a provider exposes a reliable documented context and cost model.
 
-## D-019 — Freeze the 200-event Gate A development track
+## D-019 — Freeze the 200-event Gate A development track (historical)
 
-- **Status:** Accepted for Gate A benchmark execution
+- **Status:** Historical prior Gate A execution; superseded as the current freeze target by D-024
 - **Context:** Calibration showed non-monotonic correctness across 50, 100, 200, and 400 events, while 400-event execution was materially slower. The goal is state churn while history remains usable, not context exhaustion.
 - **Decision:** Freeze one realistic 200-event development scenario with checkpoints at 50, 100, 150, and 200. Use ten interleaved evolving storylines with repeated changes, corrections, contradictions, supersession, cancellations, missing periods, duplicates, and ambiguity. Keep 400 events as an optional secondary stress track; do not run or design an 800-event track in Gate A.
 - **Consequences:** The primary run is practical enough for repeated hackathon evaluation and still exercises longitudinal state maintenance. A single synthetic scenario has limited statistical power, so results must not be generalized beyond the benchmark.
 - **Revisit when:** Human review identifies a contract defect or a later authorized calibration materially changes the runtime/cost evidence.
 
-## D-020 — Freeze checkpoint query isolation
+## D-020 — Freeze checkpoint query isolation (historical)
 
-- **Status:** Accepted for Gate A benchmark execution
+- **Status:** Historical prior execution decision; retained as a proposal input for D-024 review
 - **Context:** Asking a query in the continuing ingestion conversation can leak an answer into later state maintenance and make checkpoint scores incomparable.
 - **Decision:** Maintain one canonical persistent ingestion session. At each checkpoint, fork the canonical session, ask the fixed query bundle only in that fork, capture the result, and never resume the fork. The current Codex harness uses the atomic native `fork <parent> <prompt>` operation. Capture transport uses one chronological batch per checkpoint segment; batching is not a summary or retrieval layer.
 - **Consequences:** Checkpoint answers are isolated read-only probes, while the parent retains only the chronological captures. Provider fork/resume behavior, fork IDs, usage, and discarded-child status are recorded in the runtime trajectory.
 - **Revisit when:** The provider loses native fork support or a human-approved equivalent isolation mechanism is required.
 
-## D-021 — Freeze the development response and scoring contract
+## D-021 — Freeze the development response and scoring contract (historical)
 
-- **Status:** Accepted for Gate A benchmark execution
+- **Status:** Historical prior contract; superseded as the current freeze target by D-024
 - **Context:** A reproducible benchmark needs deterministic comparison of state, provenance, uncertainty, relations, and safety behavior.
 - **Decision:** Use contract `1.0-gate-a-dev` with 12 fixed query IDs, typed assertions containing `state_key`, optional `value`, `knowledge_status`, `source_refs`, and optional `unknown_reason`/`confirmation_ref`. Score exact canonical assertion sets with unweighted per-query LQA-0M, explicit empty-set rules, secondary category/status metrics, DSCR, schema diagnostics, and a hard safety gate. Define `duplicate_event_count` as duplicate captures excluding originals; keep `duplicate_group_count` separate.
 - **Consequences:** Results are deterministic and auditable, but a candidate that invents a different assertion vocabulary is penalized rather than semantically remapped. Development expected output is visible for local scorer work; holdout expected output remains evaluator-owned.
@@ -186,10 +186,18 @@ This is a lightweight decision record. Each entry captures the current design di
 - **Consequences:** The recorded run completed all four checkpoints but produced a deterministic LQA-0M of 0.0000 because its assertion keys/shapes did not match the frozen contract. It incurred approximately 2,513 seconds of query-fork runtime and reported no safety or source-integrity failure. The result is preserved as invalid-contract evidence and is a Gate B analysis item, not a reason to rewrite ground truth.
 - **Revisit when:** A future human-approved baseline protocol changes the public response contract or provider configuration. Any rerun must be versioned and must not overwrite this result silently.
 
-## D-023 — Repair the public baseline response boundary
+## D-023 — Repair the public baseline response boundary (historical)
 
-- **Status:** Validated for Gate B execution; supersedes the candidate-facing response boundary in D-021
+- **Status:** Validated for the prior Gate B execution; not current Gate A approval
 - **Context:** The Gate A v0 run used grouped semantic summaries and evaluator-oriented dotted `state_key` values, while the scorer required a different assertion identity. The resulting `LQA-0M=0.0000` had no true positives and also contained malformed `unknown` assertions with values, so it was not a valid semantic baseline.
 - **Decision:** Preserve v0 as invalid-contract evidence and freeze `response-contract-v2`. Candidate assertions use public `subject`, `predicate`, `knowledge_status`, `source_refs`, and value/unknown fields. The deterministic scorer canonicalizes only public ontology aliases and declared value formats; it rejects candidate `state_key` fields. Source references remain required and validated, but provenance is reported separately from primary semantic matching so extra valid evidence does not mask state quality. Duplicate-event wording explicitly excludes each original event.
 - **Consequences:** A reasonable general-purpose baseline can be scored without access to evaluator-internal IDs or expected values. Development expected output may retain internal keys solely for DSCR clustering. A non-scored smoke fixture tests raw parsing through canonicalization and evaluation. The substantive `baseline-v1` prompt remains unchanged; only the runner/schema instruction is versioned. The corrected 200-event run is recorded separately and is schema-valid.
 - **Revisit when:** A human review finds a public ontology or normalization ambiguity, a future benchmark needs a new assertion type, or the provider configuration changes. Never repair a semantic disagreement by changing expected ground truth without human review.
+
+## D-024 — Reopen Gate A around the long-chat zero-maintenance benchmark
+
+- **Status:** Proposed for human review; supersedes the prior freeze target without deleting its historical evidence
+- **Context:** The current master brief defines the benchmark as a single 60–100-event longitudinal timeline evaluated against one fair long general-purpose AI conversation, with zero human maintenance as the primary condition and a measurable maintenance-burden secondary metric. The prior 200-event package and response-contract repair were created under an earlier Gate A scope and are not approval of this revised target.
+- **Decision:** Retain the prior 200-event case, evaluator, baseline outputs, and calibration as historical draft/execution artifacts. Propose one 100-event primary timeline over roughly 90 synthetic days, ten interleaved high-churn storylines, checkpoints at 20/40/60/80/100, fixed query assertions, public candidate semantics, deterministic scoring, and a `MIR-90` intervention-equivalent protocol with a threshold-not-reached fallback. Do not generate or modify benchmark cases, expected outputs, evaluator code, or baseline code until human Gate A approval.
+- **Consequences:** The revised proposal emphasizes changing state, uncertainty, corrections, duplicates, and contradictions rather than raw event count or context exhaustion. It makes the current repository status honest and preserves prior reproducibility evidence. A 100-event primary may still be short for a very strong long-context model; an optional separate 200-event stress track can test that without replacing the primary.
+- **Revisit when:** The human approves or rejects the five Gate A questions in [`docs/GATE_A_PROPOSAL.md`](GATE_A_PROPOSAL.md), or measured post-approval calibration materially changes the length, provider, or maintenance protocol.

@@ -1,6 +1,8 @@
 # Reproduction protocol
 
-The goal of this document is to make a future implementation or benchmark result repeatable without exposing protected evaluation data.
+The goal of this document is to make a future implementation or benchmark result repeatable without exposing protected evaluation data. The current
+Gate A proposal is still under human review; the existing execution commands
+below describe historical artifacts and must not be treated as a new freeze.
 
 ## 1. Run identity
 
@@ -164,7 +166,7 @@ dollar cost. A result produced with another provider, model, reasoning setting,
 or CLI version is a different runtime configuration and must not be silently
 compared with this record.
 
-## 9. Gate B corrected public development run (valid)
+## 9. Historical Gate B corrected public development run
 
 From the repository root, after authenticating Codex outside this repository:
 
@@ -204,6 +206,8 @@ The earlier v0 artifacts remain preserved under the unmistakable names
 `eval/results/baseline-v0-invalid-contract.md`. Their `LQA-0M=0.0000` is not an
 official semantic baseline and must not be overwritten or reported as one.
 
+The commands and artifacts in this section reproduce the prior Gate B execution
+for auditability; they do not freeze or authorize the revised Gate A proposal.
 The 50-event representative run, when present, is a labeled `DEV FAST / NOT
 OFFICIAL SCORE` diagnostic and cannot replace the official four-checkpoint run.
 Record the corrected run's actual checkpoint scores, totals, schema validity,
