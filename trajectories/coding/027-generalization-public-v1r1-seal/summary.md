@@ -105,8 +105,8 @@ committed locally at
 `6efbacc4195bf90e7711c1663e725f508927ef75` (`benchmark: seal generalization
 public v1r1 inputs`). Expected outputs remain absent from this branch, while
 historical frozen `benchmark/dev/expected/**` material is allowed and remains
-unchanged. The branch is ready for the authorized push; no runtime or scoring
-execution occurred.
+unchanged. The branch was pushed to `origin/generalization/public-v1r1`; no
+runtime or scoring execution occurred.
 
 ## Regressions or unresolved issues
 
@@ -116,11 +116,14 @@ not available and must not be inferred.
 
 ## Final decision
 
-**KEEP / SEAL** the public V1R1 input-only branch. Push only
-`generalization/public-v1r1`; do not push the oracle branch, merge either
-branch, run the baseline or advanced runner, or score the scenarios.
+**KEEP / SEAL** the public V1R1 input-only branch. Only
+`generalization/public-v1r1` was pushed; the oracle branch was not pushed.
+Do not merge either branch, run the baseline or advanced runner, or score the
+scenarios.
 
 ## Related git commit
 
-`6efbacc4195bf90e7711c1663e725f508927ef75` — `benchmark: seal generalization
-public v1r1 inputs`.
+- `6efbacc4195bf90e7711c1663e725f508927ef75` — `benchmark: seal
+  generalization public v1r1 inputs`.
+- `7eb974051b49695ee034cad1588ca95bc7eb46d5` — `docs: record
+  generalization public v1r1 audit`.
