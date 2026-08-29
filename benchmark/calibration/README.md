@@ -1,6 +1,7 @@
 # Benchmark size calibration
 
-**Status:** non-scored calibration data prepared; runtime model calibration pending; Gate A is not frozen.
+**Status:** non-scored calibration data and Codex CLI runtime calibration complete;
+Gate A remains open for human review and is not frozen.
 
 This dataset measures whether longitudinal state quality degrades as changing
 history accumulates while the history remains reasonably available to the
@@ -19,10 +20,13 @@ comparable, not four unrelated samples.
   `history-400.jsonl` contain immutable-looking synthetic raw text events.
 - `oracle/oracle-*.json` contains calibration-only expected state and query
   answers. It is intentionally not an official benchmark scorer or holdout.
+- `query-bundle.md` freezes the calibration-only query wording and response
+  semantics used for every size.
 - `reports/token-estimates.json` contains the generated token and context-fit
   planning estimates.
-- `reports/RUNTIME_CALIBRATION.md` is the pre-freeze run matrix and report
-  template; it is blocked until a usable provider/API configuration is available.
+- `reports/RUNTIME_CALIBRATION.md` records the completed pre-freeze run matrix,
+  provider configuration, deterministic correctness readout, and length
+  recommendation.
 - `generate_calibration.py` deterministically regenerates the artifacts. It
   generates data only; it is not application, baseline, or evaluator code.
 - `manifest.json` records the calibration boundary, sizes, and oracle hashes.
@@ -54,13 +58,18 @@ false. Values for one storyline are tentative in order to exercise
 
 ## Measurement protocol
 
-The model-run portion is intentionally deferred until the selected model,
-context limit, tokenizer, and provider configuration are pinned. The frozen
-baseline instruction is
+The model-run portion used the pinned local Codex CLI configuration below. The
+frozen baseline instruction is
 [`prompts/runtime/baseline-v1.md`](../../prompts/runtime/baseline-v1.md). The
 same prompt, tool policy, temperature, answer format, and fixed query bundle
 must be used at all four sizes. No prompt or model setting may be changed in
 response to an individual calibration failure.
+
+The provider was Codex CLI `0.150.0-alpha.12.2`, authenticated through the
+external CLI login flow, with model `gpt-5.6-luna` and reasoning effort `max`.
+The exact combination was accepted by the CLI. No local Claude Code binary was
+available. The CLI did not expose a documented context limit; all four full
+histories completed without a context-warning or truncation signal.
 
 For each size, run the fixed query bundle after the complete prefix. If budget
 allows, also repeat the query at the nested prefix checkpoints. Record:
@@ -84,15 +93,15 @@ benchmark score and not an improvement experiment.
 ## Current planning estimates
 
 These are generated with `ceil(serialized characters / 4)` plus 160 fixed
-system/protocol tokens and a 342-token query-bundle estimate. They are not a
+system/protocol tokens and a 359-token query-bundle estimate. They are not a
 provider tokenizer result.
 
 | Events | Approx. history tokens | Approx. final query input | Fits within 75% of 16k | 32k | 64k | 128k | 200k |
 | ---: | ---: | ---: | :---: | :---: | :---: | :---: | :---: |
-| 50 | 4,109 | 4,611 | yes | yes | yes | yes | yes |
-| 100 | 8,223 | 8,725 | yes | yes | yes | yes | yes |
-| 200 | 16,482 | 16,984 | no | yes | yes | yes | yes |
-| 400 | 32,995 | 33,497 | no | no | yes | yes | yes |
+| 50 | 5,159 | 5,678 | yes | yes | yes | yes | yes |
+| 100 | 10,323 | 10,842 | yes | yes | yes | yes | yes |
+| 200 | 20,682 | 21,201 | no | yes | yes | yes | yes |
+| 400 | 41,395 | 41,914 | no | no | yes | yes | yes |
 
 The actual selected model's context limit replaces this illustrative matrix.
 The 75% column is a conservative usable-context planning budget, not a claim
@@ -100,15 +109,17 @@ that the remaining 25% is unusable.
 
 ## Runtime and cost envelope
 
-One final query-bundle run at each size is four model calls and approximately
-63,817 input tokens in total. A three-repeat variance check would be twelve
-calls and approximately 191,451 input tokens, before model output tokens and
-provider-specific overhead. The 400-event final call is about 1.97 times the
-input-token volume of the 200-event call; wall time and cost should be expected
-to scale in roughly that direction, subject to batching, caching, and model
-latency. Local generation is negligible compared with model calls.
+One final query-bundle run at each size is four model turns in four fresh
+persistent sessions and approximately 79,635 planning input tokens in total. A
+three-repeat variance check would be twelve turns and approximately 238,905
+planning input tokens, before model output tokens and provider-specific overhead.
+The observed 400-event run took about 576 seconds versus about 277 seconds for
+200; wall time is not linear because provider reasoning dominates. Local
+generation is negligible compared with model calls. The subscription provider
+did not expose a per-call dollar price.
 
-Dollar cost is intentionally left as a formula until the model is selected:
+Dollar cost remains expressible as the following formula, but the subscription
+CLI did not expose provider rates for this run:
 
 ```text
 cost = input_tokens * provider_input_rate
@@ -116,9 +127,9 @@ cost = input_tokens * provider_input_rate
      + any fixed request/tool charges
 ```
 
-The first pass should therefore be four calls. Repeat only if the first pass
-shows a potentially meaningful size effect and the result needs variance
-evidence.
+The executed first pass used one run at each of the four sizes. Repeat only if
+the first pass shows a potentially meaningful size effect and the result needs
+variance evidence.
 
 ## Length-selection rule for Gate A
 
@@ -137,6 +148,14 @@ After the fixed-prompt model sweep:
 4. If there is no meaningful degradation through 400, do not keep inflating
    the history to exhaust context. Review whether the churn pattern is
    sufficiently diagnostic before freezing Gate A.
+
+The observed sweep had a non-monotonic state-only curve: 50 and 100 events had
+two and zero current/previous-state defects respectively, 200 had one, and 400
+had two. The 400-event run also took about 9.6 minutes. This is evidence of
+additional degradation at 400 relative to 100, but not a repeatability claim;
+only one run per size was made. The provisional Gate A recommendation is 200
+events for the realistic primary and 400 events for a secondary stress track.
+The optional 800-event condition was not met and was not run.
 
 The 400-event history is the current optional stress candidate. A later
 250–500-event stress track may be added only if cost and runtime allow; it

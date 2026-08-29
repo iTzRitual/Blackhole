@@ -6,7 +6,7 @@ This repository is in the benchmark-design phase. Benchmark contract design, dev
 
 The human-authorized size-calibration step is a narrow exception: non-scored synthetic histories and their visible calibration-only oracle may live under `benchmark/calibration/`. That oracle is not final benchmark ground truth, must remain separate from `benchmark/dev/` and `benchmark/holdout/`, and must not be used to tune a baseline prompt.
 
-For the pre-freeze runtime calibration, a versioned baseline prompt and non-scored model calls are allowed once the human supplies a usable provider/API configuration. Do not commit credential values, silently change the prompt after observing failures, or turn calibration outputs into scored benchmark results.
+For the pre-freeze runtime calibration, a versioned baseline prompt and non-scored model calls are allowed once the human supplies a usable provider configuration. The primary MVP runtime is subscription-first: use an already-installed, already-authenticated local agent CLI when available, let that CLI own authentication, and never request, read, copy, export, or persist provider tokens. Direct API-key integrations are not required for this phase. Do not commit credential values, silently change the prompt after observing failures, or turn calibration outputs into scored benchmark results.
 
 The remaining empty directories are represented by placeholders so Git can preserve the intended layout. A placeholder is not permission to begin implementing the corresponding subsystem. Development benchmark content must follow the approved contract; evaluator-owned holdout material remains outside the implementation-agent trust boundary.
 

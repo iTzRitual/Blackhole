@@ -40,13 +40,12 @@ summaries, and surface only items that need attention.
 ## Status
 
 This repository is in the benchmark-design phase for the micro1 Agentic Workflows
-Hackathon. A separate non-scored size-calibration dataset is prepared, but the
-runtime calibration and final Gate A length remain open pending a fixed-prompt
-model run. Benchmark
-contract design, development benchmark cases, synthetic inputs, and evaluator
-design are in scope. Application implementation, baseline implementation,
-infrastructure, executable evaluation code, and holdout ground truth remain out
-of scope.
+Hackathon. The separate non-scored size-calibration sweep has now been run through
+the locally authenticated Codex CLI; Gate A remains open for human review of the
+runtime report and provisional length recommendation. Benchmark contract design,
+development benchmark cases, synthetic inputs, and evaluator design are in scope.
+Application implementation, baseline implementation, infrastructure, executable
+evaluation code, and holdout ground truth remain out of scope.
 
 ## Design principles
 

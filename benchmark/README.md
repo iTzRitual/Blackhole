@@ -1,6 +1,6 @@
 # Benchmark boundary
 
-This directory defines the intended boundary between development cases and evaluator-controlled holdout material. The Gate A benchmark contract proposal is documented in [docs/EVALUATION.md](../docs/EVALUATION.md#19-gate-a-pre-freeze-status) and is pending human review. The final event count is not frozen: the separate non-scored [size calibration](calibration/README.md) compares 50, 100, 200, and 400-event histories with high state churn. The intended primary remains approximately 150–200 events if calibration supports it; 400 is a secondary stress candidate. Runtime correctness calibration is still pending provider/API configuration. This directory contains no final benchmark cases or final expected outputs.
+This directory defines the intended boundary between development cases and evaluator-controlled holdout material. The Gate A benchmark contract proposal is documented in [docs/EVALUATION.md](../docs/EVALUATION.md#19-gate-a-pre-freeze-status) and remains pending human review. The final event count is not frozen: the separate non-scored [size calibration](calibration/README.md) compares 50, 100, 200, and 400-event histories with high state churn. The provisional recommendation is approximately 200 events for the realistic primary and 400 events for a secondary stress track. Runtime correctness calibration has completed through the local Codex CLI; its results are non-scored. This directory contains no final benchmark cases or final expected outputs.
 
 ## Layout
 

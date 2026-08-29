@@ -28,7 +28,48 @@ user review, correction, and explicit approval
 
 The arrows describe derivation, not destructive movement. A later stage must be able to point back to the source and the transformation that produced it.
 
-## 2. Logical layers
+## 2. Provider and runtime boundary
+
+The MVP runtime is subscription-first. Blackhole controls an already-installed,
+already-authenticated local agent CLI through a provider adapter; the CLI owns
+authentication. Blackhole never requests, reads, copies, exports, or persists
+provider auth tokens. A missing or unauthenticated provider is a setup/status
+condition, not a login flow that Blackhole proxies.
+
+The smallest useful provider-agnostic interface is conceptual rather than an
+implementation commitment:
+
+| Capability | Provider boundary responsibility |
+| --- | --- |
+| Detection/discovery | Report whether a provider is supported and locate its executable |
+| Auth/status | Return safe status metadata without exposing credentials |
+| Capabilities | Report supported modes, models, reasoning controls, structured output, sessions, and usage fields |
+| One-shot execution | Run one non-interactive request with timeout and cancellation handles |
+| Persistent execution | Start a provider-owned session and send an ordered request |
+| Resume | Continue a known session by provider session/thread identifier |
+| Configuration | Select only provider-advertised model and reasoning values; reject unsupported combinations explicitly |
+| Results | Return structured output, usage metadata when exposed, and a raw trajectory reference |
+
+Codex CLI is the MVP provider and Claude Code is a minimal adapter target. The
+interface must not grow a provider-neutral abstraction for capabilities that no
+provider exposes. Runtime detection is authoritative, and a configuration
+failure must not silently fall back to another model or provider.
+
+### Runtime roles
+
+The fair long-chat baseline may use one real persistent provider session, with
+chronological captures and fixed queries resumed in that same session when the
+provider supports reliable resume. It receives no Blackhole database, hidden
+summary, retrieval layer, or specialized state-maintenance tool.
+
+The future advanced system must not use one long provider session as its primary
+memory. Blackhole owns durable memory and derived state. It should retrieve a
+narrow relevant slice, make a fresh or deliberately scoped semantic provider
+call, validate and reconcile the candidate deterministically, and persist the
+result in rebuildable state. This keeps provider reasoning separate from
+longitudinal truth maintenance.
+
+## 3. Logical layers
 
 ### Source layer
 
@@ -50,7 +91,7 @@ Computes arithmetic, date relationships, duplicate comparisons, totals, changes,
 
 Projects the derived state into items requiring review, clarification, confirmation, or action. Attention is not a second source of truth. Hiding or resolving an attention item must not erase its evidence.
 
-## 3. State semantics
+## 4. State semantics
 
 Every important field or conclusion should be able to distinguish at least:
 
@@ -62,7 +103,7 @@ Every important field or conclusion should be able to distinguish at least:
 
 Conflicting known observations should remain conflict-bearing until resolved; the newest observation is not automatically the correct one.
 
-## 4. Rebuild model
+## 5. Rebuild model
 
 A rebuild should be able to:
 
@@ -74,7 +115,7 @@ A rebuild should be able to:
 
 Manual user decisions may influence a later rebuild, but those decisions need their own immutable audit record and must not rewrite the original source.
 
-## 5. Safety boundaries
+## 6. Safety boundaries
 
 - Source records are read-only after capture.
 - Derived records are replaceable only through a traceable, versioned rebuild or an explicit user decision.
@@ -83,7 +124,7 @@ Manual user decisions may influence a later rebuild, but those decisions need th
 - Sensitive source content should be exposed only to components that need it.
 - Evaluation ground truth is outside the implementation-agent trust boundary.
 
-## 6. Failure modes to design for
+## 7. Failure modes to design for
 
 - OCR or parsing produces a plausible but wrong value.
 - Two sources refer to the same entity but use different names.
@@ -94,7 +135,7 @@ Manual user decisions may influence a later rebuild, but those decisions need th
 - An agent emits a confident answer where the correct state is unknown.
 - A proposed action is mistaken for an approved action.
 
-## 7. Deliberately open implementation choices
+## 8. Deliberately open implementation choices
 
 - event log versus relational source tables;
 - object storage and document extraction approach;

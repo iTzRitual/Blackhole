@@ -147,7 +147,27 @@ imply zero, false, “none,” or completion.
 - The benchmark's primary hypothesis is longitudinal state maintenance; OCR and
   vision quality should not be the main source of benchmark error.
 
-## 10. Non-goals for the initial product
+## 10. Runtime and provider boundary
+
+The MVP is subscription-first. Blackhole should control an already-installed,
+already-authenticated local agent CLI through a small provider adapter rather
+than requiring a direct OpenAI or Anthropic API credential. The provider CLI owns
+authentication; Blackhole must never request, read, copy, export, or persist
+provider auth tokens.
+
+At setup, Blackhole may detect supported local providers and show their safe
+status. If a provider is missing or unauthenticated, it may show the external
+login command (for example, `codex login` or `claude auth login`), but Blackhole
+does not proxy that login flow. Codex CLI is the MVP evaluation provider; Claude
+Code support may be a minimal adapter behind the same boundary.
+
+The provider boundary may expose one-shot calls, persistent sessions, resume,
+structured output, supported model/reasoning selection, cancellation and
+timeouts, usage metadata, and raw trajectory capture. Runtime capability
+detection is authoritative: unsupported model or reasoning combinations must be
+reported rather than silently replaced.
+
+## 11. Non-goals for the initial product
 
 - A fully autonomous personal assistant that acts without approval.
 - A replacement for accounting, legal, tax, medical, or financial professionals.
@@ -157,7 +177,7 @@ imply zero, false, “none,” or completion.
 - Using an LLM as the authoritative calculator or ledger.
 - Diagnosing, treating, or improving ADHD or another medical condition.
 
-## 11. Open product questions
+## 12. Open product questions
 
 - What is the smallest useful attention unit: a fact, conflict, obligation,
   deadline, or proposed action?

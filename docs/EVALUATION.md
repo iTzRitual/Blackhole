@@ -526,8 +526,9 @@ is part of this Gate A task.
   carefully.
 - A strong full-history baseline may leave little headroom; that is a valid result
   and should be reported rather than hidden.
-- Calibration correctness cannot be interpreted until the selected model, context,
-  tokenizer, and fixed prompt are pinned; token estimates alone do not demonstrate
+- Calibration correctness is now recorded as non-scored evidence for the pinned
+  local Codex configuration; the CLI did not expose a context limit or tokenizer,
+  so fit is empirical and one run per size does not demonstrate repeatable
   longitudinal degradation.
 
 ## 17. Benchmark size calibration
@@ -544,28 +545,37 @@ from final benchmark scoring and must use the frozen baseline prompt at
 [`prompts/runtime/baseline-v1.md`](../prompts/runtime/baseline-v1.md). The exact
 provider, model, context limit, tokenizer, temperature, and other relevant runtime
 configuration are recorded in the runtime calibration report before Gate A freeze.
+The calibration query wording and response schema are frozen in
+[`benchmark/calibration/query-bundle.md`](../benchmark/calibration/query-bundle.md);
+the missing-field question intentionally scores only explicit unknown handling,
+not an unobservable field name.
 
 The current planning estimates are:
 
 | Events | Approx. history tokens | Approx. final input tokens | 75%-usable 32k context | 75%-usable 64k context | 75%-usable 128k context |
 | ---: | ---: | ---: | :---: | :---: | :---: |
-| 50 | 4,109 | 4,611 | fits | fits | fits |
-| 100 | 8,223 | 8,725 | fits | fits | fits |
-| 200 | 16,482 | 16,984 | fits | fits | fits |
-| 400 | 32,995 | 33,497 | does not fit | fits | fits |
+| 50 | 5,159 | 5,678 | fits | fits | fits |
+| 100 | 10,323 | 10,842 | fits | fits | fits |
+| 200 | 20,682 | 21,201 | fits | fits | fits |
+| 400 | 41,395 | 41,914 | does not fit | fits | fits |
 
-These figures use a conservative character-based estimate and must be replaced by
-the selected model's tokenizer before the model run. One final query bundle at each
-size is four calls and approximately 63,817 input tokens; three repeats would be
-approximately 191,451 input tokens before output tokens. The 400-event call is
-approximately 1.97 times the input volume of the 200-event call.
+These figures use a conservative character-based estimate and are retained beside
+the provider-reported usage because the selected CLI does not expose its tokenizer.
+One final query bundle at each size is four calls and approximately 79,635 input
+tokens; three repeats would be approximately 238,905 input tokens before output
+tokens. The 400-event call is approximately 1.97 times the input volume of the
+200-event call.
 
 ### 17.1 Required runtime calibration
 
-Run the same frozen baseline prompt and fixed calibration query bundle at 50, 100,
-200, and 400 events. Use the same exact semantic runtime model for the baseline and
-advanced calls where practical. The complete conversation history must remain
-available whenever it fits; do not silently summarize or truncate it.
+The required sweep has been run with the same frozen baseline prompt and fixed
+calibration query bundle at 50, 100, 200, and 400 events. It used the same exact
+Codex CLI model and reasoning setting at every size. The complete ordered history
+was supplied to each fresh persistent session without a Blackhole summary or
+retrieval layer. The measured results are recorded in
+[`benchmark/calibration/reports/RUNTIME_CALIBRATION.md`](../benchmark/calibration/reports/RUNTIME_CALIBRATION.md)
+and the representative provider outputs are in
+[`trajectories/runtime/001-codex-calibration/`](../trajectories/runtime/001-codex-calibration/).
 
 For each size, record:
 
@@ -581,9 +591,10 @@ For each size, record:
 - wall-clock runtime, retries, concurrency, and approximate API cost; and
 - whether any degradation occurred while the complete history still fit.
 
-No prompt or model tuning is permitted after inspecting a calibration failure. The
-calibration oracle is visible because it is non-scored; it must not be used to tune
-the baseline or advanced system.
+No prompt or model tuning was performed after inspecting a calibration failure. The
+calibration oracle is visible because it is non-scored; it was used only by the
+deterministic calibration comparison and must not be used to tune the baseline or
+advanced system.
 
 ### 17.2 Optional 800-event calibration
 
@@ -593,7 +604,9 @@ model context, remains practical in cost/runtime, and shows little or no meaning
 state-quality degradation. The 800-event stream should continue the same synthetic
 world and remain calibration-only. If it approaches or exceeds a practical context
 boundary, report that fact rather than silently truncating. Never add events merely
-to force context overflow.
+to force context overflow. This condition was not met in the observed sweep: the
+400-event run took about 576 seconds and showed additional current/previous-state
+errors, so no 800-event run was started.
 
 The final benchmark length is selected from state-maintenance evidence, not from the
 largest tested size. Prefer the smallest approximately 150–200-event primary that
@@ -603,9 +616,10 @@ realistic primary in the 150–200 range and label the larger history as stress.
 meaningful degradation appears through 400 (or the authorized 800 run), review state
 churn with the human owner before increasing event count.
 
-The full proposal, generated artifacts, and unresolved model-run requirement are in
-[`benchmark/calibration/README.md`](../benchmark/calibration/README.md) and
-[`benchmark/calibration/reports/SIZE_CALIBRATION.md`](../benchmark/calibration/reports/SIZE_CALIBRATION.md).
+The full proposal, generated artifacts, and runtime result are in
+[`benchmark/calibration/README.md`](../benchmark/calibration/README.md),
+[`benchmark/calibration/reports/SIZE_CALIBRATION.md`](../benchmark/calibration/reports/SIZE_CALIBRATION.md),
+and [`benchmark/calibration/reports/RUNTIME_CALIBRATION.md`](../benchmark/calibration/reports/RUNTIME_CALIBRATION.md).
 
 ## 18. Final benchmark generation strategy
 
@@ -635,11 +649,12 @@ ground truth.
 
 ## 19. Gate A pre-freeze status
 
-Gate A remains open. The product framing, revised metric definitions, baseline
-protocol, and final-generation proposal are prepared, but the actual runtime model
-calibration is blocked until a usable provider/API configuration is supplied. No
-final benchmark length, development case, expected output, baseline run, or
-application implementation is approved by this document.
+Gate A remains open for human review. The product framing, revised metric
+definitions, baseline protocol, provider boundary, and runtime calibration are
+recorded. The provisional recommendation is a 200-event realistic primary and a
+400-event secondary stress track; no final benchmark length, development case,
+expected output, baseline implementation, or application implementation is
+approved by this document.
 
 The final return after runtime calibration will contain the selected provider/model,
 actual token/context measurements, per-size correctness and failure counts,

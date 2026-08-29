@@ -129,3 +129,27 @@ This is a lightweight decision record. Each entry captures the current design di
 - **Decision:** Author final cases from explicit storyline/state-machine rules: canonical hidden world state → chronological user-facing events → deterministic checkpoint ground truth. Human review focuses on storyline semantics, transition rules, query definitions, subjective inference rules, critical transitions, and explicit unknown/contradiction cases. The implementation agent must not access protected holdout ground truth.
 - **Consequences:** Final case generation is reproducible and easier to audit. Subjective expectations still require human adjudication, and generated development data must remain separate from evaluator-owned holdout material.
 - **Revisit when:** A hand-authored case demonstrates a material behavior that cannot be represented transparently by the synthetic-world rules.
+
+## D-016 — Subscription-first local CLI providers
+
+- **Status:** Proposed for Gate A review
+- **Context:** The hackathon MVP should let a user reuse an existing AI subscription without requiring Blackhole to receive a direct OpenAI or Anthropic API credential.
+- **Decision:** Make an already-installed, already-authenticated local agent CLI the primary runtime path. The CLI owns authentication; Blackhole never requests, reads, copies, exports, or persists provider auth tokens. Use a small provider-neutral boundary with Codex CLI as the MVP provider and a minimal Claude Code adapter target.
+- **Consequences:** Setup depends on provider detection and safe status reporting. Provider capability detection is authoritative, and unsupported model/reasoning combinations must fail visibly rather than silently falling back. Direct API integrations remain a future option, not an MVP dependency.
+- **Revisit when:** A human-approved product scope requires a direct API provider or a supported CLI cannot provide the needed capability.
+
+## D-017 — Persistent CLI session for the fair baseline
+
+- **Status:** Proposed for Gate A review
+- **Context:** The baseline should represent a person maintaining one long AI conversation, while the advanced system must demonstrate Blackhole-owned memory rather than provider-native memory.
+- **Decision:** Use a real persistent Codex CLI session with resume when reliable. Supply the complete chronological history and fixed queries, with no Blackhole database, hidden summary, retrieval layer, or specialized reconciliation tool. Run it from an isolated temporary workspace with no expected outputs or calibration oracle.
+- **Consequences:** Provider session behavior, token usage, latency, compaction, and resume semantics become part of the baseline record. The advanced design must use fresh or deliberately scoped provider calls around Blackhole-owned durable state instead of treating one long session as its primary memory.
+- **Revisit when:** The provider cannot reliably resume, the exact runtime configuration changes, or the human owner approves a different fairness protocol.
+
+## D-018 — Codex CLI runtime calibration and provisional length recommendation
+
+- **Status:** Proposed for Gate A review
+- **Context:** Gate A requires evidence about state churn while the history remains available, not a benchmark inflated to force context exhaustion.
+- **Decision:** Run the frozen `baseline-v1` prompt and fixed calibration query bundle through Codex CLI `0.150.0-alpha.12.2` using `gpt-5.6-luna` with `max` reasoning at 50, 100, 200, and 400 events. All four sessions completed with no context-warning signal. The provisional recommendation is a 200-event realistic primary and a 400-event secondary stress track; do not run the optional 800-event extension because 400 was not practically comfortable and showed additional state errors.
+- **Consequences:** The result is non-scored calibration evidence, not final benchmark approval. The fixed configuration and outputs are recorded in the runtime trajectory and calibration report. The local CLI did not expose a documented context limit, so fit is reported empirically as accepted-without-warning rather than as a claimed percentage. A single run per size does not establish repeatability.
+- **Revisit when:** Human review changes the provider/model, repeated calibration changes the degradation conclusion, or a provider exposes a reliable documented context and cost model.

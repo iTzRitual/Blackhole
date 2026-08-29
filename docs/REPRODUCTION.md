@@ -89,10 +89,72 @@ python benchmark/calibration/generate_calibration.py
 ```
 
 The command regenerates the four deterministic prefixes and the separate,
-calibration-only oracle. Record the resulting manifest and file hashes, the
-selected model/provider/version, tokenizer, documented context limit, fixed
-prompt revision (`baseline-v1`), exact token counts, context utilization,
-query-correctness readout, degradation observations, runtime, retries, and cost
-in [`benchmark/calibration/reports/RUNTIME_CALIBRATION.md`](../benchmark/calibration/reports/RUNTIME_CALIBRATION.md).
+calibration-only oracle. Record the resulting manifest and file hashes, the selected model/provider/version,
+tokenizer, documented context limit, fixed prompt revision (`baseline-v1`), exact
+token counts, context utilization, query-correctness readout, degradation
+observations, runtime, retries, and cost in
+[`benchmark/calibration/reports/RUNTIME_CALIBRATION.md`](../benchmark/calibration/reports/RUNTIME_CALIBRATION.md).
 The visible calibration oracle is not final benchmark ground truth and must not
 be copied into development or holdout packages.
+
+## 8. Subscription-first CLI runtime
+
+The MVP does not require a direct OpenAI or Anthropic API key. The runtime
+controls a locally installed and authenticated agent CLI, while the CLI owns
+authentication. Blackhole must not request, read, copy, export, or persist
+provider tokens. A reproducer authenticates outside Blackhole and records only
+safe status and version metadata.
+
+The verified local runtime for the Gate A calibration was:
+
+| Field | Recorded value |
+| --- | --- |
+| Provider | Codex CLI |
+| CLI version | `codex-cli 0.150.0-alpha.12.2` |
+| Authentication check | `codex login status`; authenticated status reported, with no credential value recorded |
+| Model | `gpt-5.6-luna` |
+| Reasoning effort | `max` |
+| Claude Code | No local `claude` binary detected; adapter remains documented but unverified |
+| Context limit | Not exposed by the local CLI help/doctor output; all 50/100/200/400 histories completed without a context-warning or truncation signal |
+
+The harmless inspection commands used to establish that record were:
+
+```text
+codex --version
+codex exec --help
+codex exec resume --help
+codex login status
+codex features list
+codex doctor --summary --json
+```
+
+Only safe status, version, feature, and top-level diagnostic metadata were
+recorded; command output was not used to retrieve credentials.
+
+The harmless capability probe that accepted the exact model/reasoning pair was:
+
+```text
+codex exec --ephemeral --skip-git-repo-check --json --model gpt-5.6-luna -c model_reasoning_effort=max -s read-only "Reply exactly with CAPABILITY_PROBE_OK and do not use tools."
+```
+
+The persistent baseline shape was:
+
+```text
+codex exec --json --model gpt-5.6-luna -c model_reasoning_effort=max -s read-only --ignore-rules --skip-git-repo-check -C <isolated-empty-workspace> -o <initial-output> -
+codex exec resume <thread-id> --json -o <query-output>
+```
+
+The calibration supplied the ordered JSONL captures as one initial input block
+and resumed the same provider session for the fixed query bundle. This batching
+kept the run practical while preserving the full chronological history and the
+provider session boundary; it was not a Blackhole summary or retrieval layer.
+Each size used a fresh temporary workspace and a fresh provider session. The
+baseline invoked no tools, and the workspace contained no repository files,
+calibration oracle, expected outputs, database, or evaluator internals.
+
+Codex `--json` exposed thread identifiers and per-turn input, cached-input,
+output, and reasoning-output usage fields. Provider subscription pricing was not
+exposed, so the report records token usage and wall time rather than inventing a
+dollar cost. A result produced with another provider, model, reasoning setting,
+or CLI version is a different runtime configuration and must not be silently
+compared with this record.

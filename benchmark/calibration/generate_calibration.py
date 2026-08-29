@@ -44,32 +44,26 @@ SCHEDULE = (
 
 QUERIES = [
     {
-        "query_id": f"current-{story['id']}",
-        "prompt": f"What is the current {story['field']} for {story['entity']}? Return the value and whether it is known, inferred, or unknown.",
+        "query_id": "current-state",
+        "prompt": "What is the current value and knowledge status for each storyline?",
         "kind": "current",
-        "storyline_id": story["id"],
-    }
-    for story in STORYLINES
+    },
+    {
+        "query_id": "prior-values",
+        "prompt": "For each storyline, report the immediately preceding observed value before the current value, or unknown when none exists.",
+        "kind": "previous",
+    },
+    {
+        "query_id": "missing-secondary-fields",
+        "prompt": "For each calibration storyline, report that the intentionally unobserved secondary field is unknown with reason missing. Do not invent a field name or treat absence as zero or false.",
+        "kind": "missing",
+    },
+    {
+        "query_id": "event-relations",
+        "prompt": "How many correction, contradiction, ambiguous-link, and duplicate events are present?",
+        "kind": "relations",
+    },
 ]
-QUERIES.extend(
-    [
-        {
-            "query_id": "missing-secondary-fields",
-            "prompt": "Which secondary field is not observed for each calibration storyline? Do not treat its absence as zero or false.",
-            "kind": "missing",
-        },
-        {
-            "query_id": "prior-values",
-            "prompt": "For each storyline, report the immediately preceding observed value before the current value, or unknown when none exists.",
-            "kind": "previous",
-        },
-        {
-            "query_id": "event-relations",
-            "prompt": "Report the counts and references for duplicate, correction, contradiction, and ambiguous-link events.",
-            "kind": "relations",
-        },
-    ]
-)
 
 
 def compact_json(value: Any) -> str:
@@ -228,7 +222,7 @@ def make_history(event_count: int) -> tuple[list[dict[str, Any]], dict[str, Any]
                 "unknown_reason": "missing" if state["previous"] is None else None,
             },
             "secondary_field": {
-                "field": f"{story['field']}_secondary",
+                "field": "secondary_field",
                 "knowledge_status": "unknown",
                 "unknown_reason": "missing",
             },
@@ -243,7 +237,7 @@ def make_history(event_count: int) -> tuple[list[dict[str, Any]], dict[str, Any]
         gaps = [(later - earlier).days for earlier, later in zip(dates, dates[1:])]
         missing_periods[story["id"]] = {
             "max_gap_days_between_observations": max(gaps) if gaps else None,
-            "secondary_field": f"{story['field']}_secondary",
+            "secondary_field": "secondary_field",
         }
 
     diagnostics = {
@@ -257,9 +251,11 @@ def make_history(event_count: int) -> tuple[list[dict[str, Any]], dict[str, Any]
     query_answers = []
     for query in QUERIES:
         if query["kind"] == "current":
-            story = final_state[query["storyline_id"]]
-            assertion = {"state_key": f"{query['storyline_id']}/{story['field']}/current", **story["current"]}
-            query_answers.append({"query_id": query["query_id"], "assertions": [assertion]})
+            assertions = []
+            for story_id, story in final_state.items():
+                assertion = {"state_key": f"{story_id}/{story['field']}/current", **story["current"]}
+                assertions.append(assertion)
+            query_answers.append({"query_id": query["query_id"], "assertions": assertions})
         elif query["kind"] == "previous":
             assertions = []
             for story_id, story in final_state.items():
@@ -345,7 +341,7 @@ def build_report(histories: dict[int, list[dict[str, Any]]]) -> dict[str, Any]:
     return {
         "dataset": "life-inbox-size-calibration",
         "scored": False,
-        "token_estimate_method": "ceil(serialized characters / 4), plus fixed planning overhead; replace with the selected model tokenizer before a model run",
+        "token_estimate_method": "ceil(serialized characters / 4), plus fixed planning overhead; use a provider tokenizer when exposed and retain runtime usage separately",
         "system_overhead_tokens": system_overhead_tokens,
         "query_bundle_tokens": query_bundle_tokens,
         "rows": rows,

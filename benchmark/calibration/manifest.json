@@ -36,10 +36,10 @@
     "oracle/oracle-400.json"
   ],
   "oracle_sha256": {
-    "50": "04164d711e7e2595d51f773ba0e74dae59f47e4a0d65f626fd9a632390c22524",
-    "100": "9af653475ed60097dafd0c70b34b3f80639c21ac57df70cc8bf51bf14e90b73b",
-    "200": "6c6eaddafec52c167b7167525c213f8b2d745e1d0afa599ad3d3ae691ae3b0dd",
-    "400": "e1c1c75997129dcc5cf37293d7cc4f651b89b7054111db5532cf7e4c0adbc46c"
+    "50": "a6cbc09893777d214b31b8d17955c6999c7471d2e9cff438609c208bf4fa6ea6",
+    "100": "d137a92f4d4989417afed92fc016ad3dc315c0fd94f054c42f4b39977fd0041e",
+    "200": "a6bda7619026226ce03a533c975403379b1f201fca2151438c9c8ae9b6f42bf9",
+    "400": "1772c398f30c310a56d297a51002fb02b0f8e744b8a53a7b137585427fabb24f"
   },
   "ground_truth_boundary": "Calibration-only oracle data is separate from benchmark/dev and benchmark/holdout. It must not be used to tune baseline prompts."
 }

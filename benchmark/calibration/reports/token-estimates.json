@@ -1,19 +1,19 @@
 {
   "dataset": "life-inbox-size-calibration",
   "scored": false,
-  "token_estimate_method": "ceil(serialized characters / 4), plus fixed planning overhead; replace with the selected model tokenizer before a model run",
+  "token_estimate_method": "ceil(serialized characters / 4), plus fixed planning overhead; use a provider tokenizer when exposed and retain runtime usage separately",
   "system_overhead_tokens": 160,
-  "query_bundle_tokens": 342,
+  "query_bundle_tokens": 115,
   "rows": [
     {
       "event_count": 50,
       "history_characters": 20636,
       "approx_history_tokens": 5159,
-      "approx_final_query_input_tokens": 5661,
+      "approx_final_query_input_tokens": 5434,
       "checkpoint_prefixes": [
         50
       ],
-      "approx_checkpoint_sweep_input_tokens": 5661,
+      "approx_checkpoint_sweep_input_tokens": 5434,
       "fit_by_context_limit_with_75_percent_usable_budget": {
         "16000": true,
         "32000": true,
@@ -26,12 +26,12 @@
       "event_count": 100,
       "history_characters": 41292,
       "approx_history_tokens": 10323,
-      "approx_final_query_input_tokens": 10825,
+      "approx_final_query_input_tokens": 10598,
       "checkpoint_prefixes": [
         50,
         100
       ],
-      "approx_checkpoint_sweep_input_tokens": 16486,
+      "approx_checkpoint_sweep_input_tokens": 16032,
       "fit_by_context_limit_with_75_percent_usable_budget": {
         "16000": true,
         "32000": true,
@@ -44,13 +44,13 @@
       "event_count": 200,
       "history_characters": 82727,
       "approx_history_tokens": 20682,
-      "approx_final_query_input_tokens": 21184,
+      "approx_final_query_input_tokens": 20957,
       "checkpoint_prefixes": [
         50,
         100,
         200
       ],
-      "approx_checkpoint_sweep_input_tokens": 37670,
+      "approx_checkpoint_sweep_input_tokens": 36989,
       "fit_by_context_limit_with_75_percent_usable_budget": {
         "16000": false,
         "32000": true,
@@ -63,14 +63,14 @@
       "event_count": 400,
       "history_characters": 165580,
       "approx_history_tokens": 41395,
-      "approx_final_query_input_tokens": 41897,
+      "approx_final_query_input_tokens": 41670,
       "checkpoint_prefixes": [
         50,
         100,
         200,
         400
       ],
-      "approx_checkpoint_sweep_input_tokens": 79567,
+      "approx_checkpoint_sweep_input_tokens": 78659,
       "fit_by_context_limit_with_75_percent_usable_budget": {
         "16000": false,
         "32000": false,
