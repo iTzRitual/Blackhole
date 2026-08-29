@@ -45,8 +45,9 @@ this checkout; unchecked items remain open.
   external authentication, and no Blackhole token access.
 - [x] Keep approximate runtime/token caveats documented where they are known;
   do not invent subscription dollar cost.
-- [x] Exercise offline qualification, unit tests, compileall, benchmark
-  generator determinism, and response-contract smoke in CI.
+- [x] Define CI coverage for offline qualification, unit tests, compileall,
+  benchmark generator determinism, and response-contract smoke; local
+  equivalents pass.
 - [ ] Test the complete reproduction commands from a clean environment after
   the integrated implementation SHA is frozen.
 - [ ] Verify all reproduction commands use repository-relative or user-supplied
