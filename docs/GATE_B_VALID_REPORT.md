@@ -1,8 +1,10 @@
-# Historical Gate B valid report
+# Gate B valid report
 
-Status: `VALID` under the prior Gate A scope; historical evidence only. The
-current Gate A review is reopened under [`docs/GATE_A_PROPOSAL.md`](GATE_A_PROPOSAL.md).
-This report does not approve or implement the advanced Blackhole application.
+Status: `VALID`. This report closes the response/evaluator contract repair. It
+does not contain advanced Blackhole application implementation. The next
+authorized project phase is advanced Blackhole application experimentation;
+that transition does not reopen Gate A or unfreeze the benchmark and baseline
+artifacts.
 
 ## Why baseline-v0 was invalid
 
@@ -168,6 +170,9 @@ The response contract is valid for continued benchmark work. Keep v2, the
 deterministic evaluator, the isolation protocol, and the corrected baseline
 evidence. Keep v0 only as invalid historical evidence. Do not report v0's zero
 as an official result, do not change ground truth, and do not begin advanced
-application implementation in this phase.
+application implementation in this phase. The human-approved next phase is
+advanced Blackhole application experimentation, with the Gate A benchmark,
+response-contract-v2, evaluator, official baseline, and calibration evidence
+preserved unchanged.
 
 **GRILL ME — GATE B VALID**

@@ -1,13 +1,14 @@
 # Gate A development benchmark
 
-This directory contains the prior public development slice from the earlier
-Gate A scope. It is retained as historical draft/evaluation material while the
-revised Gate A proposal is under human review. It does not implement Blackhole,
-and no new case is approved by this directory's existing contents.
+This directory contains the frozen, public development slice approved for Gate
+A. It is design/evaluation material only. It does not implement Blackhole.
 
-The prior primary track was one deterministic 200-event scenario with ten
-interleaved storylines and checkpoint query bundles at events 50, 100, 150, and
-200. The
+Gate B response-contract repair is valid, and the next authorized phase is
+advanced Blackhole application experimentation. This public development slice
+remains frozen while that work proceeds.
+
+The primary track is one deterministic 200-event scenario with ten interleaved
+storylines and checkpoint query bundles at events 50, 100, 150, and 200. The
 storylines emphasize state churn: repeated price changes, cancellation and
 reactivation, missing periods, purchase/consumption separation, task lifecycle
 changes, policy and contract replacement, duplicates versus meaningful changes,
@@ -16,9 +17,8 @@ approval boundaries.
 
 ## Files
 
-- `response-contract-v2.json` is the prior public semantic response boundary
-  used for the historical corrected baseline; it is not the current Gate A
-  freeze target.
+- `response-contract-v2.json` is the frozen public semantic response boundary
+  used for the corrected baseline and future implementation submissions.
 - `query-bundle-v2.json` is the exact public query bundle supplied at every
   checkpoint under v2.
 - `response-schema-v2.json` documents the v2 envelope and structural shape;
@@ -45,8 +45,7 @@ and debugging; holdout expected files remain evaluator-owned.
 
 ## Regeneration
 
-From the repository root, these commands reproduce the historical package only;
-do not generate a revised benchmark before Gate A approval:
+From the repository root:
 
 ```text
 python benchmark/dev/generate_benchmark.py --check

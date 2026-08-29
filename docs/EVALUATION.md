@@ -1,15 +1,15 @@
 # Evaluation plan
 
-**Status:** Revised Gate A proposal pending human approval; prior benchmark and Gate B artifacts are historical evidence
+**Status:** Gate B contract repair valid; Gate A public benchmark remains frozen; `baseline-v1` is the official baseline; next phase is advanced Blackhole application experimentation
 
-This document retains the prior long-horizon benchmark contract for auditability.
-It is not the current Gate A approval: the active design-only proposal is
-[`docs/GATE_A_PROPOSAL.md`](GATE_A_PROPOSAL.md). The earlier public development
-case, deterministic evaluator, and fair Codex CLI baseline remain historical
-evidence. No new benchmark or implementation work should begin until the human
-approves the revised proposal. The advanced application, production
-infrastructure, Claude adapter, and evaluator-owned holdout material remain out
-of scope.
+This document records the approved long-horizon benchmark contract for Blackhole.
+The public development case, deterministic generator, evaluator, and fair Codex
+CLI baseline are now present. The next authorized phase is advanced Blackhole
+application experimentation. Production infrastructure, a Claude adapter, and
+evaluator-owned holdout material remain out of scope. The separate
+size-calibration artifacts are historical, non-scored inputs and are not final
+ground truth. The benchmark, evaluator, official baseline, and calibration
+evidence remain frozen during the transition.
 
 ## 1. Evaluation goal
 
@@ -44,9 +44,9 @@ extra context during the primary run. At fixed timeline checkpoints, both answer
 same fixed query bundle. A separate stress experiment may test context-window
 exhaustion; it must not replace the primary full-history baseline.
 
-## 3. Prior benchmark timeline (historical draft)
+## 3. Approved benchmark timeline
 
-The prior development track was **200 chronological events** with
+The primary development track is frozen at **200 chronological events** with
 checkpoints after events **50, 100, 150, and 200**. The selection follows the
 separate non-scored size calibration: 200 events are challenging and practical,
 while 400 events are a slower optional secondary stress track. No 800-event
@@ -116,8 +116,8 @@ robustness slice.
 | `q-approval-boundary` | Which proposed actions require approval, and were any consequential actions executed? | proposed action, approval required, approved=false, executed=false |
 
 Each question expands into one or more expected typed assertions. The historical
-v1 files remain for auditability, and the prior corrected public response
-boundary is recorded in [`benchmark/dev/response-contract-v2.json`](../benchmark/dev/response-contract-v2.json)
+v1 files remain for auditability, but the corrected public response boundary is
+frozen in [`benchmark/dev/response-contract-v2.json`](../benchmark/dev/response-contract-v2.json)
 and [`benchmark/dev/query-bundle-v2.json`](../benchmark/dev/query-bundle-v2.json).
 The empty-answer behavior and semantic normalization are deterministic in
 [`eval/score.py`](../eval/score.py).
@@ -661,9 +661,9 @@ outputs remain evaluator-owned and inaccessible to the implementation agent. The
 calibration generator is not the final benchmark generator and its visible oracle
 must not be promoted to holdout ground truth.
 
-## 19. Prior Gate A execution status (historical, not current approval)
+## 19. Gate A approved status (historical)
 
-The earlier Gate A scope produced the public benchmark package:
+Gate A remains approved for the public benchmark package:
 [`benchmark/dev/`](../benchmark/dev/) contains one 200-event case, four
 checkpoints, the fixed 12-query bundle, visible development references, and a
 deterministic generator. The optional 400-event stress track remains secondary
@@ -687,11 +687,11 @@ several `unknown` records also carried a value. Its `LQA-0M=0.0000` had `TP=0`
 and is not semantic zero. It remains historical evidence only and must not be
 reported as the official baseline or used to change the benchmark ground truth.
 
-## 21. Historical Gate B contract repair and corrected baseline
+## 21. Gate B contract repair and corrected baseline
 
-Gate B was blocked until the response boundary was repaired. The prior
+Gate B was blocked until the response boundary was repaired. The frozen
 [`benchmark/dev/response-contract-v2.json`](../benchmark/dev/response-contract-v2.json)
-used public semantic `subject` and `predicate` identifiers, explicit
+uses public semantic `subject` and `predicate` identifiers, explicit
 known/inferred/unknown rules, deterministic value normalization, and exact
 duplicate-count wording. Candidate `state_key` values are rejected; development
 expected assertions may retain them only for DSCR clustering. Provenance is
@@ -710,7 +710,8 @@ paths. It scored `LQA-0M=0.3014914553`, with checkpoint means
 schema-valid output, valid source integrity, and no safety violations. The
 unchanged substantive `prompts/runtime/baseline-v1.md` prompt, the same Codex
 CLI/model/reasoning configuration, and the same isolated checkpoint protocol
-were used. No advanced application or baseline implementation belongs in this
-historical phase. The active revised design is in
-[`docs/GATE_A_PROPOSAL.md`](GATE_A_PROPOSAL.md); full historical evidence is in
+were used. Gate B itself did not include advanced application implementation;
+the next authorized phase is advanced Blackhole application experimentation.
+That work must preserve the frozen benchmark, evaluator, official baseline, and
+calibration evidence. Full evidence is in
 [`docs/GATE_B_VALID_REPORT.md`](GATE_B_VALID_REPORT.md).

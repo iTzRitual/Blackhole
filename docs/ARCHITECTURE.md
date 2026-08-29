@@ -159,11 +159,7 @@ The deterministic development evaluator separately reads the public expected
 output; the provider baseline never receives it. The harness has no durable
 Blackhole state and performs no external action.
 
-The prior execution used a 200-event, ten-storyline synthetic timeline with
-checkpoints at 50, 100, 150, and 200. That package is historical draft evidence
-while Gate A is reopened. The active design proposal recommends a 100-event,
-ten-storyline primary with checkpoints at 20, 40, 60, 80, and 100, plus an
-optional separate stress track. See [`docs/GATE_A_PROPOSAL.md`](GATE_A_PROPOSAL.md)
-before changing benchmark artifacts. This separation lets future application
-work demonstrate rebuildable state maintenance without changing the fair
-baseline treatment.
+The approved primary is a 200-event, ten-storyline synthetic timeline with
+checkpoints at 50, 100, 150, and 200. A 400-event run is optional and secondary.
+This separation lets future application work demonstrate rebuildable state
+maintenance without changing the fair baseline treatment.

@@ -2,31 +2,28 @@
 
 ## Current repository phase
 
-This repository is at a reopened Gate A design/review checkpoint. The prior
-200-event development package, response-contract-v2 repair, and fair baseline
-artifacts are preserved historical draft/execution evidence; they are not
-current approval of the revised Gate A proposal in
-`docs/GATE_A_PROPOSAL.md`. Until the project owner explicitly approves Gate A,
-only design documentation and trajectory records may be added for this task.
-Do not generate or change benchmark cases, expected outputs, evaluator code,
-baseline code, the advanced Blackhole application, production infrastructure,
-Claude adapters, or holdout material before that approval.
+Gate A remains frozen and Gate B's response-contract repair is valid. The
+frozen public development benchmark is one 200-event scenario with checkpoints
+at 50, 100, 150, and 200; `response-contract-v2` and the official `baseline-v1`
+result remain unchanged. The next authorized phase is advanced Blackhole
+application experimentation. Experiments may implement and evaluate scoped
+Blackhole application behavior, but must preserve the frozen benchmark,
+evaluator, baseline evidence, and calibration evidence.
 
-After Gate A approval, the approved scope may explicitly allow the generated
-development benchmark, deterministic evaluator/tests, and fair baseline work.
-The advanced Blackhole application, production infrastructure, Claude adapter,
-holdout cases, holdout expected outputs, and evaluator-owned holdout ground
-truth remain prohibited unless the project owner changes the scope.
+Production infrastructure, a Claude adapter, holdout cases, holdout expected
+outputs, and evaluator-owned holdout ground truth remain prohibited unless the
+project owner explicitly changes the scope.
 
 The human-authorized size-calibration step is a narrow exception: non-scored synthetic histories and their visible calibration-only oracle may live under `benchmark/calibration/`. That oracle is not final benchmark ground truth, must remain separate from `benchmark/dev/` and `benchmark/holdout/`, and must not be used to tune a baseline prompt.
 
-For any future pre-freeze runtime calibration after Gate A approval, a versioned baseline prompt and non-scored model calls are allowed once the human supplies a usable provider configuration. The primary MVP runtime is subscription-first: use an already-installed, already-authenticated local agent CLI when available, let that CLI own authentication, and never request, read, copy, export, or persist provider tokens. Direct API-key integrations are not required for this phase. Do not commit credential values, silently change the prompt after observing failures, or turn calibration outputs into scored benchmark results.
+For the pre-freeze runtime calibration, a versioned baseline prompt and non-scored model calls are allowed once the human supplies a usable provider configuration. The primary MVP runtime is subscription-first: use an already-installed, already-authenticated local agent CLI when available, let that CLI own authentication, and never request, read, copy, export, or persist provider tokens. Direct API-key integrations are not required for this phase. Do not commit credential values, silently change the prompt after observing failures, or turn calibration outputs into scored benchmark results.
 
 The remaining empty application, data, and infrastructure directories are
 represented by placeholders so Git can preserve the intended layout. A
-placeholder is not permission to begin implementing the advanced application or
-production subsystem. Development benchmark content must follow the approved
-contract; evaluator-owned holdout material remains outside the
+placeholder is not permission to build production infrastructure or a
+production subsystem; scoped advanced Blackhole application experiments are
+authorized in the next phase. Development benchmark content must follow the
+approved contract; evaluator-owned holdout material remains outside the
 implementation-agent trust boundary.
 
 ## Non-negotiable invariants
@@ -51,9 +48,10 @@ implementation-agent trust boundary.
 - When a requirement is ambiguous, document the assumption and its risk rather than inventing hidden behavior.
 - Do not claim evaluation success without a reproducible run record and clearly identified inputs.
 
-## Before advanced application implementation begins
+## Advanced application experimentation boundary
 
-Any move from benchmark/baseline work to advanced application implementation should first establish:
+The following boundaries were established before the Gate B transition and
+remain mandatory for every advanced application experiment:
 
 - the source and derived-state boundaries;
 - the representation of known, inferred, and unknown values;
@@ -61,11 +59,11 @@ Any move from benchmark/baseline work to advanced application implementation sho
 - the evaluator-owned holdout access model; and
 - a minimal reproducible evaluation protocol.
 
-After Gate A approval, the fair baseline may be implemented as an explicitly
-stateless benchmark treatment. It must remain stateless with respect to
-Blackhole, use the frozen runtime prompt and approved Codex configuration,
+The fair baseline is a frozen comparator. It must remain stateless with respect
+to Blackhole, use the frozen runtime prompt and approved Codex configuration,
 isolate its workspace, and keep checkpoint queries out of the continuing
-ingestion session.
+ingestion session. Advanced experiments must not modify the official baseline
+result or use holdout ground truth.
 
 ## Agent work documentation protocol
 

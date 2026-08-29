@@ -39,13 +39,15 @@ summaries, and surface only items that need attention.
 
 ## Status
 
-This repository is at a reopened Gate A design/review checkpoint for the micro1
-Agentic Workflows Hackathon. The earlier 200-event package and Gate B contract
-repair are preserved as historical draft/execution evidence, but are not current
-approval of the revised Gate A proposal. The active review target is a single
-60–100-event long-chat benchmark with zero-maintenance queries and a defined
-maintenance-burden metric. No new benchmark, evaluator, baseline, or
-application implementation should begin before human approval.
+This repository has completed the benchmark-and-baseline phase for the micro1
+Agentic Workflows Hackathon. Gate A's 200-event development package is frozen,
+and Gate B's response-contract repair is valid. The official `baseline-v1`
+result remains the accepted baseline at `LQA-0M=0.3014914553`; the prior
+`baseline-v0` result is preserved as invalid-contract evidence, not an official
+semantic baseline; the independent v2 contract smoke test passes and the
+corrected official baseline is recorded separately. The next authorized phase is
+advanced Blackhole application experimentation. Production infrastructure,
+Claude integration, and holdout ground truth remain out of scope.
 
 ## Design principles
 
@@ -74,14 +76,15 @@ application implementation should begin before human approval.
 | `trajectories/` | Coding and runtime agent trace artifacts |
 | `scripts/` | Reserved location for future reproducibility tooling |
 
-## Scope of this phase
+## Scope of the completed benchmark phase
 
-The prior phase froze a public development benchmark and measured a fair
-baseline, but the current human review reopens Gate A before any new freeze.
-The active task is design-only. It does not implement the Blackhole
-application, add production infrastructure, expose evaluator-owned holdout
-ground truth, or add a Claude adapter. The prior baseline remains a benchmark
-treatment, not product memory or application code.
+The completed phase froze the public development benchmark and deterministic
+scorer, repaired and measured the fair baseline contract, and recorded one
+corrected baseline run. It did not implement the Blackhole application, add
+production infrastructure, expose evaluator-owned holdout ground truth, or add
+a Claude adapter. The next phase may run scoped advanced Blackhole application
+experiments; the baseline remains a benchmark treatment, not product memory or
+application code.
 
 Read [AGENTS.md](AGENTS.md) before changing the repository. The design context is
 in [docs/PRODUCT_SPEC.md](docs/PRODUCT_SPEC.md),
