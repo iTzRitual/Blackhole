@@ -46,5 +46,5 @@
   "repair_note": "V1R1 changes only the public payload container from string to {text: string} and recomputes dependent source hashes. Event text and all expected semantic assertions are unchanged.",
   "pre_runtime_statement": "No provider/model call successfully consumed any generalization event before this schema repair.",
   "expected_outputs_absence_statement": "Expected outputs remain absent from this branch.",
-  "oracle_absence_statement": "Generalization oracle, generator, audit, defect catalog, and expected-output material are absent from this branch."
+  "oracle_absence_statement": "Generalization oracle, generator, audit, defect catalog, and generalization expected-output material are absent from this branch."
 }
