@@ -44,8 +44,8 @@ visible rather than being repaired or softened during this merge.
   `docs/SUBMISSION_CHECKLIST.md` only.
 - Ran the required deterministic validation and compared the post-merge tree
   to `implementation-freeze-v1` for runtime changes.
-- Pushed `master` normally without force, if the configured remote accepted the
-  push; the observed result is recorded below.
+- Pushed `master` normally without force; the observed remote update advanced
+  `origin/master` from the freeze tag commit to `ff64cf0`.
 
 ## Failures encountered
 
@@ -89,8 +89,9 @@ artifact generation was performed.
 Both approved branches were merged cleanly in the required order. The current
 master contains only the approved post-freeze documentation and audit evidence
 changes relative to `implementation-freeze-v1`; the runtime and benchmark
-boundaries are unchanged. The normal push result is recorded after it is
-observed.
+boundaries are unchanged. The final validation passed and the documentation
+merge was pushed successfully to `origin/master` at the observed handoff
+commit `ff64cf0baa1fe429057bde501f51f6a5efa0b6e4`.
 
 ## Regressions or unresolved issues
 
@@ -114,5 +115,6 @@ decision.
 - Reproduction merge commit: `75bd85d1ae048a8bc1d4bf3b0afc89b1722fc1ac`.
 - Audit merge commit: `3419ba3625b1469091dbdf3c78fbfbbcddcb2d93`.
 - Evidence/index/checklist commit: `6bdb4ef13b77f868ba417591c6857fa9ad913d98`.
-- Final documentation closeout commit and push status are recorded in the
-  final handoff.
+- Final index closeout commit: `ff64cf0baa1fe429057bde501f51f6a5efa0b6e4`.
+- `master` was pushed normally to `origin`; local and remote refs matched at
+  the completion audit.
