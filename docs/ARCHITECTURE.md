@@ -493,3 +493,119 @@ deterministic tests. `ensure_state_fresh()` is the future Ask integration point:
 it returns immediately when no pending work exists, otherwise processes the
 pending queue and reports whether the state is fresh. No frontend integration,
 background scheduling, or consequential action executor is included.
+
+## 17. Blackhole Host foundation
+
+### Terminology and ownership
+
+- **BLACKHOLE APP** means the PWA and future native clients.
+- **BLACKHOLE HOST** means the local durable runtime, SQLite store, and
+  ingestion boundary.
+- **CODEX PROVIDER** means the externally authenticated local Codex CLI used
+  for semantic interpretation.
+
+The app does not talk directly to Codex. The app talks to Blackhole Host.
+Blackhole Host decides when semantic reasoning is required.
+
+The local product runtime now has a Blackhole-owned host boundary around the
+deferred ingestion service:
+
+```text
+future client
+    |
+    v
+future Host API transport
+    |
+    v
+HostRuntime
+    +-- RuntimeConfig / Blackhole Home
+    +-- StateStore
+    +-- IngestionEngine
+    +-- safe provider status
+    `-- optional CodexCLIProvider
+             |
+             v
+          Codex CLI
+```
+
+`HostRuntime` is orchestration and ownership, not a second ingestion
+implementation. Its `capture()`, `process_pending()`, `retry_failed()`, and
+`ensure_state_fresh()` methods delegate to the existing `IngestionEngine`,
+which remains responsible for normalization, deterministic completeness,
+relation recovery, duplicate-aware evidence, and rebuildable projection.
+`snapshot()`/`state()` expose the existing `StateStore` view without creating a
+parallel state model.
+
+### Blackhole Home and configuration
+
+The host resolves `BLACKHOLE_HOME` when provided and otherwise uses
+`~/.blackhole/` (the platform user's home directory). It owns a small
+versioned `config.json` and `blackhole.db` there. Configuration contains only
+validated, non-sensitive runtime preferences: provider type, model preference,
+reasoning effort, timeout, batch size, and the database path relative to the
+Blackhole Home. Provider credentials, Codex auth material, benchmark ground
+truth, and raw provider output are not stored in this boundary. Tests always
+use temporary homes.
+
+First-run initialization is backend-only:
+
+```text
+python -m app.host init
+```
+
+It creates the home, configuration, and SQLite schema even if Codex is absent.
+Captures therefore remain available when semantic processing is unavailable.
+
+### Provider readiness and safe status
+
+`app/codex_discovery.py` uses the actual installed CLI surface observed for the
+MVP: `codex --version` and `codex login status`. It also uses PATH discovery;
+it does not read auth files, cookies, credential stores, or tokens, and it
+never logs in. Version output is reduced to a version-only summary. Readiness
+distinguishes `MISSING`, `INSTALLED_NOT_AUTHENTICATED`, `READY`, and `ERROR`.
+Authentication is still owned by Codex CLI. The host does not perform an
+expensive semantic probe during status or doctor checks, and a model/runtime
+configuration is reported as configured rather than experimentally verified.
+
+The machine-readable `HostRuntime.status()` shape is intentionally limited to
+safe summaries:
+
+```json
+{
+  "host": {"ready": true, "version": "blackhole-host-v1", "database": "..."},
+  "provider": {
+    "type": "codex-cli",
+    "status": "READY",
+    "installed": true,
+    "authenticated": true,
+    "version": "codex-cli ...",
+    "auth_check_available": true,
+    "configured_runtime": true,
+    "ready": true
+  },
+  "processing": {"pending": 0, "processing": 0, "processed": 0, "failed": 0}
+}
+```
+
+Host-facing processing failures are concise and retryable. Provider exception
+text and raw stderr do not cross the Host boundary. A missing provider marks
+the derived processing row failed while retaining the immutable capture for an
+explicit retry after authentication is repaired.
+
+### Domain-only security boundary
+
+HostRuntime exposes Blackhole operations, not arbitrary process execution. No
+generic shell or `exec` endpoint is part of the design. Derived proposals such
+as paying, cancelling, sending, or signing remain approval-gated and are not
+executed by the host. Codex CLI is an internal semantic provider, not the
+host's durable memory; all authoritative state remains in Blackhole's
+rebuildable store.
+
+### Future transport, intentionally not implemented
+
+After the separate PWA worktree is ready, a transport may map domain routes to
+the host boundary: read status, capture, process/ensure freshness, read
+processing status, read state/attention, and query. This milestone does not
+implement HTTP, LAN exposure, pairing, device tokens, mDNS, HTTPS, remote
+access, tunnels, or a cloud relay. It also does not modify the PWA or its
+static server.

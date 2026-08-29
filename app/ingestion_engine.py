@@ -24,7 +24,7 @@ from app.completeness import (
 )
 from app.contract import PublicContract
 from app.prompts import extraction_prompt
-from app.provider import structured_call
+from app.provider import DEFAULT_PROVIDER_MODEL, structured_call
 from app.relation_recovery import (
     DETERMINISTIC_RECOVERY_VERSION,
     deterministic_relationships,
@@ -63,12 +63,21 @@ class CodexCLIProvider:
     no credential or raw provider response is persisted by Blackhole.
     """
 
-    def __init__(self, *, timeout: int = 900, reasoning_effort: str = "max") -> None:
+    def __init__(
+        self,
+        *,
+        timeout: int = 900,
+        model: str = DEFAULT_PROVIDER_MODEL,
+        reasoning_effort: str = "max",
+    ) -> None:
         if timeout < 1:
             raise ValueError("timeout must be positive")
+        if not isinstance(model, str) or not model.strip():
+            raise ValueError("model must be a non-empty string")
         if reasoning_effort not in {"max", "high", "medium"}:
             raise ValueError("unsupported reasoning effort")
         self.timeout = timeout
+        self.model = model
         self.reasoning_effort = reasoning_effort
         self._temporary = tempfile.TemporaryDirectory(prefix="blackhole-provider-")
         self.workspace = Path(self._temporary.name) / "workspace"
@@ -104,6 +113,7 @@ class CodexCLIProvider:
             temp_workspace=self.workspace,
             output_path=output_path,
             timeout=self.timeout,
+            model=self.model,
             reasoning_effort=self.reasoning_effort,
         )
         provider_metadata = result.get("provider", {})
@@ -112,7 +122,7 @@ class CodexCLIProvider:
             "returncode": provider_metadata.get("returncode"),
             "duration_seconds": provider_metadata.get("duration_seconds"),
             "usage": provider_metadata.get("usage"),
-            "model": provider_metadata.get("model"),
+            "model": provider_metadata.get("model", self.model),
             "reasoning_effort": provider_metadata.get("reasoning_effort"),
         }
         if (

@@ -441,3 +441,57 @@ python eval/score.py --scenario benchmark/dev/cases/scenario-001.json --expected
 This is a regression validation, not a new scored experiment. The expected
 reference remains LQA-0M `0.8695006212` and DSCR `40`; the recorded regression
 result matches it exactly and uses no provider calls.
+
+## 18. Blackhole Host foundation
+
+The Host foundation is a product-runtime milestone, not a benchmark
+experiment. It uses a separate Blackhole Home and can be initialized without
+Codex:
+
+```text
+python -m app.host init
+python -m app.host status
+python -m app.host doctor
+python -m app.host process
+python -m app.host retry
+```
+
+Set `BLACKHOLE_HOME` to run against an explicit local data directory. The
+default is `~/.blackhole/`. `config.json` and `blackhole.db` are created by
+`init`; tests must use temporary directories. The configuration contains no
+provider credentials. Authenticate Codex externally using the Codex CLI before
+processing pending work. Blackhole only discovers `codex` on PATH, reads its
+version, and invokes the safe `codex login status` command; it does not read or
+persist Codex auth material, tokens, cookies, or credential paths.
+
+The preferred Python boundary for future clients is:
+
+```python
+from app.host import HostRuntime
+
+with HostRuntime.open() as host:
+    host.capture("A capture is saved before semantic processing.")
+    host.status()
+    host.ensure_state_fresh()
+    state = host.snapshot()
+```
+
+`capture()` delegates to the deferred `IngestionEngine` and never performs a
+provider call. `process`, `retry`, and `ensure_state_fresh` delegate to that
+same engine; provider failures remain concise and retryable, and raw captures
+remain immutable. `status` and `doctor` do not run semantic inference. The
+host exposes domain operations only: no shell/exec endpoint, remote network,
+pairing, device token, mDNS, HTTPS, tunnel, or cloud relay exists in this
+milestone.
+
+Neutral host tests use fake discovery/provider implementations and temporary
+homes:
+
+```text
+python -m unittest app.tests.test_host -v
+```
+
+The host tests cover first-run initialization, the home override, missing and
+ready provider states, safe serialization, raw-only capture, fake processing,
+idempotency, retry, configuration persistence, secret rejection, and database
+state across a host restart. They do not require a real Codex semantic call.

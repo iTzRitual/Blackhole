@@ -8,13 +8,15 @@ from pathlib import Path
 from typing import Any
 
 from baseline.run_baseline import (
-    MODEL,
     REASONING_EFFORT,
     base_command,
     output_text,
     parse_json_document,
     run_cli,
 )
+
+
+DEFAULT_PROVIDER_MODEL = "gpt-5.6-luna"
 
 
 def parse_repaired_json(raw_text: str) -> tuple[dict[str, Any] | None, str | None, str | None]:
@@ -42,15 +44,19 @@ def structured_call(
     temp_workspace: Path,
     output_path: Path,
     timeout: int,
+    model: str = DEFAULT_PROVIDER_MODEL,
     reasoning_effort: str = REASONING_EFFORT,
 ) -> dict[str, Any]:
     """Run one fresh read-only CLI call and return parsed output plus metadata."""
 
+    if not isinstance(model, str) or not model.strip():
+        raise ValueError("model must be a non-empty string")
     cli = shutil.which("codex")
     if not cli:
         raise RuntimeError("codex CLI was not found on PATH")
     output_path.parent.mkdir(parents=True, exist_ok=True)
     command = base_command(cli, temp_workspace)
+    command[command.index("--model") + 1] = model
     command[command.index("-c") + 1] = f"model_reasoning_effort={reasoning_effort}"
     result = run_cli(
         command + ["-o", str(output_path), "-"],
@@ -69,8 +75,11 @@ def structured_call(
             "thread_id": result.get("thread_id"),
             "usage": result.get("usage"),
             "stderr": result.get("stderr"),
-            "model": MODEL,
+            "model": model,
             "reasoning_effort": reasoning_effort,
             "parse_repair": parse_repair,
         },
-    }
+}
+
+
+__all__ = ["DEFAULT_PROVIDER_MODEL", "parse_repaired_json", "structured_call"]
