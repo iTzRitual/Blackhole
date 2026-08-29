@@ -1,0 +1,376 @@
+{
+  "queries": {
+    "q-subscriptions-current": {
+      "assertions": [
+        {
+          "subject": "harborlight_reading",
+          "predicate": "current_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e004"
+          ],
+          "value": {
+            "amount": "8",
+            "billing_period": "month",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "harborlight_reading",
+          "predicate": "next_renewal",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e004"
+          ],
+          "value": "2026-07-31"
+        },
+        {
+          "subject": "harborlight_reading",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e004"
+          ],
+          "value": "active"
+        },
+        {
+          "subject": "harborlight_reading",
+          "predicate": "currency",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e004"
+          ],
+          "value": "eur"
+        },
+        {
+          "subject": "harborlight_reading",
+          "predicate": "billing_period",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e004"
+          ],
+          "value": "month"
+        }
+      ]
+    },
+    "q-subscriptions-history": {
+      "assertions": [
+        {
+          "subject": "harborlight_reading",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e004"
+          ],
+          "value": {
+            "amount": "8",
+            "billing_period": "month",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    "q-attention-14d": {
+      "assertions": [
+        {
+          "subject": "send_lease_notice",
+          "predicate": "needs_attention",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e008"
+          ],
+          "value": {
+            "reason": "approval required",
+            "executed": false
+          }
+        }
+      ]
+    },
+    "q-insurance-current": {
+      "assertions": [
+        {
+          "subject": "cedarward",
+          "predicate": "expiry_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e014"
+          ],
+          "value": "2026-12-31"
+        },
+        {
+          "subject": "cedarward",
+          "predicate": "policy_id",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e014"
+          ],
+          "value": "cd-7330"
+        },
+        {
+          "subject": "cedarward",
+          "predicate": "premium",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e014"
+          ],
+          "value": {
+            "amount": "28.4",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "cedarward",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e014"
+          ],
+          "value": "active"
+        }
+      ]
+    },
+    "q-service-costs": {
+      "assertions": []
+    },
+    "q-purchase-consumption": {
+      "assertions": [
+        {
+          "subject": "quietstone_books",
+          "predicate": "purchase_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e006"
+          ],
+          "value": 1
+        },
+        {
+          "subject": "quietstone_books",
+          "predicate": "purchased_total",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e006"
+          ],
+          "value": {
+            "amount": "24",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    "q-tasks-state": {
+      "assertions": [
+        {
+          "subject": "clinic_call",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e016"
+          ],
+          "value": "2026-07-18"
+        },
+        {
+          "subject": "clinic_call",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e017"
+          ],
+          "value": "nina_bell"
+        },
+        {
+          "subject": "clinic_call",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e002"
+          ],
+          "value": "open"
+        },
+        {
+          "subject": "grant_packet",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e001",
+            "g02-e011"
+          ],
+          "value": "2026-07-10"
+        },
+        {
+          "subject": "grant_packet",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e001",
+            "g02-e011"
+          ],
+          "value": "omar_kline"
+        },
+        {
+          "subject": "grant_packet",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e018"
+          ],
+          "value": "needs_review"
+        },
+        {
+          "subject": "capture:g02-e009",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e001",
+            "g02-e009"
+          ],
+          "value": {
+            "relation_type": "task_reassignment",
+            "source_event_id": "g02-e009",
+            "target_event_id": "g02-e001",
+            "changed_fields": [
+              "owner"
+            ]
+          }
+        },
+        {
+          "subject": "capture:g02-e011",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e001",
+            "g02-e011"
+          ],
+          "value": {
+            "relation_type": "task_reopened",
+            "source_event_id": "g02-e011",
+            "target_event_id": "g02-e001",
+            "changed_fields": [
+              "lifecycle"
+            ]
+          }
+        }
+      ]
+    },
+    "q-unresolved": {
+      "assertions": [
+        {
+          "subject": "capture:g02-e003",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "g02-e003"
+          ],
+          "unknown_reason": "ambiguous_person"
+        },
+        {
+          "subject": "capture:g02-e013",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "g02-e013"
+          ],
+          "unknown_reason": "ambiguous_person"
+        }
+      ]
+    },
+    "q-duplicates-changes": {
+      "assertions": [
+        {
+          "subject": "scenario",
+          "predicate": "duplicate_event_count",
+          "knowledge_status": "known",
+          "source_refs": [],
+          "value": 0
+        },
+        {
+          "subject": "scenario",
+          "predicate": "duplicate_group_count",
+          "knowledge_status": "known",
+          "source_refs": [],
+          "value": 0
+        },
+        {
+          "subject": "scenario",
+          "predicate": "meaningful_change_event_count",
+          "knowledge_status": "known",
+          "source_refs": [],
+          "value": 0
+        }
+      ]
+    },
+    "q-contract-dates": {
+      "assertions": [
+        {
+          "subject": "bellwether_studio",
+          "predicate": "effective_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e015"
+          ],
+          "value": "2026-07-01"
+        },
+        {
+          "subject": "bellwether_studio",
+          "predicate": "expiry_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e015"
+          ],
+          "value": "2026-12-31"
+        },
+        {
+          "subject": "bellwether_studio",
+          "predicate": "signed_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e015"
+          ],
+          "value": "2026-06-15"
+        }
+      ]
+    },
+    "q-approval-boundary": {
+      "assertions": [
+        {
+          "subject": "send_lease_notice",
+          "predicate": "approval_required",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e008"
+          ],
+          "value": true
+        },
+        {
+          "subject": "send_lease_notice",
+          "predicate": "approved",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e008"
+          ],
+          "value": false
+        },
+        {
+          "subject": "send_lease_notice",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e008"
+          ],
+          "value": false
+        },
+        {
+          "subject": "send_lease_notice",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e008"
+          ],
+          "value": "proposed"
+        }
+      ]
+    },
+    "q-recent-changes": {
+      "assertions": []
+    }
+  }
+}

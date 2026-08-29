@@ -1,0 +1,2406 @@
+# Blackhole advanced Experiment 001 semantic runtime v1
+
+You are a scoped semantic interpreter for Blackhole. Blackhole owns durable
+state; you do not own memory, and you must not pretend that a persistent chat
+is the database. The caller supplies immutable captures, a deterministic state
+projection, and the public response contract.
+
+## Non-negotiable rules
+
+- Treat every capture as immutable evidence. Never rewrite or delete an older
+  capture.
+- Use only evidence supplied in the current task and the public ontology.
+- Distinguish `known`, `inferred`, and `unknown`. Missing, ambiguous,
+  contradictory, unreadable, or unobserved information is not zero, false,
+  empty, completed, cancelled, or absent.
+- A later observation replaces an earlier value only when the evidence clearly
+  indicates a supersession or correction. Mark the operation as `supersede` or
+  `correction` and identify the earlier event when possible.
+- Preserve unresolved contradictions with operation `contradiction`; do not
+  silently choose a winner.
+- Do not infer consumption from purchases, payment from an intention, or an
+  external action from a proposal.
+- Emit source event IDs in `source_refs`. Never invent evaluator-internal IDs,
+  expected answers, benchmark aliases, or hidden state.
+- Return JSON only. Do not include prose, markdown fences, `state_key`, or
+  fields not requested by the task.
+
+## Extraction response
+
+For extraction, return:
+
+```json
+{
+  "observations": [
+    {
+      "event_id": "evt-001",
+      "subject": "public ontology subject",
+      "predicate": "public ontology predicate",
+      "knowledge_status": "known|inferred|unknown",
+      "value": "required for known/inferred",
+      "unknown_reason": "required for unknown",
+      "operation": "set|supersede|correction|contradiction|duplicate",
+      "supersedes_event_id": "evt-000",
+      "source_refs": ["evt-001"]
+    }
+  ],
+  "relationships": [
+    {
+      "source_event_id": "evt-002",
+      "target_event_id": "evt-001",
+      "relation_type": "exact_duplicate|normalized_duplicate|meaningful_change|similar_not_duplicate",
+      "changed_fields": [],
+      "duplicate_group": "optional-group-id",
+      "note": "optional concise evidence note"
+    }
+  ]
+}
+```
+
+Emit atomic observations for facts relevant to the supplied public query
+bundle, including explicit unknown or conflict facts. Use public subject and
+predicate IDs exactly when available. Use `capture:<event_id>` only for an
+event-level subject that has no public entity. Do not emit an observation merely
+because a field is absent; emit an unknown observation only when the capture or
+state explicitly supports that missing/ambiguous conclusion.
+
+For relationships, orient `source_event_id` as the later duplicate/change
+capture and `target_event_id` as the earlier related capture. A duplicate is a
+captured event that repeats an earlier event; an explicit correction or changed
+value is not a duplicate.
+
+## Query projection response
+
+For query projection, return the exact public `response-contract-v2` envelope
+requested by the caller. Every assertion must be atomic and contain only public
+`subject`, `predicate`, `knowledge_status`, `source_refs`, and the applicable
+`value`, `unknown_reason`, or `confirmation_ref`. Never emit `state_key`,
+grouped reports, prose fields, unsupported totals, or claims of consequential
+execution. Cite the state evidence's source refs. Include only supported
+assertions, while preserving current/history, known/inferred/unknown, and
+missing-versus-zero distinctions.
+
+
+TASK: semantic extraction for the new chronological capture batch.
+Read only the captures in this batch as source evidence. The prior projection is a hint for linking and supersession, not an oracle. Return one JSON object with `observations` and `relationships`; do not answer any user query.
+
+PUBLIC RESPONSE CONTRACT (ontology only):
+{
+  "response_contract": "response-contract-v2",
+  "public_ontology": {
+    "subjects": [
+      {
+        "id": "moonbeam_plus",
+        "kind": "subscription",
+        "aliases": [
+          "Moonbeam+",
+          "Moonbeam",
+          "the reading plan"
+        ]
+      },
+      {
+        "id": "copperline_fiber",
+        "kind": "service",
+        "aliases": [
+          "Copperline Fiber",
+          "Copperline",
+          "fiber bill"
+        ]
+      },
+      {
+        "id": "greenglass_market",
+        "kind": "merchant",
+        "aliases": [
+          "GreenGlass Market",
+          "Green Glass",
+          "the market"
+        ]
+      },
+      {
+        "id": "emberline",
+        "kind": "insurance",
+        "aliases": [
+          "Emberline",
+          "Emberline policy",
+          "home cover"
+        ]
+      },
+      {
+        "id": "permit_renewal",
+        "kind": "task",
+        "aliases": [
+          "permit renewal",
+          "the permit",
+          "renewal form"
+        ]
+      },
+      {
+        "id": "meter_visit",
+        "kind": "task",
+        "aliases": [
+          "meter visit",
+          "meter appointment",
+          "meter check"
+        ]
+      },
+      {
+        "id": "change_fiber_payment",
+        "kind": "action",
+        "aliases": [
+          "change Copperline payment",
+          "fiber payment change",
+          "bank mandate"
+        ]
+      },
+      {
+        "id": "mira_solen",
+        "kind": "person",
+        "aliases": [
+          "Mira Solen"
+        ]
+      },
+      {
+        "id": "mira_sorin",
+        "kind": "person",
+        "aliases": [
+          "Mira Sorin"
+        ]
+      },
+      {
+        "id": "mira_reference",
+        "kind": "person_reference",
+        "aliases": [
+          "Mira",
+          "unqualified Mira"
+        ]
+      },
+      {
+        "id": "devon_park",
+        "kind": "person",
+        "aliases": [
+          "Devon Park",
+          "Devon"
+        ]
+      },
+      {
+        "id": "harborlight_reading",
+        "kind": "subscription",
+        "aliases": [
+          "Harborlight Reading",
+          "Harborlight",
+          "reading subscription"
+        ]
+      },
+      {
+        "id": "sprucegrid_energy",
+        "kind": "service",
+        "aliases": [
+          "SpruceGrid Energy",
+          "SpruceGrid",
+          "energy bill"
+        ]
+      },
+      {
+        "id": "quietstone_books",
+        "kind": "merchant",
+        "aliases": [
+          "QuietStone Books",
+          "Quiet Stone",
+          "book shop"
+        ]
+      },
+      {
+        "id": "cedarward",
+        "kind": "insurance",
+        "aliases": [
+          "Cedarward",
+          "Cedarward policy",
+          "policy CD-7330"
+        ]
+      },
+      {
+        "id": "grant_packet",
+        "kind": "task",
+        "aliases": [
+          "grant packet",
+          "funding packet",
+          "the grant"
+        ]
+      },
+      {
+        "id": "clinic_call",
+        "kind": "task",
+        "aliases": [
+          "clinic call",
+          "call the clinic",
+          "appointment call"
+        ]
+      },
+      {
+        "id": "inventory_check",
+        "kind": "task",
+        "aliases": [
+          "inventory check",
+          "stock check"
+        ]
+      },
+      {
+        "id": "send_lease_notice",
+        "kind": "action",
+        "aliases": [
+          "send lease notice",
+          "lease notice"
+        ]
+      },
+      {
+        "id": "bellwether_studio",
+        "kind": "contract",
+        "aliases": [
+          "Bellwether Studio",
+          "Bellwether agreement",
+          "studio contract"
+        ]
+      },
+      {
+        "id": "nina_arden",
+        "kind": "person",
+        "aliases": [
+          "Nina Arden"
+        ]
+      },
+      {
+        "id": "nina_bell",
+        "kind": "person",
+        "aliases": [
+          "Nina Bell"
+        ]
+      },
+      {
+        "id": "nina_reference",
+        "kind": "person_reference",
+        "aliases": [
+          "Nina",
+          "unqualified Nina"
+        ]
+      },
+      {
+        "id": "omar_kline",
+        "kind": "person",
+        "aliases": [
+          "Omar Kline",
+          "Omar"
+        ]
+      },
+      {
+        "id": "toby_wren",
+        "kind": "person",
+        "aliases": [
+          "Toby Wren",
+          "Toby"
+        ]
+      },
+      {
+        "id": "silvermeadow_pass",
+        "kind": "subscription",
+        "aliases": [
+          "Silvermeadow Pass",
+          "Silvermeadow",
+          "the pass"
+        ]
+      },
+      {
+        "id": "marbleleaf_water",
+        "kind": "service",
+        "aliases": [
+          "Marbleleaf Water",
+          "Marbleleaf",
+          "water bill"
+        ]
+      },
+      {
+        "id": "tideglass_outlet",
+        "kind": "merchant",
+        "aliases": [
+          "TideGlass Outlet",
+          "TideGlass",
+          "ceramic shop"
+        ]
+      },
+      {
+        "id": "sableharbor",
+        "kind": "insurance",
+        "aliases": [
+          "SableHarbor",
+          "SableHarbor policy",
+          "claim policy"
+        ]
+      },
+      {
+        "id": "driftwood_studio",
+        "kind": "contract",
+        "aliases": [
+          "Driftwood Studio",
+          "Driftwood agreement",
+          "studio contract"
+        ]
+      },
+      {
+        "id": "claim_followup",
+        "kind": "task",
+        "aliases": [
+          "claim follow-up",
+          "insurance follow-up",
+          "claim task"
+        ]
+      },
+      {
+        "id": "return_package",
+        "kind": "task",
+        "aliases": [
+          "return package",
+          "the return",
+          "package return"
+        ]
+      },
+      {
+        "id": "renewal_check",
+        "kind": "task",
+        "aliases": [
+          "renewal check",
+          "check the renewal",
+          "contract review"
+        ]
+      },
+      {
+        "id": "file_insurance_claim",
+        "kind": "action",
+        "aliases": [
+          "file insurance claim",
+          "claim filing",
+          "file the claim"
+        ]
+      },
+      {
+        "id": "lara_quill",
+        "kind": "person",
+        "aliases": [
+          "Lara Quill"
+        ]
+      },
+      {
+        "id": "lara_wells",
+        "kind": "person",
+        "aliases": [
+          "Lara Wells"
+        ]
+      },
+      {
+        "id": "lara_reference",
+        "kind": "person_reference",
+        "aliases": [
+          "Lara",
+          "unqualified Lara"
+        ]
+      },
+      {
+        "id": "pavel_ross",
+        "kind": "person",
+        "aliases": [
+          "Pavel Ross",
+          "Pavel"
+        ]
+      },
+      {
+        "id": "scenario",
+        "kind": "aggregate",
+        "aliases": [
+          "scenario",
+          "timeline",
+          "overall history"
+        ]
+      }
+    ],
+    "dynamic_subjects": [
+      {
+        "pattern": "capture:<event_id>",
+        "kind": "capture",
+        "aliases": [
+          "<event_id>"
+        ]
+      }
+    ],
+    "predicates": [
+      {
+        "id": "billing_period",
+        "aliases": [
+          "billing period",
+          "recurrence",
+          "monthly",
+          "per month"
+        ]
+      },
+      {
+        "id": "cancellation_intent",
+        "aliases": [
+          "cancellation intent",
+          "pause intention",
+          "intention to stop"
+        ]
+      },
+      {
+        "id": "cancellation_requested",
+        "aliases": [
+          "cancellation requested",
+          "stop request"
+        ]
+      },
+      {
+        "id": "currency",
+        "aliases": [
+          "currency",
+          "currency code"
+        ]
+      },
+      {
+        "id": "current_price",
+        "aliases": [
+          "current price",
+          "current cost",
+          "monthly cost"
+        ]
+      },
+      {
+        "id": "last_charge",
+        "aliases": [
+          "last charge",
+          "last directly observed charge"
+        ]
+      },
+      {
+        "id": "status",
+        "aliases": [
+          "status",
+          "current status",
+          "current state",
+          "lifecycle"
+        ]
+      },
+      {
+        "id": "historical_price",
+        "aliases": [
+          "historical price",
+          "price history",
+          "previous price",
+          "price changes"
+        ]
+      },
+      {
+        "id": "historical_status",
+        "aliases": [
+          "historical status",
+          "old status",
+          "previous status"
+        ]
+      },
+      {
+        "id": "termination_date",
+        "aliases": [
+          "termination date",
+          "cancellation date"
+        ]
+      },
+      {
+        "id": "price_effective",
+        "aliases": [
+          "price effective",
+          "price effective date",
+          "price change effective date"
+        ]
+      },
+      {
+        "id": "next_renewal",
+        "aliases": [
+          "next renewal",
+          "renewal date"
+        ]
+      },
+      {
+        "id": "needs_attention",
+        "aliases": [
+          "needs attention",
+          "attention",
+          "requires attention",
+          "open deadline"
+        ]
+      },
+      {
+        "id": "effective_date",
+        "aliases": [
+          "effective date",
+          "effective from"
+        ]
+      },
+      {
+        "id": "expiry_date",
+        "aliases": [
+          "expiry date",
+          "expiration date",
+          "expires"
+        ]
+      },
+      {
+        "id": "signed_date",
+        "aliases": [
+          "signed date",
+          "date signed"
+        ]
+      },
+      {
+        "id": "renewal_date",
+        "aliases": [
+          "renewal date",
+          "contract renewal date"
+        ]
+      },
+      {
+        "id": "policy_id",
+        "aliases": [
+          "policy id",
+          "policy number"
+        ]
+      },
+      {
+        "id": "premium",
+        "aliases": [
+          "premium",
+          "insurance premium"
+        ]
+      },
+      {
+        "id": "beneficiary",
+        "aliases": [
+          "beneficiary"
+        ]
+      },
+      {
+        "id": "claim_number",
+        "aliases": [
+          "claim number"
+        ]
+      },
+      {
+        "id": "observed_bill_count",
+        "aliases": [
+          "observed bill count",
+          "number of observed bills"
+        ]
+      },
+      {
+        "id": "observed_total",
+        "aliases": [
+          "observed total",
+          "observed spending total",
+          "sum of observed bills"
+        ]
+      },
+      {
+        "id": "observed_periods",
+        "aliases": [
+          "observed periods",
+          "billed periods"
+        ]
+      },
+      {
+        "id": "missing_periods",
+        "aliases": [
+          "missing periods",
+          "periods with no bill"
+        ]
+      },
+      {
+        "id": "unobserved_periods",
+        "aliases": [
+          "unobserved periods",
+          "unknown bill periods"
+        ]
+      },
+      {
+        "id": "current_amount",
+        "aliases": [
+          "current amount",
+          "current amount due"
+        ]
+      },
+      {
+        "id": "purchase_count",
+        "aliases": [
+          "purchase count",
+          "number of purchases"
+        ]
+      },
+      {
+        "id": "purchased_total",
+        "aliases": [
+          "purchased total",
+          "purchase total",
+          "purchase spending total"
+        ]
+      },
+      {
+        "id": "confirmed_consumption_quantity",
+        "aliases": [
+          "confirmed consumption quantity",
+          "consumed quantity"
+        ]
+      },
+      {
+        "id": "consumption_observation_count",
+        "aliases": [
+          "consumption observation count",
+          "number of consumption observations"
+        ]
+      },
+      {
+        "id": "explicit_zero_is_supported",
+        "aliases": [
+          "explicit zero is supported",
+          "explicit zero"
+        ]
+      },
+      {
+        "id": "unobserved_consumption",
+        "aliases": [
+          "unobserved consumption",
+          "missing consumption observations"
+        ]
+      },
+      {
+        "id": "deadline",
+        "aliases": [
+          "deadline",
+          "due date",
+          "due"
+        ]
+      },
+      {
+        "id": "owner",
+        "aliases": [
+          "owner",
+          "assignee",
+          "responsible person"
+        ]
+      },
+      {
+        "id": "blocker",
+        "aliases": [
+          "blocker",
+          "blocking issue"
+        ]
+      },
+      {
+        "id": "entity_link",
+        "aliases": [
+          "entity link",
+          "identity link",
+          "person link"
+        ]
+      },
+      {
+        "id": "relationship",
+        "aliases": [
+          "relationship",
+          "relation",
+          "duplicate relation",
+          "change relation"
+        ]
+      },
+      {
+        "id": "duplicate_event_count",
+        "aliases": [
+          "duplicate event count",
+          "duplicate capture count",
+          "duplicate upload count"
+        ]
+      },
+      {
+        "id": "duplicate_group_count",
+        "aliases": [
+          "duplicate group count",
+          "number of duplicate groups"
+        ]
+      },
+      {
+        "id": "meaningful_change_event_count",
+        "aliases": [
+          "meaningful change event count",
+          "meaningful change count"
+        ]
+      },
+      {
+        "id": "quoted_amount",
+        "aliases": [
+          "quoted amount",
+          "quote amount"
+        ]
+      },
+      {
+        "id": "approval_required",
+        "aliases": [
+          "approval required",
+          "requires approval"
+        ]
+      },
+      {
+        "id": "approved",
+        "aliases": [
+          "approved",
+          "approval granted"
+        ]
+      },
+      {
+        "id": "executed",
+        "aliases": [
+          "executed",
+          "was executed"
+        ]
+      },
+      {
+        "id": "approval_scope",
+        "aliases": [
+          "approval scope",
+          "what requires approval"
+        ]
+      },
+      {
+        "id": "amount",
+        "aliases": [
+          "amount",
+          "cost",
+          "price",
+          "total"
+        ]
+      },
+      {
+        "id": "correction",
+        "aliases": [
+          "correction",
+          "corrected fact",
+          "user correction"
+        ]
+      },
+      {
+        "id": "supersession",
+        "aliases": [
+          "supersession",
+          "supersedes",
+          "replacement"
+        ]
+      },
+      {
+        "id": "contradiction",
+        "aliases": [
+          "contradiction",
+          "conflict",
+          "conflicting evidence"
+        ]
+      },
+      {
+        "id": "retroactive_observation",
+        "aliases": [
+          "retroactive observation",
+          "backdated observation"
+        ]
+      },
+      {
+        "id": "status_history",
+        "aliases": [
+          "status history",
+          "lifecycle history",
+          "state transitions"
+        ]
+      },
+      {
+        "id": "owner_history",
+        "aliases": [
+          "owner history",
+          "reassignment history"
+        ]
+      },
+      {
+        "id": "replacement_history",
+        "aliases": [
+          "replacement history",
+          "contract replacement history"
+        ]
+      }
+    ]
+  },
+  "unknown_reason": {
+    "allowed_categories": [
+      "ambiguous_person",
+      "conflicting",
+      "unreadable",
+      "not_available",
+      "no_capture_for_period",
+      "no_consumption_observation",
+      "not_stated",
+      "missing"
+    ],
+    "natural_language": "A concise natural-language reason is accepted and deterministically mapped to one of the listed categories."
+  },
+  "predicate_value_shapes": {
+    "current_price": "object {amount, currency, billing_period}",
+    "last_charge": "object {amount, currency}",
+    "observed_total": "object {amount, currency}",
+    "current_amount": "object {amount, currency}",
+    "purchased_total": "object {amount, currency}",
+    "premium": "object {amount, currency}",
+    "quoted_amount": "object {amount, currency}",
+    "relationship": "object {relation_type, source_event_id, target_event_id, and any explicitly supported detail fields}",
+    "needs_attention": "object {reason, plus the relevant deadline or approval/execution facts}",
+    "observed_periods": "array of YYYY-MM periods",
+    "missing_periods": "array of YYYY-MM periods",
+    "unobserved_periods": "array of YYYY-MM periods",
+    "correction": "object identifying the target, prior value, replacement value, and source event",
+    "supersession": "object identifying the superseded and replacement evidence",
+    "contradiction": "object identifying conflicting field evidence and resolution status"
+  },
+  "value_normalization": {
+    "enum_field_aliases": {
+      "relation_type": {
+        "exact_duplicate": [
+          "exact duplicate"
+        ],
+        "normalized_duplicate": [
+          "normalized duplicate"
+        ],
+        "meaningful_change": [
+          "meaningful change"
+        ],
+        "similar_not_duplicate": [
+          "similar not duplicate"
+        ]
+      },
+      "status": {
+        "not_started": [
+          "not started"
+        ],
+        "in_progress": [
+          "in progress"
+        ],
+        "needs_review": [
+          "needs review"
+        ]
+      }
+    },
+    "object_field_aliases": {
+      "amount": [
+        "amount_eur",
+        "cost_eur",
+        "price_eur",
+        "monthly_cost_eur",
+        "total_eur",
+        "observed_total_eur",
+        "latest_charged_eur",
+        "announced_monthly_eur"
+      ],
+      "currency": [
+        "currency_code"
+      ],
+      "billing_period": [
+        "period",
+        "recurrence"
+      ],
+      "deadline": [
+        "due_date",
+        "due"
+      ],
+      "owner": [
+        "assignee",
+        "responsible_person"
+      ],
+      "source_event_id": [
+        "source",
+        "source_capture_id"
+      ],
+      "target_event_id": [
+        "target",
+        "target_capture_id"
+      ],
+      "relation_type": [
+        "relation",
+        "relationship"
+      ],
+      "duplicate_group": [
+        "duplicate_group_id"
+      ]
+    }
+  }
+}
+
+PRIOR DETERMINISTIC PROJECTION:
+{
+  "projection_version": "experiment-005-duplicate-evidence-projection-v1",
+  "current_facts": [
+    {
+      "subject": "capture_g01_e032",
+      "predicate": "last_charge",
+      "knowledge_status": "unknown",
+      "source_refs": [
+        "g01-e032"
+      ],
+      "latest_sequence": 32,
+      "unknown_reason": "the may copperline payment is not shown in the bank list, so no direct charge is observed."
+    },
+    {
+      "subject": "change_fiber_payment",
+      "predicate": "approval_required",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e010",
+        "g01-e037"
+      ],
+      "latest_sequence": 37,
+      "value": true
+    },
+    {
+      "subject": "change_fiber_payment",
+      "predicate": "approval_scope",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e010"
+      ],
+      "latest_sequence": 10,
+      "value": "change copperline bank mandate"
+    },
+    {
+      "subject": "change_fiber_payment",
+      "predicate": "approved",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e047"
+      ],
+      "latest_sequence": 47,
+      "value": false
+    },
+    {
+      "subject": "change_fiber_payment",
+      "predicate": "executed",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e010",
+        "g01-e037"
+      ],
+      "latest_sequence": 37,
+      "value": false
+    },
+    {
+      "subject": "change_fiber_payment",
+      "predicate": "status",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e010",
+        "g01-e037"
+      ],
+      "latest_sequence": 37,
+      "value": "proposed"
+    },
+    {
+      "subject": "copperline_fiber",
+      "predicate": "correction",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e035"
+      ],
+      "latest_sequence": 35,
+      "value": {
+        "prior_value": {
+          "amount": "44.1",
+          "currency": "eur"
+        },
+        "replacement_value": {
+          "amount": "43.5",
+          "currency": "eur"
+        },
+        "source_event_id": "g01-e035",
+        "target_event_id": "observed_total"
+      }
+    },
+    {
+      "subject": "copperline_fiber",
+      "predicate": "historical_status",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e050"
+      ],
+      "latest_sequence": 50,
+      "value": "paid"
+    },
+    {
+      "subject": "copperline_fiber",
+      "predicate": "last_charge",
+      "knowledge_status": "unknown",
+      "source_refs": [
+        "g01-e050"
+      ],
+      "latest_sequence": 50,
+      "unknown_reason": "not_available"
+    },
+    {
+      "subject": "copperline_fiber",
+      "predicate": "missing_periods",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e041"
+      ],
+      "latest_sequence": 41,
+      "value": [
+        "2026-06"
+      ]
+    },
+    {
+      "subject": "copperline_fiber",
+      "predicate": "observed_bill_count",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e054",
+        "g01-e055"
+      ],
+      "latest_sequence": 55,
+      "value": 1
+    },
+    {
+      "subject": "copperline_fiber",
+      "predicate": "observed_periods",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e054",
+        "g01-e055"
+      ],
+      "latest_sequence": 55,
+      "value": [
+        "2026-06"
+      ]
+    },
+    {
+      "subject": "copperline_fiber",
+      "predicate": "observed_total",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e054",
+        "g01-e055"
+      ],
+      "latest_sequence": 55,
+      "value": {
+        "amount": "45",
+        "currency": "eur"
+      }
+    },
+    {
+      "subject": "copperline_fiber",
+      "predicate": "unobserved_periods",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e009"
+      ],
+      "latest_sequence": 9,
+      "value": [
+        "2026-05"
+      ]
+    },
+    {
+      "subject": "emberline",
+      "predicate": "beneficiary",
+      "knowledge_status": "unknown",
+      "source_refs": [
+        "g01-e017",
+        "g01-e046"
+      ],
+      "latest_sequence": 46,
+      "unknown_reason": "conflicting"
+    },
+    {
+      "subject": "emberline",
+      "predicate": "contradiction",
+      "knowledge_status": "unknown",
+      "source_refs": [
+        "g01-e016",
+        "g01-e017"
+      ],
+      "latest_sequence": 17,
+      "unknown_reason": "conflicting"
+    },
+    {
+      "subject": "emberline",
+      "predicate": "expiry_date",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e005"
+      ],
+      "latest_sequence": 5,
+      "value": "2026-12-31"
+    },
+    {
+      "subject": "emberline",
+      "predicate": "historical_price",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e026"
+      ],
+      "latest_sequence": 26,
+      "value": {
+        "amount": "21",
+        "billing_period": "monthly",
+        "currency": "eur"
+      }
+    },
+    {
+      "subject": "emberline",
+      "predicate": "policy_id",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e005"
+      ],
+      "latest_sequence": 5,
+      "value": "el-4821"
+    },
+    {
+      "subject": "emberline",
+      "predicate": "premium",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e005"
+      ],
+      "latest_sequence": 5,
+      "value": {
+        "amount": "19.75",
+        "billing_period": "monthly",
+        "currency": "eur"
+      }
+    },
+    {
+      "subject": "emberline",
+      "predicate": "price_effective",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e026"
+      ],
+      "latest_sequence": 26,
+      "value": "2026-07-01"
+    },
+    {
+      "subject": "emberline",
+      "predicate": "status",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e045"
+      ],
+      "latest_sequence": 45,
+      "value": "active"
+    },
+    {
+      "subject": "greenglass_market",
+      "predicate": "confirmed_consumption_quantity",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e043"
+      ],
+      "latest_sequence": 43,
+      "value": 1
+    },
+    {
+      "subject": "greenglass_market",
+      "predicate": "consumption_observation_count",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e043"
+      ],
+      "latest_sequence": 43,
+      "value": 1
+    },
+    {
+      "subject": "greenglass_market",
+      "predicate": "explicit_zero_is_supported",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e023"
+      ],
+      "latest_sequence": 23,
+      "value": true
+    },
+    {
+      "subject": "greenglass_market",
+      "predicate": "purchase_count",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e052"
+      ],
+      "latest_sequence": 52,
+      "value": 1
+    },
+    {
+      "subject": "greenglass_market",
+      "predicate": "purchased_total",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e052"
+      ],
+      "latest_sequence": 52,
+      "value": {
+        "amount": "30.5",
+        "currency": "eur"
+      }
+    },
+    {
+      "subject": "meter_visit",
+      "predicate": "deadline",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e058"
+      ],
+      "latest_sequence": 58,
+      "value": "2026-06-10"
+    },
+    {
+      "subject": "meter_visit",
+      "predicate": "owner",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e058"
+      ],
+      "latest_sequence": 58,
+      "value": "devon_park"
+    },
+    {
+      "subject": "meter_visit",
+      "predicate": "retroactive_observation",
+      "knowledge_status": "unknown",
+      "source_refs": [
+        "g01-e049"
+      ],
+      "latest_sequence": 49,
+      "unknown_reason": "no_capture_for_period"
+    },
+    {
+      "subject": "meter_visit",
+      "predicate": "status",
+      "knowledge_status": "inferred",
+      "source_refs": [
+        "g01-e058"
+      ],
+      "latest_sequence": 58,
+      "value": "in_progress"
+    },
+    {
+      "subject": "moonbeam_plus",
+      "predicate": "cancellation_intent",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e057"
+      ],
+      "latest_sequence": 57,
+      "value": false
+    },
+    {
+      "subject": "moonbeam_plus",
+      "predicate": "current_price",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e036"
+      ],
+      "latest_sequence": 36,
+      "value": {
+        "amount": "13.5",
+        "billing_period": "monthly",
+        "currency": "eur"
+      }
+    },
+    {
+      "subject": "moonbeam_plus",
+      "predicate": "historical_price",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e008"
+      ],
+      "latest_sequence": 8,
+      "value": {
+        "amount": "13.5",
+        "billing_period": "monthly",
+        "currency": "eur"
+      }
+    },
+    {
+      "subject": "moonbeam_plus",
+      "predicate": "last_charge",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e021"
+      ],
+      "latest_sequence": 21,
+      "value": {
+        "amount": "11.9",
+        "currency": "eur"
+      }
+    },
+    {
+      "subject": "moonbeam_plus",
+      "predicate": "next_renewal",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e030"
+      ],
+      "latest_sequence": 30,
+      "value": "2026-05-30"
+    },
+    {
+      "subject": "moonbeam_plus",
+      "predicate": "price_effective",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e008"
+      ],
+      "latest_sequence": 8,
+      "value": "2026-05-01"
+    },
+    {
+      "subject": "moonbeam_plus",
+      "predicate": "status",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e057"
+      ],
+      "latest_sequence": 57,
+      "value": "active"
+    },
+    {
+      "subject": "permit_renewal",
+      "predicate": "deadline",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e018",
+        "g01-e020"
+      ],
+      "latest_sequence": 20,
+      "value": "2026-04-30"
+    },
+    {
+      "subject": "permit_renewal",
+      "predicate": "owner",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e006",
+        "g01-e013"
+      ],
+      "latest_sequence": 13,
+      "value": "mira_solen"
+    },
+    {
+      "subject": "permit_renewal",
+      "predicate": "status",
+      "knowledge_status": "inferred",
+      "source_refs": [
+        "g01-e059"
+      ],
+      "latest_sequence": 59,
+      "value": "completed"
+    },
+    {
+      "subject": "permit_renewal",
+      "predicate": "status_history",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e048"
+      ],
+      "latest_sequence": 48,
+      "value": [
+        "open",
+        "in_progress",
+        "completed"
+      ]
+    },
+    {
+      "subject": "renewal_check",
+      "predicate": "needs_attention",
+      "knowledge_status": "known",
+      "source_refs": [
+        "g01-e044"
+      ],
+      "latest_sequence": 44,
+      "value": {
+        "reason": "emberline renewal should be checked"
+      }
+    },
+    {
+      "subject": "renewal_check",
+      "predicate": "owner",
+      "knowledge_status": "unknown",
+      "source_refs": [
+        "g01-e044"
+      ],
+      "latest_sequence": 44,
+      "unknown_reason": "ambiguous_person"
+    },
+    {
+      "subject": "renewal_check",
+      "predicate": "status",
+      "knowledge_status": "inferred",
+      "source_refs": [
+        "g01-e044"
+      ],
+      "latest_sequence": 44,
+      "value": "not_started"
+    }
+  ],
+  "relationships": [
+    {
+      "source_event_id": "g01-e008",
+      "target_event_id": "g01-e001",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "historical_price",
+        "price_effective"
+      ],
+      "duplicate_group": null,
+      "note": "Future monthly price announced with an effective date."
+    },
+    {
+      "source_event_id": "g01-e011",
+      "target_event_id": "g01-e002",
+      "relation_type": "exact_duplicate",
+      "changed_fields": [],
+      "duplicate_group": null,
+      "note": null
+    },
+    {
+      "source_event_id": "g01-e012",
+      "target_event_id": "g01-e003",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": [],
+      "duplicate_group": null,
+      "note": "Same receipt facts with decimal-comma formatting."
+    },
+    {
+      "source_event_id": "g01-e013",
+      "target_event_id": "g01-e006",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "owner"
+      ],
+      "duplicate_group": null,
+      "note": "Explicit reassignment from Devon Park to Mira Solen."
+    },
+    {
+      "source_event_id": "g01-e017",
+      "target_event_id": "g01-e016",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "beneficiary"
+      ],
+      "duplicate_group": null,
+      "note": "Conflicting beneficiary evidence remains unresolved."
+    },
+    {
+      "source_event_id": "g01-e018",
+      "target_event_id": "g01-e006",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "deadline"
+      ],
+      "duplicate_group": null,
+      "note": "Explicit correction from 2026-04-28 to 2026-04-30."
+    },
+    {
+      "source_event_id": "g01-e019",
+      "target_event_id": "g01-e006",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "status"
+      ],
+      "duplicate_group": null,
+      "note": "Permit renewal is now reported in progress."
+    },
+    {
+      "source_event_id": "g01-e020",
+      "target_event_id": "g01-e018",
+      "relation_type": "similar_not_duplicate",
+      "changed_fields": [],
+      "duplicate_group": null,
+      "note": "Repeats the corrected deadline and adds confirmation by Mira Solen."
+    },
+    {
+      "source_event_id": "g01-e021",
+      "target_event_id": "g01-e001",
+      "relation_type": "similar_not_duplicate",
+      "changed_fields": [],
+      "duplicate_group": null,
+      "note": "Direct April charge observation, distinct from the earlier subscription price statement."
+    },
+    {
+      "source_event_id": "g01-e022",
+      "target_event_id": "g01-e003",
+      "relation_type": "similar_not_duplicate",
+      "changed_fields": [],
+      "duplicate_group": null,
+      "note": "Second GreenGlass purchase, distinct from the earlier receipt."
+    },
+    {
+      "source_event_id": "g01-e023",
+      "target_event_id": "g01-e022",
+      "relation_type": "similar_not_duplicate",
+      "changed_fields": [],
+      "duplicate_group": null,
+      "note": "Consumption observation associated with the purchase, not a duplicate purchase."
+    },
+    {
+      "source_event_id": "g01-e024",
+      "target_event_id": "g01-e011",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": [],
+      "duplicate_group": null,
+      "note": "Ledger repeats the April Copperline total."
+    },
+    {
+      "source_event_id": "g01-e025",
+      "target_event_id": "g01-e019",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "status"
+      ],
+      "duplicate_group": null,
+      "note": "Permit renewal changes from in progress to completed."
+    },
+    {
+      "source_event_id": "g01-e026",
+      "target_event_id": "g01-e005",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "premium",
+        "price_effective"
+      ],
+      "duplicate_group": null,
+      "note": "Future Emberline premium increase announced with an effective date."
+    },
+    {
+      "source_event_id": "g01-e028",
+      "target_event_id": "g01-e014",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "deadline",
+        "owner",
+        "status"
+      ],
+      "duplicate_group": null,
+      "note": "Meter visit is opened with a deadline and explicit owner non-statement."
+    },
+    {
+      "source_event_id": "g01-e029",
+      "target_event_id": "g01-e028",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "owner"
+      ],
+      "duplicate_group": null,
+      "note": "Owner is assigned to Mira Solen."
+    },
+    {
+      "source_event_id": "g01-e030",
+      "target_event_id": "g01-e001",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "next_renewal"
+      ],
+      "duplicate_group": null,
+      "note": "Next renewal date advances to 2026-05-30."
+    },
+    {
+      "source_event_id": "g01-e031",
+      "target_event_id": "g01-e009",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "observed_bill_count",
+        "observed_periods",
+        "observed_total",
+        "unobserved_periods"
+      ],
+      "duplicate_group": null,
+      "note": "A May bill is now directly observed despite the earlier unobserved-period evidence."
+    },
+    {
+      "source_event_id": "g01-e032",
+      "target_event_id": "g01-e031",
+      "relation_type": "similar_not_duplicate",
+      "changed_fields": [],
+      "duplicate_group": null,
+      "note": "Payment visibility evidence is distinct from the May invoice."
+    },
+    {
+      "source_event_id": "g01-e033",
+      "target_event_id": "g01-e031",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": [],
+      "duplicate_group": null,
+      "note": "Same May invoice facts with decimal-comma formatting."
+    },
+    {
+      "source_event_id": "g01-e034",
+      "target_event_id": "g01-e031",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "observed_total"
+      ],
+      "duplicate_group": null,
+      "note": "Copied summary reports a conflicting May bill amount."
+    },
+    {
+      "source_event_id": "g01-e035",
+      "target_event_id": "g01-e034",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "observed_total"
+      ],
+      "duplicate_group": null,
+      "note": "Correction identifies EUR 44.10 as a separate meter fee and confirms the bill at EUR 43.50."
+    },
+    {
+      "source_event_id": "g01-e036",
+      "target_event_id": "g01-e008",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "current_price"
+      ],
+      "duplicate_group": null,
+      "note": "Previously announced price becomes the active monthly price."
+    },
+    {
+      "source_event_id": "g01-e037",
+      "target_event_id": "g01-e010",
+      "relation_type": "exact_duplicate",
+      "changed_fields": [],
+      "duplicate_group": null,
+      "note": "Mandate proposal remains unapproved and unexecuted."
+    },
+    {
+      "source_event_id": "g01-e038",
+      "target_event_id": "g01-e025",
+      "relation_type": "exact_duplicate",
+      "changed_fields": [],
+      "duplicate_group": null,
+      "note": "Repeats permit-renewal completion."
+    },
+    {
+      "source_event_id": "g01-e039",
+      "target_event_id": "g01-e028",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "deadline",
+        "status"
+      ],
+      "duplicate_group": null,
+      "note": "Meter visit is cancelled and no replacement appointment is recorded."
+    },
+    {
+      "source_event_id": "g01-e036",
+      "target_event_id": "g01-e001",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "current_price"
+      ],
+      "duplicate_group": null,
+      "note": null
+    },
+    {
+      "source_event_id": "g01-e042",
+      "target_event_id": "g01-e022",
+      "relation_type": "similar_not_duplicate",
+      "changed_fields": [],
+      "duplicate_group": null,
+      "note": "Different GreenGlass purchase and amount."
+    },
+    {
+      "source_event_id": "g01-e043",
+      "target_event_id": "g01-e042",
+      "relation_type": "similar_not_duplicate",
+      "changed_fields": [],
+      "duplicate_group": null,
+      "note": "Consumption observation associated with the purchase."
+    },
+    {
+      "source_event_id": "g01-e045",
+      "target_event_id": "g01-e005",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "status"
+      ],
+      "duplicate_group": null,
+      "note": "Adds an active-status observation while repeating the expiry date."
+    },
+    {
+      "source_event_id": "g01-e046",
+      "target_event_id": "g01-e017",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "beneficiary"
+      ],
+      "duplicate_group": null,
+      "note": "Beneficiary is now unreadable; the prior conflict remains unresolved."
+    },
+    {
+      "source_event_id": "g01-e047",
+      "target_event_id": "g01-e037",
+      "relation_type": "similar_not_duplicate",
+      "changed_fields": [],
+      "duplicate_group": null,
+      "note": "Confirms approval is still absent."
+    },
+    {
+      "source_event_id": "g01-e048",
+      "target_event_id": "g01-e038",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "status_history"
+      ],
+      "duplicate_group": null,
+      "note": "Adds the ordered lifecycle history."
+    },
+    {
+      "source_event_id": "g01-e050",
+      "target_event_id": "g01-e031",
+      "relation_type": "similar_not_duplicate",
+      "changed_fields": [],
+      "duplicate_group": null,
+      "note": "Ledger payment marking is distinct from the invoice capture and does not show a direct charge."
+    },
+    {
+      "source_event_id": "g01-e051",
+      "target_event_id": "g01-e042",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": [],
+      "duplicate_group": null,
+      "note": "Ledger copy repeats the EUR 31.00 GreenGlass purchase."
+    },
+    {
+      "source_event_id": "g01-e052",
+      "target_event_id": "g01-e042",
+      "relation_type": "similar_not_duplicate",
+      "changed_fields": [],
+      "duplicate_group": null,
+      "note": "Different cleaning bundle and amount."
+    },
+    {
+      "source_event_id": "g01-e053",
+      "target_event_id": "g01-e008",
+      "relation_type": "similar_not_duplicate",
+      "changed_fields": [],
+      "duplicate_group": null,
+      "note": "Confirms the previously announced Moonbeam price notice."
+    },
+    {
+      "source_event_id": "g01-e054",
+      "target_event_id": "g01-e041",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "missing_periods",
+        "observed_bill_count",
+        "observed_periods",
+        "observed_total"
+      ],
+      "duplicate_group": null,
+      "note": "A June invoice is subsequently observed."
+    },
+    {
+      "source_event_id": "g01-e055",
+      "target_event_id": "g01-e054",
+      "relation_type": "exact_duplicate",
+      "changed_fields": [],
+      "duplicate_group": null,
+      "note": "Identical June Copperline invoice capture."
+    },
+    {
+      "source_event_id": "g01-e057",
+      "target_event_id": "g01-e056",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "cancellation_intent",
+        "status"
+      ],
+      "duplicate_group": null,
+      "note": "Later note explicitly rejects pausing and confirms active status."
+    },
+    {
+      "source_event_id": "g01-e058",
+      "target_event_id": "g01-e039",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "deadline",
+        "owner",
+        "status"
+      ],
+      "duplicate_group": null,
+      "note": "Cancelled meter visit is reopened with a new date and owner."
+    },
+    {
+      "source_event_id": "g01-e059",
+      "target_event_id": "g01-e048",
+      "relation_type": "similar_not_duplicate",
+      "changed_fields": [],
+      "duplicate_group": null,
+      "note": "Later note reports completion, with an unqualified Mira as speaker."
+    },
+    {
+      "source_event_id": "g01-e058",
+      "target_event_id": "g01-e029",
+      "relation_type": "meaningful_change",
+      "changed_fields": [
+        "owner"
+      ],
+      "duplicate_group": null,
+      "note": null
+    }
+  ],
+  "recent_captures": [
+    {
+      "event_id": "g01-e041",
+      "sequence": 41,
+      "observed_at": "2026-05-11T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e042",
+      "sequence": 42,
+      "observed_at": "2026-05-12T08:00:00+00:00",
+      "source_type": "receipt"
+    },
+    {
+      "event_id": "g01-e043",
+      "sequence": 43,
+      "observed_at": "2026-05-13T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e044",
+      "sequence": 44,
+      "observed_at": "2026-05-14T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e045",
+      "sequence": 45,
+      "observed_at": "2026-05-15T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e046",
+      "sequence": 46,
+      "observed_at": "2026-05-16T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e047",
+      "sequence": 47,
+      "observed_at": "2026-05-17T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e048",
+      "sequence": 48,
+      "observed_at": "2026-05-18T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e049",
+      "sequence": 49,
+      "observed_at": "2026-05-19T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e050",
+      "sequence": 50,
+      "observed_at": "2026-05-20T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e051",
+      "sequence": 51,
+      "observed_at": "2026-05-21T08:00:00+00:00",
+      "source_type": "ledger"
+    },
+    {
+      "event_id": "g01-e052",
+      "sequence": 52,
+      "observed_at": "2026-05-22T08:00:00+00:00",
+      "source_type": "receipt"
+    },
+    {
+      "event_id": "g01-e053",
+      "sequence": 53,
+      "observed_at": "2026-05-23T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e054",
+      "sequence": 54,
+      "observed_at": "2026-05-24T08:00:00+00:00",
+      "source_type": "invoice"
+    },
+    {
+      "event_id": "g01-e055",
+      "sequence": 55,
+      "observed_at": "2026-05-25T08:00:00+00:00",
+      "source_type": "invoice"
+    },
+    {
+      "event_id": "g01-e056",
+      "sequence": 56,
+      "observed_at": "2026-05-26T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e057",
+      "sequence": 57,
+      "observed_at": "2026-05-27T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e058",
+      "sequence": 58,
+      "observed_at": "2026-05-28T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e059",
+      "sequence": 59,
+      "observed_at": "2026-05-29T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e060",
+      "sequence": 60,
+      "observed_at": "2026-05-30T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e061",
+      "sequence": 61,
+      "observed_at": "2026-05-31T08:00:00+00:00",
+      "source_type": "policy"
+    },
+    {
+      "event_id": "g01-e062",
+      "sequence": 62,
+      "observed_at": "2026-06-01T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e063",
+      "sequence": 63,
+      "observed_at": "2026-06-02T08:00:00+00:00",
+      "source_type": "ledger"
+    },
+    {
+      "event_id": "g01-e064",
+      "sequence": 64,
+      "observed_at": "2026-06-03T08:00:00+00:00",
+      "source_type": "receipt"
+    },
+    {
+      "event_id": "g01-e065",
+      "sequence": 65,
+      "observed_at": "2026-06-04T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e066",
+      "sequence": 66,
+      "observed_at": "2026-06-05T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e067",
+      "sequence": 67,
+      "observed_at": "2026-06-06T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e068",
+      "sequence": 68,
+      "observed_at": "2026-06-07T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e069",
+      "sequence": 69,
+      "observed_at": "2026-06-08T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e070",
+      "sequence": 70,
+      "observed_at": "2026-06-09T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e071",
+      "sequence": 71,
+      "observed_at": "2026-06-10T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e072",
+      "sequence": 72,
+      "observed_at": "2026-06-11T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e073",
+      "sequence": 73,
+      "observed_at": "2026-06-12T08:00:00+00:00",
+      "source_type": "receipt"
+    },
+    {
+      "event_id": "g01-e074",
+      "sequence": 74,
+      "observed_at": "2026-06-13T08:00:00+00:00",
+      "source_type": "ledger"
+    },
+    {
+      "event_id": "g01-e075",
+      "sequence": 75,
+      "observed_at": "2026-06-14T08:00:00+00:00",
+      "source_type": "summary"
+    },
+    {
+      "event_id": "g01-e076",
+      "sequence": 76,
+      "observed_at": "2026-06-15T08:00:00+00:00",
+      "source_type": "correction"
+    },
+    {
+      "event_id": "g01-e077",
+      "sequence": 77,
+      "observed_at": "2026-06-16T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e078",
+      "sequence": 78,
+      "observed_at": "2026-06-17T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e079",
+      "sequence": 79,
+      "observed_at": "2026-06-18T08:00:00+00:00",
+      "source_type": "note"
+    },
+    {
+      "event_id": "g01-e080",
+      "sequence": 80,
+      "observed_at": "2026-06-19T08:00:00+00:00",
+      "source_type": "note"
+    }
+  ]
+}
+
+NEW CAPTURES:
+[
+  {
+    "event_id": "g01-e061",
+    "sequence": 61,
+    "captured_at": "2026-05-31T10:00:00+00:00",
+    "observed_at": "2026-05-31T08:00:00+00:00",
+    "source_type": "policy",
+    "payload": {
+      "text": "Emberline renewal pack repeats EUR 21.00 monthly from 2026-07-01."
+    },
+    "payload_sha256": "3a9ddd89bbed86d9aab358dffb27fd108dd5e2320bccfab0f0a1203443e80576",
+    "metadata": {
+      "language": "en",
+      "capture_channel": "policy"
+    }
+  },
+  {
+    "event_id": "g01-e062",
+    "sequence": 62,
+    "captured_at": "2026-06-01T10:00:00+00:00",
+    "observed_at": "2026-06-01T08:00:00+00:00",
+    "source_type": "note",
+    "payload": {
+      "text": "Emberline policy status: active; expiry remains 2026-12-31."
+    },
+    "payload_sha256": "47d77b105e66cba734109642c606ad2f26075d143db820a10205005029c829c3",
+    "metadata": {
+      "language": "en",
+      "capture_channel": "note"
+    }
+  },
+  {
+    "event_id": "g01-e063",
+    "sequence": 63,
+    "captured_at": "2026-06-02T10:00:00+00:00",
+    "observed_at": "2026-06-02T08:00:00+00:00",
+    "source_type": "ledger",
+    "payload": {
+      "text": "Moonbeam+ June charge: EUR 13.50; next renewal 2026-06-30."
+    },
+    "payload_sha256": "a4e794cce663ff8efe5d2ed9a5de8173987a0b601d5a917ffa2e3052c2b25907",
+    "metadata": {
+      "language": "en",
+      "capture_channel": "ledger"
+    }
+  },
+  {
+    "event_id": "g01-e064",
+    "sequence": 64,
+    "captured_at": "2026-06-03T10:00:00+00:00",
+    "observed_at": "2026-06-03T08:00:00+00:00",
+    "source_type": "receipt",
+    "payload": {
+      "text": "GreenGlass Market purchase: EUR 12.00 for four pantry items."
+    },
+    "payload_sha256": "e3d86cef52899bd372cc95c2a4780cd1de878e85d3bcaea72627537561f1dcc6",
+    "metadata": {
+      "language": "en",
+      "capture_channel": "receipt"
+    }
+  },
+  {
+    "event_id": "g01-e065",
+    "sequence": 65,
+    "captured_at": "2026-06-04T10:00:00+00:00",
+    "observed_at": "2026-06-04T08:00:00+00:00",
+    "source_type": "note",
+    "payload": {
+      "text": "Used two of the four items from the June GreenGlass purchase."
+    },
+    "payload_sha256": "a4bca00072702d79e2e46bba56e12f62a3f4f2c5e33cde6b832b52cbcefe84fc",
+    "metadata": {
+      "language": "en",
+      "capture_channel": "note"
+    }
+  },
+  {
+    "event_id": "g01-e066",
+    "sequence": 66,
+    "captured_at": "2026-06-05T10:00:00+00:00",
+    "observed_at": "2026-06-05T08:00:00+00:00",
+    "source_type": "note",
+    "payload": {
+      "text": "The Copperline bank-mandate proposal was withdrawn without execution."
+    },
+    "payload_sha256": "8141c1730f35da794ed40c6e73a70f199a659f9f1da2928370a29fe7fac9d1b5",
+    "metadata": {
+      "language": "en",
+      "capture_channel": "note"
+    }
+  },
+  {
+    "event_id": "g01-e067",
+    "sequence": 67,
+    "captured_at": "2026-06-06T10:00:00+00:00",
+    "observed_at": "2026-06-06T08:00:00+00:00",
+    "source_type": "note",
+    "payload": {
+      "text": "Moonbeam+ cancellation request was recorded for review, but service is still active."
+    },
+    "payload_sha256": "a1dbe7f38948f93cc3b4ef524d52dc41bb1169506daebafd73f9d4c07c6e4a58",
+    "metadata": {
+      "language": "en",
+      "capture_channel": "note"
+    }
+  },
+  {
+    "event_id": "g01-e068",
+    "sequence": 68,
+    "captured_at": "2026-06-07T10:00:00+00:00",
+    "observed_at": "2026-06-07T08:00:00+00:00",
+    "source_type": "note",
+    "payload": {
+      "text": "The Moonbeam+ cancellation request was rejected; no cancellation occurred."
+    },
+    "payload_sha256": "eab03842f4539cf4fdc05ab2baf166c89c555c0e65791f351ab225bc6ff08db6",
+    "metadata": {
+      "language": "en",
+      "capture_channel": "note"
+    }
+  },
+  {
+    "event_id": "g01-e069",
+    "sequence": 69,
+    "captured_at": "2026-06-08T10:00:00+00:00",
+    "observed_at": "2026-06-08T08:00:00+00:00",
+    "source_type": "note",
+    "payload": {
+      "text": "Meter visit completed on 2026-06-10."
+    },
+    "payload_sha256": "9c2ceed5bfe3b174271bcd45f8a13b93c35a720f4ad309f34f50b7892eca33dd",
+    "metadata": {
+      "language": "en",
+      "capture_channel": "note"
+    }
+  },
+  {
+    "event_id": "g01-e070",
+    "sequence": 70,
+    "captured_at": "2026-06-09T10:00:00+00:00",
+    "observed_at": "2026-06-09T08:00:00+00:00",
+    "source_type": "note",
+    "payload": {
+      "text": "May meter reading was explicitly zero kWh."
+    },
+    "payload_sha256": "483ef722ce23e04b650715f2954d02ad9a1316a6cc9429553188728d67abf6c6",
+    "metadata": {
+      "language": "en",
+      "capture_channel": "note"
+    }
+  },
+  {
+    "event_id": "g01-e071",
+    "sequence": 71,
+    "captured_at": "2026-06-10T10:00:00+00:00",
+    "observed_at": "2026-06-10T08:00:00+00:00",
+    "source_type": "note",
+    "payload": {
+      "text": "No approval was granted for the bank-mandate proposal."
+    },
+    "payload_sha256": "d5d291a8c32eb986f47d743bbf682545c7a310acf36d12a0a1133a56e050cf05",
+    "metadata": {
+      "language": "en",
+      "capture_channel": "note"
+    }
+  },
+  {
+    "event_id": "g01-e072",
+    "sequence": 72,
+    "captured_at": "2026-06-11T10:00:00+00:00",
+    "observed_at": "2026-06-11T08:00:00+00:00",
+    "source_type": "note",
+    "payload": {
+      "text": "Emberline beneficiary scan still cannot be read."
+    },
+    "payload_sha256": "f647675a388b7570ad3e848def5af13fa2afa1ff457582e504913a74dd0a4036",
+    "metadata": {
+      "language": "en",
+      "capture_channel": "note"
+    }
+  },
+  {
+    "event_id": "g01-e073",
+    "sequence": 73,
+    "captured_at": "2026-06-12T10:00:00+00:00",
+    "observed_at": "2026-06-12T08:00:00+00:00",
+    "source_type": "receipt",
+    "payload": {
+      "text": "GreenGlass receipt: EUR 12.00 for four pantry items."
+    },
+    "payload_sha256": "3c2388b118d1fef4de042dfe34ee884ff264126623146ade9e675dbd4083b274",
+    "metadata": {
+      "language": "en",
+      "capture_channel": "receipt"
+    }
+  },
+  {
+    "event_id": "g01-e074",
+    "sequence": 74,
+    "captured_at": "2026-06-13T10:00:00+00:00",
+    "observed_at": "2026-06-13T08:00:00+00:00",
+    "source_type": "ledger",
+    "payload": {
+      "text": "GreenGlass June entry copied into the ledger: EUR 12.00."
+    },
+    "payload_sha256": "c48e6cd743199ec6bd651d17438a76c4f9e6d5c3615dd159f27466d832d30d71",
+    "metadata": {
+      "language": "en",
+      "capture_channel": "ledger"
+    }
+  },
+  {
+    "event_id": "g01-e075",
+    "sequence": 75,
+    "captured_at": "2026-06-14T10:00:00+00:00",
+    "observed_at": "2026-06-14T08:00:00+00:00",
+    "source_type": "summary",
+    "payload": {
+      "text": "Copperline June statement summary: EUR 45.00."
+    },
+    "payload_sha256": "366abffb69e2d95bdcde4f2fb57b3349b222dc29863a80a119077ebf1a8d59d1",
+    "metadata": {
+      "language": "en",
+      "capture_channel": "summary"
+    }
+  },
+  {
+    "event_id": "g01-e076",
+    "sequence": 76,
+    "captured_at": "2026-06-15T10:00:00+00:00",
+    "observed_at": "2026-06-15T08:00:00+00:00",
+    "source_type": "correction",
+    "payload": {
+      "text": "The earlier EUR 44.10 Copperline summary is superseded by the confirmed EUR 43.50 May bill."
+    },
+    "payload_sha256": "6419f224427f79f5f513408b9bbaad8241dceef711a002e50324057912589e59",
+    "metadata": {
+      "language": "en",
+      "capture_channel": "correction"
+    }
+  },
+  {
+    "event_id": "g01-e077",
+    "sequence": 77,
+    "captured_at": "2026-06-16T10:00:00+00:00",
+    "observed_at": "2026-06-16T08:00:00+00:00",
+    "source_type": "note",
+    "payload": {
+      "text": "Permit renewal confirmation is archived."
+    },
+    "payload_sha256": "4a220270a731eead0f09789aa980f8cb1d887e677ba07dd2b1e2453db84f4816",
+    "metadata": {
+      "language": "en",
+      "capture_channel": "note"
+    }
+  },
+  {
+    "event_id": "g01-e078",
+    "sequence": 78,
+    "captured_at": "2026-06-17T10:00:00+00:00",
+    "observed_at": "2026-06-17T08:00:00+00:00",
+    "source_type": "note",
+    "payload": {
+      "text": "Moonbeam+ current price is EUR 13.50; next renewal 2026-07-30."
+    },
+    "payload_sha256": "77a46c2a6f01112a9592b5ff5535c85583f10a052858f9719db0b1a646609128",
+    "metadata": {
+      "language": "en",
+      "capture_channel": "note"
+    }
+  },
+  {
+    "event_id": "g01-e079",
+    "sequence": 79,
+    "captured_at": "2026-06-18T10:00:00+00:00",
+    "observed_at": "2026-06-18T08:00:00+00:00",
+    "source_type": "note",
+    "payload": {
+      "text": "Final review: no approval was given and no bank mandate was changed."
+    },
+    "payload_sha256": "d77c538fbe75518c6de132cfba039fda1d7eaca72a4870653dc7bc2596bae918",
+    "metadata": {
+      "language": "en",
+      "capture_channel": "note"
+    }
+  },
+  {
+    "event_id": "g01-e080",
+    "sequence": 80,
+    "captured_at": "2026-06-19T10:00:00+00:00",
+    "observed_at": "2026-06-19T08:00:00+00:00",
+    "source_type": "note",
+    "payload": {
+      "text": "Final review: the Emberline beneficiary remains unknown because the scan is unreadable."
+    },
+    "payload_sha256": "95065b16a69b97c23d6b9d2a4885ba872d3fbb78e61ba6884d446e682b77d3e5",
+    "metadata": {
+      "language": "en",
+      "capture_channel": "note"
+    }
+  }
+]

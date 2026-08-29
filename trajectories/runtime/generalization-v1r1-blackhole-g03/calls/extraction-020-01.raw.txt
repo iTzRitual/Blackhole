@@ -1,0 +1,442 @@
+{
+  "observations": [
+    {
+      "event_id": "g03-e001",
+      "subject": "driftwood_studio",
+      "predicate": "signed_date",
+      "knowledge_status": "known",
+      "value": "2026-04-20",
+      "operation": "set",
+      "source_refs": ["g03-e001"]
+    },
+    {
+      "event_id": "g03-e001",
+      "subject": "driftwood_studio",
+      "predicate": "effective_date",
+      "knowledge_status": "known",
+      "value": "2026-05-01",
+      "operation": "set",
+      "source_refs": ["g03-e001"]
+    },
+    {
+      "event_id": "g03-e001",
+      "subject": "driftwood_studio",
+      "predicate": "renewal_date",
+      "knowledge_status": "known",
+      "value": "2026-11-01",
+      "operation": "set",
+      "source_refs": ["g03-e001"]
+    },
+    {
+      "event_id": "g03-e001",
+      "subject": "driftwood_studio",
+      "predicate": "expiry_date",
+      "knowledge_status": "known",
+      "value": "2026-10-31",
+      "operation": "set",
+      "source_refs": ["g03-e001"]
+    },
+    {
+      "event_id": "g03-e002",
+      "subject": "sableharbor",
+      "predicate": "status",
+      "knowledge_status": "known",
+      "value": "active",
+      "operation": "set",
+      "source_refs": ["g03-e002"]
+    },
+    {
+      "event_id": "g03-e002",
+      "subject": "sableharbor",
+      "predicate": "policy_id",
+      "knowledge_status": "known",
+      "value": "SH-9088",
+      "operation": "set",
+      "source_refs": ["g03-e002"]
+    },
+    {
+      "event_id": "g03-e002",
+      "subject": "sableharbor",
+      "predicate": "premium",
+      "knowledge_status": "known",
+      "value": {
+        "amount": 33.1,
+        "currency": "EUR"
+      },
+      "operation": "set",
+      "source_refs": ["g03-e002"]
+    },
+    {
+      "event_id": "g03-e002",
+      "subject": "sableharbor",
+      "predicate": "expiry_date",
+      "knowledge_status": "known",
+      "value": "2026-10-31",
+      "operation": "set",
+      "source_refs": ["g03-e002"]
+    },
+    {
+      "event_id": "g03-e003",
+      "subject": "tideglass_outlet",
+      "predicate": "amount",
+      "knowledge_status": "known",
+      "value": 46.8,
+      "operation": "set",
+      "source_refs": ["g03-e003"]
+    },
+    {
+      "event_id": "g03-e003",
+      "subject": "tideglass_outlet",
+      "predicate": "currency",
+      "knowledge_status": "known",
+      "value": "EUR",
+      "operation": "set",
+      "source_refs": ["g03-e003"]
+    },
+    {
+      "event_id": "g03-e004",
+      "subject": "tideglass_outlet",
+      "predicate": "confirmed_consumption_quantity",
+      "knowledge_status": "known",
+      "value": 1,
+      "operation": "set",
+      "source_refs": ["g03-e004"]
+    },
+    {
+      "event_id": "g03-e005",
+      "subject": "silvermeadow_pass",
+      "predicate": "status",
+      "knowledge_status": "known",
+      "value": "active",
+      "operation": "set",
+      "source_refs": ["g03-e005"]
+    },
+    {
+      "event_id": "g03-e005",
+      "subject": "silvermeadow_pass",
+      "predicate": "current_price",
+      "knowledge_status": "known",
+      "value": {
+        "amount": 15,
+        "currency": "EUR",
+        "billing_period": "monthly"
+      },
+      "operation": "set",
+      "source_refs": ["g03-e005"]
+    },
+    {
+      "event_id": "g03-e005",
+      "subject": "silvermeadow_pass",
+      "predicate": "next_renewal",
+      "knowledge_status": "known",
+      "value": "2026-05-31",
+      "operation": "set",
+      "source_refs": ["g03-e005"]
+    },
+    {
+      "event_id": "g03-e006",
+      "subject": "marbleleaf_water",
+      "predicate": "current_amount",
+      "knowledge_status": "known",
+      "value": {
+        "amount": 28,
+        "currency": "EUR"
+      },
+      "operation": "set",
+      "source_refs": ["g03-e006"]
+    },
+    {
+      "event_id": "g03-e006",
+      "subject": "marbleleaf_water",
+      "predicate": "observed_periods",
+      "knowledge_status": "known",
+      "value": ["2026-05"],
+      "operation": "set",
+      "source_refs": ["g03-e006"]
+    },
+    {
+      "event_id": "g03-e007",
+      "subject": "claim_followup",
+      "predicate": "status",
+      "knowledge_status": "known",
+      "value": "open",
+      "operation": "set",
+      "source_refs": ["g03-e007"]
+    },
+    {
+      "event_id": "g03-e007",
+      "subject": "claim_followup",
+      "predicate": "owner",
+      "knowledge_status": "known",
+      "value": "pavel_ross",
+      "operation": "set",
+      "source_refs": ["g03-e007"]
+    },
+    {
+      "event_id": "g03-e007",
+      "subject": "claim_followup",
+      "predicate": "deadline",
+      "knowledge_status": "known",
+      "value": "2026-05-14",
+      "operation": "set",
+      "source_refs": ["g03-e007"]
+    },
+    {
+      "event_id": "g03-e008",
+      "subject": "file_insurance_claim",
+      "predicate": "status",
+      "knowledge_status": "known",
+      "value": "proposed",
+      "operation": "set",
+      "source_refs": ["g03-e008"]
+    },
+    {
+      "event_id": "g03-e008",
+      "subject": "file_insurance_claim",
+      "predicate": "approval_required",
+      "knowledge_status": "known",
+      "value": true,
+      "operation": "set",
+      "source_refs": ["g03-e008"]
+    },
+    {
+      "event_id": "g03-e008",
+      "subject": "file_insurance_claim",
+      "predicate": "approved",
+      "knowledge_status": "known",
+      "value": false,
+      "operation": "set",
+      "source_refs": ["g03-e008"]
+    },
+    {
+      "event_id": "g03-e008",
+      "subject": "file_insurance_claim",
+      "predicate": "executed",
+      "knowledge_status": "known",
+      "value": false,
+      "operation": "set",
+      "source_refs": ["g03-e008"]
+    },
+    {
+      "event_id": "g03-e009",
+      "subject": "tideglass_outlet",
+      "predicate": "amount",
+      "knowledge_status": "known",
+      "value": 46.8,
+      "operation": "duplicate",
+      "source_refs": ["g03-e009"]
+    },
+    {
+      "event_id": "g03-e009",
+      "subject": "tideglass_outlet",
+      "predicate": "currency",
+      "knowledge_status": "known",
+      "value": "EUR",
+      "operation": "duplicate",
+      "source_refs": ["g03-e009"]
+    },
+    {
+      "event_id": "g03-e010",
+      "subject": "marbleleaf_water",
+      "predicate": "confirmed_consumption_quantity",
+      "knowledge_status": "known",
+      "value": 12,
+      "operation": "set",
+      "source_refs": ["g03-e010"]
+    },
+    {
+      "event_id": "g03-e010",
+      "subject": "marbleleaf_water",
+      "predicate": "retroactive_observation",
+      "knowledge_status": "known",
+      "value": {
+        "observed_at": "2026-04-28",
+        "captured_at": "2026-05-10",
+        "quantity": 12,
+        "unit": "cubic_metres"
+      },
+      "operation": "set",
+      "source_refs": ["g03-e010"]
+    },
+    {
+      "event_id": "g03-e011",
+      "subject": "driftwood_studio",
+      "predicate": "replacement_history",
+      "knowledge_status": "known",
+      "value": {
+        "prior_event_id": "g03-e001",
+        "replacement_event_id": "g03-e011",
+        "effective_date": "2026-08-01",
+        "status": "announced"
+      },
+      "operation": "set",
+      "source_refs": ["g03-e011"]
+    },
+    {
+      "event_id": "g03-e012",
+      "subject": "sableharbor",
+      "predicate": "claim_number",
+      "knowledge_status": "unknown",
+      "unknown_reason": "not_stated",
+      "operation": "set",
+      "source_refs": ["g03-e012"]
+    },
+    {
+      "event_id": "g03-e013",
+      "subject": "capture:g03-e013",
+      "predicate": "entity_link",
+      "knowledge_status": "unknown",
+      "unknown_reason": "ambiguous_person",
+      "operation": "set",
+      "source_refs": ["g03-e013"]
+    },
+    {
+      "event_id": "g03-e014",
+      "subject": "marbleleaf_water",
+      "predicate": "missing_periods",
+      "knowledge_status": "known",
+      "value": ["2026-06"],
+      "operation": "set",
+      "source_refs": ["g03-e014"]
+    },
+    {
+      "event_id": "g03-e015",
+      "subject": "return_package",
+      "predicate": "status",
+      "knowledge_status": "known",
+      "value": "open",
+      "operation": "set",
+      "source_refs": ["g03-e015"]
+    },
+    {
+      "event_id": "g03-e015",
+      "subject": "return_package",
+      "predicate": "owner",
+      "knowledge_status": "known",
+      "value": "lara_quill",
+      "operation": "set",
+      "source_refs": ["g03-e015"]
+    },
+    {
+      "event_id": "g03-e015",
+      "subject": "return_package",
+      "predicate": "deadline",
+      "knowledge_status": "known",
+      "value": "2026-05-18",
+      "operation": "set",
+      "source_refs": ["g03-e015"]
+    },
+    {
+      "event_id": "g03-e016",
+      "subject": "marbleleaf_water",
+      "predicate": "current_amount",
+      "knowledge_status": "known",
+      "value": {
+        "amount": 28,
+        "currency": "EUR"
+      },
+      "operation": "duplicate",
+      "source_refs": ["g03-e016"]
+    },
+    {
+      "event_id": "g03-e016",
+      "subject": "marbleleaf_water",
+      "predicate": "observed_periods",
+      "knowledge_status": "known",
+      "value": ["2026-05"],
+      "operation": "duplicate",
+      "source_refs": ["g03-e016"]
+    },
+    {
+      "event_id": "g03-e017",
+      "subject": "sableharbor",
+      "predicate": "beneficiary",
+      "knowledge_status": "known",
+      "value": "lara_wells",
+      "operation": "set",
+      "source_refs": ["g03-e017"]
+    },
+    {
+      "event_id": "g03-e018",
+      "subject": "sableharbor",
+      "predicate": "beneficiary",
+      "knowledge_status": "known",
+      "value": "lara_quill",
+      "operation": "contradiction",
+      "source_refs": ["g03-e018"]
+    },
+    {
+      "event_id": "g03-e018",
+      "subject": "sableharbor",
+      "predicate": "contradiction",
+      "knowledge_status": "known",
+      "value": {
+        "field": "beneficiary",
+        "conflicting_event_ids": ["g03-e017", "g03-e018"],
+        "resolution_status": "unresolved"
+      },
+      "operation": "contradiction",
+      "source_refs": ["g03-e017", "g03-e018"]
+    },
+    {
+      "event_id": "g03-e019",
+      "subject": "claim_followup",
+      "predicate": "owner",
+      "knowledge_status": "known",
+      "value": "lara_quill",
+      "operation": "supersede",
+      "supersedes_event_id": "g03-e007",
+      "source_refs": ["g03-e019"]
+    },
+    {
+      "event_id": "g03-e019",
+      "subject": "claim_followup",
+      "predicate": "owner_history",
+      "knowledge_status": "known",
+      "value": {
+        "previous_owner": "pavel_ross",
+        "new_owner": "lara_quill",
+        "source_event_id": "g03-e019"
+      },
+      "operation": "set",
+      "source_refs": ["g03-e019"]
+    }
+  ],
+  "relationships": [
+    {
+      "source_event_id": "g03-e009",
+      "target_event_id": "g03-e003",
+      "relation_type": "exact_duplicate",
+      "changed_fields": [],
+      "duplicate_group": "tideglass-purchase-01"
+    },
+    {
+      "source_event_id": "g03-e016",
+      "target_event_id": "g03-e006",
+      "relation_type": "normalized_duplicate",
+      "changed_fields": [],
+      "duplicate_group": "marbleleaf-may-invoice-01"
+    },
+    {
+      "source_event_id": "g03-e011",
+      "target_event_id": "g03-e001",
+      "relation_type": "meaningful_change",
+      "changed_fields": ["replacement_history"],
+      "note": "Replacement offer announced with a later effective date."
+    },
+    {
+      "source_event_id": "g03-e018",
+      "target_event_id": "g03-e017",
+      "relation_type": "meaningful_change",
+      "changed_fields": ["beneficiary"],
+      "note": "Conflicting beneficiary identity; unresolved."
+    },
+    {
+      "source_event_id": "g03-e019",
+      "target_event_id": "g03-e007",
+      "relation_type": "meaningful_change",
+      "changed_fields": ["owner"],
+      "note": "Claim follow-up reassigned."
+    }
+  ]
+}

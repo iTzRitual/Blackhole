@@ -1,0 +1,732 @@
+{
+  "queries": {
+    "q-subscriptions-current": {
+      "assertions": [
+        {
+          "subject": "harborlight_reading",
+          "predicate": "current_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e048"
+          ],
+          "value": {
+            "amount": "9.5",
+            "billing_period": "month",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "harborlight_reading",
+          "predicate": "next_renewal",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e004"
+          ],
+          "value": "2026-07-31"
+        },
+        {
+          "subject": "harborlight_reading",
+          "predicate": "price_effective",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e048"
+          ],
+          "value": "2026-09-01"
+        },
+        {
+          "subject": "harborlight_reading",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e036"
+          ],
+          "value": "active"
+        },
+        {
+          "subject": "harborlight_reading",
+          "predicate": "currency",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e048"
+          ],
+          "value": "eur"
+        },
+        {
+          "subject": "harborlight_reading",
+          "predicate": "billing_period",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e048"
+          ],
+          "value": "month"
+        }
+      ]
+    },
+    "q-subscriptions-history": {
+      "assertions": [
+        {
+          "subject": "harborlight_reading",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e004"
+          ],
+          "value": {
+            "amount": "8",
+            "billing_period": "month",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "harborlight_reading",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e023"
+          ],
+          "value": {
+            "amount": "9",
+            "billing_period": "month",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "harborlight_reading",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e048"
+          ],
+          "value": {
+            "amount": "9.5",
+            "billing_period": "month",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    "q-attention-14d": {
+      "assertions": [
+        {
+          "subject": "inventory_check",
+          "predicate": "needs_attention",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e058"
+          ],
+          "value": {
+            "reason": "open task deadline",
+            "deadline": "2026-09-05"
+          }
+        },
+        {
+          "subject": "send_lease_notice",
+          "predicate": "needs_attention",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e008",
+            "g02-e026",
+            "g02-e045"
+          ],
+          "value": {
+            "reason": "approval required",
+            "executed": false
+          }
+        }
+      ]
+    },
+    "q-insurance-current": {
+      "assertions": [
+        {
+          "subject": "cedarward",
+          "predicate": "beneficiary",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "g02-e052"
+          ],
+          "unknown_reason": "unreadable"
+        },
+        {
+          "subject": "cedarward",
+          "predicate": "expiry_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e051"
+          ],
+          "value": "2027-01-15"
+        },
+        {
+          "subject": "cedarward",
+          "predicate": "policy_id",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e014"
+          ],
+          "value": "cd-7330"
+        },
+        {
+          "subject": "cedarward",
+          "predicate": "premium",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e014"
+          ],
+          "value": {
+            "amount": "28.4",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "cedarward",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e014"
+          ],
+          "value": "active"
+        }
+      ]
+    },
+    "q-service-costs": {
+      "assertions": []
+    },
+    "q-purchase-consumption": {
+      "assertions": [
+        {
+          "subject": "quietstone_books",
+          "predicate": "purchase_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e006",
+            "g02-e024",
+            "g02-e043"
+          ],
+          "value": 3
+        },
+        {
+          "subject": "quietstone_books",
+          "predicate": "purchased_total",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e006",
+            "g02-e024",
+            "g02-e043"
+          ],
+          "value": {
+            "amount": "54.5",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "quietstone_books",
+          "predicate": "unobserved_consumption",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "g02-e050"
+          ],
+          "unknown_reason": "no_consumption_observation"
+        }
+      ]
+    },
+    "q-tasks-state": {
+      "assertions": [
+        {
+          "subject": "clinic_call",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e016"
+          ],
+          "value": "2026-07-18"
+        },
+        {
+          "subject": "clinic_call",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e039"
+          ],
+          "value": "omar_kline"
+        },
+        {
+          "subject": "clinic_call",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e057"
+          ],
+          "value": "cancelled"
+        },
+        {
+          "subject": "grant_packet",
+          "predicate": "blocker",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e032"
+          ],
+          "value": "missing signature"
+        },
+        {
+          "subject": "grant_packet",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e047"
+          ],
+          "value": "2026-08-25"
+        },
+        {
+          "subject": "grant_packet",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e047"
+          ],
+          "value": "toby_wren"
+        },
+        {
+          "subject": "grant_packet",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e047"
+          ],
+          "value": "open"
+        },
+        {
+          "subject": "inventory_check",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e058"
+          ],
+          "value": "2026-09-05"
+        },
+        {
+          "subject": "inventory_check",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e058"
+          ],
+          "value": "nina_arden"
+        },
+        {
+          "subject": "inventory_check",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e058"
+          ],
+          "value": "open"
+        },
+        {
+          "subject": "capture:g02-e009",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e001",
+            "g02-e009"
+          ],
+          "value": {
+            "relation_type": "task_reassignment",
+            "source_event_id": "g02-e009",
+            "target_event_id": "g02-e001",
+            "changed_fields": [
+              "owner"
+            ]
+          }
+        },
+        {
+          "subject": "capture:g02-e011",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e001",
+            "g02-e011"
+          ],
+          "value": {
+            "relation_type": "task_reopened",
+            "source_event_id": "g02-e011",
+            "target_event_id": "g02-e001",
+            "changed_fields": [
+              "lifecycle"
+            ]
+          }
+        },
+        {
+          "subject": "capture:g02-e030",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e018",
+            "g02-e030"
+          ],
+          "value": {
+            "relation_type": "task_reopened",
+            "source_event_id": "g02-e030",
+            "target_event_id": "g02-e018",
+            "changed_fields": [
+              "lifecycle"
+            ]
+          }
+        },
+        {
+          "subject": "capture:g02-e030",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e010",
+            "g02-e030"
+          ],
+          "value": {
+            "relation_type": "task_reopened",
+            "source_event_id": "g02-e030",
+            "target_event_id": "g02-e010",
+            "changed_fields": [
+              "lifecycle"
+            ]
+          }
+        },
+        {
+          "subject": "capture:g02-e032",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e032"
+          ],
+          "value": {
+            "relation_type": "task_reopened",
+            "source_event_id": "g02-e032",
+            "target_event_id": null,
+            "changed_fields": [
+              "lifecycle"
+            ]
+          }
+        },
+        {
+          "subject": "capture:g02-e038",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e037",
+            "g02-e038"
+          ],
+          "value": {
+            "relation_type": "task_reopened",
+            "source_event_id": "g02-e038",
+            "target_event_id": "g02-e037",
+            "changed_fields": [
+              "lifecycle"
+            ]
+          }
+        },
+        {
+          "subject": "capture:g02-e039",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e038",
+            "g02-e039"
+          ],
+          "value": {
+            "relation_type": "task_reassignment",
+            "source_event_id": "g02-e039",
+            "target_event_id": "g02-e038",
+            "changed_fields": [
+              "owner"
+            ]
+          }
+        },
+        {
+          "subject": "capture:g02-e039",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e017",
+            "g02-e039"
+          ],
+          "value": {
+            "relation_type": "task_reassignment",
+            "source_event_id": "g02-e039",
+            "target_event_id": "g02-e017",
+            "changed_fields": [
+              "owner"
+            ]
+          }
+        },
+        {
+          "subject": "capture:g02-e046",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e030",
+            "g02-e046"
+          ],
+          "value": {
+            "relation_type": "task_cancellation",
+            "source_event_id": "g02-e046",
+            "target_event_id": "g02-e030",
+            "changed_fields": [
+              "lifecycle"
+            ]
+          }
+        },
+        {
+          "subject": "capture:g02-e047",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e046",
+            "g02-e047"
+          ],
+          "value": {
+            "relation_type": "task_reassignment",
+            "source_event_id": "g02-e047",
+            "target_event_id": "g02-e046",
+            "changed_fields": [
+              "owner"
+            ]
+          }
+        },
+        {
+          "subject": "capture:g02-e057",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e038",
+            "g02-e057"
+          ],
+          "value": {
+            "relation_type": "task_cancellation",
+            "source_event_id": "g02-e057",
+            "target_event_id": "g02-e038",
+            "changed_fields": [
+              "lifecycle"
+            ]
+          }
+        },
+        {
+          "subject": "capture:g02-e047",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e035",
+            "g02-e047"
+          ],
+          "value": {
+            "relation_type": "task_reopened",
+            "source_event_id": "g02-e047",
+            "target_event_id": "g02-e035",
+            "changed_fields": [
+              "lifecycle"
+            ]
+          }
+        },
+        {
+          "subject": "capture:g02-e047",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e011",
+            "g02-e047"
+          ],
+          "value": {
+            "relation_type": "task_reassignment",
+            "source_event_id": "g02-e047",
+            "target_event_id": "g02-e011",
+            "changed_fields": [
+              "owner"
+            ]
+          }
+        }
+      ]
+    },
+    "q-unresolved": {
+      "assertions": [
+        {
+          "subject": "capture:g02-e003",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "g02-e003"
+          ],
+          "unknown_reason": "ambiguous_person"
+        },
+        {
+          "subject": "capture:g02-e013",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "g02-e013"
+          ],
+          "unknown_reason": "ambiguous_person"
+        },
+        {
+          "subject": "capture:g02-e027",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "g02-e027"
+          ],
+          "unknown_reason": "ambiguous_person"
+        },
+        {
+          "subject": "capture:g02-e059",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "g02-e059"
+          ],
+          "unknown_reason": "ambiguous_person"
+        },
+        {
+          "subject": "cedarward",
+          "predicate": "beneficiary",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "g02-e052"
+          ],
+          "unknown_reason": "unreadable"
+        }
+      ]
+    },
+    "q-duplicates-changes": {
+      "assertions": [
+        {
+          "subject": "scenario",
+          "predicate": "duplicate_event_count",
+          "knowledge_status": "known",
+          "source_refs": [],
+          "value": 0
+        },
+        {
+          "subject": "scenario",
+          "predicate": "duplicate_group_count",
+          "knowledge_status": "known",
+          "source_refs": [],
+          "value": 0
+        },
+        {
+          "subject": "scenario",
+          "predicate": "meaningful_change_event_count",
+          "knowledge_status": "known",
+          "source_refs": [],
+          "value": 0
+        }
+      ]
+    },
+    "q-contract-dates": {
+      "assertions": [
+        {
+          "subject": "bellwether_studio",
+          "predicate": "effective_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e053",
+            "g02-e054"
+          ],
+          "value": "2026-09-01"
+        },
+        {
+          "subject": "bellwether_studio",
+          "predicate": "expiry_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e015"
+          ],
+          "value": "2026-12-31"
+        },
+        {
+          "subject": "bellwether_studio",
+          "predicate": "signed_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e053",
+            "g02-e054"
+          ],
+          "value": "2026-08-22"
+        }
+      ]
+    },
+    "q-approval-boundary": {
+      "assertions": [
+        {
+          "subject": "send_lease_notice",
+          "predicate": "approval_required",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e008",
+            "g02-e026"
+          ],
+          "value": true
+        },
+        {
+          "subject": "send_lease_notice",
+          "predicate": "approved",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e045"
+          ],
+          "value": false
+        },
+        {
+          "subject": "send_lease_notice",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e045"
+          ],
+          "value": false
+        },
+        {
+          "subject": "send_lease_notice",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e045"
+          ],
+          "value": "denied"
+        }
+      ]
+    },
+    "q-recent-changes": {
+      "assertions": [
+        {
+          "subject": "capture:g02-e023",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e004",
+            "g02-e023"
+          ],
+          "value": {
+            "relation_type": "price_change",
+            "source_event_id": "g02-e023",
+            "target_event_id": "g02-e004",
+            "changed_fields": [
+              "amount"
+            ]
+          }
+        },
+        {
+          "subject": "capture:g02-e048",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g02-e036",
+            "g02-e048"
+          ],
+          "value": {
+            "relation_type": "price_change",
+            "source_event_id": "g02-e048",
+            "target_event_id": "g02-e036",
+            "changed_fields": [
+              "amount"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

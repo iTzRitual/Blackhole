@@ -1,0 +1,482 @@
+{
+  "response_contract": "response-contract-v2",
+  "scenario_id": "g01",
+  "checkpoint": 20,
+  "queries": {
+    "q-subscriptions-current": {
+      "assertions": [
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "current_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e001"
+          ],
+          "value": {
+            "amount": "11.9",
+            "billing_period": "month",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "next_renewal",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e001"
+          ],
+          "value": "2026-04-30"
+        },
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "price_effective",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e008"
+          ],
+          "value": "2026-05-01"
+        },
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e001"
+          ],
+          "value": "active"
+        },
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "currency",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e001"
+          ],
+          "value": "eur"
+        },
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "billing_period",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e001"
+          ],
+          "value": "month"
+        }
+      ]
+    },
+    "q-subscriptions-history": {
+      "assertions": [
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e001"
+          ],
+          "value": {
+            "amount": "11.9",
+            "billing_period": "month",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e008"
+          ],
+          "value": {
+            "amount": "13.5",
+            "billing_period": "month",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    "q-attention-14d": {
+      "assertions": [
+        {
+          "subject": "permit_renewal",
+          "predicate": "needs_attention",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e006",
+            "g01-e018",
+            "g01-e019",
+            "g01-e020"
+          ],
+          "value": {
+            "deadline": "2026-04-30",
+            "reason": "open task deadline"
+          }
+        },
+        {
+          "subject": "change_fiber_payment",
+          "predicate": "needs_attention",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e010"
+          ],
+          "value": {
+            "executed": false,
+            "reason": "approval required"
+          }
+        }
+      ]
+    },
+    "q-insurance-current": {
+      "assertions": [
+        {
+          "subject": "emberline",
+          "predicate": "beneficiary",
+          "knowledge_status": "inferred",
+          "source_refs": [
+            "g01-e017"
+          ],
+          "value": "mira_sorin"
+        },
+        {
+          "subject": "emberline",
+          "predicate": "expiry_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e005"
+          ],
+          "value": "2026-12-31"
+        },
+        {
+          "subject": "emberline",
+          "predicate": "policy_id",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e005"
+          ],
+          "value": "el-4821"
+        },
+        {
+          "subject": "emberline",
+          "predicate": "premium",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e005"
+          ],
+          "value": {
+            "amount": "19.75",
+            "billing_period": "month",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    "q-service-costs": {
+      "assertions": [
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_bill_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e002"
+          ],
+          "value": 1
+        },
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_total",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e002"
+          ],
+          "value": {
+            "amount": "42",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_periods",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e002"
+          ],
+          "value": [
+            "2026-04"
+          ]
+        },
+        {
+          "subject": "copperline_fiber",
+          "predicate": "unobserved_periods",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "g01-e009"
+          ],
+          "unknown_reason": "no_capture_for_period"
+        },
+        {
+          "subject": "copperline_fiber",
+          "predicate": "current_amount",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e002"
+          ],
+          "value": {
+            "amount": "42",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    "q-purchase-consumption": {
+      "assertions": [
+        {
+          "subject": "greenglass_market",
+          "predicate": "purchase_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e003"
+          ],
+          "value": 1
+        },
+        {
+          "subject": "greenglass_market",
+          "predicate": "purchased_total",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e003"
+          ],
+          "value": {
+            "amount": "18.4",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "greenglass_market",
+          "predicate": "confirmed_consumption_quantity",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e004",
+            "g01-e015"
+          ],
+          "value": 2
+        },
+        {
+          "subject": "greenglass_market",
+          "predicate": "consumption_observation_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e004",
+            "g01-e015"
+          ],
+          "value": 2
+        },
+        {
+          "subject": "greenglass_market",
+          "predicate": "explicit_zero_is_supported",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e015"
+          ],
+          "value": true
+        },
+        {
+          "subject": "greenglass_market",
+          "predicate": "unobserved_consumption",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "g01-e004",
+            "g01-e015"
+          ],
+          "unknown_reason": "no_consumption_observation"
+        }
+      ]
+    },
+    "q-tasks-state": {
+      "assertions": [
+        {
+          "subject": "meter_visit",
+          "predicate": "owner",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "g01-e007"
+          ],
+          "unknown_reason": "the unqualified mira cannot be resolved between the public mira identities."
+        },
+        {
+          "subject": "meter_visit",
+          "predicate": "status",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "g01-e014"
+          ],
+          "unknown_reason": "not_available"
+        },
+        {
+          "subject": "permit_renewal",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e018",
+            "g01-e020"
+          ],
+          "value": "2026-04-30"
+        },
+        {
+          "subject": "permit_renewal",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e006",
+            "g01-e013"
+          ],
+          "value": "mira_solen"
+        },
+        {
+          "subject": "permit_renewal",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e006",
+            "g01-e019"
+          ],
+          "value": "in_progress"
+        },
+        {
+          "subject": "capture_g01_e013",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e006",
+            "g01-e013"
+          ],
+          "value": {
+            "changed_fields": [
+              "owner"
+            ],
+            "relation_type": "task_reassignment",
+            "source_event_id": "g01-e013",
+            "target_event_id": "g01-e006"
+          }
+        },
+        {
+          "subject": "capture_g01_e019",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e006",
+            "g01-e019"
+          ],
+          "value": {
+            "changed_fields": [
+              "lifecycle"
+            ],
+            "relation_type": "task_reopened",
+            "source_event_id": "g01-e019",
+            "target_event_id": "g01-e006"
+          }
+        }
+      ]
+    },
+    "q-unresolved": {
+      "assertions": []
+    },
+    "q-duplicates-changes": {
+      "assertions": [
+        {
+          "subject": "scenario",
+          "predicate": "duplicate_event_count",
+          "knowledge_status": "known",
+          "source_refs": [],
+          "value": 0
+        },
+        {
+          "subject": "scenario",
+          "predicate": "duplicate_group_count",
+          "knowledge_status": "known",
+          "source_refs": [],
+          "value": 0
+        },
+        {
+          "subject": "scenario",
+          "predicate": "meaningful_change_event_count",
+          "knowledge_status": "known",
+          "source_refs": [],
+          "value": 0
+        }
+      ]
+    },
+    "q-contract-dates": {
+      "assertions": []
+    },
+    "q-approval-boundary": {
+      "assertions": [
+        {
+          "subject": "change_fiber_payment",
+          "predicate": "approval_required",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e010"
+          ],
+          "value": true
+        },
+        {
+          "subject": "change_fiber_payment",
+          "predicate": "approval_scope",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e010"
+          ],
+          "value": "change copperline bank mandate"
+        },
+        {
+          "subject": "change_fiber_payment",
+          "predicate": "approved",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e010"
+          ],
+          "value": false
+        },
+        {
+          "subject": "change_fiber_payment",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e010"
+          ],
+          "value": false
+        },
+        {
+          "subject": "change_fiber_payment",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e010"
+          ],
+          "value": "proposed"
+        }
+      ]
+    },
+    "q-recent-changes": {
+      "assertions": [
+        {
+          "subject": "capture_g01_e008",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g01-e001",
+            "g01-e008"
+          ],
+          "value": {
+            "changed_fields": [
+              "amount"
+            ],
+            "relation_type": "price_change",
+            "source_event_id": "g01-e008",
+            "target_event_id": "g01-e001"
+          }
+        }
+      ]
+    }
+  }
+}

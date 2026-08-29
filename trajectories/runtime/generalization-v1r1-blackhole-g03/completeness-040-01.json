@@ -1,0 +1,819 @@
+{
+  "evidence_records": [
+    {
+      "event_id": "g03-e021",
+      "text_length": 40,
+      "anchors": []
+    },
+    {
+      "event_id": "g03-e022",
+      "text_length": 55,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "9.20",
+          "currency": "eur",
+          "context": "TideGlass Outlet purchase: EUR 9.20 for a serving tray."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "TideGlass Outlet purchase: EUR 9.20 for a serving tray."
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e023",
+      "text_length": 57,
+      "anchors": []
+    },
+    {
+      "event_id": "g03-e024",
+      "text_length": 69,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "16.00",
+          "currency": "eur",
+          "context": "Silvermeadow Pass price changes to EUR 16.00 monthly from 2026-06-15."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Silvermeadow Pass price changes to EUR 16.00 monthly from 2026-06-15."
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "monthly",
+          "context": "Silvermeadow Pass price changes to EUR 16.00 monthly from 2026-06-15."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-06-15",
+          "context": "ow Pass price changes to EUR 16.00 monthly from 2026-06-15.",
+          "cue_type": "temporal_cue",
+          "cue": "monthly"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e025",
+      "text_length": 53,
+      "anchors": []
+    },
+    {
+      "event_id": "g03-e026",
+      "text_length": 45,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "deadline",
+          "context": "Claim follow-up deadline moved to 2026-05-20."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-05-20",
+          "context": "Claim follow-up deadline moved to 2026-05-20.",
+          "cue_type": "temporal_cue",
+          "cue": "deadline"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e027",
+      "text_length": 57,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "expires",
+          "context": "Actually, SableHarbor expires 2026-11-30, not 2026-10-31."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-11-30",
+          "context": "Actually, SableHarbor expires 2026-11-30, not 2026-10-31.",
+          "cue_type": "temporal_cue",
+          "cue": "expires"
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-10-31",
+          "context": "Actually, SableHarbor expires 2026-11-30, not 2026-10-31.",
+          "cue_type": "temporal_cue",
+          "cue": "expires"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e028",
+      "text_length": 49,
+      "anchors": []
+    },
+    {
+      "event_id": "g03-e029",
+      "text_length": 67,
+      "anchors": [
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "proposal",
+          "context": "The claim filing proposal still needs approval; no filing occurred."
+        },
+        {
+          "type": "action_cue",
+          "raw_value": "approval",
+          "context": "The claim filing proposal still needs approval; no filing occurred."
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e030",
+      "text_length": 62,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "cancelled",
+          "context": "Return package cancelled after the seller accepted the return."
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e031",
+      "text_length": 49,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "reopened",
+          "context": "Return package reopened; new due date 2026-06-05."
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "due",
+          "context": "Return package reopened; new due date 2026-06-05."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-06-05",
+          "context": "Return package reopened; new due date 2026-06-05.",
+          "cue_type": "temporal_cue",
+          "cue": "due"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e032",
+      "text_length": 63,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "47.50",
+          "currency": "eur",
+          "context": "TideGlass Outlet purchase: EUR 47.50 for a similar ceramic set."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "TideGlass Outlet purchase: EUR 47.50 for a similar ceramic set."
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e033",
+      "text_length": 66,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "signed",
+          "context": "Driftwood Studio contract signed 2026-04-20, effective 2026-05-01."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-04-20",
+          "context": "Driftwood Studio contract signed 2026-04-20, effective 2026-05-01.",
+          "cue_type": "temporal_cue",
+          "cue": "signed"
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "effective",
+          "context": "Driftwood Studio contract signed 2026-04-20, effective 2026-05-01."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-05-01",
+          "context": "od Studio contract signed 2026-04-20, effective 2026-05-01.",
+          "cue_type": "temporal_cue",
+          "cue": "effective"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e034",
+      "text_length": 55,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "28.00",
+          "currency": "eur",
+          "context": "Marbleleaf May entry copied into the ledger: EUR 28.00."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Marbleleaf May entry copied into the ledger: EUR 28.00."
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e035",
+      "text_length": 48,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "31.00",
+          "currency": "eur",
+          "context": "Marbleleaf Water invoice for 2026-06: EUR 31.00."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Marbleleaf Water invoice for 2026-06: EUR 31.00."
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e036",
+      "text_length": 31,
+      "anchors": []
+    },
+    {
+      "event_id": "g03-e037",
+      "text_length": 45,
+      "anchors": [
+        {
+          "type": "identifier",
+          "raw_value": "CL-4412",
+          "context": "SableHarbor claim number CL-4412 is recorded."
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e038",
+      "text_length": 78,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "renewal",
+          "context": "SableHarbor renewal notice: premium becomes EUR 35.00 monthly from"
+        },
+        {
+          "type": "amount",
+          "raw_value": "35.00",
+          "currency": "eur",
+          "context": "SableHarbor renewal notice: premium becomes EUR 35.00 monthly from 2026-08-01."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "SableHarbor renewal notice: premium becomes EUR 35.00 monthly from 2026-08-01."
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "monthly",
+          "context": "arbor renewal notice: premium becomes EUR 35.00 monthly from 2026-08-01."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-08-01",
+          "context": "notice: premium becomes EUR 35.00 monthly from 2026-08-01.",
+          "cue_type": "temporal_cue",
+          "cue": "monthly"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e039",
+      "text_length": 77,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "28.00",
+          "currency": "eur",
+          "context": "A water-bill summary repeats the May total EUR 28.00 from a different source."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "A water-bill summary repeats the May total EUR 28.00 from a different source."
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e040",
+      "text_length": 35,
+      "anchors": []
+    }
+  ],
+  "gap_records": [
+    {
+      "event_id": "g03-e021",
+      "subjects": [
+        "marbleleaf_water"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "marbleleaf_water",
+          "predicate": "missing_periods",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": [
+            "2026-06"
+          ]
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e022",
+      "subjects": [
+        "tideglass_outlet"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "tideglass_outlet",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "9.2"
+        },
+        {
+          "subject": "tideglass_outlet",
+          "predicate": "currency",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "eur"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e023",
+      "subjects": [
+        "tideglass_outlet"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "tideglass_outlet",
+          "predicate": "confirmed_consumption_quantity",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 0
+        },
+        {
+          "subject": "tideglass_outlet",
+          "predicate": "explicit_zero_is_supported",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": true
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e024",
+      "subjects": [
+        "silvermeadow_pass"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "silvermeadow_pass",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "16",
+            "billing_period": "monthly",
+            "currency": "eur",
+            "effective_date": "2026-06-15"
+          }
+        },
+        {
+          "subject": "silvermeadow_pass",
+          "predicate": "price_effective",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2026-06-15"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e025",
+      "subjects": [],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": []
+    },
+    {
+      "event_id": "g03-e026",
+      "subjects": [
+        "claim_followup"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "claim_followup",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "2026-05-20"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e027",
+      "subjects": [
+        "sableharbor"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "sableharbor",
+          "predicate": "expiry_date",
+          "knowledge_status": "known",
+          "operation": "correction",
+          "value": "2026-11-30"
+        },
+        {
+          "subject": "sableharbor",
+          "predicate": "correction",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "prior_value": "2026-10-31",
+            "replacement_value": "2026-11-30",
+            "source_event_id": "g03-e027",
+            "target_predicate": "expiry_date",
+            "target_subject": "sableharbor"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e028",
+      "subjects": [
+        "driftwood_studio"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "driftwood_studio",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "needs_review"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e029",
+      "subjects": [
+        "file_insurance_claim"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "file_insurance_claim",
+          "predicate": "approval_required",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": true
+        },
+        {
+          "subject": "file_insurance_claim",
+          "predicate": "approved",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": false
+        },
+        {
+          "subject": "file_insurance_claim",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": false
+        },
+        {
+          "subject": "file_insurance_claim",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "proposed"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e030",
+      "subjects": [
+        "return_package"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "return_package",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "cancelled"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e031",
+      "subjects": [
+        "return_package"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "return_package",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "open"
+        },
+        {
+          "subject": "return_package",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "2026-06-05"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e032",
+      "subjects": [
+        "tideglass_outlet"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "tideglass_outlet",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "47.5"
+        },
+        {
+          "subject": "tideglass_outlet",
+          "predicate": "currency",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "eur"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e033",
+      "subjects": [
+        "driftwood_studio"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "driftwood_studio",
+          "predicate": "signed_date",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "2026-04-20"
+        },
+        {
+          "subject": "driftwood_studio",
+          "predicate": "effective_date",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "2026-05-01"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e034",
+      "subjects": [
+        "marbleleaf_water"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "marbleleaf_water",
+          "predicate": "current_amount",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": {
+            "amount": "28",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e035",
+      "subjects": [
+        "marbleleaf_water"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "marbleleaf_water",
+          "predicate": "current_amount",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": {
+            "amount": "31",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "marbleleaf_water",
+          "predicate": "observed_periods",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": [
+            "2026-06"
+          ]
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e036",
+      "subjects": [
+        "claim_followup"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "claim_followup",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "in_progress"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e037",
+      "subjects": [
+        "sableharbor"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "sableharbor",
+          "predicate": "claim_number",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "cl-4412"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e038",
+      "subjects": [
+        "sableharbor"
+      ],
+      "reasons": [
+        "explicit monthly cue not represented in amount object"
+      ],
+      "mappings": [
+        {
+          "kind": "billing_period",
+          "subject": "sableharbor",
+          "predicate": "premium",
+          "raw_value": "month",
+          "reason": "explicit monthly cue not represented in amount object"
+        }
+      ],
+      "existing_observations": [
+        {
+          "subject": "sableharbor",
+          "predicate": "premium",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "35",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "sableharbor",
+          "predicate": "price_effective",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2026-08-01"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e039",
+      "subjects": [
+        "marbleleaf_water"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "marbleleaf_water",
+          "predicate": "current_amount",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": {
+            "amount": "28",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e040",
+      "subjects": [],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": []
+    }
+  ],
+  "batch_record": {
+    "checkpoint": 40,
+    "batch": 1,
+    "scanner_version": "experiment-004-evidence-scanner-v1",
+    "completion_version": "experiment-004-deterministic-completion-v1",
+    "verifier_version": null,
+    "event_ids": [
+      "g03-e021",
+      "g03-e022",
+      "g03-e023",
+      "g03-e024",
+      "g03-e025",
+      "g03-e026",
+      "g03-e027",
+      "g03-e028",
+      "g03-e029",
+      "g03-e030",
+      "g03-e031",
+      "g03-e032",
+      "g03-e033",
+      "g03-e034",
+      "g03-e035",
+      "g03-e036",
+      "g03-e037",
+      "g03-e038",
+      "g03-e039",
+      "g03-e040"
+    ],
+    "scanned_count": 20,
+    "flagged_count": 1,
+    "flagged_events": [
+      {
+        "event_id": "g03-e038",
+        "reasons": [
+          "explicit monthly cue not represented in amount object"
+        ],
+        "mapping_count": 1,
+        "evidence_digest": "1fd4f4e4a403dc13bffba084c60cac9d0778a4b9abf77d97d7d15c49968a5aca"
+      }
+    ],
+    "deterministic_proposal_count": 1,
+    "deterministic_inserted_count": 1,
+    "residual_events": [
+      {
+        "event_id": "g03-e038",
+        "reasons": [
+          "explicit monthly cue not represented in amount object"
+        ]
+      }
+    ],
+    "verifier_records": [],
+    "final_residual": [
+      {
+        "event_id": "g03-e038",
+        "reasons": [
+          "explicit monthly cue not represented in amount object"
+        ]
+      }
+    ]
+  }
+}

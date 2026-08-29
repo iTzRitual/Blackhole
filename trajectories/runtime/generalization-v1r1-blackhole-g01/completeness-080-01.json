@@ -1,0 +1,885 @@
+{
+  "evidence_records": [
+    {
+      "event_id": "g01-e061",
+      "text_length": 65,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "renewal",
+          "context": "Emberline renewal pack repeats EUR 21.00 monthly from 2026-07-01."
+        },
+        {
+          "type": "amount",
+          "raw_value": "21.00",
+          "currency": "eur",
+          "context": "Emberline renewal pack repeats EUR 21.00 monthly from 2026-07-01."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Emberline renewal pack repeats EUR 21.00 monthly from 2026-07-01."
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "monthly",
+          "context": "Emberline renewal pack repeats EUR 21.00 monthly from 2026-07-01."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-07-01",
+          "context": "ine renewal pack repeats EUR 21.00 monthly from 2026-07-01.",
+          "cue_type": "temporal_cue",
+          "cue": "monthly"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e062",
+      "text_length": 59,
+      "anchors": [
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "active",
+          "context": "Emberline policy status: active; expiry remains 2026-12-31."
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "expiry",
+          "context": "Emberline policy status: active; expiry remains 2026-12-31."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-12-31",
+          "context": "Emberline policy status: active; expiry remains 2026-12-31.",
+          "cue_type": "temporal_cue",
+          "cue": "expiry"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e063",
+      "text_length": 58,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "13.50",
+          "currency": "eur",
+          "context": "Moonbeam+ June charge: EUR 13.50; next renewal 2026-06-30."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Moonbeam+ June charge: EUR 13.50; next renewal 2026-06-30."
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "renewal",
+          "context": "Moonbeam+ June charge: EUR 13.50; next renewal 2026-06-30."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-06-30",
+          "context": "Moonbeam+ June charge: EUR 13.50; next renewal 2026-06-30.",
+          "cue_type": "temporal_cue",
+          "cue": "renewal"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e064",
+      "text_length": 60,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "12.00",
+          "currency": "eur",
+          "context": "GreenGlass Market purchase: EUR 12.00 for four pantry items."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "GreenGlass Market purchase: EUR 12.00 for four pantry items."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e065",
+      "text_length": 61,
+      "anchors": []
+    },
+    {
+      "event_id": "g01-e066",
+      "text_length": 69,
+      "anchors": [
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "proposal",
+          "context": "The Copperline bank-mandate proposal was withdrawn without execution."
+        },
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "withdrawn",
+          "context": "The Copperline bank-mandate proposal was withdrawn without execution."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e067",
+      "text_length": 84,
+      "anchors": [
+        {
+          "type": "action_cue",
+          "raw_value": "request",
+          "context": "Moonbeam+ cancellation request was recorded for review, but service is still a"
+        },
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "active",
+          "context": "t was recorded for review, but service is still active."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e068",
+      "text_length": 74,
+      "anchors": [
+        {
+          "type": "action_cue",
+          "raw_value": "request",
+          "context": "The Moonbeam+ cancellation request was rejected; no cancellation occurred."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e069",
+      "text_length": 36,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "completed",
+          "context": "Meter visit completed on 2026-06-10."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-06-10",
+          "context": "Meter visit completed on 2026-06-10.",
+          "cue_type": "temporal_cue",
+          "cue": "completed"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e070",
+      "text_length": 42,
+      "anchors": []
+    },
+    {
+      "event_id": "g01-e071",
+      "text_length": 54,
+      "anchors": [
+        {
+          "type": "action_cue",
+          "raw_value": "approval",
+          "context": "No approval was granted for the bank-mandate proposal."
+        },
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "proposal",
+          "context": "No approval was granted for the bank-mandate proposal."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e072",
+      "text_length": 48,
+      "anchors": []
+    },
+    {
+      "event_id": "g01-e073",
+      "text_length": 52,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "12.00",
+          "currency": "eur",
+          "context": "GreenGlass receipt: EUR 12.00 for four pantry items."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "GreenGlass receipt: EUR 12.00 for four pantry items."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e074",
+      "text_length": 56,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "12.00",
+          "currency": "eur",
+          "context": "GreenGlass June entry copied into the ledger: EUR 12.00."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "GreenGlass June entry copied into the ledger: EUR 12.00."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e075",
+      "text_length": 45,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "45.00",
+          "currency": "eur",
+          "context": "Copperline June statement summary: EUR 45.00."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Copperline June statement summary: EUR 45.00."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e076",
+      "text_length": 91,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "44.10",
+          "currency": "eur",
+          "context": "The earlier EUR 44.10 Copperline summary is superseded by the confirm"
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "The earlier EUR 44.10 Copperline summary is superseded by the confirm"
+        },
+        {
+          "type": "amount",
+          "raw_value": "43.50",
+          "currency": "eur",
+          "context": "pperline summary is superseded by the confirmed EUR 43.50 May bill."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "pperline summary is superseded by the confirmed EUR 43.50 May bill."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e077",
+      "text_length": 40,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "renewal",
+          "context": "Permit renewal confirmation is archived."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e078",
+      "text_length": 62,
+      "anchors": [
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "current",
+          "context": "Moonbeam+ current price is EUR 13.50; next renewal 2026-07-30."
+        },
+        {
+          "type": "amount",
+          "raw_value": "13.50",
+          "currency": "eur",
+          "context": "Moonbeam+ current price is EUR 13.50; next renewal 2026-07-30."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Moonbeam+ current price is EUR 13.50; next renewal 2026-07-30."
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "renewal",
+          "context": "Moonbeam+ current price is EUR 13.50; next renewal 2026-07-30."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-07-30",
+          "context": "nbeam+ current price is EUR 13.50; next renewal 2026-07-30.",
+          "cue_type": "temporal_cue",
+          "cue": "renewal"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e079",
+      "text_length": 68,
+      "anchors": [
+        {
+          "type": "action_cue",
+          "raw_value": "approval",
+          "context": "Final review: no approval was given and no bank mandate was changed."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e080",
+      "text_length": 87,
+      "anchors": []
+    }
+  ],
+  "gap_records": [
+    {
+      "event_id": "g01-e061",
+      "subjects": [
+        "emberline"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "emberline",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": {
+            "amount": "21",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "emberline",
+          "predicate": "price_effective",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "2026-07-01"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e062",
+      "subjects": [
+        "emberline"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "emberline",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "active"
+        },
+        {
+          "subject": "emberline",
+          "predicate": "expiry_date",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "2026-12-31"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e063",
+      "subjects": [
+        "moonbeam_plus"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "last_charge",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "13.5",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "next_renewal",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2026-06-30"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e064",
+      "subjects": [
+        "greenglass_market"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "greenglass_market",
+          "predicate": "purchase_count",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 1
+        },
+        {
+          "subject": "greenglass_market",
+          "predicate": "purchased_total",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "12",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e065",
+      "subjects": [
+        "greenglass_market"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "greenglass_market",
+          "predicate": "confirmed_consumption_quantity",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 2
+        },
+        {
+          "subject": "greenglass_market",
+          "predicate": "consumption_observation_count",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e066",
+      "subjects": [
+        "change_fiber_payment"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "change_fiber_payment",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "withdrawn"
+        },
+        {
+          "subject": "change_fiber_payment",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": false
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e067",
+      "subjects": [
+        "moonbeam_plus"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "cancellation_requested",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": true
+        },
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "active"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e068",
+      "subjects": [
+        "moonbeam_plus"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "cancellation_requested",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": false
+        },
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "active"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e069",
+      "subjects": [
+        "meter_visit"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "meter_visit",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "completed"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e070",
+      "subjects": [
+        "meter_visit"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "meter_visit",
+          "predicate": "retroactive_observation",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": true
+        },
+        {
+          "subject": "meter_visit",
+          "predicate": "confirmed_consumption_quantity",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 0
+        },
+        {
+          "subject": "meter_visit",
+          "predicate": "explicit_zero_is_supported",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": true
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e071",
+      "subjects": [
+        "change_fiber_payment"
+      ],
+      "reasons": [
+        "lifecycle cue supports status proposed"
+      ],
+      "mappings": [
+        {
+          "kind": "lifecycle",
+          "subject": "change_fiber_payment",
+          "predicate": "status",
+          "raw_value": "proposed",
+          "reason": "lifecycle cue supports status proposed"
+        }
+      ],
+      "existing_observations": [
+        {
+          "subject": "change_fiber_payment",
+          "predicate": "approved",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": false
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e072",
+      "subjects": [
+        "emberline"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "emberline",
+          "predicate": "beneficiary",
+          "knowledge_status": "unknown",
+          "operation": "duplicate",
+          "unknown_reason": "unreadable"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e073",
+      "subjects": [
+        "greenglass_market"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "greenglass_market",
+          "predicate": "purchased_total",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": {
+            "amount": "12",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e074",
+      "subjects": [
+        "greenglass_market"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "greenglass_market",
+          "predicate": "purchased_total",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": {
+            "amount": "12",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e075",
+      "subjects": [
+        "copperline_fiber"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_bill_count",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": 1
+        },
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_periods",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": [
+            "2026-06"
+          ]
+        },
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_total",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": {
+            "amount": "45",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e076",
+      "subjects": [
+        "copperline_fiber"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "copperline_fiber",
+          "predicate": "correction",
+          "knowledge_status": "known",
+          "operation": "correction",
+          "value": {
+            "prior_value": {
+              "amount": "44.1",
+              "currency": "eur"
+            },
+            "replacement_value": {
+              "amount": "43.5",
+              "currency": "eur"
+            },
+            "source_event_id": "g01-e076",
+            "target_event_id": "g01-e034"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e077",
+      "subjects": [
+        "permit_renewal"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "permit_renewal",
+          "predicate": "status",
+          "knowledge_status": "inferred",
+          "operation": "set",
+          "value": "completed"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e078",
+      "subjects": [
+        "moonbeam_plus"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "current_price",
+          "knowledge_status": "inferred",
+          "operation": "duplicate",
+          "value": {
+            "amount": "13.5",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "next_renewal",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "2026-07-30"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e079",
+      "subjects": [
+        "change_fiber_payment"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "change_fiber_payment",
+          "predicate": "approved",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": false
+        },
+        {
+          "subject": "change_fiber_payment",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": false
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e080",
+      "subjects": [
+        "emberline"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "emberline",
+          "predicate": "beneficiary",
+          "knowledge_status": "unknown",
+          "operation": "duplicate",
+          "unknown_reason": "unreadable"
+        }
+      ]
+    }
+  ],
+  "batch_record": {
+    "checkpoint": 80,
+    "batch": 1,
+    "scanner_version": "experiment-004-evidence-scanner-v1",
+    "completion_version": "experiment-004-deterministic-completion-v1",
+    "verifier_version": null,
+    "event_ids": [
+      "g01-e061",
+      "g01-e062",
+      "g01-e063",
+      "g01-e064",
+      "g01-e065",
+      "g01-e066",
+      "g01-e067",
+      "g01-e068",
+      "g01-e069",
+      "g01-e070",
+      "g01-e071",
+      "g01-e072",
+      "g01-e073",
+      "g01-e074",
+      "g01-e075",
+      "g01-e076",
+      "g01-e077",
+      "g01-e078",
+      "g01-e079",
+      "g01-e080"
+    ],
+    "scanned_count": 20,
+    "flagged_count": 1,
+    "flagged_events": [
+      {
+        "event_id": "g01-e071",
+        "reasons": [
+          "lifecycle cue supports status proposed"
+        ],
+        "mapping_count": 1,
+        "evidence_digest": "6d7f69990dc30cb8acb486f67602e025ef81966f1249a7aac3d432c62330fd71"
+      }
+    ],
+    "deterministic_proposal_count": 0,
+    "deterministic_inserted_count": 0,
+    "residual_events": [
+      {
+        "event_id": "g01-e071",
+        "reasons": [
+          "lifecycle cue supports status proposed"
+        ]
+      }
+    ],
+    "verifier_records": [],
+    "final_residual": [
+      {
+        "event_id": "g01-e071",
+        "reasons": [
+          "lifecycle cue supports status proposed"
+        ]
+      }
+    ]
+  }
+}
