@@ -18,7 +18,7 @@ Both installers support a global scope and can install all skills owned by the s
 - Normalized the visibly escaped `\_` characters in the pasted tokens to `_`, as required by the token format.
 - The animations.dev installer was run against HTTPS because its package defaulted to HTTP.
 - Due to the local Node.js certificate-chain error, `NODE_TLS_REJECT_UNAUTHORIZED=0` and npm's strict-SSL override were scoped to the individual installer processes only; no persistent npm configuration was changed.
-- Both vendors provide different skills named `prototype`. To prevent the second bundle from overwriting the first, the aiforui.dev copy was retained as `prototype`, while the two preserved copies are also available as `prototype-aiforui` and `prototype-animationsdev` respectively.
+- Both vendors provide different skills named `prototype`. To prevent the second bundle from overwriting the first, the aiforui.dev copy was retained as `prototype` and the animations.dev copy was preserved as `prototype-animationsdev`.
 
 ## Tools/actions used
 
@@ -45,7 +45,7 @@ The user explicitly requested global installation rather than project-local inst
 
 - Full animations.dev installation completed with exit code 0 and reported 15 skills.
 - Full aiforui.dev installation completed with exit code 0 and reported 20 skills.
-- Both disambiguated `prototype` copies were present under all four detected global agent roots, with hashes matching the fetched vendor manifests.
+- Both disambiguated `prototype` copies were present under all four detected global agent roots, with hashes matching the fetched vendor manifests. A verified redundant duplicate was moved to a recoverable temporary backup during cleanup.
 - No project-local `.codex/skills`, `.claude/skills`, or `.gemini/skills` directories were created.
 - Git status showed only the pre-existing untracked `trajectories/coding/018-blackhole-host-foundation/` directory before this trajectory was added; benchmark and holdout files were not accessed or changed.
 
@@ -55,7 +55,7 @@ The requested skill bundles are installed globally for Claude Code, Codex, Gemin
 
 ## Regressions or unresolved issues
 
-The local Node.js/npm certificate trust problem remains an environment issue, but it does not affect the installed files. The vendor-default `prototype` name is inherently ambiguous across the two bundles; both copies were preserved with explicit names.
+The local Node.js/npm certificate trust problem remains an environment issue, but it does not affect the installed files. The vendor-default `prototype` name is inherently ambiguous across the two bundles; both copies were preserved with explicit names. The redundant temporary backup is outside the active global skill roots.
 
 ## Final decision
 
