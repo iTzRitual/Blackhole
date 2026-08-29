@@ -63,8 +63,31 @@ additional human feedback was received.
 
 ## Evaluation performed
 
-Pending final public audit and commit. The required public hashes recorded in
-the manifest are:
+The final public audit passed before push:
+
+- Branch: `generalization/public-v1r1`, rooted at the exact
+  `implementation-freeze-v1` tag target
+  `8d3b4ff7a1979540f2e65dd9b493f0731e006f72`.
+- Generalization package allowlist: exact six files — public manifest, public
+  response contract, public query bundle, and the three public cases.
+- Forbidden generalization paths: absent — `expected/`, generator, `audit/`,
+  oracle `MANIFEST.json`, and defect catalog material.
+- Structural public case check: g01/g02/g03 each have 80 events and 80
+  object payloads with string `text`; total events 240; checkpoints are
+  20/40/60/80 for each scenario.
+- Public files match the repaired oracle byte-for-byte, and all manifest hashes
+  match the copied files.
+- Historical `benchmark/dev/expected/**` exists as frozen repository material
+  and has an empty diff from `implementation-freeze-v1`; it is allowed and
+  unchanged.
+- Oracle ancestry: original oracle commit and original oracle final HEAD are
+  both unreachable from this branch.
+- Historical `generalization/public-v1` and `origin/generalization/public-v1`
+  remain at `39d003cfe63dcba1e5ce701bca785963b9683157`.
+- No baseline runner, advanced runner, provider/model call, evaluator, or
+  scoring command was run.
+
+The required public hashes recorded in the manifest are:
 
 - Response contract:
   `c26d063189be0f44a7f099b49206d1731d0f933c60ece066c58630ce25ff0534`.
@@ -77,19 +100,27 @@ the manifest are:
 
 ## Result
 
-Pending final public audit, commit, and push. Expected outputs must remain
-absent from this branch, while historical frozen `benchmark/dev/expected/**`
-material is allowed and must be unchanged.
+The public V1R1 input-only branch passed the blindness/provenance audit and was
+committed locally at
+`6efbacc4195bf90e7711c1663e725f508927ef75` (`benchmark: seal generalization
+public v1r1 inputs`). Expected outputs remain absent from this branch, while
+historical frozen `benchmark/dev/expected/**` material is allowed and remains
+unchanged. The branch is ready for the authorized push; no runtime or scoring
+execution occurred.
 
 ## Regressions or unresolved issues
 
-Pending final audit. Generalization accuracy and scores are intentionally not
-available and must not be inferred.
+No packaging, blindness, ancestry, protected-path, hash, or structural
+regression was observed. Generalization accuracy and scores are intentionally
+not available and must not be inferred.
 
 ## Final decision
 
-Pending final audit and public commit.
+**KEEP / SEAL** the public V1R1 input-only branch. Push only
+`generalization/public-v1r1`; do not push the oracle branch, merge either
+branch, run the baseline or advanced runner, or score the scenarios.
 
 ## Related git commit
 
-Pending the public V1R1 seal commit.
+`6efbacc4195bf90e7711c1663e725f508927ef75` — `benchmark: seal generalization
+public v1r1 inputs`.
