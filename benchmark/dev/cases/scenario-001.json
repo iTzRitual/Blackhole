@@ -1,0 +1,3041 @@
+{
+  "contract_version": "1.0-gate-a-dev",
+  "scenario_id": "blackhole-dev-001-state-churn",
+  "person_id": "person-dev-001",
+  "timezone": "Europe/Berlin",
+  "timeline_start": "2026-01-05",
+  "cutoff_at": "2026-03-12T08:00:00+01:00",
+  "initial_context": {
+    "entities": [
+      {
+        "entity_id": "entity-jordan-lee",
+        "display_name": "Jordan Lee",
+        "kind": "person"
+      },
+      {
+        "entity_id": "entity-jordan-kim",
+        "display_name": "Jordan Kim",
+        "kind": "person"
+      },
+      {
+        "entity_id": "entity-alex",
+        "display_name": "Alex",
+        "kind": "person"
+      },
+      {
+        "entity_id": "entity-sam",
+        "display_name": "Sam",
+        "kind": "person"
+      }
+    ],
+    "accepted_state": []
+  },
+  "checkpoints": [
+    50,
+    100,
+    150,
+    200
+  ],
+  "raw_events": [
+    {
+      "event_id": "evt-001",
+      "sequence": 1,
+      "captured_at": "2026-01-05T09:00:00+01:00",
+      "observed_at": "2026-01-05",
+      "source_type": "subscription",
+      "payload": {
+        "text": "Streamly is active at 12.00 EUR per month."
+      },
+      "payload_sha256": "484434cee63cc7343c60a2eccf2f6addc5dfe841253092c725c4921213978c6e",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-002",
+      "sequence": 2,
+      "captured_at": "2026-01-05T10:00:00+01:00",
+      "observed_at": "2026-01-05",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Orange Mobile bill for 2026-01: 29.90 EUR."
+      },
+      "payload_sha256": "a8488b56854950e2d77883b17722815197837e6a538a6364e8c583296043afd9",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-003",
+      "sequence": 3,
+      "captured_at": "2026-01-05T11:00:00+01:00",
+      "observed_at": "2026-01-05",
+      "source_type": "receipt",
+      "payload": {
+        "text": "MarketOne receipt: 3 protein bars for 9.00 EUR."
+      },
+      "payload_sha256": "4a5cf66c3ad5b50dbd09b88778f250731d75c71b3566daad738b774ac8af0aca",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-004",
+      "sequence": 4,
+      "captured_at": "2026-01-06T12:00:00+01:00",
+      "observed_at": "2026-01-06",
+      "source_type": "task-note",
+      "payload": {
+        "text": "Pick up the parcel for Alex by 2026-01-12."
+      },
+      "payload_sha256": "0a7de2c7bbdc422a730711ce921109281918347b20e9cd6610d4fa81ba220e78",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-005",
+      "sequence": 5,
+      "captured_at": "2026-01-06T13:00:00+01:00",
+      "observed_at": "2026-01-06",
+      "source_type": "document",
+      "payload": {
+        "text": "RoadSure policy RS-OLD is active from 2026-01-01 through 2026-06-30."
+      },
+      "payload_sha256": "686442985f4a9bf295aaed6be73596aeb9c29cfbe3050ccde29a9a829b90b3aa",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-006",
+      "sequence": 6,
+      "captured_at": "2026-01-06T14:00:00+01:00",
+      "observed_at": "2026-01-06",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Corner Mart receipt R-1001: 11.20 EUR on 2026-01-06."
+      },
+      "payload_sha256": "b9ca78f0aa794dc2985aad8da9f86c35a5d26db4a6279785040790f402e2e201",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-007",
+      "sequence": 7,
+      "captured_at": "2026-01-07T15:00:00+01:00",
+      "observed_at": "2026-01-07",
+      "source_type": "text",
+      "payload": {
+        "text": "Jordan asked me to bring the blue folder."
+      },
+      "payload_sha256": "a30a4e800943129e917c0b61de030ea187afe621ef868418ab3adaa5d1b28d85",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-008",
+      "sequence": 8,
+      "captured_at": "2026-01-07T08:00:00+01:00",
+      "observed_at": "2026-01-07",
+      "source_type": "text",
+      "payload": {
+        "text": "HomeFix appointment is on 2026-02-10; quoted amount is 180.00 EUR."
+      },
+      "payload_sha256": "4234c9c74b06cf80a355e8968e95b04b340032a0568aaaf62d9fa5ec04a8eac6",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-009",
+      "sequence": 9,
+      "captured_at": "2026-01-07T09:00:00+01:00",
+      "observed_at": "2026-01-07",
+      "source_type": "document",
+      "payload": {
+        "text": "GymFlex contract GYM-OLD was signed 2026-01-02 and is effective 2026-02-01."
+      },
+      "payload_sha256": "7af0b9e3c8ff955fd6cc512daa8b264cbf2b80edd1a64706c4aa53c7b0f3303d",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-010",
+      "sequence": 10,
+      "captured_at": "2026-01-08T10:00:00+01:00",
+      "observed_at": "2026-01-08",
+      "source_type": "text",
+      "payload": {
+        "text": "I should ask the bank to change the standing order; no request was sent."
+      },
+      "payload_sha256": "303dc403ad4c6f6e1f461419b8881538214b2e4ab27cc08d90f906a1bb654d21",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-011",
+      "sequence": 11,
+      "captured_at": "2026-01-08T11:00:00+01:00",
+      "observed_at": "2026-01-08",
+      "source_type": "receipt",
+      "payload": {
+        "text": "The Streamly charge appeared on my card."
+      },
+      "payload_sha256": "534d9c5da3f93e74f867e8069cf97b8dd930eea868c3e06e6b9d4bddb855c106",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-012",
+      "sequence": 12,
+      "captured_at": "2026-01-08T12:00:00+01:00",
+      "observed_at": "2026-01-08",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Orange Mobile bill for 2026-02: 29.90 EUR."
+      },
+      "payload_sha256": "8288806f373995178c61503fef6e7c3cd985ececfc3362dddb9934577aace2a6",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-013",
+      "sequence": 13,
+      "captured_at": "2026-01-09T13:00:00+01:00",
+      "observed_at": "2026-01-09",
+      "source_type": "text",
+      "payload": {
+        "text": "I ate one protein bar."
+      },
+      "payload_sha256": "2d1f1dd3c53fe01175ec96ef6087585ebd450812e62a4141cb689b586276f462",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-014",
+      "sequence": 14,
+      "captured_at": "2026-01-09T14:00:00+01:00",
+      "observed_at": "2026-01-09",
+      "source_type": "task-note",
+      "payload": {
+        "text": "Sam will handle parcel pickup instead of Alex."
+      },
+      "payload_sha256": "63a6292f5709fae0db3ce279bde4159c18efce8410c0c11500dbf0412813eca8",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-015",
+      "sequence": 15,
+      "captured_at": "2026-01-09T15:00:00+01:00",
+      "observed_at": "2026-01-09",
+      "source_type": "text",
+      "payload": {
+        "text": "I think the old RoadSure policy might run until July; this is not confirmed."
+      },
+      "payload_sha256": "adaa8003f9c77ef64349bf1ae7b7b8e4ded870c6dad6a7574cf753a62561a064",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-016",
+      "sequence": 16,
+      "captured_at": "2026-01-10T08:00:00+01:00",
+      "observed_at": "2026-01-10",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Corner Mart receipt R-1001 uploaded again unchanged."
+      },
+      "payload_sha256": "3998cdfb5bf849a97a639c2406db109593845c1e14013aafb91ca3e503fc832b",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-017",
+      "sequence": 17,
+      "captured_at": "2026-01-10T09:00:00+01:00",
+      "observed_at": "2026-01-10",
+      "source_type": "document",
+      "payload": {
+        "text": "Jordan Lee from school sent the form."
+      },
+      "payload_sha256": "5aeb23a1ffbbe3de86c2443ff070cfa4bf9a2a01959e90abb80a80359e438978",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-018",
+      "sequence": 18,
+      "captured_at": "2026-01-10T10:00:00+01:00",
+      "observed_at": "2026-01-10",
+      "source_type": "text",
+      "payload": {
+        "text": "Another HomeFix note says the appointment is on 2026-02-12."
+      },
+      "payload_sha256": "aaf907cfb5765ef1f4d39fec493c295bd1c45c48fbcadeeda96ee9afffe4747d",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-019",
+      "sequence": 19,
+      "captured_at": "2026-01-11T11:00:00+01:00",
+      "observed_at": "2026-01-11",
+      "source_type": "document",
+      "payload": {
+        "text": "GYM-OLD renews on 2027-01-31."
+      },
+      "payload_sha256": "0b22fc341839fac17d57df23392dc0325c339c09eadb2ff637cf45b32202dd2b",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-020",
+      "sequence": 20,
+      "captured_at": "2026-01-11T12:00:00+01:00",
+      "observed_at": "2026-01-11",
+      "source_type": "text",
+      "payload": {
+        "text": "The walk was pleasant and sunny."
+      },
+      "payload_sha256": "ebd3ff3ff9c83879aff704c685ec3d125ccbdd1afced0b0319229b30342dd3d0",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-021",
+      "sequence": 21,
+      "captured_at": "2026-01-11T13:00:00+01:00",
+      "observed_at": "2026-01-11",
+      "source_type": "subscription",
+      "payload": {
+        "text": "Streamly sent a notice: the monthly price will be 14.00 EUR."
+      },
+      "payload_sha256": "812e71d8d3c165c49b02ae50ffa16ee3900240fdbc046331f902da9bde073539",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-022",
+      "sequence": 22,
+      "captured_at": "2026-01-12T14:00:00+01:00",
+      "observed_at": "2026-01-12",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Orange Mobile bill for 2026-03: 29.90 EUR."
+      },
+      "payload_sha256": "90e4c9c8ceec89fab7a592b800ecefa70a33da57fd5e8b9d7c2fdac8abc12033",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-023",
+      "sequence": 23,
+      "captured_at": "2026-01-12T15:00:00+01:00",
+      "observed_at": "2026-01-12",
+      "source_type": "text",
+      "payload": {
+        "text": "I ate two more protein bars."
+      },
+      "payload_sha256": "56460db78c69c89380f8d903e101db558dfe1c2d1c2fbb90c8af526b04e755c9",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-024",
+      "sequence": 24,
+      "captured_at": "2026-01-12T08:00:00+01:00",
+      "observed_at": "2026-01-12",
+      "source_type": "text",
+      "payload": {
+        "text": "The store says parcel pickup is still pending."
+      },
+      "payload_sha256": "8d9d7dfa2b8d1d0ae02f72fd4a12b700fc54bb5465191011a92f7628b2ae9605",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-025",
+      "sequence": 25,
+      "captured_at": "2026-01-13T09:00:00+01:00",
+      "observed_at": "2026-01-13",
+      "source_type": "document",
+      "payload": {
+        "text": "The RoadSure document confirms RS-OLD expires on 2026-06-30."
+      },
+      "payload_sha256": "99ae89625aab46ffb4595a9fc333c39af8b4a2b52eef7ec3c800016c67d56261",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-026",
+      "sequence": 26,
+      "captured_at": "2026-01-13T10:00:00+01:00",
+      "observed_at": "2026-01-13",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Corner Mart receipt R-1001 correction: total is 11.40 EUR."
+      },
+      "payload_sha256": "48b29c125500635230f31c2f860d8586b6fd764e72905370f298e37a59d0fa36",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-027",
+      "sequence": 27,
+      "captured_at": "2026-01-13T11:00:00+01:00",
+      "observed_at": "2026-01-13",
+      "source_type": "text",
+      "payload": {
+        "text": "Please remind Jordan about the appointment."
+      },
+      "payload_sha256": "36ef5f3065ac309e8a7705259efb8c28751cf0676b0fa6250534e61124b2f28a",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-028",
+      "sequence": 28,
+      "captured_at": "2026-01-14T12:00:00+01:00",
+      "observed_at": "2026-01-14",
+      "source_type": "text",
+      "payload": {
+        "text": "A reminder repeats February 12 for HomeFix, but it is not authoritative."
+      },
+      "payload_sha256": "5310642d6c39edccbfd7ffcea580bbe25595f1bdf434b4acc26338f6784cb542",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-029",
+      "sequence": 29,
+      "captured_at": "2026-01-14T13:00:00+01:00",
+      "observed_at": "2026-01-14",
+      "source_type": "document",
+      "payload": {
+        "text": "The old GymFlex contract has a 29.00 EUR monthly fee."
+      },
+      "payload_sha256": "20d453fdc4c28f70d94157d364c8a5086046ad46a688efa872a30bf8111f3b68",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-030",
+      "sequence": 30,
+      "captured_at": "2026-01-14T14:00:00+01:00",
+      "observed_at": "2026-01-14",
+      "source_type": "text",
+      "payload": {
+        "text": "Prepare a 50.00 EUR transfer to Sam, but do not send it."
+      },
+      "payload_sha256": "bb966a57543e5585526b3b29d651d8c10493e0df33aa42a0ee81e7fc3cb14a42",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-031",
+      "sequence": 31,
+      "captured_at": "2026-01-15T15:00:00+01:00",
+      "observed_at": "2026-01-15",
+      "source_type": "text",
+      "payload": {
+        "text": "I intend to cancel Streamly, but I have not submitted the cancellation."
+      },
+      "payload_sha256": "01a90942e8be5edf4808dac0139d57f0618307feb9e9179338660b15cf16a222",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-032",
+      "sequence": 32,
+      "captured_at": "2026-01-15T08:00:00+01:00",
+      "observed_at": "2026-01-15",
+      "source_type": "text",
+      "payload": {
+        "text": "No Orange Mobile bill was captured for 2026-04; coverage is missing, not zero."
+      },
+      "payload_sha256": "6ebecc8573cfd8aabc5a4be069dff6374b46711b0642bcc57e5224c754939c65",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-033",
+      "sequence": 33,
+      "captured_at": "2026-01-15T09:00:00+01:00",
+      "observed_at": "2026-01-15",
+      "source_type": "text",
+      "payload": {
+        "text": "There is no consumption note for January 12."
+      },
+      "payload_sha256": "8bbf2e6d68357f5a58b3ea08b9ea2e59580bb902fb722078c7728ae2428dde01",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-034",
+      "sequence": 34,
+      "captured_at": "2026-01-16T10:00:00+01:00",
+      "observed_at": "2026-01-16",
+      "source_type": "text",
+      "payload": {
+        "text": "The store cancelled parcel pickup; no collection is needed."
+      },
+      "payload_sha256": "a0e8cf8f1e2b6c65908e8f465f04a483bb6048a9d70e81c35c3501dfd2267a69",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-035",
+      "sequence": 35,
+      "captured_at": "2026-01-16T11:00:00+01:00",
+      "observed_at": "2026-01-16",
+      "source_type": "document",
+      "payload": {
+        "text": "RoadSure offered replacement policy RS-NEW, but this is only a quote."
+      },
+      "payload_sha256": "9aee94ccae3a46bde060ccf746655ca5ffe58135484b81fefba183dca9b65cc9",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-036",
+      "sequence": 36,
+      "captured_at": "2026-01-16T12:00:00+01:00",
+      "observed_at": "2026-01-16",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Corner Mart receipt R-1002: 11.20 EUR on 2026-01-08."
+      },
+      "payload_sha256": "e6639b6cf602734494f52f842e4ec968375a191cfa3e2f2a029d3911ff788193",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-037",
+      "sequence": 37,
+      "captured_at": "2026-01-17T13:00:00+01:00",
+      "observed_at": "2026-01-17",
+      "source_type": "text",
+      "payload": {
+        "text": "Jordan Kim is the person from the climbing club."
+      },
+      "payload_sha256": "148c9291ceeda2b024c6a64e517cf9f9e5cd969f8384d5bf322157cdcc928f2d",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-038",
+      "sequence": 38,
+      "captured_at": "2026-01-17T14:00:00+01:00",
+      "observed_at": "2026-01-17",
+      "source_type": "text",
+      "payload": {
+        "text": "I confirm the HomeFix appointment is 2026-02-12; treat that as a correction."
+      },
+      "payload_sha256": "dd62a2fc04d1fdf7b652ba41d4eeece2a8667c47cc67a48a21edd4f7f0e534ab",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-039",
+      "sequence": 39,
+      "captured_at": "2026-01-17T15:00:00+01:00",
+      "observed_at": "2026-01-17",
+      "source_type": "document",
+      "payload": {
+        "text": "GymFlex sent replacement terms, not yet signed."
+      },
+      "payload_sha256": "1e2422cec4b51a287a281212b781eed3eddf327a4e433f63bdc79e2e88a1554e",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-040",
+      "sequence": 40,
+      "captured_at": "2026-01-18T08:00:00+01:00",
+      "observed_at": "2026-01-18",
+      "source_type": "text",
+      "payload": {
+        "text": "No bank payment was made."
+      },
+      "payload_sha256": "7562eb3468e6f5fda5318c6d49541083ece2b36686c1d698d3dec820e9ca042c",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-041",
+      "sequence": 41,
+      "captured_at": "2026-01-18T09:00:00+01:00",
+      "observed_at": "2026-01-18",
+      "source_type": "text",
+      "payload": {
+        "text": "I changed my mind; keep Streamly for now."
+      },
+      "payload_sha256": "0d96c0a92d6430aaa5a6e13d0e12d94e0761603f3c24a7a35d99a5efebf50527",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-042",
+      "sequence": 42,
+      "captured_at": "2026-01-18T10:00:00+01:00",
+      "observed_at": "2026-01-18",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Orange Mobile bill for 2026-05: 31.90 EUR."
+      },
+      "payload_sha256": "9d0bb9c2f6f16e36b6ae4b51d242c913ad51d50ea6d2c4c161ca302703889554",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-043",
+      "sequence": 43,
+      "captured_at": "2026-01-19T11:00:00+01:00",
+      "observed_at": "2026-01-19",
+      "source_type": "receipt",
+      "payload": {
+        "text": "MarketOne receipt: 6 protein bars for 18.00 EUR."
+      },
+      "payload_sha256": "b8d5c6d261724a1a2b93fa150ff1c5a37dca25a7bfc00fd3b7fdec08f11c2860",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-044",
+      "sequence": 44,
+      "captured_at": "2026-01-19T12:00:00+01:00",
+      "observed_at": "2026-01-19",
+      "source_type": "task-note",
+      "payload": {
+        "text": "Open task: Alex should pick up the replacement parcel by 2026-02-25."
+      },
+      "payload_sha256": "7bb845d8ac01226ed444461641f4cf00f3419df83feb77f4cbb1be8e0b541efa",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-045",
+      "sequence": 45,
+      "captured_at": "2026-01-19T13:00:00+01:00",
+      "observed_at": "2026-01-19",
+      "source_type": "document",
+      "payload": {
+        "text": "The signed RoadSure policy RS-NEW is active from 2026-07-01 through 2027-06-30."
+      },
+      "payload_sha256": "4396769b5b8ec69ca58481769d68766a1294b12014028518c083582f08d3876e",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-046",
+      "sequence": 46,
+      "captured_at": "2026-01-20T14:00:00+01:00",
+      "observed_at": "2026-01-20",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Corner Mart receipt R-1002 uploaded with the same contents."
+      },
+      "payload_sha256": "22fa9b9889351a7f532e06242c555f5eeb8da1263fb7d5bb30b6a638fd577ea3",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-047",
+      "sequence": 47,
+      "captured_at": "2026-01-20T15:00:00+01:00",
+      "observed_at": "2026-01-20",
+      "source_type": "text",
+      "payload": {
+        "text": "The Jordan in this note is not identified."
+      },
+      "payload_sha256": "6397ba2b9a0acca3612ccc7f29c6957e3ca7a39ae4824026486a99b34091171d",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-048",
+      "sequence": 48,
+      "captured_at": "2026-01-20T08:00:00+01:00",
+      "observed_at": "2026-01-20",
+      "source_type": "document",
+      "payload": {
+        "text": "HomeFix still quotes 180.00 EUR."
+      },
+      "payload_sha256": "ddff5c15fb51015f6572feb57097ca58de9b2dea00bfab4cbecc9c691ac3a388",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-049",
+      "sequence": 49,
+      "captured_at": "2026-01-21T09:00:00+01:00",
+      "observed_at": "2026-01-21",
+      "source_type": "document",
+      "payload": {
+        "text": "I signed replacement GymFlex contract GYM-NEW on 2026-02-15."
+      },
+      "payload_sha256": "f8a26df1c70ef3b560ec8ad7387a2eae9dd3007cfa80b3e86c39b7e351528d0a",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-050",
+      "sequence": 50,
+      "captured_at": "2026-01-21T10:00:00+01:00",
+      "observed_at": "2026-01-21",
+      "source_type": "text",
+      "payload": {
+        "text": "Do not send or change anything without my approval."
+      },
+      "payload_sha256": "2f64203937bc0517b989c9baaf211d83547e0128154adf7aa6d3c8508339e39e",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-051",
+      "sequence": 51,
+      "captured_at": "2026-01-21T11:00:00+01:00",
+      "observed_at": "2026-01-21",
+      "source_type": "receipt",
+      "payload": {
+        "text": "The next Streamly charge was 14.00 EUR."
+      },
+      "payload_sha256": "9b854b1d19588442a48203df1400f7ab7ffbc9bcd8b9da9f02f156c071d41b9e",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-052",
+      "sequence": 52,
+      "captured_at": "2026-01-22T12:00:00+01:00",
+      "observed_at": "2026-01-22",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Orange Mobile bill for 2026-06: 31.90 EUR."
+      },
+      "payload_sha256": "a2a0aedd5fa260d900a5d0fe27d2c98138cd7d68f7c23575688e24b656d2f7eb",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-053",
+      "sequence": 53,
+      "captured_at": "2026-01-22T13:00:00+01:00",
+      "observed_at": "2026-01-22",
+      "source_type": "text",
+      "payload": {
+        "text": "I ate one bar from the second pack."
+      },
+      "payload_sha256": "705463b95145baf4ae5eee80bf18baf82f706250ea6227da5c2b874f2b4409ff",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-054",
+      "sequence": 54,
+      "captured_at": "2026-01-22T14:00:00+01:00",
+      "observed_at": "2026-01-22",
+      "source_type": "text",
+      "payload": {
+        "text": "Alex picked up the replacement parcel."
+      },
+      "payload_sha256": "050fe5a556b0d963241e690cfcab60d61b3e80778a1619bb53b62a12d27feafe",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-055",
+      "sequence": 55,
+      "captured_at": "2026-01-23T15:00:00+01:00",
+      "observed_at": "2026-01-23",
+      "source_type": "document",
+      "payload": {
+        "text": "The new RoadSure premium is 42.00 EUR per month."
+      },
+      "payload_sha256": "cbf80b3e4a2c75c7c5b5b04b1a679381100c6a825ff5def46388e4b8cdd3fa67",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-056",
+      "sequence": 56,
+      "captured_at": "2026-01-23T08:00:00+01:00",
+      "observed_at": "2026-01-23",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Corner Mart receipt R-1002 has a changed date and total: 12.20 EUR on 2026-01-09."
+      },
+      "payload_sha256": "d63d2ed541749582e7dde9db7fa38ef3321c5bd3814572698614ff425527ac88",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-057",
+      "sequence": 57,
+      "captured_at": "2026-01-23T09:00:00+01:00",
+      "observed_at": "2026-01-23",
+      "source_type": "text",
+      "payload": {
+        "text": "Jordan Lee confirmed the school deadline."
+      },
+      "payload_sha256": "258a19bd340ad86a9d51511452f302706a5e39d8c2c58cd4feec12252de39133",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-058",
+      "sequence": 58,
+      "captured_at": "2026-01-24T10:00:00+01:00",
+      "observed_at": "2026-01-24",
+      "source_type": "document",
+      "payload": {
+        "text": "A HomeFix invoice draft says 240.00 EUR instead."
+      },
+      "payload_sha256": "181a74f1642dc9eeb74d90308fdfa8de9bf10e967989d6835f316b9d05f923e6",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-059",
+      "sequence": 59,
+      "captured_at": "2026-01-24T11:00:00+01:00",
+      "observed_at": "2026-01-24",
+      "source_type": "document",
+      "payload": {
+        "text": "GYM-NEW renews on 2027-02-28."
+      },
+      "payload_sha256": "87f3033628f2c55cf25761ee004a4ab14addc796b5467157bb2266ba425c0ffb",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-060",
+      "sequence": 60,
+      "captured_at": "2026-01-24T12:00:00+01:00",
+      "observed_at": "2026-01-24",
+      "source_type": "text",
+      "payload": {
+        "text": "The weather observation is irrelevant to my obligations."
+      },
+      "payload_sha256": "8d04d3c3f7ce337d764b639a37c1e03a11294c811ce567ed1b09ece80ad9016a",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-061",
+      "sequence": 61,
+      "captured_at": "2026-01-25T13:00:00+01:00",
+      "observed_at": "2026-01-25",
+      "source_type": "subscription",
+      "payload": {
+        "text": "Streamly now costs 16.00 EUR each month."
+      },
+      "payload_sha256": "c7bbf29990709cc5e43baec6d67730a83a29f57334952faa4975022540b1f0fa",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-062",
+      "sequence": 62,
+      "captured_at": "2026-01-25T14:00:00+01:00",
+      "observed_at": "2026-01-25",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Orange Mobile bill for 2026-07: 31.90 EUR."
+      },
+      "payload_sha256": "e26e059ab5081ad75274f705b7746733cdbf123fe828a3f3449aa1954bf64eb7",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-063",
+      "sequence": 63,
+      "captured_at": "2026-01-25T15:00:00+01:00",
+      "observed_at": "2026-01-25",
+      "source_type": "receipt",
+      "payload": {
+        "text": "MarketOne receipt: 2 bars for 6.00 EUR."
+      },
+      "payload_sha256": "0c0da510f976bfc50da687f3196ed307e182035ff231facbc95c2bde10a860db",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-064",
+      "sequence": 64,
+      "captured_at": "2026-01-26T08:00:00+01:00",
+      "observed_at": "2026-01-26",
+      "source_type": "text",
+      "payload": {
+        "text": "The replacement parcel was returned, so pickup is open again."
+      },
+      "payload_sha256": "d818db56e0af7c464ada69ad1867be1cec3e184d70e35eb612dfb2a24c2f9d96",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-065",
+      "sequence": 65,
+      "captured_at": "2026-01-26T09:00:00+01:00",
+      "observed_at": "2026-01-26",
+      "source_type": "text",
+      "payload": {
+        "text": "A RoadSure card shows RS-NEW, not the old policy."
+      },
+      "payload_sha256": "f2420161443c7d9695d47d1bf6c36d2035702be4238bd0ea668ea5f08f5bd3d2",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-066",
+      "sequence": 66,
+      "captured_at": "2026-01-26T10:00:00+01:00",
+      "observed_at": "2026-01-26",
+      "source_type": "receipt",
+      "payload": {
+        "text": "A normalized copy of receipt R-1002 was captured."
+      },
+      "payload_sha256": "d5878699d753de5fc997314b6f1cc2614613587fb532ed40a02d5c4142ba7127",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-067",
+      "sequence": 67,
+      "captured_at": "2026-01-27T11:00:00+01:00",
+      "observed_at": "2026-01-27",
+      "source_type": "text",
+      "payload": {
+        "text": "I wrote only Jordan, with no surname or context."
+      },
+      "payload_sha256": "e007e44bbaafbd06135f45e08136dca59d484bb9a60a638863a51635609ae03b",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-068",
+      "sequence": 68,
+      "captured_at": "2026-01-27T12:00:00+01:00",
+      "observed_at": "2026-01-27",
+      "source_type": "text",
+      "payload": {
+        "text": "I confirmed the HomeFix amount is 220.00 EUR after checking the email."
+      },
+      "payload_sha256": "d748f914aad34941240379e58ef7fdeaf66026aac3700e08eb30b4aef7e1f018",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-069",
+      "sequence": 69,
+      "captured_at": "2026-01-27T13:00:00+01:00",
+      "observed_at": "2026-01-27",
+      "source_type": "document",
+      "payload": {
+        "text": "GYM-NEW costs 31.00 EUR monthly."
+      },
+      "payload_sha256": "670ee70896f6a410be594c229d56827dff0af90b6672976b51d7f5d65f6c367e",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-070",
+      "sequence": 70,
+      "captured_at": "2026-01-28T14:00:00+01:00",
+      "observed_at": "2026-01-28",
+      "source_type": "text",
+      "payload": {
+        "text": "Withdraw the proposed transfer to Sam."
+      },
+      "payload_sha256": "911446f9311fbbcf9837f6a831ad8e4a93c121aad5f0ef59ca0b6bd34e794533",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-071",
+      "sequence": 71,
+      "captured_at": "2026-01-28T15:00:00+01:00",
+      "observed_at": "2026-01-28",
+      "source_type": "text",
+      "payload": {
+        "text": "Please cancel Streamly at the end of February; this is a request."
+      },
+      "payload_sha256": "915d89f4411f4aeff0123680b17de944a7edfa465d9511050d556a94e7a904d7",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-072",
+      "sequence": 72,
+      "captured_at": "2026-01-28T08:00:00+01:00",
+      "observed_at": "2026-01-28",
+      "source_type": "text",
+      "payload": {
+        "text": "No Orange Mobile bill was captured for 2026-08; coverage is missing, not zero."
+      },
+      "payload_sha256": "983cf8bdca0365221949cb05b5152491e2099a5169a4cfa9b60eac4be066b0f7",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-073",
+      "sequence": 73,
+      "captured_at": "2026-01-29T09:00:00+01:00",
+      "observed_at": "2026-01-29",
+      "source_type": "text",
+      "payload": {
+        "text": "I ate two bars."
+      },
+      "payload_sha256": "e6fe63b751a97c62ff55c304fc7838ce6a0dd7f43e39fa662100836110d8285f",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-074",
+      "sequence": 74,
+      "captured_at": "2026-01-29T10:00:00+01:00",
+      "observed_at": "2026-01-29",
+      "source_type": "task-note",
+      "payload": {
+        "text": "Sam is now responsible for the replacement parcel."
+      },
+      "payload_sha256": "d6133ff0462a370d597981c4f43989633ce75b124998f5bfb0514bfd88a6e047",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-075",
+      "sequence": 75,
+      "captured_at": "2026-01-29T11:00:00+01:00",
+      "observed_at": "2026-01-29",
+      "source_type": "document",
+      "payload": {
+        "text": "The old RoadSure cancellation date was not printed clearly."
+      },
+      "payload_sha256": "ed251f34d7e9a2c2c2c687aca357d72fd88edd29f07074ad3e5237cb5d5cbbc6",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-076",
+      "sequence": 76,
+      "captured_at": "2026-01-30T12:00:00+01:00",
+      "observed_at": "2026-01-30",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Corner Mart receipt R-1003: 8.00 EUR on 2026-01-12."
+      },
+      "payload_sha256": "7238697e2cd6f5faba14237dd43623606ee92f95a936c25992226d152d4222b7",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-077",
+      "sequence": 77,
+      "captured_at": "2026-01-30T13:00:00+01:00",
+      "observed_at": "2026-01-30",
+      "source_type": "text",
+      "payload": {
+        "text": "Jordan Kim will bring climbing shoes."
+      },
+      "payload_sha256": "df406e57da3405de17884fa9d817dded1166fb33d873c1e802a1328326347b6b",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-078",
+      "sequence": 78,
+      "captured_at": "2026-01-30T14:00:00+01:00",
+      "observed_at": "2026-01-30",
+      "source_type": "text",
+      "payload": {
+        "text": "HomeFix appointment remains scheduled for 2026-02-12."
+      },
+      "payload_sha256": "781063ef33a640424e6c69fa48b44deea63dc962f693266e386920fadff91f40",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-079",
+      "sequence": 79,
+      "captured_at": "2026-01-31T15:00:00+01:00",
+      "observed_at": "2026-01-31",
+      "source_type": "text",
+      "payload": {
+        "text": "The old GymFlex terms are historical."
+      },
+      "payload_sha256": "1ea0198ba110e3d4aa8a4f7648ef18e03dd6842eeb52c11099004a2b9cd49c49",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-080",
+      "sequence": 80,
+      "captured_at": "2026-01-31T08:00:00+01:00",
+      "observed_at": "2026-01-31",
+      "source_type": "text",
+      "payload": {
+        "text": "The bank standing-order change is still only a proposal."
+      },
+      "payload_sha256": "cc4f54625f4ad408e3c4875ec176b8ce5e2a86f038ff3e57107eeaa33764ae20",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-081",
+      "sequence": 81,
+      "captured_at": "2026-01-31T09:00:00+01:00",
+      "observed_at": "2026-01-31",
+      "source_type": "document",
+      "payload": {
+        "text": "Streamly cancellation was confirmed for 2026-02-28."
+      },
+      "payload_sha256": "9a51ebefdc9ceec64676ff31c67fada4e339756746bb2e43763e6d517207f9a0",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-082",
+      "sequence": 82,
+      "captured_at": "2026-02-01T10:00:00+01:00",
+      "observed_at": "2026-02-01",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Orange Mobile bill for 2026-09: 33.90 EUR."
+      },
+      "payload_sha256": "a1c4e16ab36459c00c18d72da99cf9347825edbd607c1fe6a491cba3519c7236",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-083",
+      "sequence": 83,
+      "captured_at": "2026-02-01T11:00:00+01:00",
+      "observed_at": "2026-02-01",
+      "source_type": "text",
+      "payload": {
+        "text": "I did not record whether I ate a bar on February 10."
+      },
+      "payload_sha256": "0dc219055aacf6f625369849591f4152c962bf6a374d13e431e986b6a4e48137",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-084",
+      "sequence": 84,
+      "captured_at": "2026-02-01T12:00:00+01:00",
+      "observed_at": "2026-02-01",
+      "source_type": "task-note",
+      "payload": {
+        "text": "Alex will take the replacement parcel task back."
+      },
+      "payload_sha256": "1828f4197001c2aeeb02256690c67f4fbe3ff5caf6cebae646d3600b385248b0",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-085",
+      "sequence": 85,
+      "captured_at": "2026-02-02T13:00:00+01:00",
+      "observed_at": "2026-02-02",
+      "source_type": "text",
+      "payload": {
+        "text": "RoadSure confirmed RS-OLD was superseded when RS-NEW started."
+      },
+      "payload_sha256": "c18e65f9ed7b13127cba0914f08849b9170c8cc46d733460f307eb48dbb4cf1a",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-086",
+      "sequence": 86,
+      "captured_at": "2026-02-02T14:00:00+01:00",
+      "observed_at": "2026-02-02",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Corner Mart receipt R-1004: 8.50 EUR on 2026-01-13."
+      },
+      "payload_sha256": "b789073104df1da35236c265a290255eb6212a6241cadf553b9abcbd92494ee3",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-087",
+      "sequence": 87,
+      "captured_at": "2026-02-02T15:00:00+01:00",
+      "observed_at": "2026-02-02",
+      "source_type": "text",
+      "payload": {
+        "text": "A message from Jordan needs a reply, but the recipient is unclear."
+      },
+      "payload_sha256": "b47c18a996f9ff08ddbf7ce13ee6d19bddde826df10ce9a920cebeb69c65479a",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-088",
+      "sequence": 88,
+      "captured_at": "2026-02-03T08:00:00+01:00",
+      "observed_at": "2026-02-03",
+      "source_type": "document",
+      "payload": {
+        "text": "A later HomeFix note lists 250.00 EUR."
+      },
+      "payload_sha256": "4a0dc3b0c89e8a41eb024379f39587a85d2baf4a4576d07e8ff422d1c1b0a132",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-089",
+      "sequence": 89,
+      "captured_at": "2026-02-03T09:00:00+01:00",
+      "observed_at": "2026-02-03",
+      "source_type": "document",
+      "payload": {
+        "text": "GYM-NEW became effective on 2026-03-01."
+      },
+      "payload_sha256": "8a9e0793664da868c8f482b2823c480d82037ebae3195ffb4bf5c7226044b267",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-090",
+      "sequence": 90,
+      "captured_at": "2026-02-03T10:00:00+01:00",
+      "observed_at": "2026-02-03",
+      "source_type": "text",
+      "payload": {
+        "text": "I saw rain on the walk."
+      },
+      "payload_sha256": "c529353b3c36c4f2a1523b75132ccd33d299a58beb6066306c3932875bd746be",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-091",
+      "sequence": 91,
+      "captured_at": "2026-02-04T11:00:00+01:00",
+      "observed_at": "2026-02-04",
+      "source_type": "text",
+      "payload": {
+        "text": "I reactivated Streamly after all."
+      },
+      "payload_sha256": "1564126ed3256fa3f1e5f9447528a6e82ebdb50f1e29c8c17ce88085b2450a00",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-092",
+      "sequence": 92,
+      "captured_at": "2026-02-04T12:00:00+01:00",
+      "observed_at": "2026-02-04",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Orange Mobile bill for 2026-10: 33.90 EUR."
+      },
+      "payload_sha256": "f3b7889205a14938a4c6c5c166ea283c6e70b4c3b780e352b90a8ce62d26ab3a",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-093",
+      "sequence": 93,
+      "captured_at": "2026-02-04T13:00:00+01:00",
+      "observed_at": "2026-02-04",
+      "source_type": "text",
+      "payload": {
+        "text": "I ate three bars from the pantry."
+      },
+      "payload_sha256": "da14517fac7549a45dd8d3459e0f07358253ac06ae4e8ecf0adc27528cbf225c",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-094",
+      "sequence": 94,
+      "captured_at": "2026-02-05T14:00:00+01:00",
+      "observed_at": "2026-02-05",
+      "source_type": "task-note",
+      "payload": {
+        "text": "The replacement parcel deadline moved to 2026-03-05."
+      },
+      "payload_sha256": "b0833d320324c9de0f1040f7d548d5acf3e662ac433a32839617a2ffc6448c65",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-095",
+      "sequence": 95,
+      "captured_at": "2026-02-05T15:00:00+01:00",
+      "observed_at": "2026-02-05",
+      "source_type": "document",
+      "payload": {
+        "text": "RS-NEW is the current RoadSure policy."
+      },
+      "payload_sha256": "f2bf9e32b9225a700f81d8663e3e2afacd7fa499f8dad564017694efcaf3fc7f",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-096",
+      "sequence": 96,
+      "captured_at": "2026-02-05T08:00:00+01:00",
+      "observed_at": "2026-02-05",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Receipt R-1003 was uploaded a second time unchanged."
+      },
+      "payload_sha256": "11b232f891b4fbb21316bf7227483ca9ab2cefccd3df579df2debc6bf211fb77",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-097",
+      "sequence": 97,
+      "captured_at": "2026-02-06T09:00:00+01:00",
+      "observed_at": "2026-02-06",
+      "source_type": "document",
+      "payload": {
+        "text": "Jordan Lee is the sender of the school message."
+      },
+      "payload_sha256": "b8ebb7a09aa497e8bd51a53d841fda7d2841d4410ae021b954239fda905ff71d",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-098",
+      "sequence": 98,
+      "captured_at": "2026-02-06T10:00:00+01:00",
+      "observed_at": "2026-02-06",
+      "source_type": "text",
+      "payload": {
+        "text": "I have not resolved whether HomeFix is 220.00 or 250.00 EUR."
+      },
+      "payload_sha256": "d1225f7b89f6f5991220edebdf866622f80dbbc24434e2e0be010ebe8be567b6",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-099",
+      "sequence": 99,
+      "captured_at": "2026-02-06T11:00:00+01:00",
+      "observed_at": "2026-02-06",
+      "source_type": "document",
+      "payload": {
+        "text": "The signed date for GYM-NEW is 2026-02-15."
+      },
+      "payload_sha256": "870e4254b1b76235315513221d91c7c23e9d0ebbcf607a454619c790a7fab1ff",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-100",
+      "sequence": 100,
+      "captured_at": "2026-02-07T12:00:00+01:00",
+      "observed_at": "2026-02-07",
+      "source_type": "text",
+      "payload": {
+        "text": "I approve preparing a draft, not sending or changing an account."
+      },
+      "payload_sha256": "f7c7118c7cf5573381a22047db2e9dd6bb34b041a1b4df2e8385fb79562d1f0c",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-101",
+      "sequence": 101,
+      "captured_at": "2026-02-07T13:00:00+01:00",
+      "observed_at": "2026-02-07",
+      "source_type": "receipt",
+      "payload": {
+        "text": "The reactivated Streamly charge was 16.00 EUR."
+      },
+      "payload_sha256": "3a1b4370641cb918a92ac20651747d07e4b59812fe9a06c96f31e4f5e2fd09be",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-102",
+      "sequence": 102,
+      "captured_at": "2026-02-07T14:00:00+01:00",
+      "observed_at": "2026-02-07",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Orange Mobile bill for 2026-11: 33.90 EUR."
+      },
+      "payload_sha256": "73d43ea93f14d8a1b33f8c9d880eacc3689a6b0e00ac7c40a17961f531a81e1a",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-103",
+      "sequence": 103,
+      "captured_at": "2026-02-08T15:00:00+01:00",
+      "observed_at": "2026-02-08",
+      "source_type": "receipt",
+      "payload": {
+        "text": "MarketOne receipt: 10 bars for 30.00 EUR."
+      },
+      "payload_sha256": "5a1df000d2c38c7f56f20497c71087fa2090dc16979eb8cadcb4f237dc8ca62a",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-104",
+      "sequence": 104,
+      "captured_at": "2026-02-08T08:00:00+01:00",
+      "observed_at": "2026-02-08",
+      "source_type": "task-note",
+      "payload": {
+        "text": "Return the library books; Sam owns this task by 2026-02-18."
+      },
+      "payload_sha256": "7e6dc733120bd573ca9ac5d255b4e41aa7d0a067456be7b91fcf89c478a47ccd",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-105",
+      "sequence": 105,
+      "captured_at": "2026-02-08T09:00:00+01:00",
+      "observed_at": "2026-02-08",
+      "source_type": "document",
+      "payload": {
+        "text": "The RS-NEW card again shows expiry 2027-06-30."
+      },
+      "payload_sha256": "2ca56a78b25aa0647e68985b955b758e1324aac0d5dddc22a570de926dea3b11",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-106",
+      "sequence": 106,
+      "captured_at": "2026-02-09T10:00:00+01:00",
+      "observed_at": "2026-02-09",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Receipt R-1004 has a tax line correction; total remains 8.50 EUR."
+      },
+      "payload_sha256": "0c86ef2c8ba0c5589adcf1514bb42abbd1d04c248f0f9bb596bc54242473beba",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-107",
+      "sequence": 107,
+      "captured_at": "2026-02-09T11:00:00+01:00",
+      "observed_at": "2026-02-09",
+      "source_type": "text",
+      "payload": {
+        "text": "Jordan mentioned a meeting without identifying which Jordan."
+      },
+      "payload_sha256": "9bd4d9adc47b71ead2c3260c23c687350ed04dc2f8925e227c7605d5d9bcacd4",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-108",
+      "sequence": 108,
+      "captured_at": "2026-02-09T12:00:00+01:00",
+      "observed_at": "2026-02-09",
+      "source_type": "text",
+      "payload": {
+        "text": "The date correction for HomeFix is still 2026-02-12."
+      },
+      "payload_sha256": "318eee947d620145f795dd6a5f614d229ed8362496d567502de4d5a955a173ed",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-109",
+      "sequence": 109,
+      "captured_at": "2026-02-10T13:00:00+01:00",
+      "observed_at": "2026-02-10",
+      "source_type": "text",
+      "payload": {
+        "text": "GymFlex confirms GYM-NEW is the current contract."
+      },
+      "payload_sha256": "00cb19e4dcb8a75d34c7131d8ff37cf9c667c8d51555f0cd027540d7f07be4d4",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-110",
+      "sequence": 110,
+      "captured_at": "2026-02-10T14:00:00+01:00",
+      "observed_at": "2026-02-10",
+      "source_type": "text",
+      "payload": {
+        "text": "The bank change has not been executed."
+      },
+      "payload_sha256": "4f22f014297ed99a8a267990ac72a2a1e89885ed8ef81a55bd5e0d94838e3769",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-111",
+      "sequence": 111,
+      "captured_at": "2026-02-10T15:00:00+01:00",
+      "observed_at": "2026-02-10",
+      "source_type": "subscription",
+      "payload": {
+        "text": "The Streamly monthly price is 18.00 EUR from March."
+      },
+      "payload_sha256": "ba9e1a69ec9f97cd90fcfa1ef3f1f6548c6d865b574e9d4d0fb32198bb79cb92",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-112",
+      "sequence": 112,
+      "captured_at": "2026-02-11T08:00:00+01:00",
+      "observed_at": "2026-02-11",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Orange Mobile bill for 2026-12: 35.90 EUR."
+      },
+      "payload_sha256": "727ad72cbb053c5936181be5d497724bd7e8dc6f9b2e9861db156425f106cee6",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-113",
+      "sequence": 113,
+      "captured_at": "2026-02-11T09:00:00+01:00",
+      "observed_at": "2026-02-11",
+      "source_type": "text",
+      "payload": {
+        "text": "No consumption observation was captured for February 20."
+      },
+      "payload_sha256": "49d57dafc8e57ac9643a8f93e17e7cc52fa48dfb1f40d02de1f9272617f3c6b0",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-114",
+      "sequence": 114,
+      "captured_at": "2026-02-11T10:00:00+01:00",
+      "observed_at": "2026-02-11",
+      "source_type": "text",
+      "payload": {
+        "text": "Sam returned the library books."
+      },
+      "payload_sha256": "72e3b5d78658b0abe2f2740218d43d05c01f859c9bfded66d5f04a81a83b9e2b",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-115",
+      "sequence": 115,
+      "captured_at": "2026-02-12T11:00:00+01:00",
+      "observed_at": "2026-02-12",
+      "source_type": "document",
+      "payload": {
+        "text": "The claim number is unreadable in the RoadSure scan."
+      },
+      "payload_sha256": "ffb904a7f310a03674e9f5a611c75c64bf3fda487818497d75b43c55c41da3e8",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-116",
+      "sequence": 116,
+      "captured_at": "2026-02-12T12:00:00+01:00",
+      "observed_at": "2026-02-12",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Corner Mart receipt R-1005: 21.00 EUR on 2026-01-20."
+      },
+      "payload_sha256": "00bd628a06b7233891f29a125e474e3e58c4d1df45c3133557ca4f9573bb565d",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-117",
+      "sequence": 117,
+      "captured_at": "2026-02-12T13:00:00+01:00",
+      "observed_at": "2026-02-12",
+      "source_type": "text",
+      "payload": {
+        "text": "Jordan Kim confirmed the climbing meeting."
+      },
+      "payload_sha256": "0cc8e4833c2fa34c151bbc949b84aebb86d738b9db704b9f198902d2ff2dc5b8",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-118",
+      "sequence": 118,
+      "captured_at": "2026-02-13T14:00:00+01:00",
+      "observed_at": "2026-02-13",
+      "source_type": "document",
+      "payload": {
+        "text": "HomeFix sent another invoice copy without clarifying the amount."
+      },
+      "payload_sha256": "9c8721632990ceed172a39bcfabafbf5e0a590225d0254f94578ec63f85ed403",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-119",
+      "sequence": 119,
+      "captured_at": "2026-02-13T15:00:00+01:00",
+      "observed_at": "2026-02-13",
+      "source_type": "document",
+      "payload": {
+        "text": "The current GymFlex renewal date remains 2027-02-28."
+      },
+      "payload_sha256": "df02c9b77551e70ce9c0dceac1b3452b1168b9f246897a4fef718c098caf4b54",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-120",
+      "sequence": 120,
+      "captured_at": "2026-02-13T08:00:00+01:00",
+      "observed_at": "2026-02-13",
+      "source_type": "text",
+      "payload": {
+        "text": "No transfer to Sam was executed."
+      },
+      "payload_sha256": "9f5458fdea7d837db7e34588b9df18f9c6ea8f4bc4be03562ae5c395e8f84514",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-121",
+      "sequence": 121,
+      "captured_at": "2026-02-14T09:00:00+01:00",
+      "observed_at": "2026-02-14",
+      "source_type": "text",
+      "payload": {
+        "text": "I might cancel Streamly again, but that is only an intention."
+      },
+      "payload_sha256": "04cb6f39ebb007996f64800d8cfe5c488e3d2725eace8524eb9e509b202c3823",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-122",
+      "sequence": 122,
+      "captured_at": "2026-02-14T10:00:00+01:00",
+      "observed_at": "2026-02-14",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Orange Mobile bill for 2027-01: 35.90 EUR."
+      },
+      "payload_sha256": "af3bc140cfce0f12e0af44c1a087087b92bcb768d85f83be4ccf21b744fae108",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-123",
+      "sequence": 123,
+      "captured_at": "2026-02-14T11:00:00+01:00",
+      "observed_at": "2026-02-14",
+      "source_type": "text",
+      "payload": {
+        "text": "I ate four bars."
+      },
+      "payload_sha256": "e177cd3772fb80ed1ed45106733660e464fb8fba2afa24748d94ad17332b1ab7",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-124",
+      "sequence": 124,
+      "captured_at": "2026-02-15T12:00:00+01:00",
+      "observed_at": "2026-02-15",
+      "source_type": "text",
+      "payload": {
+        "text": "Alex completed the replacement parcel pickup."
+      },
+      "payload_sha256": "46c328cfb928596efb82c856dd6454bc1f3a496fb882521e2b1142dc5a9c5a8c",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-125",
+      "sequence": 125,
+      "captured_at": "2026-02-15T13:00:00+01:00",
+      "observed_at": "2026-02-15",
+      "source_type": "text",
+      "payload": {
+        "text": "The replacement policy remains active."
+      },
+      "payload_sha256": "320fa810792578c94975bf14172839bfebb0c8bfae374ce8a9f49327aac332a0",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-126",
+      "sequence": 126,
+      "captured_at": "2026-02-15T14:00:00+01:00",
+      "observed_at": "2026-02-15",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Receipt R-1005 looks similar to R-1004 but is a separate purchase."
+      },
+      "payload_sha256": "912ab9a021c4b668f54c3318087abed96a20ad1e32ee90f4dc8b0e5eda4c8f8e",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-127",
+      "sequence": 127,
+      "captured_at": "2026-02-16T15:00:00+01:00",
+      "observed_at": "2026-02-16",
+      "source_type": "text",
+      "payload": {
+        "text": "The sender called Jordan is still unresolved."
+      },
+      "payload_sha256": "fe7634928885dcd16dc534732344dba9f7a32a02a7a25a3eaa81869711ccb544",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-128",
+      "sequence": 128,
+      "captured_at": "2026-02-16T08:00:00+01:00",
+      "observed_at": "2026-02-16",
+      "source_type": "text",
+      "payload": {
+        "text": "The HomeFix amount remains unresolved."
+      },
+      "payload_sha256": "6f1f756fae360165a3801d3475b2b0ce01d49c71b68b5437763386ee67d36ccf",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-129",
+      "sequence": 129,
+      "captured_at": "2026-02-16T09:00:00+01:00",
+      "observed_at": "2026-02-16",
+      "source_type": "text",
+      "payload": {
+        "text": "No earlier effective date for GYM-NEW is supported."
+      },
+      "payload_sha256": "e1fc8c737c2a62139f527e04fdd954509f81f97a53fb841a6e58f3f8d593069c",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-130",
+      "sequence": 130,
+      "captured_at": "2026-02-17T10:00:00+01:00",
+      "observed_at": "2026-02-17",
+      "source_type": "text",
+      "payload": {
+        "text": "I am still deciding whether to request the bank change."
+      },
+      "payload_sha256": "414dc91953e285c2bd7b23c518ac065dfc435fa7f24dc0199e2b6f231ed9dd9d",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-131",
+      "sequence": 131,
+      "captured_at": "2026-02-17T11:00:00+01:00",
+      "observed_at": "2026-02-17",
+      "source_type": "text",
+      "payload": {
+        "text": "No, keep Streamly active; cancel that intention."
+      },
+      "payload_sha256": "281c2aafad2a02eaa65f69cf0cf5408f7910022fa28ce858d7df5c4a5c03e1f2",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-132",
+      "sequence": 132,
+      "captured_at": "2026-02-17T12:00:00+01:00",
+      "observed_at": "2026-02-17",
+      "source_type": "text",
+      "payload": {
+        "text": "No Orange Mobile bill was captured for 2027-02; coverage is missing, not zero."
+      },
+      "payload_sha256": "886aa035dd8442173c8a6ce52b3fc79b09ba9fed34631b5a00044e26f11c9082",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-133",
+      "sequence": 133,
+      "captured_at": "2026-02-18T13:00:00+01:00",
+      "observed_at": "2026-02-18",
+      "source_type": "receipt",
+      "payload": {
+        "text": "MarketOne receipt: 4 bars for 12.00 EUR."
+      },
+      "payload_sha256": "8f5527b157a965258299ccee87168c86e9e050c676ea79bc843d29da925b6512",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-134",
+      "sequence": 134,
+      "captured_at": "2026-02-18T14:00:00+01:00",
+      "observed_at": "2026-02-18",
+      "source_type": "text",
+      "payload": {
+        "text": "The parcel was not accepted, so reopen the pickup task."
+      },
+      "payload_sha256": "4525afdcc752b64a447a108f2d1d03e5d7e28d1e91561041e6845370ae3825fa",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-135",
+      "sequence": 135,
+      "captured_at": "2026-02-18T15:00:00+01:00",
+      "observed_at": "2026-02-18",
+      "source_type": "text",
+      "payload": {
+        "text": "RoadSure support reconfirmed that RS-NEW ends on 2027-06-30."
+      },
+      "payload_sha256": "d4246de25e6d8de8b4c706faa77b1178e5cf8fc7a04747fefae5fe6b04fafa43",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-136",
+      "sequence": 136,
+      "captured_at": "2026-02-19T08:00:00+01:00",
+      "observed_at": "2026-02-19",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Receipt R-1005 was captured unchanged again."
+      },
+      "payload_sha256": "5a40f3a1f0630ef4ba584fe2cca7aa4d54b3a4b43ff5216b2bc1fae381b62bc7",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-137",
+      "sequence": 137,
+      "captured_at": "2026-02-19T09:00:00+01:00",
+      "observed_at": "2026-02-19",
+      "source_type": "document",
+      "payload": {
+        "text": "Jordan Lee sent another school document."
+      },
+      "payload_sha256": "4bbfd4d4635af7b732fc3d14506c72e486c89724be25c0fbe1fa1ee79fe84139",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-138",
+      "sequence": 138,
+      "captured_at": "2026-02-19T10:00:00+01:00",
+      "observed_at": "2026-02-19",
+      "source_type": "text",
+      "payload": {
+        "text": "HomeFix appointment reminder: 2026-02-12."
+      },
+      "payload_sha256": "a35e0eeb6daeb561874a99fe8fc5c886de068058cf7367dc1f63cfd56500fd42",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-139",
+      "sequence": 139,
+      "captured_at": "2026-02-20T11:00:00+01:00",
+      "observed_at": "2026-02-20",
+      "source_type": "document",
+      "payload": {
+        "text": "GYM-OLD was superseded, not deleted."
+      },
+      "payload_sha256": "912ea6027dabd36c65e72e0d0f5ba8ab0159168d790b28110079a891299d500d",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-140",
+      "sequence": 140,
+      "captured_at": "2026-02-20T12:00:00+01:00",
+      "observed_at": "2026-02-20",
+      "source_type": "text",
+      "payload": {
+        "text": "Do not treat the draft as a completed financial action."
+      },
+      "payload_sha256": "ad88749f2f000d16649b149f8e454bef95f94245b3bdb1b60d05c121b75c2a37",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-141",
+      "sequence": 141,
+      "captured_at": "2026-02-20T13:00:00+01:00",
+      "observed_at": "2026-02-20",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Streamly billed 18.00 EUR."
+      },
+      "payload_sha256": "716af6369af4b3100cbc59371229a256811be4f53648c72f998ed4dda8d5417d",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-142",
+      "sequence": 142,
+      "captured_at": "2026-02-21T14:00:00+01:00",
+      "observed_at": "2026-02-21",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Orange Mobile bill for 2027-03: 35.90 EUR."
+      },
+      "payload_sha256": "060fd4fe6de15c3315cbaf5b9b2abffc978dc2a0688ec59b7f55ca0d2f94c091",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-143",
+      "sequence": 143,
+      "captured_at": "2026-02-21T15:00:00+01:00",
+      "observed_at": "2026-02-21",
+      "source_type": "text",
+      "payload": {
+        "text": "I explicitly ate zero bars today."
+      },
+      "payload_sha256": "025f8092a78db2cc20face0899abbd37edfc7f2c14b4951efbf34a9a3763797c",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-144",
+      "sequence": 144,
+      "captured_at": "2026-02-21T08:00:00+01:00",
+      "observed_at": "2026-02-21",
+      "source_type": "task-note",
+      "payload": {
+        "text": "Sam will complete the reopened pickup task."
+      },
+      "payload_sha256": "70f5395629a9a24efa8e9f6ecca972271680e37ca4f172250c99d1a093861cec",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-145",
+      "sequence": 145,
+      "captured_at": "2026-02-22T09:00:00+01:00",
+      "observed_at": "2026-02-22",
+      "source_type": "document",
+      "payload": {
+        "text": "No beneficiary is stated in the insurance records."
+      },
+      "payload_sha256": "bc6650bbe66ab3ca8d2dcc214a909275bc09f34032a526a58193293f6a14e8ce",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-146",
+      "sequence": 146,
+      "captured_at": "2026-02-22T10:00:00+01:00",
+      "observed_at": "2026-02-22",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Corner Mart receipt R-1006: 21.00 EUR on 2026-01-22."
+      },
+      "payload_sha256": "6eec0fafdb35a863133366dba4ec302ccbeeb8eb637363c5a688dc438e16d56b",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-147",
+      "sequence": 147,
+      "captured_at": "2026-02-22T11:00:00+01:00",
+      "observed_at": "2026-02-22",
+      "source_type": "text",
+      "payload": {
+        "text": "No evidence links this Jordan note to either known person."
+      },
+      "payload_sha256": "79e2e30c8940d6d9aaffc425909e22f64c78b529b72799b1abcd5b6d5c9ce541",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-148",
+      "sequence": 148,
+      "captured_at": "2026-02-23T12:00:00+01:00",
+      "observed_at": "2026-02-23",
+      "source_type": "text",
+      "payload": {
+        "text": "No further authoritative HomeFix amount was supplied."
+      },
+      "payload_sha256": "fc08f52a2dc61fd4f7d3d29f2488da5790df2ec69190f304ae706cedc35485c0",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-149",
+      "sequence": 149,
+      "captured_at": "2026-02-23T13:00:00+01:00",
+      "observed_at": "2026-02-23",
+      "source_type": "document",
+      "payload": {
+        "text": "GYM-NEW fee remains 31.00 EUR per month."
+      },
+      "payload_sha256": "be4cb4209c9404c7bb3e55b49760d7910e754b01de53d2232721e1cf7e92365b",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-150",
+      "sequence": 150,
+      "captured_at": "2026-02-23T14:00:00+01:00",
+      "observed_at": "2026-02-23",
+      "source_type": "text",
+      "payload": {
+        "text": "The transfer remains withdrawn."
+      },
+      "payload_sha256": "f9e2cba0aadb3b9eba512551f1c8d4f368185a29b7ae38a4f0619e2b3aa086a9",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-151",
+      "sequence": 151,
+      "captured_at": "2026-02-24T15:00:00+01:00",
+      "observed_at": "2026-02-24",
+      "source_type": "text",
+      "payload": {
+        "text": "Streamly remains active and I did not ask it to be cancelled."
+      },
+      "payload_sha256": "8424bda4ddb5d0c9aad2dc7b94f4381231bea4352e5adfe45b7ef20303ebc36e",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-152",
+      "sequence": 152,
+      "captured_at": "2026-02-24T08:00:00+01:00",
+      "observed_at": "2026-02-24",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Orange Mobile bill for 2027-04: 35.90 EUR."
+      },
+      "payload_sha256": "39055820f32e508723f8755c8cd3984c56ef0aceaab274811e4e27e0e6745183",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-153",
+      "sequence": 153,
+      "captured_at": "2026-02-24T09:00:00+01:00",
+      "observed_at": "2026-02-24",
+      "source_type": "receipt",
+      "payload": {
+        "text": "MarketOne receipt: 5 bars for 15.00 EUR."
+      },
+      "payload_sha256": "5b17640b3c3689b6fe2227ce4726ececd6ce5aabe96f2ac8c8880f933d2c65d2",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-154",
+      "sequence": 154,
+      "captured_at": "2026-02-25T10:00:00+01:00",
+      "observed_at": "2026-02-25",
+      "source_type": "text",
+      "payload": {
+        "text": "Sam completed the replacement parcel pickup."
+      },
+      "payload_sha256": "6c6a9d0e255a8ed7c11fbc10fbe043e13954605a115b3b4046094599df74304c",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-155",
+      "sequence": 155,
+      "captured_at": "2026-02-25T11:00:00+01:00",
+      "observed_at": "2026-02-25",
+      "source_type": "text",
+      "payload": {
+        "text": "The current RoadSure policy is RS-NEW."
+      },
+      "payload_sha256": "09ae1da2226c9af75aa9679e3a2dd8991fd15484bc5a3366ca6570ff90e7eca5",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-156",
+      "sequence": 156,
+      "captured_at": "2026-02-25T12:00:00+01:00",
+      "observed_at": "2026-02-25",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Receipt R-1006 changed its total to 22.00 EUR after a tip was added."
+      },
+      "payload_sha256": "214c163c7120b82e72232274f8e4cbea07b47024e743dbfdd433b2cfc957c7ae",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-157",
+      "sequence": 157,
+      "captured_at": "2026-02-26T13:00:00+01:00",
+      "observed_at": "2026-02-26",
+      "source_type": "text",
+      "payload": {
+        "text": "Jordan Kim is the climbing-club contact."
+      },
+      "payload_sha256": "a66a3e60fce135a5bcd1c03bdc265cb414f9ac80daf3c0c052acd1744aa9b6d8",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-158",
+      "sequence": 158,
+      "captured_at": "2026-02-26T14:00:00+01:00",
+      "observed_at": "2026-02-26",
+      "source_type": "text",
+      "payload": {
+        "text": "HomeFix date is unchanged at 2026-02-12."
+      },
+      "payload_sha256": "0328c9afd27e872dc858cdce709c3008f87aabc89b4ee653c0e65917db04d588",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-159",
+      "sequence": 159,
+      "captured_at": "2026-02-26T15:00:00+01:00",
+      "observed_at": "2026-02-26",
+      "source_type": "document",
+      "payload": {
+        "text": "The current GymFlex contract expires 2027-02-28."
+      },
+      "payload_sha256": "7822cc7445853683c2a7f1b805b1b7191ee2d26284410ee38ea943c9e43406ff",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-160",
+      "sequence": 160,
+      "captured_at": "2026-02-27T08:00:00+01:00",
+      "observed_at": "2026-02-27",
+      "source_type": "text",
+      "payload": {
+        "text": "A coffee observation has no task or obligation attached."
+      },
+      "payload_sha256": "131d6640a03791cd2b06e7f00ef514de70b1ff101babdd5fd43e907bd00170cd",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-161",
+      "sequence": 161,
+      "captured_at": "2026-02-27T09:00:00+01:00",
+      "observed_at": "2026-02-27",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Another Streamly charge was 18.00 EUR."
+      },
+      "payload_sha256": "515d8bcde582834f06ab4b9a80044178b7eef6ea1a44f5101e511d887b26a6bd",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-162",
+      "sequence": 162,
+      "captured_at": "2026-02-27T10:00:00+01:00",
+      "observed_at": "2026-02-27",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Orange Mobile bill for 2027-05: 37.90 EUR."
+      },
+      "payload_sha256": "3f3f6bfe4010578df3b85d69b1a1a1f67ac019d4ca4a20810afbef1184b0f9e8",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-163",
+      "sequence": 163,
+      "captured_at": "2026-02-28T11:00:00+01:00",
+      "observed_at": "2026-02-28",
+      "source_type": "text",
+      "payload": {
+        "text": "I ate one bar."
+      },
+      "payload_sha256": "d3f6f1534b6bc5fea050f06de0917890b111aa152aa06f229811d122f1c418ba",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-164",
+      "sequence": 164,
+      "captured_at": "2026-02-28T12:00:00+01:00",
+      "observed_at": "2026-02-28",
+      "source_type": "task-note",
+      "payload": {
+        "text": "Open task: Alex must submit the school form by 2026-03-18."
+      },
+      "payload_sha256": "ebf8db88afd62d18bce531a52d238237291e8dfc8bfec6f98ec7b9e6fe7c76f8",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-165",
+      "sequence": 165,
+      "captured_at": "2026-02-28T13:00:00+01:00",
+      "observed_at": "2026-02-28",
+      "source_type": "text",
+      "payload": {
+        "text": "RS-OLD is historical and RS-NEW is current."
+      },
+      "payload_sha256": "e7b48015992871e6951842ce05d8aaa3d1906a79af3564a776a3827fbde6127a",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-166",
+      "sequence": 166,
+      "captured_at": "2026-03-01T14:00:00+01:00",
+      "observed_at": "2026-03-01",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Receipt R-1006 with the tip is uploaded again."
+      },
+      "payload_sha256": "b9c4c28f397a357db99ac8edfbafe707275b86809e14f4d3f72ad369953e8603",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-167",
+      "sequence": 167,
+      "captured_at": "2026-03-01T15:00:00+01:00",
+      "observed_at": "2026-03-01",
+      "source_type": "text",
+      "payload": {
+        "text": "A short message says only: ask Jordan."
+      },
+      "payload_sha256": "719787f93e7bf06bbd73cb351040df607a202306f86e3dbe4a17bdc036608dea",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-168",
+      "sequence": 168,
+      "captured_at": "2026-03-01T08:00:00+01:00",
+      "observed_at": "2026-03-01",
+      "source_type": "document",
+      "payload": {
+        "text": "The conflicting HomeFix invoice amount is still awaiting confirmation."
+      },
+      "payload_sha256": "dbe285f01255cf37ee0b444db43e84eaf81f52b3f1e617e23b9062c403c11f8b",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-169",
+      "sequence": 169,
+      "captured_at": "2026-03-02T09:00:00+01:00",
+      "observed_at": "2026-03-02",
+      "source_type": "text",
+      "payload": {
+        "text": "The contract replacement did not change the signed date."
+      },
+      "payload_sha256": "8eb2e3f35ecc8e435a3bf1119e50731b98bb4cc3deddd77d24a68c45428a5e19",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-170",
+      "sequence": 170,
+      "captured_at": "2026-03-02T10:00:00+01:00",
+      "observed_at": "2026-03-02",
+      "source_type": "text",
+      "payload": {
+        "text": "The bank proposal needs my explicit approval before any external change."
+      },
+      "payload_sha256": "c62d92862111f1c3a4516cb4c22863eaf6b90a0fa7f9e366d43dce068d4010eb",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-171",
+      "sequence": 171,
+      "captured_at": "2026-03-02T11:00:00+01:00",
+      "observed_at": "2026-03-02",
+      "source_type": "text",
+      "payload": {
+        "text": "I am considering cancelling Streamly on renewal."
+      },
+      "payload_sha256": "193088038e70872b6a6082b530152e0dd4fef54acdd7be818c9034a6cdfbf8a3",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-172",
+      "sequence": 172,
+      "captured_at": "2026-03-03T12:00:00+01:00",
+      "observed_at": "2026-03-03",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Orange Mobile bill for 2027-06: 37.90 EUR."
+      },
+      "payload_sha256": "9e64c709cccc773c63666ef1b89baf50e614f2811b80f6ad1f88757fcc09f904",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-173",
+      "sequence": 173,
+      "captured_at": "2026-03-03T13:00:00+01:00",
+      "observed_at": "2026-03-03",
+      "source_type": "receipt",
+      "payload": {
+        "text": "MarketOne receipt: 3 bars for 9.00 EUR."
+      },
+      "payload_sha256": "f65d8730855744d63e3e1c48d87477e5f044a61df136ad8a9e3a338b6bf5e0d3",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-174",
+      "sequence": 174,
+      "captured_at": "2026-03-03T14:00:00+01:00",
+      "observed_at": "2026-03-03",
+      "source_type": "text",
+      "payload": {
+        "text": "The school form cannot be submitted until the missing signature is found."
+      },
+      "payload_sha256": "de4d6203ab74cb1d36d0c945629ca95cef5fdbb5c1ccd4a9caea12708811e733",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-175",
+      "sequence": 175,
+      "captured_at": "2026-03-04T15:00:00+01:00",
+      "observed_at": "2026-03-04",
+      "source_type": "document",
+      "payload": {
+        "text": "RoadSure sent a renewal reminder for the current policy."
+      },
+      "payload_sha256": "9da3dc6c138502837e33e36ecc770e3b7d2a05a60250d78ee0ade3656ad73db6",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-176",
+      "sequence": 176,
+      "captured_at": "2026-03-04T08:00:00+01:00",
+      "observed_at": "2026-03-04",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Corner Mart receipt R-1007: 4.75 EUR on 2026-02-01."
+      },
+      "payload_sha256": "682913915a0b634a971bbbc9b330412c16c579f4f815ccd4e240ef4d0b056164",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-177",
+      "sequence": 177,
+      "captured_at": "2026-03-04T09:00:00+01:00",
+      "observed_at": "2026-03-04",
+      "source_type": "text",
+      "payload": {
+        "text": "Jordan Lee acknowledged the form."
+      },
+      "payload_sha256": "8c8a573514ae843a714cc1779f8e33b8a36af630493ebc5d14d7146bcad2c22e",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-178",
+      "sequence": 178,
+      "captured_at": "2026-03-05T10:00:00+01:00",
+      "observed_at": "2026-03-05",
+      "source_type": "text",
+      "payload": {
+        "text": "I did not approve a new HomeFix amount."
+      },
+      "payload_sha256": "7462b4f537c2d42fb796585f6c48a1e1352e73c157eafa70b3c784d819a51cb5",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-179",
+      "sequence": 179,
+      "captured_at": "2026-03-05T11:00:00+01:00",
+      "observed_at": "2026-03-05",
+      "source_type": "text",
+      "payload": {
+        "text": "GymFlex still identifies GYM-NEW as current."
+      },
+      "payload_sha256": "3afe6650f2bf566e3474786b8bec61ad78535e5836695cfbe29a40635a2161eb",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-180",
+      "sequence": 180,
+      "captured_at": "2026-03-05T12:00:00+01:00",
+      "observed_at": "2026-03-05",
+      "source_type": "text",
+      "payload": {
+        "text": "I have not approved the transfer."
+      },
+      "payload_sha256": "cd1bdd91fa79a58369190e8bd38883694c66533cb179f04aa0d7054b2d70ac58",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-181",
+      "sequence": 181,
+      "captured_at": "2026-03-06T13:00:00+01:00",
+      "observed_at": "2026-03-06",
+      "source_type": "text",
+      "payload": {
+        "text": "I decided not to cancel Streamly."
+      },
+      "payload_sha256": "0bbaecf1eabac924d051a577eda92c6e38fe61d07973894e90a5e45babd09f56",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-182",
+      "sequence": 182,
+      "captured_at": "2026-03-06T14:00:00+01:00",
+      "observed_at": "2026-03-06",
+      "source_type": "text",
+      "payload": {
+        "text": "No Orange Mobile bill was captured for 2027-07; coverage is missing, not zero."
+      },
+      "payload_sha256": "7914fa8023fdb7f32a991239a9257c4cccaa897e0efc1c026e7312b75e5fd5c5",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-183",
+      "sequence": 183,
+      "captured_at": "2026-03-06T15:00:00+01:00",
+      "observed_at": "2026-03-06",
+      "source_type": "text",
+      "payload": {
+        "text": "I ate two bars."
+      },
+      "payload_sha256": "e6fe63b751a97c62ff55c304fc7838ce6a0dd7f43e39fa662100836110d8285f",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-184",
+      "sequence": 184,
+      "captured_at": "2026-03-07T08:00:00+01:00",
+      "observed_at": "2026-03-07",
+      "source_type": "task-note",
+      "payload": {
+        "text": "The school form deadline is still 2026-03-18."
+      },
+      "payload_sha256": "0f9324a92d20ed0b245801234c1ad897e74e37339a6d49e6307ba4f505cd8de1",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-185",
+      "sequence": 185,
+      "captured_at": "2026-03-07T09:00:00+01:00",
+      "observed_at": "2026-03-07",
+      "source_type": "document",
+      "payload": {
+        "text": "The current RoadSure expiry remains 2027-06-30."
+      },
+      "payload_sha256": "0eed79820a8e6c25eae83c23ed9d06964539c65e1b3e3e07910118f3f7931e27",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-186",
+      "sequence": 186,
+      "captured_at": "2026-03-07T10:00:00+01:00",
+      "observed_at": "2026-03-07",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Receipt R-1007 is a distinct receipt despite the same merchant."
+      },
+      "payload_sha256": "acd04cc15fdb807bdbe4dfebd24dffa9a484f441e8a34064e84b27d40b379f14",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-187",
+      "sequence": 187,
+      "captured_at": "2026-03-08T11:00:00+01:00",
+      "observed_at": "2026-03-08",
+      "source_type": "text",
+      "payload": {
+        "text": "The final Jordan reminder has no disambiguating context."
+      },
+      "payload_sha256": "9893e0eb9769aa9fc95e226f6f249c47c4a1c809adfe03c846159be455571dc3",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-188",
+      "sequence": 188,
+      "captured_at": "2026-03-08T12:00:00+01:00",
+      "observed_at": "2026-03-08",
+      "source_type": "text",
+      "payload": {
+        "text": "HomeFix appointment stays on February 12."
+      },
+      "payload_sha256": "eb8f5aeb0d742e7329840aaa6dab1e109b5f4487ce989b967e01f4397adf332a",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-189",
+      "sequence": 189,
+      "captured_at": "2026-03-08T13:00:00+01:00",
+      "observed_at": "2026-03-08",
+      "source_type": "document",
+      "payload": {
+        "text": "The renewal reminder refers to 2027-02-28."
+      },
+      "payload_sha256": "9d4b5785897a7b80e98dd1a130772761b4aa65980fe7c739ff93335fbcc2dca7",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-190",
+      "sequence": 190,
+      "captured_at": "2026-03-09T14:00:00+01:00",
+      "observed_at": "2026-03-09",
+      "source_type": "text",
+      "payload": {
+        "text": "The weather note should not appear in attention items."
+      },
+      "payload_sha256": "88325f634271abbf0cfbeb1a9afd606114720d6cc800f306b8d40bcc67c69a2f",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-191",
+      "sequence": 191,
+      "captured_at": "2026-03-09T15:00:00+01:00",
+      "observed_at": "2026-03-09",
+      "source_type": "subscription",
+      "payload": {
+        "text": "Streamly is active; the next renewal is 2026-03-20 at 18.00 EUR."
+      },
+      "payload_sha256": "9560ffc193559eeeba26be51eeb2a2b3fdbb43e8cc0295949daeb4734e9e8ade",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-192",
+      "sequence": 192,
+      "captured_at": "2026-03-09T08:00:00+01:00",
+      "observed_at": "2026-03-09",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Orange Mobile bill for 2027-08: 37.90 EUR."
+      },
+      "payload_sha256": "e0940a4fc97253292eec5a60e0a1950caaaa8b12723b62bf4cc5d7ab5cbf0f9f",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-193",
+      "sequence": 193,
+      "captured_at": "2026-03-10T09:00:00+01:00",
+      "observed_at": "2026-03-10",
+      "source_type": "text",
+      "payload": {
+        "text": "The later period has no reliable consumption observation."
+      },
+      "payload_sha256": "8e961284a8e6a0c4e6cee4bc69c84ec72c4e1fc0c1d6916ea2e5d77f3985e654",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-194",
+      "sequence": 194,
+      "captured_at": "2026-03-10T10:00:00+01:00",
+      "observed_at": "2026-03-10",
+      "source_type": "task-note",
+      "payload": {
+        "text": "The school form remains open with Alex responsible; no completion was recorded."
+      },
+      "payload_sha256": "0b6dfd32fda8969d896ad5b910a73ad3477eddd725767aae0cc319967357165e",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-195",
+      "sequence": 195,
+      "captured_at": "2026-03-10T11:00:00+01:00",
+      "observed_at": "2026-03-10",
+      "source_type": "text",
+      "payload": {
+        "text": "I have no confirmed claim number for RS-NEW."
+      },
+      "payload_sha256": "bda4f4d67f44c881adc08442daee398fa4b67c4302786e928ae633aaa76dccd0",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-196",
+      "sequence": 196,
+      "captured_at": "2026-03-11T12:00:00+01:00",
+      "observed_at": "2026-03-11",
+      "source_type": "receipt",
+      "payload": {
+        "text": "Receipt R-1007 was uploaded unchanged for backup."
+      },
+      "payload_sha256": "17a667421d42eda622b4629c430a4912df6122fe7022205b3991c9ffeb124f02",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-197",
+      "sequence": 197,
+      "captured_at": "2026-03-11T13:00:00+01:00",
+      "observed_at": "2026-03-11",
+      "source_type": "text",
+      "payload": {
+        "text": "Jordan Kim is confirmed as the climbing contact."
+      },
+      "payload_sha256": "d2667d7247eee7fbb92931629fa9b3d86e9bb1d40802ce5f0c8cb15fedef1521",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-198",
+      "sequence": 198,
+      "captured_at": "2026-03-11T14:00:00+01:00",
+      "observed_at": "2026-03-11",
+      "source_type": "text",
+      "payload": {
+        "text": "At cutoff the HomeFix amount remains an unresolved conflict."
+      },
+      "payload_sha256": "2d6084b61c5a3f32bdce6b0f7cb08b29357ef9d98a22a4cfa3e31e8e3beae109",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-199",
+      "sequence": 199,
+      "captured_at": "2026-03-12T15:00:00+01:00",
+      "observed_at": "2026-03-12",
+      "source_type": "document",
+      "payload": {
+        "text": "At cutoff GYM-NEW is active through 2027-02-28."
+      },
+      "payload_sha256": "ec395632810805ac036b24cb3973a4a76e5efc271810a1bebc8b996bb7a7ec5f",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    },
+    {
+      "event_id": "evt-200",
+      "sequence": 200,
+      "captured_at": "2026-03-12T08:00:00+01:00",
+      "observed_at": "2026-03-12",
+      "source_type": "text",
+      "payload": {
+        "text": "At cutoff the bank change is proposed, unapproved, and unexecuted."
+      },
+      "payload_sha256": "abb9773c643fa8011e3682db7c2f28f0294bec64f0bdcc214a44c36fd068fa67",
+      "metadata": {
+        "synthetic": true,
+        "source_channel": "capture"
+      }
+    }
+  ]
+}

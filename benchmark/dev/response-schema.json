@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Blackhole Gate A development checkpoint response",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "scenario_id", "checkpoint", "queries"],
+  "properties": {
+    "contract_version": {"type": "string", "const": "1.0-gate-a-dev"},
+    "scenario_id": {"type": "string"},
+    "checkpoint": {"type": "integer", "enum": [50, 100, 150, 200]},
+    "queries": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["assertions"],
+        "properties": {
+          "assertions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["state_key", "knowledge_status", "source_refs"],
+              "properties": {
+                "state_key": {"type": "string", "minLength": 1},
+                "value": {
+                  "anyOf": [
+                    {"type": "string"},
+                    {"type": "number"},
+                    {"type": "boolean"},
+                    {"type": "object", "additionalProperties": true},
+                    {"type": "array"},
+                    {"type": "null"}
+                  ]
+                },
+                "knowledge_status": {"type": "string", "enum": ["known", "inferred", "unknown"]},
+                "source_refs": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+                "unknown_reason": {"type": "string", "minLength": 1},
+                "confirmation_ref": {"type": "string", "minLength": 1}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

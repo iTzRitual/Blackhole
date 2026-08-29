@@ -39,13 +39,13 @@ summaries, and surface only items that need attention.
 
 ## Status
 
-This repository is in the benchmark-design phase for the micro1 Agentic Workflows
-Hackathon. The separate non-scored size-calibration sweep has now been run through
-the locally authenticated Codex CLI; Gate A remains open for human review of the
-runtime report and provisional length recommendation. Benchmark contract design,
-development benchmark cases, synthetic inputs, and evaluator design are in scope.
-Application implementation, baseline implementation, infrastructure, executable
-evaluation code, and holdout ground truth remain out of scope.
+This repository is in the benchmark-and-baseline phase for the micro1 Agentic
+Workflows Hackathon. Gate A is approved: the 200-event development contract,
+deterministic generator, evaluator, and fair Codex CLI baseline are frozen for
+this phase. The non-scored size-calibration sweep remains historical evidence;
+its recommended 200-event primary and optional 400-event stress track are now
+recorded as decisions. Advanced application implementation, production
+infrastructure, Claude integration, and holdout ground truth remain out of scope.
 
 ## Design principles
 
@@ -67,21 +67,20 @@ evaluation code, and holdout ground truth remain out of scope.
 | `docs/` | Product, architecture, decision, evaluation, and reproduction documents |
 | `prompts/` | Versioned runtime and coding prompt artifacts |
 | `benchmark/` | Calibration, development, and evaluator-controlled benchmark boundaries |
-| `baseline/` | Reserved location for future baseline artifacts |
+| `baseline/` | Fair provider-baseline harness; not the Blackhole application |
 | `app/` | Reserved for a future product implementation |
 | `data/` | Reserved locations for synthetic and raw source data |
-| `eval/` | Reserved location for future evaluation outputs |
+| `eval/` | Deterministic development scorer and reproducible result artifacts |
 | `trajectories/` | Coding and runtime agent trace artifacts |
 | `scripts/` | Reserved location for future reproducibility tooling |
 
 ## Scope of this phase
 
-This phase establishes the Blackhole product framing, benchmark contract,
-development-data conventions, evaluator boundaries, shared safety invariants,
-and reproducibility expectations. It does not implement the application or
-baseline, add production infrastructure, expose evaluator-owned holdout ground
-truth, or commit to a particular application framework, database, model provider,
-or user interface.
+This phase freezes the public development benchmark and its deterministic scorer,
+and records one fair baseline run. It does not implement the Blackhole
+application, add production infrastructure, expose evaluator-owned holdout
+ground truth, or add a Claude adapter. The baseline is a benchmark treatment,
+not product memory or application code.
 
 Read [AGENTS.md](AGENTS.md) before changing the repository. The design context is
 in [docs/PRODUCT_SPEC.md](docs/PRODUCT_SPEC.md),

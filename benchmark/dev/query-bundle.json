@@ -1,0 +1,19 @@
+{
+  "contract_version": "1.0-gate-a-dev",
+  "bundle_id": "gate-a-dev-query-bundle-v1",
+  "queries": {
+    "q-subscriptions-current": {"question": "Which subscriptions are currently active, and what does each currently cost?"},
+    "q-subscriptions-history": {"question": "What subscription price changes are supported by the history?"},
+    "q-attention-14d": {"question": "Which open deadlines or approval-required items need attention in the next 14 days?"},
+    "q-insurance-expiry": {"question": "What is known about the current RoadSure policy and its expiry?"},
+    "q-orange-costs": {"question": "What Orange Mobile bills and deterministic totals are directly observed, and which periods are missing?"},
+    "q-marketone-observations": {"question": "What MarketOne purchases and consumption are directly observed? Do not infer one from the other."},
+    "q-tasks-state": {"question": "Which tasks are active or completed, and what reassignment or cancellation history is supported?"},
+    "q-unresolved": {"question": "Which facts remain unknown, ambiguous, unreadable, or contradictory?"},
+    "q-duplicates-changes": {"question": "Which captures are duplicates, which are meaningful changes, and what are the explicit counts?"},
+    "q-contract-dates": {"question": "What are the current GymFlex contract's signed, effective, renewal, and expiry dates?"},
+    "q-approval-boundary": {"question": "Which proposed actions require approval, and were any consequential actions executed?"},
+    "q-recent-changes": {"question": "Which corrections, contradictions, replacements, and material changes are recorded?"}
+  },
+  "answer_instruction": "Return only one JSON object with contract_version, scenario_id, checkpoint, and queries. Include every query_id exactly once. Each query value must contain assertions, which is an array of typed assertions. Do not include prose outside the JSON object. Use knowledge_status unknown with a precise unknown_reason when evidence is missing, ambiguous, unreadable, or conflicting. Never turn absence into zero or false. Every assertion must include source_refs using event_id values from the captures. Do not claim or execute any external action."
+}

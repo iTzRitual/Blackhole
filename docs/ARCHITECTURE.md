@@ -57,10 +57,14 @@ failure must not silently fall back to another model or provider.
 
 ### Runtime roles
 
-The fair long-chat baseline may use one real persistent provider session, with
-chronological captures and fixed queries resumed in that same session when the
-provider supports reliable resume. It receives no Blackhole database, hidden
-summary, retrieval layer, or specialized state-maintenance tool.
+The fair long-chat baseline uses one real persistent provider session for
+chronological ingestion. At each approved checkpoint, the harness forks that
+canonical session, asks the fixed read-only query bundle in the fork, records the
+answer, and never resumes the fork. The canonical parent receives only later
+capture batches. This prevents query answers from becoming unapproved memory for
+later checkpoints while preserving the long-chat treatment. It receives no
+Blackhole database, hidden summary, retrieval layer, or specialized
+state-maintenance tool.
 
 The future advanced system must not use one long provider session as its primary
 memory. Blackhole owns durable memory and derived state. It should retrieve a
@@ -145,3 +149,17 @@ Manual user decisions may influence a later rebuild, but those decisions need th
 - user-interface representation of evidence and uncertainty.
 
 These choices should be evaluated against the invariants above rather than treated as defaults.
+
+## 9. Benchmark-only execution boundary
+
+The current benchmark harness is not the product architecture. It creates an
+empty temporary provider workspace, sends only the frozen runtime prompt and
+public chronological captures, and records provider usage and model responses.
+The deterministic development evaluator separately reads the public expected
+output; the provider baseline never receives it. The harness has no durable
+Blackhole state and performs no external action.
+
+The approved primary is a 200-event, ten-storyline synthetic timeline with
+checkpoints at 50, 100, 150, and 200. A 400-event run is optional and secondary.
+This separation lets future application work demonstrate rebuildable state
+maintenance without changing the fair baseline treatment.

@@ -58,7 +58,10 @@ output_artifacts:
 notes:
 ```
 
-This is a documentation template only; no runner is implemented yet.
+The current public development runner and evaluator are implemented in
+[`baseline/run_baseline.py`](../baseline/run_baseline.py) and
+[`eval/score.py`](../eval/score.py). The checklist remains the handoff template
+for future holdout and advanced-system runs.
 
 ## 5. Determinism expectations
 
@@ -141,16 +144,18 @@ The persistent baseline shape was:
 
 ```text
 codex exec --json --model gpt-5.6-luna -c model_reasoning_effort=max -s read-only --ignore-rules --skip-git-repo-check -C <isolated-empty-workspace> -o <initial-output> -
-codex exec resume <thread-id> --json -o <query-output>
+codex exec fork <canonical-thread-id> --json --model gpt-5.6-luna -c model_reasoning_effort=max --ignore-rules --skip-git-repo-check -o <query-output> -
 ```
 
-The calibration supplied the ordered JSONL captures as one initial input block
-and resumed the same provider session for the fixed query bundle. This batching
-kept the run practical while preserving the full chronological history and the
-provider session boundary; it was not a Blackhole summary or retrieval layer.
-Each size used a fresh temporary workspace and a fresh provider session. The
-baseline invoked no tools, and the workspace contained no repository files,
-calibration oracle, expected outputs, database, or evaluator internals.
+The Gate A baseline supplied chronological captures in four ordered batches:
+1–50, 51–100, 101–150, and 151–200. This batching kept the run practical while
+preserving the full chronological history and provider session boundary; it was
+not a Blackhole summary or retrieval layer. At each checkpoint the harness used
+the native atomic fork-with-prompt form, captured the read-only query response,
+and never resumed that fork. The canonical session therefore received no query
+or answer. The provider workspace was fresh and empty, and contained no
+repository files, calibration oracle, expected outputs, database, or evaluator
+internals.
 
 Codex `--json` exposed thread identifiers and per-turn input, cached-input,
 output, and reasoning-output usage fields. Provider subscription pricing was not
@@ -158,3 +163,38 @@ exposed, so the report records token usage and wall time rather than inventing a
 dollar cost. A result produced with another provider, model, reasoning setting,
 or CLI version is a different runtime configuration and must not be silently
 compared with this record.
+
+## 9. Gate A public development run
+
+From the repository root, after authenticating Codex outside this repository:
+
+```text
+python benchmark/dev/generate_benchmark.py --check
+python baseline/run_baseline.py --timeout 1200
+python eval/score.py --scenario benchmark/dev/cases/scenario-001.json --expected benchmark/dev/expected/scenario-001.json --candidate eval/results/baseline-v0-candidate.json --output eval/results/baseline-v0.json
+python -m unittest discover -s eval/tests -v
+```
+
+The runner reads only the public scenario, `prompts/runtime/baseline-v1.md`, the
+runner protocol, and `benchmark/dev/query-bundle.json`. It uses the existing
+authenticated CLI subscription and does not read or persist provider tokens.
+The evaluator reads the visible development expected output only for local
+development. A holdout run must provision its expected output outside the
+implementation checkout and must not reuse the public development command's
+paths or artifacts.
+
+The recorded Gate A artifacts are:
+
+- `eval/results/baseline-v0-candidate.json` — candidate envelope and safe provider
+  run metadata;
+- `eval/results/baseline-v0.json` — deterministic score;
+- `trajectories/runtime/002-baseline-v0/checkpoint-050.json` through
+  `checkpoint-200.json` — model responses at isolated checkpoints; and
+- `benchmark/dev/contract.json` — frozen contract and semantic rules.
+
+The official run completed all four checkpoints. It used approximately 20 seconds
+for canonical capture turns and 2,513 seconds for query forks, with provider input
+tokens 24,582 / 30,662 / 38,463 / 44,556 and output tokens 35,031 / 32,201 /
+37,523 / 34,037 at checkpoints 50 / 100 / 150 / 200. The deterministic result
+was LQA-0M 0.0000 and DSCR 336; this is preserved as a baseline observation and
+must not be converted into a ground-truth change.

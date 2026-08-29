@@ -1,0 +1,1069 @@
+{
+  "contract_version": "1.0-gate-a-dev",
+  "scenario_id": "blackhole-long-chat-baseline-v1",
+  "checkpoint": 50,
+  "queries": {
+    "q-subscriptions-current": {
+      "assertions": [
+        {
+          "state_key": "subscription.streamly.status_at_checkpoint",
+          "knowledge_status": "known",
+          "value": "active",
+          "source_refs": [
+            "evt-001",
+            "evt-011",
+            "evt-031",
+            "evt-041"
+          ]
+        },
+        {
+          "state_key": "subscription.streamly.current_monthly_cost_eur",
+          "knowledge_status": "inferred",
+          "value": 12.0,
+          "source_refs": [
+            "evt-001",
+            "evt-021"
+          ]
+        },
+        {
+          "state_key": "subscription.streamly.last_directly_observed_monthly_cost_eur",
+          "knowledge_status": "known",
+          "value": 12.0,
+          "source_refs": [
+            "evt-001"
+          ]
+        },
+        {
+          "state_key": "subscription.streamly.announced_monthly_cost_eur",
+          "knowledge_status": "known",
+          "value": 14.0,
+          "source_refs": [
+            "evt-021"
+          ]
+        },
+        {
+          "state_key": "subscription.streamly.price_change_effective_date",
+          "knowledge_status": "unknown",
+          "unknown_reason": "The notice gives a future price but no effective date or later charge amount.",
+          "source_refs": [
+            "evt-021"
+          ]
+        }
+      ]
+    },
+    "q-subscriptions-history": {
+      "assertions": [
+        {
+          "state_key": "subscription.streamly.price_change",
+          "knowledge_status": "known",
+          "value": {
+            "from_monthly_eur": 12.0,
+            "to_announced_monthly_eur": 14.0
+          },
+          "source_refs": [
+            "evt-001",
+            "evt-021"
+          ]
+        },
+        {
+          "state_key": "subscription.streamly.price_at_initial_active_capture_eur",
+          "knowledge_status": "known",
+          "value": 12.0,
+          "source_refs": [
+            "evt-001"
+          ]
+        },
+        {
+          "state_key": "subscription.streamly.future_announced_price_eur",
+          "knowledge_status": "known",
+          "value": 14.0,
+          "source_refs": [
+            "evt-021"
+          ]
+        },
+        {
+          "state_key": "subscription.streamly.actual_14_eur_charge",
+          "knowledge_status": "unknown",
+          "unknown_reason": "No later charge amount or effective date confirms that the announced 14.00 EUR price took effect.",
+          "source_refs": [
+            "evt-011",
+            "evt-021"
+          ]
+        }
+      ]
+    },
+    "q-attention-14d": {
+      "assertions": [
+        {
+          "state_key": "attention.next_14d.window",
+          "knowledge_status": "known",
+          "value": {
+            "start": "2026-01-21",
+            "end": "2026-02-04"
+          },
+          "source_refs": [
+            "evt-050"
+          ]
+        },
+        {
+          "state_key": "attention.next_14d.approval.bank_standing_order_change",
+          "knowledge_status": "known",
+          "value": {
+            "status": "proposed",
+            "request_sent": false,
+            "approval_required": true
+          },
+          "source_refs": [
+            "evt-010",
+            "evt-050"
+          ]
+        },
+        {
+          "state_key": "attention.next_14d.approval.transfer_to_sam",
+          "knowledge_status": "known",
+          "value": {
+            "status": "prepared_only",
+            "amount_eur": 50.0,
+            "sent": false,
+            "approval_required": true
+          },
+          "source_refs": [
+            "evt-030",
+            "evt-050"
+          ]
+        },
+        {
+          "state_key": "attention.homefix_deadline",
+          "knowledge_status": "known",
+          "value": {
+            "date": "2026-02-12",
+            "within_next_14_days": false
+          },
+          "source_refs": [
+            "evt-038",
+            "evt-048",
+            "evt-050"
+          ]
+        },
+        {
+          "state_key": "attention.parcel_replacement_deadline",
+          "knowledge_status": "known",
+          "value": {
+            "date": "2026-02-25",
+            "status": "open",
+            "within_next_14_days": false
+          },
+          "source_refs": [
+            "evt-044",
+            "evt-050"
+          ]
+        },
+        {
+          "state_key": "attention.original_parcel_deadline",
+          "knowledge_status": "known",
+          "value": {
+            "date": "2026-01-12",
+            "status": "cancelled",
+            "within_next_14_days": false
+          },
+          "source_refs": [
+            "evt-004",
+            "evt-034",
+            "evt-050"
+          ]
+        }
+      ]
+    },
+    "q-insurance-expiry": {
+      "assertions": [
+        {
+          "state_key": "roadsure.current_policy_at_checkpoint",
+          "knowledge_status": "known",
+          "value": {
+            "policy_id": "RS-OLD",
+            "status": "active",
+            "active_from": "2026-01-01",
+            "expires": "2026-06-30"
+          },
+          "source_refs": [
+            "evt-005",
+            "evt-025"
+          ]
+        },
+        {
+          "state_key": "roadsure.current_policy_expiry",
+          "knowledge_status": "known",
+          "value": "2026-06-30",
+          "source_refs": [
+            "evt-025"
+          ]
+        },
+        {
+          "state_key": "roadsure.scheduled_replacement_policy",
+          "knowledge_status": "known",
+          "value": {
+            "policy_id": "RS-NEW",
+            "status": "signed_future_replacement",
+            "active_from": "2026-07-01",
+            "expires": "2027-06-30"
+          },
+          "source_refs": [
+            "evt-035",
+            "evt-045"
+          ]
+        },
+        {
+          "state_key": "roadsure.rs_old_expiry_conflict_resolution",
+          "knowledge_status": "known",
+          "value": {
+            "earlier_claim": "possibly_until_2026-07",
+            "confirmed_expiry": "2026-06-30",
+            "resolved": true
+          },
+          "source_refs": [
+            "evt-015",
+            "evt-025"
+          ]
+        }
+      ]
+    },
+    "q-orange-costs": {
+      "assertions": [
+        {
+          "state_key": "orange_mobile.observed_bills",
+          "knowledge_status": "known",
+          "value": [
+            {
+              "period": "2026-01",
+              "amount_eur": 29.9
+            },
+            {
+              "period": "2026-02",
+              "amount_eur": 29.9
+            },
+            {
+              "period": "2026-03",
+              "amount_eur": 29.9
+            },
+            {
+              "period": "2026-05",
+              "amount_eur": 31.9
+            }
+          ],
+          "source_refs": [
+            "evt-002",
+            "evt-012",
+            "evt-022",
+            "evt-042"
+          ]
+        },
+        {
+          "state_key": "orange_mobile.observed_total_eur_2026-01_to_2026-05_excluding_missing",
+          "knowledge_status": "known",
+          "value": 121.6,
+          "source_refs": [
+            "evt-002",
+            "evt-012",
+            "evt-022",
+            "evt-032",
+            "evt-042"
+          ]
+        },
+        {
+          "state_key": "orange_mobile.2026-04.coverage",
+          "knowledge_status": "known",
+          "value": "missing",
+          "source_refs": [
+            "evt-032"
+          ]
+        },
+        {
+          "state_key": "orange_mobile.2026-04.amount_eur",
+          "knowledge_status": "unknown",
+          "unknown_reason": "No bill was captured for 2026-04; the record explicitly says coverage is missing, not zero.",
+          "source_refs": [
+            "evt-032"
+          ]
+        }
+      ]
+    },
+    "q-marketone-observations": {
+      "assertions": [
+        {
+          "state_key": "marketone.purchase_records",
+          "knowledge_status": "known",
+          "value": [
+            {
+              "quantity": 3,
+              "amount_eur": 9.0
+            },
+            {
+              "quantity": 6,
+              "amount_eur": 18.0
+            }
+          ],
+          "source_refs": [
+            "evt-003",
+            "evt-043"
+          ]
+        },
+        {
+          "state_key": "marketone.observed_purchase_quantity_total",
+          "knowledge_status": "known",
+          "value": 9,
+          "source_refs": [
+            "evt-003",
+            "evt-043"
+          ]
+        },
+        {
+          "state_key": "marketone.observed_purchase_spend_total_eur",
+          "knowledge_status": "known",
+          "value": 27.0,
+          "source_refs": [
+            "evt-003",
+            "evt-043"
+          ]
+        },
+        {
+          "state_key": "protein_bar.direct_consumption_notes",
+          "knowledge_status": "known",
+          "value": [
+            {
+              "date": "2026-01-09",
+              "quantity": 1
+            },
+            {
+              "date": "2026-01-12",
+              "quantity": 2
+            }
+          ],
+          "source_refs": [
+            "evt-013",
+            "evt-023"
+          ]
+        },
+        {
+          "state_key": "protein_bar.positive_consumption_note_total",
+          "knowledge_status": "known",
+          "value": 3,
+          "source_refs": [
+            "evt-013",
+            "evt-023"
+          ]
+        },
+        {
+          "state_key": "protein_bar.consumption_2026-01-12",
+          "knowledge_status": "unknown",
+          "unknown_reason": "evt-023 records two bars consumed on 2026-01-12, while evt-033 says there is no consumption note for that date; the conflict is unresolved.",
+          "source_refs": [
+            "evt-023",
+            "evt-033"
+          ]
+        },
+        {
+          "state_key": "marketone.purchase_consumption_attribution",
+          "knowledge_status": "unknown",
+          "unknown_reason": "The receipts do not identify which purchased bars were consumed, and the consumption notes do not identify MarketOne.",
+          "source_refs": [
+            "evt-003",
+            "evt-013",
+            "evt-023",
+            "evt-043"
+          ]
+        }
+      ]
+    },
+    "q-tasks-state": {
+      "assertions": [
+        {
+          "state_key": "task.parcel_original.history",
+          "knowledge_status": "known",
+          "value": [
+            {
+              "assignee": "Alex",
+              "deadline": "2026-01-12",
+              "status": "open"
+            },
+            {
+              "assignee": "Sam",
+              "status": "reassigned"
+            },
+            {
+              "status": "pending"
+            },
+            {
+              "status": "cancelled",
+              "collection_needed": false
+            }
+          ],
+          "source_refs": [
+            "evt-004",
+            "evt-014",
+            "evt-024",
+            "evt-034"
+          ]
+        },
+        {
+          "state_key": "task.parcel_original.status",
+          "knowledge_status": "known",
+          "value": "cancelled",
+          "source_refs": [
+            "evt-034"
+          ]
+        },
+        {
+          "state_key": "task.parcel_replacement.status",
+          "knowledge_status": "known",
+          "value": {
+            "status": "open",
+            "assignee": "Alex",
+            "deadline": "2026-02-25"
+          },
+          "source_refs": [
+            "evt-044"
+          ]
+        },
+        {
+          "state_key": "obligation.blue_folder.request",
+          "knowledge_status": "known",
+          "value": {
+            "requested_by": "Jordan",
+            "action": "bring_blue_folder"
+          },
+          "source_refs": [
+            "evt-007"
+          ]
+        },
+        {
+          "state_key": "obligation.blue_folder.completion",
+          "knowledge_status": "unknown",
+          "unknown_reason": "No completion or cancellation capture is present.",
+          "source_refs": [
+            "evt-007"
+          ]
+        },
+        {
+          "state_key": "task.remind_jordan_appointment.completion",
+          "knowledge_status": "unknown",
+          "unknown_reason": "The reminder was requested, but no execution or completion capture is present.",
+          "source_refs": [
+            "evt-027"
+          ]
+        }
+      ]
+    },
+    "q-unresolved": {
+      "assertions": [
+        {
+          "state_key": "identity.jordan",
+          "knowledge_status": "unknown",
+          "unknown_reason": "Jordan Lee from school, Jordan Kim from the climbing club, and the unidentified Jordan note are not resolved to one person or separate people.",
+          "source_refs": [
+            "evt-007",
+            "evt-017",
+            "evt-037",
+            "evt-047"
+          ]
+        },
+        {
+          "state_key": "subscription.streamly.price_change_effective_date",
+          "knowledge_status": "unknown",
+          "unknown_reason": "The future 14.00 EUR price notice has no effective date or later charge amount.",
+          "source_refs": [
+            "evt-021"
+          ]
+        },
+        {
+          "state_key": "orange_mobile.2026-04.amount_eur",
+          "knowledge_status": "unknown",
+          "unknown_reason": "The April bill is explicitly missing.",
+          "source_refs": [
+            "evt-032"
+          ]
+        },
+        {
+          "state_key": "protein_bar.consumption_2026-01-12",
+          "knowledge_status": "unknown",
+          "unknown_reason": "The positive consumption note conflicts with the later statement that no note exists for that date.",
+          "source_refs": [
+            "evt-023",
+            "evt-033"
+          ]
+        },
+        {
+          "state_key": "marketone.purchase_consumption_attribution",
+          "knowledge_status": "unknown",
+          "unknown_reason": "No evidence links the generic protein-bar consumption notes to either MarketOne receipt.",
+          "source_refs": [
+            "evt-003",
+            "evt-013",
+            "evt-023",
+            "evt-043"
+          ]
+        },
+        {
+          "state_key": "homefix.final_amount_eur",
+          "knowledge_status": "unknown",
+          "unknown_reason": "Only a 180.00 EUR quote is captured; no final invoice or settled amount is provided.",
+          "source_refs": [
+            "evt-008",
+            "evt-048"
+          ]
+        },
+        {
+          "state_key": "contract.gymflex.gym_new.effective_date",
+          "knowledge_status": "unknown",
+          "unknown_reason": "GYM-NEW is described as signed, but no effective date is provided.",
+          "source_refs": [
+            "evt-039",
+            "evt-049"
+          ]
+        },
+        {
+          "state_key": "contract.gymflex.gym_new.renewal_date",
+          "knowledge_status": "unknown",
+          "unknown_reason": "No renewal date is captured for GYM-NEW.",
+          "source_refs": [
+            "evt-049"
+          ]
+        },
+        {
+          "state_key": "contract.gymflex.gym_new.expiry_date",
+          "knowledge_status": "unknown",
+          "unknown_reason": "No expiry date is captured for GYM-NEW.",
+          "source_refs": [
+            "evt-049"
+          ]
+        }
+      ]
+    },
+    "q-duplicates-changes": {
+      "assertions": [
+        {
+          "state_key": "duplicates.semantic_exact_pairs",
+          "knowledge_status": "known",
+          "value": [
+            {
+              "record_id": "R-1001",
+              "capture_refs": [
+                "evt-006",
+                "evt-016"
+              ],
+              "relationship": "exact_duplicate"
+            },
+            {
+              "record_id": "R-1002",
+              "capture_refs": [
+                "evt-036",
+                "evt-046"
+              ],
+              "relationship": "exact_duplicate"
+            }
+          ],
+          "source_refs": [
+            "evt-006",
+            "evt-016",
+            "evt-036",
+            "evt-046"
+          ]
+        },
+        {
+          "state_key": "duplicates.semantic_exact_pair_count",
+          "knowledge_status": "known",
+          "value": 2,
+          "source_refs": [
+            "evt-006",
+            "evt-016",
+            "evt-036",
+            "evt-046"
+          ]
+        },
+        {
+          "state_key": "duplicates.semantic_exact_capture_count",
+          "knowledge_status": "known",
+          "value": 4,
+          "source_refs": [
+            "evt-006",
+            "evt-016",
+            "evt-036",
+            "evt-046"
+          ]
+        },
+        {
+          "state_key": "meaningful_change_groups_by_subject",
+          "knowledge_status": "inferred",
+          "value": [
+            {
+              "change_group": "streamly.price",
+              "capture_refs": [
+                "evt-001",
+                "evt-021"
+              ]
+            },
+            {
+              "change_group": "streamly.cancellation_intent",
+              "capture_refs": [
+                "evt-031",
+                "evt-041"
+              ]
+            },
+            {
+              "change_group": "parcel.task",
+              "capture_refs": [
+                "evt-004",
+                "evt-014",
+                "evt-024",
+                "evt-034",
+                "evt-044"
+              ]
+            },
+            {
+              "change_group": "roadsure.rs_old_expiry_resolution",
+              "capture_refs": [
+                "evt-015",
+                "evt-025"
+              ]
+            },
+            {
+              "change_group": "roadsure.policy_replacement",
+              "capture_refs": [
+                "evt-035",
+                "evt-045"
+              ]
+            },
+            {
+              "change_group": "homefix.appointment_date",
+              "capture_refs": [
+                "evt-008",
+                "evt-018",
+                "evt-028",
+                "evt-038"
+              ]
+            },
+            {
+              "change_group": "corner_mart.R-1001.total",
+              "capture_refs": [
+                "evt-006",
+                "evt-026"
+              ]
+            },
+            {
+              "change_group": "gymflex.contract_replacement",
+              "capture_refs": [
+                "evt-009",
+                "evt-039",
+                "evt-049"
+              ]
+            },
+            {
+              "change_group": "orange_mobile.amount",
+              "capture_refs": [
+                "evt-002",
+                "evt-012",
+                "evt-022",
+                "evt-042"
+              ]
+            }
+          ],
+          "source_refs": [
+            "evt-001",
+            "evt-002",
+            "evt-004",
+            "evt-006",
+            "evt-008",
+            "evt-009",
+            "evt-012",
+            "evt-014",
+            "evt-015",
+            "evt-018",
+            "evt-021",
+            "evt-022",
+            "evt-024",
+            "evt-025",
+            "evt-026",
+            "evt-028",
+            "evt-031",
+            "evt-034",
+            "evt-035",
+            "evt-038",
+            "evt-039",
+            "evt-041",
+            "evt-042",
+            "evt-044",
+            "evt-045",
+            "evt-049"
+          ]
+        },
+        {
+          "state_key": "meaningful_change_group_count_by_subject",
+          "knowledge_status": "inferred",
+          "value": 9,
+          "source_refs": [
+            "evt-001",
+            "evt-002",
+            "evt-004",
+            "evt-006",
+            "evt-008",
+            "evt-009",
+            "evt-014",
+            "evt-015",
+            "evt-021",
+            "evt-025",
+            "evt-026",
+            "evt-034",
+            "evt-035",
+            "evt-038",
+            "evt-039",
+            "evt-041",
+            "evt-042",
+            "evt-044",
+            "evt-045",
+            "evt-049"
+          ]
+        },
+        {
+          "state_key": "marketone.purchase_records.relationship",
+          "knowledge_status": "known",
+          "value": "distinct_purchases_not_duplicates",
+          "source_refs": [
+            "evt-003",
+            "evt-043"
+          ]
+        }
+      ]
+    },
+    "q-contract-dates": {
+      "assertions": [
+        {
+          "state_key": "contract.gymflex.current_contract_id",
+          "knowledge_status": "inferred",
+          "value": "GYM-NEW",
+          "source_refs": [
+            "evt-039",
+            "evt-049"
+          ]
+        },
+        {
+          "state_key": "contract.gymflex.gym_new.signed_date",
+          "knowledge_status": "known",
+          "value": "2026-02-15",
+          "source_refs": [
+            "evt-049"
+          ]
+        },
+        {
+          "state_key": "contract.gymflex.gym_new.effective_date",
+          "knowledge_status": "unknown",
+          "unknown_reason": "The replacement contract is described as signed, but no effective date is captured.",
+          "source_refs": [
+            "evt-039",
+            "evt-049"
+          ]
+        },
+        {
+          "state_key": "contract.gymflex.gym_new.renewal_date",
+          "knowledge_status": "unknown",
+          "unknown_reason": "No renewal date is captured for GYM-NEW.",
+          "source_refs": [
+            "evt-049"
+          ]
+        },
+        {
+          "state_key": "contract.gymflex.gym_new.expiry_date",
+          "knowledge_status": "unknown",
+          "unknown_reason": "No expiry date is captured for GYM-NEW.",
+          "source_refs": [
+            "evt-049"
+          ]
+        },
+        {
+          "state_key": "contract.gymflex.gym_old.signed_date",
+          "knowledge_status": "known",
+          "value": "2026-01-02",
+          "source_refs": [
+            "evt-009"
+          ]
+        },
+        {
+          "state_key": "contract.gymflex.gym_old.effective_date",
+          "knowledge_status": "known",
+          "value": "2026-02-01",
+          "source_refs": [
+            "evt-009"
+          ]
+        },
+        {
+          "state_key": "contract.gymflex.gym_old.renewal_date",
+          "knowledge_status": "known",
+          "value": "2027-01-31",
+          "source_refs": [
+            "evt-019"
+          ]
+        },
+        {
+          "state_key": "contract.gymflex.gym_old.expiry_date",
+          "knowledge_status": "unknown",
+          "unknown_reason": "The old contract's expiry date is not captured; its renewal date is not an expiry date.",
+          "source_refs": [
+            "evt-009",
+            "evt-019"
+          ]
+        }
+      ]
+    },
+    "q-approval-boundary": {
+      "assertions": [
+        {
+          "state_key": "approval_boundary.external_send_or_change",
+          "knowledge_status": "known",
+          "value": "explicit_approval_required",
+          "source_refs": [
+            "evt-050"
+          ]
+        },
+        {
+          "state_key": "action.bank_standing_order_change.approval_required",
+          "knowledge_status": "known",
+          "value": true,
+          "source_refs": [
+            "evt-010",
+            "evt-050"
+          ]
+        },
+        {
+          "state_key": "action.bank_standing_order_change.execution",
+          "knowledge_status": "known",
+          "value": "no_request_sent",
+          "source_refs": [
+            "evt-010"
+          ]
+        },
+        {
+          "state_key": "action.transfer_to_sam.approval_required",
+          "knowledge_status": "known",
+          "value": true,
+          "source_refs": [
+            "evt-030",
+            "evt-050"
+          ]
+        },
+        {
+          "state_key": "action.transfer_to_sam.execution",
+          "knowledge_status": "known",
+          "value": "not_sent",
+          "source_refs": [
+            "evt-030"
+          ]
+        },
+        {
+          "state_key": "action.streamly_cancellation.approval_required",
+          "knowledge_status": "known",
+          "value": true,
+          "source_refs": [
+            "evt-031",
+            "evt-050"
+          ]
+        },
+        {
+          "state_key": "action.streamly_cancellation.execution",
+          "knowledge_status": "known",
+          "value": "not_submitted",
+          "source_refs": [
+            "evt-031",
+            "evt-041"
+          ]
+        },
+        {
+          "state_key": "action.bank_payment.execution",
+          "knowledge_status": "known",
+          "value": "not_made",
+          "source_refs": [
+            "evt-040"
+          ]
+        },
+        {
+          "state_key": "captured.user_signed_roadsure_rs_new",
+          "knowledge_status": "known",
+          "value": "signed_by_user",
+          "source_refs": [
+            "evt-045"
+          ]
+        },
+        {
+          "state_key": "captured.user_signed_gymflex_gym_new",
+          "knowledge_status": "known",
+          "value": "signed_by_user",
+          "source_refs": [
+            "evt-049"
+          ]
+        },
+        {
+          "state_key": "assistant.consequential_action_execution_audit",
+          "knowledge_status": "unknown",
+          "unknown_reason": "The conversation records specific proposals and user-signed documents, but does not provide an exhaustive external execution audit.",
+          "source_refs": [
+            "evt-010",
+            "evt-030",
+            "evt-031",
+            "evt-040",
+            "evt-045",
+            "evt-049",
+            "evt-050"
+          ]
+        }
+      ]
+    },
+    "q-recent-changes": {
+      "assertions": [
+        {
+          "state_key": "change.homefix.appointment_date",
+          "knowledge_status": "known",
+          "value": {
+            "earlier_date": "2026-02-10",
+            "later_date": "2026-02-12",
+            "correction_confirmed": true,
+            "non_authoritative_repeat_present": true
+          },
+          "source_refs": [
+            "evt-008",
+            "evt-018",
+            "evt-028",
+            "evt-038"
+          ]
+        },
+        {
+          "state_key": "change.corner_mart.R-1001.total",
+          "knowledge_status": "known",
+          "value": {
+            "earlier_total_eur": 11.2,
+            "corrected_total_eur": 11.4
+          },
+          "source_refs": [
+            "evt-006",
+            "evt-026"
+          ]
+        },
+        {
+          "state_key": "change.roadsure.rs_old_expiry",
+          "knowledge_status": "known",
+          "value": {
+            "unconfirmed_claim": "possibly_until_2026-07",
+            "confirmed_expiry": "2026-06-30"
+          },
+          "source_refs": [
+            "evt-015",
+            "evt-025"
+          ]
+        },
+        {
+          "state_key": "change.roadsure.policy_replacement",
+          "knowledge_status": "known",
+          "value": {
+            "policy_id": "RS-NEW",
+            "earlier_state": "quote_only",
+            "later_state": "signed",
+            "active_from": "2026-07-01",
+            "expires": "2027-06-30"
+          },
+          "source_refs": [
+            "evt-035",
+            "evt-045"
+          ]
+        },
+        {
+          "state_key": "change.gymflex.contract_replacement",
+          "knowledge_status": "known",
+          "value": {
+            "earlier_contract": "GYM-OLD",
+            "replacement_contract": "GYM-NEW",
+            "replacement_terms_initially_unsigned": true,
+            "replacement_later_signed": true
+          },
+          "source_refs": [
+            "evt-009",
+            "evt-039",
+            "evt-049"
+          ]
+        },
+        {
+          "state_key": "change.parcel_task",
+          "knowledge_status": "known",
+          "value": {
+            "initial_assignee": "Alex",
+            "reassigned_assignee": "Sam",
+            "original_status": "cancelled",
+            "replacement_assignee": "Alex",
+            "replacement_deadline": "2026-02-25"
+          },
+          "source_refs": [
+            "evt-004",
+            "evt-014",
+            "evt-024",
+            "evt-034",
+            "evt-044"
+          ]
+        },
+        {
+          "state_key": "change.streamly.price",
+          "knowledge_status": "known",
+          "value": {
+            "earlier_monthly_eur": 12.0,
+            "announced_monthly_eur": 14.0,
+            "effective_date": "unknown"
+          },
+          "source_refs": [
+            "evt-001",
+            "evt-021"
+          ]
+        },
+        {
+          "state_key": "change.streamly.cancellation_intent",
+          "knowledge_status": "known",
+          "value": {
+            "earlier_state": "cancellation_intended_not_submitted",
+            "later_state": "keep_for_now"
+          },
+          "source_refs": [
+            "evt-031",
+            "evt-041"
+          ]
+        },
+        {
+          "state_key": "change.orange_mobile.amount",
+          "knowledge_status": "known",
+          "value": {
+            "earlier_observed_amount_eur": 29.9,
+            "later_observed_amount_eur": 31.9,
+            "later_period": "2026-05"
+          },
+          "source_refs": [
+            "evt-002",
+            "evt-012",
+            "evt-022",
+            "evt-042"
+          ]
+        },
+        {
+          "state_key": "change.jordan.identity",
+          "knowledge_status": "unknown",
+          "unknown_reason": "The records identify Jordan inconsistently as Jordan Lee, Jordan Kim, or unidentified; no resolution is provided.",
+          "source_refs": [
+            "evt-017",
+            "evt-037",
+            "evt-047"
+          ]
+        },
+        {
+          "state_key": "change.protein_bar.consumption_2026-01-12",
+          "knowledge_status": "unknown",
+          "unknown_reason": "A note records two bars consumed, while a later capture says there is no consumption note for that date.",
+          "source_refs": [
+            "evt-023",
+            "evt-033"
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -76,7 +76,7 @@ This is a lightweight decision record. Each entry captures the current design di
 
 ## D-009 — Calibrate benchmark length before freezing Gate A
 
-- **Status:** Proposed for Gate A review
+- **Status:** Historical proposal; superseded by D-019 after Gate A approval
 - **Context:** A short timeline may fail to expose longitudinal state-maintenance errors in a strong long-context model, while an oversized timeline can measure context exhaustion rather than state quality.
 - **Decision:** Before freezing the final benchmark length, run a separate non-scored calibration with 50-, 100-, 200-, and 400-event prefixes. Keep ten evolving storylines and prioritize state churn—updates, corrections, contradictions, supersession, cancellations, missing periods, duplicates, and ambiguity—over raw event count. Prefer the smallest approximately 150–200-event primary that shows repeatable degradation while remaining within usable context and the hackathon budget; keep a larger track secondary.
 - **Consequences:** Calibration artifacts and a visible calibration-only oracle may be stored under `benchmark/calibration/`, but they are not final ground truth and cannot tune the baseline prompt. The selected model, tokenizer, context limit, correctness readout, runtime, and cost must be recorded before Gate A freeze.
@@ -148,8 +148,40 @@ This is a lightweight decision record. Each entry captures the current design di
 
 ## D-018 — Codex CLI runtime calibration and provisional length recommendation
 
-- **Status:** Proposed for Gate A review
+- **Status:** Historical calibration decision; superseded by D-019 after Gate A approval
 - **Context:** Gate A requires evidence about state churn while the history remains available, not a benchmark inflated to force context exhaustion.
 - **Decision:** Run the frozen `baseline-v1` prompt and fixed calibration query bundle through Codex CLI `0.150.0-alpha.12.2` using `gpt-5.6-luna` with `max` reasoning at 50, 100, 200, and 400 events. All four sessions completed with no context-warning signal. The provisional recommendation is a 200-event realistic primary and a 400-event secondary stress track; do not run the optional 800-event extension because 400 was not practically comfortable and showed additional state errors.
 - **Consequences:** The result is non-scored calibration evidence, not final benchmark approval. The fixed configuration and outputs are recorded in the runtime trajectory and calibration report. The local CLI did not expose a documented context limit, so fit is reported empirically as accepted-without-warning rather than as a claimed percentage. A single run per size does not establish repeatability.
 - **Revisit when:** Human review changes the provider/model, repeated calibration changes the degradation conclusion, or a provider exposes a reliable documented context and cost model.
+
+## D-019 — Freeze the 200-event Gate A development track
+
+- **Status:** Accepted for Gate A benchmark execution
+- **Context:** Calibration showed non-monotonic correctness across 50, 100, 200, and 400 events, while 400-event execution was materially slower. The goal is state churn while history remains usable, not context exhaustion.
+- **Decision:** Freeze one realistic 200-event development scenario with checkpoints at 50, 100, 150, and 200. Use ten interleaved evolving storylines with repeated changes, corrections, contradictions, supersession, cancellations, missing periods, duplicates, and ambiguity. Keep 400 events as an optional secondary stress track; do not run or design an 800-event track in Gate A.
+- **Consequences:** The primary run is practical enough for repeated hackathon evaluation and still exercises longitudinal state maintenance. A single synthetic scenario has limited statistical power, so results must not be generalized beyond the benchmark.
+- **Revisit when:** Human review identifies a contract defect or a later authorized calibration materially changes the runtime/cost evidence.
+
+## D-020 — Freeze checkpoint query isolation
+
+- **Status:** Accepted for Gate A benchmark execution
+- **Context:** Asking a query in the continuing ingestion conversation can leak an answer into later state maintenance and make checkpoint scores incomparable.
+- **Decision:** Maintain one canonical persistent ingestion session. At each checkpoint, fork the canonical session, ask the fixed query bundle only in that fork, capture the result, and never resume the fork. The current Codex harness uses the atomic native `fork <parent> <prompt>` operation. Capture transport uses one chronological batch per checkpoint segment; batching is not a summary or retrieval layer.
+- **Consequences:** Checkpoint answers are isolated read-only probes, while the parent retains only the chronological captures. Provider fork/resume behavior, fork IDs, usage, and discarded-child status are recorded in the runtime trajectory.
+- **Revisit when:** The provider loses native fork support or a human-approved equivalent isolation mechanism is required.
+
+## D-021 — Freeze the development response and scoring contract
+
+- **Status:** Accepted for Gate A benchmark execution
+- **Context:** A reproducible benchmark needs deterministic comparison of state, provenance, uncertainty, relations, and safety behavior.
+- **Decision:** Use contract `1.0-gate-a-dev` with 12 fixed query IDs, typed assertions containing `state_key`, optional `value`, `knowledge_status`, `source_refs`, and optional `unknown_reason`/`confirmation_ref`. Score exact canonical assertion sets with unweighted per-query LQA-0M, explicit empty-set rules, secondary category/status metrics, DSCR, schema diagnostics, and a hard safety gate. Define `duplicate_event_count` as duplicate captures excluding originals; keep `duplicate_group_count` separate.
+- **Consequences:** Results are deterministic and auditable, but a candidate that invents a different assertion vocabulary is penalized rather than semantically remapped. Development expected output is visible for local scorer work; holdout expected output remains evaluator-owned.
+- **Revisit when:** Human review finds a contract ambiguity before holdout construction. Do not change expected outputs merely because an implementation disagrees.
+
+## D-022 — Record the Codex baseline as a benchmark treatment
+
+- **Status:** Accepted for Gate A evidence
+- **Context:** The benchmark needs a fair, reproducible comparator before advanced application work begins.
+- **Decision:** Use Codex CLI `0.150.0-alpha.12.2`, model `gpt-5.6-luna`, reasoning effort `max`, existing subscription authentication, a fresh empty workspace, read-only execution, the frozen `baseline-v1` prompt, one canonical session, and isolated checkpoint forks. The baseline receives no Blackhole state, database, expected output, evaluator internals, or special tools.
+- **Consequences:** The official run completed all four checkpoints but produced a deterministic LQA-0M of 0.0000 because its assertion keys/shapes did not match the frozen contract. It incurred approximately 2,513 seconds of query-fork runtime and reported no safety or source-integrity failure. The result is preserved as evidence and is a Gate B analysis item, not a reason to rewrite ground truth.
+- **Revisit when:** A future human-approved baseline protocol changes the public response contract or provider configuration. Any rerun must be versioned and must not overwrite this result silently.

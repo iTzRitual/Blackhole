@@ -2,13 +2,24 @@
 
 ## Current repository phase
 
-This repository is in the benchmark-design phase. Benchmark contract design, development benchmark cases, synthetic inputs, and evaluator design are allowed in this phase. Do not add application code, baseline implementation, production infrastructure, executable evaluation implementation, holdout cases, holdout expected outputs, or final benchmark ground truth unless the project owner explicitly changes the scope.
+This repository is in the benchmark-and-baseline implementation phase. The
+approved Gate A scope allows the final 200-event development benchmark,
+deterministic synthetic generators, development expected outputs, executable
+evaluator code and tests, and the fair Codex CLI baseline. Do not add the
+advanced Blackhole application, production infrastructure, Claude adapter,
+holdout cases, holdout expected outputs, or evaluator-owned holdout ground truth
+unless the project owner explicitly changes the scope.
 
 The human-authorized size-calibration step is a narrow exception: non-scored synthetic histories and their visible calibration-only oracle may live under `benchmark/calibration/`. That oracle is not final benchmark ground truth, must remain separate from `benchmark/dev/` and `benchmark/holdout/`, and must not be used to tune a baseline prompt.
 
 For the pre-freeze runtime calibration, a versioned baseline prompt and non-scored model calls are allowed once the human supplies a usable provider configuration. The primary MVP runtime is subscription-first: use an already-installed, already-authenticated local agent CLI when available, let that CLI own authentication, and never request, read, copy, export, or persist provider tokens. Direct API-key integrations are not required for this phase. Do not commit credential values, silently change the prompt after observing failures, or turn calibration outputs into scored benchmark results.
 
-The remaining empty directories are represented by placeholders so Git can preserve the intended layout. A placeholder is not permission to begin implementing the corresponding subsystem. Development benchmark content must follow the approved contract; evaluator-owned holdout material remains outside the implementation-agent trust boundary.
+The remaining empty application, data, and infrastructure directories are
+represented by placeholders so Git can preserve the intended layout. A
+placeholder is not permission to begin implementing the advanced application or
+production subsystem. Development benchmark content must follow the approved
+contract; evaluator-owned holdout material remains outside the
+implementation-agent trust boundary.
 
 ## Non-negotiable invariants
 
@@ -32,15 +43,20 @@ The remaining empty directories are represented by placeholders so Git can prese
 - When a requirement is ambiguous, document the assumption and its risk rather than inventing hidden behavior.
 - Do not claim evaluation success without a reproducible run record and clearly identified inputs.
 
-## Before application or baseline implementation begins
+## Before advanced application implementation begins
 
-Any move from benchmark design to application or baseline implementation should first establish:
+Any move from benchmark/baseline work to advanced application implementation should first establish:
 
 - the source and derived-state boundaries;
 - the representation of known, inferred, and unknown values;
 - the user-approval boundary for actions;
 - the evaluator-owned holdout access model; and
 - a minimal reproducible evaluation protocol.
+
+The fair baseline is intentionally allowed by the current Gate A approval. It
+must remain stateless with respect to Blackhole, use the frozen runtime prompt
+and approved Codex configuration, isolate its workspace, and keep checkpoint
+queries out of the continuing ingestion session.
 
 ## Agent work documentation protocol
 
