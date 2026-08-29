@@ -2,9 +2,10 @@
 
 This is an operational checklist for the final hours before submission. The
 approved Host/PWA integration and submission hardening are now consolidated on
-`master`; implementation freeze is being recorded. Post-freeze
-generalization, presentation, and external submission remain open. Checked
-items are facts verified in this checkout; unchecked items remain open.
+`master`; the implementation freeze is recorded. This post-freeze merge adds
+documentation and independent audit evidence only. Generalization,
+presentation, and external submission remain open. Checked items are facts
+verified in this checkout; unchecked items remain open.
 
 ## Repository
 
@@ -79,6 +80,10 @@ items are facts verified in this checkout; unchecked items remain open.
   completed.
 - [x] Update the index after final integration freeze; post-freeze
   generalization is intentionally not part of this task.
+- [x] Merge the independent frozen-runtime audit and preserve its authentic
+  findings: P0 `0`, P1 `10`, P2 `4`.
+- [x] Record that the reproduction refresh was completed separately before
+  the audit; the audit report itself remains unchanged.
 - [x] Ensure the removed/rejected experiment or treatment is mentioned in the
   final submission narrative where relevant.
 
@@ -120,6 +125,10 @@ items are facts verified in this checkout; unchecked items remain open.
 - [x] Freeze the integrated implementation SHA in
   `docs/IMPLEMENTATION_FREEZE.md`.
 - [ ] Freeze the authorized post-freeze generalization result, if any.
+- [ ] Complete blind post-freeze generalization.
+- [ ] Score the authorized blind generalization outputs.
+- [ ] Decide the disposition of the audit's P1 hardening findings after
+  generalization.
 - [ ] Regenerate and inspect `final-comparison.json` or its approved successor.
 - [x] Confirm baseline evidence remains unchanged.
 - [x] Confirm no benchmark optimization was performed after freeze.
@@ -156,6 +165,9 @@ These are intentionally documented rather than overwritten in this workstream:
   artifacts are historical and are not contradictions in the current
   narrative; historical changelog scores are expected and are not current
   claims.
+- The independent audit intentionally preserves its original absolute
+  worktree reference as authentic historical evidence; the resulting
+  qualification warning is understood and is not repaired in this merge.
 
 ## Hardening gate result
 

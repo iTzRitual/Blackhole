@@ -6,8 +6,11 @@ presenting the history as a linear success story. `python
 scripts/qualification_check.py --inventory` is the deterministic re-audit
 command; the snapshot below was taken from the same tree.
 
-The Host/PWA integration and submission-hardening workstreams are included
-below. Their source branches and worktrees remain preserved for auditability.
+The Host/PWA integration, submission hardening, reproduction refresh, and
+frozen-runtime audit workstreams are included below. Their source branches and
+worktrees remain preserved for auditability. Private or not-yet-submission-
+visible generalization trajectories are intentionally not listed unless their
+evidence is present in this checkout.
 
 ## Coding trajectories
 
@@ -34,6 +37,8 @@ below. Their source branches and worktrees remain preserved for auditability.
 | 019-global-skills-install | Install global coding/design skills for local agents | Global installation completed; no product/runtime change | `67e734e` | [summary](trajectories/coding/019-global-skills-install/summary.md) |
 | 020-consolidation-freeze | Consolidate approved workstreams and freeze the integrated implementation | Documentation, validation, and freeze evidence; not a benchmark experiment | `171a6cc` | [summary](trajectories/coding/020-consolidation-freeze/summary.md) |
 | 022-reproduction-refresh | Refresh judge-facing Host/PWA reproduction instructions | Documentation-only; no runtime, benchmark, evaluation, or metric changes | `abb8f80` | [summary](trajectories/coding/022-reproduction-refresh/summary.md) |
+| 024-frozen-runtime-audit | Read-only adversarial audit of the frozen runtime | P0 `0`; P1 `10`; P2 `4`; findings preserved, no fixes | `59d1914` | [audit](docs/audits/FROZEN_RUNTIME_AUDIT.md), [summary](trajectories/coding/024-frozen-runtime-audit/summary.md) |
+| 025-post-freeze-evidence-merge | Merge approved post-freeze documentation and independent audit evidence | Documentation/evidence merge; no runtime or benchmark change | pending | [summary](trajectories/coding/025-post-freeze-evidence-merge/summary.md) |
 | ui-001-mobile-pwa | Build the dependency-light mobile-first PWA in an isolated worktree | KEEP; UI workstream preserved and integrated | `0cc6653` | [summary](trajectories/coding/ui-001-mobile-pwa/summary.md) |
 | ui-002-reference-redesign | Correct the Capture surface against the approved mobile reference | KEEP; UI correction preserved and integrated | `0cc6653` | [summary](trajectories/coding/ui-002-reference-redesign/summary.md) |
 | submission-001-hardening | Add offline qualification, CI, evidence index, and submission checklist | KEEP; three non-blocking stale-artifact warnings remain for finalization | `18b123f` | [summary](trajectories/coding/submission-001-hardening/summary.md) |
@@ -65,7 +70,7 @@ the final handoff state of that trajectory. The integrated product merge is
 | 020-consolidation-real-neutral | Post-consolidation neutral Host/PWA-equivalent smoke | Authenticated local Codex CLI | HTTP transport and deferred processing worked; known novel-entity linking limitation reproduced | [summary](trajectories/runtime/020-consolidation-real-neutral/summary.md), [trace](trajectories/runtime/020-consolidation-real-neutral/trace.json) |
 | other recorded fast/replay directories | Intermediate extraction, projector, retry, and diagnostic runs | Mixed; recorded per directory | Preserved as historical evidence, including failed/invalid attempts | [runtime root](trajectories/runtime/) |
 
-The current filesystem inventory contains 24 coding trajectories and 42 runtime
+The current filesystem inventory contains 26 coding trajectories and 42 runtime
 trajectories. The index does not require every runtime directory to have a root `summary.md`:
 the runtime inventory records whether a summary, prompt-like call file, raw
 trace, and other artifacts are present. No transcript is fabricated for a
@@ -103,6 +108,8 @@ transcript, or recorded `*.raw.txt` provider output.
 | 019-global-skills-install | coding | yes | yes | n/a | no | 2 |
 | 020-consolidation-freeze | coding | yes | yes | n/a | no | 2 |
 | 022-reproduction-refresh | coding | yes | yes | n/a | no | 2 |
+| 024-frozen-runtime-audit | coding | yes | yes | n/a | no | 3 |
+| 025-post-freeze-evidence-merge | coding | yes | yes | n/a | no | 2 |
 | ui-001-mobile-pwa | coding | yes | yes | n/a | no | 2 |
 | ui-002-reference-redesign | coding | yes | yes | n/a | no | 2 |
 | submission-001-hardening | coding | yes | yes | n/a | no | 2 |
