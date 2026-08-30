@@ -1,7 +1,7 @@
 {
-  "name": "Blackhole — capture now, organize later",
+  "name": "Blackhole — personal memory",
   "short_name": "Blackhole",
-  "description": "A quiet personal inbox for getting things out of your head.",
+  "description": "Capture now. Find it later.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
