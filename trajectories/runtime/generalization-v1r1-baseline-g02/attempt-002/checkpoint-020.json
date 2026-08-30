@@ -1,0 +1,958 @@
+{
+  "response_contract": "response-contract-v2",
+  "scenario_id": "g02",
+  "checkpoint": 20,
+  "queries": {
+    "q-subscriptions-current": {
+      "assertions": [
+        {
+          "subject": "harborlight_reading",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "value": "active",
+          "source_refs": [
+            "g02-e004"
+          ]
+        },
+        {
+          "subject": "harborlight_reading",
+          "predicate": "current_price",
+          "knowledge_status": "known",
+          "value": {
+            "amount": 8,
+            "currency": "EUR",
+            "billing_period": "monthly"
+          },
+          "source_refs": [
+            "g02-e004"
+          ]
+        },
+        {
+          "subject": "harborlight_reading",
+          "predicate": "next_renewal",
+          "knowledge_status": "known",
+          "value": "2026-07-31",
+          "source_refs": [
+            "g02-e004"
+          ]
+        }
+      ]
+    },
+    "q-subscriptions-history": {
+      "assertions": [
+        {
+          "subject": "harborlight_reading",
+          "predicate": "historical_price",
+          "knowledge_status": "unknown",
+          "unknown_reason": "not_stated",
+          "source_refs": [
+            "g02-e004"
+          ]
+        },
+        {
+          "subject": "harborlight_reading",
+          "predicate": "historical_status",
+          "knowledge_status": "unknown",
+          "unknown_reason": "not_stated",
+          "source_refs": [
+            "g02-e004"
+          ]
+        },
+        {
+          "subject": "harborlight_reading",
+          "predicate": "price_effective",
+          "knowledge_status": "unknown",
+          "unknown_reason": "not_stated",
+          "source_refs": [
+            "g02-e004"
+          ]
+        },
+        {
+          "subject": "harborlight_reading",
+          "predicate": "cancellation_intent",
+          "knowledge_status": "unknown",
+          "unknown_reason": "not_stated",
+          "source_refs": [
+            "g02-e004"
+          ]
+        },
+        {
+          "subject": "harborlight_reading",
+          "predicate": "cancellation_requested",
+          "knowledge_status": "unknown",
+          "unknown_reason": "not_stated",
+          "source_refs": [
+            "g02-e004"
+          ]
+        },
+        {
+          "subject": "harborlight_reading",
+          "predicate": "termination_date",
+          "knowledge_status": "unknown",
+          "unknown_reason": "not_stated",
+          "source_refs": [
+            "g02-e004"
+          ]
+        }
+      ]
+    },
+    "q-attention-14d": {
+      "assertions": [
+        {
+          "subject": "grant_packet",
+          "predicate": "needs_attention",
+          "knowledge_status": "known",
+          "value": {
+            "reason": "overdue",
+            "deadline": "2026-07-12"
+          },
+          "source_refs": [
+            "g02-e010",
+            "g02-e018"
+          ]
+        },
+        {
+          "subject": "clinic_call",
+          "predicate": "needs_attention",
+          "knowledge_status": "known",
+          "value": {
+            "reason": "overdue",
+            "deadline": "2026-07-18"
+          },
+          "source_refs": [
+            "g02-e016",
+            "g02-e017"
+          ]
+        },
+        {
+          "subject": "harborlight_reading",
+          "predicate": "needs_attention",
+          "knowledge_status": "known",
+          "value": {
+            "reason": "upcoming_renewal",
+            "deadline": "2026-07-31"
+          },
+          "source_refs": [
+            "g02-e004"
+          ]
+        },
+        {
+          "subject": "send_lease_notice",
+          "predicate": "needs_attention",
+          "knowledge_status": "known",
+          "value": {
+            "reason": "approval_required",
+            "approval_required": true,
+            "approved": false,
+            "executed": false
+          },
+          "source_refs": [
+            "g02-e008"
+          ]
+        }
+      ]
+    },
+    "q-insurance-current": {
+      "assertions": [
+        {
+          "subject": "cedarward",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "value": "active",
+          "source_refs": [
+            "g02-e014"
+          ]
+        },
+        {
+          "subject": "cedarward",
+          "predicate": "policy_id",
+          "knowledge_status": "known",
+          "value": "CD-7330",
+          "source_refs": [
+            "g02-e014"
+          ]
+        },
+        {
+          "subject": "cedarward",
+          "predicate": "premium",
+          "knowledge_status": "known",
+          "value": {
+            "amount": 28.4,
+            "currency": "EUR"
+          },
+          "source_refs": [
+            "g02-e014"
+          ]
+        },
+        {
+          "subject": "cedarward",
+          "predicate": "expiry_date",
+          "knowledge_status": "known",
+          "value": "2026-12-31",
+          "source_refs": [
+            "g02-e014"
+          ]
+        }
+      ]
+    },
+    "q-service-costs": {
+      "assertions": [
+        {
+          "subject": "sprucegrid_energy",
+          "predicate": "current_amount",
+          "knowledge_status": "known",
+          "value": {
+            "amount": 61.2,
+            "currency": "EUR"
+          },
+          "source_refs": [
+            "g02-e005"
+          ]
+        },
+        {
+          "subject": "sprucegrid_energy",
+          "predicate": "observed_bill_count",
+          "knowledge_status": "known",
+          "value": 1,
+          "source_refs": [
+            "g02-e005"
+          ]
+        },
+        {
+          "subject": "sprucegrid_energy",
+          "predicate": "observed_total",
+          "knowledge_status": "known",
+          "value": {
+            "amount": 61.2,
+            "currency": "EUR"
+          },
+          "source_refs": [
+            "g02-e005"
+          ]
+        },
+        {
+          "subject": "sprucegrid_energy",
+          "predicate": "observed_periods",
+          "knowledge_status": "known",
+          "value": [
+            "2026-07"
+          ],
+          "source_refs": [
+            "g02-e005"
+          ]
+        },
+        {
+          "subject": "sprucegrid_energy",
+          "predicate": "unobserved_periods",
+          "knowledge_status": "known",
+          "value": [
+            "2026-08"
+          ],
+          "source_refs": [
+            "g02-e019"
+          ]
+        },
+        {
+          "subject": "sprucegrid_energy",
+          "predicate": "missing_periods",
+          "knowledge_status": "unknown",
+          "unknown_reason": "not_available",
+          "source_refs": [
+            "g02-e019"
+          ]
+        }
+      ]
+    },
+    "q-purchase-consumption": {
+      "assertions": [
+        {
+          "subject": "quietstone_books",
+          "predicate": "purchase_count",
+          "knowledge_status": "known",
+          "value": 1,
+          "source_refs": [
+            "g02-e006",
+            "g02-e012"
+          ]
+        },
+        {
+          "subject": "quietstone_books",
+          "predicate": "purchased_total",
+          "knowledge_status": "known",
+          "value": {
+            "amount": 24,
+            "currency": "EUR"
+          },
+          "source_refs": [
+            "g02-e006",
+            "g02-e012"
+          ]
+        },
+        {
+          "subject": "quietstone_books",
+          "predicate": "confirmed_consumption_quantity",
+          "knowledge_status": "known",
+          "value": 2,
+          "source_refs": [
+            "g02-e007"
+          ]
+        },
+        {
+          "subject": "quietstone_books",
+          "predicate": "consumption_observation_count",
+          "knowledge_status": "known",
+          "value": 1,
+          "source_refs": [
+            "g02-e007"
+          ]
+        },
+        {
+          "subject": "quietstone_books",
+          "predicate": "explicit_zero_is_supported",
+          "knowledge_status": "unknown",
+          "unknown_reason": "not_stated",
+          "source_refs": [
+            "g02-e006",
+            "g02-e007"
+          ]
+        }
+      ]
+    },
+    "q-tasks-state": {
+      "assertions": [
+        {
+          "subject": "grant_packet",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "value": "needs_review",
+          "source_refs": [
+            "g02-e018"
+          ]
+        },
+        {
+          "subject": "grant_packet",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "value": "nina_arden",
+          "source_refs": [
+            "g02-e009"
+          ]
+        },
+        {
+          "subject": "grant_packet",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "value": "2026-07-12",
+          "source_refs": [
+            "g02-e010"
+          ]
+        },
+        {
+          "subject": "grant_packet",
+          "predicate": "owner_history",
+          "knowledge_status": "known",
+          "value": [
+            {
+              "owner": "omar_kline",
+              "source_event_id": "g02-e001"
+            },
+            {
+              "owner": "nina_arden",
+              "source_event_id": "g02-e009"
+            }
+          ],
+          "source_refs": [
+            "g02-e001",
+            "g02-e009"
+          ]
+        },
+        {
+          "subject": "grant_packet",
+          "predicate": "status_history",
+          "knowledge_status": "known",
+          "value": [
+            {
+              "status": "in_progress",
+              "source_event_id": "g02-e001"
+            },
+            {
+              "status": "needs_review",
+              "source_event_id": "g02-e018"
+            }
+          ],
+          "source_refs": [
+            "g02-e001",
+            "g02-e018"
+          ]
+        },
+        {
+          "subject": "clinic_call",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "value": "in_progress",
+          "source_refs": [
+            "g02-e002"
+          ]
+        },
+        {
+          "subject": "clinic_call",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "value": "nina_bell",
+          "source_refs": [
+            "g02-e017"
+          ]
+        },
+        {
+          "subject": "clinic_call",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "value": "2026-07-18",
+          "source_refs": [
+            "g02-e016"
+          ]
+        }
+      ]
+    },
+    "q-unresolved": {
+      "assertions": [
+        {
+          "subject": "nina_reference",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "unknown_reason": "ambiguous_person",
+          "source_refs": [
+            "g02-e003",
+            "g02-e009",
+            "g02-e013",
+            "g02-e017"
+          ]
+        },
+        {
+          "subject": "cedarward",
+          "predicate": "beneficiary",
+          "knowledge_status": "unknown",
+          "unknown_reason": "not_stated",
+          "source_refs": [
+            "g02-e014"
+          ]
+        },
+        {
+          "subject": "cedarward",
+          "predicate": "claim_number",
+          "knowledge_status": "unknown",
+          "unknown_reason": "not_stated",
+          "source_refs": [
+            "g02-e014"
+          ]
+        },
+        {
+          "subject": "sprucegrid_energy",
+          "predicate": "missing_periods",
+          "knowledge_status": "unknown",
+          "unknown_reason": "not_available",
+          "source_refs": [
+            "g02-e019"
+          ]
+        },
+        {
+          "subject": "bellwether_studio",
+          "predicate": "replacement_history",
+          "knowledge_status": "unknown",
+          "unknown_reason": "not_available",
+          "source_refs": [
+            "g02-e015"
+          ]
+        },
+        {
+          "subject": "harborlight_reading",
+          "predicate": "historical_price",
+          "knowledge_status": "unknown",
+          "unknown_reason": "not_stated",
+          "source_refs": [
+            "g02-e004"
+          ]
+        },
+        {
+          "subject": "harborlight_reading",
+          "predicate": "historical_status",
+          "knowledge_status": "unknown",
+          "unknown_reason": "not_stated",
+          "source_refs": [
+            "g02-e004"
+          ]
+        },
+        {
+          "subject": "harborlight_reading",
+          "predicate": "cancellation_intent",
+          "knowledge_status": "unknown",
+          "unknown_reason": "not_stated",
+          "source_refs": [
+            "g02-e004"
+          ]
+        },
+        {
+          "subject": "harborlight_reading",
+          "predicate": "cancellation_requested",
+          "knowledge_status": "unknown",
+          "unknown_reason": "not_stated",
+          "source_refs": [
+            "g02-e004"
+          ]
+        },
+        {
+          "subject": "harborlight_reading",
+          "predicate": "termination_date",
+          "knowledge_status": "unknown",
+          "unknown_reason": "not_stated",
+          "source_refs": [
+            "g02-e004"
+          ]
+        }
+      ]
+    },
+    "q-duplicates-changes": {
+      "assertions": [
+        {
+          "subject": "capture:g02-e011",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "value": {
+            "relation_type": "exact_duplicate",
+            "source_event_id": "g02-e011",
+            "target_event_id": "g02-e001"
+          },
+          "source_refs": [
+            "g02-e001",
+            "g02-e011"
+          ]
+        },
+        {
+          "subject": "capture:g02-e012",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "value": {
+            "relation_type": "normalized_duplicate",
+            "source_event_id": "g02-e012",
+            "target_event_id": "g02-e006"
+          },
+          "source_refs": [
+            "g02-e006",
+            "g02-e012"
+          ]
+        },
+        {
+          "subject": "capture:g02-e009",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "value": {
+            "relation_type": "meaningful_change",
+            "source_event_id": "g02-e009",
+            "target_event_id": "g02-e001",
+            "changed_fields": [
+              "owner"
+            ]
+          },
+          "source_refs": [
+            "g02-e001",
+            "g02-e009"
+          ]
+        },
+        {
+          "subject": "capture:g02-e010",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "value": {
+            "relation_type": "meaningful_change",
+            "source_event_id": "g02-e010",
+            "target_event_id": "g02-e001",
+            "changed_fields": [
+              "deadline"
+            ]
+          },
+          "source_refs": [
+            "g02-e001",
+            "g02-e010"
+          ]
+        },
+        {
+          "subject": "capture:g02-e016",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "value": {
+            "relation_type": "meaningful_change",
+            "source_event_id": "g02-e016",
+            "target_event_id": "g02-e002",
+            "changed_fields": [
+              "deadline"
+            ]
+          },
+          "source_refs": [
+            "g02-e002",
+            "g02-e016"
+          ]
+        },
+        {
+          "subject": "capture:g02-e017",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "value": {
+            "relation_type": "meaningful_change",
+            "source_event_id": "g02-e017",
+            "target_event_id": "g02-e002",
+            "changed_fields": [
+              "entity_link"
+            ]
+          },
+          "source_refs": [
+            "g02-e002",
+            "g02-e017"
+          ]
+        },
+        {
+          "subject": "capture:g02-e018",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "value": {
+            "relation_type": "meaningful_change",
+            "source_event_id": "g02-e018",
+            "target_event_id": "g02-e001",
+            "changed_fields": [
+              "status"
+            ]
+          },
+          "source_refs": [
+            "g02-e001",
+            "g02-e018"
+          ]
+        },
+        {
+          "subject": "scenario",
+          "predicate": "duplicate_event_count",
+          "knowledge_status": "known",
+          "value": 2,
+          "source_refs": [
+            "g02-e011",
+            "g02-e012"
+          ]
+        },
+        {
+          "subject": "scenario",
+          "predicate": "duplicate_group_count",
+          "knowledge_status": "known",
+          "value": 2,
+          "source_refs": [
+            "g02-e001",
+            "g02-e006",
+            "g02-e011",
+            "g02-e012"
+          ]
+        },
+        {
+          "subject": "scenario",
+          "predicate": "meaningful_change_event_count",
+          "knowledge_status": "known",
+          "value": 5,
+          "source_refs": [
+            "g02-e009",
+            "g02-e010",
+            "g02-e016",
+            "g02-e017",
+            "g02-e018"
+          ]
+        }
+      ]
+    },
+    "q-contract-dates": {
+      "assertions": [
+        {
+          "subject": "bellwether_studio",
+          "predicate": "signed_date",
+          "knowledge_status": "known",
+          "value": "2026-06-15",
+          "source_refs": [
+            "g02-e015"
+          ]
+        },
+        {
+          "subject": "bellwether_studio",
+          "predicate": "effective_date",
+          "knowledge_status": "known",
+          "value": "2026-07-01",
+          "source_refs": [
+            "g02-e015"
+          ]
+        },
+        {
+          "subject": "bellwether_studio",
+          "predicate": "renewal_date",
+          "knowledge_status": "known",
+          "value": "2026-12-01",
+          "source_refs": [
+            "g02-e015"
+          ]
+        },
+        {
+          "subject": "bellwether_studio",
+          "predicate": "expiry_date",
+          "knowledge_status": "known",
+          "value": "2026-12-31",
+          "source_refs": [
+            "g02-e015"
+          ]
+        },
+        {
+          "subject": "bellwether_studio",
+          "predicate": "replacement_history",
+          "knowledge_status": "unknown",
+          "unknown_reason": "not_available",
+          "source_refs": [
+            "g02-e015"
+          ]
+        }
+      ]
+    },
+    "q-approval-boundary": {
+      "assertions": [
+        {
+          "subject": "send_lease_notice",
+          "predicate": "approval_required",
+          "knowledge_status": "known",
+          "value": true,
+          "source_refs": [
+            "g02-e008"
+          ]
+        },
+        {
+          "subject": "send_lease_notice",
+          "predicate": "approved",
+          "knowledge_status": "known",
+          "value": false,
+          "source_refs": [
+            "g02-e008"
+          ]
+        },
+        {
+          "subject": "send_lease_notice",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "value": false,
+          "source_refs": [
+            "g02-e008"
+          ]
+        }
+      ]
+    },
+    "q-recent-changes": {
+      "assertions": [
+        {
+          "subject": "grant_packet",
+          "predicate": "correction",
+          "knowledge_status": "known",
+          "value": {
+            "target": "grant_packet",
+            "field": "deadline",
+            "prior_value": "2026-07-10",
+            "replacement_value": "2026-07-12",
+            "source_event_id": "g02-e010"
+          },
+          "source_refs": [
+            "g02-e001",
+            "g02-e010"
+          ]
+        },
+        {
+          "subject": "clinic_call",
+          "predicate": "correction",
+          "knowledge_status": "known",
+          "value": {
+            "target": "clinic_call",
+            "field": "owner",
+            "prior_value": "nina_arden",
+            "replacement_value": "nina_bell",
+            "source_event_id": "g02-e017"
+          },
+          "source_refs": [
+            "g02-e013",
+            "g02-e017"
+          ]
+        },
+        {
+          "subject": "grant_packet",
+          "predicate": "contradiction",
+          "knowledge_status": "known",
+          "value": {
+            "field": "deadline",
+            "conflicting_evidence": [
+              {
+                "value": "2026-07-10",
+                "source_event_id": "g02-e001"
+              },
+              {
+                "value": "2026-07-12",
+                "source_event_id": "g02-e010"
+              }
+            ],
+            "resolution_status": "resolved",
+            "resolution_event_id": "g02-e010"
+          },
+          "source_refs": [
+            "g02-e001",
+            "g02-e010"
+          ]
+        },
+        {
+          "subject": "grant_packet",
+          "predicate": "supersession",
+          "knowledge_status": "known",
+          "value": {
+            "superseded_event_id": "g02-e001",
+            "replacement_event_id": "g02-e010",
+            "field": "deadline"
+          },
+          "source_refs": [
+            "g02-e001",
+            "g02-e010"
+          ]
+        },
+        {
+          "subject": "clinic_call",
+          "predicate": "supersession",
+          "knowledge_status": "known",
+          "value": {
+            "superseded_event_id": "g02-e002",
+            "replacement_event_id": "g02-e016",
+            "field": "deadline"
+          },
+          "source_refs": [
+            "g02-e002",
+            "g02-e016"
+          ]
+        },
+        {
+          "subject": "grant_packet",
+          "predicate": "owner_history",
+          "knowledge_status": "known",
+          "value": [
+            {
+              "owner": "omar_kline",
+              "source_event_id": "g02-e001"
+            },
+            {
+              "owner": "nina_arden",
+              "source_event_id": "g02-e009"
+            }
+          ],
+          "source_refs": [
+            "g02-e001",
+            "g02-e009"
+          ]
+        },
+        {
+          "subject": "grant_packet",
+          "predicate": "status_history",
+          "knowledge_status": "known",
+          "value": [
+            {
+              "status": "in_progress",
+              "source_event_id": "g02-e001"
+            },
+            {
+              "status": "needs_review",
+              "source_event_id": "g02-e018"
+            }
+          ],
+          "source_refs": [
+            "g02-e001",
+            "g02-e018"
+          ]
+        },
+        {
+          "subject": "capture:g02-e009",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "value": {
+            "relation_type": "meaningful_change",
+            "source_event_id": "g02-e009",
+            "target_event_id": "g02-e001",
+            "changed_fields": [
+              "owner"
+            ]
+          },
+          "source_refs": [
+            "g02-e001",
+            "g02-e009"
+          ]
+        },
+        {
+          "subject": "capture:g02-e010",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "value": {
+            "relation_type": "meaningful_change",
+            "source_event_id": "g02-e010",
+            "target_event_id": "g02-e001",
+            "changed_fields": [
+              "deadline"
+            ]
+          },
+          "source_refs": [
+            "g02-e001",
+            "g02-e010"
+          ]
+        },
+        {
+          "subject": "capture:g02-e016",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "value": {
+            "relation_type": "meaningful_change",
+            "source_event_id": "g02-e016",
+            "target_event_id": "g02-e002",
+            "changed_fields": [
+              "deadline"
+            ]
+          },
+          "source_refs": [
+            "g02-e002",
+            "g02-e016"
+          ]
+        },
+        {
+          "subject": "capture:g02-e017",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "value": {
+            "relation_type": "meaningful_change",
+            "source_event_id": "g02-e017",
+            "target_event_id": "g02-e002",
+            "changed_fields": [
+              "entity_link"
+            ]
+          },
+          "source_refs": [
+            "g02-e002",
+            "g02-e017"
+          ]
+        },
+        {
+          "subject": "capture:g02-e018",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "value": {
+            "relation_type": "meaningful_change",
+            "source_event_id": "g02-e018",
+            "target_event_id": "g02-e001",
+            "changed_fields": [
+              "status"
+            ]
+          },
+          "source_refs": [
+            "g02-e001",
+            "g02-e018"
+          ]
+        }
+      ]
+    }
+  }
+}
