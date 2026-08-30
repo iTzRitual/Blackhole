@@ -401,7 +401,6 @@ _ATTENTION_PHRASES = (
     r"\bwhat\s+(?:is|s)\s+coming\s+up\b",
     r"\bwhat\s+do\s+i\s+have\s+coming\s+up\b",
     r"\bco\s+mam\s+(?:niedlugo\s+)?do\s+zrobienia\b",
-    r"\bco\s+mam\s+zrobic\b",
     r"\bco\s+musze\s+zrobic\b",
     r"\bco\s+trzeba\s+zrobic\b",
     r"\bco\s+(?:jest|mnie)\s+(?:teraz\s+)?pilne\b",
@@ -711,7 +710,7 @@ def plan_ask(question: str) -> AskPlan:
     has_attention_phrase = any(re.search(pattern, normalized) for pattern in _ATTENTION_PHRASES)
     has_action_phrase = bool(
         re.search(r"\b(?:need|should)\s+(?:to\s+)?do\b", normalized)
-        or re.search(r"\b(?:musze|trzeba)\s+zrobic\b", normalized)
+        or re.search(r"\b(?:mam|musze|trzeba)\s+zrobic\b", normalized)
         or re.search(r"\bdo\s+zrobienia\b", normalized)
     )
     has_deadline_question = bool(

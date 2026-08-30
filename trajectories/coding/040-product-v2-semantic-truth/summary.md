@@ -78,6 +78,10 @@ localized capability tables, or exact live-smoke wording.
   new lexical-gap branch treated a currency question as semantic synthesis.
   Numeric/currency tokens were excluded from gap detection; the final rerun
   returned `50/50 PASS`.
+- Final boundary review found that an intermediate acceptance repair had added
+  one narrow Polish action phrase. That literal was removed and replaced by a
+  generalized action-verb pattern before finalization; the final code contains
+  no exact live-sequence phrase rule.
 - The authoritative live run was capped at 10 captures and 8 asks as
   authorized. No second live run was started after final offline refinements.
 
