@@ -282,7 +282,19 @@ class ProductV2AskRoutingTests(unittest.TestCase):
         self.assertEqual(plan_ask("What changed about PocketWave?").intent, "changes")
         self.assertEqual(plan_ask("Co się ostatnio zmieniło?").intent, "changes")
         self.assertEqual(plan_ask("Co mam niedługo do zrobienia?").intent, "attention")
+        self.assertEqual(plan_ask("Co mam zrobić w ciągu najbliższych 15 minut?").intent, "attention")
         self.assertEqual(plan_ask("When did I last mention PocketWave?").intent, "last_mention")
+
+    def test_unmapped_money_modifier_uses_semantic_synthesis(self) -> None:
+        plan = plan_ask("Ile kosztuje PocketWave i czy cena się zmieniała?")
+        self.assertEqual(plan.intent, "costs")
+        self.assertTrue(plan.semantic_fallback)
+        self.assertTrue(plan.requires_synthesis)
+        result = self.runtime.ask("Ile kosztuje PocketWave i czy cena się zmieniała?")
+        self.assertEqual(result["mode"], "semantic")
+        self.assertTrue(result["provider_used"])
+        self.assertIn("ask-pocket-old", result["source_refs"])
+        self.assertIn("ask-pocket-new", result["source_refs"])
 
     def test_provider_context_contains_only_retrieved_memory(self) -> None:
         result = self.runtime.ask("Explain what I know about the boiler.")

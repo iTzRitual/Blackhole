@@ -1,0 +1,824 @@
+{
+  "run_type": "product-v2-semantic-truth-live-smoke",
+  "scope": "authorized post-freeze product generalization; non-scored",
+  "base_sha": "7a76a1b660b49d28cb5aa29ab9e9b5099238aaee",
+  "encoding": "UTF-8 source file and UTF-8 HTTP JSON bodies",
+  "host_lifecycle": "normal create_server HTTP lifecycle with auto_start_product_worker=true",
+  "manual_processing_endpoint_used": false,
+  "capture_limit": 10,
+  "ask_limit": 8,
+  "health": {
+    "http_status": 200,
+    "ok": true
+  },
+  "captures": [
+    {
+      "index": 1,
+      "text": "Klucze do piwnicy są u mamy.",
+      "http_status": 200,
+      "ok": true,
+      "saved": true,
+      "event_id": "semantic-live-utf8-01",
+      "processing_status": "pending"
+    },
+    {
+      "index": 2,
+      "text": "Jednak znalazłem klucze w szufladzie biurka.",
+      "http_status": 200,
+      "ok": true,
+      "saved": true,
+      "event_id": "semantic-live-utf8-02",
+      "processing_status": "pending"
+    },
+    {
+      "index": 3,
+      "text": "PocketWave kosztuje 9 EUR miesięcznie.",
+      "http_status": 200,
+      "ok": true,
+      "saved": true,
+      "event_id": "semantic-live-utf8-03",
+      "processing_status": "pending"
+    },
+    {
+      "index": 4,
+      "text": "Od 1 września PocketWave będzie kosztować 11 EUR miesięcznie.",
+      "http_status": 200,
+      "ok": true,
+      "saved": true,
+      "event_id": "semantic-live-utf8-04",
+      "processing_status": "pending"
+    },
+    {
+      "index": 5,
+      "text": "Chyba gwarancja na bojler kończy się w grudniu.",
+      "http_status": 200,
+      "ok": true,
+      "saved": true,
+      "event_id": "semantic-live-utf8-05",
+      "processing_status": "pending"
+    },
+    {
+      "index": 6,
+      "text": "Mechanik mówi, że stukanie może powodować lewe łożysko.",
+      "http_status": 200,
+      "ok": true,
+      "saved": true,
+      "event_id": "semantic-live-utf8-06",
+      "processing_status": "pending"
+    },
+    {
+      "index": 7,
+      "text": "Drugi mechanik mówi, że lewe łożysko jest okej i podejrzewa oponę.",
+      "http_status": 200,
+      "ok": true,
+      "saved": true,
+      "event_id": "semantic-live-utf8-07",
+      "processing_status": "pending"
+    },
+    {
+      "index": 8,
+      "text": "Spotkanie z Markiem jest we wtorek o 14:00.",
+      "http_status": 200,
+      "ok": true,
+      "saved": true,
+      "event_id": "semantic-live-utf8-08",
+      "processing_status": "pending"
+    },
+    {
+      "index": 9,
+      "text": "Meeting z Markiem moved to Donnerstag 16:00.",
+      "http_status": 200,
+      "ok": true,
+      "saved": true,
+      "event_id": "semantic-live-utf8-09",
+      "processing_status": "pending"
+    },
+    {
+      "index": 10,
+      "text": "Muszę odnowić pozwolenie parkingowe do piątku.",
+      "http_status": 200,
+      "ok": true,
+      "saved": true,
+      "event_id": "semantic-live-utf8-10",
+      "processing_status": "pending"
+    }
+  ],
+  "processing": {
+    "counts": {
+      "failed": 0,
+      "pending": 0,
+      "processed": 10,
+      "processing": 0
+    },
+    "events": [
+      {
+        "event_id": "semantic-live-utf8-01",
+        "status": "processed",
+        "attempt_count": 1,
+        "last_error": null
+      },
+      {
+        "event_id": "semantic-live-utf8-02",
+        "status": "processed",
+        "attempt_count": 1,
+        "last_error": null
+      },
+      {
+        "event_id": "semantic-live-utf8-03",
+        "status": "processed",
+        "attempt_count": 1,
+        "last_error": null
+      },
+      {
+        "event_id": "semantic-live-utf8-04",
+        "status": "processed",
+        "attempt_count": 1,
+        "last_error": null
+      },
+      {
+        "event_id": "semantic-live-utf8-05",
+        "status": "processed",
+        "attempt_count": 1,
+        "last_error": null
+      },
+      {
+        "event_id": "semantic-live-utf8-06",
+        "status": "processed",
+        "attempt_count": 1,
+        "last_error": null
+      },
+      {
+        "event_id": "semantic-live-utf8-07",
+        "status": "processed",
+        "attempt_count": 1,
+        "last_error": null
+      },
+      {
+        "event_id": "semantic-live-utf8-08",
+        "status": "processed",
+        "attempt_count": 1,
+        "last_error": null
+      },
+      {
+        "event_id": "semantic-live-utf8-09",
+        "status": "processed",
+        "attempt_count": 1,
+        "last_error": null
+      },
+      {
+        "event_id": "semantic-live-utf8-10",
+        "status": "processed",
+        "attempt_count": 1,
+        "last_error": null
+      }
+    ],
+    "provider_retries": 0
+  },
+  "asks": [
+    {
+      "question": "Gdzie są teraz klucze do piwnicy?",
+      "http_status": 200,
+      "ok": true,
+      "mode": "retrieval",
+      "status": "ready",
+      "answer": "Pasujące wspomnienia: Klucze do piwnicy location: w szufladzie biurka.",
+      "provider_used": false,
+      "source_refs": [
+        "semantic-live-utf8-02"
+      ],
+      "items": [
+        {
+          "entity_key": "keys_to_basement",
+          "entity_label": "Klucze do piwnicy",
+          "concept": "location",
+          "value": "w szufladzie biurka",
+          "knowledge_status": "known",
+          "source_refs": [
+            "semantic-live-utf8-02"
+          ],
+          "temporal": {
+            "date": "2026-08-30",
+            "effective_at": null,
+            "expression": null,
+            "interval_end": null,
+            "interval_start": null,
+            "local_time": null,
+            "next": null,
+            "normalized": null,
+            "observed_at": "2026-08-30T10:01:00+02:00",
+            "precision": "day",
+            "timezone": "Europe/Berlin",
+            "valid_from": null,
+            "valid_to": null,
+            "weekday": null,
+            "weekday_index": null
+          },
+          "metadata": {
+            "certainty": "certain",
+            "claim_type": "observation",
+            "confidence": 1,
+            "semantic_relation": "correction",
+            "semantic_state": "current"
+          }
+        }
+      ]
+    },
+    {
+      "question": "Gdzie wcześniej były klucze?",
+      "http_status": 200,
+      "ok": true,
+      "mode": "changes",
+      "status": "ready",
+      "answer": "Pasujące wspomnienia: Klucze do piwnicy location: u mamy.",
+      "provider_used": false,
+      "source_refs": [
+        "semantic-live-utf8-01"
+      ],
+      "items": [
+        {
+          "entity_key": "keys_to_basement",
+          "entity_label": "Klucze do piwnicy",
+          "concept": "location",
+          "value": "u mamy",
+          "knowledge_status": "known",
+          "source_refs": [
+            "semantic-live-utf8-01"
+          ],
+          "temporal": {
+            "date": "2026-08-30",
+            "effective_at": null,
+            "expression": null,
+            "interval_end": null,
+            "interval_start": null,
+            "local_time": null,
+            "next": null,
+            "normalized": null,
+            "observed_at": "2026-08-30T00:00:00+02:00",
+            "precision": "day",
+            "timezone": "Europe/Berlin",
+            "valid_from": null,
+            "valid_to": null,
+            "weekday": null,
+            "weekday_index": null
+          }
+        }
+      ]
+    },
+    {
+      "question": "Ile kosztuje PocketWave i czy cena się zmieniała?",
+      "http_status": 200,
+      "ok": true,
+      "mode": "costs",
+      "status": "ready",
+      "answer": "Zaobserwowane koszty: PocketWave recurring_cost: 9 EUR per monthly. Sumy obliczone deterministycznie: [{'currency': 'EUR', 'billing_period': 'monthly', 'total': '9'}].",
+      "provider_used": false,
+      "source_refs": [
+        "semantic-live-utf8-03"
+      ],
+      "items": [
+        {
+          "entity_key": "pocketwave_subscription",
+          "entity_label": "PocketWave",
+          "concept": "recurring_cost",
+          "value": {
+            "amount": 9,
+            "billing_period": "monthly",
+            "currency": "EUR",
+            "date": null,
+            "datetime": null,
+            "deadline": null,
+            "due_at": null,
+            "iso": null,
+            "relative_hours": null,
+            "relative_minutes": null,
+            "relative_seconds": null,
+            "start_at": null,
+            "starts_at": null,
+            "task": null,
+            "text": null,
+            "timestamp": null,
+            "title": null,
+            "value": null
+          },
+          "knowledge_status": "known",
+          "source_refs": [
+            "semantic-live-utf8-03"
+          ],
+          "temporal": {
+            "date": "2026-08-30",
+            "effective_at": null,
+            "expression": null,
+            "interval_end": null,
+            "interval_start": null,
+            "local_time": null,
+            "next": null,
+            "normalized": null,
+            "observed_at": "2026-08-30T10:02:00+02:00",
+            "precision": "day",
+            "timezone": "Europe/Berlin",
+            "valid_from": null,
+            "valid_to": "2026-08-31T00:00:00+02:00",
+            "weekday": null,
+            "weekday_index": null
+          },
+          "metadata": {
+            "certainty": "certain",
+            "claim_type": "observation",
+            "confidence": 1,
+            "semantic_state": "current"
+          }
+        }
+      ]
+    },
+    {
+      "question": "Kiedy kończy się gwarancja na bojler?",
+      "http_status": 200,
+      "ok": true,
+      "mode": "retrieval",
+      "status": "ready",
+      "answer": "Pasujące wspomnienia: gwarancja na bojler warranty_expiration: possibly {\"amount\": null, \"billing_period\": null, \"currency\": null, \"date\": null, \"datetime\": null, \"deadline\": null, \"due_at\": null, \"iso\": null, \"relative_hours\": null, \"relative_minutes\": null, \"relative_seconds\": null, \"start_at\": null, \"starts_at\": null, \"task\": null, \"text\": null, \"timestamp\": null, \"title\": null, \"value\": \"December\"} (not confirmed) (month: w grudniu).",
+      "provider_used": false,
+      "source_refs": [
+        "semantic-live-utf8-05"
+      ],
+      "items": [
+        {
+          "entity_key": "boiler_warranty",
+          "entity_label": "gwarancja na bojler",
+          "concept": "warranty_expiration",
+          "value": {
+            "amount": null,
+            "billing_period": null,
+            "currency": null,
+            "date": null,
+            "datetime": null,
+            "deadline": null,
+            "due_at": null,
+            "iso": null,
+            "relative_hours": null,
+            "relative_minutes": null,
+            "relative_seconds": null,
+            "start_at": null,
+            "starts_at": null,
+            "task": null,
+            "text": null,
+            "timestamp": null,
+            "title": null,
+            "value": "December"
+          },
+          "knowledge_status": "inferred",
+          "source_refs": [
+            "semantic-live-utf8-05"
+          ],
+          "temporal": {
+            "date": null,
+            "effective_at": null,
+            "expression": "w grudniu",
+            "interval_end": null,
+            "interval_start": null,
+            "local_time": null,
+            "next": null,
+            "normalized": null,
+            "observed_at": "2026-08-30T10:04:00+02:00",
+            "precision": "month",
+            "timezone": "Europe/Berlin",
+            "valid_from": null,
+            "valid_to": null,
+            "weekday": null,
+            "weekday_index": null
+          },
+          "metadata": {
+            "certainty": "uncertain",
+            "claim_type": "belief",
+            "confidence": 0.6,
+            "semantic_state": "uncertain"
+          }
+        }
+      ]
+    },
+    {
+      "question": "Co może powodować stukanie w samochodzie?",
+      "http_status": 200,
+      "ok": true,
+      "mode": "retrieval",
+      "status": "ready",
+      "answer": "Pasujące wspomnienia: stukanie possible_cause: unknown (conflicting evidence: lewe łożysko; opona).",
+      "provider_used": false,
+      "source_refs": [
+        "semantic-live-utf8-06",
+        "semantic-live-utf8-07"
+      ],
+      "items": [
+        {
+          "entity_key": "car_knocking",
+          "entity_label": "stukanie",
+          "concept": "possible_cause",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "semantic-live-utf8-06",
+            "semantic-live-utf8-07"
+          ],
+          "attribution": {
+            "name": "drugi mechanik",
+            "organization": null,
+            "relationship": null,
+            "role": null
+          },
+          "temporal": {
+            "date": "2026-08-30",
+            "effective_at": null,
+            "expression": null,
+            "interval_end": null,
+            "interval_start": null,
+            "local_time": null,
+            "next": null,
+            "normalized": null,
+            "observed_at": "2026-08-30T10:06:00+02:00",
+            "precision": "day",
+            "timezone": "Europe/Berlin",
+            "valid_from": null,
+            "valid_to": null,
+            "weekday": null,
+            "weekday_index": null
+          },
+          "metadata": {
+            "attribution": {
+              "name": "drugi mechanik",
+              "organization": null,
+              "relationship": null,
+              "role": null
+            },
+            "certainty": "uncertain",
+            "claim_type": "attributed_diagnosis",
+            "confidence": 0.6,
+            "semantic_state": "conflict",
+            "conflicting_values": [
+              {
+                "fact_id": 6,
+                "source_event_id": "semantic-live-utf8-06",
+                "knowledge_status": "inferred",
+                "value": "lewe łożysko",
+                "source_refs": [
+                  "semantic-live-utf8-06"
+                ],
+                "attribution": {
+                  "name": "mechanik",
+                  "organization": null,
+                  "relationship": null,
+                  "role": null
+                },
+                "claim_type": "attributed_diagnosis"
+              },
+              {
+                "fact_id": 8,
+                "source_event_id": "semantic-live-utf8-07",
+                "knowledge_status": "inferred",
+                "value": "opona",
+                "source_refs": [
+                  "semantic-live-utf8-07"
+                ],
+                "attribution": {
+                  "name": "drugi mechanik",
+                  "organization": null,
+                  "relationship": null,
+                  "role": null
+                },
+                "claim_type": "attributed_diagnosis"
+              }
+            ],
+            "conflicting_fact_ids": [
+              6,
+              8
+            ],
+            "conflict_source_refs": [
+              "semantic-live-utf8-06",
+              "semantic-live-utf8-07"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "question": "Kiedy mam spotkanie z Markiem?",
+      "http_status": 200,
+      "ok": true,
+      "mode": "retrieval",
+      "status": "ready",
+      "answer": "Pasujące wspomnienia: Meeting z Markiem appointment: meeting z Markiem (weekday_time: Donnerstag 16:00).",
+      "provider_used": false,
+      "source_refs": [
+        "semantic-live-utf8-09"
+      ],
+      "items": [
+        {
+          "entity_key": "meeting_marek",
+          "entity_label": "Meeting z Markiem",
+          "concept": "appointment",
+          "value": "meeting z Markiem",
+          "knowledge_status": "known",
+          "source_refs": [
+            "semantic-live-utf8-09"
+          ],
+          "temporal": {
+            "date": null,
+            "effective_at": null,
+            "expression": "Donnerstag 16:00",
+            "interval_end": null,
+            "interval_start": null,
+            "local_time": "16:00",
+            "next": true,
+            "normalized": null,
+            "observed_at": "2026-08-30T10:08:00+02:00",
+            "precision": "weekday_time",
+            "timezone": "Europe/Berlin",
+            "valid_from": null,
+            "valid_to": null,
+            "weekday": "Thursday",
+            "weekday_index": 3
+          },
+          "metadata": {
+            "certainty": "certain",
+            "claim_type": "appointment",
+            "confidence": 1,
+            "semantic_relation": "reschedule",
+            "semantic_state": "current"
+          }
+        }
+      ]
+    },
+    {
+      "question": "What changed about my meeting with Marek?",
+      "http_status": 200,
+      "ok": true,
+      "mode": "changes",
+      "status": "ready",
+      "answer": "Recent changes: Spotkanie z Markiem: set (spotkanie z Markiem); Meeting z Markiem: correction (meeting z Markiem).",
+      "provider_used": false,
+      "source_refs": [
+        "semantic-live-utf8-08",
+        "semantic-live-utf8-09"
+      ],
+      "items": [
+        {
+          "entity_key": "meeting_marek",
+          "entity_label": "Spotkanie z Markiem",
+          "concept": "appointment",
+          "value": "spotkanie z Markiem",
+          "knowledge_status": "known",
+          "source_refs": [
+            "semantic-live-utf8-08"
+          ],
+          "temporal": {
+            "date": null,
+            "effective_at": null,
+            "expression": "we wtorek o 14:00",
+            "interval_end": null,
+            "interval_start": null,
+            "local_time": "14:00",
+            "next": true,
+            "normalized": null,
+            "observed_at": "2026-08-30T10:07:00+02:00",
+            "precision": "weekday_time",
+            "timezone": "Europe/Berlin",
+            "valid_from": null,
+            "valid_to": null,
+            "weekday": "Tuesday",
+            "weekday_index": 1
+          }
+        },
+        {
+          "entity_key": "meeting_marek",
+          "entity_label": "Meeting z Markiem",
+          "concept": "appointment",
+          "value": "meeting z Markiem",
+          "knowledge_status": "known",
+          "source_refs": [
+            "semantic-live-utf8-09"
+          ],
+          "semantic_relation": "reschedule",
+          "temporal": {
+            "date": null,
+            "effective_at": null,
+            "expression": "Donnerstag 16:00",
+            "interval_end": null,
+            "interval_start": null,
+            "local_time": "16:00",
+            "next": true,
+            "normalized": null,
+            "observed_at": "2026-08-30T10:08:00+02:00",
+            "precision": "weekday_time",
+            "timezone": "Europe/Berlin",
+            "valid_from": null,
+            "valid_to": null,
+            "weekday": "Thursday",
+            "weekday_index": 3
+          }
+        }
+      ]
+    },
+    {
+      "question": "Was weißt du über die Kellerschlüssel?",
+      "http_status": 200,
+      "ok": true,
+      "mode": "semantic",
+      "status": "ready",
+      "answer": "Die Kellerschlüssel liegen laut aktuellem Stand in der Schreibtischschublade. Zuvor waren sie bei Mama vermerkt, das wurde korrigiert.",
+      "provider_used": true,
+      "source_refs": [
+        "semantic-live-utf8-01",
+        "semantic-live-utf8-02"
+      ],
+      "items": [
+        {
+          "entity_key": "keys_to_basement",
+          "entity_label": "Klucze do piwnicy",
+          "concept": "location",
+          "value": "w szufladzie biurka",
+          "knowledge_status": "known",
+          "source_refs": [
+            "semantic-live-utf8-02"
+          ],
+          "temporal": {
+            "date": "2026-08-30",
+            "effective_at": null,
+            "expression": null,
+            "interval_end": null,
+            "interval_start": null,
+            "local_time": null,
+            "next": null,
+            "normalized": null,
+            "observed_at": "2026-08-30T10:01:00+02:00",
+            "precision": "day",
+            "timezone": "Europe/Berlin",
+            "valid_from": null,
+            "valid_to": null,
+            "weekday": null,
+            "weekday_index": null
+          },
+          "metadata": {
+            "certainty": "certain",
+            "claim_type": "observation",
+            "confidence": 1,
+            "semantic_relation": "correction",
+            "semantic_state": "current"
+          }
+        },
+        {
+          "value": "w szufladzie biurka",
+          "knowledge_status": "known",
+          "source_refs": [
+            "semantic-live-utf8-02"
+          ],
+          "semantic_relation": "correction"
+        },
+        {
+          "entity_key": "keys_to_basement",
+          "entity_label": "Klucze do piwnicy",
+          "concept": "location",
+          "value": "u mamy",
+          "knowledge_status": "known",
+          "source_refs": [
+            "semantic-live-utf8-01"
+          ],
+          "temporal": {
+            "date": "2026-08-30",
+            "effective_at": null,
+            "expression": null,
+            "interval_end": null,
+            "interval_start": null,
+            "local_time": null,
+            "next": null,
+            "normalized": null,
+            "observed_at": "2026-08-30T00:00:00+02:00",
+            "precision": "day",
+            "timezone": "Europe/Berlin",
+            "valid_from": null,
+            "valid_to": null,
+            "weekday": null,
+            "weekday_index": null
+          }
+        }
+      ]
+    }
+  ],
+  "attention": {
+    "http_status": 200,
+    "items": [
+      {
+        "knowledge_status": "known",
+        "source_refs": [
+          "semantic-live-utf8-10"
+        ],
+        "status": "open",
+        "title": "Odnowić pozwolenie parkingowe",
+        "kind": "deadline",
+        "starts_at": null,
+        "due_at": "2026-09-04T00:00:00+02:00",
+        "state": "upcoming",
+        "details": {
+          "actionable": true,
+          "due_temporal": {
+            "date": null,
+            "effective_at": null,
+            "expression": "do piątku",
+            "interval_end": null,
+            "interval_start": null,
+            "local_time": null,
+            "next": true,
+            "normalized": null,
+            "observed_at": "2026-08-30T10:09:00+02:00",
+            "precision": "weekday",
+            "timezone": "Europe/Berlin",
+            "valid_from": null,
+            "valid_to": null,
+            "weekday": "Friday",
+            "weekday_index": 4
+          },
+          "entity_key": "parking_permit_renewal",
+          "lifecycle_action": null,
+          "lifecycle_key": "parking_permit_renewal",
+          "note": null,
+          "related_event_id": null,
+          "semantic_relation": null,
+          "starts_temporal": {
+            "date": null,
+            "effective_at": null,
+            "expression": null,
+            "interval_end": null,
+            "interval_start": null,
+            "local_time": null,
+            "next": null,
+            "normalized": null,
+            "observed_at": null,
+            "precision": null,
+            "timezone": "Europe/Berlin",
+            "valid_from": null,
+            "valid_to": null,
+            "weekday": null,
+            "weekday_index": null
+          },
+          "supersedes_event_id": null,
+          "time_expression": "do piątku",
+          "time_precision": "weekday",
+          "time_status": "known"
+        }
+      },
+      {
+        "knowledge_status": "known",
+        "source_refs": [
+          "semantic-live-utf8-09"
+        ],
+        "status": "open",
+        "title": "Meeting z Markiem",
+        "kind": "appointment",
+        "starts_at": "2026-09-03T16:00:00+02:00",
+        "due_at": null,
+        "state": "upcoming",
+        "details": {
+          "actionable": true,
+          "due_temporal": {
+            "relative_minutes": null
+          },
+          "entity_key": "meeting_marek",
+          "lifecycle_action": "reschedule",
+          "lifecycle_key": "meeting_marek",
+          "note": null,
+          "related_event_id": "semantic-live-utf8-08",
+          "semantic_relation": "reschedule",
+          "starts_temporal": {
+            "date": null,
+            "effective_at": null,
+            "expression": "Donnerstag 16:00",
+            "interval_end": null,
+            "interval_start": null,
+            "local_time": "16:00",
+            "next": true,
+            "normalized": null,
+            "observed_at": "2026-08-30T10:08:00+02:00",
+            "precision": "weekday_time",
+            "timezone": "Europe/Berlin",
+            "valid_from": null,
+            "valid_to": null,
+            "weekday": "Thursday",
+            "weekday_index": 3
+          },
+          "supersedes_event_id": "semantic-live-utf8-08",
+          "time_expression": {
+            "relative_minutes": null
+          },
+          "time_precision": "weekday_time",
+          "time_status": "coarse_or_ambiguous"
+        }
+      }
+    ],
+    "current_fact_count": 7,
+    "fact_history_count": 11
+  },
+  "structural_ok": true,
+  "provider_tokens_read_or_persisted": false,
+  "benchmark_oracle_accessed": false,
+  "holdout_accessed": false,
+  "started_at": "2026-08-30T19:06:10.946078+00:00",
+  "finished_at": "2026-08-30T19:08:45.817993+00:00",
+  "finalization_note": "The authoritative live smoke completed before the final offline-only normalization, change-rendering, and lexical-gap routing refinements. The authorized live capture/Ask cap was already consumed, so no second live run was started; its observed outcomes remain preserved as recorded evidence."
+}

@@ -48,9 +48,9 @@ from app.runtime_config import (
 )
 
 
-PRODUCT_RUNTIME_VERSION = "blackhole-product-v2-runtime-v1"
+PRODUCT_RUNTIME_VERSION = "blackhole-product-v2-runtime-v2"
 PRODUCT_DATABASE_NAME = "blackhole-v2.db"
-PRODUCT_PROMPT_VERSION = "blackhole-product-v2-prompt-v3"
+PRODUCT_PROMPT_VERSION = "blackhole-product-v2-prompt-v4"
 PROCESSING_PENDING_MESSAGE = "Still understanding your recent captures."
 PROCESSING_FAILED_MESSAGE = "Some recent captures couldn't be understood yet. Your captures are still saved."
 MAX_CAPTURE_TEXT = 100_000
@@ -189,28 +189,75 @@ def _is_cost_fact(item: dict[str, Any]) -> bool:
 
 
 def _display_fact_value(item: dict[str, Any]) -> str:
+    metadata = item.get("metadata", item.get("semantic_metadata", {}))
+    if not isinstance(metadata, dict):
+        metadata = {}
     if item.get("knowledge_status") == "unknown":
-        return f"unknown ({item.get('unknown_reason', 'not stated')})"
+        reason = item.get("unknown_reason", "not stated")
+        conflicts = item.get("conflicting_values", metadata.get("conflicting_values", []))
+        if reason == "conflicting" and isinstance(conflicts, list):
+            alternatives: list[str] = []
+            for conflict in conflicts:
+                if not isinstance(conflict, dict) or conflict.get("value") is None:
+                    continue
+                alternative = str(conflict["value"])
+                if conflict.get("negated"):
+                    alternative = f"not {alternative}"
+                alternatives.append(alternative)
+            if alternatives:
+                return f"unknown (conflicting evidence: {'; '.join(alternatives)})"
+        return f"unknown ({reason})"
     value = item.get("value")
-    if isinstance(value, dict):
-        amount = value.get("amount", value.get("price", value.get("total")))
-        currency = value.get("currency", value.get("currency_code"))
-        if amount is not None and currency:
-            period = value.get("billing_period", value.get("period"))
-            suffix = f" per {period}" if period else ""
-            return f"{amount} {currency}{suffix}"
-        return json.dumps(value, ensure_ascii=False, sort_keys=True)
-    if isinstance(value, list):
-        return json.dumps(value, ensure_ascii=False, sort_keys=True)
-    if value is None:
-        return "unknown"
-    return str(value)
+    negated = bool(item.get("negated") or metadata.get("negated"))
+    if negated and value is True:
+        concept = str(item.get("concept") or "fact").replace("_", " ")
+        display = f"not {concept}"
+    else:
+        display = None
+    if display is None:
+        if isinstance(value, dict):
+            amount = value.get("amount", value.get("price", value.get("total")))
+            currency = value.get("currency", value.get("currency_code"))
+            if amount is not None and currency:
+                period = value.get("billing_period", value.get("period"))
+                suffix = f" per {period}" if period else ""
+                display = f"{amount} {currency}{suffix}"
+            else:
+                display = json.dumps(value, ensure_ascii=False, sort_keys=True)
+        elif isinstance(value, list):
+            display = json.dumps(value, ensure_ascii=False, sort_keys=True)
+        elif value is None:
+            display = "unknown"
+        else:
+            display = str(value)
+    if negated and display is not None and not display.startswith("not "):
+        display = f"not {display}"
+    if item.get("knowledge_status") == "inferred":
+        display = f"possibly {display} (not confirmed)"
+    attribution = item.get("attribution", metadata.get("attribution"))
+    if attribution is not None:
+        if isinstance(attribution, dict):
+            attribution_label = attribution.get("name") or attribution.get("role") or attribution.get("organization")
+        else:
+            attribution_label = attribution
+        if attribution_label:
+            display += f" (reported by {attribution_label})"
+    return display
 
 
 def _fact_summary(item: dict[str, Any]) -> str:
     label = item.get("entity_label") or item.get("entity_key") or "memory"
     concept = item.get("concept") or "fact"
-    return f"{label} {concept}: {_display_fact_value(item)}"
+    display = _display_fact_value(item)
+    temporal = item.get("temporal")
+    if not isinstance(temporal, dict):
+        temporal = {}
+    normalized = temporal.get("normalized")
+    if isinstance(normalized, str) and normalized not in display:
+        display += f" at {normalized}"
+    elif temporal.get("expression") and temporal.get("precision"):
+        display += f" ({temporal['precision']}: {temporal['expression']})"
+    return f"{label} {concept}: {display}"
 
 
 def _safe_json_value(value: Any, *, depth: int = 0) -> Any:
@@ -350,6 +397,11 @@ _MONTHS = {
 
 def _relative_delta(value: Any) -> timedelta | None:
     if isinstance(value, dict):
+        nested = value.get("relative")
+        if nested is not value:
+            nested_delta = _relative_delta(nested)
+            if nested_delta is not None:
+                return nested_delta
         for key in ("relative_seconds", "seconds"):
             if isinstance(value.get(key), (int, float)) and not isinstance(value.get(key), bool):
                 return timedelta(seconds=float(value[key]))
@@ -376,12 +428,159 @@ def _relative_delta(value: Any) -> timedelta | None:
     return timedelta(minutes=amount)
 
 
+def _temporal_fold(value: Any) -> str:
+    if not isinstance(value, str):
+        return ""
+    normalized = unicodedata.normalize("NFKD", value.casefold())
+    normalized = normalized.translate(
+        str.maketrans({"ł": "l", "đ": "d", "ð": "d", "þ": "th", "ß": "ss"})
+    )
+    return "".join(character for character in normalized if not unicodedata.combining(character))
+
+
+def _weekday_index(value: Any) -> int | None:
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, int) and 0 <= value <= 6:
+        return value
+    if isinstance(value, float) and value.is_integer() and 0 <= value <= 6:
+        return int(value)
+    if isinstance(value, dict):
+        for key in ("weekday_index", "day_of_week_index", "weekday_number"):
+            if key in value:
+                parsed = _weekday_index(value[key])
+                if parsed is not None:
+                    return parsed
+        for key in ("weekday", "day_of_week", "day"):
+            if key in value:
+                parsed = _weekday_index(value[key])
+                if parsed is not None:
+                    return parsed
+        return None
+    if not isinstance(value, str):
+        return None
+    folded = _temporal_fold(value).strip()
+    if folded.isdigit() and 0 <= int(folded) <= 6:
+        return int(folded)
+    return None
+
+
+def _local_time(value: Any) -> tuple[int, int] | None:
+    if isinstance(value, dict):
+        for key in ("local_time", "time", "at", "clock_time"):
+            if key in value:
+                parsed = _local_time(value[key])
+                if parsed is not None:
+                    return parsed
+        hour = value.get("hour")
+        minute = value.get("minute", 0)
+        if isinstance(hour, (int, float)) and not isinstance(hour, bool) and isinstance(minute, (int, float)) and not isinstance(minute, bool):
+            hour_int = int(hour)
+            minute_int = int(minute)
+            if 0 <= hour_int <= 23 and 0 <= minute_int <= 59:
+                return hour_int, minute_int
+        return None
+    if not isinstance(value, str):
+        return None
+    text = _temporal_fold(value)
+    match = re.search(r"(?<!\d)(\d{1,2})(?:\s*(?::|h|\.\s*)\s*(\d{2}))?\s*(am|pm)?(?!\d)", text)
+    if not match:
+        return None
+    hour = int(match.group(1))
+    minute = int(match.group(2) or 0)
+    meridiem = match.group(3)
+    if match.group(2) is None and meridiem is None and not re.fullmatch(r"\s*\d{1,2}\s*", text):
+        # Do not mistake the month or day in an ISO date for a clock time.
+        return None
+    if meridiem == "pm" and hour < 12:
+        hour += 12
+    elif meridiem == "am" and hour == 12:
+        hour = 0
+    if hour > 23 or minute > 59:
+        return None
+    return hour, minute
+
+
+def _weekday_datetime(value: Any, *, base: datetime) -> datetime | None:
+    if isinstance(value, dict):
+        day = _weekday_index(value)
+        time_value = value.get("local_time", value.get("time", value))
+        time_parts = _local_time(time_value)
+        next_marker = bool(value.get("next", False))
+    elif isinstance(value, str):
+        day = _weekday_index(value)
+        time_parts = _local_time(value)
+        next_marker = bool(re.search(r"\bnext\b|\bnast[eę]pny\b|\bnaechste[nr]?\b", _temporal_fold(value)))
+    else:
+        return None
+    if day is None:
+        return None
+    days_ahead = (day - base.weekday()) % 7
+    if next_marker or days_ahead == 0:
+        days_ahead = 7 if days_ahead == 0 else days_ahead
+    target = base + timedelta(days=days_ahead)
+    hour, minute = time_parts or (0, 0)
+    return target.replace(hour=hour, minute=minute, second=0, microsecond=0)
+
+
+def _coarse_interval(value: Any, *, base: datetime) -> dict[str, Any] | None:
+    """Return a coarse interval without pretending it is a point in time."""
+
+    text = value if isinstance(value, str) else json.dumps(value, ensure_ascii=False, sort_keys=True)
+    folded = _temporal_fold(text)
+    if re.search(r"\bnext\s+week\b|\bnastepny\s+tydzien\b|\bnachste\s+woche\b", folded):
+        start_date = (base - timedelta(days=base.weekday()) + timedelta(days=7)).date()
+        end_date = start_date + timedelta(days=7)
+        start = datetime.combine(start_date, datetime.min.time(), tzinfo=base.tzinfo)
+        end = datetime.combine(end_date, datetime.min.time(), tzinfo=base.tzinfo)
+        return {
+            "interval_start": start.isoformat(),
+            "interval_end": end.isoformat(),
+            "precision": "week",
+            "expression": text[:300],
+        }
+
+    month: int | None = None
+    for alias, candidate in _MONTHS.items():
+        if re.search(rf"\b{re.escape(_temporal_fold(alias))}\b", folded):
+            month = candidate
+            break
+    has_day = bool(re.search(r"\b\d{1,2}(?:st|nd|rd|th)?\b", folded))
+    if month is not None and not has_day:
+        year = base.year
+        start_date = date(year, month, 1)
+        if start_date < base.date() and month != base.month:
+            start_date = date(year + 1, month, 1)
+        end_date = date(start_date.year + (1 if month == 12 else 0), 1 if month == 12 else month + 1, 1)
+        start = datetime.combine(start_date, datetime.min.time(), tzinfo=base.tzinfo)
+        end = datetime.combine(end_date, datetime.min.time(), tzinfo=base.tzinfo)
+        return {
+            "interval_start": start.isoformat(),
+            "interval_end": end.isoformat(),
+            "precision": "month",
+            "expression": text[:300],
+        }
+
+    if re.search(r"\b(?:tomorrow|jutro)\b", folded):
+        tomorrow = (base + timedelta(days=1)).date().isoformat()
+        return {"date": tomorrow, "precision": "day", "expression": text[:300]}
+    if re.search(
+        r"\b(?:around|about|approximately|approx|circa|okolo|około|ungef[aä]hr|alrededor|vers)\b",
+        folded,
+    ):
+        return {"precision": "approximate", "expression": text[:300]}
+    return None
+
+
 def _natural_date(value: str, *, base: datetime) -> datetime | None:
-    lowered = value.casefold().strip()
-    if lowered in {"today", "dzisiaj", "dziś"}:
+    lowered = _temporal_fold(value).strip()
+    if lowered in {"today", "dzisiaj", "dzis"}:
         return base.replace(hour=0, minute=0, second=0, microsecond=0)
     if lowered in {"tomorrow", "jutro"}:
         return (base + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+    weekday = _weekday_datetime(value, base=base)
+    if weekday is not None:
+        return weekday
     match = re.search(
         r"\b(\d{1,2})(?:st|nd|rd|th)?[ .-]+([\wąćęłńóśźż]+)(?:[ .,-]+(\d{4}))?\b",
         lowered,
@@ -422,6 +621,9 @@ def normalize_timestamp(
     delta = _relative_delta(value)
     if delta is not None:
         return (captured_at + delta).astimezone(zone).isoformat()
+    weekday = _weekday_datetime(value, base=captured_at)
+    if weekday is not None:
+        return weekday.astimezone(zone).isoformat()
     parsed = parse_datetime(value, zone=zone)
     if parsed is not None:
         return parsed.isoformat()
@@ -430,12 +632,56 @@ def normalize_timestamp(
         if natural is not None:
             return natural.astimezone(zone).isoformat()
     if isinstance(value, dict):
-        for key in ("iso", "datetime", "timestamp", "date", "value"):
+        for key in ("normalized", "iso", "datetime", "timestamp", "date", "value"):
             if key in value:
                 normalized = normalize_timestamp(value[key], captured_at=captured_at, zone=zone)
                 if normalized is not None:
                     return normalized
     return None
+
+
+def normalize_temporal(
+    value: Any,
+    *,
+    captured_at: datetime,
+    zone: Any,
+) -> dict[str, Any]:
+    """Normalize temporal meaning while retaining coarse/ambiguous precision."""
+
+    if value is None:
+        return {}
+    temporal = _safe_json_value(value) if isinstance(value, dict) else {"expression": _safe_json_value(value)}
+    if not isinstance(temporal, dict):
+        temporal = {"expression": str(value)[:300]}
+    original = copy.deepcopy(temporal)
+    for field in ("valid_from", "valid_to", "effective_at", "observed_at"):
+        raw = temporal.get(field)
+        if raw is None:
+            continue
+        normalized = normalize_timestamp(raw, captured_at=captured_at, zone=zone)
+        if normalized is not None:
+            temporal[field] = normalized
+        else:
+            temporal[f"{field}_expression"] = _safe_json_value(raw)
+            temporal.pop(field, None)
+    point_value = normalize_timestamp(value, captured_at=captured_at, zone=zone)
+    if point_value is not None:
+        # Strict provider schemas deliberately require nullable fields. A
+        # present null is still an absent proposal at this boundary: replace
+        # it with the deterministic result whenever structured temporal
+        # fields make a point computable.
+        temporal["normalized"] = point_value
+        if temporal.get("precision") is None:
+            temporal["precision"] = "minute" if _local_time(value) else "day"
+    else:
+        coarse = _coarse_interval(value, base=captured_at)
+        if coarse is not None:
+            for key, item in coarse.items():
+                if temporal.get(key) is None:
+                    temporal[key] = item
+    if "expression" not in temporal and original != temporal:
+        temporal["expression"] = original.get("expression", original)
+    return _safe_json_value(temporal) or {}
 
 
 def time_context_for_event(event: dict[str, Any], *, now: datetime | None = None) -> dict[str, Any]:
@@ -476,6 +722,8 @@ def normalize_fact(
     *,
     batch_ids: set[str],
     available_ids: set[str],
+    event: dict[str, Any] | None = None,
+    now: datetime | None = None,
 ) -> dict[str, Any] | None:
     if not isinstance(item, dict):
         return None
@@ -489,22 +737,33 @@ def normalize_fact(
     status = raw_status.casefold().strip() if isinstance(raw_status, str) else "inferred"
     if status not in {"known", "inferred", "unknown"}:
         status = "inferred"
+    certainty = item.get("certainty", item.get("epistemic_status"))
+    certainty_text = _temporal_fold(certainty)
+    claim_type = item.get("claim_type", item.get("claim_kind"))
+    claim_type_text = _temporal_fold(claim_type)
+    if status == "known" and (
+        certainty_text in {"uncertain", "possible", "probable", "speculative", "unconfirmed", "maybe"}
+        or claim_type_text in {"hypothesis", "speculation", "possible_diagnosis", "reported_speculation"}
+    ):
+        # A provider may be conservative in its prose but still emit a
+        # legacy ``known`` status. Preserve the epistemic signal rather than
+        # allowing a hypothesis to become a fact at the storage boundary.
+        status = "inferred"
     has_value = "value" in item and item.get("value") is not None and not (
         isinstance(item.get("value"), str) and not item["value"].strip()
     )
     if status != "unknown" and not has_value:
         status = "unknown"
-    operation = item.get("operation", "set")
-    if not isinstance(operation, str) or operation.casefold() not in {
-        "set",
-        "correction",
-        "supersede",
-        "contradiction",
-        "duplicate",
-    }:
+    raw_operation = item.get("operation", "set")
+    operation_text = raw_operation.casefold().strip() if isinstance(raw_operation, str) else "set"
+    semantic_relation = item.get("semantic_relation", item.get("relation"))
+    if operation_text in {"change", "update", "observation", "resolve", "resolution"}:
+        semantic_relation = semantic_relation or ("resolution" if operation_text in {"resolve", "resolution"} else operation_text)
         operation = "set"
+    elif operation_text in {"set", "correction", "supersede", "contradiction", "duplicate"}:
+        operation = operation_text
     else:
-        operation = operation.casefold()
+        operation = "set"
     source_refs_value = item.get("source_refs", [source_event_id])
     source_refs = {
         reference
@@ -518,9 +777,54 @@ def normalize_fact(
     temporal = item.get("temporal", {})
     if not isinstance(temporal, dict):
         temporal = {}
-    for key in ("valid_from", "valid_to", "observed_at"):
+    for key in ("valid_from", "valid_to", "effective_at", "observed_at"):
         if key in item and key not in temporal:
             temporal[key] = item[key]
+    event_context = event or {}
+    timezone_name, zone = resolve_timezone(event_context.get("timezone"))
+    captured = parse_datetime(event_context.get("captured_at"), zone=zone)
+    if captured is None:
+        captured = (now or datetime.now(timezone.utc)).astimezone(zone)
+    normalized_temporal = normalize_temporal(temporal, captured_at=captured, zone=zone)
+    if not normalized_temporal and concept_key in {
+        "appointment",
+        "meeting",
+        "event",
+        "deadline",
+        "date",
+        "time",
+    } and has_value:
+        # A compact provider may put a temporal expression in ``value``. The
+        # semantic provider still owns understanding it; this boundary only
+        # applies deterministic normalization once the concept is temporal.
+        normalized_temporal = normalize_temporal(item.get("value"), captured_at=captured, zone=zone)
+    negated = bool(item.get("negated", False))
+    polarity = item.get("polarity")
+    if isinstance(polarity, str) and _temporal_fold(polarity) in {"negative", "negated", "not", "false"}:
+        negated = True
+    confidence = item.get("confidence")
+    if isinstance(confidence, bool) or not isinstance(confidence, (int, float)) or not 0 <= float(confidence) <= 1:
+        confidence = None
+    attribution = item.get("attribution")
+    if attribution is None:
+        attribution = item.get("reported_by", item.get("claimed_by", item.get("speaker")))
+    attribution = _safe_json_value(attribution)
+    metadata: dict[str, Any] = {}
+    if attribution is not None:
+        metadata["attribution"] = attribution
+    if claim_type is not None:
+        metadata["claim_type"] = _safe_json_value(claim_type)
+    if certainty is not None:
+        metadata["certainty"] = _safe_json_value(certainty)
+    if confidence is not None:
+        metadata["confidence"] = confidence
+    if negated:
+        metadata["negated"] = True
+    if semantic_relation is not None:
+        metadata["semantic_relation"] = _safe_json_value(semantic_relation)
+    for key in ("actionable", "historical", "lifecycle_key"):
+        if key in item:
+            metadata[key] = _safe_json_value(item[key])
     result: dict[str, Any] = {
         "source_event_id": source_event_id,
         "entity_key": entity[0],
@@ -529,7 +833,8 @@ def normalize_fact(
         "knowledge_status": status,
         "operation": operation,
         "source_refs": source_refs,
-        "temporal": _safe_json_value(temporal) or {},
+        "temporal": normalized_temporal,
+        "metadata": metadata,
     }
     if status == "unknown":
         result["unknown_reason"] = _clean_text(item.get("unknown_reason"), limit=300) or "not_stated"
@@ -537,6 +842,16 @@ def normalize_fact(
         result["value"] = _safe_json_value(item.get("value"))
     if supersedes is not None:
         result["supersedes_event_id"] = supersedes
+    if attribution is not None:
+        result["attribution"] = attribution
+    if confidence is not None:
+        result["confidence"] = confidence
+    if claim_type is not None:
+        result["claim_type"] = _safe_json_value(claim_type)
+    if negated:
+        result["negated"] = True
+    if semantic_relation is not None:
+        result["semantic_relation"] = _safe_json_value(semantic_relation)
     return result
 
 
@@ -566,6 +881,13 @@ def normalize_relation(
     status = item.get("knowledge_status", "known")
     if not isinstance(status, str) or status.casefold() not in {"known", "inferred", "unknown"}:
         status = "inferred"
+    certainty = item.get("certainty", item.get("epistemic_status"))
+    claim_type = item.get("claim_type", item.get("claim_kind"))
+    if status.casefold() == "known" and (
+        _temporal_fold(certainty) in {"uncertain", "possible", "probable", "speculative", "unconfirmed", "maybe"}
+        or _temporal_fold(claim_type) in {"hypothesis", "speculation", "possible_diagnosis", "reported_speculation"}
+    ):
+        status = "inferred"
     source_refs_value = item.get("source_refs", [source_event_id])
     refs = {
         ref
@@ -573,6 +895,20 @@ def normalize_relation(
         if isinstance(ref, str) and ref in available_ids
     } if isinstance(source_refs_value, list) else set()
     refs.add(source_event_id)
+    attribution = item.get("attribution", item.get("reported_by", item.get("speaker")))
+    confidence = item.get("confidence")
+    if isinstance(confidence, bool) or not isinstance(confidence, (int, float)) or not 0 <= float(confidence) <= 1:
+        confidence = None
+    metadata: dict[str, Any] = {}
+    if attribution is not None:
+        metadata["attribution"] = _safe_json_value(attribution)
+    if confidence is not None:
+        metadata["confidence"] = confidence
+    if "negated" in item:
+        metadata["negated"] = bool(item.get("negated"))
+    for key in ("semantic_relation", "claim_type", "certainty"):
+        if key in item:
+            metadata[key] = _safe_json_value(item[key])
     return {
         "source_event_id": source_event_id,
         "source_entity_key": _slug(source_entity) if isinstance(source_entity, str) and source_entity else None,
@@ -582,6 +918,7 @@ def normalize_relation(
         "knowledge_status": status.casefold(),
         "value": _safe_json_value(item.get("value")),
         "source_refs": sorted(refs),
+        "metadata": metadata,
     }
 
 
@@ -607,6 +944,8 @@ def normalize_attention(
         return None
     event_id = item.get("event_id", item.get("source_event_id"))
     if not isinstance(event_id, str) or event_id != event.get("event_id"):
+        return None
+    if item.get("actionable") is False:
         return None
     title = _clean_text(item.get("title") or item.get("text") or item.get("task") or item.get("label"), limit=500)
     value = item.get("value")
@@ -634,10 +973,39 @@ def normalize_attention(
     detail = _safe_json_value(item.get("details", {}))
     if not isinstance(detail, dict):
         detail = {}
+    for key in (
+        "lifecycle_key",
+        "lifecycle_action",
+        "supersedes_event_id",
+        "related_event_id",
+        "entity_key",
+        "semantic_relation",
+        "time_precision",
+        "actionable",
+    ):
+        if key in item and key not in detail:
+            detail[key] = _safe_json_value(item[key])
+    lifecycle_action = _temporal_fold(detail.get("lifecycle_action"))
+    if lifecycle_action in {"cancel", "cancelled", "canceled", "void"}:
+        item_status = "cancelled"
+    elif lifecycle_action in {"complete", "completed", "done", "finished"}:
+        item_status = "completed"
+    else:
+        item_status = item.get("status")
     if raw_due is not None and due_at is None:
-        knowledge_status = "unknown"
-        detail["time_expression"] = _safe_json_value(raw_due)
-        detail["time_status"] = "unreadable_or_ambiguous"
+        coarse = normalize_temporal(raw_due, captured_at=captured, zone=zone)
+        if coarse:
+            detail["due_temporal"] = coarse
+            detail["time_expression"] = _safe_json_value(raw_due)
+            detail["time_status"] = "coarse_or_ambiguous"
+        else:
+            knowledge_status = "unknown"
+            detail["time_expression"] = _safe_json_value(raw_due)
+            detail["time_status"] = "unreadable_or_ambiguous"
+    if raw_starts is not None and starts_at is None:
+        coarse = normalize_temporal(raw_starts, captured_at=captured, zone=zone)
+        if coarse:
+            detail["starts_temporal"] = coarse
     source_refs_value = item.get("source_refs", [event_id])
     refs = {
         ref
@@ -649,7 +1017,7 @@ def normalize_attention(
         "source_event_id": event_id,
         "kind": _slug(_clean_text(item.get("kind") or item.get("type") or "task", limit=80)),
         "title": title,
-        "status": _attention_status(item.get("status")),
+        "status": _attention_status(item_status),
         "knowledge_status": knowledge_status.casefold(),
         "starts_at": starts_at,
         "due_at": due_at,
@@ -675,6 +1043,11 @@ def normalize_extraction(
         for event in events
         if isinstance(event.get("event_id"), str)
     }
+    events_by_id = {
+        str(event["event_id"]): event
+        for event in events
+        if isinstance(event.get("event_id"), str)
+    }
     raw_facts = parsed.get("facts")
     if not isinstance(raw_facts, list):
         raw_facts = parsed.get("observations", [])
@@ -683,7 +1056,17 @@ def normalize_extraction(
     facts = [
         normalized
         for item in raw_facts
-        for normalized in [normalize_fact(item, batch_ids=batch_ids, available_ids=available_ids)]
+        for normalized in [
+            normalize_fact(
+                item,
+                batch_ids=batch_ids,
+                available_ids=available_ids,
+                event=events_by_id.get(str(item.get("event_id", item.get("source_event_id"))))
+                if isinstance(item, dict)
+                else None,
+                now=now,
+            )
+        ]
         if normalized is not None
     ]
     raw_relations = parsed.get("relationships", parsed.get("relations", []))
@@ -719,11 +1102,24 @@ def normalize_extraction(
                 "title": fact["entity_label"],
                 "knowledge_status": fact["knowledge_status"],
                 "source_refs": fact["source_refs"],
+                "actionable": fact.get("metadata", {}).get("actionable", True),
+                "details": {
+                    "lifecycle_key": fact.get("metadata", {}).get(
+                        "lifecycle_key", f"{fact['entity_key']}:{fact['concept']}"
+                    ),
+                    "entity_key": fact["entity_key"],
+                    "semantic_relation": fact.get("semantic_relation"),
+                },
             }
             if isinstance(fact.get("value"), str):
                 item["title"] = fact["value"]
             elif isinstance(fact.get("value"), dict):
                 item.update(fact["value"])
+            temporal = fact.get("temporal")
+            if isinstance(temporal, dict):
+                normalized_point = temporal.get("normalized")
+                if normalized_point is not None and "due_at" not in item and "starts_at" not in item:
+                    item["starts_at"] = normalized_point
             event_attention.append(item)
         for item in event_attention:
             normalized = normalize_attention(item, event=event, available_ids=available_ids, now=now)
@@ -945,6 +1341,57 @@ def _nullable_number_schema() -> dict[str, Any]:
     return {"anyOf": [{"type": "number"}, {"type": "null"}]}
 
 
+def _nullable_boolean_schema() -> dict[str, Any]:
+    return {"anyOf": [{"type": "boolean"}, {"type": "null"}]}
+
+
+def _attribution_schema() -> dict[str, Any]:
+    attribution_properties = {
+        "name": _nullable_string_schema(),
+        "role": _nullable_string_schema(),
+        "organization": _nullable_string_schema(),
+        "relationship": _nullable_string_schema(),
+    }
+    return {
+        "anyOf": [
+            {"type": "string"},
+            {"type": "null"},
+            {
+                "type": "object",
+                "additionalProperties": False,
+                "properties": attribution_properties,
+                "required": list(attribution_properties),
+            },
+        ]
+    }
+
+
+def _temporal_semantics_schema() -> dict[str, Any]:
+    properties = {
+        "valid_from": _nullable_string_schema(),
+        "valid_to": _nullable_string_schema(),
+        "effective_at": _nullable_string_schema(),
+        "observed_at": _nullable_string_schema(),
+        "normalized": _nullable_string_schema(),
+        "interval_start": _nullable_string_schema(),
+        "interval_end": _nullable_string_schema(),
+        "date": _nullable_string_schema(),
+        "expression": _value_schema() if "_value_schema" in globals() else _nullable_string_schema(),
+        "precision": _nullable_string_schema(),
+        "weekday_index": _nullable_number_schema(),
+        "weekday": _nullable_string_schema(),
+        "local_time": _nullable_string_schema(),
+        "timezone": _nullable_string_schema(),
+        "next": _nullable_boolean_schema(),
+    }
+    return {
+        "type": "object",
+        "additionalProperties": False,
+        "properties": properties,
+        "required": list(properties),
+    }
+
+
 def _value_schema() -> dict[str, Any]:
     value_object_properties = {
         "amount": {"anyOf": [{"type": "number"}, {"type": "string"}, {"type": "null"}]},
@@ -996,6 +1443,11 @@ def _timestamp_schema() -> dict[str, Any]:
         "timestamp": _nullable_string_schema(),
         "date": _nullable_string_schema(),
         "value": _nullable_string_schema(),
+        "weekday_index": _nullable_number_schema(),
+        "weekday": _nullable_string_schema(),
+        "local_time": _nullable_string_schema(),
+        "next": _nullable_boolean_schema(),
+        "expression": _value_schema(),
     }
     return {
         "anyOf": [
@@ -1036,17 +1488,14 @@ def _semantic_output_schema() -> dict[str, Any]:
         "unknown_reason": _nullable_string_schema(),
         "operation": {"type": "string", "enum": ["set", "correction", "supersede", "contradiction", "duplicate"]},
         "supersedes_event_id": _nullable_string_schema(),
+        "attribution": _attribution_schema(),
+        "claim_type": _nullable_string_schema(),
+        "certainty": _nullable_string_schema(),
+        "confidence": _nullable_number_schema(),
+        "negated": {"type": "boolean"},
+        "semantic_relation": _nullable_string_schema(),
         "source_refs": {"type": "array", "items": {"type": "string"}},
-        "temporal": {
-            "type": "object",
-            "additionalProperties": False,
-            "properties": {
-                "valid_from": _nullable_string_schema(),
-                "valid_to": _nullable_string_schema(),
-                "observed_at": _nullable_string_schema(),
-            },
-            "required": ["valid_from", "valid_to", "observed_at"],
-        },
+        "temporal": _temporal_semantics_schema(),
     }
     relation_properties = {
         "source_event_id": {"type": "string"},
@@ -1061,6 +1510,12 @@ def _semantic_output_schema() -> dict[str, Any]:
         "target_event_id": _nullable_string_schema(),
         "knowledge_status": {"type": "string", "enum": ["known", "inferred", "unknown"]},
         "value": _value_schema(),
+        "attribution": _attribution_schema(),
+        "claim_type": _nullable_string_schema(),
+        "certainty": _nullable_string_schema(),
+        "confidence": _nullable_number_schema(),
+        "negated": {"type": "boolean"},
+        "semantic_relation": _nullable_string_schema(),
         "source_refs": {"type": "array", "items": {"type": "string"}},
     }
     attention_properties = {
@@ -1082,6 +1537,7 @@ def _semantic_output_schema() -> dict[str, Any]:
         "relative_hours": _nullable_number_schema(),
         "relative_seconds": _nullable_number_schema(),
         "value": _value_schema(),
+        "actionable": _nullable_boolean_schema(),
         "details": {
             "type": "object",
             "additionalProperties": False,
@@ -1089,8 +1545,32 @@ def _semantic_output_schema() -> dict[str, Any]:
                 "note": _nullable_string_schema(),
                 "time_expression": _value_schema(),
                 "time_status": _nullable_string_schema(),
+                "time_precision": _nullable_string_schema(),
+                "due_temporal": _temporal_semantics_schema(),
+                "starts_temporal": _temporal_semantics_schema(),
+                "lifecycle_key": _nullable_string_schema(),
+                "lifecycle_action": _nullable_string_schema(),
+                "supersedes_event_id": _nullable_string_schema(),
+                "related_event_id": _nullable_string_schema(),
+                "entity_key": _nullable_string_schema(),
+                "semantic_relation": _nullable_string_schema(),
+                "actionable": _nullable_boolean_schema(),
             },
-            "required": ["note", "time_expression", "time_status"],
+            "required": [
+                "note",
+                "time_expression",
+                "time_status",
+                "time_precision",
+                "due_temporal",
+                "starts_temporal",
+                "lifecycle_key",
+                "lifecycle_action",
+                "supersedes_event_id",
+                "related_event_id",
+                "entity_key",
+                "semantic_relation",
+                "actionable",
+            ],
         },
         "source_refs": {"type": "array", "items": {"type": "string"}},
     }
@@ -1751,6 +2231,8 @@ class ProductRuntime:
         prior_memory = {
             "entities": snapshot.get("entities", []),
             "current_facts": snapshot.get("current_facts", []),
+            "fact_history": snapshot.get("fact_history", [])[-MAX_ASK_CONTEXT_HISTORY:],
+            "relationships": snapshot.get("relationships", [])[-MAX_ASK_CONTEXT_HISTORY:],
             "attention": snapshot.get("attention", []),
             "recent_sources": snapshot.get("sources", [])[-20:],
         }
@@ -2086,7 +2568,21 @@ class ProductRuntime:
         else:
             selected_facts = ranked(
                 facts,
-                ("entity_key", "entity_label", "concept", "value", "unknown_reason", "operation"),
+                (
+                    "entity_key",
+                    "entity_label",
+                    "concept",
+                    "value",
+                    "unknown_reason",
+                    "operation",
+                    "metadata",
+                    "semantic_metadata",
+                    "temporal",
+                    "conflicting_values",
+                    "uncertainty",
+                    "attribution",
+                    "negated",
+                ),
                 limit=MAX_ASK_CONTEXT_FACTS,
                 expand_entities=plan.intent == "generic",
             )
@@ -2096,7 +2592,19 @@ class ProductRuntime:
         history = [item for item in snapshot.get("fact_history", []) if isinstance(item, dict)]
         selected_history = ranked(
             history,
-            ("entity_key", "entity_label", "concept", "value", "unknown_reason", "operation", "supersedes_event_id"),
+            (
+                "entity_key",
+                "entity_label",
+                "concept",
+                "value",
+                "unknown_reason",
+                "operation",
+                "supersedes_event_id",
+                "semantic_metadata",
+                "temporal",
+                "attribution",
+                "negated",
+            ),
             limit=MAX_ASK_CONTEXT_HISTORY,
             expand_entities=plan.intent == "generic",
         )
@@ -2483,7 +2991,9 @@ class ProductRuntime:
         # high-confidence fast paths are understood locally. Unknown or
         # mixed-language questions must reach the provider-directed semantic
         # renderer so their answer follows the question language.
-        if plan.language not in {"en", "pl"}:
+        if plan.language not in {"en", "pl"} or (
+            plan.intent == "costs" and plan.semantic_fallback
+        ):
             return None, "semantic", selected_facts, self._source_refs(
                 selected_facts
             )
@@ -2584,6 +3094,65 @@ class ProductRuntime:
             return answer, "costs", items[:MAX_ASK_CONTEXT_FACTS], self._source_refs(items)
 
         if plan.intent == "changes":
+            history_markers = {
+                "previous",
+                "earlier",
+                "before",
+                "history",
+                "historical",
+                "poprzedni",
+                "poprzednia",
+                "wczesniej",
+                "historia",
+            }
+            change_markers = {
+                "change",
+                "correction",
+                "replacement",
+                "superseded",
+            }
+            if plan.history_requested and plan.topic_terms and set(plan.query_terms) & history_markers and not (
+                set(plan.query_terms) & change_markers
+            ):
+                historical = [
+                    item
+                    for item in context.get("history", [])
+                    if isinstance(item, dict)
+                    and (item.get("superseded") or item.get("resolved"))
+                ]
+                if plan.topic_terms:
+                    matching_historical = [
+                        item
+                        for item in historical
+                        if plan.topic_terms
+                        & search_terms(
+                            _searchable_text(
+                                item,
+                                (
+                                    "entity_key",
+                                    "entity_label",
+                                    "concept",
+                                    "value",
+                                    "unknown_reason",
+                                    "semantic_metadata",
+                                    "temporal",
+                                ),
+                            )
+                        )
+                    ]
+                    if matching_historical:
+                        historical = matching_historical
+                historical.sort(key=lambda item: int(item.get("sequence", 0) or 0), reverse=True)
+                if not historical:
+                    return _answer_copy(plan, "changes_no_match"), "no_match", [], []
+                return (
+                    _answer_copy(plan, "relevant_memory")
+                    + "; ".join(_fact_summary(item) for item in historical[:10])
+                    + ".",
+                    "changes",
+                    historical[:MAX_ASK_CONTEXT_HISTORY],
+                    self._source_refs(historical),
+                )
             changes = [
                 item
                 for item in context.get("history", [])
@@ -2637,7 +3206,7 @@ class ProductRuntime:
             for item in expanded_changes[:10]:
                 label = item.get("entity_label", item.get("source_entity_key", "memory"))
                 operation = item.get("operation", item.get("relation_type", "change"))
-                labels.append(f"{label}: {operation} ({_display_fact_value(item)})")
+                labels.append(f"{label}: {operation} ({_fact_summary(item)})")
             return _answer_copy(plan, "recent_changes") + "; ".join(labels) + ".", "changes", expanded_changes, self._source_refs(expanded_changes)
 
         if plan.intent == "last_mention":
@@ -2938,6 +3507,7 @@ __all__ = [
     "ProductSemanticProvider",
     "local_timezone_name",
     "normalize_extraction",
+    "normalize_temporal",
     "normalize_timestamp",
     "product_database_path",
     "resolve_timezone",

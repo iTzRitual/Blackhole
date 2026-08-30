@@ -401,6 +401,7 @@ _ATTENTION_PHRASES = (
     r"\bwhat\s+(?:is|s)\s+coming\s+up\b",
     r"\bwhat\s+do\s+i\s+have\s+coming\s+up\b",
     r"\bco\s+mam\s+(?:niedlugo\s+)?do\s+zrobienia\b",
+    r"\bco\s+mam\s+zrobic\b",
     r"\bco\s+musze\s+zrobic\b",
     r"\bco\s+trzeba\s+zrobic\b",
     r"\bco\s+(?:jest|mnie)\s+(?:teraz\s+)?pilne\b",
@@ -464,7 +465,10 @@ def _unmapped_topic_terms(question: str) -> tuple[set[str], set[str]]:
     surface_tokens = re.findall(r"[^\W_]+", question, flags=re.UNICODE)
     for surface in surface_tokens:
         folded = _fold(surface)
-        if len(folded) <= 1 or folded in _FOLDED_STOPWORDS:
+        # Numbers and two-character currency/abbreviation tokens remain
+        # searchable terms, but they are not evidence of a semantic lexical
+        # gap by themselves.
+        if len(folded) <= 2 or folded.isdigit() or folded in _FOLDED_STOPWORDS:
             continue
         if folded in _FOLDED_TERM_ALIASES or folded in _PLANNER_TERMS:
             continue
@@ -686,6 +690,15 @@ def plan_ask(question: str) -> AskPlan:
     ) or polish_payment
     if not has_cost and bool(terms & {"month", "monthly"}):
         has_cost = bool(re.search(r"\bhow\s+much\b|\bile\b", normalized))
+    semantic_modifier_terms = {
+        term for term in unmapped_terms if len(term) > 2 and not term.isdigit()
+    }
+    if has_cost and len(semantic_modifier_terms) >= 2:
+        # An otherwise routable money question with several unrecognized
+        # modifiers may be asking for meaning or change, not only the current
+        # amount. Preserve those modifiers for the semantic provider instead
+        # of adding a language-specific lexical table to the fast path.
+        semantic_fallback = True
     attention_terms = terms & _ATTENTION_TERMS
     time_window: str | None = None
     if "today" in terms:
@@ -740,9 +753,9 @@ def plan_ask(question: str) -> AskPlan:
         intent = "generic"
 
     broad = not topic_terms and not (terms - _PLANNER_TERMS)
-    requires_synthesis = intent == "generic" and (
-        bool(terms & _SYNTHESIS_TERMS) or semantic_fallback
-    )
+    requires_synthesis = (
+        intent == "generic" and bool(terms & _SYNTHESIS_TERMS or semantic_fallback)
+    ) or (intent == "costs" and semantic_fallback)
     return AskPlan(
         intent=intent,
         query_terms=terms,

@@ -159,3 +159,37 @@ smoke test; and no human usability study was performed.
 
 Decision: **KEEP** the integrated Product V2 contract and implementation for
 the explicitly authorized post-freeze product scope.
+
+## Product V2 semantic-truth follow-up
+
+The authorized `product/v2-semantic-truth` follow-up extends the integrated
+contract without reopening the frozen V1 benchmark. Raw evidence remains
+immutable; derived truth may change and is rebuildable. A correction is not a
+deletion, and an ordinary change is not automatically a correction. The
+projector keeps current and historical evidence separate, applies only
+targeted semantic supersession, preserves duplicate support, and leaves
+unresolved contradictions as unknown/conflicting rather than choosing the
+last capture.
+
+Facts now preserve first-class uncertainty, confidence, claim type,
+attribution, negation, semantic relation, and structured temporal meaning.
+Reported claims retain who made the claim. A newer uncertain statement does
+not automatically replace a confirmed value; a later known observation may
+resolve earlier uncertainty. Effective/valid time selects the appropriate
+state version without treating a future meeting occurrence as an inactive
+fact. Relative dates are normalized from the capture's timestamp and timezone,
+not from a later retry wall clock. Coarse expressions remain coarse.
+
+Attention uses a stable lifecycle key and related-event links so reschedules,
+corrections, cancellations, and completions remove stale active occurrences.
+Historical events, document clauses, possibilities, and non-actionable
+mentions do not become urgent items. Ask renders current, historical,
+uncertain, conflicting, attributed, and negated states distinctly while
+retaining the existing candidate-versus-supporting-evidence boundary.
+
+The semantic provider remains the language-neutral interpretation boundary.
+Structured weekday/time output is normalized deterministically, and no
+language-specific correction rule or exact mixed-language phrase rule is used.
+The dedicated sequence suite and live-validation record are the evidence for
+this follow-up; they are product generalization evidence, not benchmark,
+holdout, baseline, or E006 optimization evidence.

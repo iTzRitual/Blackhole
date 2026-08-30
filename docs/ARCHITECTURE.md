@@ -808,3 +808,44 @@ fallback. Deterministic UI fixtures (`?fixture=1`, `?fixture=empty`, and
 `?fixture=unavailable`) are presentation-only and are not benchmark data.
 The reconciled route, response, acceptance, and visual evidence is recorded in
 `docs/PRODUCT_V2_INTEGRATION.md`.
+
+### Semantic truth projection (post-freeze product follow-up)
+
+The V2 semantic projection is evidence-led rather than last-write-wins:
+
+```text
+immutable claims + relations + retractions
+                    |
+                    v
+       targeted supersession / temporal selection
+                    |
+                    v
+ current | historical | uncertain | conflicting views
+                    |
+                    v
+       provenance-aware Memory, Attention, and Ask
+```
+
+The projection keeps raw evidence and derived truth separate. Corrections and
+supersessions change the current view but never delete the prior source.
+Meaningful changes can be effective-dated without declaring the earlier value
+wrong. Uncertainty, attribution, negation, duplicate support, and contradiction
+remain explicit. A later confirmed observation may resolve an earlier
+uncertain claim; a newer speculative claim cannot silently become certain.
+Only semantically competing or explicitly related facts supersede one another,
+so unrelated concepts on one entity coexist.
+
+Temporal semantics are represented as structured provider output plus
+deterministic normalization. The provider interprets natural language and
+emits a weekday index, local time, relative value, exact expression, or coarse
+interval; the runtime applies the capture timestamp/timezone and preserves
+precision. `valid_from`/`effective_at` select state versions, while an
+occurrence `normalized` timestamp does not hide a current appointment fact.
+
+Attention candidates share a stable lifecycle key and can reference the
+related source event. Reschedule, correction, completion, and cancellation
+therefore project one current timeline instead of leaving ghost reminders.
+Ask receives structured semantic metadata and still derives public provenance
+only from provider-selected candidate evidence IDs. This follow-up is an
+explicitly authorized product generalization and does not modify V1 runtime,
+benchmark, evaluator, baseline, calibration, or holdout material.

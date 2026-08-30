@@ -302,3 +302,26 @@ The initial V2 implementation is backend/API and deterministic-test focused.
 It does not claim completion of a redesigned PWA surface, production hosting,
 remote access, multi-user isolation, OCR, a Claude adapter, or consequential
 action execution.
+
+### 13.1 Semantic truth and temporal meaning
+
+Product V2 must distinguish what appears currently true from what used to be
+true, might be true, conflicts with another claim, was reported by somebody
+else, or was retracted. Raw evidence is preserved. Derived truth is allowed to
+change and is rebuildable. Correction is not deletion, and change is not
+correction. New evidence supersedes only a semantically competing or explicitly
+linked assertion; unrelated facts coexist.
+
+Uncertainty is first-class: `known`, `inferred`, and `unknown` remain distinct,
+with confidence, claim type, attribution, negation, and contradiction evidence
+preserved where available. Newer does not automatically mean more certain. A
+later supported observation may resolve an earlier uncertain claim, while
+conflicting supported claims remain conflicting until resolved.
+
+The semantic provider interprets natural-language time and emits structured
+temporal meaning. Deterministic code normalizes exact timestamps, relative
+values, weekday/time pairs, effective dates, timezones, and coarse intervals
+using the capture's reference time. It must not fabricate a point from an
+ambiguous month/week/approximation, and it must not confuse a historical time
+mention with an actionable Attention item. Language is a presentation and
+interpretation concern, not the semantic capability boundary.

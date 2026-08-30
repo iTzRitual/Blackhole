@@ -22,10 +22,10 @@ from pathlib import Path
 from typing import Any, Iterable, Iterator
 
 
-PRODUCT_STORE_VERSION = "blackhole-product-v2-store-v1"
-PRODUCT_PROJECTION_VERSION = "blackhole-product-v2-projection-v1"
+PRODUCT_STORE_VERSION = "blackhole-product-v2-store-v2"
+PRODUCT_PROJECTION_VERSION = "blackhole-product-v2-projection-v2"
 PRODUCT_PROCESSING_VERSION = "blackhole-product-v2-processing-v1"
-PRODUCT_EXTRACTOR_VERSION = "blackhole-product-v2-extractor-v2"
+PRODUCT_EXTRACTOR_VERSION = "blackhole-product-v2-extractor-v3"
 PROCESSING_STATUSES = frozenset({"pending", "processing", "processed", "failed"})
 ATTENTION_STATUSES = frozenset({"open", "completed", "cancelled"})
 # Automatic retries are deliberately finite.  The first claim is an attempt;
@@ -269,6 +269,7 @@ class ProductStore:
                     supersedes_event_id TEXT,
                     source_refs_json TEXT NOT NULL,
                     temporal_json TEXT NOT NULL,
+                    metadata_json TEXT NOT NULL DEFAULT '{}',
                     extractor_version TEXT NOT NULL,
                     fingerprint TEXT NOT NULL UNIQUE,
                     created_at TEXT NOT NULL
@@ -284,6 +285,7 @@ class ProductStore:
                     knowledge_status TEXT NOT NULL CHECK(knowledge_status IN ('known', 'inferred', 'unknown')),
                     value_json TEXT,
                     source_refs_json TEXT NOT NULL,
+                    metadata_json TEXT NOT NULL DEFAULT '{}',
                     extractor_version TEXT NOT NULL,
                     fingerprint TEXT NOT NULL UNIQUE,
                     created_at TEXT NOT NULL
@@ -324,6 +326,7 @@ class ProductStore:
                     source_refs_json TEXT NOT NULL,
                     latest_sequence INTEGER NOT NULL,
                     fact_ids_json TEXT NOT NULL,
+                    metadata_json TEXT NOT NULL DEFAULT '{}',
                     operation TEXT NOT NULL,
                     projection_run_id INTEGER NOT NULL,
                     PRIMARY KEY(entity_key, concept)
@@ -368,7 +371,18 @@ class ProductStore:
                     ON current_attention(status, due_at);
                 """
             )
+            self._ensure_column_locked("memory_facts", "metadata_json", "TEXT NOT NULL DEFAULT '{}'")
+            self._ensure_column_locked("memory_relations", "metadata_json", "TEXT NOT NULL DEFAULT '{}'")
+            self._ensure_column_locked("current_facts", "metadata_json", "TEXT NOT NULL DEFAULT '{}'")
             self.connection.commit()
+
+    def _ensure_column_locked(self, table: str, column: str, definition: str) -> None:
+        columns = {
+            str(row[1])
+            for row in self.connection.execute(f"PRAGMA table_info({table})").fetchall()
+        }
+        if column not in columns:
+            self.connection.execute(f"ALTER TABLE {table} ADD COLUMN {column} {definition}")
 
     def _migrate_legacy(self, legacy_database_path: str | Path) -> None:
         """Copy legacy V1 raw/semantic records once, without mutating them.
@@ -887,6 +901,27 @@ class ProductStore:
         operation = item.get("operation", "set")
         if operation not in {"set", "correction", "supersede", "contradiction", "duplicate"}:
             operation = "set"
+        metadata = item.get("metadata", {})
+        if not isinstance(metadata, dict):
+            metadata = {}
+        metadata = {
+            str(key): value
+            for key, value in metadata.items()
+            if isinstance(key, (str, int, float, bool))
+        }
+        for key in (
+            "attribution",
+            "confidence",
+            "claim_type",
+            "certainty",
+            "negated",
+            "semantic_relation",
+            "actionable",
+            "historical",
+            "lifecycle_key",
+        ):
+            if key in item and key not in metadata:
+                metadata[key] = item[key]
         fingerprint_input = {
             "source_event_id": event_id,
             "entity_key": item["entity_key"],
@@ -899,6 +934,7 @@ class ProductStore:
             "supersedes_event_id": item.get("supersedes_event_id"),
             "source_refs": source_refs,
             "temporal": item.get("temporal", {}),
+            "metadata": metadata,
         }
         fingerprint = hashlib.sha256(canonical_json(fingerprint_input).encode("utf-8")).hexdigest()
         cursor = self.connection.execute(
@@ -906,9 +942,9 @@ class ProductStore:
             INSERT OR IGNORE INTO memory_facts(
                 source_event_id, entity_key, entity_label, concept,
                 knowledge_status, value_json, unknown_reason, operation,
-                supersedes_event_id, source_refs_json, temporal_json,
+                supersedes_event_id, source_refs_json, temporal_json, metadata_json,
                 extractor_version, fingerprint, created_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 event_id,
@@ -922,6 +958,7 @@ class ProductStore:
                 item.get("supersedes_event_id"),
                 canonical_json(source_refs),
                 canonical_json(item.get("temporal", {})),
+                canonical_json(metadata),
                 extractor_version,
                 fingerprint,
                 utc_now(),
@@ -935,6 +972,24 @@ class ProductStore:
             {ref for ref in item.get("source_refs", []) if isinstance(ref, str) and ref}
             | {event_id}
         )
+        metadata = item.get("metadata", {})
+        if not isinstance(metadata, dict):
+            metadata = {}
+        metadata = {
+            str(key): value
+            for key, value in metadata.items()
+            if isinstance(key, (str, int, float, bool))
+        }
+        for key in (
+            "attribution",
+            "confidence",
+            "claim_type",
+            "certainty",
+            "negated",
+            "semantic_relation",
+        ):
+            if key in item and key not in metadata:
+                metadata[key] = item[key]
         fingerprint_input = {
             "source_event_id": event_id,
             "source_entity_key": item.get("source_entity_key"),
@@ -944,6 +999,7 @@ class ProductStore:
             "knowledge_status": item.get("knowledge_status", "known"),
             "value": item.get("value"),
             "source_refs": source_refs,
+            "metadata": metadata,
         }
         fingerprint = hashlib.sha256(canonical_json(fingerprint_input).encode("utf-8")).hexdigest()
         cursor = self.connection.execute(
@@ -951,9 +1007,9 @@ class ProductStore:
             INSERT OR IGNORE INTO memory_relations(
                 source_event_id, source_entity_key, relation_type,
                 target_entity_key, target_event_id, knowledge_status,
-                value_json, source_refs_json, extractor_version, fingerprint,
-                created_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                value_json, source_refs_json, metadata_json, extractor_version,
+                fingerprint, created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 event_id,
@@ -964,6 +1020,7 @@ class ProductStore:
                 item.get("knowledge_status", "known"),
                 _json_value(item.get("value")) if item.get("value") is not None else None,
                 canonical_json(source_refs),
+                canonical_json(metadata),
                 extractor_version,
                 fingerprint,
                 utc_now(),
@@ -1157,11 +1214,467 @@ class ProductStore:
         title = re.sub(r"[^\w]+", " ", title, flags=re.UNICODE).strip()
         return "title:" + re.sub(r"\s+", " ", title)
 
+    @staticmethod
+    def _json_object(value: Any) -> dict[str, Any]:
+        if isinstance(value, dict):
+            return value
+        if isinstance(value, str):
+            try:
+                parsed = json.loads(value)
+            except (TypeError, ValueError, json.JSONDecodeError):
+                return {}
+            return parsed if isinstance(parsed, dict) else {}
+        return {}
+
+    @classmethod
+    def _fact_metadata(cls, row: sqlite3.Row | dict[str, Any]) -> dict[str, Any]:
+        try:
+            value = row["metadata_json"]
+        except (KeyError, IndexError, TypeError):
+            value = {}
+        return cls._json_object(value)
+
+    @classmethod
+    def _fact_temporal(cls, row: sqlite3.Row | dict[str, Any]) -> dict[str, Any]:
+        try:
+            value = row["temporal_json"]
+        except (KeyError, IndexError, TypeError):
+            value = {}
+        return cls._json_object(value)
+
+    @classmethod
+    def _fact_status(cls, row: sqlite3.Row | dict[str, Any]) -> str:
+        try:
+            status = row["knowledge_status"]
+        except (KeyError, IndexError, TypeError):
+            status = "unknown"
+        return status if status in {"known", "inferred", "unknown"} else "unknown"
+
+    @classmethod
+    def _fact_sequence(cls, row: sqlite3.Row | dict[str, Any]) -> int:
+        try:
+            return int(row["sequence"])
+        except (KeyError, IndexError, TypeError, ValueError):
+            return 0
+
+    @classmethod
+    def _fact_id(cls, row: sqlite3.Row | dict[str, Any]) -> int:
+        try:
+            return int(row["fact_id"])
+        except (KeyError, IndexError, TypeError, ValueError):
+            return 0
+
+    @classmethod
+    def _fact_event_id(cls, row: sqlite3.Row | dict[str, Any]) -> str:
+        try:
+            return str(row["source_event_id"])
+        except (KeyError, IndexError, TypeError):
+            return ""
+
+    @classmethod
+    def _fact_value(cls, row: sqlite3.Row | dict[str, Any]) -> Any:
+        try:
+            value = row["value_json"]
+        except (KeyError, IndexError, TypeError):
+            value = None
+        if value is None:
+            return None
+        try:
+            return json.loads(value) if isinstance(value, str) else value
+        except (TypeError, ValueError, json.JSONDecodeError):
+            return None
+
+    @classmethod
+    def _fact_refs(cls, row: sqlite3.Row | dict[str, Any]) -> set[str]:
+        try:
+            value = row["source_refs_json"]
+        except (KeyError, IndexError, TypeError):
+            value = []
+        try:
+            refs = json.loads(value) if isinstance(value, str) else value
+        except (TypeError, ValueError, json.JSONDecodeError):
+            refs = []
+        result = {ref for ref in refs if isinstance(ref, str) and ref} if isinstance(refs, list) else set()
+        event_id = cls._fact_event_id(row)
+        if event_id:
+            result.add(event_id)
+        return result
+
+    @classmethod
+    def _fact_signature(cls, row: sqlite3.Row | dict[str, Any]) -> str | None:
+        if cls._fact_status(row) == "unknown":
+            return None
+        metadata = cls._fact_metadata(row)
+        return canonical_json({"value": cls._fact_value(row), "negated": bool(metadata.get("negated", False))})
+
+    @classmethod
+    def _fact_relation(cls, row: sqlite3.Row | dict[str, Any]) -> str:
+        metadata = cls._fact_metadata(row)
+        semantic_relation = metadata.get("semantic_relation")
+        if isinstance(semantic_relation, str) and semantic_relation.strip():
+            return _legacy_key(semantic_relation)
+        try:
+            operation = row["operation"]
+        except (KeyError, IndexError, TypeError):
+            operation = "set"
+        return _legacy_key(operation)
+
+    @classmethod
+    def _fact_temporal_bounds(
+        cls,
+        row: sqlite3.Row | dict[str, Any],
+    ) -> tuple[datetime | None, datetime | None]:
+        temporal = cls._fact_temporal(row)
+        # ``normalized`` and coarse interval fields describe the time being
+        # asserted (for example, an appointment next Thursday).  They are
+        # not validity bounds for the fact itself: a current assertion about
+        # a future meeting must remain current.  Only explicit validity or
+        # effectiveness fields participate in version selection.
+        start_value = next(
+            (
+                temporal.get(key)
+                for key in ("valid_from", "effective_at")
+                if temporal.get(key) is not None
+            ),
+            None,
+        )
+        end_value = temporal.get("valid_to")
+
+        def parse(value: Any) -> datetime | None:
+            if not isinstance(value, str):
+                return None
+            try:
+                return _parse_iso(value)
+            except (TypeError, ValueError):
+                return None
+
+        return parse(start_value), parse(end_value)
+
+    @classmethod
+    def _fact_temporally_active(
+        cls,
+        row: sqlite3.Row | dict[str, Any],
+        now: datetime | None,
+    ) -> bool:
+        if now is None:
+            return True
+        start, end = cls._fact_temporal_bounds(row)
+        current = now.astimezone(timezone.utc)
+        return not (start is not None and start > current) and not (end is not None and end <= current)
+
+    @classmethod
+    def _fact_sort_key(cls, row: sqlite3.Row | dict[str, Any]) -> tuple[datetime, int, int]:
+        start, _end = cls._fact_temporal_bounds(row)
+        if start is None:
+            try:
+                start = _parse_iso(str(row["captured_at"]))
+            except (KeyError, TypeError, ValueError):
+                start = datetime.min.replace(tzinfo=timezone.utc)
+        return start, cls._fact_sequence(row), cls._fact_id(row)
+
+    @classmethod
+    def _fact_view(cls, row: sqlite3.Row | dict[str, Any]) -> dict[str, Any]:
+        metadata = cls._fact_metadata(row)
+        result: dict[str, Any] = {
+            "fact_id": cls._fact_id(row),
+            "source_event_id": cls._fact_event_id(row),
+            "knowledge_status": cls._fact_status(row),
+            "value": cls._fact_value(row),
+            "source_refs": sorted(cls._fact_refs(row)),
+        }
+        if metadata.get("negated"):
+            result["negated"] = True
+        if metadata.get("attribution") is not None:
+            result["attribution"] = metadata["attribution"]
+        if metadata.get("claim_type") is not None:
+            result["claim_type"] = metadata["claim_type"]
+        if metadata.get("semantic_relation") is not None:
+            result["semantic_relation"] = metadata["semantic_relation"]
+        if cls._fact_status(row) == "unknown":
+            result["unknown_reason"] = row["unknown_reason"] or "not_stated"
+        return result
+
+    def _fact_projections(
+        self,
+        fact_rows: list[sqlite3.Row],
+        relation_rows: list[sqlite3.Row],
+        retracted: set[str],
+        *,
+        now: datetime | None,
+    ) -> tuple[list[dict[str, Any]], dict[int, dict[str, Any]]]:
+        """Project current truth from evidence without a last-write-wins rule."""
+
+        groups: dict[tuple[str, str], list[sqlite3.Row]] = {}
+        for row in fact_rows:
+            if self._fact_event_id(row) in retracted:
+                continue
+            groups.setdefault((str(row["entity_key"]), str(row["concept"])), []).append(row)
+
+        annotations: dict[int, dict[str, Any]] = {
+            self._fact_id(row): {
+                "active": False,
+                "current": False,
+                "superseded": False,
+                "resolved": False,
+                "superseded_by_event_ids": [],
+            }
+            for row in fact_rows
+        }
+        relation_replacements: dict[str, list[sqlite3.Row]] = {}
+        relation_types = {
+            "correction",
+            "moved",
+            "postponed",
+            "rebook",
+            "reschedule",
+            "supersede",
+            "supersession",
+            "meaningful_change",
+            "resolves_uncertainty",
+            "resolution",
+        }
+        for relation in relation_rows:
+            if self._fact_event_id(relation) in retracted:
+                continue
+            relation_type = _legacy_key(str(relation["relation_type"]))
+            target = relation["target_event_id"]
+            if isinstance(target, str) and target and relation_type in relation_types:
+                relation_replacements.setdefault(self._fact_event_id(relation), []).append(relation)
+
+        projections: list[dict[str, Any]] = []
+        for group_key, group_rows in groups.items():
+            rows = sorted(group_rows, key=lambda row: (self._fact_sequence(row), self._fact_id(row)))
+            superseded_by: dict[str, list[sqlite3.Row]] = {}
+
+            def add_supersession(target_event_id: Any, replacement: sqlite3.Row) -> None:
+                if not isinstance(target_event_id, str) or not target_event_id:
+                    return
+                if target_event_id == self._fact_event_id(replacement):
+                    return
+                superseded_by.setdefault(target_event_id, []).append(replacement)
+
+            for row in rows:
+                operation = str(row["operation"] or "set")
+                relation = self._fact_relation(row)
+                # An explicitly contradictory report is evidence for the
+                # disagreement, never permission to erase its target.
+                if operation != "contradiction" and relation not in {"contradiction", "duplicate"}:
+                    add_supersession(row["supersedes_event_id"], row)
+                if operation in {"correction", "supersede"} or relation in {
+                    "correction",
+                    "moved",
+                    "postponed",
+                    "rebook",
+                    "reschedule",
+                    "supersede",
+                    "supersession",
+                    "meaningful_change",
+                }:
+                    if row["supersedes_event_id"] is None:
+                        for prior in rows:
+                            if self._fact_sequence(prior) >= self._fact_sequence(row):
+                                continue
+                            if str(prior["operation"] or "set") == "duplicate":
+                                continue
+                            if operation == "contradiction" or relation == "contradiction":
+                                continue
+                            add_supersession(self._fact_event_id(prior), row)
+                for relation_row in relation_replacements.get(self._fact_event_id(row), []):
+                    # This source row is the replacement named by a relation
+                    # whose target is another capture. The relation itself is
+                    # retained separately, while the target is only removed
+                    # from the current view when the replacement is effective.
+                    add_supersession(relation_row["target_event_id"], row)
+
+            for target_event_id, replacements in superseded_by.items():
+                for target in rows:
+                    if self._fact_event_id(target) != target_event_id:
+                        continue
+                    effective_replacements = [
+                        replacement
+                        for replacement in replacements
+                        if self._fact_temporally_active(replacement, now)
+                    ]
+                    if not effective_replacements:
+                        continue
+                    annotation = annotations[self._fact_id(target)]
+                    annotation["superseded_by_event_ids"] = sorted(
+                        {self._fact_event_id(replacement) for replacement in effective_replacements}
+                    )
+                    annotation["superseded"] = True
+
+            temporally_available = [row for row in rows if self._fact_temporally_active(row, now)]
+            if now is None:
+                version_rows = temporally_available
+            else:
+                timed_rows = [
+                    (row, self._fact_temporal_bounds(row)[0])
+                    for row in temporally_available
+                    if self._fact_temporal_bounds(row)[0] is not None
+                ]
+                eligible_starts = [start for _row, start in timed_rows if start is not None and start <= now]
+                if eligible_starts:
+                    latest_start = max(eligible_starts)
+                    version_rows = [row for row, start in timed_rows if start == latest_start]
+                    replacement_event_ids = {
+                        self._fact_event_id(replacement)
+                        for replacements in superseded_by.values()
+                        for replacement in replacements
+                    }
+                    version_rows.extend(
+                        row
+                        for row in temporally_available
+                        if self._fact_temporal_bounds(row)[0] is None
+                        and self._fact_event_id(row) in replacement_event_ids
+                    )
+                elif timed_rows:
+                    version_rows = [row for row in temporally_available if not self._fact_temporal_bounds(row)[0]]
+                else:
+                    version_rows = temporally_available
+
+            def replacement_is_active(target_event_id: str) -> bool:
+                return any(
+                    self._fact_temporally_active(replacement, now)
+                    for replacement in superseded_by.get(target_event_id, [])
+                )
+
+            active_rows = [
+                row
+                for row in version_rows
+                if not replacement_is_active(self._fact_event_id(row))
+            ]
+
+            # A later direct observation may resolve an earlier speculative or
+            # missing value. An unresolved contradiction is different: it is
+            # deliberately retained and still projects to conflict.
+            for row in active_rows:
+                if self._fact_status(row) not in {"unknown", "inferred"}:
+                    continue
+                relation = self._fact_relation(row)
+                if relation == "contradiction" or str(row["operation"] or "set") == "contradiction":
+                    continue
+                if any(
+                    self._fact_status(candidate) == "known"
+                    and self._fact_sequence(candidate) > self._fact_sequence(row)
+                    and self._fact_relation(candidate) not in {"contradiction"}
+                    for candidate in active_rows
+                ):
+                    annotations[self._fact_id(row)]["resolved"] = True
+            active_rows = [
+                row
+                for row in active_rows
+                if not annotations[self._fact_id(row)]["resolved"]
+            ]
+
+            if not active_rows:
+                continue
+            for row in active_rows:
+                annotations[self._fact_id(row)]["active"] = True
+
+            value_rows = [row for row in active_rows if self._fact_signature(row) is not None]
+            known_rows = [row for row in value_rows if self._fact_status(row) == "known"]
+            inferred_rows = [row for row in value_rows if self._fact_status(row) == "inferred"]
+            known_signatures = {self._fact_signature(row) for row in known_rows}
+            inferred_signatures = {self._fact_signature(row) for row in inferred_rows}
+            is_conflict = len(known_signatures) > 1 or (not known_signatures and len(inferred_signatures) > 1)
+            if is_conflict:
+                state = "conflict"
+                chosen_row = max(value_rows, key=self._fact_sort_key)
+                output_status = "unknown"
+                output_value = None
+                output_reason = "conflicting"
+                supporting_rows = value_rows
+            elif known_signatures:
+                chosen_signature = next(iter(known_signatures))
+                supporting_rows = [row for row in value_rows if self._fact_signature(row) == chosen_signature]
+                chosen_row = max(
+                    [row for row in supporting_rows if self._fact_status(row) == "known"],
+                    key=self._fact_sort_key,
+                )
+                output_status = "known"
+                output_value = self._fact_value(chosen_row)
+                output_reason = None
+                state = "current"
+            elif inferred_signatures:
+                chosen_signature = next(iter(inferred_signatures))
+                supporting_rows = [row for row in value_rows if self._fact_signature(row) == chosen_signature]
+                chosen_row = max(supporting_rows, key=self._fact_sort_key)
+                output_status = "inferred"
+                output_value = self._fact_value(chosen_row)
+                output_reason = None
+                state = "uncertain"
+            else:
+                chosen_row = max(active_rows, key=self._fact_sort_key)
+                supporting_rows = [chosen_row]
+                output_status = "unknown"
+                output_value = None
+                output_reason = next(
+                    (str(row["unknown_reason"]) for row in reversed(active_rows) if row["unknown_reason"]),
+                    "not_stated",
+                )
+                state = "unknown"
+
+            for row in supporting_rows:
+                annotations[self._fact_id(row)]["current"] = True
+            metadata = dict(self._fact_metadata(chosen_row))
+            metadata["semantic_state"] = state
+            if is_conflict:
+                metadata["conflicting_values"] = [self._fact_view(row) for row in value_rows]
+                metadata["conflicting_fact_ids"] = [self._fact_id(row) for row in value_rows]
+                metadata["conflict_source_refs"] = sorted(
+                    {ref for row in value_rows for ref in self._fact_refs(row)}
+                )
+            uncertainty_rows = [
+                row
+                for row in active_rows
+                if row not in supporting_rows
+                and (
+                    self._fact_status(row) in {"unknown", "inferred"}
+                    or self._fact_signature(row) != self._fact_signature(chosen_row)
+                )
+            ]
+            if output_status == "known" and uncertainty_rows:
+                metadata["uncertainty"] = [self._fact_view(row) for row in uncertainty_rows]
+                metadata["uncertainty_source_refs"] = sorted(
+                    {ref for row in uncertainty_rows for ref in self._fact_refs(row)}
+                )
+            temporal = self._fact_temporal(chosen_row)
+            return_value = {
+                "entity_key": group_key[0],
+                "entity_label": str(chosen_row["entity_label"] or group_key[0]),
+                "concept": group_key[1],
+                "knowledge_status": output_status,
+                "unknown_reason": output_reason,
+                "source_refs": sorted(
+                    {ref for row in supporting_rows for ref in self._fact_refs(row)}
+                    if not is_conflict
+                    else {ref for row in value_rows for ref in self._fact_refs(row)}
+                ),
+                "latest_sequence": max(self._fact_sequence(row) for row in active_rows),
+                "fact_ids": [self._fact_id(row) for row in active_rows],
+                "operation": "contradiction" if is_conflict else str(chosen_row["operation"] or "set"),
+                "temporal": temporal,
+                "metadata": metadata,
+            }
+            if output_value is not None:
+                return_value["value"] = output_value
+            if metadata.get("negated"):
+                return_value["negated"] = True
+            if metadata.get("attribution") is not None:
+                return_value["attribution"] = metadata["attribution"]
+            if metadata.get("claim_type") is not None:
+                return_value["claim_type"] = metadata["claim_type"]
+            if metadata.get("confidence") is not None:
+                return_value["confidence"] = metadata["confidence"]
+            projections.append(return_value)
+        projections.sort(key=lambda item: (str(item["entity_key"]), str(item["concept"])))
+        return projections, annotations
+
     def _rebuild_derived_locked(self) -> dict[str, Any]:
         retracted = self._retracted_event_ids_locked()
         fact_rows = self.connection.execute(
             """
-            SELECT f.*, s.sequence
+            SELECT f.*, s.sequence, s.captured_at, s.timezone
             FROM memory_facts f JOIN source_events s ON s.event_id = f.source_event_id
             ORDER BY s.sequence, f.fact_id
             """
@@ -1191,83 +1704,40 @@ class ProductStore:
         self.connection.execute("DELETE FROM current_facts")
         self.connection.execute("DELETE FROM current_attention")
 
-        grouped: dict[tuple[str, str], list[sqlite3.Row]] = {}
-        for row in fact_rows:
-            if row["source_event_id"] in retracted:
-                continue
-            grouped.setdefault((row["entity_key"], row["concept"]), []).append(row)
-
-        for (entity_key, concept), rows in grouped.items():
-            superseded_event_ids = {
-                row["supersedes_event_id"]
-                for row in rows
-                if row["supersedes_event_id"] and row["supersedes_event_id"] not in retracted
-            }
-            active = [row for row in rows if row["source_event_id"] not in superseded_event_ids]
-            if not active:
-                continue
-            active.sort(key=lambda row: (int(row["sequence"]), int(row["fact_id"])))
-            known_values = {
-                canonical_json(json.loads(row["value_json"]))
-                for row in active
-                if row["knowledge_status"] != "unknown" and row["value_json"] is not None
-            }
-            source_refs = sorted(
-                {
-                    reference
-                    for row in active
-                    for reference in json.loads(row["source_refs_json"])
-                    if isinstance(reference, str) and reference
-                }
-            )
-            latest = active[-1]
-            if len(known_values) > 1:
-                output_status = "unknown"
-                output_value = None
-                output_reason = "conflicting"
-                output_operation = "contradiction"
-            elif not known_values:
-                output_status = "unknown"
-                output_value = None
-                output_reason = next(
-                    (row["unknown_reason"] for row in reversed(active) if row["unknown_reason"]),
-                    "not_stated",
-                )
-                output_operation = "set"
-            else:
-                candidate = next(
-                    row
-                    for row in reversed(active)
-                    if row["knowledge_status"] != "unknown" and row["value_json"] is not None
-                )
-                output_status = candidate["knowledge_status"]
-                output_value = candidate["value_json"]
-                output_reason = None
-                output_operation = candidate["operation"]
-                if any(row["knowledge_status"] == "unknown" for row in active):
-                    output_status = "unknown"
-                    output_value = None
-                    output_reason = "ambiguous"
-                    output_operation = "contradiction"
+        projection_reference = None
+        if fact_rows:
+            try:
+                projection_reference = max(_parse_iso(str(row["captured_at"])) for row in fact_rows)
+            except (KeyError, TypeError, ValueError):
+                projection_reference = None
+        fact_projections, _annotations = self._fact_projections(
+            fact_rows,
+            relation_rows,
+            retracted,
+            now=projection_reference,
+        )
+        for projected in fact_projections:
             self.connection.execute(
                 """
                 INSERT INTO current_facts(
                     entity_key, entity_label, concept, knowledge_status,
                     value_json, unknown_reason, source_refs_json,
-                    latest_sequence, fact_ids_json, operation, projection_run_id
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    latest_sequence, fact_ids_json, metadata_json, operation,
+                    projection_run_id
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
-                    entity_key,
-                    latest["entity_label"],
-                    concept,
-                    output_status,
-                    output_value,
-                    output_reason,
-                    canonical_json(source_refs),
-                    latest["sequence"],
-                    canonical_json([row["fact_id"] for row in active]),
-                    output_operation,
+                    projected["entity_key"],
+                    projected["entity_label"],
+                    projected["concept"],
+                    projected["knowledge_status"],
+                    canonical_json(projected["value"]) if projected.get("value") is not None else None,
+                    projected["unknown_reason"],
+                    canonical_json(projected["source_refs"]),
+                    projected["latest_sequence"],
+                    canonical_json(projected["fact_ids"]),
+                    canonical_json(projected.get("metadata", {})),
+                    projected["operation"],
                     projection_run_id,
                 ),
             )
@@ -1279,11 +1749,21 @@ class ProductStore:
             row["event_id"]: int(row["sequence"])
             for row in self.connection.execute("SELECT event_id, sequence FROM source_events").fetchall()
         }
+        lifecycle_keys: dict[str, str] = {}
         lifecycle_rows: dict[str, sqlite3.Row] = {}
         for row in attention_rows:
+            lifecycle_key = self._attention_lifecycle_key(row)
+            try:
+                details = json.loads(row["details_json"])
+            except (TypeError, ValueError, json.JSONDecodeError):
+                details = {}
+            if isinstance(details, dict):
+                linked_event = details.get("supersedes_event_id", details.get("related_event_id"))
+                if isinstance(linked_event, str) and linked_event in lifecycle_keys:
+                    lifecycle_key = lifecycle_keys[linked_event]
+            lifecycle_keys[str(row["source_event_id"])] = lifecycle_key
             if row["source_event_id"] in retracted:
                 continue
-            lifecycle_key = self._attention_lifecycle_key(row)
             current = lifecycle_rows.get(lifecycle_key)
             candidate_score = (
                 source_sequences.get(row["source_event_id"], 0),
@@ -1338,6 +1818,16 @@ class ProductStore:
 
     @staticmethod
     def _fact_dict(row: sqlite3.Row, *, current: bool = False) -> dict[str, Any]:
+        try:
+            metadata_raw = row["metadata_json"]
+        except (KeyError, IndexError, TypeError):
+            metadata_raw = "{}"
+        try:
+            metadata = json.loads(metadata_raw) if isinstance(metadata_raw, str) else metadata_raw
+        except (TypeError, ValueError, json.JSONDecodeError):
+            metadata = {}
+        if not isinstance(metadata, dict):
+            metadata = {}
         result: dict[str, Any] = {
             "entity_key": row["entity_key"],
             "entity_label": row["entity_label"],
@@ -1368,6 +1858,13 @@ class ProductStore:
                 result["supersedes_event_id"] = row["supersedes_event_id"]
             result["sequence"] = row["sequence"]
             result["retracted"] = bool(row["source_event_id"] in row["retracted_event_ids"])
+        if metadata.get("negated"):
+            result["negated"] = True
+        for key in ("attribution", "claim_type", "certainty", "confidence", "semantic_relation"):
+            if metadata.get(key) is not None:
+                result[key] = metadata[key]
+        if metadata:
+            result["semantic_metadata"] = metadata
         if row["knowledge_status"] == "unknown":
             result["unknown_reason"] = row["unknown_reason"] or "not_stated"
         elif row["value_json"] is not None:
@@ -1381,22 +1878,13 @@ class ProductStore:
                 current_time = current_time.replace(tzinfo=timezone.utc)
             current_time = current_time.astimezone(timezone.utc)
             retracted = self._retracted_event_ids_locked()
-            current_rows = self.connection.execute(
-                "SELECT * FROM current_facts ORDER BY entity_key, concept"
-            ).fetchall()
             history_rows = self.connection.execute(
                 """
-                SELECT f.*, s.sequence
+                SELECT f.*, s.sequence, s.captured_at, s.timezone
                 FROM memory_facts f JOIN source_events s ON s.event_id = f.source_event_id
                 ORDER BY s.sequence, f.fact_id
                 """
             ).fetchall()
-            history: list[dict[str, Any]] = []
-            for row in history_rows:
-                result = self._fact_dict(
-                    {**dict(row), "retracted_event_ids": retracted}  # type: ignore[arg-type]
-                )
-                history.append(result)
             relation_rows = self.connection.execute(
                 """
                 SELECT r.*, s.sequence
@@ -1404,6 +1892,29 @@ class ProductStore:
                 ORDER BY s.sequence, r.relation_id
                 """
             ).fetchall()
+            current_projections, annotations = self._fact_projections(
+                history_rows,
+                relation_rows,
+                retracted,
+                now=current_time,
+            )
+            history: list[dict[str, Any]] = []
+            for row in history_rows:
+                result = self._fact_dict(
+                    {**dict(row), "retracted_event_ids": retracted}  # type: ignore[arg-type]
+                )
+                annotation = annotations.get(int(row["fact_id"]), {})
+                result.update(
+                    {
+                        "active": bool(annotation.get("active", False)),
+                        "current": bool(annotation.get("current", False)),
+                        "superseded": bool(annotation.get("superseded", False)),
+                        "resolved": bool(annotation.get("resolved", False)),
+                    }
+                )
+                if annotation.get("superseded_by_event_ids"):
+                    result["superseded_by_event_ids"] = annotation["superseded_by_event_ids"]
+                history.append(result)
             relations = []
             for row in relation_rows:
                 item = {
@@ -1418,6 +1929,14 @@ class ProductStore:
                     "sequence": row["sequence"],
                     "retracted": row["source_event_id"] in retracted,
                 }
+                metadata = self._json_object(row["metadata_json"] if "metadata_json" in row.keys() else {})
+                if metadata:
+                    item["semantic_metadata"] = metadata
+                    for key in ("attribution", "claim_type", "certainty", "confidence", "semantic_relation"):
+                        if metadata.get(key) is not None:
+                            item[key] = metadata[key]
+                    if metadata.get("negated"):
+                        item["negated"] = True
                 if row["value_json"] is not None:
                     item["value"] = json.loads(row["value_json"])
                 relations.append(item)
@@ -1488,9 +2007,9 @@ class ProductStore:
             ).fetchone()
             processing = self.processing_status() or {"counts": {}, "events": []}
             entities: dict[str, dict[str, Any]] = {}
-            for row in current_rows:
+            for row in current_projections:
                 entity = entities.setdefault(
-                    row["entity_key"],
+                    str(row["entity_key"]),
                     {
                         "entity_key": row["entity_key"],
                         "label": row["entity_label"],
@@ -1499,7 +2018,7 @@ class ProductStore:
                 )
                 entity["source_refs"] = sorted(
                     set(entity["source_refs"])
-                    | set(json.loads(row["source_refs_json"]))
+                    | set(row.get("source_refs", []))
                 )
             return {
                 "store_version": PRODUCT_STORE_VERSION,
@@ -1508,7 +2027,7 @@ class ProductStore:
                 "counts": {
                     "captures": len(sources),
                     "active_captures": sum(not item["retracted"] for item in sources),
-                    "facts": len(current_rows),
+                    "facts": len(current_projections),
                     "fact_history": len(history),
                     "entities": len(entities),
                     "relationships": len(relations),
@@ -1516,8 +2035,8 @@ class ProductStore:
                     "attachments": len(attachments),
                 },
                 "entities": list(entities.values()),
-                "facts": [self._fact_dict(row, current=True) for row in current_rows],
-                "current_facts": [self._fact_dict(row, current=True) for row in current_rows],
+                "facts": current_projections,
+                "current_facts": current_projections,
                 "fact_history": history,
                 "relationships": relations,
                 "attention": attention,
