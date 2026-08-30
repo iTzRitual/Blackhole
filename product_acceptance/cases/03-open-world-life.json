@@ -1,0 +1,152 @@
+[
+  {
+    "case_id": "OW-001",
+    "title": "A recipe change is a useful household memory",
+    "locale": "en-US",
+    "tags": ["open-world", "memory", "preference", "recipe"],
+    "initial_time": "2026-04-01T18:00:00-04:00",
+    "timezone": "America/New_York",
+    "user_outcome": "The user can later remember that the lentil soup worked better with lemon and less cumin.",
+    "steps": [
+      {"id": "capture-recipe", "type": "capture", "at": "2026-04-01T18:00:00-04:00", "text": "Next time for the lentil soup: add lemon at the end and use less cumin.", "idempotency_key": "ow-001-recipe", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-recipe", "type": "ask", "at": "2026-04-08T18:00:00-04:00", "question": "How should I change the lentil soup next time?", "expect": {"include": ["lemon", "less cumin"], "evidence": "required"}},
+      {"id": "memory-recipe", "type": "memory", "at": "2026-04-08T18:01:00-04:00", "expect": {"include": ["lentil soup"], "evidence": "required"}}
+    ],
+    "manual_observations": ["A free-form cooking note should remain useful without being forced into a task or shopping category."]
+  },
+  {
+    "case_id": "OW-002",
+    "title": "A Wi-Fi workaround should be retrievable",
+    "locale": "en-US",
+    "tags": ["open-world", "memory", "household", "technical-note"],
+    "initial_time": "2026-04-02T09:00:00-04:00",
+    "timezone": "America/New_York",
+    "user_outcome": "When the Wi-Fi problem returns, the user can recall that restarting the white mesh unit fixed it once.",
+    "steps": [
+      {"id": "capture-wifi", "type": "capture", "at": "2026-04-02T09:00:00-04:00", "text": "Wi-Fi kept dropping in the office; restarting the white mesh unit fixed it last time.", "idempotency_key": "ow-002-wifi", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-wifi", "type": "ask", "at": "2026-04-10T09:00:00-04:00", "question": "What helped with the office Wi-Fi last time?", "expect": {"include": ["white mesh unit", "restarting"], "evidence": "required"}},
+      {"id": "memory-wifi", "type": "memory", "at": "2026-04-10T09:01:00-04:00", "expect": {"include": ["Wi-Fi", "office"], "evidence": "required"}}
+    ],
+    "manual_observations": ["The system should preserve the detail as an observation, not claim that restarting always fixes the network."]
+  },
+  {
+    "case_id": "OW-003",
+    "title": "Remember a gift idea for a friend",
+    "locale": "en-GB",
+    "tags": ["open-world", "memory", "gift-idea", "people"],
+    "initial_time": "2026-04-03T11:00:00+01:00",
+    "timezone": "Europe/London",
+    "user_outcome": "A later question about gifts for Priya retrieves the handmade ceramic mug idea without creating an unrequested purchase.",
+    "steps": [
+      {"id": "capture-gift", "type": "capture", "at": "2026-04-03T11:00:00+01:00", "text": "Gift idea for Priya: a handmade ceramic mug with a blue glaze.", "idempotency_key": "ow-003-gift", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-gift", "type": "ask", "at": "2026-04-20T11:00:00+01:00", "question": "What gift idea did I have for Priya?", "expect": {"include": ["handmade ceramic mug", "blue glaze"], "evidence": "required"}},
+      {"id": "check-gift-attention", "type": "attention", "at": "2026-04-20T11:01:00+01:00", "expect": {"exclude": ["urgent"], "not_urgent": true}}
+    ],
+    "manual_observations": ["A gift idea is memory until the user asks for a task or purchase action."]
+  },
+  {
+    "case_id": "OW-004",
+    "title": "Store a shoe size from a casual conversation",
+    "locale": "pl-PL",
+    "tags": ["open-world", "memory", "people", "preference", "polish"],
+    "initial_time": "2026-04-04T12:00:00+02:00",
+    "timezone": "Europe/Warsaw",
+    "user_outcome": "The user can later ask Kuba's shoe size and receive EU 42 as a personal detail.",
+    "steps": [
+      {"id": "capture-shoe-size", "type": "capture", "at": "2026-04-04T12:00:00+02:00", "text": "Kuba wears EU 42 shoes, he mentioned it at lunch.", "idempotency_key": "ow-004-shoe-size", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-shoe-size", "type": "ask", "at": "2026-04-18T12:00:00+02:00", "question": "Jaki rozmiar butów nosi Kuba?", "expect": {"include": ["42"], "evidence": "required"}},
+      {"id": "memory-shoe-size", "type": "memory", "at": "2026-04-18T12:01:00+02:00", "expect": {"include": ["Kuba", "butów"], "evidence": "required"}}
+    ],
+    "manual_observations": ["The detail should be retrievable even though it is neither a deadline nor a subscription."]
+  },
+  {
+    "case_id": "OW-005",
+    "title": "Recall a small conversation detail",
+    "locale": "en-US",
+    "tags": ["open-world", "memory", "conversation", "people"],
+    "initial_time": "2026-04-05T16:00:00-04:00",
+    "timezone": "America/New_York",
+    "user_outcome": "The user's later question recalls that Noor is moving to Bristol in June, without turning a conversation into an urgent task.",
+    "steps": [
+      {"id": "capture-conversation", "type": "capture", "at": "2026-04-05T16:00:00-04:00", "text": "Noor said she is moving to Bristol in June.", "idempotency_key": "ow-005-noor", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-noor", "type": "ask", "at": "2026-04-25T16:00:00-04:00", "question": "What did Noor say about moving?", "expect": {"include": ["Bristol", "June"], "evidence": "required"}},
+      {"id": "check-noor-attention", "type": "attention", "at": "2026-04-25T16:01:00-04:00", "expect": {"exclude": ["urgent"], "not_urgent": true}}
+    ],
+    "manual_observations": ["Conversation memory should not be lost simply because it lacks a predefined entity type."]
+  },
+  {
+    "case_id": "OW-006",
+    "title": "Understand what a landlord PDF represents",
+    "locale": "en-GB",
+    "tags": ["open-world", "memory", "attachment", "document", "evidence"],
+    "initial_time": "2026-04-06T10:00:00+01:00",
+    "timezone": "Europe/London",
+    "user_outcome": "The user can ask what the landlord document is and learn that it is the new lease, with the PDF retained as evidence.",
+    "steps": [
+      {"id": "capture-lease", "type": "capture", "at": "2026-04-06T10:00:00+01:00", "text": "The PDF from the landlord is the new lease.", "attachment": {"fixture": "landlord-lease.pdf", "mime_type": "application/pdf", "filename": "landlord-new-lease.pdf"}, "idempotency_key": "ow-006-lease", "expect": {"saved": true, "processing": "pending", "attachment_persisted": true}},
+      {"id": "ask-lease", "type": "ask", "at": "2026-04-07T10:00:00+01:00", "question": "What is the PDF from the landlord?", "expect": {"include": ["new lease"], "evidence": "required"}},
+      {"id": "memory-lease", "type": "memory", "at": "2026-04-07T10:01:00+01:00", "expect": {"include": ["landlord", "lease"], "evidence": "required"}}
+    ],
+    "manual_observations": ["The answer should link to or clearly identify the attached source; a bare unsupported label is not enough."]
+  },
+  {
+    "case_id": "OW-007",
+    "title": "Keep a pet-care observation",
+    "locale": "en-US",
+    "tags": ["open-world", "memory", "pet", "household"],
+    "initial_time": "2026-04-07T07:00:00-04:00",
+    "timezone": "America/New_York",
+    "user_outcome": "The user can later recall that the cat stopped eating the salmon treats after the new bag was opened, without an invented medical conclusion.",
+    "steps": [
+      {"id": "capture-pet", "type": "capture", "at": "2026-04-07T07:00:00-04:00", "text": "The cat stopped eating the salmon treats after we opened the new bag.", "idempotency_key": "ow-007-pet", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-pet", "type": "ask", "at": "2026-04-14T07:00:00-04:00", "question": "What did I notice about the cat and the salmon treats?", "expect": {"include": ["stopped eating", "new bag"], "evidence": "required", "uncertainty": "if_relevant"}},
+      {"id": "memory-pet", "type": "memory", "at": "2026-04-14T07:01:00-04:00", "expect": {"include": ["cat"], "evidence": "required"}}
+    ],
+    "manual_observations": ["Do not infer an allergy, illness, or treatment from this observation alone."]
+  },
+  {
+    "case_id": "OW-008",
+    "title": "Recall a travel detail without a booking form",
+    "locale": "pl-PL",
+    "tags": ["open-world", "memory", "travel", "place", "polish"],
+    "initial_time": "2026-04-08T09:00:00+02:00",
+    "timezone": "Europe/Warsaw",
+    "user_outcome": "The user can later remember that the quiet entrance to the Kraków apartment is through the courtyard, not the street door.",
+    "steps": [
+      {"id": "capture-travel", "type": "capture", "at": "2026-04-08T09:00:00+02:00", "text": "W mieszkaniu w Krakowie ciche wejście jest od podwórka, nie od ulicy.", "idempotency_key": "ow-008-travel", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-travel", "type": "ask", "at": "2026-05-01T09:00:00+02:00", "question": "Którędy wejść do mieszkania w Krakowie?", "expect": {"include": ["podwórka"], "exclude": ["od ulicy"], "evidence": "required"}},
+      {"id": "memory-travel", "type": "memory", "at": "2026-05-01T09:01:00+02:00", "expect": {"include": ["Krakowie", "wejście"], "evidence": "required"}}
+    ],
+    "manual_observations": ["Place-specific travel knowledge should survive as memory even without importing a reservation."]
+  },
+  {
+    "case_id": "OW-009",
+    "title": "Remember a household maintenance detail",
+    "locale": "en-US",
+    "tags": ["open-world", "memory", "household", "maintenance"],
+    "initial_time": "2026-04-09T08:00:00-04:00",
+    "timezone": "America/New_York",
+    "user_outcome": "The user can later recall that the downstairs radiator valve needs turning clockwise to stop the rattle, while the source remains available.",
+    "steps": [
+      {"id": "capture-radiator", "type": "capture", "at": "2026-04-09T08:00:00-04:00", "text": "The downstairs radiator rattles unless its valve is turned clockwise halfway.", "idempotency_key": "ow-009-radiator", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-radiator", "type": "ask", "at": "2026-04-22T08:00:00-04:00", "question": "How did I stop the downstairs radiator rattling?", "expect": {"include": ["valve", "clockwise", "halfway"], "evidence": "required"}},
+      {"id": "attention-radiator", "type": "attention", "at": "2026-04-22T08:01:00-04:00", "expect": {"exclude": ["urgent"], "not_urgent": true}}
+    ],
+    "manual_observations": ["The product should distinguish a useful workaround from a confirmed repair or an automatically scheduled maintenance job."]
+  },
+  {
+    "case_id": "OW-010",
+    "title": "Preserve a vague observation without overclaiming",
+    "locale": "en-GB",
+    "tags": ["open-world", "memory", "observation", "uncertain", "unknown"],
+    "initial_time": "2026-04-10T17:00:00+01:00",
+    "timezone": "Europe/London",
+    "user_outcome": "The vague observation is findable later and is labeled as an observation, not promoted into a confirmed cause or urgent problem.",
+    "steps": [
+      {"id": "capture-vague", "type": "capture", "at": "2026-04-10T17:00:00+01:00", "text": "There was a faint sweet smell near the back door this evening; I don't know why.", "idempotency_key": "ow-010-vague", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-vague", "type": "ask", "at": "2026-04-11T17:00:00+01:00", "question": "What did I notice near the back door yesterday?", "expect": {"include": ["sweet smell", "back door"], "evidence": "required", "uncertainty": "required"}},
+      {"id": "attention-vague", "type": "attention", "at": "2026-04-11T17:01:00+01:00", "expect": {"exclude": ["confirmed leak", "urgent"], "not_urgent": true}}
+    ],
+    "manual_observations": ["Missing cause must remain unknown; a useful recall answer can still quote the observation."]
+  }
+]

@@ -1,0 +1,159 @@
+[
+  {
+    "case_id": "ATT-001",
+    "title": "Image-only capture keeps a visual location clue",
+    "locale": "en-US",
+    "tags": ["capture", "attachment", "image-only", "memory", "location"],
+    "initial_time": "2026-05-01T09:00:00-04:00",
+    "timezone": "America/New_York",
+    "user_outcome": "An image captured without typed text is saved and remains available as a source for later understanding of the blue suitcase location clue.",
+    "steps": [
+      {"id": "capture-image", "type": "capture", "at": "2026-05-01T09:00:00-04:00", "attachment": {"fixture": "blue-suitcase.svg", "mime_type": "image/svg+xml", "filename": "blue-suitcase.svg"}, "idempotency_key": "att-001-image", "expect": {"saved": true, "durable": true, "processing": "pending", "attachment_persisted": true}},
+      {"id": "ask-image", "type": "ask", "at": "2026-05-01T09:05:00-04:00", "question": "What does the suitcase image tell me?", "expect": {"include": ["blue suitcase"], "evidence": "required"}},
+      {"id": "memory-image", "type": "memory", "at": "2026-05-01T09:06:00-04:00", "expect": {"include": ["suitcase"], "evidence": "required"}}
+    ],
+    "manual_observations": ["The user should get a saved confirmation even when the capture contains no text field."]
+  },
+  {
+    "case_id": "ATT-002",
+    "title": "PDF-only capture preserves the document",
+    "locale": "en-GB",
+    "tags": ["capture", "attachment", "document-only", "pdf", "evidence"],
+    "initial_time": "2026-05-02T10:00:00+01:00",
+    "timezone": "Europe/London",
+    "user_outcome": "A PDF dropped into the inbox is durably retained and can later be identified as the new lease.",
+    "steps": [
+      {"id": "capture-pdf", "type": "capture", "at": "2026-05-02T10:00:00+01:00", "attachment": {"fixture": "landlord-lease.pdf", "mime_type": "application/pdf", "filename": "lease.pdf"}, "idempotency_key": "att-002-pdf", "expect": {"saved": true, "durable": true, "processing": "pending", "attachment_persisted": true}},
+      {"id": "ask-pdf", "type": "ask", "at": "2026-05-02T10:05:00+01:00", "question": "What document did I save from the landlord?", "expect": {"include": ["lease"], "evidence": "required"}},
+      {"id": "memory-pdf", "type": "memory", "at": "2026-05-02T10:06:00+01:00", "expect": {"include": ["PDF", "landlord"], "evidence": "required"}}
+    ],
+    "manual_observations": ["The attachment should remain downloadable or otherwise inspectable as the source of the answer."]
+  },
+  {
+    "case_id": "ATT-003",
+    "title": "Text context travels with an attachment",
+    "locale": "en-US",
+    "tags": ["capture", "attachment", "text-plus-attachment", "document", "memory"],
+    "initial_time": "2026-05-03T11:00:00-04:00",
+    "timezone": "America/New_York",
+    "user_outcome": "The short note and its lease PDF stay associated, so a later question can use both the human context and the source document.",
+    "steps": [
+      {"id": "capture-context-pdf", "type": "capture", "at": "2026-05-03T11:00:00-04:00", "text": "Keep this lease; the landlord's new version starts in October.", "attachment": {"fixture": "landlord-lease.pdf", "mime_type": "application/pdf", "filename": "landlord-lease.pdf"}, "idempotency_key": "att-003-context", "expect": {"saved": true, "processing": "pending", "attachment_persisted": true}},
+      {"id": "ask-context-pdf", "type": "ask", "at": "2026-05-04T11:00:00-04:00", "question": "Which lease did I say starts in October?", "expect": {"include": ["landlord", "lease", "October"], "evidence": "required"}},
+      {"id": "memory-context-pdf", "type": "memory", "at": "2026-05-04T11:01:00-04:00", "expect": {"include": ["lease"], "evidence": "required"}}
+    ],
+    "manual_observations": ["The product should not drop either the text context or the attachment when both are submitted together."]
+  },
+  {
+    "case_id": "ATT-004",
+    "title": "Unsupported format gets an honest outcome",
+    "locale": "en-US",
+    "tags": ["capture", "attachment", "unsupported-format", "reliability", "unknown"],
+    "initial_time": "2026-05-04T12:00:00-04:00",
+    "timezone": "America/New_York",
+    "user_outcome": "The unsupported file is either accepted as raw evidence with a visible processing limitation or rejected with a clear recoverable message; it is never silently lost.",
+    "steps": [
+      {"id": "capture-unsupported", "type": "capture", "at": "2026-05-04T12:00:00-04:00", "attachment": {"fixture": "unsupported-sample.bin", "mime_type": "application/octet-stream", "filename": "sample.bin"}, "idempotency_key": "att-004-unsupported", "expect": {"saved": true, "durable": true, "attachment_persisted": true}},
+      {"id": "memory-unsupported", "type": "memory", "at": "2026-05-04T12:05:00-04:00", "expect": {"include": ["unsupported"], "uncertainty": "required"}}
+    ],
+    "manual_observations": ["If semantic reading is unavailable, say so plainly and keep the raw file or a recoverable failure record."]
+  },
+  {
+    "case_id": "ATT-005",
+    "title": "The same attachment twice does not create two active facts",
+    "locale": "en-US",
+    "tags": ["attachment", "duplicate", "capture", "memory"],
+    "initial_time": "2026-05-05T09:00:00-04:00",
+    "timezone": "America/New_York",
+    "user_outcome": "Uploading the same image twice preserves both source events if needed, but active memory does not double-count the same visual evidence.",
+    "steps": [
+      {"id": "capture-first-image", "type": "capture", "at": "2026-05-05T09:00:00-04:00", "attachment": {"fixture": "blue-suitcase.svg", "mime_type": "image/svg+xml", "filename": "suitcase.svg"}, "idempotency_key": "att-005-first", "expect": {"saved": true, "processing": "pending", "attachment_persisted": true}},
+      {"id": "capture-second-image", "type": "capture", "at": "2026-05-05T09:00:03-04:00", "attachment": {"fixture": "blue-suitcase.svg", "mime_type": "image/svg+xml", "filename": "suitcase-copy.svg"}, "idempotency_key": "att-005-second", "expect": {"saved": true, "processing": "pending", "attachment_persisted": true}},
+      {"id": "process-images", "type": "process", "at": "2026-05-05T09:01:00-04:00", "expect": {"outcome": "processed"}},
+      {"id": "ask-one-location", "type": "ask", "at": "2026-05-05T09:02:00-04:00", "question": "What location clue was in the suitcase image?", "expect": {"include": ["blue suitcase"], "evidence": "required"}}
+    ],
+    "manual_observations": ["Do not delete raw duplicate evidence just to make the active view concise; consolidate only the active interpretation."]
+  },
+  {
+    "case_id": "REL-006",
+    "title": "A provider failure leaves a retry path",
+    "locale": "en-GB",
+    "tags": ["reliability", "provider-failure", "retry", "capture"],
+    "initial_time": "2026-05-06T09:00:00+01:00",
+    "timezone": "Europe/London",
+    "user_outcome": "A temporary provider outage is visible as a retryable processing problem, while the captured note remains safe and is processed after recovery.",
+    "steps": [
+      {"id": "provider-fails-once", "type": "set_provider", "availability": "fail_once"},
+      {"id": "capture-garden", "type": "capture", "at": "2026-05-06T09:00:00+01:00", "text": "The herb planter needs a sunnier spot.", "idempotency_key": "rel-006-garden", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "first-processing", "type": "process", "at": "2026-05-06T09:01:00+01:00", "expect": {"outcome": "retryable", "processing": "failed"}},
+      {"id": "retry-processing", "type": "retry", "at": "2026-05-06T09:03:00+01:00", "expect": {"outcome": "processed", "processing": "processed"}},
+      {"id": "ask-garden", "type": "ask", "at": "2026-05-06T09:04:00+01:00", "question": "What did I note about the herb planter?", "expect": {"include": ["sunnier spot"], "evidence": "required"}}
+    ],
+    "manual_observations": ["No retry should require the user to retype the original note."]
+  },
+  {
+    "case_id": "REL-007",
+    "title": "Restart with pending work does not lose the capture",
+    "locale": "en-US",
+    "tags": ["reliability", "restart", "pending", "capture"],
+    "initial_time": "2026-05-07T10:00:00-04:00",
+    "timezone": "America/New_York",
+    "user_outcome": "Restarting the Host while a note is pending keeps the raw capture and its pending status, ready for later processing.",
+    "steps": [
+      {"id": "capture-restart-pending", "type": "capture", "at": "2026-05-07T10:00:00-04:00", "text": "The spare batteries are in the top drawer.", "idempotency_key": "rel-007-batteries", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "restart-pending", "type": "restart", "at": "2026-05-07T10:00:05-04:00", "expect": {"state_preserved": true}},
+      {"id": "process-after-restart", "type": "process", "at": "2026-05-07T10:01:00-04:00", "expect": {"outcome": "processed"}},
+      {"id": "ask-batteries", "type": "ask", "at": "2026-05-07T10:02:00-04:00", "question": "Where are the spare batteries?", "expect": {"include": ["top drawer"], "evidence": "required"}}
+    ],
+    "manual_observations": ["A restart should not reset the inbox or create a second copy of the pending item."]
+  },
+  {
+    "case_id": "REL-008",
+    "title": "Restart after processing still keeps usable state",
+    "locale": "en-US",
+    "tags": ["reliability", "restart", "processing", "memory"],
+    "initial_time": "2026-05-08T10:00:00-04:00",
+    "timezone": "America/New_York",
+    "user_outcome": "Restarting after a processing run leaves the already understood note available and does not reprocess it into duplicate active state.",
+    "steps": [
+      {"id": "capture-restart-processing", "type": "capture", "at": "2026-05-08T10:00:00-04:00", "text": "The library card is in the green wallet.", "idempotency_key": "rel-008-library-card", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "process-before-restart", "type": "process", "at": "2026-05-08T10:01:00-04:00", "expect": {"outcome": "processed"}},
+      {"id": "restart-processing", "type": "restart", "at": "2026-05-08T10:01:05-04:00", "expect": {"state_preserved": true}},
+      {"id": "ask-library-card", "type": "ask", "at": "2026-05-08T10:02:00-04:00", "question": "Where is the library card?", "expect": {"include": ["green wallet"], "evidence": "required"}}
+    ],
+    "manual_observations": ["The product should return to the same usable state after a normal restart, not a blank onboarding state."]
+  },
+  {
+    "case_id": "REL-009",
+    "title": "Repeating process is safe",
+    "locale": "en-US",
+    "tags": ["reliability", "idempotency", "processing", "duplicate"],
+    "initial_time": "2026-05-09T10:00:00-04:00",
+    "timezone": "America/New_York",
+    "user_outcome": "Calling processing again after there is no new work is harmless and does not create duplicate active memory.",
+    "steps": [
+      {"id": "capture-process-repeat", "type": "capture", "at": "2026-05-09T10:00:00-04:00", "text": "The blue notebook is on the hall shelf.", "idempotency_key": "rel-009-notebook", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "process-once", "type": "process", "at": "2026-05-09T10:01:00-04:00", "expect": {"outcome": "processed"}},
+      {"id": "process-again", "type": "process", "at": "2026-05-09T10:01:01-04:00", "expect": {"outcome": "no_duplicate"}},
+      {"id": "ask-notebook", "type": "ask", "at": "2026-05-09T10:02:00-04:00", "question": "Where is the blue notebook?", "expect": {"include": ["hall shelf"], "evidence": "required"}}
+    ],
+    "manual_observations": ["A repeated button click or scheduled process retry should not inflate counts or create another memory card."]
+  },
+  {
+    "case_id": "REL-010",
+    "title": "Retrying a completed item does not duplicate it",
+    "locale": "en-GB",
+    "tags": ["reliability", "retry", "idempotency", "provider-failure"],
+    "initial_time": "2026-05-10T10:00:00+01:00",
+    "timezone": "Europe/London",
+    "user_outcome": "After a fail-then-retry sequence, the item is processed once; another retry is a safe no-op and the active state contains one note.",
+    "steps": [
+      {"id": "provider-fails", "type": "set_provider", "availability": "fail_once"},
+      {"id": "capture-retry-item", "type": "capture", "at": "2026-05-10T10:00:00+01:00", "text": "Book the annual boiler service.", "idempotency_key": "rel-010-boiler-service", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "process-failure", "type": "process", "at": "2026-05-10T10:01:00+01:00", "expect": {"outcome": "retryable", "processing": "failed"}},
+      {"id": "retry-completes", "type": "retry", "at": "2026-05-10T10:02:00+01:00", "expect": {"outcome": "processed"}},
+      {"id": "retry-no-op", "type": "retry", "at": "2026-05-10T10:03:00+01:00", "expect": {"outcome": "no_duplicate"}}
+    ],
+    "manual_observations": ["The user should not have to decide whether a retry already succeeded before trusting the active state."]
+  }
+]

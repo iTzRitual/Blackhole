@@ -1,0 +1,156 @@
+[
+  {
+    "case_id": "CAP-001",
+    "title": "A taxi in ten minutes is an actionable near-term reminder",
+    "locale": "pl-PL",
+    "tags": ["capture", "text", "attention", "relative-time", "polish"],
+    "initial_time": "2026-01-05T09:00:00+01:00",
+    "timezone": "Europe/Warsaw",
+    "user_outcome": "After saving the fragment, the user can see the taxi as something actionable in the next few minutes and can retrieve the supporting capture.",
+    "steps": [
+      {"id": "capture-taxi", "type": "capture", "at": "2026-01-05T09:00:00+01:00", "text": "Taxi za 10 minut.", "idempotency_key": "cap-001-taxi", "expect": {"saved": true, "durable": true, "processing": "pending", "message": "Saved."}},
+      {"id": "check-attention", "type": "attention", "at": "2026-01-05T09:01:00+01:00", "expect": {"include": ["taxi"], "actionable": true, "evidence": "required"}},
+      {"id": "ask-next", "type": "ask", "at": "2026-01-05T09:01:00+01:00", "question": "Co mam zrobić w ciągu najbliższych 15 minut?", "expect": {"include": ["taxi"], "evidence": "required"}}
+    ],
+    "manual_observations": ["A normal person should not need to create a task or choose a category before the taxi note is safely saved."]
+  },
+  {
+    "case_id": "CAP-002",
+    "title": "Picking up the children in ten minutes",
+    "locale": "pl-PL",
+    "tags": ["capture", "text", "attention", "explicit-time", "polish"],
+    "initial_time": "2026-01-06T15:45:00+01:00",
+    "timezone": "Europe/Warsaw",
+    "user_outcome": "The fixed 16:30 pickup appears as an actionable item with the right local time, without requiring structured task entry.",
+    "steps": [
+      {"id": "capture-pickup", "type": "capture", "at": "2026-01-06T15:45:00+01:00", "text": "Odbieram dzieci za 10 minut.", "idempotency_key": "cap-002-pickup", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "check-pickup", "type": "attention", "at": "2026-01-06T15:50:00+01:00", "expect": {"include": ["dzieci", "10 minut"], "actionable": true, "evidence": "required"}},
+      {"id": "ask-pickup", "type": "ask", "at": "2026-01-06T15:50:00+01:00", "question": "Kiedy odbieram dzieci?", "expect": {"include": ["10 minut"], "evidence": "required"}}
+    ],
+    "manual_observations": ["The relative time should be shown against the user's local clock and should not drift by an hour."]
+  },
+  {
+    "case_id": "CAP-003",
+    "title": "Parking permit renewal has a real deadline",
+    "locale": "pl-PL",
+    "tags": ["capture", "text", "attention", "explicit-date", "deadline", "polish"],
+    "initial_time": "2026-08-30T10:00:00+02:00",
+    "timezone": "Europe/Warsaw",
+    "user_outcome": "The parking permit renewal is visible as an actionable deadline on 12 September, with the original wording available as evidence.",
+    "steps": [
+      {"id": "capture-parking", "type": "capture", "at": "2026-08-30T10:00:00+02:00", "text": "Muszę odnowić pozwolenie parkingowe do 12 września.", "idempotency_key": "cap-003-parking", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "check-parking", "type": "attention", "at": "2026-08-30T10:05:00+02:00", "expect": {"include": ["parking", "12 września"], "actionable": true, "evidence": "required"}},
+      {"id": "ask-parking", "type": "ask", "at": "2026-08-30T10:05:00+02:00", "question": "Do kiedy muszę odnowić pozwolenie parkingowe?", "expect": {"include": ["12 września"], "evidence": "required"}}
+    ],
+    "manual_observations": ["A clear deadline should not disappear just because it was captured as an ordinary sentence."]
+  },
+  {
+    "case_id": "CAP-004",
+    "title": "A brother's flight next month is context, not urgent attention",
+    "locale": "en-US",
+    "tags": ["capture", "text", "attention", "false-positive", "relative-time"],
+    "initial_time": "2026-02-02T08:00:00-05:00",
+    "timezone": "America/New_York",
+    "user_outcome": "The flight note can be recalled later, but mentioning next month does not create a false urgent item today.",
+    "steps": [
+      {"id": "capture-flight", "type": "capture", "at": "2026-02-02T08:00:00-05:00", "text": "My brother's flight is next month.", "idempotency_key": "cap-004-flight", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "check-no-urgent-flight", "type": "attention", "at": "2026-02-02T08:05:00-05:00", "expect": {"exclude": ["urgent"], "not_urgent": true}},
+      {"id": "ask-flight", "type": "ask", "at": "2026-02-02T08:05:00-05:00", "question": "When is my brother's flight?", "expect": {"include": ["next month"], "evidence": "required"}}
+    ],
+    "manual_observations": ["The note may be useful memory, but it should not interrupt the user as if a task were due now."]
+  },
+  {
+    "case_id": "CAP-005",
+    "title": "A possible bike purchase next year is not a task",
+    "locale": "en-US",
+    "tags": ["capture", "text", "attention", "false-positive", "uncertain"],
+    "initial_time": "2026-02-03T08:00:00-05:00",
+    "timezone": "America/New_York",
+    "user_outcome": "The possibility of buying a bike remains retrievable as a thought, with no automatic urgent Attention item.",
+    "steps": [
+      {"id": "capture-bike", "type": "capture", "at": "2026-02-03T08:00:00-05:00", "text": "I might buy a bike next year.", "idempotency_key": "cap-005-bike", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "check-no-urgent-bike", "type": "attention", "at": "2026-02-03T08:05:00-05:00", "expect": {"exclude": ["urgent"], "not_urgent": true}},
+      {"id": "ask-bike", "type": "ask", "at": "2026-02-03T08:05:00-05:00", "question": "What did I say about buying a bike?", "expect": {"include": ["bike", "next year"], "evidence": "required", "uncertainty": "required"}}
+    ],
+    "manual_observations": ["Do not silently turn 'might' into a commitment or a deadline."]
+  },
+  {
+    "case_id": "CAP-006",
+    "title": "A contract's notice clause is background information",
+    "locale": "en-US",
+    "tags": ["capture", "text", "attention", "false-positive", "document"],
+    "initial_time": "2026-02-04T08:00:00-05:00",
+    "timezone": "America/New_York",
+    "user_outcome": "The 30-day notice period is available when asked about the contract, but the clause alone does not become an urgent task.",
+    "steps": [
+      {"id": "capture-notice", "type": "capture", "at": "2026-02-04T08:00:00-05:00", "text": "The contract mentions a 30-day notice period.", "idempotency_key": "cap-006-notice", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "check-no-urgent-notice", "type": "attention", "at": "2026-02-04T08:05:00-05:00", "expect": {"exclude": ["urgent"], "not_urgent": true}},
+      {"id": "ask-notice", "type": "ask", "at": "2026-02-04T08:05:00-05:00", "question": "What does the contract say about notice?", "expect": {"include": ["30-day", "notice"], "evidence": "required"}}
+    ],
+    "manual_observations": ["A mentioned duration is not necessarily a user commitment or a dated deadline."]
+  },
+  {
+    "case_id": "CAP-007",
+    "title": "A past outing should stay a memory",
+    "locale": "en-US",
+    "tags": ["capture", "text", "attention", "false-positive", "past-time"],
+    "initial_time": "2026-02-05T08:00:00-05:00",
+    "timezone": "America/New_York",
+    "user_outcome": "The user can later remember the outing, while the past-tense observation does not create an overdue or urgent item.",
+    "steps": [
+      {"id": "capture-outing", "type": "capture", "at": "2026-02-05T08:00:00-05:00", "text": "I remember we went there last Tuesday.", "idempotency_key": "cap-007-outing", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "check-no-urgent-outing", "type": "attention", "at": "2026-02-05T08:05:00-05:00", "expect": {"exclude": ["urgent", "overdue"], "not_urgent": true}},
+      {"id": "ask-outing", "type": "ask", "at": "2026-02-05T08:05:00-05:00", "question": "When did we go there?", "expect": {"include": ["last Tuesday"], "evidence": "required"}}
+    ],
+    "manual_observations": ["Past-tense recall should not be misread as an outstanding action."]
+  },
+  {
+    "case_id": "CAP-008",
+    "title": "Capture remains available while the provider is unavailable",
+    "locale": "en-US",
+    "tags": ["capture", "reliability", "provider-failure", "immediate-save"],
+    "initial_time": "2026-02-06T09:00:00-05:00",
+    "timezone": "America/New_York",
+    "user_outcome": "The note is safely saved even when later understanding is temporarily unavailable, and processing can be retried without losing it.",
+    "steps": [
+      {"id": "provider-offline", "type": "set_provider", "availability": "unavailable"},
+      {"id": "capture-leak", "type": "capture", "at": "2026-02-06T09:00:00-05:00", "text": "The kettle is still leaking near the handle.", "idempotency_key": "cap-008-leak", "expect": {"saved": true, "durable": true, "processing": "pending"}},
+      {"id": "process-fails", "type": "process", "at": "2026-02-06T09:01:00-05:00", "expect": {"outcome": "retryable", "processing": "failed"}},
+      {"id": "provider-back", "type": "set_provider", "availability": "available"},
+      {"id": "retry-leak", "type": "retry", "at": "2026-02-06T09:03:00-05:00", "expect": {"outcome": "processed", "processing": "processed"}}
+    ],
+    "manual_observations": ["The user should see an honest retryable processing message, not a lost capture or a fabricated interpretation."]
+  },
+  {
+    "case_id": "CAP-009",
+    "title": "Two quick captures remain two distinct thoughts",
+    "locale": "en-US",
+    "tags": ["capture", "text", "rapid-consecutive", "memory"],
+    "initial_time": "2026-02-07T07:30:00-05:00",
+    "timezone": "America/New_York",
+    "user_outcome": "Two notes entered back to back are both saved, even though the user did not pause to organize the second one.",
+    "steps": [
+      {"id": "capture-charger", "type": "capture", "at": "2026-02-07T07:30:00-05:00", "text": "I left the spare charger in the blue suitcase.", "idempotency_key": "cap-009-charger", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "capture-birthday", "type": "capture", "at": "2026-02-07T07:30:04-05:00", "text": "Marta's birthday is November 3.", "idempotency_key": "cap-009-birthday", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-charger", "type": "ask", "at": "2026-02-07T07:35:00-05:00", "question": "Where is the spare charger and when is Marta's birthday?", "expect": {"include": ["blue suitcase", "November 3"], "evidence": "required"}}
+    ],
+    "manual_observations": ["Neither capture should overwrite the other or force the user into a queue-management screen."]
+  },
+  {
+    "case_id": "CAP-010",
+    "title": "A double click does not duplicate the active note",
+    "locale": "en-US",
+    "tags": ["capture", "reliability", "duplicate", "double-submit"],
+    "initial_time": "2026-02-08T11:00:00-05:00",
+    "timezone": "America/New_York",
+    "user_outcome": "A double submit produces one active capture with clear feedback, rather than duplicate memory or duplicate Attention.",
+    "steps": [
+      {"id": "first-submit", "type": "capture", "at": "2026-02-08T11:00:00-05:00", "text": "Buy oat milk on the way home.", "idempotency_key": "cap-010-oat-milk", "expect": {"saved": true, "processing": "pending", "duplicate": false}},
+      {"id": "second-submit", "type": "capture", "at": "2026-02-08T11:00:00-05:00", "text": "Buy oat milk on the way home.", "idempotency_key": "cap-010-oat-milk", "expect": {"saved": true, "duplicate": true}},
+      {"id": "process-oat-milk", "type": "process", "at": "2026-02-08T11:01:00-05:00", "expect": {"outcome": "processed"}},
+      {"id": "process-oat-milk-again", "type": "process", "at": "2026-02-08T11:01:01-05:00", "expect": {"outcome": "no_duplicate"}},
+      {"id": "ask-oat-milk", "type": "ask", "at": "2026-02-08T11:02:00-05:00", "question": "What should I buy on the way home?", "expect": {"include": ["oat milk"], "evidence": "required"}}
+    ],
+    "manual_observations": ["The user should be able to trust that tapping twice did not silently create two reminders."]
+  }
+]
