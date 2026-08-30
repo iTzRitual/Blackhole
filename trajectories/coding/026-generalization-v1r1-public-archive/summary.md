@@ -1,6 +1,6 @@
 # Generalization V1R1 public archive
 
-Status: archive assembled; publication verification pending.
+Status: complete; public archive gate PASS.
 
 ## Goal
 
@@ -63,6 +63,9 @@ files, provided the remote safety gates and ancestry checks pass.
   edits.
 - Kept the oracle worktree and local scoring worktree untouched as Git
   histories; no provider or model calls were made.
+- Published the evidence commit directly to `origin/master`, pushed and
+  verified the five archive tags, deleted only the five authorized obsolete
+  remote branches, and confirmed the remote now exposes only `master`.
 
 ## Failures encountered
 
@@ -91,29 +94,43 @@ checks do not match the specified conditions.
 
 ## Evaluation performed
 
-Pre-publication deterministic checks are pending. No provider-backed run is
-authorized or needed for this archive task.
+Provider-free checks passed: `python scripts/qualification_check.py
+--inventory` (31 coding and 48 runtime trajectories; four pre-existing
+non-blocking warnings), `python benchmark/dev/generate_benchmark.py --check`,
+`python eval/contract_smoke.py`, 85 unit tests, `python -m compileall -q app
+eval scripts`, and Git whitespace/protected-tree checks. The six candidate
+checkout-byte hashes, six score-artifact hashes, sealed manifests, merge
+ancestry, remote tags, required public paths, and final remote-head state all
+passed. No provider-backed run was authorized or needed.
 
 ## Result
 
-The archive worktree contains both sealed V1R1 merge histories, the inspected
-public-safe scoring evidence, and the required documentation updates. Remote
-publication, tag push, obsolete-branch deletion, final deterministic checks,
-and temporary-worktree cleanup remain pending.
+The public evidence commit
+`b29aa5a0c1465d011b8152b76a35ae17605593dd` was pushed directly to
+`origin/master`. It contains both sealed V1R1 merge histories, the inspected
+public-safe scoring evidence, the authoritative report/result, and the
+required documentation updates. All five archive tags are remotely verified,
+and the five obsolete generalization remote branches are deleted; the only
+remote head is `refs/heads/master`.
 
 ## Regressions or unresolved issues
 
-No runtime or benchmark regression has been observed. The supplied candidate
+No runtime or benchmark regression has been observed. The qualification check
+retains four pre-existing non-blocking warnings (one developer-specific audit
+path and three historical stale-artifact warnings). The supplied candidate
 hashes require the documented CRLF checkout-byte interpretation; raw Git-blob
 hashes are intentionally different because the repository stores LF-normalized
-blobs.
+blobs. The oracle and scoring worktrees remain local and clean as required.
 
 ## Final decision
 
-Pending final publication gate.
+KEEP the public-safe V1R1 archive and evidence consolidation. This was
+repository hygiene and evidence publication only; no runtime behavior,
+benchmark semantics, or reported score was tuned.
 
 ## Related git commit
 
-The planned public evidence commit message is
-`generalization: archive sealed V1R1 evaluation`; the exact final SHA will be
-recorded in the handoff after publication.
+Public evidence commit: `b29aa5a0c1465d011b8152b76a35ae17605593dd`
+(`generalization: archive sealed V1R1 evaluation`). A final documentation-only
+commit records this completed summary; its exact final master SHA is reported
+in the handoff.
