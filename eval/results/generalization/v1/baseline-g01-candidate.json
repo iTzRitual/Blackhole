@@ -1,0 +1,2079 @@
+{
+  "response_contract": "response-contract-v2",
+  "scenario_id": "g01",
+  "checkpoints": {
+    "20": {
+      "checkpoint": 20,
+      "queries": {
+        "q-subscriptions-current": {
+          "assertions": [
+            {
+              "subject": "moonbeam_plus",
+              "predicate": "status",
+              "knowledge_status": "known",
+              "value": "active",
+              "source_refs": [
+                "g01-e001"
+              ]
+            },
+            {
+              "subject": "moonbeam_plus",
+              "predicate": "current_price",
+              "knowledge_status": "known",
+              "value": {
+                "amount": 11.9,
+                "currency": "EUR",
+                "billing_period": "monthly"
+              },
+              "source_refs": [
+                "g01-e001"
+              ]
+            },
+            {
+              "subject": "moonbeam_plus",
+              "predicate": "next_renewal",
+              "knowledge_status": "known",
+              "value": "2026-04-30",
+              "source_refs": [
+                "g01-e001"
+              ]
+            }
+          ]
+        },
+        "q-subscriptions-history": {
+          "assertions": [
+            {
+              "subject": "moonbeam_plus",
+              "predicate": "historical_price",
+              "knowledge_status": "known",
+              "value": {
+                "amount": 11.9,
+                "currency": "EUR",
+                "billing_period": "monthly"
+              },
+              "source_refs": [
+                "g01-e001"
+              ]
+            },
+            {
+              "subject": "moonbeam_plus",
+              "predicate": "historical_price",
+              "knowledge_status": "known",
+              "value": {
+                "amount": 13.5,
+                "currency": "EUR",
+                "billing_period": "monthly"
+              },
+              "source_refs": [
+                "g01-e008"
+              ]
+            },
+            {
+              "subject": "moonbeam_plus",
+              "predicate": "price_effective",
+              "knowledge_status": "known",
+              "value": "2026-05-01",
+              "source_refs": [
+                "g01-e008"
+              ]
+            },
+            {
+              "subject": "moonbeam_plus",
+              "predicate": "cancellation_intent",
+              "knowledge_status": "unknown",
+              "unknown_reason": "not_stated",
+              "source_refs": [
+                "g01-e001",
+                "g01-e008"
+              ]
+            },
+            {
+              "subject": "moonbeam_plus",
+              "predicate": "cancellation_requested",
+              "knowledge_status": "unknown",
+              "unknown_reason": "not_stated",
+              "source_refs": [
+                "g01-e001",
+                "g01-e008"
+              ]
+            }
+          ]
+        },
+        "q-attention-14d": {
+          "assertions": [
+            {
+              "subject": "permit_renewal",
+              "predicate": "needs_attention",
+              "knowledge_status": "known",
+              "value": {
+                "reason": "open deadline",
+                "deadline": "2026-04-30",
+                "owner": "mira_solen",
+                "status": "in_progress"
+              },
+              "source_refs": [
+                "g01-e013",
+                "g01-e018",
+                "g01-e019",
+                "g01-e020"
+              ]
+            },
+            {
+              "subject": "change_fiber_payment",
+              "predicate": "needs_attention",
+              "knowledge_status": "known",
+              "value": {
+                "reason": "approval required",
+                "approval_required": true,
+                "approved": false,
+                "executed": false
+              },
+              "source_refs": [
+                "g01-e010"
+              ]
+            }
+          ]
+        },
+        "q-insurance-current": {
+          "assertions": [
+            {
+              "subject": "emberline",
+              "predicate": "policy_id",
+              "knowledge_status": "known",
+              "value": "EL-4821",
+              "source_refs": [
+                "g01-e005"
+              ]
+            },
+            {
+              "subject": "emberline",
+              "predicate": "premium",
+              "knowledge_status": "known",
+              "value": {
+                "amount": 19.75,
+                "currency": "EUR",
+                "billing_period": "monthly"
+              },
+              "source_refs": [
+                "g01-e005"
+              ]
+            },
+            {
+              "subject": "emberline",
+              "predicate": "expiry_date",
+              "knowledge_status": "known",
+              "value": "2026-12-31",
+              "source_refs": [
+                "g01-e005"
+              ]
+            },
+            {
+              "subject": "emberline",
+              "predicate": "beneficiary",
+              "knowledge_status": "unknown",
+              "unknown_reason": "conflicting",
+              "source_refs": [
+                "g01-e016",
+                "g01-e017"
+              ]
+            }
+          ]
+        },
+        "q-service-costs": {
+          "assertions": [
+            {
+              "subject": "copperline_fiber",
+              "predicate": "observed_bill_count",
+              "knowledge_status": "known",
+              "value": 1,
+              "source_refs": [
+                "g01-e002",
+                "g01-e011"
+              ]
+            },
+            {
+              "subject": "copperline_fiber",
+              "predicate": "observed_total",
+              "knowledge_status": "known",
+              "value": {
+                "amount": 42,
+                "currency": "EUR"
+              },
+              "source_refs": [
+                "g01-e002",
+                "g01-e011"
+              ]
+            },
+            {
+              "subject": "copperline_fiber",
+              "predicate": "observed_periods",
+              "knowledge_status": "known",
+              "value": [
+                "2026-04"
+              ],
+              "source_refs": [
+                "g01-e002",
+                "g01-e011"
+              ]
+            },
+            {
+              "subject": "copperline_fiber",
+              "predicate": "missing_periods",
+              "knowledge_status": "known",
+              "value": [
+                "2026-05"
+              ],
+              "source_refs": [
+                "g01-e009"
+              ]
+            }
+          ]
+        },
+        "q-purchase-consumption": {
+          "assertions": [
+            {
+              "subject": "greenglass_market",
+              "predicate": "purchase_count",
+              "knowledge_status": "known",
+              "value": 1,
+              "source_refs": [
+                "g01-e003",
+                "g01-e012"
+              ]
+            },
+            {
+              "subject": "greenglass_market",
+              "predicate": "purchased_total",
+              "knowledge_status": "known",
+              "value": {
+                "amount": 18.4,
+                "currency": "EUR"
+              },
+              "source_refs": [
+                "g01-e003",
+                "g01-e012"
+              ]
+            },
+            {
+              "subject": "greenglass_market",
+              "predicate": "confirmed_consumption_quantity",
+              "knowledge_status": "known",
+              "value": 2,
+              "source_refs": [
+                "g01-e004"
+              ]
+            },
+            {
+              "subject": "greenglass_market",
+              "predicate": "consumption_observation_count",
+              "knowledge_status": "known",
+              "value": 2,
+              "source_refs": [
+                "g01-e004",
+                "g01-e015"
+              ]
+            },
+            {
+              "subject": "greenglass_market",
+              "predicate": "explicit_zero_is_supported",
+              "knowledge_status": "known",
+              "value": true,
+              "source_refs": [
+                "g01-e015"
+              ]
+            },
+            {
+              "subject": "greenglass_market",
+              "predicate": "unobserved_consumption",
+              "knowledge_status": "unknown",
+              "unknown_reason": "no_consumption_observation",
+              "source_refs": [
+                "g01-e003",
+                "g01-e004",
+                "g01-e015"
+              ]
+            }
+          ]
+        },
+        "q-tasks-state": {
+          "assertions": [
+            {
+              "subject": "permit_renewal",
+              "predicate": "status",
+              "knowledge_status": "known",
+              "value": "in_progress",
+              "source_refs": [
+                "g01-e019"
+              ]
+            },
+            {
+              "subject": "permit_renewal",
+              "predicate": "owner",
+              "knowledge_status": "known",
+              "value": "mira_solen",
+              "source_refs": [
+                "g01-e013"
+              ]
+            },
+            {
+              "subject": "permit_renewal",
+              "predicate": "deadline",
+              "knowledge_status": "known",
+              "value": "2026-04-30",
+              "confirmation_ref": "g01-e020",
+              "source_refs": [
+                "g01-e018",
+                "g01-e020"
+              ]
+            },
+            {
+              "subject": "permit_renewal",
+              "predicate": "status_history",
+              "knowledge_status": "known",
+              "value": [
+                "open",
+                "in_progress"
+              ],
+              "source_refs": [
+                "g01-e006",
+                "g01-e019"
+              ]
+            },
+            {
+              "subject": "permit_renewal",
+              "predicate": "owner_history",
+              "knowledge_status": "known",
+              "value": [
+                "devon_park",
+                "mira_solen"
+              ],
+              "source_refs": [
+                "g01-e006",
+                "g01-e013"
+              ]
+            },
+            {
+              "subject": "meter_visit",
+              "predicate": "owner",
+              "knowledge_status": "known",
+              "value": "mira_reference",
+              "source_refs": [
+                "g01-e007"
+              ]
+            },
+            {
+              "subject": "meter_visit",
+              "predicate": "status",
+              "knowledge_status": "unknown",
+              "unknown_reason": "not_stated",
+              "source_refs": [
+                "g01-e007",
+                "g01-e014"
+              ]
+            },
+            {
+              "subject": "meter_visit",
+              "predicate": "blocker",
+              "knowledge_status": "known",
+              "value": "April meter reading is not available",
+              "source_refs": [
+                "g01-e014"
+              ]
+            }
+          ]
+        },
+        "q-unresolved": {
+          "assertions": [
+            {
+              "subject": "emberline",
+              "predicate": "beneficiary",
+              "knowledge_status": "unknown",
+              "unknown_reason": "conflicting",
+              "source_refs": [
+                "g01-e016",
+                "g01-e017"
+              ]
+            },
+            {
+              "subject": "emberline",
+              "predicate": "contradiction",
+              "knowledge_status": "known",
+              "value": {
+                "target": "emberline.beneficiary",
+                "conflicting_values": [
+                  "mira_solen",
+                  "mira_sorin"
+                ],
+                "resolution_status": "unresolved"
+              },
+              "source_refs": [
+                "g01-e016",
+                "g01-e017"
+              ]
+            },
+            {
+              "subject": "mira_reference",
+              "predicate": "entity_link",
+              "knowledge_status": "unknown",
+              "unknown_reason": "ambiguous_person",
+              "source_refs": [
+                "g01-e007"
+              ]
+            },
+            {
+              "subject": "meter_visit",
+              "predicate": "status",
+              "knowledge_status": "unknown",
+              "unknown_reason": "not_stated",
+              "source_refs": [
+                "g01-e007",
+                "g01-e014"
+              ]
+            },
+            {
+              "subject": "greenglass_market",
+              "predicate": "unobserved_consumption",
+              "knowledge_status": "unknown",
+              "unknown_reason": "no_consumption_observation",
+              "source_refs": [
+                "g01-e003",
+                "g01-e004",
+                "g01-e015"
+              ]
+            }
+          ]
+        },
+        "q-duplicates-changes": {
+          "assertions": [
+            {
+              "subject": "scenario",
+              "predicate": "duplicate_event_count",
+              "knowledge_status": "known",
+              "value": 2,
+              "source_refs": [
+                "g01-e011",
+                "g01-e012"
+              ]
+            },
+            {
+              "subject": "scenario",
+              "predicate": "duplicate_group_count",
+              "knowledge_status": "known",
+              "value": 2,
+              "source_refs": [
+                "g01-e002",
+                "g01-e003",
+                "g01-e011",
+                "g01-e012"
+              ]
+            },
+            {
+              "subject": "scenario",
+              "predicate": "meaningful_change_event_count",
+              "knowledge_status": "known",
+              "value": 4,
+              "source_refs": [
+                "g01-e008",
+                "g01-e013",
+                "g01-e018",
+                "g01-e019"
+              ]
+            },
+            {
+              "subject": "capture:g01-e011",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "exact_duplicate",
+                "source_event_id": "g01-e002",
+                "target_event_id": "g01-e011"
+              },
+              "source_refs": [
+                "g01-e002",
+                "g01-e011"
+              ]
+            },
+            {
+              "subject": "capture:g01-e012",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "normalized_duplicate",
+                "source_event_id": "g01-e003",
+                "target_event_id": "g01-e012"
+              },
+              "source_refs": [
+                "g01-e003",
+                "g01-e012"
+              ]
+            },
+            {
+              "subject": "capture:g01-e008",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "meaningful_change",
+                "source_event_id": "g01-e001",
+                "target_event_id": "g01-e008",
+                "changed_fields": [
+                  "current_price"
+                ]
+              },
+              "source_refs": [
+                "g01-e001",
+                "g01-e008"
+              ]
+            },
+            {
+              "subject": "capture:g01-e013",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "meaningful_change",
+                "source_event_id": "g01-e006",
+                "target_event_id": "g01-e013",
+                "changed_fields": [
+                  "owner"
+                ]
+              },
+              "source_refs": [
+                "g01-e006",
+                "g01-e013"
+              ]
+            },
+            {
+              "subject": "capture:g01-e018",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "meaningful_change",
+                "source_event_id": "g01-e006",
+                "target_event_id": "g01-e018",
+                "changed_fields": [
+                  "deadline"
+                ]
+              },
+              "source_refs": [
+                "g01-e006",
+                "g01-e018"
+              ]
+            },
+            {
+              "subject": "capture:g01-e019",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "meaningful_change",
+                "source_event_id": "g01-e006",
+                "target_event_id": "g01-e019",
+                "changed_fields": [
+                  "status"
+                ]
+              },
+              "source_refs": [
+                "g01-e006",
+                "g01-e019"
+              ]
+            },
+            {
+              "subject": "capture:g01-e017",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "similar_not_duplicate",
+                "source_event_id": "g01-e016",
+                "target_event_id": "g01-e017",
+                "changed_fields": [
+                  "beneficiary"
+                ]
+              },
+              "source_refs": [
+                "g01-e016",
+                "g01-e017"
+              ]
+            }
+          ]
+        },
+        "q-contract-dates": {
+          "assertions": []
+        },
+        "q-approval-boundary": {
+          "assertions": [
+            {
+              "subject": "change_fiber_payment",
+              "predicate": "approval_required",
+              "knowledge_status": "known",
+              "value": true,
+              "source_refs": [
+                "g01-e010"
+              ]
+            },
+            {
+              "subject": "change_fiber_payment",
+              "predicate": "approved",
+              "knowledge_status": "known",
+              "value": false,
+              "source_refs": [
+                "g01-e010"
+              ]
+            },
+            {
+              "subject": "change_fiber_payment",
+              "predicate": "executed",
+              "knowledge_status": "known",
+              "value": false,
+              "source_refs": [
+                "g01-e010"
+              ]
+            },
+            {
+              "subject": "change_fiber_payment",
+              "predicate": "approval_scope",
+              "knowledge_status": "known",
+              "value": "Copperline bank mandate",
+              "source_refs": [
+                "g01-e010"
+              ]
+            }
+          ]
+        },
+        "q-recent-changes": {
+          "assertions": [
+            {
+              "subject": "moonbeam_plus",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "meaningful_change",
+                "source_event_id": "g01-e001",
+                "target_event_id": "g01-e008",
+                "changed_fields": [
+                  "current_price"
+                ],
+                "effective_date": "2026-05-01"
+              },
+              "source_refs": [
+                "g01-e001",
+                "g01-e008"
+              ]
+            },
+            {
+              "subject": "permit_renewal",
+              "predicate": "owner_history",
+              "knowledge_status": "known",
+              "value": [
+                "devon_park",
+                "mira_solen"
+              ],
+              "source_refs": [
+                "g01-e006",
+                "g01-e013"
+              ]
+            },
+            {
+              "subject": "permit_renewal",
+              "predicate": "status_history",
+              "knowledge_status": "known",
+              "value": [
+                "open",
+                "in_progress"
+              ],
+              "source_refs": [
+                "g01-e006",
+                "g01-e019"
+              ]
+            },
+            {
+              "subject": "permit_renewal",
+              "predicate": "correction",
+              "knowledge_status": "known",
+              "value": {
+                "target": "permit_renewal.deadline",
+                "prior_value": "2026-04-28",
+                "replacement_value": "2026-04-30",
+                "source_event_id": "g01-e018"
+              },
+              "confirmation_ref": "g01-e020",
+              "source_refs": [
+                "g01-e006",
+                "g01-e018",
+                "g01-e020"
+              ]
+            },
+            {
+              "subject": "permit_renewal",
+              "predicate": "supersession",
+              "knowledge_status": "known",
+              "value": {
+                "superseded_event_id": "g01-e006",
+                "replacement_event_id": "g01-e018"
+              },
+              "source_refs": [
+                "g01-e006",
+                "g01-e018"
+              ]
+            },
+            {
+              "subject": "emberline",
+              "predicate": "contradiction",
+              "knowledge_status": "known",
+              "value": {
+                "target": "emberline.beneficiary",
+                "conflicting_values": [
+                  "mira_solen",
+                  "mira_sorin"
+                ],
+                "resolution_status": "unresolved"
+              },
+              "source_refs": [
+                "g01-e016",
+                "g01-e017"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "40": {
+      "checkpoint": 40,
+      "queries": {
+        "q-subscriptions-current": {
+          "assertions": [
+            {
+              "subject": "moonbeam_plus",
+              "predicate": "status",
+              "knowledge_status": "known",
+              "value": "active",
+              "source_refs": [
+                "g01-e001",
+                "g01-e036"
+              ]
+            },
+            {
+              "subject": "moonbeam_plus",
+              "predicate": "current_price",
+              "knowledge_status": "known",
+              "value": {
+                "amount": 13.5,
+                "currency": "EUR",
+                "billing_period": "monthly"
+              },
+              "source_refs": [
+                "g01-e008",
+                "g01-e036"
+              ]
+            },
+            {
+              "subject": "moonbeam_plus",
+              "predicate": "last_charge",
+              "knowledge_status": "known",
+              "value": {
+                "amount": 11.9,
+                "currency": "EUR"
+              },
+              "source_refs": [
+                "g01-e021"
+              ]
+            },
+            {
+              "subject": "moonbeam_plus",
+              "predicate": "next_renewal",
+              "knowledge_status": "known",
+              "value": "2026-05-30",
+              "source_refs": [
+                "g01-e030"
+              ]
+            }
+          ]
+        },
+        "q-subscriptions-history": {
+          "assertions": [
+            {
+              "subject": "moonbeam_plus",
+              "predicate": "historical_price",
+              "knowledge_status": "known",
+              "value": {
+                "from": {
+                  "amount": 11.9,
+                  "currency": "EUR"
+                },
+                "to": {
+                  "amount": 13.5,
+                  "currency": "EUR"
+                }
+              },
+              "source_refs": [
+                "g01-e001",
+                "g01-e008",
+                "g01-e036"
+              ]
+            },
+            {
+              "subject": "moonbeam_plus",
+              "predicate": "price_effective",
+              "knowledge_status": "known",
+              "value": "2026-05-01",
+              "source_refs": [
+                "g01-e008"
+              ]
+            },
+            {
+              "subject": "moonbeam_plus",
+              "predicate": "cancellation_intent",
+              "knowledge_status": "unknown",
+              "unknown_reason": "not_stated",
+              "source_refs": [
+                "g01-e001",
+                "g01-e036"
+              ]
+            },
+            {
+              "subject": "moonbeam_plus",
+              "predicate": "cancellation_requested",
+              "knowledge_status": "unknown",
+              "unknown_reason": "not_stated",
+              "source_refs": [
+                "g01-e001",
+                "g01-e036"
+              ]
+            },
+            {
+              "subject": "moonbeam_plus",
+              "predicate": "termination_date",
+              "knowledge_status": "unknown",
+              "unknown_reason": "not_stated",
+              "source_refs": [
+                "g01-e001",
+                "g01-e036"
+              ]
+            }
+          ]
+        },
+        "q-attention-14d": {
+          "assertions": [
+            {
+              "subject": "change_fiber_payment",
+              "predicate": "needs_attention",
+              "knowledge_status": "known",
+              "value": {
+                "reason": "approval_required",
+                "approval_required": true,
+                "approved": false,
+                "executed": false
+              },
+              "source_refs": [
+                "g01-e010",
+                "g01-e037"
+              ]
+            }
+          ]
+        },
+        "q-insurance-current": {
+          "assertions": [
+            {
+              "subject": "emberline",
+              "predicate": "policy_id",
+              "knowledge_status": "known",
+              "value": "EL-4821",
+              "source_refs": [
+                "g01-e005"
+              ]
+            },
+            {
+              "subject": "emberline",
+              "predicate": "premium",
+              "knowledge_status": "known",
+              "value": {
+                "amount": 19.75,
+                "currency": "EUR"
+              },
+              "source_refs": [
+                "g01-e005"
+              ]
+            },
+            {
+              "subject": "emberline",
+              "predicate": "expiry_date",
+              "knowledge_status": "known",
+              "value": "2026-12-31",
+              "source_refs": [
+                "g01-e005"
+              ]
+            },
+            {
+              "subject": "emberline",
+              "predicate": "effective_date",
+              "knowledge_status": "known",
+              "value": "2026-07-01",
+              "source_refs": [
+                "g01-e026"
+              ]
+            },
+            {
+              "subject": "emberline",
+              "predicate": "beneficiary",
+              "knowledge_status": "unknown",
+              "unknown_reason": "conflicting",
+              "source_refs": [
+                "g01-e016",
+                "g01-e017"
+              ]
+            },
+            {
+              "subject": "emberline",
+              "predicate": "contradiction",
+              "knowledge_status": "known",
+              "value": {
+                "field": "beneficiary",
+                "conflicts": [
+                  {
+                    "value": "mira_solen",
+                    "source_event_id": "g01-e016"
+                  },
+                  {
+                    "value": "mira_sorin",
+                    "source_event_id": "g01-e017"
+                  }
+                ],
+                "resolution_status": "unresolved"
+              },
+              "source_refs": [
+                "g01-e016",
+                "g01-e017"
+              ]
+            }
+          ]
+        },
+        "q-service-costs": {
+          "assertions": [
+            {
+              "subject": "copperline_fiber",
+              "predicate": "observed_bill_count",
+              "knowledge_status": "known",
+              "value": 2,
+              "source_refs": [
+                "g01-e002",
+                "g01-e031"
+              ]
+            },
+            {
+              "subject": "copperline_fiber",
+              "predicate": "observed_total",
+              "knowledge_status": "known",
+              "value": {
+                "amount": 85.5,
+                "currency": "EUR"
+              },
+              "source_refs": [
+                "g01-e002",
+                "g01-e024",
+                "g01-e031",
+                "g01-e035"
+              ]
+            },
+            {
+              "subject": "copperline_fiber",
+              "predicate": "current_amount",
+              "knowledge_status": "known",
+              "value": {
+                "amount": 43.5,
+                "currency": "EUR"
+              },
+              "source_refs": [
+                "g01-e031",
+                "g01-e035"
+              ]
+            },
+            {
+              "subject": "copperline_fiber",
+              "predicate": "observed_periods",
+              "knowledge_status": "known",
+              "value": [
+                "2026-04",
+                "2026-05"
+              ],
+              "source_refs": [
+                "g01-e002",
+                "g01-e031"
+              ]
+            },
+            {
+              "subject": "copperline_fiber",
+              "predicate": "missing_periods",
+              "knowledge_status": "known",
+              "value": [],
+              "source_refs": [
+                "g01-e009",
+                "g01-e031"
+              ]
+            }
+          ]
+        },
+        "q-purchase-consumption": {
+          "assertions": [
+            {
+              "subject": "greenglass_market",
+              "predicate": "purchase_count",
+              "knowledge_status": "known",
+              "value": 2,
+              "source_refs": [
+                "g01-e003",
+                "g01-e022"
+              ]
+            },
+            {
+              "subject": "greenglass_market",
+              "predicate": "purchased_total",
+              "knowledge_status": "known",
+              "value": {
+                "amount": 25.6,
+                "currency": "EUR"
+              },
+              "source_refs": [
+                "g01-e003",
+                "g01-e022"
+              ]
+            },
+            {
+              "subject": "greenglass_market",
+              "predicate": "confirmed_consumption_quantity",
+              "knowledge_status": "known",
+              "value": 2,
+              "source_refs": [
+                "g01-e004"
+              ]
+            },
+            {
+              "subject": "greenglass_market",
+              "predicate": "consumption_observation_count",
+              "knowledge_status": "known",
+              "value": 3,
+              "source_refs": [
+                "g01-e004",
+                "g01-e015",
+                "g01-e023"
+              ]
+            },
+            {
+              "subject": "greenglass_market",
+              "predicate": "explicit_zero_is_supported",
+              "knowledge_status": "known",
+              "value": true,
+              "source_refs": [
+                "g01-e015",
+                "g01-e023"
+              ]
+            },
+            {
+              "subject": "greenglass_market",
+              "predicate": "unobserved_consumption",
+              "knowledge_status": "unknown",
+              "unknown_reason": "no_consumption_observation",
+              "source_refs": [
+                "g01-e003",
+                "g01-e022"
+              ]
+            }
+          ]
+        },
+        "q-tasks-state": {
+          "assertions": [
+            {
+              "subject": "permit_renewal",
+              "predicate": "status",
+              "knowledge_status": "known",
+              "value": "completed",
+              "source_refs": [
+                "g01-e025",
+                "g01-e038"
+              ]
+            },
+            {
+              "subject": "permit_renewal",
+              "predicate": "owner",
+              "knowledge_status": "known",
+              "value": "mira_solen",
+              "source_refs": [
+                "g01-e013",
+                "g01-e025"
+              ]
+            },
+            {
+              "subject": "permit_renewal",
+              "predicate": "deadline",
+              "knowledge_status": "known",
+              "value": "2026-04-30",
+              "source_refs": [
+                "g01-e018",
+                "g01-e020"
+              ]
+            },
+            {
+              "subject": "permit_renewal",
+              "predicate": "owner_history",
+              "knowledge_status": "known",
+              "value": [
+                "devon_park",
+                "mira_solen"
+              ],
+              "source_refs": [
+                "g01-e006",
+                "g01-e013"
+              ]
+            },
+            {
+              "subject": "permit_renewal",
+              "predicate": "status_history",
+              "knowledge_status": "known",
+              "value": [
+                "open",
+                "in_progress",
+                "completed"
+              ],
+              "source_refs": [
+                "g01-e006",
+                "g01-e019",
+                "g01-e025",
+                "g01-e038"
+              ]
+            },
+            {
+              "subject": "meter_visit",
+              "predicate": "status",
+              "knowledge_status": "known",
+              "value": "cancelled",
+              "source_refs": [
+                "g01-e039"
+              ]
+            },
+            {
+              "subject": "meter_visit",
+              "predicate": "owner",
+              "knowledge_status": "known",
+              "value": "mira_solen",
+              "source_refs": [
+                "g01-e029"
+              ]
+            },
+            {
+              "subject": "meter_visit",
+              "predicate": "deadline",
+              "knowledge_status": "known",
+              "value": "2026-05-12",
+              "source_refs": [
+                "g01-e028"
+              ]
+            },
+            {
+              "subject": "meter_visit",
+              "predicate": "status_history",
+              "knowledge_status": "known",
+              "value": [
+                "open",
+                "cancelled"
+              ],
+              "source_refs": [
+                "g01-e028",
+                "g01-e039"
+              ]
+            }
+          ]
+        },
+        "q-unresolved": {
+          "assertions": [
+            {
+              "subject": "emberline",
+              "predicate": "beneficiary",
+              "knowledge_status": "unknown",
+              "unknown_reason": "conflicting",
+              "source_refs": [
+                "g01-e016",
+                "g01-e017"
+              ]
+            },
+            {
+              "subject": "emberline",
+              "predicate": "contradiction",
+              "knowledge_status": "known",
+              "value": {
+                "field": "beneficiary",
+                "conflicts": [
+                  {
+                    "value": "mira_solen",
+                    "source_event_id": "g01-e016"
+                  },
+                  {
+                    "value": "mira_sorin",
+                    "source_event_id": "g01-e017"
+                  }
+                ],
+                "resolution_status": "unresolved"
+              },
+              "source_refs": [
+                "g01-e016",
+                "g01-e017"
+              ]
+            },
+            {
+              "subject": "mira_reference",
+              "predicate": "entity_link",
+              "knowledge_status": "unknown",
+              "unknown_reason": "ambiguous_person",
+              "source_refs": [
+                "g01-e007"
+              ]
+            },
+            {
+              "subject": "greenglass_market",
+              "predicate": "unobserved_consumption",
+              "knowledge_status": "unknown",
+              "unknown_reason": "no_consumption_observation",
+              "source_refs": [
+                "g01-e003",
+                "g01-e022"
+              ]
+            },
+            {
+              "subject": "moonbeam_plus",
+              "predicate": "cancellation_intent",
+              "knowledge_status": "unknown",
+              "unknown_reason": "not_stated",
+              "source_refs": [
+                "g01-e001",
+                "g01-e036"
+              ]
+            },
+            {
+              "subject": "moonbeam_plus",
+              "predicate": "cancellation_requested",
+              "knowledge_status": "unknown",
+              "unknown_reason": "not_stated",
+              "source_refs": [
+                "g01-e001",
+                "g01-e036"
+              ]
+            },
+            {
+              "subject": "moonbeam_plus",
+              "predicate": "termination_date",
+              "knowledge_status": "unknown",
+              "unknown_reason": "not_stated",
+              "source_refs": [
+                "g01-e001",
+                "g01-e036"
+              ]
+            }
+          ]
+        },
+        "q-duplicates-changes": {
+          "assertions": [
+            {
+              "subject": "capture:g01-e011",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "exact_duplicate",
+                "source_event_id": "g01-e011",
+                "target_event_id": "g01-e002"
+              },
+              "source_refs": [
+                "g01-e011",
+                "g01-e002"
+              ]
+            },
+            {
+              "subject": "capture:g01-e012",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "normalized_duplicate",
+                "source_event_id": "g01-e012",
+                "target_event_id": "g01-e003"
+              },
+              "source_refs": [
+                "g01-e012",
+                "g01-e003"
+              ]
+            },
+            {
+              "subject": "capture:g01-e033",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "normalized_duplicate",
+                "source_event_id": "g01-e033",
+                "target_event_id": "g01-e031"
+              },
+              "source_refs": [
+                "g01-e033",
+                "g01-e031"
+              ]
+            },
+            {
+              "subject": "capture:g01-e008",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "meaningful_change",
+                "source_event_id": "g01-e008",
+                "target_event_id": "g01-e001",
+                "changed_fields": [
+                  "current_price"
+                ]
+              },
+              "source_refs": [
+                "g01-e008",
+                "g01-e001"
+              ]
+            },
+            {
+              "subject": "capture:g01-e013",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "meaningful_change",
+                "source_event_id": "g01-e013",
+                "target_event_id": "g01-e006",
+                "changed_fields": [
+                  "owner"
+                ]
+              },
+              "source_refs": [
+                "g01-e013",
+                "g01-e006"
+              ]
+            },
+            {
+              "subject": "capture:g01-e018",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "meaningful_change",
+                "source_event_id": "g01-e018",
+                "target_event_id": "g01-e006",
+                "changed_fields": [
+                  "deadline"
+                ]
+              },
+              "source_refs": [
+                "g01-e018",
+                "g01-e006"
+              ]
+            },
+            {
+              "subject": "capture:g01-e019",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "meaningful_change",
+                "source_event_id": "g01-e019",
+                "target_event_id": "g01-e006",
+                "changed_fields": [
+                  "status"
+                ]
+              },
+              "source_refs": [
+                "g01-e019",
+                "g01-e006"
+              ]
+            },
+            {
+              "subject": "capture:g01-e025",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "meaningful_change",
+                "source_event_id": "g01-e025",
+                "target_event_id": "g01-e019",
+                "changed_fields": [
+                  "status"
+                ]
+              },
+              "source_refs": [
+                "g01-e025",
+                "g01-e019"
+              ]
+            },
+            {
+              "subject": "capture:g01-e026",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "meaningful_change",
+                "source_event_id": "g01-e026",
+                "target_event_id": "g01-e005",
+                "changed_fields": [
+                  "premium"
+                ]
+              },
+              "source_refs": [
+                "g01-e026",
+                "g01-e005"
+              ]
+            },
+            {
+              "subject": "capture:g01-e029",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "meaningful_change",
+                "source_event_id": "g01-e029",
+                "target_event_id": "g01-e028",
+                "changed_fields": [
+                  "owner"
+                ]
+              },
+              "source_refs": [
+                "g01-e029",
+                "g01-e028"
+              ]
+            },
+            {
+              "subject": "capture:g01-e030",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "meaningful_change",
+                "source_event_id": "g01-e030",
+                "target_event_id": "g01-e001",
+                "changed_fields": [
+                  "next_renewal"
+                ]
+              },
+              "source_refs": [
+                "g01-e030",
+                "g01-e001"
+              ]
+            },
+            {
+              "subject": "capture:g01-e035",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "meaningful_change",
+                "source_event_id": "g01-e035",
+                "target_event_id": "g01-e034",
+                "changed_fields": [
+                  "amount"
+                ]
+              },
+              "source_refs": [
+                "g01-e035",
+                "g01-e034"
+              ]
+            },
+            {
+              "subject": "capture:g01-e039",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "meaningful_change",
+                "source_event_id": "g01-e039",
+                "target_event_id": "g01-e028",
+                "changed_fields": [
+                  "status"
+                ]
+              },
+              "source_refs": [
+                "g01-e039",
+                "g01-e028"
+              ]
+            },
+            {
+              "subject": "scenario",
+              "predicate": "duplicate_event_count",
+              "knowledge_status": "known",
+              "value": 3,
+              "source_refs": [
+                "g01-e011",
+                "g01-e012",
+                "g01-e033"
+              ]
+            },
+            {
+              "subject": "scenario",
+              "predicate": "duplicate_group_count",
+              "knowledge_status": "known",
+              "value": 3,
+              "source_refs": [
+                "g01-e002",
+                "g01-e003",
+                "g01-e031"
+              ]
+            },
+            {
+              "subject": "scenario",
+              "predicate": "meaningful_change_event_count",
+              "knowledge_status": "known",
+              "value": 10,
+              "source_refs": [
+                "g01-e001",
+                "g01-e006",
+                "g01-e008",
+                "g01-e013",
+                "g01-e018",
+                "g01-e019",
+                "g01-e025",
+                "g01-e026",
+                "g01-e028",
+                "g01-e029",
+                "g01-e030",
+                "g01-e034",
+                "g01-e035",
+                "g01-e039"
+              ]
+            }
+          ]
+        },
+        "q-contract-dates": {
+          "assertions": []
+        },
+        "q-approval-boundary": {
+          "assertions": [
+            {
+              "subject": "change_fiber_payment",
+              "predicate": "approval_required",
+              "knowledge_status": "known",
+              "value": true,
+              "source_refs": [
+                "g01-e010",
+                "g01-e037"
+              ]
+            },
+            {
+              "subject": "change_fiber_payment",
+              "predicate": "approved",
+              "knowledge_status": "known",
+              "value": false,
+              "source_refs": [
+                "g01-e010",
+                "g01-e037"
+              ]
+            },
+            {
+              "subject": "change_fiber_payment",
+              "predicate": "executed",
+              "knowledge_status": "known",
+              "value": false,
+              "source_refs": [
+                "g01-e010",
+                "g01-e037"
+              ]
+            }
+          ]
+        },
+        "q-recent-changes": {
+          "assertions": [
+            {
+              "subject": "permit_renewal",
+              "predicate": "correction",
+              "knowledge_status": "known",
+              "value": {
+                "target_event_id": "g01-e006",
+                "prior_value": "2026-04-28",
+                "replacement_value": "2026-04-30",
+                "source_event_id": "g01-e018"
+              },
+              "source_refs": [
+                "g01-e006",
+                "g01-e018",
+                "g01-e020"
+              ]
+            },
+            {
+              "subject": "copperline_fiber",
+              "predicate": "correction",
+              "knowledge_status": "known",
+              "value": {
+                "target_event_id": "g01-e034",
+                "prior_value": {
+                  "amount": 44.1,
+                  "currency": "EUR"
+                },
+                "replacement_value": {
+                  "amount": 43.5,
+                  "currency": "EUR"
+                },
+                "source_event_id": "g01-e035"
+              },
+              "source_refs": [
+                "g01-e031",
+                "g01-e034",
+                "g01-e035"
+              ]
+            },
+            {
+              "subject": "permit_renewal",
+              "predicate": "supersession",
+              "knowledge_status": "known",
+              "value": {
+                "superseded_event_id": "g01-e006",
+                "replacement_event_id": "g01-e018"
+              },
+              "source_refs": [
+                "g01-e006",
+                "g01-e018"
+              ]
+            },
+            {
+              "subject": "copperline_fiber",
+              "predicate": "supersession",
+              "knowledge_status": "known",
+              "value": {
+                "superseded_event_id": "g01-e034",
+                "replacement_event_id": "g01-e035"
+              },
+              "source_refs": [
+                "g01-e034",
+                "g01-e035"
+              ]
+            },
+            {
+              "subject": "emberline",
+              "predicate": "contradiction",
+              "knowledge_status": "known",
+              "value": {
+                "field": "beneficiary",
+                "conflicts": [
+                  {
+                    "value": "mira_solen",
+                    "source_event_id": "g01-e016"
+                  },
+                  {
+                    "value": "mira_sorin",
+                    "source_event_id": "g01-e017"
+                  }
+                ],
+                "resolution_status": "unresolved"
+              },
+              "source_refs": [
+                "g01-e016",
+                "g01-e017"
+              ]
+            },
+            {
+              "subject": "permit_renewal",
+              "predicate": "contradiction",
+              "knowledge_status": "known",
+              "value": {
+                "field": "deadline",
+                "conflicts": [
+                  {
+                    "value": "2026-04-28",
+                    "source_event_id": "g01-e006"
+                  },
+                  {
+                    "value": "2026-04-30",
+                    "source_event_id": "g01-e018"
+                  }
+                ],
+                "resolution_status": "resolved",
+                "resolution_event_id": "g01-e020"
+              },
+              "source_refs": [
+                "g01-e006",
+                "g01-e018",
+                "g01-e020"
+              ]
+            },
+            {
+              "subject": "copperline_fiber",
+              "predicate": "contradiction",
+              "knowledge_status": "known",
+              "value": {
+                "field": "amount",
+                "conflicts": [
+                  {
+                    "value": {
+                      "amount": 43.5,
+                      "currency": "EUR"
+                    },
+                    "source_event_id": "g01-e031"
+                  },
+                  {
+                    "value": {
+                      "amount": 44.1,
+                      "currency": "EUR"
+                    },
+                    "source_event_id": "g01-e034"
+                  }
+                ],
+                "resolution_status": "resolved",
+                "resolution_event_id": "g01-e035"
+              },
+              "source_refs": [
+                "g01-e031",
+                "g01-e034",
+                "g01-e035"
+              ]
+            },
+            {
+              "subject": "capture:g01-e027",
+              "predicate": "retroactive_observation",
+              "knowledge_status": "known",
+              "value": {
+                "observed_at": "2026-04-15",
+                "value": 0,
+                "unit": "kWh"
+              },
+              "source_refs": [
+                "g01-e027"
+              ]
+            },
+            {
+              "subject": "moonbeam_plus",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "meaningful_change",
+                "source_event_id": "g01-e008",
+                "target_event_id": "g01-e001",
+                "changed_fields": [
+                  "current_price"
+                ]
+              },
+              "source_refs": [
+                "g01-e008",
+                "g01-e001"
+              ]
+            },
+            {
+              "subject": "emberline",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "meaningful_change",
+                "source_event_id": "g01-e026",
+                "target_event_id": "g01-e005",
+                "changed_fields": [
+                  "premium"
+                ]
+              },
+              "source_refs": [
+                "g01-e026",
+                "g01-e005"
+              ]
+            },
+            {
+              "subject": "permit_renewal",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "meaningful_change",
+                "source_event_id": "g01-e013",
+                "target_event_id": "g01-e006",
+                "changed_fields": [
+                  "owner"
+                ]
+              },
+              "source_refs": [
+                "g01-e013",
+                "g01-e006"
+              ]
+            },
+            {
+              "subject": "meter_visit",
+              "predicate": "relationship",
+              "knowledge_status": "known",
+              "value": {
+                "relation_type": "meaningful_change",
+                "source_event_id": "g01-e039",
+                "target_event_id": "g01-e028",
+                "changed_fields": [
+                  "status"
+                ]
+              },
+              "source_refs": [
+                "g01-e039",
+                "g01-e028"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "60": {
+      "checkpoint": 60,
+      "queries": {}
+    },
+    "80": {
+      "checkpoint": 80,
+      "queries": {}
+    }
+  },
+  "run_metadata": {
+    "run_id": "generalization-v1r1-baseline-g01",
+    "label": "POST-FREEZE GENERALIZATION V1R1 / BLIND / BASELINE G01",
+    "started_at": "2026-08-29T22:38:41.854772+00:00",
+    "provider": "Codex CLI",
+    "cli_path_basename": "codex.EXE",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "sandbox": "read-only",
+    "scenario_id": "g01",
+    "response_contract": "response-contract-v2",
+    "contract_version": "1.0-post-freeze-generalization-v1",
+    "event_count": 80,
+    "checkpoints": [
+      20,
+      40,
+      60,
+      80
+    ],
+    "batching": "one chronological capture batch per checkpoint segment; one persistent canonical session",
+    "checkpoint_isolation": "native Codex CLI fork; query fork is never resumed",
+    "structured_response": "prompt-constrained JSON; response-contract-v2 is validated by the deterministic evaluator",
+    "query_ids": [
+      "q-subscriptions-current",
+      "q-subscriptions-history",
+      "q-attention-14d",
+      "q-insurance-current",
+      "q-service-costs",
+      "q-purchase-consumption",
+      "q-tasks-state",
+      "q-unresolved",
+      "q-duplicates-changes",
+      "q-contract-dates",
+      "q-approval-boundary",
+      "q-recent-changes"
+    ],
+    "canonical_thread_id": "01a04fac-d599-7852-8ad3-05356357ccba",
+    "turns": [
+      {
+        "kind": "capture",
+        "checkpoint": 20,
+        "returncode": 0,
+        "duration_seconds": 5.266,
+        "thread_id": "01a04fac-d599-7852-8ad3-05356357ccba",
+        "usage": {
+          "input_tokens": 21465,
+          "cached_input_tokens": 9984,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 34,
+          "reasoning_output_tokens": 23
+        },
+        "stderr": {
+          "line_count": 5,
+          "last_lines": [
+            "2026-08-29T22:38:42.183101Z  WARN codex_skills::interface: ignoring interface.icon_small: icon path with '..' must resolve under plugin assets/",
+            "2026-08-29T22:38:42.183184Z  WARN codex_skills::interface: ignoring interface.icon_large: icon path with '..' must resolve under plugin assets/",
+            "2026-08-29T22:38:42.202122Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell",
+            "2026-08-29T22:38:42.726440Z  WARN codex_skills::interface: ignoring interface.icon_small: icon path with '..' must resolve under plugin assets/",
+            "2026-08-29T22:38:42.726470Z  WARN codex_skills::interface: ignoring interface.icon_large: icon path with '..' must resolve under plugin assets/"
+          ]
+        }
+      },
+      {
+        "kind": "capture",
+        "checkpoint": 40,
+        "returncode": 0,
+        "duration_seconds": 4.75,
+        "thread_id": "01a04fac-d599-7852-8ad3-05356357ccba",
+        "usage": {
+          "input_tokens": 27000,
+          "cached_input_tokens": 21248,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 20,
+          "reasoning_output_tokens": 9
+        },
+        "stderr": {
+          "line_count": 5,
+          "last_lines": [
+            "2026-08-29T22:48:24.596134Z  WARN codex_skills::interface: ignoring interface.icon_small: icon path with '..' must resolve under plugin assets/",
+            "2026-08-29T22:48:24.596342Z  WARN codex_skills::interface: ignoring interface.icon_large: icon path with '..' must resolve under plugin assets/",
+            "2026-08-29T22:48:24.613851Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell",
+            "2026-08-29T22:48:25.074613Z  WARN codex_skills::interface: ignoring interface.icon_small: icon path with '..' must resolve under plugin assets/",
+            "2026-08-29T22:48:25.074660Z  WARN codex_skills::interface: ignoring interface.icon_large: icon path with '..' must resolve under plugin assets/"
+          ]
+        }
+      },
+      {
+        "kind": "capture",
+        "checkpoint": 60,
+        "returncode": 0,
+        "duration_seconds": 4.875,
+        "thread_id": "01a04fac-d599-7852-8ad3-05356357ccba",
+        "usage": {
+          "input_tokens": 29736,
+          "cached_input_tokens": 26368,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 9,
+          "reasoning_output_tokens": 0
+        },
+        "stderr": {
+          "line_count": 6,
+          "last_lines": [
+            "2026-08-29T23:01:21.647702Z  WARN codex_skills::interface: ignoring interface.icon_large: icon path with '..' must resolve under plugin assets/",
+            "2026-08-29T23:01:21.664834Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell",
+            "2026-08-29T23:01:22.136598Z  WARN codex_skills::interface: ignoring interface.icon_small: icon path with '..' must resolve under plugin assets/",
+            "2026-08-29T23:01:22.136643Z  WARN codex_skills::interface: ignoring interface.icon_large: icon path with '..' must resolve under plugin assets/",
+            "2026-08-29T23:01:25.812293Z  WARN codex_core::hook_runtime: after_agent hook failed; continuing turn_id=01a04fc1-9511-7712-83a3-3feb447decd0 hook_name=legacy_notify error=The filename or extension is too long. (os error 206)"
+          ]
+        }
+      },
+      {
+        "kind": "capture",
+        "checkpoint": 80,
+        "returncode": 0,
+        "duration_seconds": 4.188,
+        "thread_id": "01a04fac-d599-7852-8ad3-05356357ccba",
+        "usage": {
+          "input_tokens": 32468,
+          "cached_input_tokens": 29440,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 9,
+          "reasoning_output_tokens": 0
+        },
+        "stderr": {
+          "line_count": 6,
+          "last_lines": [
+            "2026-08-29T23:15:30.175788Z  WARN codex_skills::interface: ignoring interface.icon_large: icon path with '..' must resolve under plugin assets/",
+            "2026-08-29T23:15:30.187861Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell",
+            "2026-08-29T23:15:30.636092Z  WARN codex_skills::interface: ignoring interface.icon_small: icon path with '..' must resolve under plugin assets/",
+            "2026-08-29T23:15:30.636132Z  WARN codex_skills::interface: ignoring interface.icon_large: icon path with '..' must resolve under plugin assets/",
+            "2026-08-29T23:15:33.797112Z  WARN codex_core::hook_runtime: after_agent hook failed; continuing turn_id=01a04fce-877c-79c0-9200-8769c5e3c3cb hook_name=legacy_notify error=The filename or extension is too long. (os error 206)"
+          ]
+        }
+      }
+    ],
+    "checkpoint_runs": {
+      "20": {
+        "canonical_thread_id": "01a04fac-d599-7852-8ad3-05356357ccba",
+        "fork_thread_id": "01a04fac-ea1d-7f30-ac15-c13ca4fc6e62",
+        "atomic_fork": true,
+        "query": {
+          "returncode": 0,
+          "duration_seconds": 577.156,
+          "thread_id": "01a04fac-ea1d-7f30-ac15-c13ca4fc6e62",
+          "usage": {
+            "input_tokens": 52798,
+            "cached_input_tokens": 33536,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 13182,
+            "reasoning_output_tokens": 8804
+          },
+          "stderr": {
+            "line_count": 7,
+            "last_lines": [
+              "2026-08-29T22:38:47.718353Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell",
+              "2026-08-29T22:38:47.950137Z  WARN codex_skills::interface: ignoring interface.icon_small: icon path with '..' must resolve under plugin assets/",
+              "2026-08-29T22:38:47.950181Z  WARN codex_skills::interface: ignoring interface.icon_large: icon path with '..' must resolve under plugin assets/",
+              "2026-08-29T22:44:24.751313Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (1/5 in 218ms)... turn_id=01a04fac-f013-7482-bd20-b8e57edfedec retries=1 max_retries=5 sampling_error=stream disconnected before completion: WebSocket protocol error: Connection reset without closing handshake",
+              "2026-08-29T22:48:24.023170Z  WARN codex_core::hook_runtime: after_agent hook failed; continuing turn_id=01a04fac-f013-7482-bd20-b8e57edfedec hook_name=legacy_notify error=The filename or extension is too long. (os error 206)"
+            ]
+          }
+        },
+        "discarded": true,
+        "parse_error": null,
+        "response_contract": {
+          "parsed": true,
+          "query_count": 12,
+          "trajectory_output": "trajectories\\runtime\\generalization-v1r1-baseline-g01\\checkpoint-020.json"
+        }
+      },
+      "40": {
+        "canonical_thread_id": "01a04fac-d599-7852-8ad3-05356357ccba",
+        "fork_thread_id": "01a04fb5-cb3c-7893-8d29-aa742759d692",
+        "atomic_fork": true,
+        "query": {
+          "returncode": 0,
+          "duration_seconds": 772.328,
+          "thread_id": "01a04fb5-cb3c-7893-8d29-aa742759d692",
+          "usage": {
+            "input_tokens": 37400,
+            "cached_input_tokens": 26368,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 42651,
+            "reasoning_output_tokens": 36277
+          },
+          "stderr": {
+            "line_count": 6,
+            "last_lines": [
+              "2026-08-29T22:48:29.346399Z  WARN codex_skills::interface: ignoring interface.icon_large: icon path with '..' must resolve under plugin assets/",
+              "2026-08-29T22:48:29.601002Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell",
+              "2026-08-29T22:48:29.790869Z  WARN codex_skills::interface: ignoring interface.icon_small: icon path with '..' must resolve under plugin assets/",
+              "2026-08-29T22:48:29.790909Z  WARN codex_skills::interface: ignoring interface.icon_large: icon path with '..' must resolve under plugin assets/",
+              "2026-08-29T23:01:20.892037Z  WARN codex_core::hook_runtime: after_agent hook failed; continuing turn_id=01a04fb5-d0a1-7c20-9152-f4e2bcbc5ced hook_name=legacy_notify error=The filename or extension is too long. (os error 206)"
+            ]
+          }
+        },
+        "discarded": true,
+        "parse_error": null,
+        "response_contract": {
+          "parsed": true,
+          "query_count": 12,
+          "trajectory_output": "trajectories\\runtime\\generalization-v1r1-baseline-g01\\checkpoint-040.json"
+        }
+      },
+      "60": {
+        "canonical_thread_id": "01a04fac-d599-7852-8ad3-05356357ccba",
+        "fork_thread_id": "01a04fc1-a6f2-7283-ac54-2c8ff6154fb0",
+        "atomic_fork": true,
+        "query": {
+          "returncode": 0,
+          "duration_seconds": 843.75,
+          "thread_id": "01a04fc1-a6f2-7283-ac54-2c8ff6154fb0",
+          "usage": {
+            "input_tokens": 40125,
+            "cached_input_tokens": 9984,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 46631,
+            "reasoning_output_tokens": 41881
+          },
+          "stderr": {
+            "line_count": 6,
+            "last_lines": [
+              "2026-08-29T23:01:26.496891Z  WARN codex_skills::interface: ignoring interface.icon_large: icon path with '..' must resolve under plugin assets/",
+              "2026-08-29T23:01:26.820250Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell",
+              "2026-08-29T23:01:27.018603Z  WARN codex_skills::interface: ignoring interface.icon_small: icon path with '..' must resolve under plugin assets/",
+              "2026-08-29T23:01:27.018658Z  WARN codex_skills::interface: ignoring interface.icon_large: icon path with '..' must resolve under plugin assets/",
+              "2026-08-29T23:15:29.735262Z  WARN codex_core::hook_runtime: after_agent hook failed; continuing turn_id=01a04fc1-ac99-72b0-bdbb-0267738836a8 hook_name=legacy_notify error=The filename or extension is too long. (os error 206)"
+            ]
+          }
+        },
+        "discarded": true,
+        "parse_error": "model output was not a JSON object",
+        "response_contract": {
+          "parsed": false,
+          "query_count": 0,
+          "trajectory_output": "trajectories\\runtime\\generalization-v1r1-baseline-g01\\checkpoint-060.json"
+        }
+      },
+      "80": {
+        "canonical_thread_id": "01a04fac-d599-7852-8ad3-05356357ccba",
+        "fork_thread_id": "01a04fce-9733-7e43-868a-a0c6a73777af",
+        "atomic_fork": true,
+        "query": {
+          "returncode": 0,
+          "duration_seconds": 848.437,
+          "thread_id": "01a04fce-9733-7e43-868a-a0c6a73777af",
+          "usage": {
+            "input_tokens": 42857,
+            "cached_input_tokens": 9984,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 46802,
+            "reasoning_output_tokens": 41421
+          },
+          "stderr": {
+            "line_count": 6,
+            "last_lines": [
+              "2026-08-29T23:15:34.524034Z  WARN codex_skills::interface: ignoring interface.icon_large: icon path with '..' must resolve under plugin assets/",
+              "2026-08-29T23:15:34.596044Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell",
+              "2026-08-29T23:15:35.431317Z  WARN codex_skills::interface: ignoring interface.icon_small: icon path with '..' must resolve under plugin assets/",
+              "2026-08-29T23:15:35.431359Z  WARN codex_skills::interface: ignoring interface.icon_large: icon path with '..' must resolve under plugin assets/",
+              "2026-08-29T23:29:42.246010Z  WARN codex_core::hook_runtime: after_agent hook failed; continuing turn_id=01a04fce-9b99-7eb2-8c42-6f405b82847a hook_name=legacy_notify error=The filename or extension is too long. (os error 206)"
+            ]
+          }
+        },
+        "discarded": true,
+        "parse_error": "model output was not a JSON object",
+        "response_contract": {
+          "parsed": false,
+          "query_count": 0,
+          "trajectory_output": "trajectories\\runtime\\generalization-v1r1-baseline-g01\\checkpoint-080.json"
+        }
+      }
+    },
+    "finished_at": "2026-08-29T23:29:42.630705+00:00"
+  }
+}

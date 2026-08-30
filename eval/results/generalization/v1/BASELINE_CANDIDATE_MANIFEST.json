@@ -1,0 +1,142 @@
+{
+  "manifest_type": "baseline_candidate_manifest",
+  "set_revision": "v1r1",
+  "manifest_created_at": "2026-08-30T03:06:20.4867405Z",
+  "fresh_clone_path": "C:\\Users\\natan\\OneDrive\\Dokumenty\\ChatGPT\\Blackhole-gen-baseline-v1r1",
+  "public_branch": "generalization/public-v1r1",
+  "public_head": "79bea04e432e6566e3d6989e8fa411e7c613908b",
+  "run_branch": "generalization/blind-baseline-v1r1",
+  "baseline_configuration": {
+    "runner": "baseline/run_baseline.py",
+    "prompt": "prompts/runtime/baseline-v1.md",
+    "runner_prompt": "prompts/runtime/baseline-runner-v2.md",
+    "provider": "Codex CLI",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "architecture": "one persistent chronological general-purpose conversation",
+    "workspace": "isolated / read-only",
+    "checkpoint_isolation": "native Codex CLI fork; query forks are discarded and never resumed",
+    "query_bundle": "benchmark/generalization/v1/query-bundle-v2.json",
+    "response_contract": "benchmark/generalization/v1/response-contract-v2.json",
+    "max_events": 80,
+    "timeout_seconds_per_provider_invocation": 900,
+    "query_ids": "all public query IDs"
+  },
+  "scenario_policy": {
+    "scenario_order": [
+      "g01",
+      "g02",
+      "g03"
+    ],
+    "successful_candidate_count_per_scenario": 1,
+    "semantic_quality_retries": 0,
+    "operational_retry_rule": "retry only when no usable candidate is produced because of process, timeout, transport, or infrastructure failure"
+  },
+  "scenarios": {
+    "g01": {
+      "scenario_id": "g01",
+      "candidate_path": "eval/results/generalization/v1/baseline-g01-candidate.json",
+      "runtime_trajectory": "trajectories/runtime/generalization-v1r1-baseline-g01",
+      "successful_attempt": 1,
+      "operational_retries": 0,
+      "candidate_sha256": "943571f22882429a0518005ba41cbc9ffba3d3a73153ac2aae9f18e1287bc71b",
+      "started_at": "2026-08-29T22:38:41.854772+00:00",
+      "finished_at": "2026-08-29T23:29:42.630705+00:00",
+      "runtime_seconds": 3060.775933,
+      "provider": "Codex CLI",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "max",
+      "provider_usage": {
+        "per_turn": [
+          {"checkpoint": 20, "input_tokens": 21465, "cached_input_tokens": 9984, "cache_write_input_tokens": 0, "output_tokens": 34, "reasoning_output_tokens": 23},
+          {"checkpoint": 40, "input_tokens": 27000, "cached_input_tokens": 21248, "cache_write_input_tokens": 0, "output_tokens": 20, "reasoning_output_tokens": 9},
+          {"checkpoint": 60, "input_tokens": 29736, "cached_input_tokens": 26368, "cache_write_input_tokens": 0, "output_tokens": 9, "reasoning_output_tokens": 0},
+          {"checkpoint": 80, "input_tokens": 32468, "cached_input_tokens": 29440, "cache_write_input_tokens": 0, "output_tokens": 9, "reasoning_output_tokens": 0}
+        ],
+        "totals": {"input_tokens": 110669, "cached_input_tokens": 87040, "cache_write_input_tokens": 0, "output_tokens": 72, "reasoning_output_tokens": 32}
+      }
+    },
+    "g02": {
+      "scenario_id": "g02",
+      "candidate_path": "eval/results/generalization/v1/baseline-g02-candidate.json",
+      "runtime_trajectory": "trajectories/runtime/generalization-v1r1-baseline-g02",
+      "successful_attempt": 3,
+      "operational_retries": 2,
+      "failed_attempt_evidence": [
+        "trajectories/runtime/generalization-v1r1-baseline-g02/operational-failure-001.json",
+        "trajectories/runtime/generalization-v1r1-baseline-g02/operational-failure-002.json",
+        "trajectories/runtime/generalization-v1r1-baseline-g02/attempt-001",
+        "trajectories/runtime/generalization-v1r1-baseline-g02/attempt-002"
+      ],
+      "candidate_sha256": "2bdc02ab4f0d51b612ede8281d9dedafba837c0e2d56608ba16248740626f59c",
+      "started_at": "2026-08-30T00:52:58.621417+00:00",
+      "finished_at": "2026-08-30T01:42:18.640331+00:00",
+      "runtime_seconds": 2960.018914,
+      "provider": "Codex CLI",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "max",
+      "provider_usage": {
+        "per_turn": [
+          {"checkpoint": 20, "input_tokens": 21492, "cached_input_tokens": 15104, "cache_write_input_tokens": 0, "output_tokens": 41, "reasoning_output_tokens": 30},
+          {"checkpoint": 40, "input_tokens": 27054, "cached_input_tokens": 21248, "cache_write_input_tokens": 0, "output_tokens": 19, "reasoning_output_tokens": 8},
+          {"checkpoint": 60, "input_tokens": 29818, "cached_input_tokens": 26368, "cache_write_input_tokens": 0, "output_tokens": 17, "reasoning_output_tokens": 6},
+          {"checkpoint": 80, "input_tokens": 32563, "cached_input_tokens": 29440, "cache_write_input_tokens": 0, "output_tokens": 20, "reasoning_output_tokens": 9}
+        ],
+        "totals": {"input_tokens": 110927, "cached_input_tokens": 92160, "cache_write_input_tokens": 0, "output_tokens": 97, "reasoning_output_tokens": 53}
+      }
+    },
+    "g03": {
+      "scenario_id": "g03",
+      "candidate_path": "eval/results/generalization/v1/baseline-g03-candidate.json",
+      "runtime_trajectory": "trajectories/runtime/generalization-v1r1-baseline-g03",
+      "successful_attempt": 2,
+      "operational_retries": 1,
+      "failed_attempt_evidence": [
+        "trajectories/runtime/generalization-v1r1-baseline-g03/operational-failure-001.json",
+        "trajectories/runtime/generalization-v1r1-baseline-g03/attempt-001"
+      ],
+      "candidate_sha256": "0a1e1674aab9e80a59c3318e83693b151fab1f6c79a6b153024e33f1269f0e3f",
+      "started_at": "2026-08-30T02:10:48.300300+00:00",
+      "finished_at": "2026-08-30T03:03:46.932031+00:00",
+      "runtime_seconds": 3178.631731,
+      "provider": "Codex CLI",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "max",
+      "provider_usage": {
+        "per_turn": [
+          {"checkpoint": 20, "input_tokens": 21491, "cached_input_tokens": 9984, "cache_write_input_tokens": 0, "output_tokens": 28, "reasoning_output_tokens": 17},
+          {"checkpoint": 40, "input_tokens": 27026, "cached_input_tokens": 21248, "cache_write_input_tokens": 0, "output_tokens": 20, "reasoning_output_tokens": 9},
+          {"checkpoint": 60, "input_tokens": 29783, "cached_input_tokens": 26368, "cache_write_input_tokens": 0, "output_tokens": 19, "reasoning_output_tokens": 8},
+          {"checkpoint": 80, "input_tokens": 32557, "cached_input_tokens": 29440, "cache_write_input_tokens": 0, "output_tokens": 19, "reasoning_output_tokens": 8}
+        ],
+        "totals": {"input_tokens": 110857, "cached_input_tokens": 87040, "cache_write_input_tokens": 0, "output_tokens": 86, "reasoning_output_tokens": 42}
+      }
+    }
+  },
+  "structural_validation": {
+    "method": "JSON and response-shape validation only; no semantic repair or assessment",
+    "expected_checkpoints": [
+      20,
+      40,
+      60,
+      80
+    ],
+    "source_ref_scope": "public event_id values from the corresponding public scenario only",
+    "g01": {"valid_json": true, "response_contract": true, "scenario_id": true, "checkpoints": true, "query_object_shape": true, "source_refs_public_events": true, "query_objects": 24, "assertions": 131, "source_refs": 260},
+    "g02": {"valid_json": true, "response_contract": true, "scenario_id": true, "checkpoints": true, "query_object_shape": true, "source_refs_public_events": true, "query_objects": 24, "assertions": 206, "source_refs": 476},
+    "g03": {"valid_json": true, "response_contract": true, "scenario_id": true, "checkpoints": true, "query_object_shape": true, "source_refs_public_events": true, "query_objects": 36, "assertions": 269, "source_refs": 571}
+  },
+  "operational_retries": {
+    "g01": 0,
+    "g02": 2,
+    "g03": 1,
+    "semantic_quality_retries": 0
+  },
+  "sealing_statement": "These baseline candidates were sealed before any V1R1 generalization expected output was available in this clone and before any scoring.",
+  "oracle_and_scoring": {
+    "generalization_expected_output_accessed": false,
+    "generalization_expected_hashes_recorded": false,
+    "scoring_run": false,
+    "score_files_invoked": false
+  }
+}

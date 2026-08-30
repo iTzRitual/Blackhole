@@ -1,0 +1,18 @@
+{
+  "attempt": 2,
+  "scenario_id": "g02",
+  "run_id": "generalization-v1r1-baseline-g02",
+  "status": "operational_failure",
+  "runner_exit_code": 1,
+  "failure_checkpoint": 80,
+  "failure_stage": "checkpoint_fork_query",
+  "failure_reported_by_runner": "checkpoint fork/query failed at 80",
+  "candidate_produced": false,
+  "preserved_artifacts": [
+    "checkpoint-020.json",
+    "checkpoint-040.json",
+    "checkpoint-060.json"
+  ],
+  "operational_retry_allowed": true,
+  "ended_at": "2026-08-30T00:52:38.6567754Z"
+}

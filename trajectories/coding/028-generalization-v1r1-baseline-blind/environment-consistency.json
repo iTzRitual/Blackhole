@@ -1,0 +1,36 @@
+{
+  "check_type": "metadata_only",
+  "checked_at": "2026-08-30T01:43:49.4450063Z",
+  "current_runner_environment": {
+    "resolved_codex_executable": "C:\\Users\\natan\\AppData\\Local\\OpenAI\\Codex\\bin\\fac60c5e9a2ae3df\\codex.EXE",
+    "codex_version": "codex-cli 0.150.0-alpha.12.2",
+    "provider": "Codex CLI",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max"
+  },
+  "preserved_runtime_metadata": {
+    "g01": {
+      "provider": "Codex CLI",
+      "cli_path_basename": "codex.EXE",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "max"
+    },
+    "g02": {
+      "provider": "Codex CLI",
+      "cli_path_basename": "codex.EXE",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "max"
+    }
+  },
+  "historical_exact_path_available": false,
+  "historical_version_available": false,
+  "observable_comparison": {
+    "executable_basename_match": true,
+    "provider_match": true,
+    "model_match": true,
+    "reasoning_effort_match": true,
+    "version_drift_observed": false
+  },
+  "decision": "PROCEED_TO_G03",
+  "note": "G01/G02 runner metadata preserves only the executable basename, not full path or CLI version. The current environment resolves to the pre-existing 0.150.0-alpha.12.2 executable; the separately installed 0.151.0 CLI was not selected by this runner environment."
+}
