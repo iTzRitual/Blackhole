@@ -135,5 +135,5 @@ human-dogfood gate **PARTIAL / REVISE** rather than claiming full completion.
 ## Related git commit
 
 The implementation and evidence are committed on
-`product/v2-final-dogfood-fixes`; the final commit SHA is reported in the
-handoff and trajectory index after commit.
+`product/v2-final-dogfood-fixes` in `e5ca77f`
+(`e5ca77f8f95be5363be0e88bb8b56e8eb05fe9ad`).
