@@ -115,5 +115,5 @@ holdout, or protected-worktree material.
 
 ## Related git commit
 
-Recorded after the implementation commit; the exact SHA is included in the
-final response and in the final commit history.
+`37e56d3b3a465859b959d30dec947ea2ddfe971d` — `fix: repair Product V2
+Codex provider boundary`.
