@@ -234,6 +234,34 @@ class HostWebTests(unittest.TestCase):
             finally:
                 running.close()
 
+    def test_legacy_query_get_is_read_only_when_processing_is_pending(self) -> None:
+        provider = NeutralProvider()
+        discovery = FakeDiscovery(provider_status(READY, ready=True))
+        with tempfile.TemporaryDirectory() as directory:
+            running = RunningServer(
+                home=Path(directory),
+                contract=NEUTRAL_CONTRACT,
+                provider=provider,
+                discovery_fn=discovery,
+            )
+            try:
+                status, _saved = request_json(
+                    running.base_url,
+                    "/api/capture",
+                    method="POST",
+                    body={"text": "Northstar Cloud costs 18 EUR per month."},
+                )
+                self.assertEqual(status, 200)
+                status, answer = request_json(
+                    running.base_url,
+                    "/api/query?q=What%20does%20Northstar%20Cloud%20cost%3F",
+                )
+                self.assertEqual(status, 409)
+                self.assertEqual(answer["code"], "state_not_fresh")
+                self.assertEqual(provider.calls, [])
+            finally:
+                running.close()
+
     def test_ask_refreshes_once_and_answers_from_updated_state(self) -> None:
         provider = NeutralProvider()
         discovery = FakeDiscovery(provider_status(READY, ready=True))

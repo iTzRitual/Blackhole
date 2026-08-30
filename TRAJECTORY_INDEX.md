@@ -45,6 +45,7 @@ now listed below; the local oracle and scoring histories remain separate.
 | 028-generalization-v1r1-baseline-blind | Run and seal the stateless baseline candidates | Three candidates sealed before oracle/scoring access | `72294cd` | [summary](trajectories/coding/028-generalization-v1r1-baseline-blind/summary.md) |
 | 029-generalization-v1r1-blackhole-blind | Run and seal the Blackhole candidates | Three candidates sealed before oracle/scoring access | `94e635f` | [summary](trajectories/coding/029-generalization-v1r1-blackhole-blind/summary.md) |
 | 030-generalization-v1r1-scoring | Score sealed V1R1 candidates and analyze generalization | PASS; six deterministic results and public report; scoring history remains local | `47f1449` (local-only) | [report](docs/GENERALIZATION_V1R1_REPORT.md), [summary](trajectories/coding/030-generalization-v1r1-scoring/summary.md) |
+| 031-product-v2-runtime-foundation | Build the isolated post-evaluation open-world runtime foundation | PASS; deterministic runtime/API foundation; no benchmark or holdout evaluation | `1d0b198` | [prompt](trajectories/coding/031-product-v2-runtime-foundation/prompt.md), [summary](trajectories/coding/031-product-v2-runtime-foundation/summary.md) |
 | ui-001-mobile-pwa | Build the dependency-light mobile-first PWA in an isolated worktree | KEEP; UI workstream preserved and integrated | `0cc6653` | [summary](trajectories/coding/ui-001-mobile-pwa/summary.md) |
 | ui-002-reference-redesign | Correct the Capture surface against the approved mobile reference | KEEP; UI correction preserved and integrated | `0cc6653` | [summary](trajectories/coding/ui-002-reference-redesign/summary.md) |
 | submission-001-hardening | Add offline qualification, CI, evidence index, and submission checklist | KEEP; three non-blocking stale-artifact warnings remain for finalization | `18b123f` | [summary](trajectories/coding/submission-001-hardening/summary.md) |
@@ -79,7 +80,7 @@ the final handoff state of that trajectory. The integrated product merge is
 | generalization-v1r1 scoring | Deterministic scoring and descriptive analysis of the sealed V1R1 set | None; frozen evaluator | Public result; no post-result tuning | [report](docs/GENERALIZATION_V1R1_REPORT.md), [machine result](eval/results/generalization/v1/GENERALIZATION_V1R1_RESULT.json) |
 | other recorded fast/replay directories | Intermediate extraction, projector, retry, and diagnostic runs | Mixed; recorded per directory | Preserved as historical evidence, including failed/invalid attempts | [runtime root](trajectories/runtime/) |
 
-The current filesystem inventory contains 31 coding trajectories and 48 runtime
+The current filesystem inventory contains 32 coding trajectories and 48 runtime
 trajectories. The index does not require every runtime directory to have a root `summary.md`:
 the runtime inventory records whether a summary, prompt-like call file, raw
 trace, and other artifacts are present. No transcript is fabricated for a
@@ -124,6 +125,7 @@ transcript, or recorded `*.raw.txt` provider output.
 | 028-generalization-v1r1-baseline-blind | coding | yes | yes | n/a | no | 3 |
 | 029-generalization-v1r1-blackhole-blind | coding | yes | yes | n/a | no | 2 |
 | 030-generalization-v1r1-scoring | coding | yes | yes | n/a | no | 3 |
+| 031-product-v2-runtime-foundation | coding | yes | yes | n/a | no | 2 |
 | ui-001-mobile-pwa | coding | yes | yes | n/a | no | 2 |
 | ui-002-reference-redesign | coding | yes | yes | n/a | no | 2 |
 | submission-001-hardening | coding | yes | yes | n/a | no | 2 |

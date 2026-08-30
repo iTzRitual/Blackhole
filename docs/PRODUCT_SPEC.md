@@ -2,7 +2,7 @@
 
 **Product:** Blackhole
 **Descriptor:** A zero-organization life inbox.
-**Status:** Product design retained; Gate A benchmark frozen, Gate B response contract valid; consolidated implementation frozen
+**Status:** Product design retained; Gate A benchmark frozen, Gate B response contract valid; V1 implementation frozen; Product V2 runtime foundation authorized post-evaluation
 **Audience:** Product, engineering, evaluation, and agent-workflow contributors
 
 ## 1. Product intent
@@ -214,3 +214,60 @@ consequential action without explicit user approval.
 - What retention and export controls are required for sensitive raw sources?
 - Which slices of the benchmark best represent real capture friction and
   downstream trust?
+
+## 13. Post-evaluation Product V2 runtime foundation
+
+Product V2 is the open-world product runtime built after the evaluated V1
+boundary. It is isolated in its own worktree and branch and must not be used
+to tune, rewrite, or replace the frozen V1R1 benchmark, baseline, evaluator,
+calibration evidence, or reported results.
+
+### Capture and processing
+
+Capture is nonblocking and provider-independent. Text-only, attachment-only,
+and combined captures append one immutable source event and return `Saved.`
+before semantic work. A durable pending row records processing separately from
+raw evidence. A background worker or explicit process command claims events in
+chronological order with a lease, recovers stale owners, retries failures with
+bounded backoff, and commits normalized semantics and rebuilt projections in a
+single transaction. A failure never discards the source or silently skips an
+earlier event.
+
+### Open-world memory
+
+The V2 contract accepts generic entities, facts, events, tasks, deadlines,
+relations, documents, transactions, observations, and proposed actions. It
+does not require a predefined benchmark ontology. Every value is explicitly
+`known`, `inferred`, or `unknown`; corrections, contradictions, supersession,
+duplicates, and provenance references remain visible. Derived state is
+rebuildable and raw evidence is never rewritten.
+
+### Attention and Ask
+
+Attention is a deterministic projection of tasks, obligations, deadlines,
+unknowns, changes, conflicts, and proposed actions. Relative dates are
+interpreted with capture timezone/context, and upcoming/overdue status is
+recomputed from the current clock. It does not make medical or ADHD claims.
+Ask uses `POST /api/v2/ask` and bounded retrieval over processed state rather
+than replaying the complete history. Cost totals, date comparisons, upcoming
+work, recent changes, and last-mention lookups use deterministic code. Only
+bounded synthesis questions may invoke the local Codex CLI, and references
+must point to known stored evidence.
+
+### Attachments and retraction
+
+Attachment bytes are stored as verified content-addressed blobs inside
+Blackhole Home. The event records filename, MIME type, length, SHA-256, and
+the blob link. Text content, attachment-only content, and combined content are
+valid inputs. The local Python boundary accepts a file path; the HTTP boundary
+requires bounded base64 bytes so a request cannot make the host read an
+arbitrary server path. The runtime reports whether an attachment was unread, read,
+unsupported, or unreadable; it makes no blanket OCR or vision-quality claim.
+Retraction is an append-only semantic operation. It excludes the selected
+source from active derived state while retaining the raw bytes, source event,
+history, and provenance for rebuild and audit.
+
+The initial V2 implementation is backend/API and deterministic-test focused.
+It does not claim completion of a redesigned PWA surface, production hosting,
+remote access, multi-user isolation, OCR, a Claude adapter, or consequential
+action execution.

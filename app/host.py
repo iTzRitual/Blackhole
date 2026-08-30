@@ -18,6 +18,7 @@ from app.codex_discovery import (
     discover_codex,
 )
 from app.ingestion_engine import CodexCLIProvider, IngestionEngine, SemanticProvider
+from app.product_v2 import PRODUCT_DATABASE_NAME, PRODUCT_RUNTIME_VERSION, ProductRuntime
 from app.runtime_config import RuntimeConfig
 from app.runtime_contract import runtime_contract
 from app.state_store import StateStore
@@ -139,6 +140,7 @@ class HostRuntime:
         provider: SemanticProvider | None = None,
         discovery_fn: Callable[..., ProviderStatus] | None = None,
         store: StateStore | None = None,
+        _managed: bool = False,
     ) -> None:
         config.validate()
         self.config = config
@@ -147,6 +149,8 @@ class HostRuntime:
         self._discovery_fn = discovery_fn or discover_codex
         self._provider_status_cache: ProviderStatus | None = None
         self._lock = threading.RLock()
+        self._managed = _managed
+        self._product_runtime: ProductRuntime | None = None
         self.store = store or StateStore(config.database_path)
         self._owns_store = store is None
         self.engine = IngestionEngine(
@@ -177,6 +181,17 @@ class HostRuntime:
     initialize = open
 
     def close(self) -> None:
+        if self._managed:
+            return
+        self.shutdown()
+
+    def shutdown(self) -> None:
+        """Close all owned Product V2/V1 resources, including a worker."""
+
+        product = self._product_runtime
+        self._product_runtime = None
+        if product is not None:
+            product.close()
         if self._owns_store:
             self.store.close()
 
@@ -219,6 +234,12 @@ class HostRuntime:
         with self._lock:
             processing = self.store.processing_status() or {"counts": {}}
             counts = processing.get("counts", {})
+            product_processing = (
+                self._product_runtime.processing_status() or {"counts": {}}
+                if self._product_runtime is not None
+                else {"counts": {}}
+            )
+            product_counts = product_processing.get("counts", {})
             return {
                 "host": {
                     "ready": True,
@@ -231,6 +252,16 @@ class HostRuntime:
                     "processing": int(counts.get("processing", 0)),
                     "processed": int(counts.get("processed", 0)),
                     "failed": int(counts.get("failed", 0)),
+                },
+                "product": {
+                    "version": PRODUCT_RUNTIME_VERSION,
+                    "database": str(self.config.home / PRODUCT_DATABASE_NAME),
+                    "processing": {
+                        "pending": int(product_counts.get("pending", 0)),
+                        "processing": int(product_counts.get("processing", 0)),
+                        "processed": int(product_counts.get("processed", 0)),
+                        "failed": int(product_counts.get("failed", 0)),
+                    },
                 },
             }
 
@@ -269,6 +300,59 @@ class HostRuntime:
 
         with self._lock:
             return self.engine.capture(payload, **kwargs)
+
+    @property
+    def product_runtime(self) -> ProductRuntime:
+        """Lazily open the separate Product V2 store and background worker."""
+
+        with self._lock:
+            if self._product_runtime is None:
+                self._product_runtime = ProductRuntime(
+                    self.config.home,
+                    db_path=self.config.home / PRODUCT_DATABASE_NAME,
+                    provider=self._provider,
+                    discovery_fn=self._discovery_fn,
+                    model=self.config.model,
+                    reasoning_effort=self.config.reasoning_effort,
+                    timeout_seconds=self.config.timeout_seconds,
+                    batch_size=self.config.batch_size,
+                    start_worker=False,
+                    auto_start_on_capture=True,
+                )
+            return self._product_runtime
+
+    def product_capture(self, text: str | None = None, **kwargs: Any) -> dict[str, Any]:
+        return self.product_runtime.capture(text, **kwargs)
+
+    def product_processing_status(self, event_id: str | None = None) -> dict[str, Any] | None:
+        return self.product_runtime.processing_status(event_id)
+
+    def product_state(self) -> dict[str, Any]:
+        return self.product_runtime.state()
+
+    def product_process_pending(self, *, limit: int | None = None) -> dict[str, Any]:
+        return self.product_runtime.process_pending(limit=limit)
+
+    def product_retry_failed(self, event_id: str | None = None, *, limit: int | None = None) -> dict[str, Any]:
+        return self.product_runtime.retry_failed(event_id, limit=limit)
+
+    def product_ask(self, question: str) -> dict[str, Any]:
+        return self.product_runtime.ask(question)
+
+    def product_retract(self, event_id: str, *, reason: str = "user undo") -> dict[str, Any]:
+        return self.product_runtime.retract(event_id, reason=reason)
+
+    def product_set_attention_status(
+        self,
+        fingerprint: str,
+        status: str,
+        *,
+        note: str | None = None,
+    ) -> dict[str, Any]:
+        return self.product_runtime.set_attention_status(fingerprint, status, note=note)
+
+    def product_attachment_bytes(self, sha256: str) -> tuple[bytes, dict[str, Any]]:
+        return self.product_runtime.attachment_bytes(sha256)
 
     def processing_status(self, event_id: str | None = None) -> dict[str, Any] | None:
         with self._lock:
