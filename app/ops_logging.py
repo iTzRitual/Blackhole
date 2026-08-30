@@ -24,6 +24,7 @@ _SECRET_COMPOUND = re.compile(r"(?i)\bsecret(?:[-_][A-Za-z0-9._~+/=-]+)+")
 _SENSITIVE_FIELD = re.compile(
     r"(?i)(?:token|secret|password|credential|cookie|api[_-]?key|access[_-]?token|authorization|prompt|payload|content|capture[_-]?text|question|stdout|stderr)"
 )
+_HUMAN_WHITESPACE = re.compile(r"[\r\n\t]+")
 _IDENTIFIER_SAFE = re.compile(r"[^A-Za-z0-9_.:@/-]+")
 _EVENT_SAFE = re.compile(r"[^A-Za-z0-9_.:@/ -]+")
 
@@ -57,6 +58,20 @@ def sanitize_event_name(value: Any, *, limit: int = 80) -> str:
     text = _SECRET_ASSIGNMENT.sub(r"\1[REDACTED]", text)
     text = _SECRET_COMPOUND.sub("[REDACTED]", text)
     return _EVENT_SAFE.sub("", text)[:limit] or "operation"
+
+
+def sanitize_human_text(value: Any, *, limit: int = 220) -> str:
+    """Keep a concise derived summary readable without exposing raw input."""
+
+    text = str(value or "")
+    text = _HUMAN_WHITESPACE.sub(" ", text).strip()
+    text = _BEARER.sub("Bearer [REDACTED]", text)
+    text = _SECRET_ASSIGNMENT.sub(r"\1[REDACTED]", text)
+    text = _SECRET_COMPOUND.sub("[REDACTED]", text)
+    # Control characters can make a terminal line misleading even when they
+    # are not a newline.  Keep normal Unicode labels and punctuation intact.
+    text = "".join(character for character in text if character.isprintable())
+    return text[:limit]
 
 
 def _format_value(key: str, value: Any) -> str:
@@ -97,5 +112,24 @@ class ProductOpsLogger:
             self.stream.write(f"{timestamp} {' '.join(rendered)}\n")
             self.stream.flush()
 
+    def human(self, message: Any) -> None:
+        """Write one concise local-dogfood summary without IDs or payloads."""
 
-__all__ = ["ProductOpsLogger", "sanitize_error", "sanitize_event_name", "sanitize_identifier"]
+        # Leave room for the local timestamp while keeping one terminal line
+        # comfortably readable.
+        rendered = sanitize_human_text(message, limit=180)
+        if not rendered:
+            return
+        timestamp = datetime.now(timezone.utc).astimezone().isoformat(timespec="milliseconds")
+        with self._lock:
+            self.stream.write(f"{timestamp} {rendered}\n")
+            self.stream.flush()
+
+
+__all__ = [
+    "ProductOpsLogger",
+    "sanitize_error",
+    "sanitize_event_name",
+    "sanitize_human_text",
+    "sanitize_identifier",
+]

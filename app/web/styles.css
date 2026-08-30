@@ -286,17 +286,17 @@ main {
 
 .composer-content {
   display: flex;
-  align-items: flex-end;
-  min-height: 76px;
+  align-items: center;
+  min-height: 68px;
   gap: 8px;
-  padding: 10px 12px 10px 9px;
+  padding: 8px 12px 8px 9px;
 }
 
 .plus-button {
   display: inline-grid;
   place-items: center;
   width: 48px;
-  height: 52px;
+  height: 48px;
   flex: 0 0 auto;
   padding: 0;
   border: 0;
@@ -321,7 +321,9 @@ main {
   height: 52px;
   max-height: 180px;
   flex: 1 1 auto;
-  padding: 13px 2px 10px;
+  align-self: center;
+  min-height: 48px;
+  padding: 11px 2px;
   border: 0;
   outline: 0;
   background: transparent;
@@ -798,6 +800,21 @@ main {
   border-top: 1px solid rgba(190, 182, 222, .12);
 }
 
+.attention-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+  gap: 10px;
+}
+
+.attention-complete {
+  min-height: 36px;
+  padding: 6px 11px;
+  color: var(--accent-blue);
+  white-space: nowrap;
+}
+
 .attention-state {
   color: var(--dim);
   font-size: .68rem;
@@ -810,6 +827,9 @@ main {
 }
 
 .evidence-details summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   min-height: 40px;
   padding: 9px 0;
   color: var(--muted);
@@ -823,14 +843,24 @@ main {
 }
 
 .evidence-details summary::after {
-  display: inline-block;
-  margin-left: 6px;
+  display: none;
+}
+
+.disclosure-chevron {
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
   color: var(--dim);
-  content: "⌄";
   transition: transform .16s ease-out;
 }
 
-.evidence-details[open] summary::after {
+.disclosure-chevron svg {
+  width: 16px;
+  height: 16px;
+}
+
+.evidence-details[open] .disclosure-chevron {
   transform: rotate(180deg);
 }
 
@@ -1064,6 +1094,7 @@ main {
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-top: 12px;
   padding: 6px 7px 6px 17px;
   border: 1px solid var(--border);
   border-radius: 22px;
@@ -1125,7 +1156,64 @@ main {
 }
 
 .answer-output {
+  display: grid;
+  gap: 14px;
   min-height: 150px;
+}
+
+.chat-message {
+  max-width: min(680px, 100%);
+}
+
+.user-message {
+  justify-self: end;
+  max-width: min(520px, 88%);
+  padding: 12px 15px;
+  border: 1px solid rgba(184, 168, 255, .23);
+  border-radius: 18px 18px 5px 18px;
+  background: rgba(184, 168, 255, .1);
+  color: var(--text);
+}
+
+.user-message p {
+  margin: 0;
+  font-size: .88rem;
+  overflow-wrap: anywhere;
+}
+
+.assistant-message {
+  justify-self: start;
+  width: 100%;
+}
+
+.chat-assistant-primary {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 4px 0 12px;
+}
+
+.chat-assistant-primary p {
+  max-width: 60ch;
+  margin: 3px 0 0;
+  color: var(--text);
+  font-size: 1.1rem;
+  letter-spacing: -.02em;
+  text-wrap: pretty;
+}
+
+.related-memories {
+  margin-top: 3px;
+  padding-top: 4px;
+  border-top: 1px solid rgba(190, 182, 222, .11);
+}
+
+.related-memories > summary {
+  color: var(--muted);
+}
+
+.related-memories .answer-groups {
+  margin-top: 4px;
 }
 
 .answer-summary {
@@ -1401,18 +1489,6 @@ main {
   color: var(--accent);
 }
 
-.nav-item.is-active::after {
-  position: absolute;
-  right: 50%;
-  bottom: 3px;
-  width: 24px;
-  height: 2px;
-  border-radius: 99px;
-  background: linear-gradient(90deg, var(--accent), var(--accent-blue));
-  content: "";
-  transform: translateX(50%);
-}
-
 .nav-icon {
   display: grid;
   place-items: center;
@@ -1593,6 +1669,11 @@ button:active:not(:disabled) {
     gap: 3px;
     padding-top: 4px;
     padding-bottom: 4px;
+  }
+
+  .attention-actions {
+    width: 100%;
+    justify-content: space-between;
   }
 
   .attention-state {

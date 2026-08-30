@@ -90,6 +90,18 @@
     return String(value);
   };
 
+  const isDisplayArtifact = (value) => {
+    const normalized = String(value ?? "").trim().toLowerCase();
+    return !normalized || normalized === "undefined" || normalized === "null" || normalized === "[object object]";
+  };
+
+  const displayText = (value, fallback = "") => {
+    const safeFallback = isDisplayArtifact(fallback) ? "" : String(fallback);
+    if (value === null || value === undefined || value === "") return safeFallback;
+    const rendered = typeof value === "string" ? value : formatValue(value);
+    return isDisplayArtifact(rendered) ? safeFallback : String(rendered);
+  };
+
   const fileTypeLabel = (attachment) => {
     if (attachment.isImage) return "Image";
     const type = String(attachment.type || "");
@@ -152,7 +164,35 @@
       const count = evidence.filter((ref) => ref !== null && ref !== undefined && String(ref).trim() !== "").length;
       return count === 1 ? "From a captured source" : count + " captured sources";
     }
-    return evidence ? String(evidence) : "From a captured source";
+    return displayText(evidence, "From a captured source");
+  };
+
+  const formatAttentionTime = (item, now = new Date()) => {
+    const lifecycleStatus = String(firstValue(item?.status, "open")).toLowerCase();
+    if (lifecycleStatus === "completed" || lifecycleStatus === "cancelled") {
+      return lifecycleStatus === "completed" ? "Done" : "Cancelled";
+    }
+    const timestamp = firstValue(item?.due_at, item?.starts_at);
+    const due = timestamp ? new Date(String(timestamp)) : null;
+    const explicitState = String(firstValue(item?.state, item?.urgency, "")).toLowerCase();
+    if (!due || Number.isNaN(due.getTime())) {
+      return displayText(firstValue(item?.display?.when, item?.when, item?.relative_time), "Worth a look");
+    }
+    const difference = due.getTime() - now.getTime();
+    const clock = new Intl.DateTimeFormat(undefined, { hour: "2-digit", minute: "2-digit" }).format(due);
+    if (explicitState === "overdue" || difference <= 0) {
+      const minutes = Math.max(1, Math.floor(Math.abs(difference) / 60000));
+      return "Overdue by " + minutes + " min · " + clock;
+    }
+    if (difference < 60 * 60 * 1000) {
+      const minutes = Math.max(1, Math.ceil(difference / 60000));
+      return "in " + minutes + " min · " + clock;
+    }
+    const sameDate = due.toDateString() === now.toDateString();
+    const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).toDateString() === due.toDateString();
+    if (sameDate) return "today · " + clock;
+    if (tomorrow) return "tomorrow · " + clock;
+    return new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric" }).format(due) + " · " + clock;
   };
 
   const normalizeAttention = (items) => {
@@ -160,38 +200,37 @@
     return source.map((item, index) => {
       const value = item?.value;
       const display = item?.display || {};
-      const subject = displayName(firstValue(item?.entity_name, item?.subject, item?.entity?.name, item?.title, "Something"));
+      const subject = displayName(displayText(firstValue(item?.entity_name, item?.subject, item?.entity?.name, item?.title), "Something"));
       const predicate = String(item?.predicate || "").toLowerCase();
-      const rawWhen = firstValue(display.when, display.time, display.relative_time, item?.when, item?.relative_time, item?.deadline, value?.deadline, value?.when);
-      const title = String(firstValue(item?.title, display.title, item?.label,
+      const title = displayText(firstValue(item?.title, display.title, item?.label,
         predicate.includes("deadline") || predicate.includes("due") || predicate.includes("renew")
           ? "Renew " + subject
           : predicate.includes("approval")
             ? "Review " + subject
-            : subject));
-      const summary = String(firstValue(item?.summary, display.summary, item?.description,
+            : subject), "Something");
+      const summary = displayText(firstValue(item?.summary, display.summary, item?.description,
         predicate.includes("approval") || value?.reason === "approval required"
           ? "Needs your decision before it can move forward."
           : predicate.includes("deadline") || predicate.includes("due")
             ? "A deadline is coming up."
-            : "Worth a look while it is still useful."));
+            : "Worth a look while it is still useful."), "Worth a look while it is still useful.");
       const rawDetail = firstValue(item?.detail, item?.details, value?.detail, value?.reason);
       const detail = rawDetail !== undefined
-        ? formatValue(rawDetail)
+        ? displayText(rawDetail, "")
         : (predicate ? humanize(predicate) + " needs a closer look." : "Blackhole found something worth checking.");
       const lifecycleStatus = String(firstValue(item?.status, "open")).toLowerCase();
       const lifecycleState = String(firstValue(item?.state, "")).toLowerCase();
       const rawUrgency = String(firstValue(item?.urgency, display.urgency, "")).toLowerCase();
-      const urgency = rawUrgency || (lifecycleState === "overdue" || String(rawWhen || "").toLowerCase().includes("overdue")
+      const dueValue = firstValue(item?.due_at, item?.starts_at, item?.deadline, value?.deadline, value?.when);
+      const rawWhen = firstValue(display.when, display.time, display.relative_time, item?.when, item?.relative_time);
+      const urgency = rawUrgency || (lifecycleState === "overdue" || lifecycleState === "past" || String(rawWhen || "").toLowerCase().includes("overdue")
         ? "overdue"
-        : lifecycleState === "upcoming" || String(rawWhen || "").toLowerCase().includes("min")
+        : lifecycleState === "upcoming" || String(rawWhen || "").toLowerCase().includes("min") || dueValue
           ? "soon"
           : "upcoming");
-      const when = rawWhen
-        ? (String(rawWhen).match(/^\d{4}-\d{2}-\d{2}/) ? formatDate(rawWhen) : String(rawWhen))
-        : lifecycleState === "completed" ? "Done" : lifecycleState === "cancelled" ? "Cancelled" : "Worth a look";
+      const when = formatAttentionTime({ ...item, status: lifecycleStatus, urgency, state: lifecycleState, display });
       return {
-        id: String(firstValue(item?.id, item?.event_id, item?.state_key, "attention-" + index)),
+        id: displayText(firstValue(item?.id, item?.fingerprint, item?.event_id, item?.state_key), "attention-" + index),
         title,
         summary,
         detail,
@@ -229,7 +268,7 @@
   const normalizeFact = (item, fallbackEntity) => {
     if (typeof item === "string") {
       return {
-        text: item,
+        text: displayText(item, "Memory"),
         detail: "",
         status: "known",
         evidence: "From a captured source",
@@ -237,37 +276,40 @@
       };
     }
     const source = item || {};
-    const text = String(firstValue(source.summary, source.display?.summary, source.text, source.description, source.label, naturalizeAssertion({
+    const proposedText = firstValue(source.summary, source.display?.summary, source.text, source.description, source.label);
+    const text = displayText(proposedText, naturalizeAssertion({
       ...source,
       subject: source.subject || source.entity_label || fallbackEntity,
       entity_name: source.entity_name || source.entity_label || fallbackEntity,
       predicate: source.predicate || source.concept,
-    })));
+    }));
+    const rawDetail = firstValue(source.detail, source.details, source.explanation);
     return {
       text,
-      detail: String(firstValue(source.detail, source.details, source.explanation, "")),
+      detail: displayText(rawDetail, ""),
       status: source.knowledge_status || source.status || "known",
       evidence: normalizeEvidence(source),
-      unknownReason: source.unknown_reason || "",
+      unknownReason: displayText(source.unknown_reason, ""),
     };
   };
 
   const normalizeMemory = (memory) => {
     const groups = new Map();
     const addGroup = (id, name, kind, summary, facts) => {
-      const key = String(id || name || "memory").toLowerCase();
+      const safeName = displayText(name, "Memory");
+      const key = displayText(id || safeName || "memory", "memory").toLowerCase();
       if (!groups.has(key)) {
         groups.set(key, {
           id: key,
-          name: String(name || "Memory"),
+          name: safeName,
           kind: kindLabel(kind),
           kindKey: String(kind || "memory").toLowerCase(),
-          summary: String(summary || ""),
+          summary: displayText(summary, ""),
           facts: [],
         });
       }
       const group = groups.get(key);
-      if (summary && !group.summary) group.summary = String(summary);
+      if (summary && !group.summary) group.summary = displayText(summary, "");
       (Array.isArray(facts) ? facts : []).forEach((fact) => group.facts.push(normalizeFact(fact, name)));
       return group;
     };
@@ -275,38 +317,63 @@
     if (!memory || typeof memory !== "object") return [];
     const entities = Array.isArray(memory.entities) ? memory.entities : [];
     entities.forEach((entity, index) => {
-      const name = String(firstValue(entity.name, entity.label, entity.title, entity.display_name, entity.subject, "Memory"));
+      if (!entity || typeof entity !== "object") return;
+      const name = displayText(firstValue(entity.name, entity.label, entity.title, entity.display_name, entity.subject), "Memory");
       const facts = firstValue(entity.facts, entity.items, entity.observations) || [];
       addGroup(entity.id || entity.entity_id || name + index, name, entity.kind || entity.type, entity.summary, facts);
     });
 
     const topics = Array.isArray(memory.topics) ? memory.topics : [];
     topics.forEach((topic, index) => {
-      const name = String(firstValue(topic.name, topic.title, topic.label, "Topic"));
+      if (!topic || typeof topic !== "object") return;
+      const name = displayText(firstValue(topic.name, topic.title, topic.label), "Topic");
       addGroup(topic.id || name + index, name, topic.kind || "topic", topic.summary, topic.items || topic.facts || []);
     });
 
     const groupsPayload = Array.isArray(memory.groups) ? memory.groups : [];
     groupsPayload.forEach((group, index) => {
-      const name = String(firstValue(group.name, group.title, group.label, "Memory"));
+      if (!group || typeof group !== "object") return;
+      const name = displayText(firstValue(group.name, group.title, group.label), "Memory");
       addGroup(group.id || name + index, name, group.kind || "memory", group.summary, group.items || group.facts || []);
     });
 
     const structuredFacts = Array.isArray(memory.current_facts) ? memory.current_facts : Array.isArray(memory.facts) ? memory.facts : [];
     structuredFacts.forEach((fact, index) => {
       const source = typeof fact === "object" && fact ? fact : { text: String(fact) };
-      const name = String(firstValue(source.entity_label, source.entity_name, source.entity?.name, source.subject, "Memory"));
+      const name = displayText(firstValue(source.entity_label, source.entity_name, source.entity?.name, source.subject), "Memory");
       const kind = firstValue(source.entity_kind, source.entity?.kind, source.kind, "memory");
       const group = addGroup(source.entity_key || source.entity_id || name + index, name, kind, "", []);
       group.facts.push(normalizeFact(source, name));
     });
 
+    // History is evidence subordinate to its entity/topic card. A row with no
+    // stable context is intentionally omitted rather than shown as a
+    // misleading standalone card.
+    const history = Array.isArray(memory.fact_history) ? memory.fact_history : [];
+    history.forEach((fact, index) => {
+      if (!fact || typeof fact !== "object") return;
+      const name = displayText(firstValue(fact.entity_label, fact.entity_name, fact.entity?.name, fact.subject), "");
+      if (!name) return;
+      const kind = firstValue(fact.entity_kind, fact.entity?.kind, fact.kind, "memory");
+      const group = addGroup(fact.entity_key || fact.entity_id || name, name, kind, "", []);
+      const normalized = normalizeFact(fact, name);
+      const operation = String(firstValue(fact.semantic_relation, fact.operation, "")).toLowerCase();
+      const prefix = ["correction", "supersede", "supersession", "meaningful_change", "change"].some((marker) => operation.includes(marker))
+        ? "Changed from "
+        : "Previously: ";
+      group.facts.push({
+        ...normalized,
+        text: prefix + normalized.text,
+        detail: normalized.detail || "Earlier captured evidence for this memory.",
+      });
+    });
+
     Object.entries(memory).forEach(([sectionKey, sectionItems]) => {
-      if (["entities", "topics", "groups", "items", "facts", "current_facts", "attention", "counts", "approval", "recent_captures", "processing", "relationships", "sources", "attachments", "retracted_event_ids", "store_version", "projection_version", "projection_run_id"].includes(sectionKey)) return;
+      if (["entities", "topics", "groups", "items", "facts", "current_facts", "fact_history", "attention", "counts", "approval", "recent_captures", "processing", "relationships", "sources", "attachments", "retracted_event_ids", "store_version", "projection_version", "projection_run_id"].includes(sectionKey)) return;
       if (!Array.isArray(sectionItems)) return;
       sectionItems.forEach((item, index) => {
         const source = typeof item === "object" && item ? item : { text: String(item) };
-        const name = String(firstValue(source.entity_name, source.entity?.name, source.subject, source.title, kindLabel(sectionKey)));
+        const name = displayText(firstValue(source.entity_name, source.entity?.name, source.subject, source.title), kindLabel(sectionKey));
         const kind = firstValue(source.entity_kind, source.entity?.kind, source.kind, sectionKey);
         const group = addGroup(source.entity_id || source.entity?.id || name, name, kind, "", []);
         group.facts.push(normalizeFact(source, name));
@@ -342,7 +409,7 @@
   const normalizeAnswer = (payload) => {
     const answer = payload?.answer || payload || {};
     const mode = String(answer.mode || answer.status || "").toLowerCase();
-    const rawMessage = String(firstValue(answer.message, answer.answer, "") || "");
+    const rawMessage = displayText(firstValue(answer.message, answer.answer), "");
     if (mode === "processing" || mode === "pending") {
       return {
         status: "processing",
@@ -379,20 +446,22 @@
     const groups = [];
     const rawGroups = Array.isArray(answer.groups) ? answer.groups : [];
     rawGroups.forEach((group, index) => {
-      const items = firstValue(group.items, group.assertions, []) || [];
+      const source = group && typeof group === "object" ? group : {};
+      const items = firstValue(source.items, source.assertions, []) || [];
       groups.push({
-        id: String(firstValue(group.id, group.title, "group-" + index)),
-        title: String(firstValue(group.title, group.name, "Related memories")),
+        id: displayText(firstValue(source.id, source.title), "group-" + index),
+        title: displayText(firstValue(source.title, source.name), "Related memories"),
         items: Array.isArray(items) ? items.map(normalizeSupportItem) : [],
       });
     });
 
     const sections = Array.isArray(answer.sections) ? answer.sections : [];
     sections.forEach((section, index) => {
-      const items = firstValue(section.items, section.assertions, []) || [];
+      const source = section && typeof section === "object" ? section : {};
+      const items = firstValue(source.items, source.assertions, []) || [];
       groups.push({
-        id: String(firstValue(section.id, section.title, "section-" + index)),
-        title: String(firstValue(section.title, "Related memories")),
+        id: displayText(firstValue(source.id, source.title), "section-" + index),
+        title: displayText(source.title, "Related memories"),
         items: Array.isArray(items) ? items.map(normalizeSupportItem) : [],
       });
     });
@@ -406,8 +475,8 @@
     const status = mode === "no_match" || mode === "empty" || (!meaningfulGroups.length && !answer.summary && messageIsEmpty)
       ? "no_match"
       : "ready";
-    const summary = String(firstValue(answer.summary, answer.answer, answer.direct_answer, answer.text,
-      status === "no_match" ? "I couldn’t find that in your memory yet." : deriveAnswerSummary(answer, meaningfulGroups)));
+    const summary = displayText(firstValue(answer.summary, answer.answer, answer.direct_answer, answer.text),
+      status === "no_match" ? "I couldn’t find that in your memory yet." : deriveAnswerSummary(answer, meaningfulGroups));
     return {
       status,
       summary,
@@ -677,6 +746,16 @@
         body: JSON.stringify({ event_id: captureId, reason: "user undo" }),
       });
     },
+    async setAttentionStatus(fingerprint, status) {
+      if (fixtureMode) {
+        await wait(40);
+        return { ok: true, attention: { fingerprint, status } };
+      }
+      return api("/api/v2/attention/status", {
+        method: "POST",
+        body: JSON.stringify({ fingerprint, status }),
+      });
+    },
     async ask(question) {
       if (fixtureMode) {
         await wait(180);
@@ -724,6 +803,8 @@
     toastAction: null,
     undoRecord: null,
     lastAskQuestion: "",
+    askMessages: [],
+    openDisclosures: new Set(),
   };
 
   const persistLocalState = () => {
@@ -736,6 +817,30 @@
       // Local view preferences are optional.
     }
   };
+
+  const rememberDisclosureState = (root) => {
+    if (!root) return;
+    $$('details[data-disclosure-id]', root).forEach((details) => {
+      const id = details.dataset.disclosureId;
+      if (!id) return;
+      if (details.open) state.openDisclosures.add(id);
+      else state.openDisclosures.delete(id);
+    });
+  };
+
+  const bindDisclosureState = (root) => {
+    if (!root) return;
+    $$('details[data-disclosure-id]', root).forEach((details) => {
+      details.addEventListener("toggle", () => {
+        const id = details.dataset.disclosureId;
+        if (!id) return;
+        if (details.open) state.openDisclosures.add(id);
+        else state.openDisclosures.delete(id);
+      });
+    });
+  };
+
+  const disclosureChevron = '<span class="disclosure-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#icon-chevron"></use></svg></span>';
 
   const prefersReducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -958,6 +1063,7 @@
     const element = $("#attention-list");
     renderProcessingNotice("#attention-processing");
     const items = state.attention;
+    rememberDisclosureState(element);
     if (!items.length) {
       renderEmpty(element, "Nothing needs your attention.", "Blackhole will only interrupt when something is worth acting on.", "check");
       return;
@@ -980,10 +1086,28 @@
         '</div>' +
         '<div class="attention-card-meta">' +
           (item.approval && lifecycleStatus === "open" ? '<span class="attention-state">Needs your decision</span>' : '<span class="attention-state">' + escapeHtml(lifecycleLabel) + '</span>') +
-          '<details class="evidence-details"><summary>Why this is here</summary><div class="detail-copy"><p>' + escapeHtml(item.detail) + '</p><p class="detail-meta">' + escapeHtml(statusDetails(item.status, item.unknownReason)) + ' · ' + escapeHtml(item.evidence) + '</p></div></details>' +
+          '<div class="attention-actions">' +
+            (lifecycleStatus === "open" ? '<button class="quiet-button attention-complete" type="button" data-attention-complete="' + escapeHtml(item.id) + '">Done</button>' : '') +
+            '<details class="evidence-details" data-disclosure-id="attention:' + escapeHtml(item.id) + '"' + (state.openDisclosures.has("attention:" + item.id) ? " open" : "") + '><summary><span>Why this is here</span>' + disclosureChevron + '</summary><div class="detail-copy"><p>' + escapeHtml(item.detail) + '</p><p class="detail-meta">' + escapeHtml(statusDetails(item.status, item.unknownReason)) + ' · ' + escapeHtml(item.evidence) + '</p></div></details>' +
+          '</div>' +
         '</div>' +
       '</article>';
     }).join("");
+    bindDisclosureState(element);
+  };
+
+  const completeAttention = async (button) => {
+    const fingerprint = button?.dataset?.attentionComplete;
+    if (!fingerprint || button.disabled) return;
+    button.disabled = true;
+    try {
+      await client.setAttentionStatus(fingerprint, "completed");
+      showToast("Marked done");
+      await refreshState();
+    } catch (_error) {
+      button.disabled = false;
+      showToast("Couldn’t update that yet.", "error");
+    }
   };
 
   const updateAttentionBadge = () => {
@@ -1031,6 +1155,7 @@
   const renderMemory = () => {
     const element = $("#memory-list");
     if (!element) return;
+    rememberDisclosureState(element);
     renderProcessingNotice("#memory-processing");
     renderMemoryFilters();
     renderMemorySummary();
@@ -1064,11 +1189,12 @@
             '<span class="fact-status">' + escapeHtml(humanStatus(fact.status)) + '</span></span>' +
           '</li>';
         }).join("") + '</ul>' +
-        '<details class="evidence-details memory-evidence"><summary>Why Blackhole knows this</summary><div class="detail-copy"><p>' +
+        '<details class="evidence-details memory-evidence" data-disclosure-id="memory:' + escapeHtml(entity.id) + '"' + (state.openDisclosures.has("memory:" + entity.id) ? " open" : "") + '><summary><span>Why Blackhole knows this</span>' + disclosureChevron + '</summary><div class="detail-copy"><p>' +
           escapeHtml(entity.facts.map((fact) => fact.text + " — " + statusDetails(fact.status, fact.unknownReason) + ". " + fact.evidence).join(" ")) +
         '</p></div></details>' +
       '</article>';
     }).join("");
+    bindDisclosureState(element);
   };
 
   const renderUnavailableState = () => {
@@ -1117,57 +1243,85 @@
     const output = $("#answer-output");
     if (!output) return;
     output.setAttribute("aria-busy", "true");
-    output.innerHTML = '<div class="answer-loading"><span class="loading-orbit" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#icon-orbit"></use></svg></span><div><h3>Looking through your memory…</h3><p>Just a moment.</p></div></div>';
+    renderAskConversation(true);
+  };
+
+  const answerIcon = (kind) => kind === "error" ? "error" : kind === "no-match" ? "search" : "spark";
+
+  const renderAssistantMarkup = (message, messageIndex) => {
+    if (message.transient) {
+      const transient = message.transient;
+      return '<article class="chat-message assistant-message"><div class="answer-state is-' + escapeHtml(transient.kind || "empty") + '">' +
+        '<span class="answer-state-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-' + answerIcon(transient.kind) + '"></use></svg></span>' +
+        '<div><h3>' + escapeHtml(transient.title) + '</h3><p>' + escapeHtml(transient.message) + '</p>' +
+        (transient.actionLabel ? '<button class="quiet-button" type="button" data-answer-action-index="' + messageIndex + '">' + escapeHtml(transient.actionLabel) + '</button>' : "") +
+        '</div></div></article>';
+    }
+    const normalized = message.answer || {};
+    if (normalized.status === "processing" || normalized.status === "processing_failed" || normalized.status === "no_data" || normalized.status === "unsupported" || normalized.status === "no_match") {
+      const copy = normalized.status === "processing"
+        ? ["Still understanding your recent captures.", "Your capture is saved. Check back soon for useful memory and attention.", "processing"]
+        : normalized.status === "processing_failed"
+          ? ["Some recent captures couldn't be understood yet.", "Your captures are still saved. Try again when your local provider is available.", "error"]
+          : normalized.status === "no_data"
+            ? ["No processed memory yet.", normalized.helper, "no-match"]
+            : normalized.status === "unsupported"
+              ? ["Let’s try that another way.", normalized.helper, "no-match"]
+              : ["Nothing clear came back yet.", normalized.summary, "no-match"];
+      return '<article class="chat-message assistant-message"><div class="answer-state is-' + copy[2] + '">' +
+        '<span class="answer-state-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-' + answerIcon(copy[2]) + '"></use></svg></span>' +
+        '<div><h3>' + escapeHtml(copy[0]) + '</h3><p>' + escapeHtml(displayText(copy[1], "")) + '</p>' +
+        (normalized.status === "processing_failed" ? '<button class="quiet-button" type="button" data-answer-action-index="' + messageIndex + '">Try again</button>' : "") +
+        '</div></div></article>';
+    }
+    const groups = Array.isArray(normalized.groups) ? normalized.groups.filter((group) => Array.isArray(group.items) && group.items.length) : [];
+    const relatedCount = groups.reduce((count, group) => count + group.items.length, 0);
+    const groupMarkup = groups.map((group) => '<section class="answer-group"><h3>' + escapeHtml(displayText(group.title, "Related memories")) + '</h3><ul class="support-list">' +
+      group.items.map((item) => '<li class="support-item is-' + statusClass(item.status) + '">' +
+        '<span class="fact-marker" aria-hidden="true"></span><span class="support-copy"><span>' + escapeHtml(displayText(item.text, "Memory")) + '</span>' +
+        (item.detail ? '<span class="support-detail">' + escapeHtml(displayText(item.detail, "")) + '</span>' : "") +
+        '<span class="support-detail">' + escapeHtml(statusDetails(item.status, item.unknownReason) + " · " + displayText(item.evidence, "From a captured source")) + '</span>' +
+      '</li>').join("") + '</ul></section>').join("");
+    const related = relatedCount ? '<details class="evidence-details related-memories" data-disclosure-id="ask:' + messageIndex + ':related"' + (state.openDisclosures.has("ask:" + messageIndex + ":related") ? " open" : "") + '><summary><span>Supporting memories · ' + relatedCount + '</span>' + disclosureChevron + '</summary><div class="detail-copy answer-groups">' + groupMarkup + '</div></details>' : "";
+    return '<article class="chat-message assistant-message"><div class="chat-assistant-primary"><span class="answer-spark"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-spark"></use></svg></span><p>' + escapeHtml(displayText(normalized.summary, "Here’s what I found in your memory:")) + '</p></div>' + related + '<p class="answer-grounding">Based on what you’ve captured so far.</p></article>';
+  };
+
+  const renderAskConversation = (loading = false) => {
+    const output = $("#answer-output");
+    if (!output) return;
+    const messages = state.askMessages.map((message, index) => {
+      if (message.role === "user") {
+        return '<article class="chat-message user-message"><p>' + escapeHtml(displayText(message.text, "")) + '</p></article>';
+      }
+      return renderAssistantMarkup(message, index);
+    });
+    if (loading) {
+      messages.push('<article class="chat-message assistant-message"><div class="answer-loading"><span class="loading-orbit" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#icon-orbit"></use></svg></span><div><h3>Looking through your memory…</h3><p>Just a moment.</p></div></div></article>');
+    }
+    output.innerHTML = messages.join("");
+    bindDisclosureState(output);
+    $$("[data-answer-action-index]", output).forEach((button) => {
+      const index = Number(button.dataset.answerActionIndex);
+      const message = state.askMessages[index];
+      if (message?.transient?.action) button.addEventListener("click", message.transient.action);
+      else if (message?.answer?.status === "processing_failed") button.addEventListener("click", () => refreshState());
+    });
   };
 
   const renderAnswerState = (title, message, kind = "empty", actionLabel = "", action = null) => {
     const output = $("#answer-output");
     if (!output) return;
     output.removeAttribute("aria-busy");
-    output.innerHTML = '<div class="answer-state is-' + escapeHtml(kind) + '">' +
-      '<span class="answer-state-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-' + (kind === "error" ? "error" : kind === "no-match" ? "search" : "spark") + '"></use></svg></span>' +
-      '<div><h3>' + escapeHtml(title) + '</h3><p>' + escapeHtml(message) + '</p>' +
-      (actionLabel ? '<button class="quiet-button" type="button" data-answer-action>' + escapeHtml(actionLabel) + '</button>' : "") +
-      '</div></div>';
-    const button = $("[data-answer-action]", output);
-    if (button && action) button.addEventListener("click", action);
+    state.askMessages.push({ role: "assistant", transient: { title, message, kind, actionLabel, action } });
+    renderAskConversation();
   };
 
   const renderAnswer = (normalized) => {
     const output = $("#answer-output");
     if (!output) return;
     output.removeAttribute("aria-busy");
-    if (normalized.status === "processing") {
-      renderAnswerState("Still understanding your recent captures.", "Your capture is saved. Check back soon for useful memory and attention.", "processing");
-      return;
-    }
-    if (normalized.status === "processing_failed") {
-      renderAnswerState("Some recent captures couldn't be understood yet.", "Your captures are still saved. Try again when your local provider is available.", "error", "Try again", () => refreshState());
-      return;
-    }
-    if (normalized.status === "no_data") {
-      renderAnswerState("No processed memory yet.", normalized.helper, "no-match");
-      return;
-    }
-    if (normalized.status === "unsupported") {
-      renderAnswerState("Let’s try that another way.", normalized.helper, "no-match");
-      return;
-    }
-    if (normalized.status === "no_match") {
-      renderAnswerState("Nothing clear came back yet.", normalized.summary, "no-match");
-      return;
-    }
-    output.innerHTML = '<div class="answer-summary"><span class="answer-spark"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-spark"></use></svg></span><p>' + escapeHtml(normalized.summary) + '</p></div>' +
-      '<div class="answer-groups">' + normalized.groups.map((group) => {
-        return '<section class="answer-group"><h3>' + escapeHtml(group.title) + '</h3><ul class="support-list">' +
-          group.items.map((item) => '<li class="support-item is-' + statusClass(item.status) + '">' +
-            '<span class="fact-marker" aria-hidden="true"></span><span class="support-copy"><span>' + escapeHtml(item.text) + '</span>' +
-            (item.detail ? '<span class="support-detail">' + escapeHtml(item.detail) + '</span>' : "") +
-            '</span><details class="evidence-details"><summary>Details</summary><div class="detail-copy"><p>' + escapeHtml(statusDetails(item.status, item.unknownReason) + " · " + item.evidence) + '</p></div></details>' +
-          '</li>').join("") +
-          '</ul></section>';
-      }).join("") + '</div>' +
-      '<p class="answer-grounding">Based on what you’ve captured so far.</p>';
+    state.askMessages.push({ role: "assistant", answer: normalized });
+    renderAskConversation();
   };
 
   const answerError = (error) => {
@@ -1188,6 +1342,10 @@
     if (!normalizedQuestion || state.asking) return;
     state.asking = true;
     state.lastAskQuestion = normalizedQuestion;
+    state.askMessages.push({ role: "user", text: normalizedQuestion });
+    renderQuestionExamples();
+    const input = $("#ask-input");
+    if (input) input.value = "";
     renderAnswerLoading();
     try {
       const payload = await client.ask(normalizedQuestion);
@@ -1314,6 +1472,11 @@
   const renderQuestionExamples = () => {
     const element = $("#question-chips");
     if (!element) return;
+    const heading = $("#ask-examples-heading");
+    const hasConversation = state.askMessages.length > 0;
+    element.hidden = hasConversation;
+    if (heading) heading.hidden = hasConversation;
+    if (hasConversation) return;
     const examples = [
       "What do I need to do today?",
       "What am I paying for?",
@@ -1370,6 +1533,10 @@
     persistLocalState();
     renderMemory();
   });
+  $("#attention-list")?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-attention-complete]");
+    if (button) completeAttention(button);
+  });
   $("#install-button")?.addEventListener("click", triggerInstall);
   document.addEventListener("click", (event) => {
     if (!$("#attachment-menu")?.hidden && !$(".composer-wrap")?.contains(event.target)) closeAttachmentMenu();
@@ -1408,7 +1575,7 @@
       window.location.reload();
     });
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=7", { updateViaCache: "none" })
+      navigator.serviceWorker.register("/sw.js?v=8", { updateViaCache: "none" })
         .then((registration) => {
           if (registration.waiting) registration.waiting.postMessage({ type: "SKIP_WAITING" });
           if (typeof registration.update === "function") return registration.update();
@@ -1424,6 +1591,8 @@
       normalizeAttention,
       normalizeMemory,
       normalizeAnswer,
+      formatAttentionTime,
+      displayText,
       formatMoney,
       humanize,
     };

@@ -1,0 +1,70 @@
+{
+  "report_type": "product-v2-final-human-dogfood",
+  "trajectory": "042-product-v2-final-human-dogfood-fixes",
+  "base_sha": "15f29e8c07c4280ddd8349ea880cc2cb90316f1c",
+  "branch": "product/v2-final-dogfood-fixes",
+  "deterministic": {
+    "focused_product_and_ui_tests": {"passed": 103, "failed": 0},
+    "application_tests": {"passed": 170, "failed": 0},
+    "acceptance_harness_tests": {"passed": 7, "failed": 0},
+    "evaluator_tests": {"passed": 10, "failed": 0},
+    "integrated_acceptance": {
+      "passed": 50,
+      "failed": 0,
+      "partial": 0,
+      "not_tested": 0,
+      "reliability_gates": "PASS",
+      "latency_probe": {
+        "status": "PASS",
+        "capture_return_ms": 7.489,
+        "processing_completion_ms": 140.295,
+        "processing_completed": true,
+        "status_at_capture": "pending",
+        "provider_calls_at_capture": 1
+      }
+    },
+    "compileall": "PASS",
+    "javascript_syntax": "PASS",
+    "qualification": {"status": "PASS", "warnings": 4},
+    "benchmark_structure": {"status": "PASS", "events": 200, "checkpoints": 4},
+    "contract_smoke": {"status": "PASS", "kind": "non-scored-contract-smoke"},
+    "diff_check": "PASS"
+  },
+  "provider_capability_observation": {
+    "commands": ["codex exec --help", "codex features list"],
+    "help": "model_reasoning_effort is accepted through -c; no explicit fast or priority flag was shown",
+    "features": "fast_mode is listed stable/enabled; no unsupported CLI flag was used"
+  },
+  "reasoning_effort_comparison": {
+    "calls": 3,
+    "limit": 6,
+    "model": "gpt-5.6-luna",
+    "results": {
+      "high": {"wall_seconds": 48.859, "parse_success": true, "semantic_checks": "5/5"},
+      "medium": {"wall_seconds": 43.391, "parse_success": true, "semantic_checks": "5/5"},
+      "low": {"wall_seconds": 31.64, "parse_success": true, "semantic_checks": "5/5"}
+    },
+    "selected": "low",
+    "batch_size": 2,
+    "prompt": "blackhole-product-v2-prompt-v5-compact"
+  },
+  "final_live_smoke": {
+    "captures": {"count": 6, "limit": 6, "http_statuses": [200, 200, 200, 200, 200, 200], "processed": 6, "failed": 0},
+    "observed_usable_state_seconds": {"first_capture": 23.031, "remaining_burst": 129.562},
+    "temporal_check": {"capture_index": 3, "correct": true, "reference": "persisted captured_at plus ten minutes with timezone"},
+    "asks": {"count": 4, "limit": 4, "http_statuses": [200, 200, 200, 200], "statuses": ["ready", "ready", "ready", "ready"], "provider_calls": 0, "return_seconds": [0.015, 0.016, 0.016, 0.015]},
+    "cleanup": "Windows CTRL_BREAK runner status 3221225786 omitted child stop lines; deterministic clean-stop and separate visual-server stop checks passed"
+  },
+  "visual_review": {
+    "viewports": ["390x844", "1280x900"],
+    "evidence": [
+      "trajectories/coding/042-product-v2-final-human-dogfood-fixes/visual-390x844.png",
+      "trajectories/coding/042-product-v2-final-human-dogfood-fixes/visual-1280x900.png"
+    ],
+    "checks": ["Capture alignment/no underline", "Attention time/overdue/persistent disclosure/chevrons", "contextual Memory history", "Ask chat/examples/supporting memories", "artifact-free rendering"]
+  },
+  "gate": "PARTIAL / REVISE",
+  "raw_inputs_persisted": false,
+  "protected_material_accessed": false,
+  "notes": "Semantic and UI repairs are kept. The observed burst interval did not demonstrate material end-to-end latency improvement; no semantic regression was observed."
+}

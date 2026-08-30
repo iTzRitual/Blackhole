@@ -217,3 +217,30 @@ Capture/question content, provider payloads, credentials, and raw stderr are
 not logged; error summaries and identifiers are bounded and sanitized. This
 follow-up changes neither the frozen V1 benchmark/evaluator/baseline evidence
 nor the holdout boundary.
+
+## Final human dogfood integration repair — 2026-08-30
+
+The final repair preserves the existing Host/API/SQLite seams and ordered
+semantic commit/projection boundary. Product V2 now uses the compact,
+versioned extraction instruction, bounded prior-memory context, selected
+low-cost supported reasoning effort, and a conservative batch size of two.
+Capture remains immediate and nonblocking; persisted capture timestamps remain
+the temporal reference through delay, retry, and rebuild. Deterministic Ask
+routes remain provider-free, while provider Ask context is independently
+bounded per request.
+
+The live bounded smoke used a fresh temporary Home, six exact captures, and
+four exact Ask requests. All capture HTTP requests returned 200 and all four
+Ask requests returned 200 without Ask-time provider calls; the observed first
+usable state was 23.031 seconds and the remaining burst completed at 129.562
+seconds. The ten-minute due-time check matched the persisted capture-time
+timestamp and timezone. The overall gate is PARTIAL/REVISE because the burst
+interval did not demonstrate material end-to-end latency improvement and the
+launcher stream did not capture final stop lines. No semantic boundary was
+weakened and no protected benchmark or holdout material was used.
+
+The web shell adds stable Attention/Memory/Ask disclosure state, contextual
+history, English structured presentation, capture-time due/overdue copy,
+defensive rendering, Ask conversation examples, and centered composer
+alignment without changing transport compatibility. Operational logs remain
+bounded, readable, and privacy-preserving.

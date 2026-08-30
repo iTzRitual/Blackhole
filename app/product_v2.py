@@ -32,6 +32,7 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from app.ask_planner import AskPlan, plan_ask, search_terms
 from app.codex_discovery import ProviderStatus
 from app.ops_logging import ProductOpsLogger
+from app.prompts import product_v2_extraction_instruction
 from app.product_v2_store import (
     AUTOMATIC_RETRY_BACKOFF_SECONDS,
     MAX_AUTOMATIC_ATTEMPTS,
@@ -51,7 +52,7 @@ from app.runtime_config import (
 
 PRODUCT_RUNTIME_VERSION = "blackhole-product-v2-runtime-v2"
 PRODUCT_DATABASE_NAME = "blackhole-v2.db"
-PRODUCT_PROMPT_VERSION = "blackhole-product-v2-prompt-v4"
+PRODUCT_PROMPT_VERSION = "blackhole-product-v2-prompt-v5-compact"
 PROCESSING_PENDING_MESSAGE = "Still understanding your recent captures."
 PROCESSING_FAILED_MESSAGE = "Some recent captures couldn't be understood yet. Your captures are still saved."
 MAX_CAPTURE_TEXT = 100_000
@@ -66,6 +67,15 @@ MAX_ASK_CONTEXT_HISTORY = 20
 MAX_ASK_FALLBACK_FACTS = 40
 MAX_ASK_FALLBACK_HISTORY = 20
 MAX_ASK_SUPPORTING_EVIDENCE_IDS = MAX_ASK_CONTEXT_FACTS + MAX_ASK_CONTEXT_HISTORY
+# Extraction only needs a recent, compact projection for linking.  Keeping
+# this context bounded prevents an old Home from turning every capture into a
+# large provider request while leaving the immutable source history untouched.
+MAX_EXTRACTION_ENTITIES = 24
+MAX_EXTRACTION_FACTS = 36
+MAX_EXTRACTION_HISTORY = 12
+MAX_EXTRACTION_RELATIONS = 12
+MAX_EXTRACTION_ATTENTION = 16
+MAX_EXTRACTION_SOURCES = 12
 _EVENT_REFERENCE_KEYS = frozenset(
     {
         "event_id",
@@ -288,6 +298,49 @@ def _fact_summary(item: dict[str, Any]) -> str:
     return f"{label} {concept}: {display}"
 
 
+def _human_fact_summary(item: dict[str, Any]) -> str:
+    """Render a short derived fact for the local operational log."""
+
+    label = _clean_text(item.get("entity_label") or item.get("entity_key") or "memory", limit=80)
+    concept = str(item.get("concept") or "").casefold()
+    # Generic notes can contain the entire user capture as their value.  Keep
+    # the operational line useful without echoing that private source text.
+    if concept in {"note", "note_from_user", "observation", "capture"}:
+        return f"{label} → captured"
+    display = _clean_text(_display_fact_value(item), limit=120)
+    status = str(item.get("knowledge_status") or "known").casefold()
+    if status == "unknown":
+        reason = _clean_text(item.get("unknown_reason") or "not stated", limit=60)
+        return f"{label} → unclear ({reason})"
+    if status == "inferred":
+        return f"{label} → may be {display}"
+    return f"{label} → {display}"
+
+
+def _human_attention_summary(item: dict[str, Any], *, now: datetime | None = None) -> str:
+    """Render a short actionable summary without exposing raw timestamps."""
+
+    title = _clean_text(item.get("title") or item.get("kind") or "open item", limit=100)
+    due_value = item.get("due_at") or item.get("starts_at")
+    if due_value is None:
+        return title
+    timezone_name, zone = resolve_timezone(item.get("timezone"))
+    del timezone_name
+    due = parse_datetime(due_value, zone=zone)
+    if due is None:
+        return title
+    current = (now or datetime.now(timezone.utc)).astimezone(zone)
+    seconds = (due - current).total_seconds()
+    if seconds <= 0:
+        minutes = max(1, int(abs(seconds) // 60))
+        return f"{title} · overdue by {minutes} min"
+    if seconds < 3600:
+        minutes = max(1, int(seconds // 60))
+        return f"{title} · due in {minutes} min"
+    day = due.strftime("%d").lstrip("0") or "0"
+    return f"{title} · {due.strftime('%b')} {day} at {due.strftime('%H:%M')}"
+
+
 def _safe_json_value(value: Any, *, depth: int = 0) -> Any:
     """Copy provider values while bounding accidental output expansion."""
 
@@ -306,6 +359,24 @@ def _safe_json_value(value: Any, *, depth: int = 0) -> Any:
             if isinstance(key, (str, int, float, bool))
         }
     return None
+
+
+def _bounded_projection_rows(
+    snapshot: dict[str, Any],
+    key: str,
+    limit: int,
+) -> list[dict[str, Any]]:
+    """Return only recent structured rows for the extraction prompt."""
+
+    rows = snapshot.get(key, [])
+    if not isinstance(rows, list):
+        return []
+    return [
+        safe
+        for row in rows[-limit:]
+        for safe in [_safe_json_value(row)]
+        if isinstance(safe, dict)
+    ]
 
 
 def local_timezone_name() -> str:
@@ -821,6 +892,9 @@ def normalize_fact(
         "deadline",
         "date",
         "time",
+        "task",
+        "reminder",
+        "obligation",
     } and has_value:
         # A compact provider may put a temporal expression in ``value``. The
         # semantic provider still owns understanding it; this boundary only
@@ -1893,10 +1967,7 @@ class ProductCodexProvider:
         time_context: dict[str, Any],
         contract: dict[str, Any],
     ) -> dict[str, Any]:
-        prompt_path = Path(__file__).resolve().parents[1] / "prompts" / "runtime" / "product-v2.md"
-        instruction = prompt_path.read_text(encoding="utf-8") if prompt_path.exists() else (
-            "Extract only supported facts from the supplied captures. Return JSON."
-        )
+        instruction = product_v2_extraction_instruction()
         images = [
             str(attachment["path"])
             for event in events
@@ -1911,7 +1982,12 @@ class ProductCodexProvider:
             "prior_memory": prior_memory,
             "captures": events,
         }
-        return self._call(instruction + "\n\nINPUT:\n" + json.dumps(payload, ensure_ascii=False, indent=2), image_paths=images)
+        return self._call(
+            instruction
+            + "\n\nINPUT:\n"
+            + json.dumps(payload, ensure_ascii=False),
+            image_paths=images,
+        )
 
     def answer(
         self,
@@ -2003,6 +2079,8 @@ class ProductRuntime:
         self._worker_stop = threading.Event()
         self._worker_wake = threading.Event()
         self._worker: threading.Thread | None = None
+        self._codex_provider: ProductCodexProvider | None = None
+        self._discovery_ready = False
         self._closed = False
         self._auto_start_on_capture = start_worker if auto_start_on_capture is None else auto_start_on_capture
         self.last_provider_diagnostic: dict[str, Any] | None = None
@@ -2012,6 +2090,13 @@ class ProductRuntime:
     def _log(self, component: str, event_name: str, **fields: Any) -> None:
         if self.ops_logger is not None:
             self.ops_logger.event(component, event_name, **fields)
+
+    def _human(self, message: str) -> None:
+        """Emit a concise derived operational line when a logger is present."""
+
+        human = getattr(self.ops_logger, "human", None)
+        if callable(human):
+            human(message)
 
     def start_worker(self) -> None:
         with self._capture_lock:
@@ -2028,6 +2113,7 @@ class ProductRuntime:
             )
             self._worker.start()
             self._log("worker", "product-v2 worker started")
+            self._human("Understanding in the background…")
 
     def close(self) -> None:
         with self._capture_lock:
@@ -2044,6 +2130,10 @@ class ProductRuntime:
             "product-v2 worker stopped",
             clean=worker is None or not worker.is_alive(),
         )
+        provider = self._codex_provider
+        self._codex_provider = None
+        if provider is not None and callable(getattr(provider, "close", None)):
+            provider.close()
         if (worker is None or not worker.is_alive()) and self._owns_store:
             self.store.close()
 
@@ -2212,6 +2302,7 @@ class ProductRuntime:
             attachments=len(attachment_descriptors),
         )
         self._log("queue", "pending", event=event_id)
+        self._human(f"Saved capture · {source_type.strip()}")
         if self._auto_start_on_capture:
             self.start_worker()
         self._worker_wake.set()
@@ -2241,28 +2332,32 @@ class ProductRuntime:
         if self.provider_factory is not None:
             return self.provider_factory(), True
         if self.discovery_fn is not None:
-            try:
-                status = self.discovery_fn(
-                    configured_model=self.model,
-                    configured_reasoning=self.reasoning_effort,
-                )
-                if isinstance(status, dict):
-                    ready = bool(status.get("ready"))
-                else:
-                    ready = bool(getattr(status, "ready", False))
-                if not ready:
-                    raise ProductProviderUnavailableError(_provider_unavailable(status))
-            except ProductProviderUnavailableError:
-                raise
-            except Exception as error:
-                del error
-                raise ProductProviderUnavailableError("provider unavailable: readiness check failed") from None
-        return ProductCodexProvider(
-            home=self.home,
-            timeout=self.timeout_seconds,
-            model=self.model,
-            reasoning_effort=self.reasoning_effort,
-        ), True
+            if not self._discovery_ready:
+                try:
+                    status = self.discovery_fn(
+                        configured_model=self.model,
+                        configured_reasoning=self.reasoning_effort,
+                    )
+                    if isinstance(status, dict):
+                        ready = bool(status.get("ready"))
+                    else:
+                        ready = bool(getattr(status, "ready", False))
+                    if not ready:
+                        raise ProductProviderUnavailableError(_provider_unavailable(status))
+                    self._discovery_ready = True
+                except ProductProviderUnavailableError:
+                    raise
+                except Exception as error:
+                    del error
+                    raise ProductProviderUnavailableError("provider unavailable: readiness check failed") from None
+        if self._codex_provider is None:
+            self._codex_provider = ProductCodexProvider(
+                home=self.home,
+                timeout=self.timeout_seconds,
+                model=self.model,
+                reasoning_effort=self.reasoning_effort,
+            )
+        return self._codex_provider, False
 
     @staticmethod
     def _extract_call(provider: Any, *, events: list[dict[str, Any]], prior_memory: dict[str, Any], time_context: dict[str, Any], contract: dict[str, Any]) -> dict[str, Any]:
@@ -2290,6 +2385,7 @@ class ProductRuntime:
         }
         for event_id in event_ids:
             self._log("provider", "start", event=event_id, attempt=attempts.get(event_id, 1))
+        self._human("Understanding…")
         max_sequence = max(int(event["sequence"]) for event in events)
         available_ids = {
             str(event.get("event_id"))
@@ -2298,12 +2394,12 @@ class ProductRuntime:
         }
         snapshot = self.store.snapshot(now=self._now())
         prior_memory = {
-            "entities": snapshot.get("entities", []),
-            "current_facts": snapshot.get("current_facts", []),
-            "fact_history": snapshot.get("fact_history", [])[-MAX_ASK_CONTEXT_HISTORY:],
-            "relationships": snapshot.get("relationships", [])[-MAX_ASK_CONTEXT_HISTORY:],
-            "attention": snapshot.get("attention", []),
-            "recent_sources": snapshot.get("sources", [])[-20:],
+            "entities": _bounded_projection_rows(snapshot, "entities", MAX_EXTRACTION_ENTITIES),
+            "current_facts": _bounded_projection_rows(snapshot, "current_facts", MAX_EXTRACTION_FACTS),
+            "fact_history": _bounded_projection_rows(snapshot, "fact_history", MAX_EXTRACTION_HISTORY),
+            "relationships": _bounded_projection_rows(snapshot, "relationships", MAX_EXTRACTION_RELATIONS),
+            "attention": _bounded_projection_rows(snapshot, "attention", MAX_EXTRACTION_ATTENTION),
+            "recent_sources": _bounded_projection_rows(snapshot, "sources", MAX_EXTRACTION_SOURCES),
         }
         time_context = {
             "now_utc": self._now().isoformat(),
@@ -2456,6 +2552,11 @@ class ProductRuntime:
                     event=event_id,
                     active_added=attention_by_event[event_id],
                 )
+            for item in facts_for_commit:
+                self._human(f"Learned · {_human_fact_summary(item)}")
+            for item in attention_for_commit:
+                self._human(f"Attention · {_human_attention_summary(item, now=self._now())}")
+            self._human(f"Ready · {time.monotonic() - provider_started:.1f}s")
             return {
                 "requested": len(events),
                 "processed": len(live_event_ids),
@@ -2528,6 +2629,10 @@ class ProductRuntime:
                     )
                 else:
                     self._log("queue", "no immediate retry", event=event_id)
+            self._human(
+                "Understanding unavailable"
+                + (f" · retry in {retry_after}s" if retry_after > 0 else " · retry available")
+            )
             return {
                 "requested": len(events),
                 "processed": 0,
@@ -2644,6 +2749,13 @@ class ProductRuntime:
             blobs_deleted=result.get("blobs_deleted", 0),
             blobs_preserved=result.get("blobs_preserved", 0),
         )
+        if result.get("deleted"):
+            self._human(
+                "Forgot capture · derived memory removed · "
+                f"attachments deleted={int(result.get('blobs_deleted', 0) or 0)}"
+            )
+        else:
+            self._human("Forgot capture · already forgotten")
         self._worker_wake.set()
         return result
 
@@ -3733,6 +3845,13 @@ class ProductRuntime:
                 count=source_count,
                 provider_calls=self._ask_provider_calls,
                 duration=f"{(time.monotonic() - started) * 1000:.0f}ms",
+            )
+            human_path = "semantic fallback" if mode == "semantic" else "deterministic retrieval"
+            self._human(f"Ask · {human_path}")
+            self._human(
+                f"Answer ready · {source_count} supporting memory"
+                + ("s" if source_count != 1 else "")
+                + f" · {(time.monotonic() - started):.1f}s"
             )
             return result
         except Exception as error:

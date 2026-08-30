@@ -46,3 +46,24 @@ leaves the saved capture visible as a retryable state.
 The ?fixture=1 (with ?fixture=empty and ?fixture=unavailable variants) query
 modes remain deterministic UI-only fixtures for visual interaction checks. They
 are not benchmark data, ground truth, or the normal Host path.
+
+## Final human dogfood presentation repair — 2026-08-30
+
+The final UI contract keeps structured presentation labels and generated
+presentation summaries in English while preserving raw capture language and
+answering Ask in the current question's language. Attention items expose
+capture-time-based due/overdue formatting, persistent disclosure state keyed by
+stable IDs, chevrons, and a completion action. Memory history is contextual to
+its entity; it is not emitted as a detached “Fact history” block. Ask keeps a
+lightweight in-browser conversation, hides examples after the first question,
+and collapses supporting memories behind stable disclosures. Display helpers
+defensively reject empty values, object stringification, and provider-shaped
+artifacts before rendering. The centered Capture composer and un-underlined
+navigation are part of the mobile and desktop contract.
+
+The deterministic Ask routes remain provider-free and fast. The final visual
+review at 390×844 and 1280×900 verified these behaviors with fixture state;
+the evidence is stored under
+`trajectories/coding/042-product-v2-final-human-dogfood-fixes/`. The fixture is
+presentation-only and does not alter Host, API, SQLite, provenance, or
+semantic truth contracts.

@@ -289,3 +289,17 @@ Use one entry per meaningful improvement:
 - Evidence or evaluation impact:
 - Follow-up:
 ```
+
+## 2026-08-30 — Product V2 final human dogfood P0/P1 repair
+
+- **Stage / experiment identifier:** Authorized Product V2 final human-dogfood repair; not a benchmark-optimization experiment and not E006.
+- **Problem observed:** Useful semantic state was delayed by provider prompt/context/startup overhead, while the visible Attention, Memory, Ask, and operational surfaces still had timing, disclosure, history, chat, alignment, and artifact gaps.
+- **Hypothesis:** A compact versioned extraction instruction, bounded prior-memory context, a supported lower reasoning effort, conservative small batches, defensive presentation, stable disclosures, and concise sanitized lifecycle logs can improve first-use experience while preserving semantic truth.
+- **What changed:** Selected `low` after a bounded high/medium/low ordinary-case comparison; retained batch size `2`; bounded projection/prompt context; added capture-time Attention formatting, contextual Memory history, stable chevrons/disclosures, Ask conversation/supporting-memory presentation, defensive display helpers, centered composer/no nav underline, and human-readable privacy-preserving logs. No wording was tuned after live outputs and no unsupported CLI flag was used.
+- **Evaluation method:** Focused deterministic Product V2/UI tests, full application and evaluator/acceptance suites, compile/qualification/benchmark-structure/contract checks, three bounded diagnostic extraction calls, a fresh six-capture/four-Ask live smoke, and 390×844/1280×900 fixture visual review.
+- **Metric before:** Existing implementation used the prior larger extraction path/default high effort and lacked the final presentation/logging repairs; no comparable final-smoke latency baseline was available.
+- **Metric after:** Diagnostic calls were `48.859s` high, `43.391s` medium, and `31.640s` low with all five semantic cases preserved. Final smoke stayed within `6` captures/`4` Ask requests: all capture/Ask HTTP calls returned 200, Ask was provider-free at `15–16ms`, capture #3 due time was exact, first usable state was observed at `23.031s`, and the remaining burst at `129.562s`.
+- **Regressions:** Deterministic suites remained green. The live launcher stream did not include final stop lines, and the observed burst interval did not demonstrate material end-to-end latency improvement; no semantic regression was observed. No second live run or post-live wording edit was made.
+- **Runtime/cost impact:** Three diagnostic provider calls and six live extraction captures were performed within the stated separate limits; four live Ask calls made zero provider calls. Temporary homes were cleaned; no credentials, prompts, raw captures, questions, or provider output were persisted.
+- **Decision:** **KEEP** the compact/context, low-effort, batching, UI, and logging repairs. Overall live product gate: **PARTIAL / REVISE** pending separately authorized runtime attribution/clean-shutdown evidence; do not use this result to tune frozen benchmark artifacts.
+- **Learning:** Small-batch and prompt reductions can preserve ordinary semantic contracts, but observed burst latency must be measured end-to-end before claiming a material improvement; a useful UI can fail closed on malformed display data without weakening underlying truth.

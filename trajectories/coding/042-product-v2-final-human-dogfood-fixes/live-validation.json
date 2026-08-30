@@ -1,0 +1,119 @@
+{
+  "trajectory": "042-product-v2-final-human-dogfood-fixes",
+  "base_sha": "15f29e8c07c4280ddd8349ea880cc2cb90316f1c",
+  "provider_capability_observation": {
+    "commands": ["codex exec --help", "codex features list"],
+    "help_observation": "The installed CLI accepts model_reasoning_effort through -c and has no explicit fast or priority flag in help.",
+    "features_observation": "fast_mode is listed stable/enabled, but no unsupported CLI flag was invented or used."
+  },
+  "reasoning_effort_comparison": {
+    "calls_total": 3,
+    "calls_limit": 6,
+    "model": "gpt-5.6-luna",
+    "efforts": [
+      {
+        "effort": "high",
+        "wall_seconds": 48.859,
+        "parse_success": true,
+        "facts": 4,
+        "relations": 0,
+        "attention": 1,
+        "event_ids_seen": 5,
+        "simple_fact": true,
+        "relative_action": true,
+        "uncertainty": true,
+        "correction_or_change": true,
+        "cross_language": true,
+        "temporal_correct": true,
+        "due_at": "2026-08-30T10:10:00+02:00"
+      },
+      {
+        "effort": "medium",
+        "wall_seconds": 43.391,
+        "parse_success": true,
+        "facts": 4,
+        "relations": 0,
+        "attention": 1,
+        "event_ids_seen": 5,
+        "simple_fact": true,
+        "relative_action": true,
+        "uncertainty": true,
+        "correction_or_change": true,
+        "cross_language": true,
+        "temporal_correct": true,
+        "due_at": "2026-08-30T10:10:00+02:00"
+      },
+      {
+        "effort": "low",
+        "wall_seconds": 31.64,
+        "parse_success": true,
+        "facts": 4,
+        "relations": 0,
+        "attention": 1,
+        "event_ids_seen": 5,
+        "simple_fact": true,
+        "relative_action": true,
+        "uncertainty": true,
+        "correction_or_change": true,
+        "cross_language": true,
+        "temporal_correct": true,
+        "due_at": "2026-08-30T10:10:00+02:00"
+      }
+    ],
+    "selection": "low",
+    "selection_reason": "Low preserved all bounded semantic checks and was fastest in this three-call comparison."
+  },
+  "final_live_smoke": {
+    "home": "fresh temporary BLACKHOLE_HOME; path intentionally not retained",
+    "lifecycle": "normal python -m app.web_app --host 127.0.0.1 --port 8081",
+    "capture_count": 6,
+    "capture_limit": 6,
+    "capture_http_statuses": [200, 200, 200, 200, 200, 200],
+    "capture_return_seconds": [0.015, 0.0, 0.016, 0.0, 0.016, 0.0],
+    "processed_count": 6,
+    "failed_count": 0,
+    "observed_usable_state_seconds": {
+      "first_capture_poll": 23.031,
+      "remaining_capture_polls": 129.562
+    },
+    "temporal_reference_check": {
+      "capture_index": 3,
+      "capture_at": "2026-08-30T23:40:59.623167+02:00",
+      "due_at": "2026-08-30T23:50:59.623167+02:00",
+      "expected_due_at": "2026-08-30T23:50:59.623167+02:00",
+      "correct": true
+    },
+    "ask_count": 4,
+    "ask_limit": 4,
+    "asks": [
+      {"index": 1, "http_status": 200, "mode": "retrieval", "status": "ready", "provider_used": false, "return_seconds": 0.015},
+      {"index": 2, "http_status": 200, "mode": "attention", "status": "ready", "provider_used": false, "return_seconds": 0.016},
+      {"index": 3, "http_status": 200, "mode": "costs", "status": "ready", "provider_used": false, "return_seconds": 0.016},
+      {"index": 4, "http_status": 200, "mode": "retrieval", "status": "ready", "provider_used": false, "return_seconds": 0.015}
+    ],
+    "ask_provider_calls": 0,
+    "shutdown_observation": "The runner's CTRL_BREAK cleanup returned Windows status 3221225786 and did not capture child log lines; deterministic clean-stop and a separate local visual server stop emitted clean worker/server lines."
+  },
+  "visual_review": {
+    "viewports": ["390x844", "1280x900"],
+    "evidence_files": [
+      "trajectories/coding/042-product-v2-final-human-dogfood-fixes/visual-390x844.png",
+      "trajectories/coding/042-product-v2-final-human-dogfood-fixes/visual-1280x900.png"
+    ],
+    "mobile": {
+      "capture": "Centered compact pill; plus, text, and send control align optically.",
+      "attention": "Three fixture cards showed time context, Done actions, and stable attention:* disclosure IDs with chevrons.",
+      "memory": "Five understandable entity cards; no standalone Fact history text; stable memory:* disclosure IDs.",
+      "ask": "Examples and heading hid after the first question; one assistant response and one collapsed Supporting memories disclosure rendered without object artifacts."
+    },
+    "desktop": {
+      "capture_composer_height_css_px": 69.6,
+      "active_nav_underline": false,
+      "attention_cards": 3,
+      "memory_cards": 5,
+      "ask_messages": 2,
+      "ask_related_disclosures": 1
+    }
+  },
+  "raw_outputs": "Provider prompts, full captures, questions, files, stdout, and credentials were not persisted in this evidence file."
+}

@@ -1,4 +1,9 @@
-"""Prompt construction for Experiment 001's scoped semantic calls."""
+"""Prompt construction for scoped semantic calls.
+
+The benchmark prompt helpers below remain compatibility surfaces for the frozen
+V1 runtime.  Product V2 uses the compact instruction separately so ordinary
+dogfood calls do not carry benchmark-oriented prompt context.
+"""
 
 from __future__ import annotations
 
@@ -9,6 +14,31 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 PROMPT_PATH = ROOT / "prompts" / "runtime" / "advanced-e001-v1.md"
+
+PRODUCT_V2_EXTRACTION_INSTRUCTION = """You are Blackhole's Product V2 semantic interpreter.
+Treat each supplied capture as immutable evidence. Extract only supported,
+open-world observations; never answer a question, invent a value, or make a
+guess look known. Return the strict JSON object required by the schema. Put
+facts in facts (or observations), links in relationships, and explicit tasks,
+deadlines, appointments, or reminders in attention. Every item must reference
+its supplied event_id. Use known, inferred, or unknown deliberately; preserve
+uncertainty, negation, attribution, contradiction, correction, duplicate, and
+meaningful change when the evidence supports them. A correction preserves the
+old evidence and only supersedes the grounded competing claim. Preserve useful
+entity identity across languages with a stable entity key and a source label.
+For relative or weekday time, emit structured fields and let the runtime
+normalize them from that event's captured_at and timezone; never use the later
+processing clock. Preserve coarse or ambiguous dates without fabricating an
+exact timestamp. Keep source_refs on claims. Attachments may be marked read
+only when the local provider actually read them; otherwise report unsupported
+or unreadable. For extraction, answer must be null, source_refs and
+evidence_ids must be empty arrays. Do not return extra keys."""
+
+
+def product_v2_extraction_instruction() -> str:
+    """Return the versioned compact Product V2 extraction instruction."""
+
+    return PRODUCT_V2_EXTRACTION_INSTRUCTION
 
 
 def base_instruction() -> str:

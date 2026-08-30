@@ -276,3 +276,50 @@ source references and no Ask-time provider call:
 This is post-freeze product evidence, not a benchmark optimization, not E006,
 and not a new LQA/DSCR result. No V1 oracle/scoring worktree, holdout
 material, G01/G02/G03 result, official baseline, or provider token was used.
+
+## Final human dogfood repair — 2026-08-30
+
+This final, bounded P0/P1 repair keeps the established Product V2 semantic
+and persistence boundaries while tightening the path from capture to useful
+state. The Product V2 provider uses the compact versioned instruction and
+bounded structured prior memory; the installed Codex CLI was inspected with
+`codex exec --help` and `codex features list`, and no unsupported fast or
+priority flag was introduced. The bounded effort comparison made three
+ordinary five-case extraction calls: high `48.859s`, medium `43.391s`, and
+low `31.640s`. All parsed successfully and preserved simple facts, a
+relative ten-minute action, uncertainty, correction, cross-language meaning,
+and capture-time temporal normalization. Low was selected as the lowest-cost
+effort preserving those checks. The conservative runtime batch size is `2`.
+
+The browser repair makes Attention time and overdue state explicit, keeps
+disclosure state by stable IDs, shows contextual history under its entity,
+renders Ask as a compact conversation with collapsible supporting memories,
+and guards all display fields against object or empty-value artifacts. Chrome
+labels and generated presentation remain English, while raw evidence and
+questions remain in their captured/current languages. The Capture composer is
+centered and the active navigation underline is removed.
+
+The final fresh-home live smoke used exactly six captures and four Ask
+requests through the normal lifecycle. All six capture requests returned
+HTTP 200 and were saved/processed without failure; observed polling reached a
+usable state at `23.031s` for the first capture and `129.562s` for the
+remaining burst. Capture #3's due timestamp was exactly ten minutes from its
+persisted capture timestamp, including timezone. All four Ask requests were
+HTTP 200, deterministic/provider-free, and completed in `15–16ms`. The live
+run did not persist raw inputs, prompts, questions, provider output, or
+credentials. The launcher shutdown stream did not capture final stop lines;
+deterministic clean-stop coverage remains passing.
+
+The two required viewport reviews were completed at 390×844 and 1280×900.
+They verified Capture alignment/no underline, Attention time/overdue,
+persistent disclosure state and chevrons, contextual Memory history, Ask
+examples/chat/supporting-memory behavior, and artifact-free rendering. The
+allowed screenshots are recorded at
+`trajectories/coding/042-product-v2-final-human-dogfood-fixes/`.
+
+Overall gate: **PARTIAL / REVISE**. The semantic and UI repairs are kept, but
+the observed burst processing interval does not demonstrate the required
+material end-to-end latency improvement, and the live launcher stream lacks
+complete shutdown evidence. This is product evidence only; frozen benchmark,
+baseline, evaluator, calibration, holdout, V1 oracle, and protected
+worktrees remain outside scope.

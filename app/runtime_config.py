@@ -13,12 +13,12 @@ from typing import Any
 RUNTIME_CONFIG_VERSION = "blackhole-runtime-config-v1"
 DEFAULT_PROVIDER = "codex"
 DEFAULT_MODEL = "gpt-5.6-luna"
-DEFAULT_REASONING_EFFORT = "high"
+DEFAULT_REASONING_EFFORT = "low"
 DEFAULT_TIMEOUT_SECONDS = 900
-DEFAULT_BATCH_SIZE = 10
+DEFAULT_BATCH_SIZE = 2
 DEFAULT_DATABASE_NAME = "blackhole.db"
 CONFIG_FILENAME = "config.json"
-SUPPORTED_REASONING_EFFORTS = frozenset({"max", "high", "medium"})
+SUPPORTED_REASONING_EFFORTS = frozenset({"max", "high", "medium", "low"})
 SENSITIVE_CONFIG_KEYS = frozenset(
     {
         "access_token",
