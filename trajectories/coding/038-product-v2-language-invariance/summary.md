@@ -192,5 +192,5 @@ start a benchmark-optimization experiment or alter frozen V1 evidence.
 
 ## Related git commit
 
-To be filled with the final coherent commit hash after the working tree is
-validated and committed.
+Implementation commit: `16aad12` (`generalization: make product v2 ask
+language invariant`).
