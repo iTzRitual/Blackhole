@@ -1,0 +1,145 @@
+{
+  "report_type": "product-v2-language-invariance",
+  "generated_on": "2026-08-30",
+  "scope": "authorized post-freeze Product V2 generalization",
+  "not_benchmark_optimization": true,
+  "not_e006": true,
+  "matrix": {
+    "case_count": 54,
+    "passed": 54,
+    "failed": 0,
+    "provider_directed_cases": 30,
+    "deterministic_cases": 24,
+    "answer_language_contract_passed": 54,
+    "source_reference_checks_passed": 54,
+    "fixture_provider_extract_calls": 1,
+    "fixture_provider_answer_calls": 30,
+    "fallback_context": {
+      "facts": 12,
+      "history": 14,
+      "relationships": 0,
+      "attention": 3,
+      "max_facts": 40,
+      "max_history": 20,
+      "max_relationships": 20,
+      "max_attention": 20,
+      "raw_payload_exposed": false,
+      "raw_capture_text_exposed": false
+    },
+    "coverage": [
+      "Polish",
+      "English",
+      "Spanish",
+      "German",
+      "French",
+      "mixed language",
+      "Japanese",
+      "Ukrainian",
+      "locations",
+      "people and preferences",
+      "tasks and attention",
+      "costs and money",
+      "current and previous values",
+      "corrections",
+      "uncertainty",
+      "documents",
+      "Unicode",
+      "dates and times",
+      "provenance"
+    ]
+  },
+  "baseline_reproduction": {
+    "question": "¿Dónde están las llaves del sótano?",
+    "matching_structured_memory_present": true,
+    "mode_before": "no_match",
+    "provider_used_before": false,
+    "ask_provider_calls_before": 0
+  },
+  "offline_validation": {
+    "application_tests": {
+      "command": "python -X utf8 -m unittest discover -s app/tests -v",
+      "passed": 126,
+      "failed": 0
+    },
+    "evaluator_tests": {
+      "command": "python -X utf8 -m unittest discover -s eval/tests -v",
+      "passed": 10,
+      "failed": 0
+    },
+    "acceptance_harness_tests": {
+      "command": "python -X utf8 -m unittest product_acceptance.harness.test_harness -v",
+      "passed": 7,
+      "failed": 0
+    },
+    "integrated_acceptance": {
+      "command": "python -X utf8 scripts/run_product_v2_integrated_acceptance.py",
+      "passed": 50,
+      "failed": 0,
+      "final_status": "PASS",
+      "historical_report_overwrite": false
+    },
+    "benchmark_structure": {
+      "command": "python -X utf8 benchmark/dev/generate_benchmark.py --check",
+      "event_count": 200,
+      "checkpoint_count": 4,
+      "status": "PASS"
+    },
+    "contract_smoke": {
+      "command": "python -X utf8 eval/contract_smoke.py",
+      "scored": false,
+      "correct_fixture_semantic_score": 1.0,
+      "correct_fixture_schema_valid": true,
+      "malformed_fixture_detected": true,
+      "status": "PASS"
+    },
+    "compileall": {
+      "command": "python -X utf8 -m compileall -q app eval product_acceptance scripts",
+      "status": "PASS"
+    },
+    "javascript_syntax": {
+      "command": "node --check app/web/app.js",
+      "status": "PASS"
+    },
+    "qualification": {
+      "command": "python -X utf8 scripts/qualification_check.py",
+      "status": "PASS",
+      "warnings": 4,
+      "warnings_are_preexisting_artifact_warnings": true
+    }
+  },
+  "live_smoke": {
+    "evidence": "trajectories/coding/038-product-v2-language-invariance/live-validation.json",
+    "fresh_temporary_home": true,
+    "capture_count": 6,
+    "captures_saved": 6,
+    "captures_processed": 6,
+    "capture_attempts": 1,
+    "ask_count": 8,
+    "ask_ready": 8,
+    "ask_no_match_or_no_data": 0,
+    "ask_provider_calls": 5,
+    "capture_provider_calls": 2,
+    "answer_language_contract_passed": 8,
+    "implementation_edits_between_live_questions": false,
+    "credential_values_read": false,
+    "credential_values_persisted": false,
+    "provenance_quality": "PARTIAL",
+    "provenance_note": "The mixed-language answer returned valid but overly broad candidate source references; the provider prompt was tightened afterward, with no further live question authorized.",
+    "final_status": "PARTIAL"
+  },
+  "boundary_review": {
+    "raw_sources_unchanged": true,
+    "derived_state_rebuildable": true,
+    "unknown_first_class": true,
+    "deterministic_arithmetic_and_dates_preserved": true,
+    "holdout_material_added": false,
+    "frozen_v1_artifacts_modified": false,
+    "official_baseline_modified": false,
+    "v1_oracle_or_scoring_worktree_accessed": false,
+    "g01_g02_g03_used": false,
+    "production_infrastructure_added": false,
+    "claude_adapter_added": false
+  },
+  "final_status": "PARTIAL",
+  "decision": "KEEP implementation and offline matrix; REVISE live gate only after a separately authorized provenance-focused smoke."
+}

@@ -52,6 +52,7 @@ now listed below; the local oracle and scoring histories remain separate.
 | ui-002-reference-redesign | Correct the Capture surface against the approved mobile reference | KEEP; UI correction preserved and integrated | `0cc6653` | [summary](trajectories/coding/ui-002-reference-redesign/summary.md) |
 | submission-001-hardening | Add offline qualification, CI, evidence index, and submission checklist | KEEP; three non-blocking stale-artifact warnings remain for finalization | `18b123f` | [summary](trajectories/coding/submission-001-hardening/summary.md) |
 | 034-product-v2-integration | Integrate the Product V2 runtime, PWA, and dogfood contract | KEEP; 50/50 visible acceptance cases and all quality gates passed | `43426e8` | [prompt](trajectories/coding/034-product-v2-integration/prompt.md), [summary](trajectories/coding/034-product-v2-integration/summary.md), [result](eval/results/product-v2-integrated-acceptance.json) |
+| 038-product-v2-language-invariance | Generalize Product V2 memory and Ask across capture/query languages | KEEP offline implementation; live gate PARTIAL pending provenance-focused validation | pending | [prompt](trajectories/coding/038-product-v2-language-invariance/prompt.md), [summary](trajectories/coding/038-product-v2-language-invariance/summary.md), [live](trajectories/coding/038-product-v2-language-invariance/live-validation.json), [result](eval/results/product-v2-language-invariance.json) |
 
 The short commit IDs above were resolved from local Git history. The hardening
 implementation is in `18b123f`; the small follow-up metadata commit records
@@ -86,7 +87,7 @@ integration commit is `43426e8`.
 | generalization-v1r1 scoring | Deterministic scoring and descriptive analysis of the sealed V1R1 set | None; frozen evaluator | Public result; no post-result tuning | [report](docs/GENERALIZATION_V1R1_REPORT.md), [machine result](eval/results/generalization/v1/GENERALIZATION_V1R1_RESULT.json) |
 | other recorded fast/replay directories | Intermediate extraction, projector, retry, and diagnostic runs | Mixed; recorded per directory | Preserved as historical evidence, including failed/invalid attempts | [runtime root](trajectories/runtime/) |
 
-The current filesystem inventory contains 35 coding trajectories and 49 runtime
+The current filesystem inventory contains 39 coding trajectories and 51 runtime
 trajectories. The index does not require every runtime directory to have a root `summary.md`:
 the runtime inventory records whether a summary, prompt-like call file, raw
 trace, and other artifacts are present. No transcript is fabricated for a
@@ -135,6 +136,7 @@ transcript, or recorded `*.raw.txt` provider output.
 | 032-product-v2-ui-redesign | coding | yes | yes | n/a | no | 2 |
 | 033-product-v2-dogfood-acceptance | coding | yes | yes | n/a | no | 2 |
 | 034-product-v2-integration | coding | yes | yes | n/a | no | 2 |
+| 038-product-v2-language-invariance | coding | yes | yes | n/a | no | 3 |
 | ui-001-mobile-pwa | coding | yes | yes | n/a | no | 2 |
 | ui-002-reference-redesign | coding | yes | yes | n/a | no | 2 |
 | submission-001-hardening | coding | yes | yes | n/a | no | 2 |

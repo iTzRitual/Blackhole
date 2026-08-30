@@ -49,7 +49,7 @@ from app.runtime_config import (
 
 PRODUCT_RUNTIME_VERSION = "blackhole-product-v2-runtime-v1"
 PRODUCT_DATABASE_NAME = "blackhole-v2.db"
-PRODUCT_PROMPT_VERSION = "blackhole-product-v2-prompt-v1"
+PRODUCT_PROMPT_VERSION = "blackhole-product-v2-prompt-v3"
 PROCESSING_PENDING_MESSAGE = "Still understanding your recent captures."
 PROCESSING_FAILED_MESSAGE = "Some recent captures couldn't be understood yet. Your captures are still saved."
 MAX_CAPTURE_TEXT = 100_000
@@ -57,6 +57,60 @@ MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024
 MAX_TOTAL_ATTACHMENT_BYTES = 25 * 1024 * 1024
 MAX_ASK_CONTEXT_FACTS = 40
 MAX_ASK_CONTEXT_HISTORY = 20
+# A language the optional lexical planner cannot identify still needs a
+# provider candidate set.  These are structured projections only, never raw
+# capture replay.  The limits keep difficult questions bounded even when a
+# Home contains a long history.
+MAX_ASK_FALLBACK_FACTS = 40
+MAX_ASK_FALLBACK_HISTORY = 20
+
+_ANSWER_COPY = {
+    "en": {
+        "processing": PROCESSING_PENDING_MESSAGE,
+        "processing_failed": PROCESSING_FAILED_MESSAGE,
+        "no_data": "I do not have any processed memory yet.",
+        "no_match": "No supporting evidence matches that question in processed memory.",
+        "attention_no_match": "No supporting evidence matched that attention request among currently open items.",
+        "open_items": "Open items: ",
+        "cost_no_match": "No supporting payment or cost evidence matches that question.",
+        "observed_costs": "Observed costs: ",
+        "recorded_history": " Recorded history: ",
+        "deterministic_totals": " Deterministic totals: ",
+        "changes_no_match": "No recorded change evidence matches that question.",
+        "recent_changes": "Recent changes: ",
+        "last_mention_no_match": "No recorded mention evidence matches that question.",
+        "latest_mention": "The latest matching mention of ",
+        "latest_mention_at": " is ",
+        "relevant_memory": "Relevant memory: ",
+        "relevant_attention": "Relevant attention: ",
+    },
+    "pl": {
+        "processing": "Nadal analizuję Twoje ostatnie zapisy.",
+        "processing_failed": "Niektórych ostatnich zapisów nie udało się jeszcze zrozumieć. Twoje zapisy są zachowane.",
+        "no_data": "Nie mam jeszcze żadnych przetworzonych wspomnień.",
+        "no_match": "W przetworzonej pamięci nie ma dowodów pasujących do tego pytania.",
+        "attention_no_match": "Nie znaleziono dowodów pasujących do tej prośby wśród otwartych spraw.",
+        "open_items": "Otwarte sprawy: ",
+        "cost_no_match": "Nie znaleziono dowodów płatności ani kosztów pasujących do tego pytania.",
+        "observed_costs": "Zaobserwowane koszty: ",
+        "recorded_history": " Zapisana historia: ",
+        "deterministic_totals": " Sumy obliczone deterministycznie: ",
+        "changes_no_match": "Nie znaleziono zapisanych zmian pasujących do tego pytania.",
+        "recent_changes": "Najnowsze zmiany: ",
+        "last_mention_no_match": "Nie znaleziono zapisanej wzmianki pasującej do tego pytania.",
+        "latest_mention": "Najnowsza pasująca wzmianka o ",
+        "latest_mention_at": " jest z ",
+        "relevant_memory": "Pasujące wspomnienia: ",
+        "relevant_attention": "Pasujące sprawy: ",
+    },
+}
+
+
+def _answer_copy(plan: AskPlan, key: str) -> str:
+    """Return localized fast-path copy; unknown languages use provider copy."""
+
+    language_copy = _ANSWER_COPY.get(plan.language, _ANSWER_COPY["en"])
+    return language_copy[key]
 
 
 class ProductProviderUnavailableError(RuntimeError):
@@ -1353,8 +1407,15 @@ class ProductCodexProvider:
         instruction = (
             "You are Blackhole's bounded personal-memory answerer. Answer the question concisely "
             "using only the supplied structured memory and source references. Do not invent facts. "
+            "Respond in the same language as the current question unless the question explicitly "
+            "requests another language. Mixed-language questions should be answered in the language "
+            "of the request's main conversational wording. Keep proper names, numbers, currencies, "
+            "dates, times, units, and filenames unchanged where appropriate. Do not translate an "
+            "evidence string and present it as if it were the original capture. "
             "Return one JSON object with a short string `answer` and an array `source_refs`; include "
-            "only references present in the context. If the context is insufficient, say so explicitly."
+            "only references present in the context, and cite the smallest set that directly supports "
+            "the answer. Never cite every candidate merely because it was supplied. If the context is "
+            "insufficient, say so explicitly and cite only evidence that supports that limitation."
         )
         payload = {"question": question, "time_context": time_context, "context": context}
         return self._call(instruction + "\n\nINPUT:\n" + json.dumps(payload, ensure_ascii=False, indent=2))
@@ -1911,9 +1972,10 @@ class ProductRuntime:
         """Return only state that is relevant to one inspected Ask plan.
 
         The provider receives this bounded context, never the raw capture
-        history and never an unrelated Attention list.  Current facts remain
-        the primary retrieval surface; history and relations are added only
-        when they match the query or the plan explicitly asks about change.
+        history. Current facts remain the primary retrieval surface; history
+        and relations are added only when they match the query or the plan
+        explicitly asks about change. A difficult or unrecognized-language
+        query receives a separately bounded structured candidate set.
         """
 
         plan = plan or plan_ask(question)
@@ -1964,6 +2026,18 @@ class ProductRuntime:
                         for row in scored
                         if len(query_terms & search_terms(_searchable_text(row[4], keys)) & topic_terms) >= 2
                     ]
+                if not qualified and plan.lexical_gap:
+                    # Cross-language questions often preserve one canonical
+                    # semantic key term while the other surface words are
+                    # inflected or untranslated. If the strongest overlap
+                    # identifies exactly one entity, retain that winner. A
+                    # tied result still stays ambiguous rather than leaking
+                    # an unrelated fact.
+                    best_score = scored[0][0]
+                    best_entities = {row[2] for row in scored if row[0] == best_score}
+                    if len(best_entities) != 1:
+                        return []
+                    qualified = [row for row in scored if row[2] in best_entities]
                 if not qualified:
                     return []
                 best_score = qualified[0][0]
@@ -2121,23 +2195,108 @@ class ProductRuntime:
                 limit=MAX_ASK_CONTEXT_HISTORY,
             )
 
-        selected_items = [*selected_facts, *selected_history, *selected_relations, *selected_attention]
+        def newest(items: Iterable[dict[str, Any]], limit: int) -> list[dict[str, Any]]:
+            candidates = [item for item in items if isinstance(item, dict) and not item.get("retracted")]
+            candidates.sort(
+                key=lambda item: int(item.get("latest_sequence", item.get("sequence", 0)) or 0),
+                reverse=True,
+            )
+            return candidates[:limit]
+
+        def merge_bounded(
+            preferred: Iterable[dict[str, Any]],
+            fallback: Iterable[dict[str, Any]],
+            limit: int,
+        ) -> list[dict[str, Any]]:
+            result: list[dict[str, Any]] = []
+            seen: set[tuple[Any, ...]] = set()
+            for item in [*preferred, *fallback]:
+                if not isinstance(item, dict) or item.get("retracted"):
+                    continue
+                identity = (
+                    item.get("fact_id"),
+                    item.get("relation_id"),
+                    item.get("source_event_id"),
+                    item.get("fingerprint"),
+                    item.get("operation"),
+                    canonical_json(item.get("value")) if "value" in item else item.get("unknown_reason"),
+                )
+                if identity in seen:
+                    continue
+                result.append(item)
+                seen.add(identity)
+                if len(result) >= limit:
+                    break
+            return result
+
+        # An unknown or mixed-language question cannot safely be reduced by
+        # the optional lexical fast path. Give the general semantic provider
+        # a bounded candidate set of structured state instead of returning
+        # ``no_match`` merely because the query and source use different
+        # surface languages. This never includes raw capture text or the
+        # complete unbounded history.
+        fallback_facts: list[dict[str, Any]] = []
+        fallback_history: list[dict[str, Any]] = []
+        fallback_relations: list[dict[str, Any]] = []
+        fallback_attention: list[dict[str, Any]] = []
+        provider_facts = selected_facts
+        provider_history = selected_history
+        provider_relations = selected_relations
+        provider_attention = selected_attention
+        if plan.semantic_fallback:
+            fallback_facts = merge_bounded(
+                selected_facts,
+                newest(facts, MAX_ASK_FALLBACK_FACTS),
+                MAX_ASK_FALLBACK_FACTS,
+            )
+            fallback_history = merge_bounded(
+                selected_history,
+                newest(history, MAX_ASK_FALLBACK_HISTORY),
+                MAX_ASK_FALLBACK_HISTORY,
+            )
+            fallback_relations = merge_bounded(
+                selected_relations,
+                newest(relations, MAX_ASK_FALLBACK_HISTORY),
+                MAX_ASK_FALLBACK_HISTORY,
+            )
+            fallback_attention = merge_bounded(
+                selected_attention,
+                newest(attention, MAX_ASK_FALLBACK_HISTORY),
+                MAX_ASK_FALLBACK_HISTORY,
+            )
+            provider_facts = fallback_facts
+            provider_history = fallback_history
+            provider_relations = fallback_relations
+            provider_attention = fallback_attention
+
+        selected_items = [*provider_facts, *provider_history, *provider_relations, *provider_attention]
         reference_ids = self._source_refs(selected_items)
+        source_limit = (
+            MAX_ASK_FALLBACK_FACTS + MAX_ASK_FALLBACK_HISTORY
+            if plan.semantic_fallback
+            else MAX_ASK_CONTEXT_HISTORY
+        )
         selected_sources = [
             item
             for item in snapshot.get("sources", [])
             if isinstance(item, dict)
             and item.get("event_id") in reference_ids
             and not item.get("retracted")
-        ][:MAX_ASK_CONTEXT_HISTORY]
+        ][:source_limit]
         context = {
-            "facts": selected_facts,
-            "history": selected_history[:MAX_ASK_CONTEXT_HISTORY],
-            "attention": selected_attention,
-            "relationships": selected_relations[:MAX_ASK_CONTEXT_HISTORY],
+            "facts": provider_facts,
+            "history": provider_history[:MAX_ASK_CONTEXT_HISTORY],
+            "attention": provider_attention,
+            "relationships": provider_relations[:MAX_ASK_CONTEXT_HISTORY],
             "sources": selected_sources,
             "plan": plan.as_dict(),
+            "response_language": plan.language if plan.language in {"en", "pl"} else "same_as_question",
         }
+        if plan.language == "unknown":
+            context["candidate_facts"] = fallback_facts
+            context["candidate_history"] = fallback_history
+            context["candidate_relationships"] = fallback_relations
+            context["candidate_attention"] = fallback_attention
         return context, selected_facts, " ".join(sorted(query_terms))
 
     @staticmethod
@@ -2183,6 +2342,15 @@ class ProductRuntime:
     ) -> tuple[str | None, str, list[dict[str, Any]], list[str]]:
         plan = plan or plan_ask(question)
 
+        # Deterministic rendering is an optimization for the languages whose
+        # high-confidence fast paths are understood locally. Unknown or
+        # mixed-language questions must reach the provider-directed semantic
+        # renderer so their answer follows the question language.
+        if plan.language not in {"en", "pl"}:
+            return None, "semantic", selected_facts, self._source_refs(
+                selected_facts
+            )
+
         if plan.intent == "attention":
             attention = [
                 item
@@ -2214,9 +2382,9 @@ class ProductRuntime:
                     filtered.append(item)
                 attention = filtered
             if not attention:
-                return "No supporting evidence matched that attention request among currently open items.", "no_match", [], []
+                return _answer_copy(plan, "attention_no_match"), "no_match", [], []
             labels = [str(item.get("title") or item.get("kind") or "open item") for item in attention[:10]]
-            answer = "Open items: " + "; ".join(labels) + "."
+            answer = _answer_copy(plan, "open_items") + "; ".join(labels) + "."
             return answer, "attention", attention, self._source_refs(attention)
 
         if plan.intent == "costs":
@@ -2243,9 +2411,9 @@ class ProductRuntime:
                     if (item.get("entity_key"), item.get("concept")) in selected_keys
                     or plan.topic_terms
                     & search_terms(_searchable_text(item, ("entity_key", "entity_label", "concept", "value")))
-                ]
+            ]
             if not cost_facts and not history_costs:
-                return "No supporting payment or cost evidence matches that question.", "no_match", [], []
+                return _answer_copy(plan, "cost_no_match"), "no_match", [], []
 
             descriptions = [_fact_summary(item) for item in cost_facts[:10]]
             items = list(cost_facts[:10])
@@ -2270,12 +2438,12 @@ class ProductRuntime:
                 history_descriptions = [_fact_summary(item) for item in items[len(cost_facts[:10]) :10]]
             else:
                 history_descriptions = []
-            answer = "Observed costs: " + "; ".join(descriptions or [_fact_summary(item) for item in items[:10]]) + "."
+            answer = _answer_copy(plan, "observed_costs") + "; ".join(descriptions or [_fact_summary(item) for item in items[:10]]) + "."
             if history_descriptions:
-                answer += " Recorded history: " + "; ".join(history_descriptions) + "."
+                answer += _answer_copy(plan, "recorded_history") + "; ".join(history_descriptions) + "."
             totals = self._money_summary(cost_facts)
             if totals:
-                answer += f" Deterministic totals: {totals}."
+                answer += _answer_copy(plan, "deterministic_totals") + f"{totals}."
             return answer, "costs", items[:MAX_ASK_CONTEXT_FACTS], self._source_refs(items)
 
         if plan.intent == "changes":
@@ -2292,7 +2460,7 @@ class ProductRuntime:
                 and item.get("relation_type") in {"meaningful_change", "correction", "supersession"}
             )
             if not changes:
-                return "No recorded change evidence matches that question.", "no_match", [], []
+                return _answer_copy(plan, "changes_no_match"), "no_match", [], []
             change_keys = {
                 (item.get("entity_key"), item.get("concept"))
                 for item in changes
@@ -2333,7 +2501,7 @@ class ProductRuntime:
                 label = item.get("entity_label", item.get("source_entity_key", "memory"))
                 operation = item.get("operation", item.get("relation_type", "change"))
                 labels.append(f"{label}: {operation} ({_display_fact_value(item)})")
-            return "Recent changes: " + "; ".join(labels) + ".", "changes", expanded_changes, self._source_refs(expanded_changes)
+            return _answer_copy(plan, "recent_changes") + "; ".join(labels) + ".", "changes", expanded_changes, self._source_refs(expanded_changes)
 
         if plan.intent == "last_mention":
             matches = context.get("history", []) or selected_facts
@@ -2346,8 +2514,16 @@ class ProductRuntime:
                 )
                 when = source.get("captured_at") if source else "an earlier capture"
                 label = latest.get("entity_label", latest.get("entity_key", "that topic"))
-                return f"The latest matching mention of {label} is {when}.", "last_mention", [latest], self._source_refs([latest])
-            return "No recorded mention evidence matches that question.", "no_match", [], []
+                return (
+                    _answer_copy(plan, "latest_mention")
+                    + f"{label}"
+                    + _answer_copy(plan, "latest_mention_at")
+                    + f"{when}.",
+                    "last_mention",
+                    [latest],
+                    self._source_refs([latest]),
+                )
+            return _answer_copy(plan, "last_mention_no_match"), "no_match", [], []
 
         if plan.intent == "generic" and not plan.broad and len(plan.topic_terms) <= 1:
             singular_question = bool(
@@ -2372,14 +2548,16 @@ class ProductRuntime:
                     )
                     return message, "ambiguous", selected_facts, self._source_refs(selected_facts)
 
-        if plan.requires_synthesis:
+        if plan.requires_synthesis and not (plan.semantic_fallback and selected_facts):
             return None, "semantic", selected_facts, self._source_refs(
                 [*selected_facts, *context.get("history", []), *context.get("relationships", [])]
             )
 
         if selected_facts:
             return (
-                "Relevant memory: " + "; ".join(_fact_summary(item) for item in selected_facts[:10]) + ".",
+                _answer_copy(plan, "relevant_memory")
+                + "; ".join(_fact_summary(item) for item in selected_facts[:10])
+                + ".",
                 "retrieval",
                 selected_facts,
                 self._source_refs(selected_facts),
@@ -2387,7 +2565,9 @@ class ProductRuntime:
         history = [item for item in context.get("history", []) if isinstance(item, dict)]
         if history:
             return (
-                "Relevant memory: " + "; ".join(_fact_summary(item) for item in history[:10]) + ".",
+                _answer_copy(plan, "relevant_memory")
+                + "; ".join(_fact_summary(item) for item in history[:10])
+                + ".",
                 "retrieval",
                 history[:MAX_ASK_CONTEXT_HISTORY],
                 self._source_refs(history),
@@ -2395,7 +2575,7 @@ class ProductRuntime:
         attention = [item for item in context.get("attention", []) if isinstance(item, dict)]
         if attention:
             labels = [str(item.get("title") or item.get("kind") or "open item") for item in attention[:10]]
-            return "Relevant attention: " + "; ".join(labels) + ".", "retrieval", attention, self._source_refs(attention)
+            return _answer_copy(plan, "relevant_attention") + "; ".join(labels) + ".", "retrieval", attention, self._source_refs(attention)
         return None, "generic", [], []
 
     def ask(self, question: str) -> dict[str, Any]:
@@ -2410,27 +2590,31 @@ class ProductRuntime:
         pending_count = int(counts.get("pending", 0) or 0)
         processing_count = int(counts.get("processing", 0) or 0)
         if failed_count:
+            message = _answer_copy(plan, "processing_failed")
             return {
                 "question": question,
                 "mode": "processing_failed",
                 "status": "processing_failed",
-                "answer": PROCESSING_FAILED_MESSAGE,
-                "message": PROCESSING_FAILED_MESSAGE,
+                "answer": message,
+                "message": message,
                 "items": [],
                 "source_refs": [],
                 "provider_used": False,
+                "answer_language": plan.language if plan.language in {"en", "pl"} else "same_as_question",
                 "processing": processing,
             }
         if pending_count or processing_count:
+            message = _answer_copy(plan, "processing")
             return {
                 "question": question,
                 "mode": "processing",
                 "status": "processing",
-                "answer": PROCESSING_PENDING_MESSAGE,
-                "message": PROCESSING_PENDING_MESSAGE,
+                "answer": message,
+                "message": message,
                 "items": [],
                 "source_refs": [],
                 "provider_used": False,
+                "answer_language": plan.language if plan.language in {"en", "pl"} else "same_as_question",
                 "processing": processing,
             }
         context, selected_facts, _normalized = self._retrieval_context(question, plan)
@@ -2450,15 +2634,26 @@ class ProductRuntime:
                 "items": items,
                 "source_refs": refs,
                 "provider_used": False,
+                "answer_language": plan.language,
                 "processing": snapshot.get("processing", {}),
             }
+        if plan.semantic_fallback:
+            # Candidate context is intentionally broad enough for an unknown
+            # language, but its source refs must not become an implicit answer
+            # citation before the provider selects evidence.
+            refs = self._source_refs(selected_facts)
         relevant_items = [
             item
             for collection in (
                 selected_facts,
+                context.get("facts", []),
+                context.get("candidate_facts", []),
                 context.get("history", []),
+                context.get("candidate_history", []),
                 context.get("relationships", []),
+                context.get("candidate_relationships", []),
                 context.get("attention", []),
+                context.get("candidate_attention", []),
             )
             for item in collection
             if isinstance(item, dict)
@@ -2469,10 +2664,10 @@ class ProductRuntime:
         )
         if not relevant_items:
             if not has_processed_memory:
-                message = "I do not have any processed memory yet."
+                message = _answer_copy(plan, "no_data")
                 mode = "no_data"
             else:
-                message = "No supporting evidence matches that question in processed memory."
+                message = _answer_copy(plan, "no_match")
                 mode = "no_match"
             return {
                 "question": question,
@@ -2482,6 +2677,7 @@ class ProductRuntime:
                 "items": [],
                 "source_refs": [],
                 "provider_used": False,
+                "answer_language": plan.language if plan.language in {"en", "pl"} else "same_as_question",
                 "processing": snapshot.get("processing", {}),
             }
         provider_used = False
@@ -2504,7 +2700,11 @@ class ProductRuntime:
                                 raw = method(
                                     question=question,
                                     context=context,
-                                    time_context={"now_utc": self._now().isoformat(), "timezone": local_timezone_name()},
+                                    time_context={
+                                        "now_utc": self._now().isoformat(),
+                                        "timezone": local_timezone_name(),
+                                        "response_language": context.get("response_language", "same_as_question"),
+                                    },
                                 )
                             else:
                                 raw = method(question, context)
@@ -2535,18 +2735,49 @@ class ProductRuntime:
                     self.last_provider_diagnostic = copy.deepcopy(provider.last_call)
                 answer = None
         if not answer:
-            answer = "Relevant memory: " + "; ".join(
-                _fact_summary(item)
-                for item in (selected_facts or context.get("history", []))[:10]
+            fallback_items = selected_facts or (
+                [] if plan.semantic_fallback else context.get("facts", [])
+            ) or ([] if plan.semantic_fallback else context.get("history", []))
+            if not fallback_items:
+                message = _answer_copy(plan, "no_match")
+                return {
+                    "question": question,
+                    "mode": "no_match",
+                    "status": "no_match",
+                    "answer": message,
+                    "items": [],
+                    "source_refs": [],
+                    "provider_used": False,
+                    "answer_language": plan.language if plan.language in {"en", "pl"} else "same_as_question",
+                    "processing": snapshot.get("processing", {}),
+                }
+            answer = _answer_copy(plan, "relevant_memory") + "; ".join(
+                _fact_summary(item) for item in fallback_items[:10]
             ) + "."
+        if provider_used and plan.semantic_fallback and not selected_facts:
+            result_items = [
+                item
+                for collection in (
+                    context.get("facts", []),
+                    context.get("history", []),
+                    context.get("relationships", []),
+                    context.get("attention", []),
+                )
+                for item in collection
+                if isinstance(item, dict)
+                and set(self._source_refs([item])) & set(refs)
+            ]
+        else:
+            result_items = selected_facts or context.get("facts", []) or context.get("history", [])
         return {
             "question": question,
             "mode": "semantic" if provider_used else "retrieval",
             "status": "ready",
             "answer": answer,
-            "items": selected_facts or context.get("history", [])[:MAX_ASK_CONTEXT_HISTORY],
+            "items": result_items[:MAX_ASK_CONTEXT_FACTS],
             "source_refs": refs,
             "provider_used": provider_used,
+            "answer_language": plan.language if plan.language in {"en", "pl"} else "same_as_question",
             "processing": snapshot.get("processing", {}),
         }
 

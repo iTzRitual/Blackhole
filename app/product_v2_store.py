@@ -25,7 +25,7 @@ from typing import Any, Iterable, Iterator
 PRODUCT_STORE_VERSION = "blackhole-product-v2-store-v1"
 PRODUCT_PROJECTION_VERSION = "blackhole-product-v2-projection-v1"
 PRODUCT_PROCESSING_VERSION = "blackhole-product-v2-processing-v1"
-PRODUCT_EXTRACTOR_VERSION = "blackhole-product-v2-extractor-v1"
+PRODUCT_EXTRACTOR_VERSION = "blackhole-product-v2-extractor-v2"
 PROCESSING_STATUSES = frozenset({"pending", "processing", "processed", "failed"})
 ATTENTION_STATUSES = frozenset({"open", "completed", "cancelled"})
 # Automatic retries are deliberately finite.  The first claim is an attempt;

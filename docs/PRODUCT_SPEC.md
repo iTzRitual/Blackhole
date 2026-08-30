@@ -254,6 +254,27 @@ work, recent changes, and last-mention lookups use deterministic code. Only
 bounded synthesis questions may invoke the local Codex CLI, and references
 must point to known stored evidence.
 
+#### Language invariance
+
+Language is presentation, not memory structure. The language of a capture must
+not determine whether that memory can be represented or retrieved later. A
+semantic provider may preserve the source label for display while assigning a
+stable, language-neutral entity key and semantic concept; the runtime keeps the
+raw capture, names, Unicode, numbers, currencies, dates, times, units, and
+filenames intact as evidence. Derived state remains rebuildable and provenance
+remains attached to the source.
+
+Captures and Ask questions may use different languages. The runtime may use
+small lexical rules as bounded fast paths, but those rules are not the product's
+language capability boundary. If a question is mixed, unfamiliar, or cannot be
+resolved safely by the fast path, Ask passes a bounded candidate set of
+structured current facts and related state to the general semantic provider
+instead of returning `no_match` solely because surface languages differ. The
+provider is instructed to answer in the current question's language and to
+return only supplied source references. This is a bounded generalization
+mechanism, not a claim of universal language identification or equal answer
+quality for every language.
+
 ### Attachments and retraction
 
 Attachment bytes are stored as verified content-addressed blobs inside

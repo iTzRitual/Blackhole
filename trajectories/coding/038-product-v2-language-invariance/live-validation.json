@@ -1,0 +1,116 @@
+{
+  "validation": "authorized Product V2 live language-invariance smoke",
+  "date": "2026-08-30",
+  "scope": "one fresh temporary BLACKHOLE_HOME; normal ProductRuntime worker; six captures; eight Ask queries",
+  "provider": "already-installed, already-authenticated local Codex CLI through ProductCodexProvider",
+  "capture_count": 6,
+  "captures_saved": 6,
+  "captures_processed": 6,
+  "capture_attempts": 1,
+  "capture_provider_calls": 2,
+  "ask_count": 8,
+  "ask_provider_calls": 5,
+  "implementation_edits_between_live_questions": false,
+  "credential_values_read": false,
+  "credential_values_persisted": false,
+  "processing_statuses": [
+    {"event_id": "live-pl-basement", "status": "processed", "attempt_count": 1},
+    {"event_id": "live-en-charger", "status": "processed", "attempt_count": 1},
+    {"event_id": "live-es-garage", "status": "processed", "attempt_count": 1},
+    {"event_id": "live-de-folder", "status": "processed", "attempt_count": 1},
+    {"event_id": "live-fr-paul", "status": "processed", "attempt_count": 1},
+    {"event_id": "live-mixed-meeting", "status": "processed", "attempt_count": 1}
+  ],
+  "asks": [
+    {
+      "case_id": "pl-basement",
+      "question": "Gdzie są klucze do piwnicy?",
+      "mode": "retrieval",
+      "status": "ready",
+      "provider_used": false,
+      "answer_language": "pl",
+      "source_refs": ["live-pl-basement"],
+      "answer_preview": "Pasujące wspomnienia: Basement keys location: u mamy."
+    },
+    {
+      "case_id": "en-charger",
+      "question": "Where is the spare charger?",
+      "mode": "retrieval",
+      "status": "ready",
+      "provider_used": false,
+      "answer_language": "en",
+      "source_refs": ["live-en-charger"],
+      "answer_preview": "Relevant memory: Spare charger location: in the blue suitcase."
+    },
+    {
+      "case_id": "es-garage",
+      "question": "¿Quién tiene las llaves del garaje?",
+      "mode": "semantic",
+      "status": "ready",
+      "provider_used": true,
+      "answer_language": "same_as_question",
+      "source_refs": ["live-es-garage"],
+      "answer_preview": "Las tiene Marta."
+    },
+    {
+      "case_id": "de-folder",
+      "question": "Wo liegt der rote Ordner?",
+      "mode": "semantic",
+      "status": "ready",
+      "provider_used": true,
+      "answer_language": "same_as_question",
+      "source_refs": ["live-de-folder"],
+      "answer_preview": "Der rote Ordner liegt im Arbeitszimmer."
+    },
+    {
+      "case_id": "fr-paul",
+      "question": "Qu'est-ce que Paul aime?",
+      "mode": "semantic",
+      "status": "ready",
+      "provider_used": true,
+      "answer_language": "same_as_question",
+      "source_refs": ["live-fr-paul"],
+      "answer_preview": "Paul aime le café sans sucre."
+    },
+    {
+      "case_id": "mixed-meeting",
+      "question": "Kiedy mam spotkanie z Markiem?",
+      "mode": "semantic",
+      "status": "ready",
+      "provider_used": true,
+      "answer_language": "pl",
+      "source_refs": [
+        "live-de-folder",
+        "live-en-charger",
+        "live-es-garage",
+        "live-fr-paul",
+        "live-mixed-meeting",
+        "live-pl-basement"
+      ],
+      "answer_preview": "Nie mam wystarczających informacji, aby podać dokładny termin — brakuje konkretnej daty spotkania z Markiem."
+    },
+    {
+      "case_id": "en-from-fr",
+      "question": "What does Paul like?",
+      "mode": "retrieval",
+      "status": "ready",
+      "provider_used": false,
+      "answer_language": "en",
+      "source_refs": ["live-fr-paul"],
+      "answer_preview": "Relevant memory: Paul preference: coffee without sugar."
+    },
+    {
+      "case_id": "ja-basement",
+      "question": "地下室の鍵はどこですか？",
+      "mode": "semantic",
+      "status": "ready",
+      "provider_used": true,
+      "answer_language": "same_as_question",
+      "source_refs": ["live-pl-basement"],
+      "answer_preview": "地下室の鍵は「u mamy」にあります。"
+    }
+  ],
+  "provenance_quality": "PARTIAL",
+  "provenance_note": "All returned references were valid captured event IDs, but the mixed-language answer cited the full bounded candidate set instead of the smallest directly supporting set. The provider instruction was tightened after this smoke; no additional live questions were issued.",
+  "final_status": "PARTIAL"
+}

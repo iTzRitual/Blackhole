@@ -65,6 +65,24 @@ temporary V2 Home per case. It is product acceptance evidence, not benchmark
 ground truth and not a generalization claim. No live provider credentials or
 provider tokens were used.
 
+## Language-invariant memory and Ask
+
+Product V2 treats language as presentation rather than as the identity of a
+memory. Semantic extraction should emit a stable entity key and a
+language-neutral concept, while retaining the source-language label and raw
+evidence for display and provenance. A capture in one language must remain
+retrievable from an Ask question in another language; dates, money, names,
+Unicode, and uncertainty remain structured evidence rather than translated
+substitutes.
+
+The deterministic Ask planner is only an optional fast path. Unknown or
+mixed-language questions are kept on the generic path and receive a bounded
+structured candidate set for provider-directed semantic selection. The answer
+provider is told to use the language of the current question and may cite only
+known source references. The language matrix and live smoke are separate
+post-freeze product evidence; they do not modify the frozen V1 benchmark,
+baseline, evaluator, or holdout boundary.
+
 ## Validation and visual review
 
 The final validation commands and results are:

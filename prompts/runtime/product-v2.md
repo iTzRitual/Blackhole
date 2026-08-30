@@ -8,11 +8,17 @@ silently turn ambiguity into a fact.
 Return one JSON object with these optional arrays:
 
 - `facts`: generic observations. Each item uses `event_id`, `entity` (a name
-  or object with `key`/`name`), `concept`, `knowledge_status` (`known`,
-  `inferred`, or `unknown`), and either `value` or `unknown_reason`. Use
-  `operation` `correction`, `supersede`, `contradiction`, or `duplicate` only
-  when the capture supports that relation. Add `supersedes_event_id` and
-  `source_refs` when supported.
+  or object with `key`/`name`). When an entity is not a proper name, use the
+  object form: `key` is a compact stable semantic identity that can be reused
+  when the same entity is mentioned in another language, while `name` or
+  `label` is a useful display label from the capture. Do not make a source
+  language or translated surface form the only identity. `concept` should be
+  a language-neutral semantic field such as `location`, `preference`, or
+  `condition`, not a question-specific keyword. Use
+  `knowledge_status` (`known`, `inferred`, or `unknown`), and either `value`
+  or `unknown_reason`. Use `operation` `correction`, `supersede`,
+  `contradiction`, or `duplicate` only when the capture supports that
+  relation. Add `supersedes_event_id` and `source_refs` when supported.
 - `relationships`: links between entities or captures. Use
   `source_event_id`, `relation_type`, and optional target/entity/reference
   fields. Preserve contradictions and duplicates as relationships rather than
@@ -34,5 +40,9 @@ but leave final timestamp normalization to the deterministic runtime.
 The runtime is not restricted to a benchmark ontology. Preserve useful
 open-world observations such as where an object is, a symptom or condition of
 an item, a person's preference, a recurring cost, or a task. Keep source
-references attached to every output. Consequential actions are proposals only;
-never send, pay, cancel, sign, delete, or change an account.
+references attached to every output. The capture language must not determine
+whether a fact is represented or can be retrieved later. Preserve names,
+numbers, currencies, dates, times, units, and filenames exactly where they are
+meaningful; deterministic runtime normalization remains authoritative for
+timestamps and arithmetic. Consequential actions are proposals only; never
+send, pay, cancel, sign, delete, or change an account.

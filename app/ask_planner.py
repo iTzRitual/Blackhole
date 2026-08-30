@@ -3,6 +3,9 @@
 The planner is deliberately small and deterministic.  It recognizes a few
 high-confidence product intents, removes conversational stop words from
 retrieval terms, and leaves open-world questions on the generic memory path.
+The lexical rules in this module are optional fast paths only.  A question that
+does not match this finite vocabulary is explicitly marked for the general
+semantic path, so the vocabulary is never the product's language boundary.
 It does not contain benchmark query IDs or product-specific question text.
 """
 
@@ -413,6 +416,7 @@ def _fold(value: str) -> str:
 
 
 _FOLDED_STOPWORDS = frozenset(_fold(item) for item in _STOPWORDS)
+_FOLDED_TERM_ALIASES = frozenset(_fold(item) for item in _TERM_ALIASES)
 
 
 def word_tokens(value: Any) -> set[str]:
@@ -422,7 +426,10 @@ def word_tokens(value: Any) -> set[str]:
         value = json.dumps(value, ensure_ascii=False, sort_keys=True) if value is not None else ""
     return {
         token
-        for token in re.findall(r"[\w]+", value.casefold(), flags=re.UNICODE)
+        # Treat identifier separators as boundaries.  This makes a provider's
+        # stable key such as ``basement_keys`` searchable from ordinary words
+        # without adding language-specific aliases.
+        for token in re.findall(r"[^\W_]+", value.casefold(), flags=re.UNICODE)
         if len(token) > 1
     }
 
@@ -443,30 +450,149 @@ def _normalized_question(question: str) -> str:
     return re.sub(r"[^\w]+", " ", _fold(question), flags=re.UNICODE).strip()
 
 
-def _has_polish_signal(tokens: set[str]) -> bool:
-    if any(any(unicodedata.combining(character) for character in unicodedata.normalize("NFKD", token)) for token in tokens):
+def _unmapped_topic_terms(question: str) -> tuple[set[str], set[str]]:
+    """Return lexical gaps without assigning the text to a language.
+
+    The first set contains ordinary unknown words and the second contains
+    proper-name-shaped unknown words.  The caller decides whether a gap is
+    large enough to use; this helper deliberately does not translate or
+    classify the unknown words.
+    """
+
+    unmapped: set[str] = set()
+    proper_unknown: set[str] = set()
+    surface_tokens = re.findall(r"[^\W_]+", question, flags=re.UNICODE)
+    for surface in surface_tokens:
+        folded = _fold(surface)
+        if len(folded) <= 1 or folded in _FOLDED_STOPWORDS:
+            continue
+        if folded in _FOLDED_TERM_ALIASES or folded in _PLANNER_TERMS:
+            continue
+        if surface[:1].isupper():
+            proper_unknown.add(folded)
+            continue
+        unmapped.add(folded)
+    return unmapped, proper_unknown
+
+
+def _has_unmapped_topic_terms(question: str) -> bool:
+    """Detect a gap large enough to require bounded semantic retrieval."""
+
+    unmapped, proper_unknown = _unmapped_topic_terms(question)
+    if len(unmapped) >= 2:
         return True
-    return bool(
-        tokens
-        & {
-            "co",
-            "gdzie",
-            "jest",
-            "jaki",
-            "jaka",
-            "jakie",
-            "mam",
-            "mamy",
-            "kiedy",
-            "ile",
-            "wiem",
-            "butow",
-            "rozmiar",
-            "nosi",
-            "ktoredy",
-            "wejsc",
-        }
-    )
+    # Inflected names often cannot be matched by a word-overlap fast path
+    # (for example ``Markiem`` versus the canonical ``Marek``). A temporal
+    # question with such a gap should be handed to semantic retrieval rather
+    # than being reported as absent memory.
+    surface_tokens = re.findall(r"[^\W_]+", question, flags=re.UNICODE)
+    temporal = any(_fold(token) in {"when", "kiedy"} for token in surface_tokens)
+    return temporal and bool(unmapped or proper_unknown)
+
+
+_FAST_PATH_POLISH_SIGNALS = frozenset(
+    {
+        "co",
+        "gdzie",
+        "jest",
+        "jaki",
+        "jaka",
+        "jakie",
+        "mam",
+        "mamy",
+        "kiedy",
+        "ile",
+        "wiem",
+        "butow",
+        "rozmiar",
+        "nosi",
+        "ktoredy",
+        "wejsc",
+        "placic",
+        "płacić",
+        "zostalo",
+        "ostatnio",
+    }
+)
+_FAST_PATH_ENGLISH_SIGNALS = frozenset(
+    {
+        "about",
+        "am",
+        "are",
+        "can",
+        "could",
+        "current",
+        "did",
+        "does",
+        "due",
+        "explain",
+        "have",
+        "history",
+        "how",
+        "is",
+        "know",
+        "last",
+        "mention",
+        "need",
+        "needs",
+        "previous",
+        "price",
+        "please",
+        "should",
+        "tell",
+        "the",
+        "urgent",
+        "what",
+        "when",
+        "where",
+        "which",
+        "who",
+        "why",
+    }
+)
+
+
+def _fast_path_language(tokens: set[str]) -> str:
+    """Return a conservative presentation hint for optional fast paths.
+
+    This intentionally recognizes only the two languages used by the
+    existing deterministic compatibility paths.  ``unknown`` is a valid and
+    important result: it routes to provider-directed language handling rather
+    than pretending that every Latin-script question is English or Polish.
+    """
+
+    folded = {_fold(token) for token in tokens}
+    polish_score = len(folded & {_fold(token) for token in _FAST_PATH_POLISH_SIGNALS})
+    english_score = len(folded & {_fold(token) for token in _FAST_PATH_ENGLISH_SIGNALS})
+    if polish_score and not english_score:
+        return "pl"
+    if english_score and not polish_score:
+        return "en"
+    if polish_score > english_score:
+        return "pl"
+    if english_score > polish_score:
+        return "en"
+    return "unknown"
+
+
+def detect_question_language(question: str) -> str:
+    """Return ``en``, ``pl``, or ``unknown`` as a fast-path hint.
+
+    The result is not a capability decision or a claim of universal language
+    identification.  Unknown and mixed-language questions are deliberately
+    handed to the general semantic provider, which can answer in the
+    question's language.
+    """
+
+    if not isinstance(question, str) or not question.strip():
+        raise ValueError("question must not be empty")
+    return _fast_path_language(word_tokens(question))
+
+
+def _has_polish_signal(tokens: set[str]) -> bool:
+    """Compatibility helper for callers that used the old private helper."""
+
+    return _fast_path_language(tokens) == "pl"
 
 
 @dataclass(frozen=True)
@@ -481,6 +607,8 @@ class AskPlan:
     requires_synthesis: bool
     broad: bool
     language: str
+    semantic_fallback: bool = False
+    lexical_gap: bool = False
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -492,6 +620,8 @@ class AskPlan:
             "requires_synthesis": self.requires_synthesis,
             "broad": self.broad,
             "language": self.language,
+            "semantic_fallback": self.semantic_fallback,
+            "lexical_gap": self.lexical_gap,
         }
 
 
@@ -502,8 +632,32 @@ def plan_ask(question: str) -> AskPlan:
         raise ValueError("question must not be empty")
     tokens = word_tokens(question)
     folded_tokens = {_fold(token) for token in tokens}
+    language = _fast_path_language(tokens)
     normalized = _normalized_question(question)
     terms = frozenset(search_terms(question))
+    unmapped_terms, proper_unknown_terms = _unmapped_topic_terms(question)
+    semantic_fallback = _has_unmapped_topic_terms(question)
+    lexical_gap = bool(unmapped_terms or proper_unknown_terms)
+
+    if language == "unknown":
+        # Do not let a borrowed word such as ``price`` or an accidental alias
+        # make an unfamiliar-language question take an unrelated deterministic
+        # intent.  The bounded semantic fallback will inspect structured
+        # memory and return the answer in the question's language.
+        topic_terms = frozenset(term for term in terms if term not in _PLANNER_TERMS)
+        return AskPlan(
+            intent="generic",
+            query_terms=terms,
+            topic_terms=topic_terms,
+            time_window=None,
+            history_requested=False,
+            requires_synthesis=True,
+            broad=not terms,
+            language="unknown",
+            semantic_fallback=True,
+            lexical_gap=lexical_gap,
+        )
+
     future_advice = bool(
         re.search(r"\bhow\s+should\b", normalized)
         or re.search(r"\bwhat\s+should\b.*\b(?:next|buy|remember)\b", normalized)
@@ -586,7 +740,9 @@ def plan_ask(question: str) -> AskPlan:
         intent = "generic"
 
     broad = not topic_terms and not (terms - _PLANNER_TERMS)
-    requires_synthesis = intent == "generic" and bool(terms & _SYNTHESIS_TERMS)
+    requires_synthesis = intent == "generic" and (
+        bool(terms & _SYNTHESIS_TERMS) or semantic_fallback
+    )
     return AskPlan(
         intent=intent,
         query_terms=terms,
@@ -595,8 +751,10 @@ def plan_ask(question: str) -> AskPlan:
         history_requested=has_history,
         requires_synthesis=requires_synthesis,
         broad=broad,
-        language="pl" if _has_polish_signal(tokens) else "en",
+        language=language,
+        semantic_fallback=semantic_fallback,
+        lexical_gap=lexical_gap,
     )
 
 
-__all__ = ["AskPlan", "plan_ask", "search_terms", "word_tokens"]
+__all__ = ["AskPlan", "detect_question_language", "plan_ask", "search_terms", "word_tokens"]
