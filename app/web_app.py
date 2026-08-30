@@ -72,6 +72,8 @@ class HostServer(ThreadingHTTPServer):
         contract: dict[str, Any] | None = None,
         provider: Any = None,
         discovery_fn: Any = None,
+        clock: Any = None,
+        auto_start_product_worker: bool = True,
         trusted_lan_demo: bool = False,
     ) -> None:
         self.home = resolve_home(home)
@@ -84,6 +86,8 @@ class HostServer(ThreadingHTTPServer):
         self.contract = contract
         self.provider = provider
         self.discovery_fn = discovery_fn
+        self.clock = clock
+        self.auto_start_product_worker = auto_start_product_worker
         self.trusted_lan_demo = trusted_lan_demo
         self.request_lock = threading.RLock()
         self._runtime: HostRuntime | None = None
@@ -106,6 +110,8 @@ class HostServer(ThreadingHTTPServer):
                         contract=self.contract,
                         provider=self.provider,
                         discovery_fn=self.discovery_fn,
+                        clock=self.clock,
+                        auto_start_product_worker=self.auto_start_product_worker,
                         _managed=True,
                     )
                 return self._runtime
@@ -117,6 +123,8 @@ class HostServer(ThreadingHTTPServer):
                 contract=self.contract,
                 provider=self.provider,
                 discovery_fn=self.discovery_fn,
+                clock=self.clock,
+                auto_start_product_worker=self.auto_start_product_worker,
             )
 
     def server_close(self) -> None:
@@ -514,7 +522,17 @@ class HostRequestHandler(BaseHTTPRequestHandler):
             self._error("Host request failed", 500, code="host_failure")
 
     def _processing_result(self, result: dict[str, Any]) -> None:
+        result = dict(result)
         failed = bool(result.get("failed") or result.get("failed_count"))
+        if not isinstance(result.get("status"), str):
+            if failed:
+                result["status"] = "failed"
+            elif int(result.get("processed", 0) or 0) > 0:
+                result["status"] = "processed"
+            elif int(result.get("pending_count", 0) or 0) > 0 or int(result.get("retried", 0) or 0) > 0:
+                result["status"] = "pending"
+            else:
+                result["status"] = "fresh"
         if not failed:
             self._send_json({"ok": True, "processing": result})
             return
@@ -549,6 +567,8 @@ def create_server(
     contract: dict[str, Any] | None = None,
     provider: Any = None,
     discovery_fn: Any = None,
+    clock: Any = None,
+    auto_start_product_worker: bool = True,
     trusted_lan_demo: bool = False,
 ) -> HostServer:
     """Create a Host-backed server without seeding or provider work."""
@@ -570,6 +590,8 @@ def create_server(
         contract=contract,
         provider=provider,
         discovery_fn=discovery_fn,
+        clock=clock,
+        auto_start_product_worker=auto_start_product_worker,
         trusted_lan_demo=trusted_lan_demo,
     )
 

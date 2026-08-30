@@ -7,6 +7,7 @@ import copy
 import json
 import threading
 from collections.abc import Callable
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -139,6 +140,8 @@ class HostRuntime:
         contract: dict[str, Any] | None = None,
         provider: SemanticProvider | None = None,
         discovery_fn: Callable[..., ProviderStatus] | None = None,
+        clock: Callable[[], datetime] | None = None,
+        auto_start_product_worker: bool = True,
         store: StateStore | None = None,
         _managed: bool = False,
     ) -> None:
@@ -147,6 +150,8 @@ class HostRuntime:
         self.contract = copy.deepcopy(contract if contract is not None else runtime_contract())
         self._provider = provider
         self._discovery_fn = discovery_fn or discover_codex
+        self._clock = clock
+        self._auto_start_product_worker = auto_start_product_worker
         self._provider_status_cache: ProviderStatus | None = None
         self._lock = threading.RLock()
         self._managed = _managed
@@ -168,6 +173,8 @@ class HostRuntime:
         contract: dict[str, Any] | None = None,
         provider: SemanticProvider | None = None,
         discovery_fn: Callable[..., ProviderStatus] | None = None,
+        clock: Callable[[], datetime] | None = None,
+        auto_start_product_worker: bool = True,
     ) -> "HostRuntime":
         config = RuntimeConfig.load_or_create(home)
         config.home.mkdir(parents=True, exist_ok=True)
@@ -176,6 +183,8 @@ class HostRuntime:
             contract=contract,
             provider=provider,
             discovery_fn=discovery_fn,
+            clock=clock,
+            auto_start_product_worker=auto_start_product_worker,
         )
 
     initialize = open
@@ -317,7 +326,8 @@ class HostRuntime:
                     timeout_seconds=self.config.timeout_seconds,
                     batch_size=self.config.batch_size,
                     start_worker=False,
-                    auto_start_on_capture=True,
+                    auto_start_on_capture=self._auto_start_product_worker,
+                    clock=self._clock,
                 )
             return self._product_runtime
 

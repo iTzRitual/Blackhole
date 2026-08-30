@@ -193,17 +193,23 @@ class MockHostAdapter:
 
 
 class HttpHostAdapter:
-    """HTTP-only adapter for a Product V2 Host or compatible local transport."""
+    """HTTP-only adapter for the integrated Product V2 Host transport."""
 
     name = "http"
 
     def __init__(self, base_url: str, *, timeout: float = 10.0) -> None:
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
+        self.case_id = ""
+        self.capture_events: dict[str, str] = {}
+        self.capture_keys: dict[str, str] = {}
 
-    def begin_case(self, _case_id: str) -> None:
+    def begin_case(self, case_id: str) -> None:
         # A Host restart or data reset is intentionally not inferred from HTTP.
         # The human/integration runner owns isolation for a real target.
+        self.case_id = case_id
+        self.capture_events = {}
+        self.capture_keys = {}
         return None
 
     def set_time(self, _timestamp: Any) -> dict[str, Any]:
@@ -240,7 +246,8 @@ class HttpHostAdapter:
         # other HTTP failures are real target failures and therefore remain
         # supported so the report can mark them FAIL.
         supported = status not in {404, 405}
-        result = _response(supported=supported, ok=200 <= status < 300, status=status, **body)
+        body_without_ok = {key: value for key, value in body.items() if key != "ok"}
+        result = _response(supported=supported, ok=200 <= status < 300, status=status, **body_without_ok)
         if not result["ok"] and "error" not in result:
             result["error"] = f"HTTP {status}"
         return result
@@ -252,38 +259,86 @@ class HttpHostAdapter:
             attachment = {
                 "filename": attachment_spec.get("filename", fixture_path.name),
                 "mime_type": attachment_spec["mime_type"],
-                "content_base64": base64.b64encode(fixture_path.read_bytes()).decode("ascii"),
+                "data_base64": base64.b64encode(fixture_path.read_bytes()).decode("ascii"),
             }
         source_type = "text"
         if attachment_spec is not None:
             source_type = "image" if attachment_spec["mime_type"].startswith("image/") else "document"
+        key = step["idempotency_key"]
+        capture_ref = step.get("capture_id", step["id"])
+        event_id = self.capture_events.get(key)
+        if event_id is None:
+            event_id = f"acceptance-{self.case_id}-{capture_ref}"
+            self.capture_events[key] = event_id
+        self.capture_keys[capture_ref] = event_id
         payload: dict[str, Any] = {
-            "text": step.get("text"),
+            "event_id": event_id,
             "source_type": source_type,
             "captured_at": step["at"],
-            "idempotency_key": step["idempotency_key"],
         }
+        if step.get("text"):
+            payload["text"] = step["text"]
         if attachment is not None:
             payload["attachment"] = attachment
-        return self._request("POST", "/api/capture", payload)
+        response = self._request("POST", "/api/v2/capture", payload)
+        capture = response.get("capture") if isinstance(response.get("capture"), dict) else {}
+        if response.get("_supported", True) and response.get("ok") and capture.get("inserted") is False:
+            capture["duplicate"] = True
+            response["capture"] = capture
+        return response
 
     def process(self) -> dict[str, Any]:
-        return self._request("POST", "/api/process", {})
+        return self._request("POST", "/api/v2/process", {})
+
+    def processing_status(self) -> dict[str, Any]:
+        return self._request("GET", "/api/v2/processing")
 
     def retry(self) -> dict[str, Any]:
-        return self._request("POST", "/api/retry", {})
+        return self._request("POST", "/api/v2/retry", {})
 
     def ask(self, question: str) -> dict[str, Any]:
-        return self._request("POST", "/api/query", {"question": question})
+        return self._request("POST", "/api/v2/ask", {"question": question})
 
     def attention(self) -> dict[str, Any]:
-        return self._request("GET", "/api/attention")
+        response = self._request("GET", "/api/v2/state")
+        if response.get("_supported", True) and response.get("ok"):
+            state = response.get("state") if isinstance(response.get("state"), dict) else {}
+            items = state.get("attention", [])
+            response = {
+                "_supported": response.get("_supported", True),
+                "ok": True,
+                "_status": response.get("_status"),
+                "items": items,
+                "attention": items,
+            }
+        return response
 
     def memory(self) -> dict[str, Any]:
-        return self._request("GET", "/api/memory")
+        response = self._request("GET", "/api/v2/state")
+        if response.get("_supported", True) and response.get("ok"):
+            state = response.get("state") if isinstance(response.get("state"), dict) else {}
+            items = state.get("current_facts", state.get("facts", []))
+            response = {
+                "_supported": response.get("_supported", True),
+                "ok": True,
+                "_status": response.get("_status"),
+                "items": items,
+                "memory": items,
+            }
+        return response
 
     def undo(self, capture_ref: str) -> dict[str, Any]:
-        return self._request("POST", "/api/undo", {"capture_id": capture_ref})
+        event_id = self.capture_keys.get(capture_ref, capture_ref)
+        response = self._request("POST", "/api/v2/retract", {"event_id": event_id, "reason": "acceptance undo"})
+        retraction = response.get("retraction") if isinstance(response.get("retraction"), dict) else {}
+        if response.get("_supported", True) and response.get("ok"):
+            response["undo"] = {
+                "capture_id": capture_ref,
+                "event_id": retraction.get("event_id", event_id),
+                "active": False,
+                "raw_preserved": True,
+            }
+        return response
 
     def restart(self) -> dict[str, Any]:
         return _unsupported("restart is a human/integration operation, not an HTTP route")

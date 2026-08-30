@@ -46,15 +46,19 @@ now listed below; the local oracle and scoring histories remain separate.
 | 029-generalization-v1r1-blackhole-blind | Run and seal the Blackhole candidates | Three candidates sealed before oracle/scoring access | `94e635f` | [summary](trajectories/coding/029-generalization-v1r1-blackhole-blind/summary.md) |
 | 030-generalization-v1r1-scoring | Score sealed V1R1 candidates and analyze generalization | PASS; six deterministic results and public report; scoring history remains local | `47f1449` (local-only) | [report](docs/GENERALIZATION_V1R1_REPORT.md), [summary](trajectories/coding/030-generalization-v1r1-scoring/summary.md) |
 | 031-product-v2-runtime-foundation | Build the isolated post-evaluation open-world runtime foundation | PASS; deterministic runtime/API foundation; no benchmark or holdout evaluation | `2ec991d` | [prompt](trajectories/coding/031-product-v2-runtime-foundation/prompt.md), [summary](trajectories/coding/031-product-v2-runtime-foundation/summary.md) |
+| 032-product-v2-ui-redesign | Build the isolated mobile-first Product V2 PWA | KEEP; UI workstream preserved and integrated | `51e6810` | [summary](trajectories/coding/032-product-v2-ui-redesign/summary.md) |
+| 033-product-v2-dogfood-acceptance | Define independent Product V2 dogfood acceptance | KEEP; 50 cases, deterministic mock gates, and human protocol | `90cb5ff` | [summary](trajectories/coding/033-product-v2-dogfood-acceptance/summary.md) |
 | ui-001-mobile-pwa | Build the dependency-light mobile-first PWA in an isolated worktree | KEEP; UI workstream preserved and integrated | `0cc6653` | [summary](trajectories/coding/ui-001-mobile-pwa/summary.md) |
 | ui-002-reference-redesign | Correct the Capture surface against the approved mobile reference | KEEP; UI correction preserved and integrated | `0cc6653` | [summary](trajectories/coding/ui-002-reference-redesign/summary.md) |
 | submission-001-hardening | Add offline qualification, CI, evidence index, and submission checklist | KEEP; three non-blocking stale-artifact warnings remain for finalization | `18b123f` | [summary](trajectories/coding/submission-001-hardening/summary.md) |
-| 033-product-v2-dogfood-acceptance | Define independent Product V2 dogfood acceptance | KEEP; 50 cases, deterministic mock gates, and human protocol | `90cb5ff` | [summary](trajectories/coding/033-product-v2-dogfood-acceptance/summary.md) |
+| 034-product-v2-integration | Integrate the Product V2 runtime, PWA, and dogfood contract | KEEP; 50/50 visible acceptance cases and all quality gates passed | pending final integration commit | [prompt](trajectories/coding/034-product-v2-integration/prompt.md), [summary](trajectories/coding/034-product-v2-integration/summary.md), [result](eval/results/product-v2-integrated-acceptance.json) |
 
 The short commit IDs above were resolved from local Git history. The hardening
 implementation is in `18b123f`; the small follow-up metadata commit records
-the final handoff state of that trajectory. The integrated product merge is
-`20e4540`, and the hardening merge is `bc4ef78`.
+the final handoff state of that trajectory. The historical integrated product
+merge is `20e4540`, and the hardening merge is `bc4ef78`. The Product V2
+integration merge of the three source branches is `2ff1156`; the final
+integration commit is recorded after the last documentation and boundary audit.
 
 ## Runtime trajectories
 
@@ -73,6 +77,7 @@ the final handoff state of that trajectory. The integrated product merge is
 | 017-final-advanced-replay | Historical product-phase final replay | None; deterministic replay | Superseded E002 artifact; LQA-0M `0.7492295899`, DSCR `72` | [summary](trajectories/runtime/017-final-advanced-replay/summary.md) |
 | 017-deferred-ingestion-fake | Exercise deferred capture/processing with neutral fake provider | Injected fake provider | Deterministic integration behavior; no benchmark score | [summary](trajectories/runtime/017-deferred-ingestion-fake/summary.md) |
 | 017-deferred-ingestion-e005-regression | Regression replay after deferred-ingestion refactor | None; deterministic replay | Matches E005 reference: LQA-0M `0.8695006212`, DSCR `40` | [runtime files](trajectories/runtime/017-deferred-ingestion-e005-regression/), [result](eval/results/deferred-ingestion-e005-regression.json) |
+| 034-product-v2-integrated-acceptance | Exercise the integrated Product V2 Host contract and reliability gates | Deterministic local fixture; no live provider | 50/50 PASS; async latency and exact attachment evidence recorded | [summary](trajectories/runtime/034-product-v2-integrated-acceptance/summary.md), [result](eval/results/product-v2-integrated-acceptance.json) |
 | 018-host-foundation-e005-regression | Regression replay after Host foundation | None; deterministic replay | Matches E005 reference: LQA-0M `0.8695006212`, DSCR `40` | [runtime files](trajectories/runtime/018-host-foundation-e005-regression/), [result](eval/results/host-foundation-e005-regression.json) |
 | 019-host-pwa-real-neutral | Real neutral Host/PWA-equivalent smoke | Authenticated local Codex CLI | HTTP transport and deferred processing worked; novel-entity linking limitation recorded | [summary](trajectories/runtime/019-host-pwa-real-neutral/summary.md), [trace](trajectories/runtime/019-host-pwa-real-neutral/trace.json) |
 | 020-consolidation-real-neutral | Post-consolidation neutral Host/PWA-equivalent smoke | Authenticated local Codex CLI | HTTP transport and deferred processing worked; known novel-entity linking limitation reproduced | [summary](trajectories/runtime/020-consolidation-real-neutral/summary.md), [trace](trajectories/runtime/020-consolidation-real-neutral/trace.json) |
@@ -81,7 +86,7 @@ the final handoff state of that trajectory. The integrated product merge is
 | generalization-v1r1 scoring | Deterministic scoring and descriptive analysis of the sealed V1R1 set | None; frozen evaluator | Public result; no post-result tuning | [report](docs/GENERALIZATION_V1R1_REPORT.md), [machine result](eval/results/generalization/v1/GENERALIZATION_V1R1_RESULT.json) |
 | other recorded fast/replay directories | Intermediate extraction, projector, retry, and diagnostic runs | Mixed; recorded per directory | Preserved as historical evidence, including failed/invalid attempts | [runtime root](trajectories/runtime/) |
 
-The current filesystem inventory contains 32 coding trajectories and 48 runtime
+The current filesystem inventory contains 35 coding trajectories and 49 runtime
 trajectories. The index does not require every runtime directory to have a root `summary.md`:
 the runtime inventory records whether a summary, prompt-like call file, raw
 trace, and other artifacts are present. No transcript is fabricated for a
@@ -127,6 +132,9 @@ transcript, or recorded `*.raw.txt` provider output.
 | 029-generalization-v1r1-blackhole-blind | coding | yes | yes | n/a | no | 2 |
 | 030-generalization-v1r1-scoring | coding | yes | yes | n/a | no | 3 |
 | 031-product-v2-runtime-foundation | coding | yes | yes | n/a | no | 2 |
+| 032-product-v2-ui-redesign | coding | yes | yes | n/a | no | 2 |
+| 033-product-v2-dogfood-acceptance | coding | yes | yes | n/a | no | 2 |
+| 034-product-v2-integration | coding | yes | yes | n/a | no | 2 |
 | ui-001-mobile-pwa | coding | yes | yes | n/a | no | 2 |
 | ui-002-reference-redesign | coding | yes | yes | n/a | no | 2 |
 | submission-001-hardening | coding | yes | yes | n/a | no | 2 |
@@ -148,6 +156,7 @@ transcript, or recorded `*.raw.txt` provider output.
 | 018-host-foundation-e005-regression | runtime | yes | no | yes | yes | 29 |
 | 019-host-pwa-real-neutral | runtime | no | yes | yes | yes | 2 |
 | 020-consolidation-real-neutral | runtime | no | yes | yes | yes | 2 |
+| 034-product-v2-integrated-acceptance | runtime | no | yes | yes | no | 2 |
 | generalization-v1r1-baseline-g01 | runtime | no | no | yes | no | 4 |
 | generalization-v1r1-baseline-g02 | runtime | no | no | yes | no | 10 |
 | generalization-v1r1-baseline-g03 | runtime | no | no | yes | no | 6 |

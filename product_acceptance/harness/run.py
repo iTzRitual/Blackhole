@@ -51,7 +51,11 @@ def _processing_status(response: dict[str, Any]) -> str | None:
 
 def _flatten_text(value: Any) -> str:
     if isinstance(value, dict):
-        return " ".join(f"{key} {_flatten_text(item)}" for key, item in value.items())
+        return " ".join(
+            f"{key} {_flatten_text(item)}"
+            for key, item in value.items()
+            if key not in {"question", "source_text"}
+        )
     if isinstance(value, list):
         return " ".join(_flatten_text(item) for item in value)
     if value is None:
@@ -96,6 +100,10 @@ def _evaluate_capture(response: dict[str, Any], expect: dict[str, Any]) -> list[
         checks.append(_check(PASS if observed == expect["duplicate"] else FAIL, "duplicate response", f"expected {expect['duplicate']}, observed {observed}"))
     if expect.get("attachment_persisted"):
         attachment = _nested_value(response, ("capture", "attachment"), response.get("attachment"))
+        if not isinstance(attachment, dict):
+            attachments = _nested_value(response, ("capture", "attachments"), response.get("attachments"))
+            if isinstance(attachments, list) and attachments:
+                attachment = attachments[0]
         observed = isinstance(attachment, dict) and bool(attachment.get("sha256") or attachment.get("id") or attachment.get("filename"))
         checks.append(_check(PASS if observed else FAIL, "attachment receipt", f"attachment receipt present={observed}"))
     return checks

@@ -1,6 +1,6 @@
 # Product V2 UI integration contract
 
-Status: frontend contract for the isolated, post-evaluation Product V2 UI worktree. This document does not change the frozen runtime contract or benchmark.
+Status: frontend contract for the integrated, post-evaluation Product V2 UI and Host. This document does not change the frozen runtime contract or benchmark.
 
 ## Adapter boundary
 
@@ -27,8 +27,22 @@ An `AnswerResult` should provide a direct `summary` or `answer` first, followed 
 
 `CaptureResult` should return a durable capture identifier, saved status, and processing status. `RetractionResult` should identify the derived retraction and its capture identifier; it must not claim that immutable source evidence was physically deleted.
 
-## Current compatibility and fixture mode
+## Integrated Host transport and fixture mode
 
-The current Host-compatible adapter uses same-origin `/api/state`, `/api/capture`, and `/api/query` where available. That path currently requires text for capture, accepts metadata rather than a binary upload, and has no `/api/capture/retract` route. The V2 UI therefore uses `?fixture=1` (with `?fixture=empty` and `?fixture=unavailable` variants) for deterministic attachment, Undo, populated/empty, and provider-error behavior. Fixture results are UI fixtures only and are not benchmark data or ground truth.
+The integrated client uses the Product V2 same-origin routes:
 
-The next Host integration must add the approved binary-source transport and derived retraction capability behind the adapter. It must not make capture wait for provider work, expose provider internals as primary copy, or weaken the approval and provenance boundaries.
+- GET /api/v2/state for read-only Memory, Attention, source, attachment, and processing state;
+- POST /api/v2/capture for text-only, attachment-only, and combined capture;
+- POST /api/v2/retract for append-only semantic Undo;
+- POST /api/v2/ask for natural Ask; and
+- GET /api/v2/attachments/<sha256> for immutable attachment retrieval.
+
+Browser attachments are sent as bounded data_base64 content with filename and
+MIME metadata. The UI never reads file text as a fallback and never waits for
+semantic processing before clearing the composer. Processing status is read from
+the V2 snapshot and polled while work is pending or running; a failed provider
+leaves the saved capture visible as a retryable state.
+
+The ?fixture=1 (with ?fixture=empty and ?fixture=unavailable variants) query
+modes remain deterministic UI-only fixtures for visual interaction checks. They
+are not benchmark data, ground truth, or the normal Host path.

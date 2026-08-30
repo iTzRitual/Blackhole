@@ -172,13 +172,16 @@ remote-access, or public-Internet deployment boundary. The Host reports only
 safe provider readiness metadata and never reads or persists authentication
 material.
 
-## Post-evaluation Product V2 runtime foundation
+## Post-evaluation Product V2 integration
 
-The explicitly authorized Product V2 work is isolated on the
-`product/v2-runtime` branch/worktree. It is a backend/API foundation, not a
-claim that the PWA has been redesigned. V2 uses a separate `blackhole-v2.db`
-and `blobs/` store inside Blackhole Home, so the frozen V1 `blackhole.db`,
-benchmark, evaluator, baseline, and recorded results remain unchanged.
+The explicitly authorized Product V2 work is integrated on the isolated
+`product/v2-integration` branch/worktree from the runtime, UI, and dogfood
+source branches. It is a local Host/PWA product path, not a replacement for
+the frozen V1 runtime. V2 uses a separate `blackhole-v2.db` and `blobs/` store
+inside Blackhole Home, so the frozen V1 `blackhole.db`, benchmark, evaluator,
+baseline, and recorded results remain unchanged. See
+[`docs/PRODUCT_V2_INTEGRATION.md`](docs/PRODUCT_V2_INTEGRATION.md) for the
+merge record and acceptance evidence.
 
 V2 adds immediate text/attachment capture, durable chronological processing
 with lease recovery and retry, generic open-world memory, deterministic
@@ -210,10 +213,12 @@ python -m app.product_process --home <blackhole-home> retry
 The product default is the configured `gpt-5.6-luna` model at `high`
 reasoning, distinct from the frozen benchmark's `max` configuration.
 
-V2 deterministic tests use fake providers and temporary Homes. No live
-provider call, benchmark expected output, holdout material, OCR guarantee,
-production hosting, Claude adapter, or consequential action execution is part
-of this foundation.
+V2 deterministic tests use fake providers and temporary Homes. The integrated
+acceptance run also uses a provider-free deterministic fixture and separately
+measures the normal asynchronous worker boundary; it is not benchmark ground
+truth. No live provider credentials, benchmark expected output, holdout
+material, OCR guarantee, production hosting, Claude adapter, or consequential
+action execution is part of this product scope.
 
 ## Benchmark status
 

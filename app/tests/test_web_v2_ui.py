@@ -49,10 +49,18 @@ class ProductV2UIContractTests(unittest.TestCase):
     def test_success_undo_and_reduced_motion_are_explicit(self) -> None:
         self.assertIn('showToast("+1 off your mind", "", "Undo", undoCapture)', APP_JS)
         self.assertIn("retractCapture", APP_JS)
-        self.assertIn('/api/capture/retract', APP_JS)
+        self.assertIn('/api/v2/retract', APP_JS)
         self.assertIn("prefers-reduced-motion: reduce", CSS)
         self.assertIn("composer-fade", CSS)
         self.assertIn('matchMedia("(prefers-reduced-motion: reduce)")', APP_JS)
+
+    def test_client_uses_the_real_product_v2_host_contract(self) -> None:
+        self.assertIn('api("/api/v2/state")', APP_JS)
+        self.assertIn('api("/api/v2/capture"', APP_JS)
+        self.assertIn('api("/api/v2/ask"', APP_JS)
+        self.assertIn("data_base64", APP_JS)
+        self.assertIn("state.processing", APP_JS)
+        self.assertIn("scheduleProcessingPoll", APP_JS)
 
     def test_attention_is_human_oriented_and_badge_is_count_gated(self) -> None:
         self.assertIn("updateAttentionBadge", APP_JS)
@@ -68,6 +76,7 @@ class ProductV2UIContractTests(unittest.TestCase):
     def test_memory_is_open_world_and_hides_raw_assertions_from_primary_markup(self) -> None:
         self.assertIn("const normalizeMemory", APP_JS)
         self.assertIn("memory.entities", APP_JS)
+        self.assertIn("memory.current_facts", APP_JS)
         self.assertIn("Object.entries(memory)", APP_JS)
         self.assertNotIn("memorySections", APP_JS)
         self.assertIn("What Blackhole knows.", HTML)

@@ -148,7 +148,10 @@
 
   const normalizeEvidence = (item) => {
     const evidence = firstValue(item?.evidence, item?.source, item?.source_refs, item?.sources);
-    if (Array.isArray(evidence)) return evidence.map((ref) => String(ref)).join(", ");
+    if (Array.isArray(evidence)) {
+      const count = evidence.filter((ref) => ref !== null && ref !== undefined && String(ref).trim() !== "").length;
+      return count === 1 ? "From a captured source" : count + " captured sources";
+    }
     return evidence ? String(evidence) : "From a captured source";
   };
 
@@ -172,11 +175,21 @@
           : predicate.includes("deadline") || predicate.includes("due")
             ? "A deadline is coming up."
             : "Worth a look while it is still useful."));
-      const detail = String(firstValue(item?.detail, item?.details, value?.detail, value?.reason,
-        predicate ? humanize(predicate) + " needs a closer look." : "Blackhole found something worth checking."));
+      const rawDetail = firstValue(item?.detail, item?.details, value?.detail, value?.reason);
+      const detail = rawDetail !== undefined
+        ? formatValue(rawDetail)
+        : (predicate ? humanize(predicate) + " needs a closer look." : "Blackhole found something worth checking.");
+      const lifecycleStatus = String(firstValue(item?.status, "open")).toLowerCase();
+      const lifecycleState = String(firstValue(item?.state, "")).toLowerCase();
       const rawUrgency = String(firstValue(item?.urgency, display.urgency, "")).toLowerCase();
-      const urgency = rawUrgency || (String(rawWhen || "").toLowerCase().includes("overdue") ? "overdue" : String(rawWhen || "").toLowerCase().includes("min") ? "soon" : "upcoming");
-      const when = rawWhen ? (String(rawWhen).match(/^\d{4}-\d{2}-\d{2}/) ? formatDate(rawWhen) : String(rawWhen)) : "Worth a look";
+      const urgency = rawUrgency || (lifecycleState === "overdue" || String(rawWhen || "").toLowerCase().includes("overdue")
+        ? "overdue"
+        : lifecycleState === "upcoming" || String(rawWhen || "").toLowerCase().includes("min")
+          ? "soon"
+          : "upcoming");
+      const when = rawWhen
+        ? (String(rawWhen).match(/^\d{4}-\d{2}-\d{2}/) ? formatDate(rawWhen) : String(rawWhen))
+        : lifecycleState === "completed" ? "Done" : lifecycleState === "cancelled" ? "Cancelled" : "Worth a look";
       return {
         id: String(firstValue(item?.id, item?.event_id, item?.state_key, "attention-" + index)),
         title,
@@ -186,7 +199,8 @@
         urgency,
         approval: Boolean(item?.approval_required || value?.reason === "approval required" || predicate.includes("approval")),
         evidence: normalizeEvidence(item),
-        status: item?.knowledge_status || item?.status || "known",
+        status: item?.knowledge_status || "known",
+        lifecycleStatus,
         unknownReason: item?.unknown_reason || "",
       };
     });
@@ -223,7 +237,12 @@
       };
     }
     const source = item || {};
-    const text = String(firstValue(source.summary, source.display?.summary, source.text, source.description, source.label, naturalizeAssertion({ ...source, subject: source.subject || fallbackEntity })));
+    const text = String(firstValue(source.summary, source.display?.summary, source.text, source.description, source.label, naturalizeAssertion({
+      ...source,
+      subject: source.subject || source.entity_label || fallbackEntity,
+      entity_name: source.entity_name || source.entity_label || fallbackEntity,
+      predicate: source.predicate || source.concept,
+    })));
     return {
       text,
       detail: String(firstValue(source.detail, source.details, source.explanation, "")),
@@ -256,7 +275,7 @@
     if (!memory || typeof memory !== "object") return [];
     const entities = Array.isArray(memory.entities) ? memory.entities : [];
     entities.forEach((entity, index) => {
-      const name = String(firstValue(entity.name, entity.title, entity.display_name, entity.subject, "Memory"));
+      const name = String(firstValue(entity.name, entity.label, entity.title, entity.display_name, entity.subject, "Memory"));
       const facts = firstValue(entity.facts, entity.items, entity.observations) || [];
       addGroup(entity.id || entity.entity_id || name + index, name, entity.kind || entity.type, entity.summary, facts);
     });
@@ -273,8 +292,17 @@
       addGroup(group.id || name + index, name, group.kind || "memory", group.summary, group.items || group.facts || []);
     });
 
+    const structuredFacts = Array.isArray(memory.current_facts) ? memory.current_facts : Array.isArray(memory.facts) ? memory.facts : [];
+    structuredFacts.forEach((fact, index) => {
+      const source = typeof fact === "object" && fact ? fact : { text: String(fact) };
+      const name = String(firstValue(source.entity_label, source.entity_name, source.entity?.name, source.subject, "Memory"));
+      const kind = firstValue(source.entity_kind, source.entity?.kind, source.kind, "memory");
+      const group = addGroup(source.entity_key || source.entity_id || name + index, name, kind, "", []);
+      group.facts.push(normalizeFact(source, name));
+    });
+
     Object.entries(memory).forEach(([sectionKey, sectionItems]) => {
-      if (["entities", "topics", "groups", "items", "attention", "counts", "approval", "recent_captures", "processing"].includes(sectionKey)) return;
+      if (["entities", "topics", "groups", "items", "facts", "current_facts", "attention", "counts", "approval", "recent_captures", "processing", "relationships", "sources", "attachments", "retracted_event_ids", "store_version", "projection_version", "projection_run_id"].includes(sectionKey)) return;
       if (!Array.isArray(sectionItems)) return;
       sectionItems.forEach((item, index) => {
         const source = typeof item === "object" && item ? item : { text: String(item) };
@@ -314,7 +342,7 @@
   const normalizeAnswer = (payload) => {
     const answer = payload?.answer || payload || {};
     const mode = String(answer.mode || answer.status || "").toLowerCase();
-    const rawMessage = String(answer.message || "");
+    const rawMessage = String(firstValue(answer.message, answer.answer, "") || "");
     if (mode === "unsupported" || rawMessage.toLowerCase().includes("outside blackhole")) {
       return {
         status: "unsupported",
@@ -354,7 +382,7 @@
     const status = mode === "no_match" || mode === "empty" || (!meaningfulGroups.length && !answer.summary && messageIsEmpty)
       ? "no_match"
       : "ready";
-    const summary = String(firstValue(answer.summary, answer.direct_answer, answer.text,
+    const summary = String(firstValue(answer.summary, answer.answer, answer.direct_answer, answer.text,
       status === "no_match" ? "I couldn’t find that in your memory yet." : deriveAnswerSummary(answer, meaningfulGroups)));
     return {
       status,
@@ -554,6 +582,33 @@
     return payload;
   };
 
+  const bufferToBase64 = (buffer) => {
+    const bytes = new Uint8Array(buffer);
+    let binary = "";
+    const chunkSize = 0x8000;
+    for (let offset = 0; offset < bytes.length; offset += chunkSize) {
+      binary += String.fromCharCode(...bytes.subarray(offset, offset + chunkSize));
+    }
+    return window.btoa(binary);
+  };
+
+  const serializeAttachment = async (attachment) => {
+    if (!attachment?.file) return null;
+    const dataBase64 = typeof attachment.file.arrayBuffer === "function"
+      ? bufferToBase64(await attachment.file.arrayBuffer())
+      : await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(new ClientError("Blackhole could not read that attachment.", "attachment_read_failed"));
+        reader.onload = () => resolve(String(reader.result || "").split(",", 2)[1] || "");
+        reader.readAsDataURL(attachment.file);
+      });
+    return {
+      filename: attachment.name,
+      mime_type: attachment.type,
+      data_base64: dataBase64,
+    };
+  };
+
   const client = {
     fixture: fixtureMode,
     async getState() {
@@ -561,7 +616,7 @@
         await wait(40);
         return fixtureState;
       }
-      const payload = await api("/api/state");
+      const payload = await api("/api/v2/state");
       return payload.state || {};
     },
     async capture(payload) {
@@ -577,19 +632,15 @@
           processing: { status: "pending" },
         };
       }
-      const attachment = payload.attachment;
-      return api("/api/capture", {
+      const attachment = await serializeAttachment(payload.attachment);
+      const request = {
+        source_type: payload.attachment ? (payload.attachment.isImage ? "image" : "document") : "text",
+      };
+      if (payload.text && payload.text.trim()) request.text = payload.text;
+      if (attachment) request.attachment = attachment;
+      return api("/api/v2/capture", {
         method: "POST",
-        body: JSON.stringify({
-          text: payload.text || "",
-          source_type: attachment ? (attachment.isImage ? "image" : "document") : "text",
-          filename: attachment?.name || null,
-          attachment: attachment ? {
-            name: attachment.name,
-            type: attachment.type,
-            size: attachment.size,
-          } : null,
-        }),
+        body: JSON.stringify(request),
       });
     },
     async retractCapture(captureId) {
@@ -597,9 +648,9 @@
         await wait(60);
         return { ok: true, retracted: true, capture: { event_id: captureId } };
       }
-      return api("/api/capture/retract", {
+      return api("/api/v2/retract", {
         method: "POST",
-        body: JSON.stringify({ capture_id: captureId }),
+        body: JSON.stringify({ event_id: captureId, reason: "user undo" }),
       });
     },
     async ask(question) {
@@ -610,7 +661,7 @@
         }
         return { ok: true, answer: fixtureAnswer(question) };
       }
-      return api("/api/query", {
+      return api("/api/v2/ask", {
         method: "POST",
         body: JSON.stringify({ question }),
       });
@@ -642,6 +693,9 @@
     installPrompt: null,
     submitting: false,
     asking: false,
+    processing: null,
+    processingPollTimer: null,
+    captureStatusVisible: false,
     toastTimer: null,
     toastAction: null,
     undoRecord: null,
@@ -709,6 +763,39 @@
     if (!element) return;
     element.textContent = message;
     element.className = "inline-feedback" + (kind ? " is-" + kind : "");
+  };
+
+  const processingCounts = (processing) => processing?.counts || {};
+
+  const processingFeedback = (processing) => {
+    const counts = processingCounts(processing);
+    const status = String(processing?.status || "").toLowerCase();
+    const failed = Number(counts.failed || 0);
+    const pending = Number(counts.pending || 0);
+    const active = Number(counts.processing || 0);
+    if (failed > 0 || status === "failed") return { message: "Saved. Understanding needs a retry.", kind: "error" };
+    if (pending > 0 || active > 0 || status === "pending" || status === "processing") return { message: "Saved. Understanding in the background…", kind: "" };
+    return { message: "Saved.", kind: "" };
+  };
+
+  const scheduleProcessingPoll = () => {
+    if (fixtureMode || state.processingPollTimer) return;
+    const counts = processingCounts(state.processing);
+    if (Number(counts.pending || 0) <= 0 && Number(counts.processing || 0) <= 0) return;
+    state.processingPollTimer = window.setTimeout(async () => {
+      state.processingPollTimer = null;
+      if (document.hidden) {
+        scheduleProcessingPoll();
+        return;
+      }
+      await refreshState();
+    }, 650);
+  };
+
+  const updateCaptureProcessingFeedback = () => {
+    if (!state.captureStatusVisible || state.submitting) return;
+    const feedback = processingFeedback(state.processing);
+    setFeedback(feedback.message, feedback.kind);
   };
 
   const updateCapturePlaceholder = () => {
@@ -816,6 +903,14 @@
     }
     element.innerHTML = items.map((item) => {
       const status = statusClass(item.status);
+      const lifecycleStatus = item.lifecycleStatus || "open";
+      const lifecycleLabel = lifecycleStatus === "completed"
+        ? "Completed"
+        : lifecycleStatus === "cancelled"
+          ? "Cancelled"
+          : item.urgency === "overdue"
+            ? "Overdue"
+            : item.urgency === "soon" ? "Soon" : "Upcoming";
       return '<article class="attention-card urgency-' + escapeHtml(item.urgency) + (item.approval ? " is-approval" : "") + '">' +
         '<div class="attention-card-main">' +
           '<span class="attention-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-attention"></use></svg></span>' +
@@ -823,7 +918,7 @@
           '<span class="attention-when">' + escapeHtml(item.when) + '</span>' +
         '</div>' +
         '<div class="attention-card-meta">' +
-          (item.approval ? '<span class="attention-state">Needs your decision</span>' : '<span class="attention-state">' + escapeHtml(item.urgency === "overdue" ? "Overdue" : "Upcoming") + '</span>') +
+          (item.approval && lifecycleStatus === "open" ? '<span class="attention-state">Needs your decision</span>' : '<span class="attention-state">' + escapeHtml(lifecycleLabel) + '</span>') +
           '<details class="evidence-details"><summary>Why this is here</summary><div class="detail-copy"><p>' + escapeHtml(item.detail) + '</p><p class="detail-meta">' + escapeHtml(statusDetails(item.status, item.unknownReason)) + ' · ' + escapeHtml(item.evidence) + '</p></div></details>' +
         '</div>' +
       '</article>';
@@ -926,12 +1021,15 @@
 
   const renderState = (rawState) => {
     state.dataAvailable = true;
+    state.processing = rawState?.processing || null;
     const rawAttention = Array.isArray(rawState?.attention) ? rawState.attention : rawState?.attention?.items;
     state.attention = normalizeAttention(rawAttention);
     state.memoryEntities = normalizeMemory(rawState?.memory || rawState);
     updateAttentionBadge();
     renderAttention();
     renderMemory();
+    updateCaptureProcessingFeedback();
+    scheduleProcessingPoll();
     setConnectionStatus(fixtureMode ? "Fixture" : "Connected", "online");
   };
 
@@ -1079,16 +1177,20 @@
         input.style.height = "";
       }
       clearAttachment();
+      state.captureStatusVisible = true;
       state.undoRecord = { id: captureId, inFlight: false };
-      setFeedback("");
+      state.processing = result.processing || { status: result.capture?.processing_status || "pending" };
+      updateCaptureProcessingFeedback();
       showToast("+1 off your mind", "", "Undo", undoCapture);
       await refreshState();
     } catch (error) {
       const code = String(error?.code || "");
       const message = code === "attachments_not_supported"
-        ? "This host needs the V2 attachment contract before it can save a file by itself."
+        ? "This host cannot save attachments yet. Your text capture is still safe."
+        : code === "attachment_read_failed"
+          ? "Blackhole could not read that attachment. Choose it again and retry."
         : code === "invalid_request" && attachment && !text.trim()
-          ? "This host still requires text for attachments. The V2 attachment contract will allow attachment-only saves."
+          ? "Blackhole could not save that attachment. Choose a smaller or supported file and retry."
           : "Couldn’t save that yet. Your capture is still here.";
       setFeedback(message, "error");
       showToast(message, "error");
@@ -1147,7 +1249,11 @@
   $$(".nav-item, .brand-button").forEach((button) => button.addEventListener("click", () => showView(button.dataset.view || "capture")));
   $("#capture-input")?.addEventListener("input", resizeTextarea);
   $("#capture-input")?.addEventListener("keydown", (event) => {
-    if (event.key === "Enter" && !event.shiftKey && !event.isComposing) {
+    // Some embedded Chromium builds report isComposing for ordinary Enter
+    // keypresses.  Ignore the IME sentinel (229) while keeping plain Enter a
+    // reliable submit action.
+    const composingEnter = event.isComposing && event.keyCode === 229;
+    if (event.key === "Enter" && !event.shiftKey && !composingEnter) {
       event.preventDefault();
       $("#capture-form")?.requestSubmit();
     }

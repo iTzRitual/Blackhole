@@ -610,13 +610,15 @@ rebuildable store.
 ### Pre-integration transport boundary
 
 The preceding Host Foundation milestone intentionally stopped before HTTP and
-PWA integration. The active same-origin transport is documented in section 18.
-Pairing, device tokens, mDNS, HTTPS, remote access, tunnels, cloud relay, and
-public networking remain outside scope.
+PWA integration. Its historical V1-compatible same-origin transport is
+documented in section 18; the current Product V2 App/Host contract is in
+section 20. Pairing, device tokens, mDNS, HTTPS, remote access, tunnels, cloud
+relay, and public networking remain outside scope.
 
-## 18. Blackhole App to Host HTTP integration
+## 18. Historical V1-compatible Blackhole App to Host HTTP integration
 
-The integrated local product keeps the ownership boundary explicit:
+The historical V1-compatible local product keeps the ownership boundary
+explicit:
 
 ```text
 BLACKHOLE APP (PWA)
@@ -660,7 +662,8 @@ are not restricted to benchmark subject IDs: undeclared entities receive only a
 presentation kind when their observed predicates support one. This runtime
 contract is separate from the frozen `response-contract-v2` artifact.
 
-Capture remains `CAPTURE NOW. UNDERSTAND LATER.` The PWA posts to
+In this V1-compatible path, capture remains `CAPTURE NOW. UNDERSTAND LATER.`
+The PWA posts to
 `/api/capture`, keeps its collapse/milestone interaction, and refreshes the
 Host state without waiting for Codex. Ask posts to `/api/query` and shows
 product-language loading while Host freshness work runs. A failed freshness
@@ -683,7 +686,8 @@ Non-loopback binding is refused unless the operator explicitly passes
 python -m app.web_app --host 0.0.0.0 --port 8080 --trusted-lan-demo
 ```
 
-This is a trusted-private-network hackathon demo only. It has no device
+This V1-compatible transport is a trusted-private-network hackathon demo only.
+It has no device
 authentication, pairing, revocable tokens, TLS, mDNS, cloud relay, tunnel
 support, or public-Internet safety. The PWA service worker caches shell assets
 only and deliberately bypasses `/api/`; it makes no offline capture-sync
@@ -767,3 +771,21 @@ worker after capture, while read-only status/state/attachment routes do not
 start a provider. The V2 provider adapter uses the already-installed,
 already-authenticated local Codex CLI, an ephemeral isolated invocation, a
 versioned prompt, bounded structured output, and no provider-token access.
+
+## 20. Integrated Product V2 App contract
+
+The current PWA is the Product V2 client and uses the V2 Host transport rather
+than the historical `/api/*` routes in section 18. Capture posts text, exact
+attachment bytes, or both to `POST /api/v2/capture` and clears immediately
+after the durable save. It reads `GET /api/v2/state` and
+`GET /api/v2/processing`, polls while deferred work is pending, and exposes
+retryable failure feedback. Attention and Memory render human-oriented
+projections; Ask posts to `POST /api/v2/ask`; Undo appends a semantic
+retraction through `POST /api/v2/retract` and never deletes immutable evidence.
+
+The browser sends attachment content as bounded base64 with filename and MIME
+metadata. The client does not OCR or copy file text into the composer as a
+fallback. Deterministic UI fixtures (`?fixture=1`, `?fixture=empty`, and
+`?fixture=unavailable`) are presentation-only and are not benchmark data.
+The reconciled route, response, acceptance, and visual evidence is recorded in
+`docs/PRODUCT_V2_INTEGRATION.md`.

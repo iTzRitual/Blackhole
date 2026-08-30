@@ -1121,6 +1121,29 @@ class ProductStore:
     def _retracted_event_ids_locked(self) -> set[str]:
         return {row["event_id"] for row in self.connection.execute("SELECT event_id FROM retractions").fetchall()}
 
+    @staticmethod
+    def _attention_lifecycle_key(row: sqlite3.Row) -> str:
+        """Return an explicit or conservative key for one attention timeline.
+
+        Providers may give related candidates a stable ``lifecycle_key`` in
+        their details.  The title fallback keeps simple providers useful while
+        still normalizing only punctuation and terminal lifecycle prefixes;
+        unrelated titles remain separate timelines.
+        """
+
+        try:
+            details = json.loads(row["details_json"])
+        except (TypeError, ValueError, json.JSONDecodeError):
+            details = {}
+        if isinstance(details, dict):
+            explicit = details.get("lifecycle_key")
+            if isinstance(explicit, str) and explicit.strip():
+                return "key:" + _legacy_key(explicit)
+        title = str(row["title"] or "").casefold().strip()
+        title = re.sub(r"^(?:completed|complete|done|finished|cancelled|canceled)\s*[:\-–—]\s*", "", title)
+        title = re.sub(r"[^\w]+", " ", title, flags=re.UNICODE).strip()
+        return "title:" + re.sub(r"\s+", " ", title)
+
     def _rebuild_derived_locked(self) -> dict[str, Any]:
         retracted = self._retracted_event_ids_locked()
         fact_rows = self.connection.execute(
@@ -1239,9 +1262,33 @@ class ProductStore:
         latest_attention_status: dict[str, str] = {}
         for row in status_rows:
             latest_attention_status[row["candidate_fingerprint"]] = row["status"]
+        source_sequences = {
+            row["event_id"]: int(row["sequence"])
+            for row in self.connection.execute("SELECT event_id, sequence FROM source_events").fetchall()
+        }
+        lifecycle_rows: dict[str, sqlite3.Row] = {}
         for row in attention_rows:
             if row["source_event_id"] in retracted:
                 continue
+            lifecycle_key = self._attention_lifecycle_key(row)
+            current = lifecycle_rows.get(lifecycle_key)
+            candidate_score = (
+                source_sequences.get(row["source_event_id"], 0),
+                int(bool(row["due_at"] or row["starts_at"])),
+                int(row["candidate_id"]),
+            )
+            current_score = (
+                (
+                    source_sequences.get(current["source_event_id"], 0),
+                    int(bool(current["due_at"] or current["starts_at"])),
+                    int(current["candidate_id"]),
+                )
+                if current is not None
+                else (-1, -1, -1)
+            )
+            if current is None or candidate_score > current_score:
+                lifecycle_rows[lifecycle_key] = row
+        for row in lifecycle_rows.values():
             status = latest_attention_status.get(row["fingerprint"], row["status"])
             self.connection.execute(
                 """

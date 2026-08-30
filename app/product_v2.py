@@ -85,7 +85,12 @@ def _slug(value: str) -> str:
 def _tokens(value: Any) -> set[str]:
     if not isinstance(value, str):
         value = json.dumps(value, ensure_ascii=False, sort_keys=True) if value is not None else ""
-    return {token for token in re.findall(r"[\w]+", value.casefold(), flags=re.UNICODE) if len(token) > 1}
+    stopwords = {"my"}
+    return {
+        token
+        for token in re.findall(r"[\w]+", value.casefold(), flags=re.UNICODE)
+        if len(token) > 1 and token not in stopwords
+    }
 
 
 def _safe_json_value(value: Any, *, depth: int = 0) -> Any:
@@ -1362,6 +1367,12 @@ class ProductRuntime:
                 selected_history.append(item)
             if len(selected_history) >= MAX_ASK_CONTEXT_HISTORY:
                 break
+        broad_question = bool(
+            question_tokens
+            & {"locations", "location", "recorded", "remembered", "things", "items", "anything", "list"}
+        )
+        if not selected_facts and broad_question:
+            selected_facts = list(facts[:MAX_ASK_CONTEXT_FACTS])
         text = " ".join(question_tokens)
         context = {
             "facts": selected_facts,
@@ -1436,7 +1447,23 @@ class ProductRuntime:
             labels = [item["title"] for item in selected_attention[:10]]
             return "Open items: " + "; ".join(labels) + ".", "attention", selected_attention, self._source_refs(selected_attention)
 
-        is_cost = bool(question_tokens & {"paying", "pay", "cost", "costs", "price", "prices", "subscription", "subscriptions", "billing", "płacę", "place", "koszt", "koszty"})
+        is_time_question = bool(
+            question_tokens
+            & {"when", "kiedy", "deadline", "due", "date", "termin", "datę", "date", "until", "do"}
+        )
+        if attention and (is_time_question or is_task):
+            attention_tokens = [
+                item
+                for item in attention
+                if question_tokens
+                & _tokens(" ".join(str(item.get(key, "")) for key in ("title", "kind", "details")))
+            ]
+            selected_attention = attention_tokens or attention[:MAX_ASK_CONTEXT_HISTORY]
+            labels = [item["title"] for item in selected_attention[:10]]
+            return "Relevant attention: " + "; ".join(labels) + ".", "attention", selected_attention, self._source_refs(selected_attention)
+
+        is_change_marker = {"changed", "change", "changes", "recent", "correction", "zmieniło", "zmienilo", "zmiana", "ostatnio"}
+        is_cost = bool(question_tokens & {"paying", "pay", "cost", "costs", "price", "prices", "subscription", "subscriptions", "billing", "płacę", "place", "koszt", "koszty"}) and not bool(question_tokens & is_change_marker)
         if is_cost:
             cost_facts = [
                 item
@@ -1449,15 +1476,25 @@ class ProductRuntime:
             ]
             if not cost_facts:
                 return "I do not have a supported payment or cost observation yet.", "costs", [], []
-            descriptions = [
-                f"{item.get('entity_label', item.get('entity_key'))}: {item.get('value')}"
-                for item in cost_facts[:10]
-            ]
+            def cost_description(item: dict[str, Any]) -> str:
+                value = item.get("value")
+                if isinstance(value, dict):
+                    amount = value.get("amount", value.get("price", value.get("total")))
+                    currency = value.get("currency", value.get("currency_code"))
+                    period = value.get("billing_period", value.get("period"))
+                    if amount is not None and currency:
+                        suffix = f" per {period}" if period else ""
+                        return f"{item.get('entity_label', item.get('entity_key'))}: {amount} {currency}{suffix}"
+                return f"{item.get('entity_label', item.get('entity_key'))}: {value}"
+
+            descriptions = [cost_description(item) for item in cost_facts[:10]]
             totals = self._money_summary(cost_facts)
             suffix = f" Deterministic totals: {totals}." if totals else ""
             return "Observed costs: " + "; ".join(descriptions) + "." + suffix, "costs", cost_facts, self._source_refs(cost_facts)
 
-        is_change = bool(question_tokens & {"changed", "change", "changes", "recent", "correction", "changed", "zmieniło", "zmienilo", "zmiana", "ostatnio"})
+        is_change = bool(question_tokens & is_change_marker) and not (
+            "how" in lowered and ("should" in lowered or "next" in lowered)
+        )
         if is_change:
             changes = [
                 item
@@ -1471,22 +1508,87 @@ class ProductRuntime:
             )
             if not changes:
                 return "I do not have a recorded recent change matching that question.", "changes", [], []
-            labels = [
-                f"{item.get('entity_label', item.get('source_entity_key', 'memory'))}: {item.get('operation', item.get('relation_type'))}"
-                for item in changes[:10]
-            ]
-            return "Recent changes: " + "; ".join(labels) + ".", "changes", changes, self._source_refs(changes)
+            history = context.get("history", [])
+            change_keys = {
+                (item.get("entity_key"), item.get("concept"))
+                for item in changes
+                if item.get("entity_key") is not None and item.get("concept") is not None
+            }
+            expanded_changes: list[dict[str, Any]] = []
+            seen_change_items: set[tuple[Any, ...]] = set()
+            for item in history:
+                key = (item.get("entity_key"), item.get("concept"))
+                if key not in change_keys:
+                    continue
+                identity = (
+                    item.get("source_event_id"),
+                    item.get("fact_id"),
+                    item.get("operation"),
+                    canonical_json(item.get("value")) if "value" in item else item.get("unknown_reason"),
+                )
+                if identity not in seen_change_items:
+                    expanded_changes.append(item)
+                    seen_change_items.add(identity)
+            expanded_changes.extend(
+                item
+                for item in changes
+                if item not in expanded_changes
+            )
+            expanded_changes.sort(key=lambda item: int(item.get("sequence", 0)))
+
+            def display_value(item: dict[str, Any]) -> str:
+                if "value" in item:
+                    value = item.get("value")
+                    if isinstance(value, dict):
+                        amount = value.get("amount", value.get("price", value.get("total")))
+                        currency = value.get("currency", value.get("currency_code"))
+                        if amount is not None and currency:
+                            period = value.get("billing_period", value.get("period"))
+                            suffix = f" per {period}" if period else ""
+                            return f"{amount} {currency}{suffix}"
+                        return json.dumps(value, ensure_ascii=False, sort_keys=True)
+                    if isinstance(value, list):
+                        return json.dumps(value, ensure_ascii=False, sort_keys=True)
+                    return str(value)
+                return str(item.get("unknown_reason", "unknown"))
+
+            labels = []
+            for item in expanded_changes[:10]:
+                label = item.get("entity_label", item.get("source_entity_key", "memory"))
+                operation = item.get("operation", item.get("relation_type"))
+                labels.append(f"{label}: {operation} ({display_value(item)})")
+            return "Recent changes: " + "; ".join(labels) + ".", "changes", expanded_changes, self._source_refs(expanded_changes)
 
         is_last = bool(question_tokens & {"last", "mention", "mentioned", "when", "kiedy", "wspomniałem", "wspomnialem"})
         if is_last:
             matches = context.get("history", []) or selected_facts
             if matches:
+                if "last" not in question_tokens and selected_facts:
+                    return (
+                        "Relevant memory: " + "; ".join(
+                            f"{item.get('entity_label', item.get('entity_key'))} {item.get('concept')}: {item.get('value', item.get('unknown_reason', 'unknown'))}"
+                            for item in selected_facts[:10]
+                        ) + ".",
+                        "retrieval",
+                        selected_facts,
+                        self._source_refs(selected_facts),
+                    )
                 latest = sorted(matches, key=lambda item: int(item.get("sequence", 0)), reverse=True)[0]
                 ref = latest.get("source_refs", [])
                 source = next((item for item in snapshot.get("sources", []) if item.get("event_id") in ref), None)
                 when = source.get("captured_at") if source else "an earlier capture"
                 label = latest.get("entity_label", latest.get("entity_key", "that topic"))
                 return f"The latest matching mention of {label} is {when}.", "last_mention", [latest], self._source_refs([latest])
+
+        if (
+            len(selected_facts) > 1
+            and question_tokens & {"keys", "key", "klucze", "kluczyk"}
+            and not question_tokens & {"basement", "piwnicy", "house", "home", "bike", "roweru"}
+        ):
+            refs = self._source_refs(selected_facts)
+            if question_tokens & {"gdzie", "są", "jest"}:
+                return "To jest niejednoznaczne — nie wiadomo, które klucze masz na myśli.", "retrieval", selected_facts, refs
+            return "The question is ambiguous; I found more than one kind of key.", "retrieval", selected_facts, refs
 
         requires_synthesis = bool(
             question_tokens

@@ -151,6 +151,20 @@ This file records material improvements to the product design, agent workflow, e
 - **Decision:** **KEEP** duplicate-aware evidence consolidation. It recovered all three audited projection losses, reduced DSCR by `1`, improved LQA-0M by `+0.0064236111`, and passed the predeclared financial, duplicate/change, entity, relation, unknown-state, schema, safety, and source-integrity guards. This is the last benchmark-optimization experiment for the frozen development track; no E006 was started.
 - **Learning:** Duplicate identity and evidence contribution are separate concepts. A duplicate component can provide additional predicate support, but provenance must stay predicate-scoped and unresolved disagreement must remain explicit uncertainty.
 
+## 2026-08-30 — Product V2 Host/PWA integration
+
+- **Stage / experiment identifier:** Post-freeze Product V2 integration milestone; this is not a benchmark-optimization experiment and is not E006.
+- **Problem observed:** The separately developed runtime, PWA, and dogfood harness had incompatible assumptions about V2 routes, attachment bytes, deferred processing, Attention lifecycle state, semantic Undo, and visible acceptance reporting.
+- **Hypothesis:** A narrow Host-owned V2 transport reconciliation can make Capture, Attention, Memory, Ask, attachments, retry, restart, and Undo one coherent product contract while preserving the frozen V1 boundary.
+- **What changed:** Merged the authorized runtime, UI, and dogfood branches into an isolated integration worktree. Connected the PWA to the real `/api/v2/*` routes, added bounded base64 attachment transport, asynchronous processing feedback and retry, lifecycle-aware Attention projection, deterministic Ask/change handling, and a reproducible 50-case integrated acceptance runner with quality gates and latency evidence.
+- **Evaluation method:** Full application tests, evaluator tests, dogfood harness tests, JavaScript syntax/compile checks, live local Host browser review at `390x844` and `1280x900`, and the visible deterministic integrated acceptance run. No live provider credentials, benchmark expected output, holdout material, or official baseline rerun was used.
+- **Metric before:** Not applicable as a single product metric; the three source branches were separate and their pre-integration capability gaps were recorded by the dogfood harness.
+- **Metric after:** `50/50 PASS` in `eval/results/product-v2-integrated-acceptance.json`; all product quality gates passed. The normal-worker latency probe returned capture in `110.706 ms` and completed processing in `239.226 ms` with a `120 ms` fixture-provider delay.
+- **Regressions:** No application or benchmark regression remains in the final test pass. Deliberate limitations are that the acceptance provider is deterministic and local, the runner explicitly drains processing for semantic determinism, no human usability study was performed, and production infrastructure/OCR/remote providers remain out of scope.
+- **Runtime/cost impact:** The visible acceptance suite uses no provider tokens or subscription calls. The normal-worker probe records the asynchronous boundary separately; no credential handling was added.
+- **Decision:** **KEEP** the integrated Product V2 contract and implementation for the explicitly authorized post-freeze product scope. Do not treat this as a new benchmark result or start a follow-up optimization experiment.
+- **Learning:** Integration evidence must test the product's trust boundary—durability, exact bytes, retryability, provenance, lifecycle state, and approval semantics—as well as route compatibility. A clean merge is not sufficient without a black-box acceptance and visual pass.
+
 ## Entry template
 
 Use one entry per meaningful improvement:
