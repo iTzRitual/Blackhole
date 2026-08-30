@@ -92,6 +92,8 @@ class HostServer(ThreadingHTTPServer):
         self.request_lock = threading.RLock()
         self._runtime: HostRuntime | None = None
         super().__init__(address, handler)
+        if self.contract is None and self.database_path is None and self.auto_start_product_worker:
+            self.open_runtime().start_product_worker()
 
     def open_runtime(self) -> HostRuntime:
         """Open the configured HostRuntime with managed default ownership."""

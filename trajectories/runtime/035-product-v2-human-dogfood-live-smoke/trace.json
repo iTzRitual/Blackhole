@@ -1,0 +1,49 @@
+{
+  "trajectory": "035-product-v2-human-dogfood-live-smoke",
+  "type": "runtime",
+  "scope": "authorized normal-launch live smoke; no benchmark or holdout data",
+  "entrypoint": "python -m app.web_app",
+  "home_policy": "fresh temporary Home per attempt; deleted by the smoke harness after capture state was recorded",
+  "provider": {
+    "kind": "already-installed local Codex CLI",
+    "version": "codex-cli 0.150.0-alpha.12.2",
+    "authentication": "Logged in using ChatGPT",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "high"
+  },
+  "limits": {
+    "live_capture_attempts": 2,
+    "live_ask_attempts": 2,
+    "used_capture_attempts": 2,
+    "used_ask_attempts": 0,
+    "manual_product_process_used": false
+  },
+  "runs": [
+    {
+      "attempt": 1,
+      "input": "one neutral synthetic capture",
+      "capture_http_status": 200,
+      "capture_returned_before_processing": true,
+      "capture_latency_seconds": 0.031,
+      "capture_processing_status": "pending",
+      "provider_status_before_capture": "READY",
+      "provider_attempt_result": "failed",
+      "semantic_state_produced": false,
+      "ask_issued": false,
+      "operational_detail": "HTTP status redacted the provider failure to the safe queue message; no semantic success was inferred."
+    },
+    {
+      "attempt": 2,
+      "input": "one neutral synthetic capture",
+      "capture_http_status": 200,
+      "capture_returned_before_processing": true,
+      "capture_processing_status": "pending",
+      "provider_attempt_result": "failed",
+      "semantic_state_produced": false,
+      "ask_issued": false,
+      "sanitized_failure": "semantic provider failed (exit code 1): 2026-08-30T14:49:50.685864Z  WARN codex_skills::interface: ignoring interface.icon_small: icon path with '..' must resolve under plugin assets/\n2026-08-30T14:49:50.685893Z  WARN codex_skills::interface: ignoring interface.icon_large: icon path with '..' must resolve under plugin assets/\n2026-08-30T14:49:50.696158Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell\n2026-08-30T14:49:51.132594Z  WARN codex_skills::interface: ignoring interface.icon_small: icon path with '..' must resolve under plugin assets/\n2026-08-30T14:49:51.132630Z  WARN codex_skills::interface: ignoring interface.icon_large: icon path with '..' must resolve under plugin assets/; retry available"
+    }
+  ],
+  "result": "PARTIAL",
+  "decision": "Keep the deterministic fixes; revise the provider adapter in a separately authorized follow-up before claiming a live PASS."
+}

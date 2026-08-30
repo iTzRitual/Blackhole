@@ -28,6 +28,11 @@ PRODUCT_PROCESSING_VERSION = "blackhole-product-v2-processing-v1"
 PRODUCT_EXTRACTOR_VERSION = "blackhole-product-v2-extractor-v1"
 PROCESSING_STATUSES = frozenset({"pending", "processing", "processed", "failed"})
 ATTENTION_STATUSES = frozenset({"open", "completed", "cancelled"})
+# Automatic retries are deliberately finite.  The first claim is an attempt;
+# four durable delays permit five automatic attempts in total.  An explicit
+# user retry requeues the event and remains available after the automatic cap.
+AUTOMATIC_RETRY_BACKOFF_SECONDS = (1, 2, 4, 8)
+MAX_AUTOMATIC_ATTEMPTS = len(AUTOMATIC_RETRY_BACKOFF_SECONDS) + 1
 
 
 def canonical_json(value: Any) -> str:
@@ -783,16 +788,24 @@ class ProductStore:
         now_text = now.isoformat()
         statuses = ["pending"] + (["failed"] if include_failed else [])
         placeholders = ",".join("?" for _ in statuses)
+        eligibility = "(p.next_retry_at IS NULL OR p.next_retry_at <= ?)"
+        query_params: list[Any] = [*statuses, now_text]
+        if include_failed:
+            # Failed rows at the automatic-attempt cap stay failed until an
+            # explicit retry.  Without this predicate a terminal failed row
+            # with a NULL next_retry_at would be immediately reacquired.
+            eligibility += " AND (p.status <> 'failed' OR p.attempt_count < ?)"
+            query_params.append(MAX_AUTOMATIC_ATTEMPTS)
         with self._transaction(immediate=True):
             rows = self.connection.execute(
                 f"""
                 SELECT s.raw_json, p.event_id
                 FROM processing_state p JOIN source_events s ON s.event_id = p.event_id
                 WHERE p.status IN ({placeholders})
-                  AND (p.next_retry_at IS NULL OR p.next_retry_at <= ?)
+                  AND {eligibility}
                 ORDER BY s.sequence LIMIT ?
                 """,
-                (*statuses, now_text, limit),
+                (*query_params, limit),
             ).fetchall()
             claimed: list[dict[str, Any]] = []
             claimed_ids: set[str] = set()
@@ -1566,7 +1579,9 @@ class ProductStore:
 
 __all__ = [
     "ATTENTION_STATUSES",
+    "AUTOMATIC_RETRY_BACKOFF_SECONDS",
     "BlobStore",
+    "MAX_AUTOMATIC_ATTEMPTS",
     "PRODUCT_EXTRACTOR_VERSION",
     "PRODUCT_PROCESSING_VERSION",
     "PRODUCT_PROJECTION_VERSION",

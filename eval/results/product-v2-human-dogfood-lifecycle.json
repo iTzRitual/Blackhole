@@ -1,0 +1,64 @@
+{
+  "result_type": "product_v2_human_dogfood_lifecycle",
+  "recorded_at": "2026-08-30",
+  "scope": "authorized Product V2 human-dogfood P0/P1 repair",
+  "deterministic_normal_launch": {
+    "status": "PASS",
+    "test": "app.tests.test_product_v2_human_dogfood_regression.ProductV2HumanDogfoodRegressionTests.test_normal_launch_processes_v2_queue_without_v1_or_manual_process",
+    "capture_returned_before_provider_completion": true,
+    "pending_ask_was_typed": true,
+    "automatic_worker_completed": true,
+    "memory_and_attention_produced": true,
+    "host_product_status_agreed": true,
+    "legacy_v1_queue_required": false
+  },
+  "validation": {
+    "application_tests": {"status": "PASS", "count": 110},
+    "evaluator_tests": {"status": "PASS", "count": 10},
+    "product_acceptance_harness_tests": {"status": "PASS", "count": 7},
+    "qualification": {"status": "PASS_WITH_WARNINGS", "hard_failures": 0, "warnings": 4},
+    "compileall": {"status": "PASS", "command": "python -m compileall -q app eval product_acceptance scripts"},
+    "javascript_syntax": {"status": "PASS", "commands": ["node --check app/web/app.js", "node --check app/web/sw.js"]},
+    "integrated_acceptance": {
+      "status": "PASS",
+      "case_count": 50,
+      "case_status_counts": {"PASS": 50, "FAIL": 0, "PARTIAL": 0, "NOT TESTED": 0},
+      "latency": {
+        "provider_delay_ms": 120,
+        "capture_return_ms": 8.841,
+        "processing_completion_ms": 134.743,
+        "capture_returned_before_processing_finished": true
+      },
+      "historical_result_sha256_before": "9a009f661db9cffb4102f4647105ea880d1fd6ee9f738b614c6721f4d9447add",
+      "historical_result_sha256_after": "9a009f661db9cffb4102f4647105ea880d1fd6ee9f738b614c6721f4d9447add",
+      "historical_result_unchanged": true
+    },
+    "protected_human_home": {
+      "status": "UNCHANGED",
+      "forensic_evidence": "trajectories/coding/035-product-v2-human-dogfood-p0-fixes/forensic-evidence.json"
+    }
+  },
+  "live_normal_launch": {
+    "status": "PARTIAL",
+    "entrypoint": "python -m app.web_app",
+    "fresh_home_per_attempt": true,
+    "capture_attempts": 2,
+    "ask_attempts": 0,
+    "manual_product_process_used": false,
+    "provider": {
+      "version": "codex-cli 0.150.0-alpha.12.2",
+      "authentication": "Logged in using ChatGPT",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "high"
+    },
+    "capture_returns": [
+      {"http_status": 200, "processing_status": "pending", "latency_seconds": 0.031},
+      {"http_status": 200, "processing_status": "pending"}
+    ],
+    "semantic_state_produced": false,
+    "sanitized_operational_failure": "semantic provider failed (exit code 1): 2026-08-30T14:49:50.685864Z  WARN codex_skills::interface: ignoring interface.icon_small: icon path with '..' must resolve under plugin assets/\n2026-08-30T14:49:50.685893Z  WARN codex_skills::interface: ignoring interface.icon_large: icon path with '..' must resolve under plugin assets/\n2026-08-30T14:49:50.696158Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell\n2026-08-30T14:49:51.132594Z  WARN codex_skills::interface: ignoring interface.icon_small: icon path with '..' must resolve under plugin assets/\n2026-08-30T14:49:51.132630Z  WARN codex_skills::interface: ignoring interface.icon_large: icon path with '..' must resolve under plugin assets/; retry available",
+    "evidence": "trajectories/runtime/035-product-v2-human-dogfood-live-smoke/trace.json"
+  },
+  "gate": "PARTIAL",
+  "decision": "KEEP deterministic fixes; REVISE the live provider adapter only under a separately authorized follow-up."
+}

@@ -343,6 +343,22 @@
     const answer = payload?.answer || payload || {};
     const mode = String(answer.mode || answer.status || "").toLowerCase();
     const rawMessage = String(firstValue(answer.message, answer.answer, "") || "");
+    if (mode === "processing" || mode === "pending") {
+      return {
+        status: "processing",
+        summary: "Still understanding your recent captures.",
+        helper: "Your capture is saved. Check back soon for useful memory and attention.",
+        groups: [],
+      };
+    }
+    if (mode === "processing_failed" || mode === "failed") {
+      return {
+        status: "processing_failed",
+        summary: "Some recent captures couldn't be understood yet.",
+        helper: "Your captures are still saved. Try again when your local provider is available.",
+        groups: [],
+      };
+    }
     if (mode === "unsupported" || rawMessage.toLowerCase().includes("outside blackhole")) {
       return {
         status: "unsupported",
@@ -773,9 +789,45 @@
     const failed = Number(counts.failed || 0);
     const pending = Number(counts.pending || 0);
     const active = Number(counts.processing || 0);
-    if (failed > 0 || status === "failed") return { message: "Saved. Understanding needs a retry.", kind: "error" };
+    if (failed > 0 || status === "failed") return { message: "Some recent captures couldn't be understood yet. Your captures are still saved.", kind: "error" };
     if (pending > 0 || active > 0 || status === "pending" || status === "processing") return { message: "Saved. Understanding in the background…", kind: "" };
     return { message: "Saved.", kind: "" };
+  };
+
+  const processingNotice = (processing) => {
+    const counts = processingCounts(processing);
+    const status = String(processing?.status || "").toLowerCase();
+    if (Number(counts.failed || 0) > 0 || status === "failed") {
+      return {
+        kind: "error",
+        title: "Some recent captures couldn't be understood yet.",
+        message: "Your captures are still saved. Try again when your local provider is available.",
+      };
+    }
+    if (Number(counts.pending || 0) > 0 || Number(counts.processing || 0) > 0 || status === "pending" || status === "processing") {
+      return {
+        kind: "pending",
+        title: "Still understanding your recent captures.",
+        message: "Your captures are saved; useful memory and attention will appear as understanding completes.",
+      };
+    }
+    return null;
+  };
+
+  const renderProcessingNotice = (selector) => {
+    const element = $(selector);
+    if (!element) return;
+    const notice = processingNotice(state.processing);
+    if (!notice) {
+      element.hidden = true;
+      element.innerHTML = "";
+      return;
+    }
+    element.hidden = false;
+    element.innerHTML = '<div class="processing-notice is-' + escapeHtml(notice.kind) + '" role="status">' +
+      '<span class="processing-notice-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-' + (notice.kind === "error" ? "error" : "orbit") + '"></use></svg></span>' +
+      '<div><h3>' + escapeHtml(notice.title) + '</h3><p>' + escapeHtml(notice.message) + '</p></div>' +
+      '</div>';
   };
 
   const scheduleProcessingPoll = () => {
@@ -896,6 +948,7 @@
 
   const renderAttention = () => {
     const element = $("#attention-list");
+    renderProcessingNotice("#attention-processing");
     const items = state.attention;
     if (!items.length) {
       renderEmpty(element, "Nothing needs your attention.", "Blackhole will only interrupt when something is worth acting on.", "check");
@@ -970,6 +1023,7 @@
   const renderMemory = () => {
     const element = $("#memory-list");
     if (!element) return;
+    renderProcessingNotice("#memory-processing");
     renderMemoryFilters();
     renderMemorySummary();
     const query = state.memoryQuery.trim().toLowerCase();
@@ -1010,12 +1064,15 @@
   };
 
   const renderUnavailableState = () => {
+    state.processing = null;
     state.attention = [];
     state.memoryEntities = [];
     updateAttentionBadge();
+    renderProcessingNotice("#attention-processing");
     renderEmpty($("#attention-list"), "Attention is unavailable right now.", "Your saved captures are safe. Try again when Blackhole is reachable.", "attention");
     renderMemoryFilters();
     renderMemorySummary();
+    renderProcessingNotice("#memory-processing");
     renderEmpty($("#memory-list"), "Memory is unavailable right now.", "Your saved captures are safe. Try again when Blackhole is reachable.", "attention");
   };
 
@@ -1072,6 +1129,14 @@
     const output = $("#answer-output");
     if (!output) return;
     output.removeAttribute("aria-busy");
+    if (normalized.status === "processing") {
+      renderAnswerState("Still understanding your recent captures.", "Your capture is saved. Check back soon for useful memory and attention.", "processing");
+      return;
+    }
+    if (normalized.status === "processing_failed") {
+      renderAnswerState("Some recent captures couldn't be understood yet.", "Your captures are still saved. Try again when your local provider is available.", "error", "Try again", () => refreshState());
+      return;
+    }
     if (normalized.status === "unsupported") {
       renderAnswerState("Let’s try that another way.", normalized.helper, "no-match");
       return;
@@ -1323,7 +1388,22 @@
   showView(window.location.hash.slice(1), false);
   refreshState();
   if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(() => {}));
+    let reloadingForServiceWorker = false;
+    const hadServiceWorkerController = Boolean(navigator.serviceWorker.controller);
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (!hadServiceWorkerController || reloadingForServiceWorker) return;
+      reloadingForServiceWorker = true;
+      window.location.reload();
+    });
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("/sw.js?v=7", { updateViaCache: "none" })
+        .then((registration) => {
+          if (registration.waiting) registration.waiting.postMessage({ type: "SKIP_WAITING" });
+          if (typeof registration.update === "function") return registration.update();
+          return undefined;
+        })
+        .catch(() => {});
+    });
   }
 
   if (typeof window !== "undefined") {

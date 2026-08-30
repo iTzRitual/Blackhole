@@ -198,6 +198,9 @@ class ProductV2Tests(unittest.TestCase):
                 self.assertEqual(runtime.processing_status(saved["event_id"])["status"], "failed")
                 self.assertIsNotNone(runtime.store.raw_event(saved["event_id"]))
                 self.assertEqual(runtime.snapshot()["counts"]["facts"], 0)
+                failed_answer = runtime.ask("What do I remember?")
+                self.assertEqual(failed_answer["mode"], "processing_failed")
+                self.assertNotIn("secret-token-value", json.dumps(failed_answer))
                 provider.fail = False
                 self.assertEqual(runtime.retry_failed()["retried"], 1)
                 retried = runtime.process_pending()

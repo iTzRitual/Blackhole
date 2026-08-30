@@ -652,6 +652,58 @@ main {
   gap: 13px;
 }
 
+.processing-notice-region {
+  margin: 0 0 17px;
+}
+
+.processing-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 15px 16px;
+  border: 1px solid rgba(184, 168, 255, .22);
+  border-radius: 18px;
+  background: rgba(184, 168, 255, .07);
+}
+
+.processing-notice.is-error {
+  border-color: rgba(240, 155, 157, .34);
+  background: rgba(240, 155, 157, .07);
+}
+
+.processing-notice-icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  color: var(--accent);
+}
+
+.processing-notice.is-error .processing-notice-icon {
+  color: var(--danger);
+}
+
+.processing-notice-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.processing-notice.is-pending .processing-notice-icon svg {
+  animation: loading-orbit 1.15s linear infinite;
+}
+
+.processing-notice h3 {
+  font-size: .86rem;
+}
+
+.processing-notice p {
+  max-width: 56ch;
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: .78rem;
+}
+
 /* Attention */
 
 .attention-card {
@@ -1571,6 +1623,10 @@ button:active:not(:disabled) {
   }
 
   .loading-orbit {
+    animation: none;
+  }
+
+  .processing-notice.is-pending .processing-notice-icon svg {
     animation: none;
   }
 

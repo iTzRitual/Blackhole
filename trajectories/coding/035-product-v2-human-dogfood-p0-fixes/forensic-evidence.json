@@ -1,0 +1,88 @@
+{
+  "scope": "read-only forensic inspection of the human dogfood home",
+  "home": "C:\\Users\\natan\\AppData\\Local\\Temp\\blackhole-v2-human-dogfood",
+  "inspected_at_utc": "2026-08-30T14:26:03.8960880Z",
+  "mutating_actions_performed": false,
+  "initial_files": [
+    {
+      "path": "blackhole-v2.db",
+      "size": 151552,
+      "sha256": "45f939ed01fa958b22b0098d418d03438c027a30c3ed7d4062546acbe61b59aa"
+    },
+    {
+      "path": "blackhole-v2.db-shm",
+      "size": 32768,
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb"
+    },
+    {
+      "path": "blackhole-v2.db-wal",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "blackhole.db",
+      "size": 73728,
+      "sha256": "275b42643baddc6908b89adb86581bc94e03616fd627c198eab4f815bf8ab892"
+    },
+    {
+      "path": "config.json",
+      "size": 219,
+      "sha256": "eaaeb1fe89332ec53f750f179933f54c8f0d61ad0aeca94b19aeeffaf503e1c5"
+    }
+  ],
+  "database_evidence": {
+    "legacy_blackhole.db": {
+      "raw_events": 6,
+      "processing_state": {"pending": 6, "processing": 0, "processed": 0, "failed": 0},
+      "authoritative_for": "legacy V1 Host StateStore"
+    },
+    "product_blackhole-v2.db": {
+      "source_events": 11,
+      "processing_state": {"pending": 1, "processing": 0, "processed": 0, "failed": 10},
+      "attempt_count_range_observed": {"min": 0, "max": 22},
+      "last_error": "semantic provider failed; retry available",
+      "migration_log": {
+        "imported_count": 6,
+        "source_path": "C:\\Users\\natan\\AppData\\Local\\Temp\\blackhole-v2-human-dogfood\\blackhole.db"
+      },
+      "authoritative_for": "Product V2"
+    }
+  },
+  "provider_diagnostic": {
+    "executable": "C:\\Users\\natan\\AppData\\Local\\OpenAI\\Codex\\bin\\fac60c5e9a2ae3df\\codex.exe",
+    "version": "codex-cli 0.150.0-alpha.12.2",
+    "authentication_status": "Logged in using ChatGPT",
+    "probe": "codex exec --ask-for-approval never --help",
+    "returncode": 2,
+    "sanitized_stderr": "error: unexpected argument '--ask-for-approval' found"
+  },
+  "final_inspected_at_utc": "2026-08-30T14:55:14.8908268Z",
+  "final_files": [
+    {
+      "path": "blackhole-v2.db",
+      "size": 151552,
+      "sha256": "45f939ed01fa958b22b0098d418d03438c027a30c3ed7d4062546acbe61b59aa"
+    },
+    {
+      "path": "blackhole-v2.db-shm",
+      "size": 32768,
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb"
+    },
+    {
+      "path": "blackhole-v2.db-wal",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "blackhole.db",
+      "size": 73728,
+      "sha256": "275b42643baddc6908b89adb86581bc94e03616fd627c198eab4f815bf8ab892"
+    },
+    {
+      "path": "config.json",
+      "size": 219,
+      "sha256": "eaaeb1fe89332ec53f750f179933f54c8f0d61ad0aeca94b19aeeffaf503e1c5"
+    }
+  ],
+  "unchanged": true
+}

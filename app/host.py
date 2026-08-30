@@ -19,7 +19,7 @@ from app.codex_discovery import (
     discover_codex,
 )
 from app.ingestion_engine import CodexCLIProvider, IngestionEngine, SemanticProvider
-from app.product_v2 import PRODUCT_DATABASE_NAME, PRODUCT_RUNTIME_VERSION, ProductRuntime
+from app.product_v2 import PRODUCT_RUNTIME_VERSION, ProductRuntime, product_database_path
 from app.runtime_config import RuntimeConfig
 from app.runtime_contract import runtime_contract
 from app.state_store import StateStore
@@ -116,6 +116,29 @@ def _safe_processing_value(value: dict[str, Any] | None) -> dict[str, Any] | Non
     result = copy.deepcopy(value)
     if result.get("last_error"):
         result["last_error"] = _safe_error(result["last_error"])
+    return result
+
+
+def _safe_processing_payload(value: Any) -> Any:
+    if not isinstance(value, dict):
+        return value
+    result = copy.deepcopy(value)
+    if isinstance(result.get("processing"), dict):
+        result["processing"] = _safe_processing_payload(result["processing"])
+    if isinstance(result.get("events"), list):
+        result["events"] = [
+            _safe_processing_value(item) if isinstance(item, dict) else item
+            for item in result["events"]
+        ]
+    elif "event_id" in result:
+        return _safe_processing_value(result)
+    return result
+
+
+def _safe_product_result(value: dict[str, Any]) -> dict[str, Any]:
+    result = copy.deepcopy(value)
+    if isinstance(result.get("processing"), dict):
+        result["processing"] = _safe_processing_payload(result["processing"])
     return result
 
 
@@ -243,11 +266,8 @@ class HostRuntime:
         with self._lock:
             processing = self.store.processing_status() or {"counts": {}}
             counts = processing.get("counts", {})
-            product_processing = (
-                self._product_runtime.processing_status() or {"counts": {}}
-                if self._product_runtime is not None
-                else {"counts": {}}
-            )
+            product = self.product_runtime
+            product_processing = product.processing_status() or {"counts": {}}
             product_counts = product_processing.get("counts", {})
             return {
                 "host": {
@@ -264,7 +284,7 @@ class HostRuntime:
                 },
                 "product": {
                     "version": PRODUCT_RUNTIME_VERSION,
-                    "database": str(self.config.home / PRODUCT_DATABASE_NAME),
+                    "database": str(product.store.path),
                     "processing": {
                         "pending": int(product_counts.get("pending", 0)),
                         "processing": int(product_counts.get("processing", 0)),
@@ -318,7 +338,7 @@ class HostRuntime:
             if self._product_runtime is None:
                 self._product_runtime = ProductRuntime(
                     self.config.home,
-                    db_path=self.config.home / PRODUCT_DATABASE_NAME,
+                    db_path=product_database_path(self.config.home),
                     provider=self._provider,
                     discovery_fn=self._discovery_fn,
                     model=self.config.model,
@@ -331,14 +351,29 @@ class HostRuntime:
                 )
             return self._product_runtime
 
+    def start_product_worker(self) -> None:
+        """Start the managed Product V2 worker for normal Host lifecycles."""
+
+        with self._lock:
+            self.product_runtime.start_worker()
+
     def product_capture(self, text: str | None = None, **kwargs: Any) -> dict[str, Any]:
         return self.product_runtime.capture(text, **kwargs)
 
     def product_processing_status(self, event_id: str | None = None) -> dict[str, Any] | None:
-        return self.product_runtime.processing_status(event_id)
+        value = self.product_runtime.processing_status(event_id)
+        if event_id is not None:
+            return _safe_processing_value(value)
+        if value is None:
+            return None
+        result = copy.deepcopy(value)
+        result["events"] = [
+            _safe_processing_value(item) for item in result.get("events", [])
+        ]
+        return result
 
     def product_state(self) -> dict[str, Any]:
-        return self.product_runtime.state()
+        return _safe_processing_payload(self.product_runtime.state())
 
     def product_process_pending(self, *, limit: int | None = None) -> dict[str, Any]:
         return self.product_runtime.process_pending(limit=limit)
@@ -347,7 +382,7 @@ class HostRuntime:
         return self.product_runtime.retry_failed(event_id, limit=limit)
 
     def product_ask(self, question: str) -> dict[str, Any]:
-        return self.product_runtime.ask(question)
+        return _safe_product_result(self.product_runtime.ask(question))
 
     def product_retract(self, event_id: str, *, reason: str = "user undo") -> dict[str, Any]:
         return self.product_runtime.retract(event_id, reason=reason)

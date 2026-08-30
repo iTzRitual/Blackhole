@@ -8,9 +8,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Blackhole">
-    <link rel="manifest" href="/manifest.webmanifest">
-    <link rel="apple-touch-icon" href="/icons/icon.svg">
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="manifest" href="/manifest.webmanifest?v=7">
+    <link rel="apple-touch-icon" href="/icons/icon.svg?v=7">
+    <link rel="stylesheet" href="/styles.css?v=7">
     <title>Blackhole — capture now</title>
   </head>
   <body>
@@ -145,6 +145,7 @@
             <h2 id="attention-title">What actually needs you?</h2>
             <p class="screen-description">A small, calm list of deadlines, changes, and decisions worth acting on.</p>
           </div>
+          <div id="attention-processing" class="processing-notice-region" aria-live="polite" hidden></div>
           <div id="attention-list" class="insight-list" aria-live="polite"></div>
         </section>
 
@@ -163,6 +164,7 @@
             <div id="memory-filters" class="memory-filters" role="group" aria-label="Filter memory"></div>
           </div>
           <div id="memory-summary" class="memory-summary" aria-live="polite"></div>
+          <div id="memory-processing" class="processing-notice-region" aria-live="polite" hidden></div>
           <div id="memory-list" class="memory-grid" aria-live="polite"></div>
         </section>
 
@@ -202,6 +204,6 @@
         </button>
       </nav>
     </div>
-    <script src="/app.js" defer></script>
+    <script src="/app.js?v=7" defer></script>
   </body>
 </html>

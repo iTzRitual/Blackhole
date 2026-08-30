@@ -62,6 +62,14 @@ class ProductV2UIContractTests(unittest.TestCase):
         self.assertIn("state.processing", APP_JS)
         self.assertIn("scheduleProcessingPoll", APP_JS)
 
+    def test_processing_state_is_visible_without_faking_empty_memory(self) -> None:
+        self.assertIn('id="attention-processing"', HTML)
+        self.assertIn('id="memory-processing"', HTML)
+        self.assertIn("Still understanding your recent captures.", APP_JS)
+        self.assertIn("Some recent captures couldn't be understood yet.", APP_JS)
+        self.assertIn('status: "processing"', APP_JS)
+        self.assertIn('status: "processing_failed"', APP_JS)
+
     def test_attention_is_human_oriented_and_badge_is_count_gated(self) -> None:
         self.assertIn("updateAttentionBadge", APP_JS)
         self.assertIn("count > 0", APP_JS)

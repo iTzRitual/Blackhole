@@ -30,6 +30,8 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from app.codex_discovery import ProviderStatus
 from app.product_v2_store import (
+    AUTOMATIC_RETRY_BACKOFF_SECONDS,
+    MAX_AUTOMATIC_ATTEMPTS,
     PRODUCT_EXTRACTOR_VERSION,
     PRODUCT_PROCESSING_VERSION,
     ProductStore,
@@ -47,6 +49,8 @@ from app.runtime_config import (
 PRODUCT_RUNTIME_VERSION = "blackhole-product-v2-runtime-v1"
 PRODUCT_DATABASE_NAME = "blackhole-v2.db"
 PRODUCT_PROMPT_VERSION = "blackhole-product-v2-prompt-v1"
+PROCESSING_PENDING_MESSAGE = "Still understanding your recent captures."
+PROCESSING_FAILED_MESSAGE = "Some recent captures couldn't be understood yet. Your captures are still saved."
 MAX_CAPTURE_TEXT = 100_000
 MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024
 MAX_TOTAL_ATTACHMENT_BYTES = 25 * 1024 * 1024
@@ -56,6 +60,14 @@ MAX_ASK_CONTEXT_HISTORY = 20
 
 class ProductProviderUnavailableError(RuntimeError):
     """Safe provider condition used by the Product V2 queue."""
+
+
+class ProductProviderExecutionError(RuntimeError):
+    """Safe provider execution failure with bounded operational diagnostics."""
+
+    def __init__(self, message: str, *, diagnostic: dict[str, Any]) -> None:
+        super().__init__(message)
+        self.diagnostic = copy.deepcopy(diagnostic)
 
 
 class ProductSemanticProvider(Protocol):
@@ -635,6 +647,44 @@ def _parse_model_json(text: str) -> dict[str, Any] | None:
     return None
 
 
+_SECRET_ASSIGNMENT = re.compile(
+    r"(?i)(\b(?:api[_-]?key|access[_-]?token|auth(?:orization)?|bearer|cookie|credential|password|secret|token)\b\s*[:=]\s*)([^\s,;]+)"
+)
+_DIAGNOSTIC_LINE = re.compile(
+    r"(?i)\b(error|warn(?:ing)?|fail(?:ed|ure)?|invalid|unexpected|unsupported|unknown|timeout|timed out|denied|permission|usage)\b"
+)
+
+
+def _decode_process_output(value: Any) -> str:
+    if isinstance(value, bytes):
+        return value.decode("utf-8", errors="replace")
+    return value if isinstance(value, str) else ""
+
+
+def _sanitize_provider_output(value: Any) -> str | None:
+    """Keep only bounded diagnostic lines and redact credential-shaped values."""
+
+    text = _decode_process_output(value)
+    lines: list[str] = []
+    for line in text.splitlines():
+        candidate = line.strip()
+        if not candidate or not _DIAGNOSTIC_LINE.search(candidate):
+            continue
+        candidate = _SECRET_ASSIGNMENT.sub(r"\1[REDACTED]", candidate)
+        candidate = re.sub(r"(?i)\bBearer\s+[A-Za-z0-9._~+/=-]+", "Bearer [REDACTED]", candidate)
+        lines.append(candidate[:500])
+        if sum(len(item) for item in lines) >= 1000:
+            break
+    result = "\n".join(lines)[:1000]
+    return result or None
+
+
+def product_database_path(home: str | Path) -> Path:
+    """Return the single authoritative Product V2 database for one Home."""
+
+    return Path(home).expanduser().resolve() / PRODUCT_DATABASE_NAME
+
+
 class ProductCodexProvider:
     """Bounded, ephemeral Codex CLI adapter for Product V2.
 
@@ -665,6 +715,7 @@ class ProductCodexProvider:
         self.reasoning_effort = reasoning_effort
         self.call_count = 0
         self.last_call: dict[str, Any] | None = None
+        self._version_cache: str | None = None
 
     @staticmethod
     def _schema_path(directory: Path) -> Path:
@@ -690,6 +741,53 @@ class ProductCodexProvider:
         )
         return path
 
+    def _cli_version(self, cli: str) -> str | None:
+        if self._version_cache is not None:
+            return self._version_cache
+        try:
+            result = subprocess.run(
+                [cli, "--version"],
+                stdin=subprocess.DEVNULL,
+                capture_output=True,
+                timeout=5,
+                check=False,
+            )
+        except (OSError, subprocess.SubprocessError):
+            return None
+        output = "\n".join(
+            part
+            for part in (_decode_process_output(result.stdout), _decode_process_output(result.stderr))
+            if part
+        )
+        match = re.search(r"\b\d+\.\d+(?:\.\d+)?(?:[-+][A-Za-z0-9.]+)?\b", output)
+        self._version_cache = f"codex-cli {match.group(0)}" if match else None
+        return self._version_cache
+
+    def _invocation_summary(self, image_count: int) -> list[str]:
+        command = [
+            "exec",
+            "--ephemeral",
+            "--json",
+            "--model",
+            self.model,
+            "-c",
+            f"model_reasoning_effort={self.reasoning_effort}",
+            "-s",
+            "read-only",
+            "--ignore-rules",
+            "--skip-git-repo-check",
+            "-C",
+            "<isolated-workspace>",
+            "--add-dir",
+            "<blackhole-home>",
+            "--output-schema",
+            "<temporary-schema>",
+        ]
+        for _ in range(image_count):
+            command.extend(["--image", "<stored-image>"])
+        command.extend(["-o", "<temporary-output>", "-"])
+        return command
+
     def _call(self, prompt: str, *, image_paths: list[str] | None = None) -> dict[str, Any]:
         cli = shutil.which("codex")
         if not cli:
@@ -712,8 +810,6 @@ class ProductCodexProvider:
                 f"model_reasoning_effort={self.reasoning_effort}",
                 "-s",
                 "read-only",
-                "--ask-for-approval",
-                "never",
                 "--ignore-rules",
                 "--skip-git-repo-check",
                 "-C",
@@ -726,6 +822,17 @@ class ProductCodexProvider:
             for image_path in image_paths or []:
                 command.extend(["--image", image_path])
             command.extend(["-o", str(output), "-"])
+            self.last_call = {
+                "call_number": self.call_count,
+                "executable": str(Path(cli).resolve()),
+                "cli_version": self._cli_version(cli),
+                "model": self.model,
+                "reasoning_effort": self.reasoning_effort,
+                "invocation": self._invocation_summary(len(image_paths or [])),
+                "image_count": len(image_paths or []),
+                "returncode": None,
+                "timed_out": False,
+            }
             try:
                 completed = subprocess.run(
                     command,
@@ -735,28 +842,66 @@ class ProductCodexProvider:
                     check=False,
                 )
             except subprocess.TimeoutExpired as error:
-                raise RuntimeError("semantic provider timed out; retry available") from error
+                self.last_call.update(
+                    {
+                        "duration_seconds": round(time.monotonic() - started, 3),
+                        "timed_out": True,
+                        "stdout": _sanitize_provider_output(getattr(error, "stdout", None)),
+                        "stderr": _sanitize_provider_output(getattr(error, "stderr", None)),
+                    }
+                )
+                raise ProductProviderExecutionError(
+                    "semantic provider timed out; retry available",
+                    diagnostic=self.last_call,
+                ) from error
+            except OSError as error:
+                self.last_call.update(
+                    {
+                        "duration_seconds": round(time.monotonic() - started, 3),
+                        "error_type": type(error).__name__,
+                        "stderr": _sanitize_provider_output(str(error)),
+                    }
+                )
+                raise ProductProviderExecutionError(
+                    "semantic provider could not start; retry available",
+                    diagnostic=self.last_call,
+                ) from error
+            stdout = _decode_process_output(completed.stdout)
+            stderr = _decode_process_output(completed.stderr)
+            self.last_call.update(
+                {
+                    "duration_seconds": round(time.monotonic() - started, 3),
+                    "returncode": completed.returncode,
+                    "stdout": _sanitize_provider_output(stdout),
+                    "stderr": _sanitize_provider_output(stderr),
+                }
+            )
             if completed.returncode != 0:
-                raise RuntimeError("semantic provider failed; retry available")
-            raw_text = output.read_text(encoding="utf-8") if output.exists() else ""
+                detail = self.last_call.get("stderr") or self.last_call.get("stdout") or f"exit code {completed.returncode}"
+                raise ProductProviderExecutionError(
+                    f"semantic provider failed (exit code {completed.returncode}): {detail}; retry available",
+                    diagnostic=self.last_call,
+                )
+            try:
+                raw_text = output.read_text(encoding="utf-8") if output.exists() else ""
+            except OSError as error:
+                raise ProductProviderExecutionError(
+                    "semantic provider output could not be read; retry available",
+                    diagnostic=self.last_call,
+                ) from error
             parsed = _parse_model_json(raw_text)
             if parsed is None:
-                stdout = (completed.stdout or b"").decode("utf-8", errors="replace")
                 for line in reversed(stdout.splitlines()):
                     candidate = _parse_model_json(line)
                     if candidate is not None:
                         parsed = candidate
                         break
             if parsed is None:
-                raise RuntimeError("semantic provider returned unreadable JSON; retry available")
-            self.last_call = {
-                "call_number": self.call_count,
-                "duration_seconds": round(time.monotonic() - started, 3),
-                "model": self.model,
-                "reasoning_effort": self.reasoning_effort,
-                "image_count": len(image_paths or []),
-                "returncode": completed.returncode,
-            }
+                self.last_call["error_type"] = "unreadable_json"
+                raise ProductProviderExecutionError(
+                    "semantic provider returned unreadable JSON; retry available",
+                    diagnostic=self.last_call,
+                )
             return parsed
 
     def extract(
@@ -853,7 +998,7 @@ class ProductRuntime:
         self.discovery_fn = discovery_fn
         self.clock = clock or (lambda: datetime.now(timezone.utc))
         self.store = store or ProductStore(
-            db_path or (self.home / PRODUCT_DATABASE_NAME),
+            db_path or product_database_path(self.home),
             home=self.home,
             legacy_database_path=self.home / "blackhole.db",
         )
@@ -866,6 +1011,7 @@ class ProductRuntime:
         self._worker: threading.Thread | None = None
         self._closed = False
         self._auto_start_on_capture = start_worker if auto_start_on_capture is None else auto_start_on_capture
+        self.last_provider_diagnostic: dict[str, Any] | None = None
         if start_worker:
             self.start_worker()
 
@@ -1128,6 +1274,7 @@ class ProductRuntime:
             "now_utc": self._now().isoformat(),
             "captures": [time_context_for_event(event, now=self._now()) for event in events],
         }
+        provider: Any | None = None
         try:
             with self._provider_lock:
                 provider, owned = self._provider()
@@ -1147,6 +1294,9 @@ class ProductRuntime:
                 finally:
                     if owned and callable(getattr(provider, "close", None)):
                         provider.close()
+                    diagnostic = getattr(provider, "last_call", None)
+                    if isinstance(diagnostic, dict):
+                        self.last_provider_diagnostic = copy.deepcopy(diagnostic)
             facts, relations, attention, attachment_results = normalize_extraction(
                 parsed,
                 events=events,
@@ -1192,13 +1342,24 @@ class ProductRuntime:
                 "projection_run_id": committed["projection_run_id"],
             }
         except Exception as error:
+            diagnostic = getattr(error, "diagnostic", None)
+            if isinstance(diagnostic, dict):
+                self.last_provider_diagnostic = copy.deepcopy(diagnostic)
+            elif isinstance(getattr(provider, "last_call", None), dict):
+                self.last_provider_diagnostic = copy.deepcopy(provider.last_call)
             if isinstance(error, ProductProviderUnavailableError):
+                message = str(error)
+            elif isinstance(error, ProductProviderExecutionError):
                 message = str(error)
             else:
                 message = "semantic provider failed; retry available"
             status = self.store.processing_status(event_ids[0]) if event_ids else None
             attempt = int(status.get("attempt_count", 1)) if status else 1
-            retry_after = min(60, 2 ** min(max(attempt - 1, 0), 5))
+            retry_after = (
+                AUTOMATIC_RETRY_BACKOFF_SECONDS[attempt - 1]
+                if 1 <= attempt < MAX_AUTOMATIC_ATTEMPTS
+                else 0
+            )
             failed = self.store.mark_failed(
                 self._owner_id,
                 event_ids,
@@ -1612,6 +1773,35 @@ class ProductRuntime:
             raise ValueError("question must not be empty")
         question = question.strip()
         snapshot = self.store.snapshot(now=self._now())
+        processing = snapshot.get("processing", {})
+        counts = processing.get("counts", {}) if isinstance(processing, dict) else {}
+        failed_count = int(counts.get("failed", 0) or 0)
+        pending_count = int(counts.get("pending", 0) or 0)
+        processing_count = int(counts.get("processing", 0) or 0)
+        if failed_count:
+            return {
+                "question": question,
+                "mode": "processing_failed",
+                "status": "processing_failed",
+                "answer": PROCESSING_FAILED_MESSAGE,
+                "message": PROCESSING_FAILED_MESSAGE,
+                "items": [],
+                "source_refs": [],
+                "provider_used": False,
+                "processing": processing,
+            }
+        if pending_count or processing_count:
+            return {
+                "question": question,
+                "mode": "processing",
+                "status": "processing",
+                "answer": PROCESSING_PENDING_MESSAGE,
+                "message": PROCESSING_PENDING_MESSAGE,
+                "items": [],
+                "source_refs": [],
+                "provider_used": False,
+                "processing": processing,
+            }
         context, selected_facts, _normalized = self._retrieval_context(question)
         deterministic, mode, items, refs = self._deterministic_answer(question, snapshot, context, selected_facts)
         if deterministic is not None:
@@ -1626,6 +1816,7 @@ class ProductRuntime:
             }
         provider_used = False
         answer: str | None = None
+        provider: Any | None = None
         try:
             with self._provider_lock:
                 provider, owned = self._provider()
@@ -1665,7 +1856,12 @@ class ProductRuntime:
                 finally:
                     if owned and callable(getattr(provider, "close", None)):
                         provider.close()
-        except (ProductProviderUnavailableError, RuntimeError):
+        except (ProductProviderUnavailableError, RuntimeError) as error:
+            diagnostic = getattr(error, "diagnostic", None)
+            if isinstance(diagnostic, dict):
+                self.last_provider_diagnostic = copy.deepcopy(diagnostic)
+            elif isinstance(getattr(provider, "last_call", None), dict):
+                self.last_provider_diagnostic = copy.deepcopy(provider.last_call)
             answer = None
         if not answer:
             answer = (
@@ -1696,12 +1892,14 @@ __all__ = [
     "PRODUCT_PROMPT_VERSION",
     "PRODUCT_RUNTIME_VERSION",
     "ProductCodexProvider",
+    "ProductProviderExecutionError",
     "ProductProviderUnavailableError",
     "ProductRuntime",
     "ProductSemanticProvider",
     "local_timezone_name",
     "normalize_extraction",
     "normalize_timestamp",
+    "product_database_path",
     "resolve_timezone",
     "time_context_for_event",
 ]

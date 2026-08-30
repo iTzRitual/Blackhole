@@ -12,7 +12,7 @@ import json
 from pathlib import Path
 
 from app.codex_discovery import discover_codex
-from app.product_v2 import PRODUCT_RUNTIME_VERSION, ProductRuntime
+from app.product_v2 import PRODUCT_RUNTIME_VERSION, ProductRuntime, product_database_path
 from app.runtime_config import RuntimeConfig
 
 
@@ -28,7 +28,7 @@ def main(argv: list[str] | None = None) -> int:
         config = RuntimeConfig.load_or_create(args.home)
         with ProductRuntime(
             config.home,
-            db_path=config.home / "blackhole-v2.db",
+            db_path=product_database_path(config.home),
             discovery_fn=discover_codex,
             model=config.model,
             reasoning_effort=config.reasoning_effort,
@@ -44,7 +44,12 @@ def main(argv: list[str] | None = None) -> int:
                     "processing": runtime.processing_status(),
                 }
             elif args.command == "status":
-                result = runtime.processing_status() or {"counts": {}}
+                result = {
+                    "runtime": PRODUCT_RUNTIME_VERSION,
+                    "home": str(config.home),
+                    "database": str(runtime.store.path),
+                    "processing": runtime.processing_status() or {"counts": {}},
+                }
             elif args.command == "process":
                 result = runtime.process_pending(limit=args.limit)
             else:
@@ -55,7 +60,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"Product V2: {result.get('processed', 0)} processed")
             if result.get("failed") or result.get("failed_count"):
                 print("retryable processing failures remain")
-        return 1 if result.get("failed") else 0
+        return 1 if result.get("failed") or result.get("failed_count") else 0
     except (OSError, ValueError, json.JSONDecodeError) as error:
         print(f"Blackhole Product V2 error: {error}")
         return 2
