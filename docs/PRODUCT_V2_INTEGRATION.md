@@ -78,17 +78,57 @@ substitutes.
 The deterministic Ask planner is only an optional fast path. Unknown or
 mixed-language questions are kept on the generic path and receive a bounded
 structured candidate set for provider-directed semantic selection. The answer
-provider is told to use the language of the current question and may cite only
-known source references. The language matrix and live smoke are separate
-post-freeze product evidence; they do not modify the frozen V1 benchmark,
-baseline, evaluator, or holdout boundary.
+provider is told to use the language of the current question and to select
+explicit IDs for only the bounded evidence items that support the answer. The
+runtime validates those IDs and derives the public source references from the
+selected items. The language matrix and live smoke are separate post-freeze
+product evidence; they do not modify the frozen V1 benchmark, baseline,
+evaluator, or holdout boundary.
+
+## Ask provenance precision follow-up
+
+The separately authorized provenance follow-up starts from source commit
+`f56dd4908aced1683993e0a32a45bf5fef1c65f6` on the isolated
+`product/v2-provenance-fix` branch. The observed failure was at the Ask
+projection boundary: unknown or mixed-language retrieval correctly produced a
+bounded candidate pool, but the old path unioned provider `source_refs` with
+all source references present in that pool. A semantically correct answer
+could therefore expose unrelated, valid candidate citations.
+
+The repaired flow is `retrieve broadly -> tag candidates -> provider selects
+evidence_ids -> validate exact context -> derive source_refs narrowly -> strip
+internal IDs`. The strict shared provider schema requires `evidence_ids` and
+the answer prompt forbids invented IDs and broad source lists. Deterministic
+cost/date/Attention/history/change paths remain authoritative and derive
+provenance from what they render. Selected history/correction/conflict items
+can preserve multiple material sources; invalid-only provider selections fail
+closed without fabricated provenance. Raw captures and derived store schemas
+are unchanged.
+
+The dedicated provenance suite contains 11 regression cases covering bounded
+candidate separation, cross-language and mixed-language over-citation,
+current/history and correction semantics, contradiction uncertainty,
+unsupported/entity/Attention retrieval, and invalid provider IDs. Focused
+coverage increased from 26 passing tests before the change to 43 after it; the
+full application suite passes 137/137. The visible integrated acceptance run
+passes 50/50 and is preserved as
+[product-v2-provenance-fix.json](../eval/results/product-v2-provenance-fix.json);
+the prior integrated result file was not overwritten.
+
+The authorized live smoke processed all four prescribed captures on attempt 1
+with zero retries. All four Ask responses returned only the relevant capture
+reference and no unrelated references. Three answers were semantically
+correct; the meeting answer cited only its material capture but conservatively
+reported the time as unclear, so live semantic correctness is `3/4` and the
+overall live gate remains `PARTIAL` pending a separately authorized provider
+extraction validation. No live retry or wording change was made.
 
 ## Validation and visual review
 
 The final validation commands and results are:
 
 ```text
-python -m unittest discover -s app/tests -v       # 104 passed
+python -m unittest discover -s app/tests -v       # 137 passed
 python -m unittest discover -s eval/tests -v      # 10 passed
 python -m unittest product_acceptance.harness.test_harness -v  # 7 passed
 node --check app/web/app.js

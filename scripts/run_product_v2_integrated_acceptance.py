@@ -477,22 +477,31 @@ class DeterministicAcceptanceProvider:
         facts = context.get("facts", [])
         if not isinstance(facts, list):
             facts = []
+        fact_evidence_ids = [
+            item["evidence_id"]
+            for item in facts
+            if isinstance(item, dict) and isinstance(item.get("evidence_id"), str)
+        ]
         if "passport" in lowered or "paszport" in lowered:
-            return {"answer": "I have no supporting evidence for that question, so I will not invent an answer."}
+            return {
+                "answer": "I have no supporting evidence for that question, so I will not invent an answer.",
+                "evidence_ids": [],
+            }
         if len(facts) > 1 and _has(question, "keys", "klucze") and not _has(question, "basement", "piwnicy", "house", "bike", "roweru"):
-            return {"answer": "To jest niejednoznaczne — znalazłem więcej niż jeden rodzaj kluczy."}
+            return {"answer": "To jest niejednoznaczne — znalazłem więcej niż jeden rodzaj kluczy.", "evidence_ids": fact_evidence_ids}
         if not facts:
-            return {"answer": "I have no supporting evidence for that question."}
+            return {"answer": "I have no supporting evidence for that question.", "evidence_ids": []}
         pieces: list[str] = []
-        refs: list[str] = []
+        evidence_ids: list[str] = []
         for item in facts[:10]:
             label = item.get("entity_label", item.get("entity_key", "memory"))
             value = item.get("value", item.get("unknown_reason", "unknown"))
             if isinstance(value, (dict, list)):
                 value = json.dumps(value, ensure_ascii=False, sort_keys=True)
             pieces.append(f"{label}: {value}")
-            refs.extend(ref for ref in item.get("source_refs", []) if isinstance(ref, str))
-        return {"answer": "Based on captured evidence: " + "; ".join(pieces) + ".", "source_refs": sorted(set(refs))}
+            if isinstance(item.get("evidence_id"), str):
+                evidence_ids.append(item["evidence_id"])
+        return {"answer": "Based on captured evidence: " + "; ".join(pieces) + ".", "evidence_ids": sorted(set(evidence_ids))}
 
 
 class IntegratedHttpAdapter(HttpHostAdapter):

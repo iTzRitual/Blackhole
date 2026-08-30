@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import base64
 import copy
+import hashlib
 import inspect
 import json
 import re
@@ -63,6 +64,7 @@ MAX_ASK_CONTEXT_HISTORY = 20
 # Home contains a long history.
 MAX_ASK_FALLBACK_FACTS = 40
 MAX_ASK_FALLBACK_HISTORY = 20
+MAX_ASK_SUPPORTING_EVIDENCE_IDS = MAX_ASK_CONTEXT_FACTS + MAX_ASK_CONTEXT_HISTORY
 
 _ANSWER_COPY = {
     "en": {
@@ -1119,6 +1121,11 @@ def _semantic_output_schema() -> dict[str, Any]:
             "attachment_results": {"type": "array", "items": strict_items(attachment_properties)},
             "answer": _nullable_string_schema(),
             "source_refs": {"type": "array", "items": {"type": "string"}},
+            "evidence_ids": {
+                "type": "array",
+                "items": {"type": "string"},
+                "maxItems": MAX_ASK_SUPPORTING_EVIDENCE_IDS,
+            },
         },
         "required": [
             "facts",
@@ -1128,6 +1135,7 @@ def _semantic_output_schema() -> dict[str, Any]:
             "attachment_results",
             "answer",
             "source_refs",
+            "evidence_ids",
         ],
     }
 
@@ -1411,11 +1419,15 @@ class ProductCodexProvider:
             "requests another language. Mixed-language questions should be answered in the language "
             "of the request's main conversational wording. Keep proper names, numbers, currencies, "
             "dates, times, units, and filenames unchanged where appropriate. Do not translate an "
-            "evidence string and present it as if it were the original capture. "
-            "Return one JSON object with a short string `answer` and an array `source_refs`; include "
-            "only references present in the context, and cite the smallest set that directly supports "
-            "the answer. Never cite every candidate merely because it was supplied. If the context is "
-            "insufficient, say so explicitly and cite only evidence that supports that limitation."
+            "evidence string and present it as if it were the original capture. Every candidate item "
+            "has an `evidence_id`; return those IDs in `evidence_ids` for the facts, history, "
+            "relationships, attention items, or source metadata actually used to support the rendered "
+            "answer. Validate your selection against the supplied IDs and never invent one. Return "
+            "only the smallest materially supporting set, including multiple IDs when the answer "
+            "reports a correction, historical value, conflict, or uncertainty. Never cite every "
+            "candidate merely because it was supplied. The runtime ignores top-level `source_refs` "
+            "for answer provenance, so return `source_refs: []` here. If the context is insufficient, "
+            "say so explicitly and select only evidence that supports that limitation."
         )
         payload = {"question": question, "time_context": time_context, "context": context}
         return self._call(instruction + "\n\nINPUT:\n" + json.dumps(payload, ensure_ascii=False, indent=2))
@@ -2269,6 +2281,18 @@ class ProductRuntime:
             provider_relations = fallback_relations
             provider_attention = fallback_attention
 
+        # Candidate IDs are provider-facing only. They let synthesis select a
+        # structured item without allowing a source-reference list to stand in
+        # for that selection.
+        provider_facts = self._tag_candidates("facts", provider_facts)
+        provider_history = self._tag_candidates("history", provider_history)
+        provider_relations = self._tag_candidates("relationships", provider_relations)
+        provider_attention = self._tag_candidates("attention", provider_attention)
+        fallback_facts = self._tag_candidates("facts", fallback_facts)
+        fallback_history = self._tag_candidates("history", fallback_history)
+        fallback_relations = self._tag_candidates("relationships", fallback_relations)
+        fallback_attention = self._tag_candidates("attention", fallback_attention)
+
         selected_items = [*provider_facts, *provider_history, *provider_relations, *provider_attention]
         reference_ids = self._source_refs(selected_items)
         source_limit = (
@@ -2283,6 +2307,7 @@ class ProductRuntime:
             and item.get("event_id") in reference_ids
             and not item.get("retracted")
         ][:source_limit]
+        selected_sources = self._tag_candidates("sources", selected_sources)
         context = {
             "facts": provider_facts,
             "history": provider_history[:MAX_ASK_CONTEXT_HISTORY],
@@ -2323,14 +2348,126 @@ class ProductRuntime:
 
     @staticmethod
     def _source_refs(items: Iterable[dict[str, Any]]) -> list[str]:
-        return sorted(
-            {
+        refs: set[str] = set()
+        for item in items:
+            refs.update(
                 ref
-                for item in items
                 for ref in item.get("source_refs", [])
                 if isinstance(ref, str) and ref
-            }
-        )
+            )
+            for key in ("event_id", "source_event_id"):
+                reference = item.get(key)
+                if isinstance(reference, str) and reference:
+                    refs.add(reference)
+        return sorted(refs)
+
+    @staticmethod
+    def _candidate_evidence_id(collection: str, item: dict[str, Any]) -> str:
+        """Return a stable, typed ID for one bounded Ask candidate.
+
+        These IDs are an internal bridge between provider selection and source
+        provenance. They deliberately identify the retrieved structured item,
+        not an arbitrary provider-supplied source reference.
+        """
+
+        if collection == "facts":
+            entity_key = _clean_text(item.get("entity_key"), limit=160)
+            concept = _clean_text(item.get("concept"), limit=160)
+            if entity_key and concept:
+                return f"current_fact:{_slug(entity_key)}:{_slug(concept)}"
+        elif collection == "history":
+            fact_id = item.get("fact_id")
+            if isinstance(fact_id, (int, str)) and not isinstance(fact_id, bool) and str(fact_id):
+                return f"fact:{fact_id}"
+        elif collection == "relationships":
+            relation_id = item.get("relation_id")
+            if isinstance(relation_id, (int, str)) and not isinstance(relation_id, bool) and str(relation_id):
+                return f"relation:{relation_id}"
+        elif collection == "attention":
+            fingerprint = item.get("fingerprint")
+            if isinstance(fingerprint, str) and fingerprint:
+                return f"attention:{fingerprint}"
+        elif collection == "sources":
+            event_id = item.get("event_id")
+            if isinstance(event_id, str) and event_id:
+                return f"source:{event_id}"
+        digest = hashlib.sha256(canonical_json(item).encode("utf-8")).hexdigest()[:24]
+        return f"{collection}:{digest}"
+
+    @classmethod
+    def _tag_candidates(
+        cls,
+        collection: str,
+        items: Iterable[dict[str, Any]],
+    ) -> list[dict[str, Any]]:
+        """Copy bounded candidates and expose only an internal evidence ID."""
+
+        tagged: list[dict[str, Any]] = []
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+            candidate = copy.deepcopy(item)
+            candidate["evidence_id"] = cls._candidate_evidence_id(collection, candidate)
+            tagged.append(candidate)
+        return tagged
+
+    @staticmethod
+    def _evidence_lookup(context: dict[str, Any]) -> dict[str, dict[str, Any]]:
+        """Index exactly the candidate objects exposed to the provider."""
+
+        lookup: dict[str, dict[str, Any]] = {}
+        for collection in (
+            "facts",
+            "candidate_facts",
+            "history",
+            "candidate_history",
+            "relationships",
+            "candidate_relationships",
+            "attention",
+            "candidate_attention",
+            "sources",
+        ):
+            values = context.get(collection, [])
+            if not isinstance(values, list):
+                continue
+            for item in values:
+                evidence_id = item.get("evidence_id") if isinstance(item, dict) else None
+                if isinstance(evidence_id, str) and evidence_id and evidence_id not in lookup:
+                    lookup[evidence_id] = item
+        return lookup
+
+    @classmethod
+    def _validated_supporting_evidence(
+        cls,
+        context: dict[str, Any],
+        evidence_ids: Iterable[Any],
+    ) -> tuple[list[str], list[dict[str, Any]]]:
+        """Keep only provider IDs that name an exposed candidate object."""
+
+        lookup = cls._evidence_lookup(context)
+        selected_ids: list[str] = []
+        selected_items: list[dict[str, Any]] = []
+        for evidence_id in evidence_ids:
+            if not isinstance(evidence_id, str) or evidence_id not in lookup or evidence_id in selected_ids:
+                continue
+            selected_ids.append(evidence_id)
+            selected_items.append(lookup[evidence_id])
+            if len(selected_ids) >= MAX_ASK_SUPPORTING_EVIDENCE_IDS:
+                break
+        return selected_ids, selected_items
+
+    @staticmethod
+    def _public_items(items: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
+        """Remove the provider-only candidate ID from returned Ask items."""
+
+        public: list[dict[str, Any]] = []
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+            value = copy.deepcopy(item)
+            value.pop("evidence_id", None)
+            public.append(value)
+        return public
 
     def _deterministic_answer(
         self,
@@ -2637,11 +2774,11 @@ class ProductRuntime:
                 "answer_language": plan.language,
                 "processing": snapshot.get("processing", {}),
             }
-        if plan.semantic_fallback:
-            # Candidate context is intentionally broad enough for an unknown
-            # language, but its source refs must not become an implicit answer
-            # citation before the provider selects evidence.
-            refs = self._source_refs(selected_facts)
+
+        # The deterministic result above already derives refs from the facts it
+        # rendered. Once synthesis is needed, every retrieval item is only a
+        # candidate until the provider selects its explicit evidence IDs.
+        refs = []
         relevant_items = [
             item
             for collection in (
@@ -2682,6 +2819,7 @@ class ProductRuntime:
             }
         provider_used = False
         answer: str | None = None
+        supporting_items: list[dict[str, Any]] = []
         provider: Any | None = None
         if plan.requires_synthesis:
             try:
@@ -2710,19 +2848,28 @@ class ProductRuntime:
                                 raw = method(question, context)
                             if isinstance(raw, str):
                                 answer = raw.strip()
-                                provider_refs: list[Any] = []
+                                provider_evidence_ids: list[Any] = []
                             elif isinstance(raw, dict):
                                 answer = _clean_text(raw.get("answer"), limit=4000)
-                                provider_refs = raw.get("source_refs", []) if isinstance(raw.get("source_refs"), list) else []
+                                provider_evidence_ids = (
+                                    raw.get("evidence_ids", [])
+                                    if isinstance(raw.get("evidence_ids"), list)
+                                    else []
+                                )
                             else:
-                                provider_refs = []
-                            allowed_refs = set(refs) | {
-                                reference
-                                for item in context.get("sources", [])
-                                for reference in [item.get("event_id")]
-                                if isinstance(reference, str)
-                            }
-                            refs = sorted({reference for reference in provider_refs if isinstance(reference, str) and reference in allowed_refs} | set(refs))
+                                provider_evidence_ids = []
+                            selected_evidence_ids, supporting_items = self._validated_supporting_evidence(
+                                context,
+                                provider_evidence_ids,
+                            )
+                            if answer and provider_evidence_ids and not selected_evidence_ids:
+                                # A provider answer backed only by invented or
+                                # stale IDs cannot safely be rendered. Empty
+                                # IDs remain valid for an explicit limitation
+                                # answer such as "no supporting evidence".
+                                answer = None
+                                supporting_items = []
+                            refs = self._source_refs(supporting_items) if answer else []
                             provider_used = bool(answer)
                     finally:
                         if owned and callable(getattr(provider, "close", None)):
@@ -2734,6 +2881,8 @@ class ProductRuntime:
                 elif isinstance(getattr(provider, "last_call", None), dict):
                     self.last_provider_diagnostic = copy.deepcopy(provider.last_call)
                 answer = None
+                supporting_items = []
+                refs = []
         if not answer:
             fallback_items = selected_facts or (
                 [] if plan.semantic_fallback else context.get("facts", [])
@@ -2754,27 +2903,15 @@ class ProductRuntime:
             answer = _answer_copy(plan, "relevant_memory") + "; ".join(
                 _fact_summary(item) for item in fallback_items[:10]
             ) + "."
-        if provider_used and plan.semantic_fallback and not selected_facts:
-            result_items = [
-                item
-                for collection in (
-                    context.get("facts", []),
-                    context.get("history", []),
-                    context.get("relationships", []),
-                    context.get("attention", []),
-                )
-                for item in collection
-                if isinstance(item, dict)
-                and set(self._source_refs([item])) & set(refs)
-            ]
-        else:
-            result_items = selected_facts or context.get("facts", []) or context.get("history", [])
+            supporting_items = list(fallback_items)
+            refs = self._source_refs(supporting_items)
+        result_items = self._public_items(supporting_items)
         return {
             "question": question,
             "mode": "semantic" if provider_used else "retrieval",
             "status": "ready",
             "answer": answer,
-            "items": result_items[:MAX_ASK_CONTEXT_FACTS],
+            "items": result_items[:MAX_ASK_SUPPORTING_EVIDENCE_IDS],
             "source_refs": refs,
             "provider_used": provider_used,
             "answer_language": plan.language if plan.language in {"en", "pl"} else "same_as_question",
@@ -2788,6 +2925,7 @@ class ProductRuntime:
 __all__ = [
     "MAX_ATTACHMENT_BYTES",
     "MAX_CAPTURE_TEXT",
+    "MAX_ASK_SUPPORTING_EVIDENCE_IDS",
     "PRODUCT_DATABASE_NAME",
     "PRODUCT_EXTRACTOR_VERSION",
     "PRODUCT_PROCESSING_VERSION",

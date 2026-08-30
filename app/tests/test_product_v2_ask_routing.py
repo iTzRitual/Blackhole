@@ -169,18 +169,20 @@ class AskCorpusProvider:
         del question, time_context
         self.answer_calls += 1
         self.answer_contexts.append(json.loads(json.dumps(context, ensure_ascii=False)))
-        refs = [
-            ref
+        evidence_ids = [
+            item["evidence_id"]
             for item in [
                 *context.get("facts", []),
                 *context.get("history", []),
                 *context.get("attention", []),
                 *context.get("relationships", []),
             ]
-            for ref in item.get("source_refs", [])
-            if isinstance(ref, str)
+            if isinstance(item, dict) and isinstance(item.get("evidence_id"), str)
         ]
-        return {"answer": "A bounded semantic explanation from recorded memory.", "source_refs": sorted(set(refs))}
+        return {
+            "answer": "A bounded semantic explanation from recorded memory.",
+            "evidence_ids": sorted(set(evidence_ids)),
+        }
 
 
 CAPTURES = (

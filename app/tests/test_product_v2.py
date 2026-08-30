@@ -125,9 +125,13 @@ class ProductFakeProvider:
     def answer(self, *, question: str, context: dict[str, Any], time_context: dict[str, Any]) -> dict[str, Any]:
         del question, time_context
         self.answer_calls += 1
-        refs = [item.get("source_event_id") for item in context.get("history", [])]
-        refs = [ref for ref in refs if isinstance(ref, str)]
-        return {"answer": "A bounded provider summary.", "source_refs": refs}
+        evidence_ids = [
+            item["evidence_id"]
+            for collection in ("facts", "history", "relationships", "attention")
+            for item in context.get(collection, [])
+            if isinstance(item, dict) and isinstance(item.get("evidence_id"), str)
+        ]
+        return {"answer": "A bounded provider summary.", "evidence_ids": evidence_ids}
 
 
 def fixed_clock() -> datetime:

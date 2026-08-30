@@ -1,0 +1,101 @@
+{
+  "record_type": "authorized-live-validation",
+  "task": "Product V2 Ask provenance precision",
+  "branch": "product/v2-provenance-fix",
+  "base_commit": "f56dd4908aced1683993e0a32a45bf5fef1c65f6",
+  "home": {
+    "kind": "fresh temporary BLACKHOLE_HOME",
+    "persisted": false
+  },
+  "limits": {
+    "captures_used": 4,
+    "asks_used": 4,
+    "capture_limit": 4,
+    "ask_limit": 4
+  },
+  "captures": [
+    {
+      "event_id": "live-001",
+      "text": "Klucze do piwnicy są u mamy.",
+      "saved": true,
+      "processing_status_at_capture": "pending"
+    },
+    {
+      "event_id": "live-002",
+      "text": "Paul aime le café sans sucre.",
+      "saved": true,
+      "processing_status_at_capture": "pending"
+    },
+    {
+      "event_id": "live-003",
+      "text": "The spare charger is in the blue suitcase.",
+      "saved": true,
+      "processing_status_at_capture": "pending"
+    },
+    {
+      "event_id": "live-004",
+      "text": "Meeting z Markiem moved to Donnerstag 16:00.",
+      "saved": true,
+      "processing_status_at_capture": "pending"
+    }
+  ],
+  "processing": {
+    "processed": 4,
+    "failed": 0,
+    "pending": 0,
+    "processing": 0,
+    "attempt_count_by_event": {
+      "live-001": 1,
+      "live-002": 1,
+      "live-003": 1,
+      "live-004": 1
+    },
+    "retries": 0,
+    "normal_worker_waited_for_completion": true
+  },
+  "asks": [
+    {
+      "question": "Where are the basement keys?",
+      "semantic_result": "PASS",
+      "answer_language": "en",
+      "source_refs": ["live-001"],
+      "unrelated_source_refs": [],
+      "provider_used": false
+    },
+    {
+      "question": "What does Paul like?",
+      "semantic_result": "PASS",
+      "answer_language": "en",
+      "source_refs": ["live-002"],
+      "unrelated_source_refs": [],
+      "provider_used": false
+    },
+    {
+      "question": "Gdzie jest zapasowa ładowarka?",
+      "semantic_result": "PASS",
+      "answer_language": "pl",
+      "source_refs": ["live-003"],
+      "unrelated_source_refs": [],
+      "provider_used": false
+    },
+    {
+      "question": "Kiedy mam spotkanie z Markiem?",
+      "semantic_result": "PARTIAL",
+      "answer_language": "pl",
+      "answer_observation": "The provider answered that the Marek meeting was recorded but its time was unclear, despite the supplied Donnerstag 16:00 capture.",
+      "source_refs": ["live-004"],
+      "unrelated_source_refs": [],
+      "provider_used": true
+    }
+  ],
+  "summary": {
+    "captures": "4/4 processed on attempt 1",
+    "asks_ready": "4/4",
+    "semantic_correct": "3/4",
+    "provenance_precision": "4/4 relevant-only source lists",
+    "zero_retries": true,
+    "semantic_provider_calls": 5,
+    "overall": "PARTIAL"
+  },
+  "runtime_note": "All authorized requests completed. The disposable test harness emitted WinError 10038 after server_close while its serve_forever thread was exiting; no capture, processing, or Ask request failed."
+}

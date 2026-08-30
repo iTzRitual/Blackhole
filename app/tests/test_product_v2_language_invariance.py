@@ -165,7 +165,7 @@ class LanguageMatrixProvider:
         self.answer_contexts.append(json.loads(json.dumps({"question": question, "context": context, "time_context": time_context}, ensure_ascii=False)))
         target = ANSWERS.get(question)
         if target is None:
-            return {"answer": "No supporting evidence matches that question.", "source_refs": []}
+            return {"answer": "No supporting evidence matches that question.", "evidence_ids": []}
         language, key, value = target
         source_overrides = {
             "¿Cuánto pago por la suscripción?": "language-en-pocket-new",
@@ -176,7 +176,24 @@ class LanguageMatrixProvider:
             "Qu'est-ce qui a changé pour le mot de passe Wi-Fi?": "language-en-wifi-old",
         }
         source_id = source_overrides.get(question, _source_for_key(key))
-        return {"answer": f"[{language}] {value}", "source_refs": [source_id]}
+        evidence_ids = [
+            item["evidence_id"]
+            for collection in (
+                "facts",
+                "candidate_facts",
+                "history",
+                "candidate_history",
+                "relationships",
+                "candidate_relationships",
+                "attention",
+                "candidate_attention",
+            )
+            for item in context.get(collection, [])
+            if isinstance(item, dict)
+            and isinstance(item.get("evidence_id"), str)
+            and source_id in item.get("source_refs", [])
+        ]
+        return {"answer": f"[{language}] {value}", "evidence_ids": sorted(set(evidence_ids))}
 
 
 ANSWERS: dict[str, tuple[str, str, str]] = {

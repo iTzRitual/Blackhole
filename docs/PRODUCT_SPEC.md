@@ -271,9 +271,19 @@ resolved safely by the fast path, Ask passes a bounded candidate set of
 structured current facts and related state to the general semantic provider
 instead of returning `no_match` solely because surface languages differ. The
 provider is instructed to answer in the current question's language and to
-return only supplied source references. This is a bounded generalization
-mechanism, not a claim of universal language identification or equal answer
-quality for every language.
+return explicit IDs for only the supplied evidence items that materially
+support the rendered answer; the runtime maps those IDs back to source
+references. This is a bounded generalization mechanism, not a claim of
+universal language identification or equal answer quality for every language.
+
+For provider-backed Ask, retrieval candidates and answer-supporting evidence
+are separate contracts. Each bounded candidate receives a typed internal
+`evidence_id`; the provider must select those IDs, and the runtime validates
+them against the exact context before deriving public `source_refs`. Provider
+source-reference lists cannot broaden the answer, and invalid-only selections
+fail closed without fabricated provenance. Deterministic current, history,
+correction, contradiction, and Attention answers continue to derive
+provenance from the items they render.
 
 ### Attachments and retraction
 

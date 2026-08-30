@@ -757,6 +757,19 @@ replay. Empty processed state, no-match, pending, and failed states remain
 distinct. Provider output is never authoritative for arithmetic, dates, or
 action execution.
 
+For provider-backed Ask, retrieved items are candidates, not automatic answer
+evidence. The runtime adds a typed internal `evidence_id` to each bounded
+fact, history item, relationship, Attention item, and source metadata record.
+The provider must return an explicit `evidence_ids` selection; the runtime
+validates those IDs against the exact context it supplied, drops unknown or
+duplicate IDs, derives public `source_refs` only from the selected items, and
+removes the internal IDs before returning the result. A top-level provider
+`source_refs` list is ignored for Ask provenance. Deterministic answers retain
+their directly rendered fact/Attention provenance, while current-versus-history
+answers, corrections, and conflicts can retain every selected material source.
+An answer backed only by invalid IDs is rejected safely without fabricated
+provenance.
+
 The V2 transport routes are:
 
 | Route | Behavior |

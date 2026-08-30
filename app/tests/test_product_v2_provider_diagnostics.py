@@ -128,7 +128,16 @@ class ProductV2ProviderDiagnosticsTests(unittest.TestCase):
         self.assertFalse(schema["additionalProperties"])
         self.assertEqual(
             schema["required"],
-            ["facts", "observations", "relationships", "attention", "attachment_results", "answer", "source_refs"],
+            [
+                "facts",
+                "observations",
+                "relationships",
+                "attention",
+                "attachment_results",
+                "answer",
+                "source_refs",
+                "evidence_ids",
+            ],
         )
 
     def test_successful_structured_output_is_parsed_with_exact_safe_invocation_boundary(self) -> None:
@@ -144,6 +153,7 @@ class ProductV2ProviderDiagnosticsTests(unittest.TestCase):
                 "attachment_results": [],
                 "answer": None,
                 "source_refs": [],
+                "evidence_ids": [],
             }
 
             def fake_run(command: list[str], **kwargs: object) -> subprocess.CompletedProcess[bytes]:
@@ -217,6 +227,7 @@ class ProductV2ProviderDiagnosticsTests(unittest.TestCase):
                 "attachment_results": [],
                 "answer": None,
                 "source_refs": [],
+                "evidence_ids": [],
             }
 
             def fake_run(command: list[str], **_kwargs: object) -> subprocess.CompletedProcess[bytes]:

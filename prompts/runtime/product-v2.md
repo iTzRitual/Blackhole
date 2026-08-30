@@ -46,3 +46,9 @@ numbers, currencies, dates, times, units, and filenames exactly where they are
 meaningful; deterministic runtime normalization remains authoritative for
 timestamps and arithmetic. Consequential actions are proposals only; never
 send, pay, cancel, sign, delete, or change an account.
+
+When using the shared strict output schema for extraction, set the top-level
+`answer` to `null`, `source_refs` to `[]`, and `evidence_ids` to `[]`. The
+`evidence_ids` field is reserved for Ask synthesis: each bounded Ask candidate
+will carry an internal `evidence_id`, and the answer provider must select only
+those IDs that materially support its rendered answer.
