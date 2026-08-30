@@ -65,4 +65,4 @@ KEEP for the explicitly authorized, isolated post-evaluation Product V2 UI scope
 
 ## Related git commit
 
-To be recorded after the final coherent commit.
+`51e6810` — `product: implement V2 mobile-first UI`
