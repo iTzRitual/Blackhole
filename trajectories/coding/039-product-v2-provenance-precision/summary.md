@@ -159,5 +159,5 @@ or a holdout claim.
 
 ## Related git commit
 
-Pending commit; the exact final branch SHA will be recorded in the delivery
-report.
+Implementation commit: `c73369b` (`fix: separate Product V2 Ask evidence
+from candidates`). The final branch SHA is recorded in the delivery report.
