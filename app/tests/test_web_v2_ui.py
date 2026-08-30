@@ -98,6 +98,8 @@ class ProductV2UIContractTests(unittest.TestCase):
         self.assertIn("Your latest memory is still safe.", APP_JS)
         self.assertIn("provider_unavailable", APP_JS)
         self.assertIn("Nothing clear came back yet.", APP_JS)
+        self.assertIn('mode === "no_data"', APP_JS)
+        self.assertIn("No processed memory yet.", APP_JS)
         self.assertNotIn("No supported observations", APP_JS)
 
     def test_hover_is_pointer_gated_and_touch_targets_are_present(self) -> None:

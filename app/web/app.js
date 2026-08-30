@@ -359,6 +359,14 @@
         groups: [],
       };
     }
+    if (mode === "no_data") {
+      return {
+        status: "no_data",
+        summary: "No processed memory yet.",
+        helper: "Capture something first, then ask again.",
+        groups: [],
+      };
+    }
     if (mode === "unsupported" || rawMessage.toLowerCase().includes("outside blackhole")) {
       return {
         status: "unsupported",
@@ -1135,6 +1143,10 @@
     }
     if (normalized.status === "processing_failed") {
       renderAnswerState("Some recent captures couldn't be understood yet.", "Your captures are still saved. Try again when your local provider is available.", "error", "Try again", () => refreshState());
+      return;
+    }
+    if (normalized.status === "no_data") {
+      renderAnswerState("No processed memory yet.", normalized.helper, "no-match");
       return;
     }
     if (normalized.status === "unsupported") {

@@ -743,13 +743,19 @@ dates are normalized deterministically with timezone and relative-time context;
 upcoming/overdue status is recomputed from the current clock and task status.
 Arithmetic and cost totals use deterministic Decimal/date logic.
 
-V2 Ask is a POST semantic route (`POST /api/v2/ask`). The runtime first uses
-bounded retrieval over processed current state, relevant history, relations,
-Attention, and source metadata. Deterministic intents such as cost totals,
-upcoming work, last mentions, and recent changes do not call a provider. Only
-bounded synthesis questions may use the local Codex CLI, and the CLI receives
-the retrieved context rather than a full replay. Provider output is never
-authoritative for arithmetic, dates, or action execution.
+V2 Ask is a POST semantic route (`POST /api/v2/ask`). The runtime first builds
+an inspectable, whole-word `AskPlan` with conservative multilingual term
+normalization, then performs bounded retrieval over processed current state,
+relevant history, relations, Attention, and source metadata. Current facts are
+prioritized; matching history/relations and tied or same-entity facts are
+included only when the plan supports them, so a short conversational token
+cannot divert an ordinary question to unrelated Attention. Deterministic
+intents such as cost totals, upcoming work, last mentions, and recent changes
+do not call a provider. Only bounded synthesis questions may use the local
+Codex CLI, and the CLI receives the retrieved context rather than a full
+replay. Empty processed state, no-match, pending, and failed states remain
+distinct. Provider output is never authoritative for arithmetic, dates, or
+action execution.
 
 The V2 transport routes are:
 

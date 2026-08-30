@@ -207,6 +207,20 @@ This file records material improvements to the product design, agent workflow, e
 - **Decision:** **KEEP** the provider-boundary repair; **REVISE** the overall gate and do not retain semantic routing tuning in this branch.
 - **Learning:** Passing an offline regression for a prescribed query is not sufficient authorization to change unrelated product semantics during an adapter investigation.
 
+## 2026-08-30 — Product V2 Ask routing generalization
+
+- **Stage / experiment identifier:** Authorized post-freeze Product V2 Ask-routing generalization; not a benchmark-optimization experiment and not E006.
+- **Problem observed:** The live Polish question `Gdzie są klucze do piwnicy?` was routed to unrelated children-pickup Attention because the old deterministic router treated the standalone preposition `do` as a task/time marker before generic Memory retrieval. Ordinary open-world questions also needed bounded multilingual retrieval without accidental substring matches.
+- **Hypothesis:** An inspectable whole-word Ask plan, conservative cross-language term normalization, and scoped retrieval with current-state priority will remove the collision while preserving justified deterministic Attention/cost/change paths and enabling ordinary multi-fact questions.
+- **What changed:** Added `app/ask_planner.py`; integrated plan-aware Product V2 retrieval and deterministic response handling; added inflection/alias normalization, same-entity expansion, ambiguity and location-list handling, current/history/relation scoping, and distinct `no_data`/`no_match` responses. Added the PWA no-data state and a 37-case multilingual routing suite with mocked HTTP E2E and provider-context isolation. The provider adapter was not modified.
+- **Evaluation method:** Baseline focused Product V2 coverage was 16 passing tests and reproduced the live misroute. Final focused Ask/Product/UI coverage passed 32 tests; the dedicated routing suite passed 5 test methods over 37 cases; the full application suite passed 119 tests; evaluator tests passed 10; Product V2 acceptance-harness tests passed 7; compileall, JavaScript syntax, benchmark structure (`200` events / `4` checkpoints), and non-scored contract smoke passed. The visible integrated acceptance was run in a disposable directory and passed `50/50`, all seven reliability gates, and its latency probe.
+- **Metric before:** No LQA/DSCR metric is applicable: this is explicitly post-freeze product generalization evidence. The observed live Ask result was an unrelated Attention answer with the wrong source reference.
+- **Metric after:** Live normal-launch processing completed `4/4` captures on attempt 1 with `0` retries and `0` failures. All `6/6` authorized Ask requests returned useful `ready` results with correct source references and `0` Ask-time provider calls. The final integrated fixture latency was `8.493 ms` capture return / `134.276 ms` completion with a `120 ms` provider delay.
+- **Regressions:** The first disposable integrated rerun exposed 20 Ask regressions from over-strict multi-term matching and future-advice classification; the general ranking/alias/planner corrections removed them and the final rerun was `50/50 PASS`. No application, evaluator, visible acceptance, provider-boundary, benchmark-structure, official baseline, or frozen V1 regression remains. No new visual browser review was performed.
+- **Runtime/cost impact:** The deterministic Ask paths made the six live Ask calls provider-free. The four live captures used four normal local provider calls, one attempt each; no credential values were read, copied, exported, or persisted.
+- **Decision:** **KEEP** for the explicitly authorized post-freeze Product V2 product scope. Do not use this result to tune the frozen baseline, claim holdout performance, or start an E006 optimization.
+- **Learning:** Short lexical cues are unsafe intent selectors. Planning must be whole-word and confidence-bounded, while retrieval must preserve the winning entity and its relevant facts without leaking weaker collisions or unrelated Attention.
+
 ## Entry template
 
 Use one entry per meaningful improvement:

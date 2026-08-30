@@ -206,3 +206,73 @@ unrelated router issue requires separate product-scope authorization and a
 fresh bounded validation. No benchmark, baseline,
 holdout, V1 oracle, G01/G02/G03 run, global Codex configuration, or protected
 worktree was changed or accessed.
+
+## Authorized Product V2 Ask-routing follow-up — 2026-08-30
+
+The preceding provider-fix **PARTIAL** result remains preserved above. This
+separate post-freeze product task used the exact base
+`33185aaefac93882e898e9d47e7d9405daab7b84` in the isolated
+`product/v2-ask-fix` worktree. The provider-fix source worktree and provider
+adapter were left unchanged.
+
+### Failure and general repair
+
+The live failure was deterministic routing, not semantic extraction: the
+Polish preposition `do` appeared as a standalone token in
+`Gdzie są klucze do piwnicy?`, and the old Ask path treated it as a task/time
+cue before using the matching Memory. That sent the question to unrelated
+children-pickup Attention.
+
+The repair adds a small language-aware Ask planner and plan-aware retrieval
+boundary. Whole-word, accent-folded terms and conservative English/Polish
+aliases support ordinary open-world questions without routing on short
+substrings. Current facts are ranked first; history and relations are added
+only when relevant or explicitly requested. Same-entity facts, tied
+multi-object candidates, location-list observations, ambiguity, corrections,
+retractions, and unknown values remain source-linked. High-confidence
+Attention, cost, change, and last-mention paths remain deterministic; future
+recommendation questions stay on generic Memory rather than becoming false
+change history. Bounded synthesis receives only the selected context. Empty
+processed state is `no_data`; processed state without a match is `no_match`;
+pending and failed processing remain typed states.
+
+### Reproducible validation
+
+The dedicated suite contains 37 multilingual routing cases, mocked HTTP
+end-to-end coverage, provider-context isolation checks, and distinct no-data,
+no-match, unknown, and retraction assertions. The final application suite
+passed 119 tests; evaluator tests passed 10; acceptance-harness tests passed 7;
+compileall, JavaScript syntax, the 200-event/4-checkpoint benchmark structure
+check, and the non-scored contract smoke passed. The visible integrated
+acceptance rerun was 50/50 PASS with all seven reliability gates and its
+latency probe PASS. Its historical result file was not rewritten.
+
+The detailed machine-readable result is
+`eval/results/product-v2-ask-routing.json`. The coding trajectory is
+`trajectories/coding/037-product-v2-ask-routing/`, including the live record.
+
+### Fresh live smoke
+
+The authorized fresh temporary `BLACKHOLE_HOME` was initialized through the
+normal Host CLI and served by the normal loopback `app.web_app` entry point.
+Exactly four captures were submitted. All four returned `Saved.` with pending
+status and then processed on attempt 1: 4 processed, 0 pending, 0 processing,
+0 failed, and 0 retries. Exactly the six authorized Ask questions were then
+submitted without changing the implementation. All six returned `ready` with
+source references and no Ask-time provider call:
+
+- `Gdzie są klucze do piwnicy?` and `Where are the basement keys?` returned the
+  basement-key Memory from `live-keys`.
+- `Co wiem o Kubie?` and `What do I know about Kuba?` returned Kuba's green
+  pasta preference from `live-kuba`.
+- `Co mówiłem o samochodzie?` returned the front-left knocking note from
+  `live-car`.
+- `Co mam niedługo do zrobienia?` returned the open children-pickup Attention
+  item from `live-children`.
+
+### Gate decision
+
+**PASS / KEEP** for the explicitly authorized Product V2 Ask-routing scope.
+This is post-freeze product evidence, not a benchmark optimization, not E006,
+and not a new LQA/DSCR result. No V1 oracle/scoring worktree, holdout
+material, G01/G02/G03 result, official baseline, or provider token was used.

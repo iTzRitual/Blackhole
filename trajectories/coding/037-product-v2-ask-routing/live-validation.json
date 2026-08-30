@@ -1,0 +1,127 @@
+{
+  "trajectory_id": "037-product-v2-ask-routing",
+  "date": "2026-08-30",
+  "worktree": "C:\\Users\\natan\\OneDrive\\Dokumenty\\ChatGPT\\Blackhole-v2-ask-fix",
+  "branch": "product/v2-ask-fix",
+  "base_sha": "33185aaefac93882e898e9d47e7d9405daab7b84",
+  "server_lifecycle": {
+    "home": "fresh temporary BLACKHOLE_HOME",
+    "init_command": "python -m app.host --home <fresh-temporary-home> --json init",
+    "run_command": "python -m app.web_app --host 127.0.0.1 --port 3930 --home <fresh-temporary-home>",
+    "bind": "127.0.0.1:3930",
+    "started_normally": true,
+    "stopped_normally": true
+  },
+  "authorization_limits": {
+    "maximum_captures": 4,
+    "maximum_asks": 6,
+    "implementation_changed_between_questions": false
+  },
+  "provider": {
+    "type": "codex-cli",
+    "normal_local_runtime_ready": true,
+    "capture_provider_calls": 4,
+    "ask_provider_calls": 0,
+    "retries": 0,
+    "credential_values_read_or_persisted": false
+  },
+  "captures": [
+    {
+      "event_id": "live-keys",
+      "text": "Klucze do piwnicy są u mamy.",
+      "saved": true,
+      "processing_status_at_capture": "pending",
+      "final_status": "processed",
+      "attempt_count": 1
+    },
+    {
+      "event_id": "live-kuba",
+      "text": "Kuba lubi ten zielony makaron z Lidla.",
+      "saved": true,
+      "processing_status_at_capture": "pending",
+      "final_status": "processed",
+      "attempt_count": 1
+    },
+    {
+      "event_id": "live-car",
+      "text": "Samochód zaczął stukać z przodu po lewej.",
+      "saved": true,
+      "processing_status_at_capture": "pending",
+      "final_status": "processed",
+      "attempt_count": 1
+    },
+    {
+      "event_id": "live-children",
+      "text": "Odbieram dzieci za 10 minut.",
+      "saved": true,
+      "processing_status_at_capture": "pending",
+      "final_status": "processed",
+      "attempt_count": 1
+    }
+  ],
+  "processing_final_counts": {
+    "processed": 4,
+    "pending": 0,
+    "processing": 0,
+    "failed": 0
+  },
+  "asks": [
+    {
+      "question": "Gdzie są klucze do piwnicy?",
+      "mode": "retrieval",
+      "status": "ready",
+      "answer": "Relevant memory: keys to the basement location: at mom's.",
+      "source_refs": ["live-keys"],
+      "provider_used": false
+    },
+    {
+      "question": "Co wiem o Kubie?",
+      "mode": "retrieval",
+      "status": "ready",
+      "answer": "Relevant memory: Kuba preference: likes the green pasta from Lidl.",
+      "source_refs": ["live-kuba"],
+      "provider_used": false
+    },
+    {
+      "question": "Co mówiłem o samochodzie?",
+      "mode": "retrieval",
+      "status": "ready",
+      "answer": "Relevant memory: car condition: started knocking at the front left.",
+      "source_refs": ["live-car"],
+      "provider_used": false
+    },
+    {
+      "question": "Co mam niedługo do zrobienia?",
+      "mode": "attention",
+      "status": "ready",
+      "answer": "Open items: Pick up the children.",
+      "source_refs": ["live-children"],
+      "provider_used": false
+    },
+    {
+      "question": "Where are the basement keys?",
+      "mode": "retrieval",
+      "status": "ready",
+      "answer": "Relevant memory: keys to the basement location: at mom's.",
+      "source_refs": ["live-keys"],
+      "provider_used": false
+    },
+    {
+      "question": "What do I know about Kuba?",
+      "mode": "retrieval",
+      "status": "ready",
+      "answer": "Relevant memory: Kuba preference: likes the green pasta from Lidl.",
+      "source_refs": ["live-kuba"],
+      "provider_used": false
+    }
+  ],
+  "boundary_confirmations": {
+    "v1_oracle_or_scoring_accessed": false,
+    "g01_g02_g03_used": false,
+    "holdout_material_accessed": false,
+    "provider_fix_source_worktree_modified": false,
+    "main_or_master_modified": false,
+    "benchmark_or_official_baseline_modified": false
+  },
+  "result": "PASS"
+}

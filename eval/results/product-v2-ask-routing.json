@@ -1,0 +1,80 @@
+{
+  "artifact_type": "product-v2-ask-routing-validation",
+  "trajectory_id": "037-product-v2-ask-routing",
+  "scope": "authorized post-freeze Product V2 product generalization; not a benchmark result",
+  "worktree": "C:\\Users\\natan\\OneDrive\\Dokumenty\\ChatGPT\\Blackhole-v2-ask-fix",
+  "branch": "product/v2-ask-fix",
+  "base_sha": "33185aaefac93882e898e9d47e7d9405daab7b84",
+  "routing_regressions": {
+    "case_count": 37,
+    "test_methods": 5,
+    "status": "PASS",
+    "command": "python -m unittest app.tests.test_product_v2_ask_routing -q"
+  },
+  "focused_validation": {
+    "test_count": 32,
+    "status": "PASS",
+    "command": "python -m unittest app.tests.test_product_v2_ask_routing app.tests.test_product_v2 app.tests.test_product_v2_http app.tests.test_web_v2_ui -q"
+  },
+  "repository_validation": {
+    "application_tests": {"count": 119, "status": "PASS", "command": "python -m unittest discover -s app/tests -q"},
+    "evaluator_tests": {"count": 10, "status": "PASS", "command": "python -m unittest discover -s eval/tests -q"},
+    "acceptance_harness_tests": {"count": 7, "status": "PASS", "command": "python -m unittest discover -s product_acceptance -q"},
+    "compileall": {"status": "PASS", "command": "python -m compileall -q app eval product_acceptance scripts"},
+    "javascript_syntax": {"status": "PASS", "command": "node --check app/web/app.js"},
+    "qualification": {"status": "PASS_WITH_4_PREEXISTING_WARNINGS", "command": "python scripts/qualification_check.py --inventory"}
+  },
+  "benchmark_boundary_checks": {
+    "development_structure": {"status": "PASS", "event_count": 200, "checkpoint_count": 4, "command": "python benchmark/dev/generate_benchmark.py --check"},
+    "contract_smoke": {"status": "PASS", "scored": false, "semantic_score": 1.0, "schema_valid_for_correct_fixture": true, "malformed_fixture_detected": true, "command": "python eval/contract_smoke.py"},
+    "frozen_benchmark_or_baseline_modified": false,
+    "new_benchmark_metric": false
+  },
+  "integrated_acceptance": {
+    "case_count": 50,
+    "pass": 50,
+    "fail": 0,
+    "partial": 0,
+    "not_tested": 0,
+    "reliability_gate_count": 7,
+    "reliability_gates_passed": 7,
+    "status": "PASS",
+    "latency_probe": {
+      "status": "PASS",
+      "provider_delay_ms": 120,
+      "capture_return_ms": 8.493,
+      "processing_completion_ms": 134.276,
+      "capture_returned_before_processing_finished": true
+    },
+    "command": "python scripts/run_product_v2_integrated_acceptance.py (executed from a disposable working directory)"
+  },
+  "live_smoke": {
+    "status": "PASS",
+    "capture_count": 4,
+    "captures_processed": 4,
+    "capture_attempts": [1, 1, 1, 1],
+    "capture_provider_calls": 4,
+    "ask_count": 6,
+    "ask_provider_calls": 0,
+    "retries": 0,
+    "final_processing_counts": {"processed": 4, "pending": 0, "processing": 0, "failed": 0},
+    "implementation_changed_between_questions": false,
+    "ask_results": [
+      {"question": "Gdzie są klucze do piwnicy?", "mode": "retrieval", "status": "ready", "source_refs": ["live-keys"]},
+      {"question": "Co wiem o Kubie?", "mode": "retrieval", "status": "ready", "source_refs": ["live-kuba"]},
+      {"question": "Co mówiłem o samochodzie?", "mode": "retrieval", "status": "ready", "source_refs": ["live-car"]},
+      {"question": "Co mam niedługo do zrobienia?", "mode": "attention", "status": "ready", "source_refs": ["live-children"]},
+      {"question": "Where are the basement keys?", "mode": "retrieval", "status": "ready", "source_refs": ["live-keys"]},
+      {"question": "What do I know about Kuba?", "mode": "retrieval", "status": "ready", "source_refs": ["live-kuba"]}
+    ],
+    "evidence_file": "trajectories/coding/037-product-v2-ask-routing/live-validation.json"
+  },
+  "boundary_confirmations": {
+    "provider_fix_source_worktree_modified": false,
+    "v1_oracle_or_scoring_accessed": false,
+    "holdout_material_accessed": false,
+    "g01_g02_g03_used": false,
+    "provider_tokens_read_copied_exported_or_persisted": false,
+    "decision": "KEEP"
+  }
+}

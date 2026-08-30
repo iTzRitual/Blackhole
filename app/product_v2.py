@@ -28,6 +28,7 @@ from pathlib import Path
 from typing import Any, Protocol
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
+from app.ask_planner import AskPlan, plan_ask, search_terms
 from app.codex_discovery import ProviderStatus
 from app.product_v2_store import (
     AUTOMATIC_RETRY_BACKOFF_SECONDS,
@@ -95,14 +96,65 @@ def _slug(value: str) -> str:
 
 
 def _tokens(value: Any) -> set[str]:
-    if not isinstance(value, str):
-        value = json.dumps(value, ensure_ascii=False, sort_keys=True) if value is not None else ""
-    stopwords = {"my"}
-    return {
-        token
-        for token in re.findall(r"[\w]+", value.casefold(), flags=re.UNICODE)
-        if len(token) > 1 and token not in stopwords
-    }
+    """Compatibility wrapper for the Product V2 retrieval tokenizer."""
+
+    return search_terms(value)
+
+
+def _searchable_text(item: dict[str, Any], keys: Iterable[str]) -> str:
+    parts: list[str] = []
+    for key in keys:
+        value = item.get(key)
+        if value is None:
+            continue
+        if isinstance(value, (dict, list)):
+            parts.append(json.dumps(value, ensure_ascii=False, sort_keys=True))
+        else:
+            parts.append(str(value))
+    return " ".join(parts)
+
+
+def _is_cost_fact(item: dict[str, Any]) -> bool:
+    value = item.get("value")
+    return isinstance(value, dict) and (
+        item.get("concept")
+        in {
+            "price",
+            "cost",
+            "monthly_cost",
+            "recurring_cost",
+            "subscription",
+            "payment",
+            "current_price",
+            "historical_price",
+        }
+        or any(key in value for key in ("amount", "price", "total"))
+    )
+
+
+def _display_fact_value(item: dict[str, Any]) -> str:
+    if item.get("knowledge_status") == "unknown":
+        return f"unknown ({item.get('unknown_reason', 'not stated')})"
+    value = item.get("value")
+    if isinstance(value, dict):
+        amount = value.get("amount", value.get("price", value.get("total")))
+        currency = value.get("currency", value.get("currency_code"))
+        if amount is not None and currency:
+            period = value.get("billing_period", value.get("period"))
+            suffix = f" per {period}" if period else ""
+            return f"{amount} {currency}{suffix}"
+        return json.dumps(value, ensure_ascii=False, sort_keys=True)
+    if isinstance(value, list):
+        return json.dumps(value, ensure_ascii=False, sort_keys=True)
+    if value is None:
+        return "unknown"
+    return str(value)
+
+
+def _fact_summary(item: dict[str, Any]) -> str:
+    label = item.get("entity_label") or item.get("entity_key") or "memory"
+    concept = item.get("concept") or "fact"
+    return f"{label} {concept}: {_display_fact_value(item)}"
 
 
 def _safe_json_value(value: Any, *, depth: int = 0) -> Any:
@@ -1851,57 +1903,242 @@ class ProductRuntime:
             time.sleep(0.01)
         return False
 
-    def _retrieval_context(self, question: str) -> tuple[dict[str, Any], list[dict[str, Any]], str]:
+    def _retrieval_context(
+        self,
+        question: str,
+        plan: AskPlan | None = None,
+    ) -> tuple[dict[str, Any], list[dict[str, Any]], str]:
+        """Return only state that is relevant to one inspected Ask plan.
+
+        The provider receives this bounded context, never the raw capture
+        history and never an unrelated Attention list.  Current facts remain
+        the primary retrieval surface; history and relations are added only
+        when they match the query or the plan explicitly asks about change.
+        """
+
+        plan = plan or plan_ask(question)
         snapshot = self.store.snapshot(now=self._now())
-        question_tokens = _tokens(question)
-        facts = snapshot.get("current_facts", [])
-        scored: list[tuple[int, dict[str, Any]]] = []
-        for item in facts:
-            searchable = " ".join(
-                str(item.get(key, "")) for key in ("entity_key", "entity_label", "concept", "value", "unknown_reason")
+        query_terms = set(plan.query_terms)
+        topic_terms = set(plan.topic_terms)
+
+        def ranked(
+            collection: Any,
+            keys: tuple[str, ...],
+            *,
+            limit: int,
+            expand_entities: bool = False,
+        ) -> list[dict[str, Any]]:
+            if not isinstance(collection, list) or not query_terms:
+                return []
+            scored: list[tuple[int, int, str, str, dict[str, Any]]] = []
+            for item in collection:
+                if not isinstance(item, dict) or item.get("retracted"):
+                    continue
+                searchable = search_terms(_searchable_text(item, keys))
+                overlap = query_terms & searchable
+                if not overlap:
+                    continue
+                topic_overlap = overlap & topic_terms
+                score = len(overlap) + (2 * len(topic_overlap))
+                scored.append(
+                    (
+                        score,
+                        int(item.get("sequence", item.get("latest_sequence", 0)) or 0),
+                        str(item.get("entity_key", item.get("source_entity_key", ""))),
+                        str(item.get("concept", item.get("relation_type", ""))),
+                        item,
+                    )
+                )
+            scored.sort(key=lambda row: (-row[0], -row[1], row[2], row[3]))
+            if scored:
+                qualified = scored
+                if plan.intent == "generic" and len(topic_terms) >= 2:
+                    # Multiple content terms normally describe one requested
+                    # object.  Requiring two matching terms prevents a generic
+                    # multi-term object query from falling back to a merely
+                    # related object. Keep the full scored set for entity
+                    # expansion, so a second fact about the winning entity can
+                    # still be returned even if it only matches the entity.
+                    qualified = [
+                        row
+                        for row in scored
+                        if len(query_terms & search_terms(_searchable_text(row[4], keys)) & topic_terms) >= 2
+                    ]
+                if not qualified:
+                    return []
+                best_score = qualified[0][0]
+                leaders = [row for row in qualified if row[0] == best_score]
+                if expand_entities:
+                    # A question can ask for several properties of one
+                    # entity (for example a gift and a dietary constraint).
+                    # Retrieve the entity's other current facts without
+                    # broadening to unrelated entities.
+                    leader_entities = {row[2] for row in leaders}
+                    scored = [row for row in scored if row[2] in leader_entities]
+                else:
+                    # Keep tied best candidates for honest ambiguity handling,
+                    # but do not leak a weaker accidental overlap into the
+                    # answer.
+                    scored = leaders
+            return [item for _score, _sequence, _entity, _concept, item in scored[:limit]]
+
+        facts = [item for item in snapshot.get("current_facts", []) if isinstance(item, dict)]
+        if plan.broad:
+            selected_facts = facts[:MAX_ASK_CONTEXT_FACTS]
+        elif plan.intent == "generic" and query_terms == {"location"}:
+            # A plural location request is a field-oriented list query.  Some
+            # provider facts expose the location as a concept; others retain
+            # a useful observation sentence, so accept either representation.
+            def location_like(item: dict[str, Any]) -> bool:
+                concept_terms = search_terms(str(item.get("concept", "")))
+                if concept_terms & {"location", "entrance", "address", "place"}:
+                    return True
+                value = _searchable_text(item, ("entity_label", "value", "unknown_reason"))
+                return bool(re.search(r"\b(?:in|at|inside|near|by|on|under|from)\b", value, flags=re.IGNORECASE))
+
+            selected_facts = [item for item in facts if location_like(item)][:MAX_ASK_CONTEXT_FACTS]
+        else:
+            selected_facts = ranked(
+                facts,
+                ("entity_key", "entity_label", "concept", "value", "unknown_reason", "operation"),
+                limit=MAX_ASK_CONTEXT_FACTS,
+                expand_entities=plan.intent == "generic",
             )
-            overlap = len(question_tokens & _tokens(searchable))
-            if overlap:
-                scored.append((overlap, item))
-        scored.sort(key=lambda pair: (-pair[0], str(pair[1].get("entity_key", "")), str(pair[1].get("concept", ""))))
-        selected_facts = [item for _score, item in scored[:MAX_ASK_CONTEXT_FACTS]]
-        history = snapshot.get("fact_history", [])
-        history_scored: list[tuple[int, int, dict[str, Any]]] = []
-        for item in history:
-            if item.get("retracted"):
-                continue
-            searchable = " ".join(str(item.get(key, "")) for key in ("entity_key", "entity_label", "concept", "value", "operation"))
-            overlap = len(question_tokens & _tokens(searchable))
-            if overlap:
-                history_scored.append((overlap, -int(item.get("sequence", 0)), item))
-        history_scored.sort(key=lambda pair: (-pair[0], pair[1]))
-        selected_history = [item for _score, _sequence, item in history_scored[:MAX_ASK_CONTEXT_HISTORY]]
-        recent_changes = [
-            item
-            for item in reversed(history)
-            if not item.get("retracted")
-            and item.get("operation") in {"correction", "supersede", "contradiction"}
-        ]
-        for item in recent_changes:
-            if item not in selected_history:
-                selected_history.append(item)
-            if len(selected_history) >= MAX_ASK_CONTEXT_HISTORY:
-                break
-        broad_question = bool(
-            question_tokens
-            & {"locations", "location", "recorded", "remembered", "things", "items", "anything", "list"}
+        if plan.intent == "costs" and not topic_terms:
+            selected_facts = [item for item in facts if _is_cost_fact(item)][:MAX_ASK_CONTEXT_FACTS]
+
+        history = [item for item in snapshot.get("fact_history", []) if isinstance(item, dict)]
+        selected_history = ranked(
+            history,
+            ("entity_key", "entity_label", "concept", "value", "unknown_reason", "operation", "supersedes_event_id"),
+            limit=MAX_ASK_CONTEXT_HISTORY,
+            expand_entities=plan.intent == "generic",
         )
-        if not selected_facts and broad_question:
-            selected_facts = list(facts[:MAX_ASK_CONTEXT_FACTS])
-        text = " ".join(question_tokens)
+
+        def append_unique(target: list[dict[str, Any]], items: Iterable[dict[str, Any]]) -> None:
+            seen = {
+                (
+                    item.get("fact_id"),
+                    item.get("relation_id"),
+                    item.get("source_event_id"),
+                    item.get("operation"),
+                    canonical_json(item.get("value")) if "value" in item else item.get("unknown_reason"),
+                )
+                for item in target
+            }
+            for item in items:
+                identity = (
+                    item.get("fact_id"),
+                    item.get("relation_id"),
+                    item.get("source_event_id"),
+                    item.get("operation"),
+                    canonical_json(item.get("value")) if "value" in item else item.get("unknown_reason"),
+                )
+                if identity in seen:
+                    continue
+                target.append(item)
+                seen.add(identity)
+                if len(target) >= MAX_ASK_CONTEXT_HISTORY:
+                    break
+
+        selected_keys = {
+            (item.get("entity_key"), item.get("concept"))
+            for item in selected_facts
+            if item.get("entity_key") is not None and item.get("concept") is not None
+        }
+        if plan.history_requested or plan.intent in {"changes", "costs"}:
+            changed_keys = {
+                (item.get("entity_key"), item.get("concept"))
+                for item in history
+                if item.get("operation") in {"correction", "supersede", "contradiction"}
+                and item.get("entity_key") is not None
+                and item.get("concept") is not None
+            }
+            related_history = [
+                item
+                for item in history
+                if not item.get("retracted")
+                and (
+                    (
+                        (item.get("entity_key"), item.get("concept")) in selected_keys
+                        and (plan.intent != "changes" or bool(topic_terms))
+                    )
+                    or (
+                        plan.intent == "changes"
+                        and not topic_terms
+                        and (item.get("entity_key"), item.get("concept")) in changed_keys
+                    )
+                    or (
+                        plan.intent == "costs"
+                        and not topic_terms
+                        and _is_cost_fact(item)
+                    )
+                )
+            ]
+            related_history.sort(key=lambda item: int(item.get("sequence", 0)))
+            append_unique(selected_history, related_history)
+
+        relations = [item for item in snapshot.get("relationships", []) if isinstance(item, dict)]
+        selected_relations = ranked(
+            relations,
+            ("source_entity_key", "relation_type", "target_entity_key", "value", "source_event_id", "target_event_id"),
+            limit=MAX_ASK_CONTEXT_HISTORY,
+        )
+        if plan.intent == "changes":
+            change_relations = [
+                item
+                for item in relations
+                if not item.get("retracted")
+                and item.get("relation_type") in {"meaningful_change", "correction", "supersession"}
+                and (
+                    not topic_terms
+                    or topic_terms
+                    & search_terms(
+                        _searchable_text(
+                            item,
+                            ("source_entity_key", "relation_type", "target_entity_key", "value"),
+                        )
+                    )
+                )
+            ]
+            append_unique(selected_relations, change_relations)
+
+        attention = [item for item in snapshot.get("attention", []) if isinstance(item, dict)]
+        open_attention = [item for item in attention if item.get("status") == "open"]
+        if plan.intent == "attention":
+            if topic_terms:
+                selected_attention = ranked(
+                    open_attention,
+                    ("title", "kind", "details", "due_at", "starts_at"),
+                    limit=MAX_ASK_CONTEXT_HISTORY,
+                )
+            else:
+                selected_attention = open_attention[:MAX_ASK_CONTEXT_HISTORY]
+        else:
+            selected_attention = ranked(
+                attention,
+                ("title", "kind", "details", "due_at", "starts_at"),
+                limit=MAX_ASK_CONTEXT_HISTORY,
+            )
+
+        selected_items = [*selected_facts, *selected_history, *selected_relations, *selected_attention]
+        reference_ids = self._source_refs(selected_items)
+        selected_sources = [
+            item
+            for item in snapshot.get("sources", [])
+            if isinstance(item, dict)
+            and item.get("event_id") in reference_ids
+            and not item.get("retracted")
+        ][:MAX_ASK_CONTEXT_HISTORY]
         context = {
             "facts": selected_facts,
-            "history": selected_history,
-            "attention": snapshot.get("attention", [])[:MAX_ASK_CONTEXT_HISTORY],
-            "relationships": snapshot.get("relationships", [])[:MAX_ASK_CONTEXT_HISTORY],
-            "sources": snapshot.get("sources", [])[-MAX_ASK_CONTEXT_HISTORY:],
+            "history": selected_history[:MAX_ASK_CONTEXT_HISTORY],
+            "attention": selected_attention,
+            "relationships": selected_relations[:MAX_ASK_CONTEXT_HISTORY],
+            "sources": selected_sources,
+            "plan": plan.as_dict(),
         }
-        return context, selected_facts, text
+        return context, selected_facts, " ".join(sorted(query_terms))
 
     @staticmethod
     def _money_summary(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -1942,93 +2179,120 @@ class ProductRuntime:
         snapshot: dict[str, Any],
         context: dict[str, Any],
         selected_facts: list[dict[str, Any]],
+        plan: AskPlan | None = None,
     ) -> tuple[str | None, str, list[dict[str, Any]], list[str]]:
-        lowered = question.casefold()
-        question_tokens = _tokens(question)
-        attention = [item for item in snapshot.get("attention", []) if item.get("status") == "open"]
-        is_today = bool(question_tokens & {"today", "dzisiaj", "dziś"})
-        is_upcoming = bool(question_tokens & {"upcoming", "coming", "week", "tydzień", "tydzien", "nadchodzący", "nadchodzacy"})
-        is_task = bool(question_tokens & {"need", "task", "tasks", "do", "todo", "muszę", "musze", "zrobić", "zrobic"})
-        if (is_today and is_task) or (is_upcoming and is_task):
+        plan = plan or plan_ask(question)
+
+        if plan.intent == "attention":
+            attention = [
+                item
+                for item in context.get("attention", [])
+                if isinstance(item, dict) and item.get("status") == "open"
+            ]
+            if plan.topic_terms:
+                attention = [
+                    item
+                    for item in attention
+                    if plan.topic_terms
+                    & search_terms(_searchable_text(item, ("title", "kind", "details", "due_at", "starts_at")))
+                ]
             now = self._now()
-            horizon = now + timedelta(days=7 if is_upcoming else 1)
-            selected_attention: list[dict[str, Any]] = []
-            for item in attention:
-                due_value = item.get("due_at") or item.get("starts_at")
-                due = parse_datetime(due_value, zone=timezone.utc) if due_value else None
-                if is_today:
-                    if due is None or due.astimezone(now.tzinfo).date() != now.date():
+            if plan.time_window in {"today", "tomorrow", "upcoming"}:
+                target_date = now.date()
+                if plan.time_window == "tomorrow":
+                    target_date += timedelta(days=1)
+                horizon = now + timedelta(days=7)
+                filtered: list[dict[str, Any]] = []
+                for item in attention:
+                    due_value = item.get("due_at") or item.get("starts_at")
+                    due = parse_datetime(due_value, zone=timezone.utc) if due_value else None
+                    if plan.time_window in {"today", "tomorrow"}:
+                        if due is None or due.astimezone(now.tzinfo).date() != target_date:
+                            continue
+                    elif due is not None and due > horizon:
                         continue
-                elif due is not None and due > horizon:
-                    continue
-                selected_attention.append(item)
-            if not selected_attention:
-                return "Nothing matching that time window is currently open.", "attention", [], []
-            labels = [item["title"] for item in selected_attention[:10]]
-            return "Open items: " + "; ".join(labels) + ".", "attention", selected_attention, self._source_refs(selected_attention)
+                    filtered.append(item)
+                attention = filtered
+            if not attention:
+                return "No supporting evidence matched that attention request among currently open items.", "no_match", [], []
+            labels = [str(item.get("title") or item.get("kind") or "open item") for item in attention[:10]]
+            answer = "Open items: " + "; ".join(labels) + "."
+            return answer, "attention", attention, self._source_refs(attention)
 
-        is_time_question = bool(
-            question_tokens
-            & {"when", "kiedy", "deadline", "due", "date", "termin", "datę", "date", "until", "do"}
-        )
-        if attention and (is_time_question or is_task):
-            attention_tokens = [
-                item
-                for item in attention
-                if question_tokens
-                & _tokens(" ".join(str(item.get(key, "")) for key in ("title", "kind", "details")))
+        if plan.intent == "costs":
+            all_costs = [
+                item for item in snapshot.get("current_facts", [])
+                if isinstance(item, dict) and _is_cost_fact(item)
             ]
-            selected_attention = attention_tokens or attention[:MAX_ASK_CONTEXT_HISTORY]
-            labels = [item["title"] for item in selected_attention[:10]]
-            return "Relevant attention: " + "; ".join(labels) + ".", "attention", selected_attention, self._source_refs(selected_attention)
-
-        is_change_marker = {"changed", "change", "changes", "recent", "correction", "zmieniło", "zmienilo", "zmiana", "ostatnio"}
-        is_cost = bool(question_tokens & {"paying", "pay", "cost", "costs", "price", "prices", "subscription", "subscriptions", "billing", "płacę", "place", "koszt", "koszty"}) and not bool(question_tokens & is_change_marker)
-        if is_cost:
-            cost_facts = [
+            cost_facts = [item for item in selected_facts if _is_cost_fact(item)]
+            if not plan.topic_terms:
+                cost_facts = all_costs[:MAX_ASK_CONTEXT_FACTS]
+            history_costs = [
                 item
-                for item in snapshot.get("current_facts", [])
-                if isinstance(item.get("value"), dict)
-                and (
-                    item.get("concept") in {"price", "cost", "monthly_cost", "subscription", "payment", "current_price", "historical_price"}
-                    or any(key in item.get("value", {}) for key in ("amount", "price", "total"))
-                )
+                for item in context.get("history", [])
+                if isinstance(item, dict) and _is_cost_fact(item)
             ]
-            if not cost_facts:
-                return "I do not have a supported payment or cost observation yet.", "costs", [], []
-            def cost_description(item: dict[str, Any]) -> str:
-                value = item.get("value")
-                if isinstance(value, dict):
-                    amount = value.get("amount", value.get("price", value.get("total")))
-                    currency = value.get("currency", value.get("currency_code"))
-                    period = value.get("billing_period", value.get("period"))
-                    if amount is not None and currency:
-                        suffix = f" per {period}" if period else ""
-                        return f"{item.get('entity_label', item.get('entity_key'))}: {amount} {currency}{suffix}"
-                return f"{item.get('entity_label', item.get('entity_key'))}: {value}"
+            selected_keys = {
+                (item.get("entity_key"), item.get("concept"))
+                for item in cost_facts
+            }
+            if plan.topic_terms:
+                history_costs = [
+                    item
+                    for item in history_costs
+                    if (item.get("entity_key"), item.get("concept")) in selected_keys
+                    or plan.topic_terms
+                    & search_terms(_searchable_text(item, ("entity_key", "entity_label", "concept", "value")))
+                ]
+            if not cost_facts and not history_costs:
+                return "No supporting payment or cost evidence matches that question.", "no_match", [], []
 
-            descriptions = [cost_description(item) for item in cost_facts[:10]]
+            descriptions = [_fact_summary(item) for item in cost_facts[:10]]
+            items = list(cost_facts[:10])
+            if plan.history_requested:
+                seen = {
+                    (
+                        item.get("source_event_id"),
+                        item.get("fact_id"),
+                        canonical_json(item.get("value")) if "value" in item else item.get("unknown_reason"),
+                    )
+                    for item in items
+                }
+                for item in sorted(history_costs, key=lambda value: int(value.get("sequence", 0))):
+                    identity = (
+                        item.get("source_event_id"),
+                        item.get("fact_id"),
+                        canonical_json(item.get("value")) if "value" in item else item.get("unknown_reason"),
+                    )
+                    if identity not in seen:
+                        items.append(item)
+                        seen.add(identity)
+                history_descriptions = [_fact_summary(item) for item in items[len(cost_facts[:10]) :10]]
+            else:
+                history_descriptions = []
+            answer = "Observed costs: " + "; ".join(descriptions or [_fact_summary(item) for item in items[:10]]) + "."
+            if history_descriptions:
+                answer += " Recorded history: " + "; ".join(history_descriptions) + "."
             totals = self._money_summary(cost_facts)
-            suffix = f" Deterministic totals: {totals}." if totals else ""
-            return "Observed costs: " + "; ".join(descriptions) + "." + suffix, "costs", cost_facts, self._source_refs(cost_facts)
+            if totals:
+                answer += f" Deterministic totals: {totals}."
+            return answer, "costs", items[:MAX_ASK_CONTEXT_FACTS], self._source_refs(items)
 
-        is_change = bool(question_tokens & is_change_marker) and not (
-            "how" in lowered and ("should" in lowered or "next" in lowered)
-        )
-        if is_change:
+        if plan.intent == "changes":
             changes = [
                 item
                 for item in context.get("history", [])
-                if item.get("operation") in {"correction", "supersede", "contradiction"}
+                if isinstance(item, dict)
+                and item.get("operation") in {"correction", "supersede", "contradiction"}
             ]
             changes.extend(
                 item
                 for item in context.get("relationships", [])
-                if item.get("relation_type") in {"meaningful_change", "correction", "supersession"}
+                if isinstance(item, dict)
+                and item.get("relation_type") in {"meaningful_change", "correction", "supersession"}
             )
             if not changes:
-                return "I do not have a recorded recent change matching that question.", "changes", [], []
-            history = context.get("history", [])
+                return "No recorded change evidence matches that question.", "no_match", [], []
             change_keys = {
                 (item.get("entity_key"), item.get("concept"))
                 for item in changes
@@ -2036,101 +2300,109 @@ class ProductRuntime:
             }
             expanded_changes: list[dict[str, Any]] = []
             seen_change_items: set[tuple[Any, ...]] = set()
-            for item in history:
+            for item in context.get("history", []):
+                if not isinstance(item, dict):
+                    continue
                 key = (item.get("entity_key"), item.get("concept"))
-                if key not in change_keys:
+                if change_keys and key not in change_keys:
                     continue
                 identity = (
                     item.get("source_event_id"),
                     item.get("fact_id"),
+                    item.get("relation_id"),
                     item.get("operation"),
                     canonical_json(item.get("value")) if "value" in item else item.get("unknown_reason"),
                 )
                 if identity not in seen_change_items:
                     expanded_changes.append(item)
                     seen_change_items.add(identity)
-            expanded_changes.extend(
-                item
-                for item in changes
-                if item not in expanded_changes
-            )
+            for item in changes:
+                identity = (
+                    item.get("source_event_id"),
+                    item.get("fact_id"),
+                    item.get("relation_id"),
+                    item.get("operation", item.get("relation_type")),
+                    canonical_json(item.get("value")) if "value" in item else item.get("unknown_reason"),
+                )
+                if identity not in seen_change_items:
+                    expanded_changes.append(item)
+                    seen_change_items.add(identity)
             expanded_changes.sort(key=lambda item: int(item.get("sequence", 0)))
-
-            def display_value(item: dict[str, Any]) -> str:
-                if "value" in item:
-                    value = item.get("value")
-                    if isinstance(value, dict):
-                        amount = value.get("amount", value.get("price", value.get("total")))
-                        currency = value.get("currency", value.get("currency_code"))
-                        if amount is not None and currency:
-                            period = value.get("billing_period", value.get("period"))
-                            suffix = f" per {period}" if period else ""
-                            return f"{amount} {currency}{suffix}"
-                        return json.dumps(value, ensure_ascii=False, sort_keys=True)
-                    if isinstance(value, list):
-                        return json.dumps(value, ensure_ascii=False, sort_keys=True)
-                    return str(value)
-                return str(item.get("unknown_reason", "unknown"))
-
             labels = []
             for item in expanded_changes[:10]:
                 label = item.get("entity_label", item.get("source_entity_key", "memory"))
-                operation = item.get("operation", item.get("relation_type"))
-                labels.append(f"{label}: {operation} ({display_value(item)})")
+                operation = item.get("operation", item.get("relation_type", "change"))
+                labels.append(f"{label}: {operation} ({_display_fact_value(item)})")
             return "Recent changes: " + "; ".join(labels) + ".", "changes", expanded_changes, self._source_refs(expanded_changes)
 
-        is_last = bool(question_tokens & {"last", "mention", "mentioned", "when", "kiedy", "wspomniałem", "wspomnialem"})
-        if is_last:
+        if plan.intent == "last_mention":
             matches = context.get("history", []) or selected_facts
             if matches:
-                if "last" not in question_tokens and selected_facts:
-                    return (
-                        "Relevant memory: " + "; ".join(
-                            f"{item.get('entity_label', item.get('entity_key'))} {item.get('concept')}: {item.get('value', item.get('unknown_reason', 'unknown'))}"
-                            for item in selected_facts[:10]
-                        ) + ".",
-                        "retrieval",
-                        selected_facts,
-                        self._source_refs(selected_facts),
-                    )
                 latest = sorted(matches, key=lambda item: int(item.get("sequence", 0)), reverse=True)[0]
-                ref = latest.get("source_refs", [])
-                source = next((item for item in snapshot.get("sources", []) if item.get("event_id") in ref), None)
+                refs = latest.get("source_refs", [])
+                source = next(
+                    (item for item in snapshot.get("sources", []) if item.get("event_id") in refs),
+                    None,
+                )
                 when = source.get("captured_at") if source else "an earlier capture"
                 label = latest.get("entity_label", latest.get("entity_key", "that topic"))
                 return f"The latest matching mention of {label} is {when}.", "last_mention", [latest], self._source_refs([latest])
+            return "No recorded mention evidence matches that question.", "no_match", [], []
 
-        if (
-            len(selected_facts) > 1
-            and question_tokens & {"keys", "key", "klucze", "kluczyk"}
-            and not question_tokens & {"basement", "piwnicy", "house", "home", "bike", "roweru"}
-        ):
-            refs = self._source_refs(selected_facts)
-            if question_tokens & {"gdzie", "są", "jest"}:
-                return "To jest niejednoznaczne — nie wiadomo, które klucze masz na myśli.", "retrieval", selected_facts, refs
-            return "The question is ambiguous; I found more than one kind of key.", "retrieval", selected_facts, refs
+        if plan.intent == "generic" and not plan.broad and len(plan.topic_terms) <= 1:
+            singular_question = bool(
+                re.match(r"^(?:where|who|which|whose|gdzie|kto|ktore|które)\b", question.casefold().strip())
+            )
+            if singular_question:
+                candidates: list[tuple[int, dict[str, Any]]] = []
+                for item in selected_facts:
+                    overlap = plan.query_terms & search_terms(
+                        _searchable_text(item, ("entity_key", "entity_label", "concept", "value", "unknown_reason"))
+                    )
+                    score = len(overlap) + (2 * len(overlap & set(plan.topic_terms)))
+                    candidates.append((score, item))
+                top_score = max((score for score, _item in candidates), default=0)
+                leaders = [item for score, item in candidates if score == top_score and score > 0]
+                leader_entities = {item.get("entity_key") for item in leaders}
+                if len(leader_entities) > 1:
+                    message = (
+                        "Pytanie jest niejednoznaczne; znalazłem kilka pasujących wspomnień."
+                        if plan.language == "pl"
+                        else "The question is ambiguous; I found several matching memories."
+                    )
+                    return message, "ambiguous", selected_facts, self._source_refs(selected_facts)
 
-        requires_synthesis = bool(
-            question_tokens
-            & {"summarize", "summary", "synthesize", "explain", "connect", "compare", "why", "how"}
-        )
-        about_tokens = question_tokens - {"what", "do", "know", "about", "my", "the", "i", "have", "anything", "coming", "up", "this", "week"}
-        if about_tokens and selected_facts and not requires_synthesis:
+        if plan.requires_synthesis:
+            return None, "semantic", selected_facts, self._source_refs(
+                [*selected_facts, *context.get("history", []), *context.get("relationships", [])]
+            )
+
+        if selected_facts:
             return (
-                "Relevant memory: " + "; ".join(
-                    f"{item.get('entity_label', item.get('entity_key'))} {item.get('concept')}: {item.get('value', item.get('unknown_reason', 'unknown'))}"
-                    for item in selected_facts[:10]
-                ) + ".",
+                "Relevant memory: " + "; ".join(_fact_summary(item) for item in selected_facts[:10]) + ".",
                 "retrieval",
                 selected_facts,
                 self._source_refs(selected_facts),
             )
-        return None, "semantic", selected_facts, self._source_refs(selected_facts)
+        history = [item for item in context.get("history", []) if isinstance(item, dict)]
+        if history:
+            return (
+                "Relevant memory: " + "; ".join(_fact_summary(item) for item in history[:10]) + ".",
+                "retrieval",
+                history[:MAX_ASK_CONTEXT_HISTORY],
+                self._source_refs(history),
+            )
+        attention = [item for item in context.get("attention", []) if isinstance(item, dict)]
+        if attention:
+            labels = [str(item.get("title") or item.get("kind") or "open item") for item in attention[:10]]
+            return "Relevant attention: " + "; ".join(labels) + ".", "retrieval", attention, self._source_refs(attention)
+        return None, "generic", [], []
 
     def ask(self, question: str) -> dict[str, Any]:
         if not isinstance(question, str) or not question.strip():
             raise ValueError("question must not be empty")
         question = question.strip()
+        plan = plan_ask(question)
         snapshot = self.store.snapshot(now=self._now())
         processing = snapshot.get("processing", {})
         counts = processing.get("counts", {}) if isinstance(processing, dict) else {}
@@ -2161,78 +2433,118 @@ class ProductRuntime:
                 "provider_used": False,
                 "processing": processing,
             }
-        context, selected_facts, _normalized = self._retrieval_context(question)
-        deterministic, mode, items, refs = self._deterministic_answer(question, snapshot, context, selected_facts)
+        context, selected_facts, _normalized = self._retrieval_context(question, plan)
+        deterministic, mode, items, refs = self._deterministic_answer(
+            question,
+            snapshot,
+            context,
+            selected_facts,
+            plan,
+        )
         if deterministic is not None:
             return {
                 "question": question,
                 "mode": mode,
+                "status": "no_match" if mode == "no_match" else "ready",
                 "answer": deterministic,
                 "items": items,
                 "source_refs": refs,
                 "provider_used": False,
                 "processing": snapshot.get("processing", {}),
             }
+        relevant_items = [
+            item
+            for collection in (
+                selected_facts,
+                context.get("history", []),
+                context.get("relationships", []),
+                context.get("attention", []),
+            )
+            for item in collection
+            if isinstance(item, dict)
+        ]
+        has_processed_memory = any(
+            isinstance(snapshot.get(name), list) and bool(snapshot.get(name))
+            for name in ("current_facts", "fact_history", "relationships", "attention")
+        )
+        if not relevant_items:
+            if not has_processed_memory:
+                message = "I do not have any processed memory yet."
+                mode = "no_data"
+            else:
+                message = "No supporting evidence matches that question in processed memory."
+                mode = "no_match"
+            return {
+                "question": question,
+                "mode": mode,
+                "status": mode,
+                "answer": message,
+                "items": [],
+                "source_refs": [],
+                "provider_used": False,
+                "processing": snapshot.get("processing", {}),
+            }
         provider_used = False
         answer: str | None = None
         provider: Any | None = None
-        try:
-            with self._provider_lock:
-                provider, owned = self._provider()
-                try:
-                    method = getattr(provider, "answer", None)
-                    if callable(method):
-                        try:
-                            parameters = inspect.signature(method).parameters
-                        except (TypeError, ValueError):
-                            parameters = {}
-                        if "context" in parameters or any(
-                            parameter.kind == inspect.Parameter.VAR_KEYWORD for parameter in parameters.values()
-                        ):
-                            raw = method(
-                                question=question,
-                                context=context,
-                                time_context={"now_utc": self._now().isoformat(), "timezone": local_timezone_name()},
-                            )
-                        else:
-                            raw = method(question, context)
-                        if isinstance(raw, str):
-                            answer = raw.strip()
-                            provider_refs: list[Any] = []
-                        elif isinstance(raw, dict):
-                            answer = _clean_text(raw.get("answer"), limit=4000)
-                            provider_refs = raw.get("source_refs", []) if isinstance(raw.get("source_refs"), list) else []
-                        else:
-                            provider_refs = []
-                        allowed_refs = set(refs) | {
-                            reference
-                            for item in context.get("sources", [])
-                            for reference in [item.get("event_id")]
-                            if isinstance(reference, str)
-                        }
-                        refs = sorted({reference for reference in provider_refs if isinstance(reference, str) and reference in allowed_refs} | set(refs))
-                        provider_used = bool(answer)
-                finally:
-                    if owned and callable(getattr(provider, "close", None)):
-                        provider.close()
-        except (ProductProviderUnavailableError, RuntimeError) as error:
-            diagnostic = getattr(error, "diagnostic", None)
-            if isinstance(diagnostic, dict):
-                self.last_provider_diagnostic = copy.deepcopy(diagnostic)
-            elif isinstance(getattr(provider, "last_call", None), dict):
-                self.last_provider_diagnostic = copy.deepcopy(provider.last_call)
-            answer = None
+        if plan.requires_synthesis:
+            try:
+                with self._provider_lock:
+                    provider, owned = self._provider()
+                    try:
+                        method = getattr(provider, "answer", None)
+                        if callable(method):
+                            try:
+                                parameters = inspect.signature(method).parameters
+                            except (TypeError, ValueError):
+                                parameters = {}
+                            if "context" in parameters or any(
+                                parameter.kind == inspect.Parameter.VAR_KEYWORD for parameter in parameters.values()
+                            ):
+                                raw = method(
+                                    question=question,
+                                    context=context,
+                                    time_context={"now_utc": self._now().isoformat(), "timezone": local_timezone_name()},
+                                )
+                            else:
+                                raw = method(question, context)
+                            if isinstance(raw, str):
+                                answer = raw.strip()
+                                provider_refs: list[Any] = []
+                            elif isinstance(raw, dict):
+                                answer = _clean_text(raw.get("answer"), limit=4000)
+                                provider_refs = raw.get("source_refs", []) if isinstance(raw.get("source_refs"), list) else []
+                            else:
+                                provider_refs = []
+                            allowed_refs = set(refs) | {
+                                reference
+                                for item in context.get("sources", [])
+                                for reference in [item.get("event_id")]
+                                if isinstance(reference, str)
+                            }
+                            refs = sorted({reference for reference in provider_refs if isinstance(reference, str) and reference in allowed_refs} | set(refs))
+                            provider_used = bool(answer)
+                    finally:
+                        if owned and callable(getattr(provider, "close", None)):
+                            provider.close()
+            except (ProductProviderUnavailableError, RuntimeError) as error:
+                diagnostic = getattr(error, "diagnostic", None)
+                if isinstance(diagnostic, dict):
+                    self.last_provider_diagnostic = copy.deepcopy(diagnostic)
+                elif isinstance(getattr(provider, "last_call", None), dict):
+                    self.last_provider_diagnostic = copy.deepcopy(provider.last_call)
+                answer = None
         if not answer:
-            answer = (
-                "I found no matching structured memory yet."
-                if not selected_facts
-                else "I found relevant memory, but it needs a bounded semantic summary."
-            )
+            answer = "Relevant memory: " + "; ".join(
+                _fact_summary(item)
+                for item in (selected_facts or context.get("history", []))[:10]
+            ) + "."
         return {
             "question": question,
             "mode": "semantic" if provider_used else "retrieval",
+            "status": "ready",
             "answer": answer,
-            "items": selected_facts,
+            "items": selected_facts or context.get("history", [])[:MAX_ASK_CONTEXT_HISTORY],
             "source_refs": refs,
             "provider_used": provider_used,
             "processing": snapshot.get("processing", {}),
