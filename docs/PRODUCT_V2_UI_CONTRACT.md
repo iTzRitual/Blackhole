@@ -9,11 +9,11 @@ The web client owns presentation state only. Its adapter is expected to expose t
 ```text
 getState() -> StateSnapshot
 capture({ text?: string, attachment?: Attachment }) -> CaptureResult
-retractCapture(captureId) -> RetractionResult
+retractCapture(captureId) -> UndoResult
 ask(question) -> AnswerResult
 ```
 
-`text` is optional when an attachment is present. An `Attachment` should carry the source handle or upload result plus `name`, `type`, `size`, and whether it is an image. The transport must preserve the original source as immutable evidence; the UI must not OCR a file or copy its contents into the text composer as a fallback.
+`text` is optional when an attachment is present. An `Attachment` should carry the source handle or upload result plus `name`, `type`, `size`, and whether it is an image. The transport preserves the original source during normal operation; an explicit Undo is the user-authorized deletion exception. The UI must not OCR a file or copy its contents into the text composer as a fallback.
 
 ## Response shapes
 
@@ -25,7 +25,7 @@ The UI normalizes responses at the boundary. A compatible `StateSnapshot` can pr
 
 An `AnswerResult` should provide a direct `summary` or `answer` first, followed by grouped supporting `items`, `groups`, or `sections`. Supported states include `ready`, `no_match`, `unsupported`, and `provider_unavailable` (or an equivalent typed error). Unknown, missing, and not-yet-checked values must remain distinguishable from false, zero, or completion.
 
-`CaptureResult` should return a durable capture identifier, saved status, and processing status. `RetractionResult` should identify the derived retraction and its capture identifier; it must not claim that immutable source evidence was physically deleted.
+`CaptureResult` should return a durable capture identifier, saved status, and processing status. `UndoResult` should identify the capture and report `forgotten`, `deleted`, or `already_deleted`; it must not expose the deleted capture's content. The existing `retractCapture` name and route are compatibility names for this permanent operation.
 
 ## Integrated Host transport and fixture mode
 
@@ -33,9 +33,9 @@ The integrated client uses the Product V2 same-origin routes:
 
 - GET /api/v2/state for read-only Memory, Attention, source, attachment, and processing state;
 - POST /api/v2/capture for text-only, attachment-only, and combined capture;
-- POST /api/v2/retract for append-only semantic Undo;
+- POST /api/v2/retract for permanent user Undo/forget;
 - POST /api/v2/ask for natural Ask; and
-- GET /api/v2/attachments/<sha256> for immutable attachment retrieval.
+- GET /api/v2/attachments/<sha256> for retrieval of live immutable attachment bytes; forgotten blobs are unavailable.
 
 Browser attachments are sent as bounded data_base64 content with filename and
 MIME metadata. The UI never reads file text as a fallback and never waits for

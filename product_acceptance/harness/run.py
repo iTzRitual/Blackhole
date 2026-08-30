@@ -164,7 +164,7 @@ def _evaluate_undo(response: dict[str, Any], expect: dict[str, Any]) -> list[dic
     undo = response.get("undo") if isinstance(response.get("undo"), dict) else {}
     if "raw_preserved" in expect:
         observed = bool(undo.get("raw_preserved"))
-        checks.append(_check(PASS if observed == expect["raw_preserved"] else FAIL, "undo preserves raw evidence", f"expected {expect['raw_preserved']}, observed {observed}"))
+        checks.append(_check(PASS if observed == expect["raw_preserved"] else FAIL, "undo source retention", f"expected raw_preserved={expect['raw_preserved']}, observed {observed}"))
     if expect.get("removed_from_active"):
         observed = undo.get("active") is False
         checks.append(_check(PASS if observed else FAIL, "undo removes item from active state", f"active={undo.get('active')!r}; expected removal of {expect['removed_from_active']}"))

@@ -19,6 +19,7 @@ from app.codex_discovery import (
     discover_codex,
 )
 from app.ingestion_engine import CodexCLIProvider, IngestionEngine, SemanticProvider
+from app.ops_logging import ProductOpsLogger
 from app.product_v2 import PRODUCT_RUNTIME_VERSION, ProductRuntime, product_database_path
 from app.runtime_config import RuntimeConfig
 from app.runtime_contract import runtime_contract
@@ -167,6 +168,7 @@ class HostRuntime:
         auto_start_product_worker: bool = True,
         store: StateStore | None = None,
         _managed: bool = False,
+        ops_logger: ProductOpsLogger | None = None,
     ) -> None:
         config.validate()
         self.config = config
@@ -178,6 +180,7 @@ class HostRuntime:
         self._provider_status_cache: ProviderStatus | None = None
         self._lock = threading.RLock()
         self._managed = _managed
+        self.ops_logger = ops_logger
         self._product_runtime: ProductRuntime | None = None
         self.store = store or StateStore(config.database_path)
         self._owns_store = store is None
@@ -198,6 +201,7 @@ class HostRuntime:
         discovery_fn: Callable[..., ProviderStatus] | None = None,
         clock: Callable[[], datetime] | None = None,
         auto_start_product_worker: bool = True,
+        ops_logger: ProductOpsLogger | None = None,
     ) -> "HostRuntime":
         config = RuntimeConfig.load_or_create(home)
         config.home.mkdir(parents=True, exist_ok=True)
@@ -208,6 +212,7 @@ class HostRuntime:
             discovery_fn=discovery_fn,
             clock=clock,
             auto_start_product_worker=auto_start_product_worker,
+            ops_logger=ops_logger,
         )
 
     initialize = open
@@ -348,6 +353,7 @@ class HostRuntime:
                     start_worker=False,
                     auto_start_on_capture=self._auto_start_product_worker,
                     clock=self._clock,
+                    ops_logger=self.ops_logger,
                 )
             return self._product_runtime
 
@@ -384,8 +390,13 @@ class HostRuntime:
     def product_ask(self, question: str) -> dict[str, Any]:
         return _safe_product_result(self.product_runtime.ask(question))
 
+    def product_forget(self, event_id: str, *, reason: str = "user undo") -> dict[str, Any]:
+        return self.product_runtime.forget(event_id, reason=reason)
+
     def product_retract(self, event_id: str, *, reason: str = "user undo") -> dict[str, Any]:
-        return self.product_runtime.retract(event_id, reason=reason)
+        """Compatibility name for the permanent Product V2 Undo operation."""
+
+        return self.product_forget(event_id, reason=reason)
 
     def product_set_attention_status(
         self,

@@ -31,6 +31,7 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from app.ask_planner import AskPlan, plan_ask, search_terms
 from app.codex_discovery import ProviderStatus
+from app.ops_logging import ProductOpsLogger
 from app.product_v2_store import (
     AUTOMATIC_RETRY_BACKOFF_SECONDS,
     MAX_AUTOMATIC_ATTEMPTS,
@@ -65,6 +66,33 @@ MAX_ASK_CONTEXT_HISTORY = 20
 MAX_ASK_FALLBACK_FACTS = 40
 MAX_ASK_FALLBACK_HISTORY = 20
 MAX_ASK_SUPPORTING_EVIDENCE_IDS = MAX_ASK_CONTEXT_FACTS + MAX_ASK_CONTEXT_HISTORY
+_EVENT_REFERENCE_KEYS = frozenset(
+    {
+        "event_id",
+        "source_event_id",
+        "target_event_id",
+        "related_event_id",
+        "supersedes_event_id",
+    }
+)
+
+
+def _contains_deleted_event_reference(value: Any, deleted_ids: set[str]) -> bool:
+    """Detect deleted event IDs in normalized semantic/provenance output."""
+
+    if isinstance(value, list):
+        return any(
+            (isinstance(item, str) and item in deleted_ids)
+            or _contains_deleted_event_reference(item, deleted_ids)
+            for item in value
+        )
+    if isinstance(value, dict):
+        return any(
+            (str(key) in _EVENT_REFERENCE_KEYS and isinstance(item, str) and item in deleted_ids)
+            or _contains_deleted_event_reference(item, deleted_ids)
+            for key, item in value.items()
+        )
+    return False
 
 _ANSWER_COPY = {
     "en": {
@@ -1945,6 +1973,7 @@ class ProductRuntime:
         auto_start_on_capture: bool | None = None,
         store: ProductStore | None = None,
         clock: Callable[[], datetime] | None = None,
+        ops_logger: ProductOpsLogger | None = None,
     ) -> None:
         self.home = Path(home).expanduser().resolve()
         self.home.mkdir(parents=True, exist_ok=True)
@@ -1961,6 +1990,7 @@ class ProductRuntime:
         self.provider_factory = provider_factory
         self.discovery_fn = discovery_fn
         self.clock = clock or (lambda: datetime.now(timezone.utc))
+        self.ops_logger = ops_logger
         self.store = store or ProductStore(
             db_path or product_database_path(self.home),
             home=self.home,
@@ -1979,6 +2009,10 @@ class ProductRuntime:
         if start_worker:
             self.start_worker()
 
+    def _log(self, component: str, event_name: str, **fields: Any) -> None:
+        if self.ops_logger is not None:
+            self.ops_logger.event(component, event_name, **fields)
+
     def start_worker(self) -> None:
         with self._capture_lock:
             if self._closed:
@@ -1993,6 +2027,7 @@ class ProductRuntime:
                 daemon=True,
             )
             self._worker.start()
+            self._log("worker", "product-v2 worker started")
 
     def close(self) -> None:
         with self._capture_lock:
@@ -2004,6 +2039,11 @@ class ProductRuntime:
             worker = self._worker
         if worker is not None and worker is not threading.current_thread():
             worker.join(timeout=min(max(self.timeout_seconds, 1), 5))
+        self._log(
+            "worker",
+            "product-v2 worker stopped",
+            clean=worker is None or not worker.is_alive(),
+        )
         if (worker is None or not worker.is_alive()) and self._owns_store:
             self.store.close()
 
@@ -2098,27 +2138,36 @@ class ProductRuntime:
             observed_at = capture_time.date().isoformat()
         if not isinstance(observed_at, str):
             raise ValueError("observed_at must be a date string")
+        if source_type is not None and (not isinstance(source_type, str) or not source_type.strip()):
+            raise ValueError("source_type must be non-empty")
 
         attachment_descriptors: list[dict[str, Any]] = []
+        stored_attachment_hashes: list[str] = []
         total_bytes = 0
-        for index, item in enumerate(inputs):
-            content, filename, mime_type = self._attachment_input(item)
-            if len(content) > MAX_ATTACHMENT_BYTES:
-                raise ValueError("attachment is too large")
-            total_bytes += len(content)
-            if total_bytes > MAX_TOTAL_ATTACHMENT_BYTES:
-                raise ValueError("combined attachments are too large")
-            digest, byte_length, _path = self.store.blobs.put(content)
-            attachment_descriptors.append(
-                {
-                    "sha256": digest,
-                    "blob_ref": f"sha256:{digest}",
-                    "original_filename": filename,
-                    "mime_type": mime_type,
-                    "byte_length": byte_length,
-                    "attachment_index": index,
-                }
-            )
+        try:
+            for index, item in enumerate(inputs):
+                content, filename, mime_type = self._attachment_input(item)
+                if len(content) > MAX_ATTACHMENT_BYTES:
+                    raise ValueError("attachment is too large")
+                total_bytes += len(content)
+                if total_bytes > MAX_TOTAL_ATTACHMENT_BYTES:
+                    raise ValueError("combined attachments are too large")
+                digest, byte_length, _path = self.store.put_blob(content)
+                stored_attachment_hashes.append(digest)
+                attachment_descriptors.append(
+                    {
+                        "sha256": digest,
+                        "blob_ref": f"sha256:{digest}",
+                        "original_filename": filename,
+                        "mime_type": mime_type,
+                        "byte_length": byte_length,
+                        "attachment_index": index,
+                    }
+                )
+        except Exception:
+            for digest in stored_attachment_hashes:
+                self.store.remove_blob_if_unreferenced(digest)
+            raise
         if source_type is None:
             if not text and attachment_descriptors and all(
                 str(item["mime_type"]).casefold().startswith("image/") for item in attachment_descriptors
@@ -2128,8 +2177,6 @@ class ProductRuntime:
                 source_type = "document"
             else:
                 source_type = "text"
-        if not isinstance(source_type, str) or not source_type.strip():
-            raise ValueError("source_type must be non-empty")
         payload: dict[str, Any] = {}
         if text is not None:
             payload["text"] = text
@@ -2148,7 +2195,23 @@ class ProductRuntime:
             "payload": payload,
             "metadata": copy.deepcopy(metadata or {}),
         }
-        inserted = self.store.insert_capture(event, attachments=attachment_descriptors)
+        try:
+            inserted = self.store.insert_capture(event, attachments=attachment_descriptors)
+        except Exception:
+            # A rejected duplicate/conflicting or permanently deleted event
+            # must not leave a newly published, unreferenced blob behind.
+            for digest in stored_attachment_hashes:
+                self.store.remove_blob_if_unreferenced(digest)
+            raise
+        self._log(
+            "capture",
+            "saved",
+            event=event_id,
+            inserted=inserted,
+            source_type=source_type.strip(),
+            attachments=len(attachment_descriptors),
+        )
+        self._log("queue", "pending", event=event_id)
         if self._auto_start_on_capture:
             self.start_worker()
         self._worker_wake.set()
@@ -2221,6 +2284,12 @@ class ProductRuntime:
     def _process_claimed(self, events: list[dict[str, Any]]) -> dict[str, Any]:
         events = sorted(events, key=lambda item: (int(item["sequence"]), str(item["event_id"])))
         event_ids = [str(event["event_id"]) for event in events]
+        attempts = {
+            event_id: int((self.store.processing_status(event_id) or {}).get("attempt_count", 1))
+            for event_id in event_ids
+        }
+        for event_id in event_ids:
+            self._log("provider", "start", event=event_id, attempt=attempts.get(event_id, 1))
         max_sequence = max(int(event["sequence"]) for event in events)
         available_ids = {
             str(event.get("event_id"))
@@ -2241,6 +2310,8 @@ class ProductRuntime:
             "captures": [time_context_for_event(event, now=self._now()) for event in events],
         }
         provider: Any | None = None
+        provider_started = time.monotonic()
+        provider_succeeded = False
         try:
             with self._provider_lock:
                 provider, owned = self._provider()
@@ -2269,6 +2340,18 @@ class ProductRuntime:
                 available_ids=available_ids,
                 now=self._now(),
             )
+            provider_succeeded = True
+            provider_call_count = getattr(provider, "call_count", None)
+            if not isinstance(provider_call_count, int) or provider_call_count < 1:
+                provider_call_count = 1
+            self._log(
+                "provider",
+                "complete",
+                event=event_ids[0] if len(event_ids) == 1 else f"batch-{len(event_ids)}",
+                events=len(event_ids),
+                provider_calls=provider_call_count,
+                duration=f"{time.monotonic() - provider_started:.3f}s",
+            )
             for event in events:
                 event_results = [
                     item
@@ -2288,17 +2371,94 @@ class ProductRuntime:
                             )
                         except ValueError:
                             pass
-            committed = self.store.commit_semantic(
-                self._owner_id,
-                event_ids,
-                facts=facts,
-                relations=relations,
-                attention=attention,
-                extractor_version=PRODUCT_EXTRACTOR_VERSION,
-            )
+            committed: dict[str, Any] | None = None
+            deleted_ids: set[str] = set()
+            live_event_ids: list[str] = []
+            facts_for_commit: list[dict[str, Any]] = []
+            relations_for_commit: list[dict[str, Any]] = []
+            attention_for_commit: list[dict[str, Any]] = []
+            for _lease_check in range(3):
+                deleted_ids = {
+                    event_id for event_id in event_ids if self.store.is_deleted(event_id)
+                }
+                live_event_ids = [event_id for event_id in event_ids if event_id not in deleted_ids]
+
+                def survives(item: Any) -> bool:
+                    return (
+                        isinstance(item, dict)
+                        and item.get("source_event_id") in live_event_ids
+                        and not _contains_deleted_event_reference(item, deleted_ids)
+                    )
+
+                facts_for_commit = [item for item in facts if survives(item)]
+                relations_for_commit = [item for item in relations if survives(item)]
+                attention_for_commit = [item for item in attention if survives(item)]
+                if not live_event_ids:
+                    for deleted_event_id in sorted(deleted_ids):
+                        self._log("queue", "commit skipped", event=deleted_event_id, status="deleted")
+                    return {
+                        "requested": len(events),
+                        "processed": 0,
+                        "failed": 0,
+                        "deleted": len(deleted_ids),
+                        "event_ids": event_ids,
+                        "deleted_event_ids": sorted(deleted_ids),
+                        "semantic_effects": 0,
+                    }
+                try:
+                    committed = self.store.commit_semantic(
+                        self._owner_id,
+                        live_event_ids,
+                        facts=facts_for_commit,
+                        relations=relations_for_commit,
+                        attention=attention_for_commit,
+                        extractor_version=PRODUCT_EXTRACTOR_VERSION,
+                    )
+                    break
+                except RuntimeError as commit_error:
+                    if str(commit_error) != "processing lease is no longer owned":
+                        raise
+                    latest_deleted_ids = {
+                        event_id for event_id in event_ids if self.store.is_deleted(event_id)
+                    }
+                    latest_live_event_ids = [
+                        event_id for event_id in event_ids if event_id not in latest_deleted_ids
+                    ]
+                    if latest_deleted_ids == deleted_ids and latest_live_event_ids == live_event_ids:
+                        raise
+            if committed is None:
+                raise RuntimeError("processing lease is no longer owned")
+            for deleted_event_id in sorted(deleted_ids):
+                self._log("queue", "commit skipped", event=deleted_event_id, status="deleted")
+            facts_by_event = {event_id: 0 for event_id in live_event_ids}
+            relations_by_event = {event_id: 0 for event_id in live_event_ids}
+            attention_by_event = {event_id: 0 for event_id in live_event_ids}
+            for item in facts_for_commit:
+                if item.get("source_event_id") in facts_by_event:
+                    facts_by_event[item["source_event_id"]] += 1
+            for item in relations_for_commit:
+                if item.get("source_event_id") in relations_by_event:
+                    relations_by_event[item["source_event_id"]] += 1
+            for item in attention_for_commit:
+                if item.get("source_event_id") in attention_by_event:
+                    attention_by_event[item["source_event_id"]] += 1
+            for event_id in live_event_ids:
+                self._log(
+                    "memory",
+                    "updated",
+                    event=event_id,
+                    facts=facts_by_event[event_id],
+                    relations=relations_by_event[event_id],
+                )
+                self._log(
+                    "attention",
+                    "updated",
+                    event=event_id,
+                    active_added=attention_by_event[event_id],
+                )
             return {
                 "requested": len(events),
-                "processed": len(event_ids),
+                "processed": len(live_event_ids),
                 "failed": 0,
                 "event_ids": event_ids,
                 "facts_added": committed["facts_added"],
@@ -2306,8 +2466,23 @@ class ProductRuntime:
                 "attention_added": committed["attention_added"],
                 "semantic_effects": committed["facts_added"] + committed["relations_added"] + committed["attention_added"],
                 "projection_run_id": committed["projection_run_id"],
+                "deleted": len(deleted_ids),
+                "deleted_event_ids": sorted(deleted_ids),
             }
         except Exception as error:
+            deleted_ids = [event_id for event_id in event_ids if self.store.is_deleted(event_id)]
+            if provider_succeeded and deleted_ids and len(deleted_ids) == len(event_ids):
+                for event_id in deleted_ids:
+                    self._log("queue", "commit skipped", event=event_id, status="deleted")
+                return {
+                    "requested": len(events),
+                    "processed": 0,
+                    "failed": 0,
+                    "deleted": len(deleted_ids),
+                    "event_ids": event_ids,
+                    "deleted_event_ids": deleted_ids,
+                    "semantic_effects": 0,
+                }
             diagnostic = getattr(error, "diagnostic", None)
             if isinstance(diagnostic, dict):
                 self.last_provider_diagnostic = copy.deepcopy(diagnostic)
@@ -2332,6 +2507,27 @@ class ProductRuntime:
                 error=message,
                 retry_after_seconds=retry_after,
             )
+            for event_id in event_ids:
+                if event_id in deleted_ids:
+                    self._log("queue", "commit skipped", event=event_id, status="deleted")
+                    continue
+                self._log(
+                    "provider",
+                    "failed",
+                    event=event_id,
+                    attempt=attempts.get(event_id, 1),
+                    code=type(error).__name__,
+                    error=message,
+                )
+                if retry_after > 0:
+                    self._log(
+                        "queue",
+                        "retry scheduled",
+                        event=event_id,
+                        in_seconds=retry_after,
+                    )
+                else:
+                    self._log("queue", "no immediate retry", event=event_id)
             return {
                 "requested": len(events),
                 "processed": 0,
@@ -2362,11 +2558,11 @@ class ProductRuntime:
                 if events:
                     self._process_claimed(events)
                     continue
-            except Exception:
+            except Exception as error:
                 # A worker loop must stay alive for later captures.  Event
                 # claims have leases and are recovered on the next iteration or
                 # by the next runtime process.
-                pass
+                self._log("worker", "error", error=error)
             self._worker_wake.wait(0.15)
             self._worker_wake.clear()
 
@@ -2420,6 +2616,12 @@ class ProductRuntime:
 
     def retry_failed(self, event_id: str | None = None, *, limit: int | None = None) -> dict[str, Any]:
         retried = self.store.retry_failed(event_id, limit=limit)
+        self._log(
+            "queue",
+            "retry requested",
+            event=event_id or "all",
+            requeued=retried,
+        )
         if retried and self._auto_start_on_capture:
             self.start_worker()
         self._worker_wake.set()
@@ -2432,10 +2634,23 @@ class ProductRuntime:
             "failed_count": status.get("counts", {}).get("failed", 0),
         }
 
-    def retract(self, event_id: str, *, reason: str = "user undo") -> dict[str, Any]:
-        result = self.store.retract(event_id, reason=reason)
+    def forget(self, event_id: str, *, reason: str = "user undo") -> dict[str, Any]:
+        self._log("undo", "requested", event=event_id)
+        result = self.store.forget(event_id, reason=reason)
+        self._log(
+            "undo",
+            "deleted" if result.get("deleted") else "already deleted",
+            event=event_id,
+            blobs_deleted=result.get("blobs_deleted", 0),
+            blobs_preserved=result.get("blobs_preserved", 0),
+        )
         self._worker_wake.set()
         return result
+
+    def retract(self, event_id: str, *, reason: str = "user undo") -> dict[str, Any]:
+        """Compatibility name for the permanent Product V2 Undo operation."""
+
+        return self.forget(event_id, reason=reason)
 
     def set_attention_status(self, fingerprint: str, status: str, *, note: str | None = None) -> dict[str, Any]:
         return self.store.set_attention_status(fingerprint, status, note=note)
@@ -3284,7 +3499,7 @@ class ProductRuntime:
             return _answer_copy(plan, "relevant_attention") + "; ".join(labels) + ".", "retrieval", attention, self._source_refs(attention)
         return None, "generic", [], []
 
-    def ask(self, question: str) -> dict[str, Any]:
+    def _ask(self, question: str) -> dict[str, Any]:
         if not isinstance(question, str) or not question.strip():
             raise ValueError("question must not be empty")
         question = question.strip()
@@ -3404,6 +3619,7 @@ class ProductRuntime:
                             if "context" in parameters or any(
                                 parameter.kind == inspect.Parameter.VAR_KEYWORD for parameter in parameters.values()
                             ):
+                                self._ask_provider_calls += 1
                                 raw = method(
                                     question=question,
                                     context=context,
@@ -3414,6 +3630,7 @@ class ProductRuntime:
                                     },
                                 )
                             else:
+                                self._ask_provider_calls += 1
                                 raw = method(question, context)
                             if isinstance(raw, str):
                                 answer = raw.strip()
@@ -3486,6 +3703,49 @@ class ProductRuntime:
             "answer_language": plan.language if plan.language in {"en", "pl"} else "same_as_question",
             "processing": snapshot.get("processing", {}),
         }
+
+    def ask(self, question: str) -> dict[str, Any]:
+        """Answer one question and emit bounded operational timing metadata."""
+
+        request_id = f"ask-{uuid.uuid4().hex[:12]}"
+        started = time.monotonic()
+        self._ask_provider_calls = 0
+        self._log("ask", "start", request=request_id)
+        result: dict[str, Any] | None = None
+        try:
+            result = self._ask(question)
+            mode = str(result.get("mode") or "unknown")
+            if mode == "semantic":
+                path = "deterministic/retrieval/semantic"
+            elif mode in {"processing", "processing_failed"}:
+                path = mode
+            elif mode in {"retrieval", "attention", "costs", "changes", "last_mention", "ambiguous", "no_match", "no_data"}:
+                path = f"deterministic/{mode}"
+            else:
+                path = mode
+            refs = result.get("source_refs")
+            source_count = len(refs) if isinstance(refs, list) else 0
+            self._log("ask", "path", request=request_id, path=path)
+            self._log(
+                "ask",
+                "sources",
+                request=request_id,
+                count=source_count,
+                provider_calls=self._ask_provider_calls,
+                duration=f"{(time.monotonic() - started) * 1000:.0f}ms",
+            )
+            return result
+        except Exception as error:
+            self._log(
+                "ask",
+                "failed",
+                request=request_id,
+                code=type(error).__name__,
+                error=error,
+            )
+            raise
+        finally:
+            self._log("ask", "complete", request=request_id)
 
     def attachment_bytes(self, sha256: str) -> tuple[bytes, dict[str, Any]]:
         return self.store.attachment_bytes(sha256)

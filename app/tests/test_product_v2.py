@@ -350,7 +350,7 @@ class ProductV2Tests(unittest.TestCase):
                 self.assertEqual(actual, content)
                 self.assertEqual(metadata["mime_type"], "application/pdf")
 
-    def test_retract_is_auditable_and_removes_fact_from_rebuildable_active_state(self) -> None:
+    def test_undo_permanently_forgets_capture_and_is_idempotent(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             with self.runtime(directory, ProductFakeProvider()) as runtime:
                 runtime.capture("The car started knocking.", event_id="v2-retract-1")
@@ -358,13 +358,19 @@ class ProductV2Tests(unittest.TestCase):
                 self.assertEqual(runtime.snapshot()["counts"]["facts"], 1)
                 result = runtime.retract("v2-retract-1")
                 self.assertTrue(result["retracted"])
+                self.assertTrue(result["forgotten"])
+                self.assertTrue(result["deleted"])
                 state = runtime.snapshot()
                 self.assertEqual(state["counts"]["facts"], 0)
-                self.assertEqual(state["retracted_event_ids"], ["v2-retract-1"])
-                self.assertTrue(state["fact_history"][0]["retracted"])
-                self.assertIsNotNone(runtime.store.raw_event("v2-retract-1"))
+                self.assertEqual(state["fact_history"], [])
+                self.assertIsNone(runtime.store.raw_event("v2-retract-1"))
+                self.assertIsNone(runtime.processing_status("v2-retract-1"))
+                self.assertTrue(runtime.store.is_deleted("v2-retract-1"))
                 runtime.store.rebuild()
                 self.assertEqual(runtime.snapshot()["counts"]["facts"], 0)
+                second = runtime.retract("v2-retract-1")
+                self.assertFalse(second["deleted"])
+                self.assertTrue(second["already_deleted"])
 
     def test_open_world_fact_and_deterministic_ask_do_not_need_provider_answer(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

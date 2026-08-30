@@ -776,7 +776,7 @@ def main() -> int:
             {"capability": "open-world Memory", "status": _capability_status(results, {case["case_id"] for case in cases if case["case_id"].startswith(("MEM-", "OW-"))})},
             {"capability": "POST Ask and source evidence", "status": _capability_status(results, {case["case_id"] for case in cases if any(step.get("type") == "ask" for step in case.get("steps", []))})},
             {"capability": "attachment-only, combined, unsupported, and exact bytes", "status": _capability_status(results, {"ATT-001", "ATT-002", "ATT-003", "ATT-004", "ATT-005"})},
-            {"capability": "Undo/retraction preserves raw evidence", "status": _capability_status(results, {"UNDO-010"})},
+            {"capability": "Undo permanently forgets the selected capture", "status": _capability_status(results, {"UNDO-010"})},
             {"capability": "integrated PWA visual review", "status": "NOT TESTED"},
         ]
         report["limitations"] = [

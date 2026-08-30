@@ -18,6 +18,7 @@ from typing import Any
 from urllib.parse import unquote, urlparse
 
 from app.host import HOST_VERSION, HostRuntime
+from app.ops_logging import ProductOpsLogger
 from app.product_v2 import MAX_ATTACHMENT_BYTES, MAX_CAPTURE_TEXT, PRODUCT_RUNTIME_VERSION
 from app.query_service import answer_question_from_snapshot, build_state_view
 from app.runtime_config import RuntimeConfig, resolve_home
@@ -75,6 +76,7 @@ class HostServer(ThreadingHTTPServer):
         clock: Any = None,
         auto_start_product_worker: bool = True,
         trusted_lan_demo: bool = False,
+        ops_logger: ProductOpsLogger | None = None,
     ) -> None:
         self.home = resolve_home(home)
         self.database_path = database_path.resolve() if database_path is not None else None
@@ -89,6 +91,7 @@ class HostServer(ThreadingHTTPServer):
         self.clock = clock
         self.auto_start_product_worker = auto_start_product_worker
         self.trusted_lan_demo = trusted_lan_demo
+        self.ops_logger = ops_logger
         self.request_lock = threading.RLock()
         self._runtime: HostRuntime | None = None
         super().__init__(address, handler)
@@ -115,6 +118,7 @@ class HostServer(ThreadingHTTPServer):
                         clock=self.clock,
                         auto_start_product_worker=self.auto_start_product_worker,
                         _managed=True,
+                        ops_logger=self.ops_logger,
                     )
                 return self._runtime
             config = RuntimeConfig.load_or_create(self.home)
@@ -127,6 +131,7 @@ class HostServer(ThreadingHTTPServer):
                 discovery_fn=self.discovery_fn,
                 clock=self.clock,
                 auto_start_product_worker=self.auto_start_product_worker,
+                ops_logger=self.ops_logger,
             )
 
     def server_close(self) -> None:
@@ -134,6 +139,8 @@ class HostServer(ThreadingHTTPServer):
         self._runtime = None
         if runtime is not None:
             runtime.shutdown()
+        if self.ops_logger is not None:
+            self.ops_logger.event("web", "server stopped")
         super().server_close()
 
 
@@ -448,7 +455,7 @@ class HostRequestHandler(BaseHTTPRequestHandler):
                 if not isinstance(reason, str) or not reason.strip():
                     raise ValueError("reason must be a non-empty string")
                 with self.host_server.request_lock, self._with_host() as host:
-                    result = host.product_retract(event_id, reason=reason)
+                    result = host.product_forget(event_id, reason=reason)
                 self._send_json({"ok": True, "runtime": PRODUCT_RUNTIME_VERSION, "retraction": result})
                 return
             if parsed.path == "/api/v2/attention/status":
@@ -572,6 +579,7 @@ def create_server(
     clock: Any = None,
     auto_start_product_worker: bool = True,
     trusted_lan_demo: bool = False,
+    ops_logger: ProductOpsLogger | None = None,
 ) -> HostServer:
     """Create a Host-backed server without seeding or provider work."""
 
@@ -595,6 +603,7 @@ def create_server(
         clock=clock,
         auto_start_product_worker=auto_start_product_worker,
         trusted_lan_demo=trusted_lan_demo,
+        ops_logger=ops_logger,
     )
 
 
@@ -609,16 +618,31 @@ def main(argv: list[str] | None = None) -> int:
         help="explicitly allow a non-loopback bind on a trusted private hackathon network",
     )
     args = parser.parse_args(argv)
+    ops_logger = ProductOpsLogger()
     try:
         server = create_server(
             args.host,
             args.port,
             home=args.home,
             trusted_lan_demo=args.trusted_lan_demo,
+            ops_logger=ops_logger,
         )
     except (OSError, ValueError) as error:
         parser.error(str(error))
         return 2
+    runtime = server.open_runtime()
+    status = runtime.status(refresh_provider=True)
+    product = status.get("product", {})
+    provider = status.get("provider", {})
+    ops_logger.event("web", "listening", url=f"http://{args.host}:{args.port}")
+    ops_logger.event(
+        "startup",
+        "product-v2 ready",
+        home=str(server.home),
+        product_db=product.get("database", server.home / "blackhole-v2.db"),
+        provider=provider.get("status", "unknown"),
+        readiness="ready" if provider.get("ready") else "not_ready",
+    )
     print(f"Blackhole Host running at http://{args.host}:{args.port}")
     print(f"Blackhole Home: {server.home}")
     if not _is_loopback(args.host):

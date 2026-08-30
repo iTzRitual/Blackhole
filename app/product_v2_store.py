@@ -3,8 +3,10 @@
 The historical ``StateStore`` remains the V1 benchmark/product compatibility
 store.  This module owns a separate Product V2 database so generic product
 facts, attachments, and attention state cannot accidentally change the frozen
-V1 projection.  Raw source rows and user retractions are append-only; current
-views are replaceable projections with a recorded input digest.
+V1 projection.  Raw source rows are immutable during normal processing and
+history operations; an explicit user Undo is the one supported destructive
+operation and permanently forgets that capture. Current views are replaceable
+projections with a recorded input digest.
 """
 
 from __future__ import annotations
@@ -187,6 +189,12 @@ class ProductStore:
 
     def _create_schema(self) -> None:
         with self._lock:
+            # Product V2 source rows are still immutable during normal runtime
+            # operations. Explicit user forget is implemented below as the
+            # narrowly-scoped deletion capability, so the original blanket
+            # DELETE trigger must not remain on databases created by an older
+            # Product V2 build.
+            self.connection.execute("DROP TRIGGER IF EXISTS product_source_events_no_delete")
             self.connection.executescript(
                 """
                 CREATE TABLE IF NOT EXISTS source_events (
@@ -205,12 +213,6 @@ class ProductStore:
 
                 CREATE TRIGGER IF NOT EXISTS product_source_events_no_update
                 BEFORE UPDATE ON source_events
-                BEGIN
-                    SELECT RAISE(ABORT, 'Product V2 source events are immutable');
-                END;
-
-                CREATE TRIGGER IF NOT EXISTS product_source_events_no_delete
-                BEFORE DELETE ON source_events
                 BEGIN
                     SELECT RAISE(ABORT, 'Product V2 source events are immutable');
                 END;
@@ -255,6 +257,25 @@ class ProductStore:
                     reason TEXT NOT NULL,
                     created_at TEXT NOT NULL
                 );
+
+                CREATE TABLE IF NOT EXISTS deleted_events (
+                    event_id TEXT PRIMARY KEY,
+                    deleted_at TEXT NOT NULL
+                );
+
+                CREATE TABLE IF NOT EXISTS product_delete_authorizations (
+                    event_id TEXT PRIMARY KEY
+                );
+
+                CREATE TRIGGER IF NOT EXISTS product_source_events_no_delete
+                BEFORE DELETE ON source_events
+                WHEN NOT EXISTS (
+                    SELECT 1 FROM product_delete_authorizations
+                    WHERE event_id = OLD.event_id
+                )
+                BEGIN
+                    SELECT RAISE(ABORT, 'Product V2 source events are immutable outside explicit Undo');
+                END;
 
                 CREATE TABLE IF NOT EXISTS memory_facts (
                     fact_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -369,6 +390,8 @@ class ProductStore:
                     ON memory_facts(source_event_id);
                 CREATE INDEX IF NOT EXISTS product_attention_due_idx
                     ON current_attention(status, due_at);
+                CREATE INDEX IF NOT EXISTS product_event_attachment_hash_idx
+                    ON event_attachments(sha256);
                 """
             )
             self._ensure_column_locked("memory_facts", "metadata_json", "TEXT NOT NULL DEFAULT '{}'")
@@ -564,6 +587,42 @@ class ProductStore:
             ).fetchone()
             return int(row["next_sequence"])
 
+    def put_blob(self, content: bytes) -> tuple[str, int, Path]:
+        """Publish a blob while sharing the store lock with explicit forget."""
+
+        with self._lock:
+            return self.blobs.put(content)
+
+    def remove_blob_if_unreferenced(self, sha256: str) -> bool:
+        """Remove one orphaned blob, if no live capture references its hash."""
+
+        with self._transaction(immediate=True):
+            row = self.connection.execute(
+                "SELECT relative_path FROM attachment_blobs WHERE sha256 = ?",
+                (sha256,),
+            ).fetchone()
+            references = self.connection.execute(
+                "SELECT COUNT(*) AS count FROM event_attachments WHERE sha256 = ?",
+                (sha256,),
+            ).fetchone()
+            if int(references["count"]) > 0:
+                return False
+            if row is None:
+                # A failed capture can publish the content-addressed file
+                # before its attachment_blobs row is created. It is still an
+                # orphan when no event link exists.
+                path = self.blobs.path_for_hash(sha256).resolve()
+            else:
+                path = (self.home / row["relative_path"]).resolve()
+            try:
+                path.relative_to(self.blobs.root.resolve())
+            except ValueError as error:
+                raise RuntimeError("attachment path escaped blob store") from error
+            if row is not None:
+                self.connection.execute("DELETE FROM attachment_blobs WHERE sha256 = ?", (sha256,))
+            path.unlink(missing_ok=True)
+            return path.exists() is False
+
     def insert_capture(
         self,
         event: dict[str, Any],
@@ -586,6 +645,10 @@ class ProductStore:
         raw_json = json.dumps(event, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
         attachment_rows = list(attachments or [])
         with self._transaction(immediate=True):
+            if self.connection.execute(
+                "SELECT 1 FROM deleted_events WHERE event_id = ?", (event_id,)
+            ).fetchone() is not None:
+                raise ValueError(f"capture was permanently deleted: {event_id}")
             existing = self.connection.execute(
                 "SELECT raw_json FROM source_events WHERE event_id = ?", (event_id,)
             ).fetchone()
@@ -671,6 +734,12 @@ class ProductStore:
                 "SELECT raw_json FROM source_events WHERE event_id = ?", (event_id,)
             ).fetchone()
             return json.loads(row["raw_json"]) if row is not None else None
+
+    def is_deleted(self, event_id: str) -> bool:
+        with self._lock:
+            return self.connection.execute(
+                "SELECT 1 FROM deleted_events WHERE event_id = ?", (event_id,)
+            ).fetchone() is not None
 
     def raw_events(self, *, max_sequence: int | None = None) -> list[dict[str, Any]]:
         with self._lock:
@@ -1147,25 +1216,437 @@ class ProductStore:
                 updated += int(cursor.rowcount > 0)
             return updated
 
-    def retract(self, event_id: str, *, reason: str = "user undo") -> dict[str, Any]:
+    @staticmethod
+    def _json_list(value: Any) -> list[Any]:
+        if isinstance(value, str):
+            try:
+                value = json.loads(value)
+            except (TypeError, ValueError, json.JSONDecodeError):
+                return []
+        return value if isinstance(value, list) else []
+
+    @classmethod
+    def _scrub_event_reference(cls, value: Any, event_id: str) -> Any:
+        """Remove one event ID from derived reference-shaped JSON values."""
+
+        reference_keys = {
+            "event_id",
+            "source_event_id",
+            "target_event_id",
+            "related_event_id",
+            "supersedes_event_id",
+        }
+        if isinstance(value, list):
+            return [
+                cls._scrub_event_reference(item, event_id)
+                for item in value
+                if item != event_id
+            ]
+        if isinstance(value, dict):
+            result: dict[Any, Any] = {}
+            for key, item in value.items():
+                if str(key) in reference_keys and item == event_id:
+                    continue
+                result[key] = cls._scrub_event_reference(item, event_id)
+            return result
+        return value
+
+    @classmethod
+    def _contains_event_reference(cls, value: Any, event_id: str) -> bool:
+        reference_keys = {
+            "event_id",
+            "source_event_id",
+            "target_event_id",
+            "related_event_id",
+            "supersedes_event_id",
+        }
+        if isinstance(value, list):
+            return any(cls._contains_event_reference(item, event_id) for item in value)
+        if isinstance(value, dict):
+            return any(
+                (str(key) in reference_keys and item == event_id)
+                or cls._contains_event_reference(item, event_id)
+                for key, item in value.items()
+            )
+        return False
+
+    @classmethod
+    def _fact_fingerprint_from_row(
+        cls,
+        row: sqlite3.Row,
+        *,
+        source_refs: list[str],
+        supersedes_event_id: str | None,
+    ) -> str:
+        value = None
+        if row["value_json"] is not None:
+            try:
+                value = json.loads(row["value_json"])
+            except (TypeError, ValueError, json.JSONDecodeError):
+                value = None
+        status = str(row["knowledge_status"])
+        fingerprint_input = {
+            "source_event_id": row["source_event_id"],
+            "entity_key": row["entity_key"],
+            "entity_label": row["entity_label"],
+            "concept": row["concept"],
+            "knowledge_status": status,
+            "value": None if status == "unknown" else value,
+            "unknown_reason": row["unknown_reason"] if status == "unknown" else None,
+            "operation": row["operation"],
+            "supersedes_event_id": supersedes_event_id,
+            "source_refs": source_refs,
+            "temporal": cls._row_json(row, "temporal_json", {}),
+            "metadata": cls._json_object(row["metadata_json"]),
+        }
+        return hashlib.sha256(canonical_json(fingerprint_input).encode("utf-8")).hexdigest()
+
+    @classmethod
+    def _relation_fingerprint_from_row(
+        cls,
+        row: sqlite3.Row,
+        *,
+        source_refs: list[str],
+    ) -> str:
+        value = None
+        if row["value_json"] is not None:
+            try:
+                value = json.loads(row["value_json"])
+            except (TypeError, ValueError, json.JSONDecodeError):
+                value = None
+        fingerprint_input = {
+            "source_event_id": row["source_event_id"],
+            "source_entity_key": row["source_entity_key"],
+            "relation_type": row["relation_type"],
+            "target_entity_key": row["target_entity_key"],
+            "target_event_id": row["target_event_id"],
+            "knowledge_status": row["knowledge_status"],
+            "value": value,
+            "source_refs": source_refs,
+            "metadata": cls._json_object(row["metadata_json"]),
+        }
+        return hashlib.sha256(canonical_json(fingerprint_input).encode("utf-8")).hexdigest()
+
+    @staticmethod
+    def _attention_fingerprint_from_row(
+        row: sqlite3.Row,
+        *,
+        source_refs: list[str],
+        details: dict[str, Any],
+    ) -> str:
+        fingerprint_input = {
+            "source_event_id": row["source_event_id"],
+            "kind": row["kind"],
+            "title": row["title"],
+            "status": row["status"],
+            "knowledge_status": row["knowledge_status"],
+            "starts_at": row["starts_at"],
+            "due_at": row["due_at"],
+            "timezone": row["timezone"],
+            "source_refs": source_refs,
+            "details": details,
+        }
+        return hashlib.sha256(canonical_json(fingerprint_input).encode("utf-8")).hexdigest()
+
+    def forget(self, event_id: str, *, reason: str = "user undo") -> dict[str, Any]:
+        """Permanently forget one capture and rebuild remaining Product V2 state.
+
+        The tombstone contains only the event ID and deletion time. All source,
+        processing, semantic, provenance, and attachment-link rows belonging
+        exclusively to the capture are removed in the same SQLite transaction.
+        A late worker therefore either observes the deleted lease or waits for
+        this transaction and then fails its ownership check.
+        """
+
+        if not isinstance(event_id, str) or not event_id.strip():
+            raise ValueError("event_id must be a non-empty string")
         if not isinstance(reason, str) or not reason.strip():
             raise ValueError("retraction reason must not be empty")
+        event_id = event_id.strip()
         with self._transaction(immediate=True):
+            if self.connection.execute(
+                "SELECT 1 FROM deleted_events WHERE event_id = ?", (event_id,)
+            ).fetchone() is not None:
+                return {
+                    "event_id": event_id,
+                    "forgotten": True,
+                    "deleted": False,
+                    "already_deleted": True,
+                    "retracted": True,
+                    "deletion_status": "already_deleted",
+                    "blobs_deleted": 0,
+                    "blobs_preserved": 0,
+                    "projection_run_id": None,
+                }
+
             if self.connection.execute(
                 "SELECT 1 FROM source_events WHERE event_id = ?", (event_id,)
             ).fetchone() is None:
                 raise ValueError(f"unknown event: {event_id}")
-            cursor = self.connection.execute(
-                "INSERT OR IGNORE INTO retractions(event_id, reason, created_at) VALUES (?, ?, ?)",
-                (event_id, reason.strip()[:500], utc_now()),
+
+            attachment_rows = self.connection.execute(
+                """
+                SELECT a.sha256, b.relative_path
+                FROM event_attachments a JOIN attachment_blobs b ON b.sha256 = a.sha256
+                WHERE a.event_id = ?
+                ORDER BY a.attachment_index
+                """,
+                (event_id,),
+            ).fetchall()
+            hashes = list(dict.fromkeys(str(row["sha256"]) for row in attachment_rows))
+
+            fact_rows = self.connection.execute(
+                "SELECT * FROM memory_facts ORDER BY fact_id"
+            ).fetchall()
+            relation_rows = self.connection.execute(
+                "SELECT * FROM memory_relations ORDER BY relation_id"
+            ).fetchall()
+            attention_rows = self.connection.execute(
+                "SELECT * FROM attention_candidates ORDER BY candidate_id"
+            ).fetchall()
+
+            candidate_fingerprints_to_delete: set[str] = set()
+            candidate_fingerprint_updates: list[tuple[str, str]] = []
+            for row in attention_rows:
+                refs = {
+                    item for item in self._json_list(row["source_refs_json"])
+                    if isinstance(item, str) and item
+                }
+                if row["source_event_id"] == event_id:
+                    candidate_fingerprints_to_delete.add(str(row["fingerprint"]))
+                    continue
+                details_value = self._row_json(row, "details_json", {})
+                if event_id not in refs and not self._contains_event_reference(details_value, event_id):
+                    continue
+                new_refs = sorted(refs - {event_id})
+                if row["source_event_id"] not in new_refs:
+                    new_refs.append(str(row["source_event_id"]))
+                    new_refs.sort()
+                details = self._scrub_event_reference(
+                    details_value, event_id
+                )
+                if not isinstance(details, dict):
+                    details = {}
+                new_fingerprint = self._attention_fingerprint_from_row(
+                    row,
+                    source_refs=new_refs,
+                    details=details,
+                )
+                candidate_fingerprint_updates.append((str(row["fingerprint"]), new_fingerprint))
+
+            if candidate_fingerprints_to_delete:
+                placeholders = ",".join("?" for _ in candidate_fingerprints_to_delete)
+                self.connection.execute(
+                    f"DELETE FROM attention_status_events WHERE candidate_fingerprint IN ({placeholders})",
+                    tuple(candidate_fingerprints_to_delete),
+                )
+            self.connection.execute(
+                "DELETE FROM attention_candidates WHERE source_event_id = ?", (event_id,)
             )
+
+            deleted_fact_rows = [row for row in fact_rows if row["source_event_id"] == event_id]
+            self.connection.execute(
+                "DELETE FROM memory_facts WHERE source_event_id = ?", (event_id,)
+            )
+            for row in fact_rows:
+                if row["source_event_id"] == event_id:
+                    continue
+                refs = {
+                    item for item in self._json_list(row["source_refs_json"])
+                    if isinstance(item, str) and item
+                }
+                supersedes = row["supersedes_event_id"]
+                if event_id not in refs and supersedes != event_id:
+                    continue
+                new_refs = sorted(refs - {event_id})
+                source_id = str(row["source_event_id"])
+                if source_id not in new_refs:
+                    new_refs.append(source_id)
+                    new_refs.sort()
+                new_supersedes = None if supersedes == event_id else supersedes
+                new_fingerprint = self._fact_fingerprint_from_row(
+                    row,
+                    source_refs=new_refs,
+                    supersedes_event_id=new_supersedes,
+                )
+                try:
+                    self.connection.execute(
+                        """
+                        UPDATE memory_facts
+                        SET supersedes_event_id = ?, source_refs_json = ?, fingerprint = ?
+                        WHERE fact_id = ?
+                        """,
+                        (new_supersedes, canonical_json(new_refs), new_fingerprint, row["fact_id"]),
+                    )
+                except sqlite3.IntegrityError:
+                    # Scrubbing can make two derived rows identical. Keep one
+                    # authoritative evidence row rather than preserving a
+                    # stale duplicate that still carries the deleted ref.
+                    self.connection.execute(
+                        "DELETE FROM memory_facts WHERE fact_id = ?", (row["fact_id"],)
+                    )
+
+            self.connection.execute(
+                "DELETE FROM memory_relations WHERE source_event_id = ?", (event_id,)
+            )
+            for row in relation_rows:
+                if row["source_event_id"] == event_id or row["target_event_id"] == event_id:
+                    self.connection.execute(
+                        "DELETE FROM memory_relations WHERE relation_id = ?", (row["relation_id"],)
+                    )
+                    continue
+                refs = {
+                    item for item in self._json_list(row["source_refs_json"])
+                    if isinstance(item, str) and item
+                }
+                if event_id not in refs:
+                    continue
+                new_refs = sorted(refs - {event_id})
+                source_id = str(row["source_event_id"])
+                if source_id not in new_refs:
+                    new_refs.append(source_id)
+                    new_refs.sort()
+                new_fingerprint = self._relation_fingerprint_from_row(
+                    row,
+                    source_refs=new_refs,
+                )
+                try:
+                    self.connection.execute(
+                        "UPDATE memory_relations SET source_refs_json = ?, fingerprint = ? WHERE relation_id = ?",
+                        (canonical_json(new_refs), new_fingerprint, row["relation_id"]),
+                    )
+                except sqlite3.IntegrityError:
+                    self.connection.execute(
+                        "DELETE FROM memory_relations WHERE relation_id = ?", (row["relation_id"],)
+                    )
+
+            for old_fingerprint, new_fingerprint in candidate_fingerprint_updates:
+                row = self.connection.execute(
+                    "SELECT * FROM attention_candidates WHERE fingerprint = ?",
+                    (old_fingerprint,),
+                ).fetchone()
+                if row is None:
+                    continue
+                refs = sorted(
+                    {
+                        item for item in self._json_list(row["source_refs_json"])
+                        if isinstance(item, str) and item and item != event_id
+                    }
+                )
+                source_id = str(row["source_event_id"])
+                if source_id not in refs:
+                    refs.append(source_id)
+                    refs.sort()
+                details = self._scrub_event_reference(
+                    self._row_json(row, "details_json", {}), event_id
+                )
+                if not isinstance(details, dict):
+                    details = {}
+                actual_fingerprint = self._attention_fingerprint_from_row(
+                    row,
+                    source_refs=refs,
+                    details=details,
+                )
+                try:
+                    self.connection.execute(
+                        """
+                        UPDATE attention_candidates
+                        SET fingerprint = ?, source_refs_json = ?, details_json = ?
+                        WHERE candidate_id = ?
+                        """,
+                        (
+                            actual_fingerprint,
+                            canonical_json(refs),
+                            canonical_json(details),
+                            row["candidate_id"],
+                        ),
+                    )
+                    self.connection.execute(
+                        "UPDATE attention_status_events SET candidate_fingerprint = ? WHERE candidate_fingerprint = ?",
+                        (actual_fingerprint, old_fingerprint),
+                    )
+                except sqlite3.IntegrityError:
+                    self.connection.execute(
+                        "DELETE FROM attention_status_events WHERE candidate_fingerprint = ?",
+                        (old_fingerprint,),
+                    )
+                    self.connection.execute(
+                        "DELETE FROM attention_candidates WHERE candidate_id = ?",
+                        (row["candidate_id"],),
+                    )
+
+            self.connection.execute("DELETE FROM retractions WHERE event_id = ?", (event_id,))
+            self.connection.execute("DELETE FROM processing_state WHERE event_id = ?", (event_id,))
+            self.connection.execute("DELETE FROM event_attachments WHERE event_id = ?", (event_id,))
+            self.connection.execute(
+                "INSERT OR REPLACE INTO product_delete_authorizations(event_id) VALUES (?)",
+                (event_id,),
+            )
+            self.connection.execute("DELETE FROM source_events WHERE event_id = ?", (event_id,))
+            self.connection.execute(
+                "DELETE FROM product_delete_authorizations WHERE event_id = ?",
+                (event_id,),
+            )
+            self.connection.execute(
+                "INSERT INTO deleted_events(event_id, deleted_at) VALUES (?, ?)",
+                (event_id, utc_now()),
+            )
+
+            blobs_deleted = 0
+            blobs_preserved = 0
+            for sha256 in hashes:
+                references = self.connection.execute(
+                    "SELECT COUNT(*) AS count FROM event_attachments WHERE sha256 = ?",
+                    (sha256,),
+                ).fetchone()
+                if int(references["count"]) > 0:
+                    blobs_preserved += 1
+                    continue
+                blob_row = self.connection.execute(
+                    "SELECT relative_path FROM attachment_blobs WHERE sha256 = ?",
+                    (sha256,),
+                ).fetchone()
+                if blob_row is None:
+                    continue
+                path = (self.home / blob_row["relative_path"]).resolve()
+                try:
+                    path.relative_to(self.blobs.root.resolve())
+                except ValueError as error:
+                    raise RuntimeError("attachment path escaped blob store") from error
+                self.connection.execute("DELETE FROM attachment_blobs WHERE sha256 = ?", (sha256,))
+                path.unlink(missing_ok=True)
+                blobs_deleted += 1
+
+            # Projection history contains only rebuild metadata, but it is
+            # derived from the deleted evidence. Drop it so the next run is a
+            # clean projection of the remaining live state.
+            self.connection.execute("DELETE FROM projection_runs")
             projection = self._rebuild_derived_locked()
             return {
                 "event_id": event_id,
+                "forgotten": True,
+                "deleted": True,
+                "already_deleted": False,
+                # Compatibility field for the existing /api/v2/retract route;
+                # the operation itself is permanent deletion, not an audit-only
+                # semantic retraction.
                 "retracted": True,
-                "already_retracted": not bool(cursor.rowcount),
+                "deletion_status": "deleted",
+                "facts_deleted": len(deleted_fact_rows),
+                "relations_deleted": sum(
+                    1 for row in relation_rows
+                    if row["source_event_id"] == event_id or row["target_event_id"] == event_id
+                ),
+                "attachments_deleted": len(attachment_rows),
+                "blobs_deleted": blobs_deleted,
+                "blobs_preserved": blobs_preserved,
                 "projection_run_id": projection["projection_run_id"],
             }
+
+    def retract(self, event_id: str, *, reason: str = "user undo") -> dict[str, Any]:
+        """Compatibility name for the permanent Product V2 Undo operation."""
+
+        return self.forget(event_id, reason=reason)
 
     def set_attention_status(
         self,

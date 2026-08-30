@@ -724,15 +724,18 @@ worker / explicit process
   -> one atomic semantic commit and derived rebuild
 ```
 
-`source_events`, blob files, and capture descriptors are append-only source
-evidence. Processing rows contain leases, attempts, retry timing, version
-identifiers, and concise failure state. A stale owner is recoverable; only one
-owner can process an event at a time. Provider failure leaves the source and
-pending/failed status intact. Facts, relations, Attention candidates, current
-projections, and retractions are derived data and can be rebuilt from source
-inputs plus versioned rules. Retraction is an append-only semantic event: it
-removes an event from active projections while retaining the raw evidence and
-history.
+`source_events`, blob files, and capture descriptors are immutable during
+normal operation. Processing rows contain leases, attempts, retry timing,
+version identifiers, and concise failure state. A stale owner is recoverable;
+only one owner can process an event at a time. Provider failure leaves the
+source and pending/failed status intact. Facts, relations, Attention
+candidates, current projections, and legacy retraction rows are derived data
+and can be rebuilt from source inputs plus versioned rules. Explicit user Undo
+is the narrow destructive exception: it atomically removes the selected source
+and dependent state, garbage-collects attachment blobs with no remaining
+event link, records only an event-ID/deletion-time tombstone, and rebuilds the
+remaining projections. The worker's ownership check makes a late semantic
+result fail closed, so deleted content cannot be resurrected.
 
 The semantic contract is deliberately open-world. It accepts generic entities,
 facts, events, tasks, deadlines, relations, documents, transactions,
@@ -780,7 +783,7 @@ The V2 transport routes are:
 | `POST /api/v2/process` | Explicit bounded chronological processing. |
 | `POST /api/v2/retry` | Explicit retry of failed work. |
 | `POST /api/v2/ask` | Natural retrieval and bounded synthesis over processed V2 memory. |
-| `POST /api/v2/retract` | Append a semantic retraction and rebuild active projections. |
+| `POST /api/v2/retract` | Compatibility route for permanent user Undo/forget; removes the selected capture and rebuilds remaining projections. |
 | `POST /api/v2/attention/status` | Append a user status event for an Attention candidate. |
 | `GET /api/v2/attachments/<sha256>` | Serve a verified immutable blob by content hash. |
 
@@ -799,8 +802,8 @@ attachment bytes, or both to `POST /api/v2/capture` and clears immediately
 after the durable save. It reads `GET /api/v2/state` and
 `GET /api/v2/processing`, polls while deferred work is pending, and exposes
 retryable failure feedback. Attention and Memory render human-oriented
-projections; Ask posts to `POST /api/v2/ask`; Undo appends a semantic
-retraction through `POST /api/v2/retract` and never deletes immutable evidence.
+projections; Ask posts to `POST /api/v2/ask`; Undo permanently forgets the
+selected capture through the compatibility route `POST /api/v2/retract`.
 
 The browser sends attachment content as bounded base64 with filename and MIME
 metadata. The client does not OCR or copy file text into the composer as a
@@ -814,7 +817,7 @@ The reconciled route, response, acceptance, and visual evidence is recorded in
 The V2 semantic projection is evidence-led rather than last-write-wins:
 
 ```text
-immutable claims + relations + retractions
+live claims + relations + explicit deletion tombstones
                     |
                     v
        targeted supersession / temporal selection
@@ -826,10 +829,12 @@ immutable claims + relations + retractions
        provenance-aware Memory, Attention, and Ask
 ```
 
-The projection keeps raw evidence and derived truth separate. Corrections and
-supersessions change the current view but never delete the prior source.
-Meaningful changes can be effective-dated without declaring the earlier value
-wrong. Uncertainty, attribution, negation, duplicate support, and contradiction
+The projection keeps raw evidence and derived truth separate during normal
+operation. Corrections and supersessions change the current view but never
+delete the prior source; explicit user Undo is the documented deletion
+exception and removes its source-linked history before rebuilding. Meaningful
+changes can be effective-dated without declaring the earlier value wrong.
+Uncertainty, attribution, negation, duplicate support, and contradiction
 remain explicit. A later confirmed observation may resolve an earlier
 uncertain claim; a newer speculative claim cannot silently become certain.
 Only semantically competing or explicitly related facts supersede one another,

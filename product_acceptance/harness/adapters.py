@@ -178,10 +178,19 @@ class MockHostAdapter:
         if capture is None:
             return _response(supported=True, ok=False, status=404, error="capture not found")
         capture["active"] = False
+        capture["forgotten"] = True
+        capture.pop("text", None)
+        capture["attachment"] = None
         return _response(
             supported=True,
             ok=True,
-            undo={"capture_id": capture_ref, "active": False, "raw_preserved": True},
+            undo={
+                "capture_id": capture_ref,
+                "active": False,
+                "forgotten": True,
+                "deleted": True,
+                "raw_preserved": False,
+            },
         )
 
     def restart(self) -> dict[str, Any]:
@@ -336,7 +345,15 @@ class HttpHostAdapter:
                 "capture_id": capture_ref,
                 "event_id": retraction.get("event_id", event_id),
                 "active": False,
-                "raw_preserved": True,
+                "forgotten": bool(retraction.get("forgotten")),
+                "deleted": bool(retraction.get("deleted")),
+                "already_deleted": bool(retraction.get("already_deleted")),
+                "raw_preserved": bool(
+                    retraction.get(
+                        "raw_preserved",
+                        not bool(retraction.get("deleted")),
+                    )
+                ),
             }
         return response
 

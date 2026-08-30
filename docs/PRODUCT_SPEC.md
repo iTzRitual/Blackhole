@@ -141,7 +141,8 @@ imply zero, false, “none,” or completion.
 
 ## 9. Safety and trust requirements
 
-- Original source content is immutable.
+- Original source content is immutable during normal operation; explicit user
+  Undo is the documented permanent-forget exception.
 - Derived state can be rebuilt when extraction, prompts, models, or rules change.
 - Arithmetic and other deterministic transformations have an executable source
   of truth.
@@ -285,7 +286,7 @@ fail closed without fabricated provenance. Deterministic current, history,
 correction, contradiction, and Attention answers continue to derive
 provenance from the items they render.
 
-### Attachments and retraction
+### Attachments and permanent Undo
 
 Attachment bytes are stored as verified content-addressed blobs inside
 Blackhole Home. The event records filename, MIME type, length, SHA-256, and
@@ -294,9 +295,12 @@ valid inputs. The local Python boundary accepts a file path; the HTTP boundary
 requires bounded base64 bytes so a request cannot make the host read an
 arbitrary server path. The runtime reports whether an attachment was unread, read,
 unsupported, or unreadable; it makes no blanket OCR or vision-quality claim.
-Retraction is an append-only semantic operation. It excludes the selected
-source from active derived state while retaining the raw bytes, source event,
-history, and provenance for rebuild and audit.
+Undo is an explicit, user-authorized permanent forget operation. It removes the
+selected source event, processing row, semantic/provenance rows that depend
+exclusively on it, and any now-unreferenced attachment blob in one transaction,
+then rebuilds the remaining projections. A minimal event-ID tombstone prevents
+accidental reuse and makes repeated Undo idempotent; the deleted capture's
+content is not retained by Product V2.
 
 The initial V2 implementation is backend/API and deterministic-test focused.
 It does not claim completion of a redesigned PWA surface, production hosting,
@@ -307,10 +311,11 @@ action execution.
 
 Product V2 must distinguish what appears currently true from what used to be
 true, might be true, conflicts with another claim, was reported by somebody
-else, or was retracted. Raw evidence is preserved. Derived truth is allowed to
-change and is rebuildable. Correction is not deletion, and change is not
-correction. New evidence supersedes only a semantically competing or explicitly
-linked assertion; unrelated facts coexist.
+else, or was superseded. Raw evidence is preserved during normal operation;
+explicit user Undo is the narrow, permanent deletion exception. Derived truth
+is allowed to change and is rebuildable. Correction is not deletion, and
+change is not correction. New evidence supersedes only a semantically
+competing or explicitly linked assertion; unrelated facts coexist.
 
 Uncertainty is first-class: `known`, `inferred`, and `unknown` remain distinct,
 with confidence, claim type, attribution, negation, and contradiction evidence

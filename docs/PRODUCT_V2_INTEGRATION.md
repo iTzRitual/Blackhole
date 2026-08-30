@@ -36,7 +36,7 @@ The PWA now uses the real V2 Host routes through `app/web_app.py` and
   and retryable. The normal Host worker can process asynchronously after the
   immediate save response.
 - `POST /api/v2/ask` provides deterministic retrieval and bounded synthesis;
-  `POST /api/v2/retract` implements auditable semantic Undo; and
+  `POST /api/v2/retract` implements permanent user Undo/forget; and
   `GET /api/v2/attachments/<sha256>` serves verified immutable blobs.
 
 The integration also reconciles duplicate/idempotent capture behavior, pending
@@ -144,8 +144,10 @@ data. This was a technical visual review, not a human usability study.
 
 ## Boundary review and decision
 
-The implementation preserves immutable raw `source_events`, content-addressed
-attachment bytes, rebuildable derived projections, known/inferred/unknown
+The implementation preserves immutable raw `source_events` and
+content-addressed attachment bytes during normal operation; explicit user Undo
+is the documented permanent-forget exception. It preserves rebuildable derived
+projections, known/inferred/unknown
 semantics, deterministic date/arithmetic paths, provenance, and approval-gated
 consequential actions. It does not add production infrastructure, remote
 access, a Claude adapter, OCR, token handling, holdout material, or a new
@@ -164,7 +166,8 @@ the explicitly authorized post-freeze product scope.
 
 The authorized `product/v2-semantic-truth` follow-up extends the integrated
 contract without reopening the frozen V1 benchmark. Raw evidence remains
-immutable; derived truth may change and is rebuildable. A correction is not a
+immutable during normal operation; derived truth may change and is rebuildable.
+A correction is not a
 deletion, and an ordinary change is not automatically a correction. The
 projector keeps current and historical evidence separate, applies only
 targeted semantic supersession, preserves duplicate support, and leaves
@@ -193,3 +196,24 @@ language-specific correction rule or exact mixed-language phrase rule is used.
 The dedicated sequence suite and live-validation record are the evidence for
 this follow-up; they are product generalization evidence, not benchmark,
 holdout, baseline, or E006 optimization evidence.
+
+## Final authorized Undo and operational logging follow-up
+
+The final Product V2 follow-up is based on the exact semantic-truth source
+commit `05c337b46798031adea8ee0f1cf6b34b40572bc1` and is limited to permanent
+Undo/forget, useful sanitized local operational logs, and regressions. The
+existing `POST /api/v2/retract` and `retractCapture` names remain as
+compatibility surfaces, but their operation is now permanent: Product V2
+removes the selected source, processing state, source-linked semantic and
+provenance rows, and unreferenced attachment bytes, then records only a
+minimal event-ID tombstone and rebuilds the remaining state. A repeated Undo
+returns an idempotent `already_deleted` result, and an in-flight provider
+result cannot recreate the deleted event.
+
+The runtime emits concise timestamped lifecycle lines for capture receipt,
+queue state, provider start/completion/failure, Memory and Attention updates,
+Ask path/source counts, Undo, worker start/stop, and server startup/shutdown.
+Capture/question content, provider payloads, credentials, and raw stderr are
+not logged; error summaries and identifiers are bounded and sanitized. This
+follow-up changes neither the frozen V1 benchmark/evaluator/baseline evidence
+nor the holdout boundary.

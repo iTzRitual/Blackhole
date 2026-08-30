@@ -1,0 +1,191 @@
+{
+  "run_type": "product-v2-undo-and-ops-logs-live-smoke",
+  "scope": "authorized post-freeze product smoke; non-scored",
+  "base_sha": "05c337b46798031adea8ee0f1cf6b34b40572bc1",
+  "launcher": "python -m app.web_app",
+  "home_is_fresh_temp": true,
+  "manual_processing_or_retry_used": false,
+  "capture_limit": 3,
+  "ask_limit": 2,
+  "captures": [
+    {
+      "http_status": 200,
+      "saved": true,
+      "event_id": "live-keys",
+      "processing_status": "pending"
+    },
+    {
+      "http_status": 200,
+      "saved": true,
+      "event_id": "live-undo",
+      "processing_status": "pending"
+    },
+    {
+      "http_status": 200,
+      "saved": true,
+      "event_id": "live-children",
+      "processing_status": "pending"
+    }
+  ],
+  "undo": {
+    "event_id": "live-undo",
+    "forgotten": true,
+    "deleted": true,
+    "already_deleted": false,
+    "retracted": true,
+    "deletion_status": "deleted",
+    "facts_deleted": 0,
+    "relations_deleted": 0,
+    "attachments_deleted": 0,
+    "blobs_deleted": 0,
+    "blobs_preserved": 0,
+    "projection_run_id": 2,
+    "http_status": 200
+  },
+  "processing": {
+    "counts": {
+      "failed": 0,
+      "pending": 0,
+      "processed": 2,
+      "processing": 0
+    },
+    "events": [
+      {
+        "event_id": "live-keys",
+        "sequence": 1,
+        "status": "processed",
+        "processing_version": "blackhole-product-v2-processing-v1",
+        "owner_id": null,
+        "lease_until": null,
+        "attempt_count": 1,
+        "last_attempted_at": "2026-08-30T20:20:45.248713+00:00",
+        "last_successful_at": "2026-08-30T20:21:01.252524+00:00",
+        "last_error": null,
+        "next_retry_at": null,
+        "extractor_version": "blackhole-product-v2-extractor-v3",
+        "updated_at": "2026-08-30T20:21:01.252524+00:00"
+      },
+      {
+        "event_id": "live-children",
+        "sequence": 2,
+        "status": "processed",
+        "processing_version": "blackhole-product-v2-processing-v1",
+        "owner_id": null,
+        "lease_until": null,
+        "attempt_count": 1,
+        "last_attempted_at": "2026-08-30T20:21:01.256038+00:00",
+        "last_successful_at": "2026-08-30T20:21:31.954727+00:00",
+        "last_error": null,
+        "next_retry_at": null,
+        "extractor_version": "blackhole-product-v2-extractor-v3",
+        "updated_at": "2026-08-30T20:21:31.954727+00:00"
+      }
+    ]
+  },
+  "asks": [
+    {
+      "http_status": 200,
+      "question": "Gdzie są klucze do piwnicy?",
+      "mode": "retrieval",
+      "status": "ready",
+      "answer": "Pasujące wspomnienia: Klucze do piwnicy location: u mamy at 2026-08-30T00:00:00+02:00.",
+      "source_refs": [
+        "live-keys"
+      ],
+      "provider_used": false
+    },
+    {
+      "http_status": 200,
+      "question": "Co mam niedługo do zrobienia?",
+      "mode": "attention",
+      "status": "ready",
+      "answer": "Otwarte sprawy: Odebrać dzieci.",
+      "source_refs": [
+        "live-children"
+      ],
+      "provider_used": false
+    }
+  ],
+  "state": {
+    "valid": true,
+    "source_event_ids": [
+      "live-keys",
+      "live-children"
+    ],
+    "current_fact_count": 2,
+    "fact_history_count": 2,
+    "attention": [
+      {
+        "kind": "task",
+        "title": "Odebrać dzieci",
+        "source_refs": [
+          "live-children"
+        ],
+        "state": "upcoming"
+      }
+    ],
+    "retracted_event_ids": [],
+    "http_status": 200
+  },
+  "logs": {
+    "required_fragments": {
+      "[startup] product-v2 ready": true,
+      "[web] listening": true,
+      "[worker] product-v2 worker started": true,
+      "[capture] saved": true,
+      "[queue] pending": true,
+      "[provider] start": true,
+      "[provider] complete": true,
+      "[memory] updated": true,
+      "[attention] updated": true,
+      "[undo] requested": true,
+      "[undo] deleted": true,
+      "[ask] start": true,
+      "[ask] path": true,
+      "[ask] sources": true,
+      "[ask] complete": true,
+      "[worker] product-v2 worker stopped": false,
+      "[web] server stopped": false
+    },
+    "capture_text_absent": true,
+    "uncontrolled_retry_count": 0,
+    "line_count": 27,
+    "max_line_length": 277,
+    "examples": [
+      "2026-08-30T22:20:44.992+02:00 [worker] product-v2 worker started",
+      "2026-08-30T22:20:45.137+02:00 [web] listening url=http://127.0.0.1:7820",
+      "2026-08-30T22:20:45.138+02:00 [startup] product-v2 ready home=C:_Users_natan_AppData_Local_Temp_blackhole-product-v2-undo-live-8mppglzb_home product_db=C:_Users_natan_AppData_Local_Temp_blackhole-product-v2-undo-live-8mppglzb_home_blackhole-v2.db provider=READY readiness=ready",
+      "2026-08-30T22:20:45.248+02:00 [capture] saved event=live-keys inserted=true source_type=text attachments=0",
+      "2026-08-30T22:20:45.248+02:00 [queue] pending event=live-keys",
+      "2026-08-30T22:20:45.250+02:00 [provider] start event=live-keys attempt=1",
+      "2026-08-30T22:20:45.256+02:00 [capture] saved event=live-undo inserted=true source_type=text attachments=0",
+      "2026-08-30T22:20:45.256+02:00 [queue] pending event=live-undo",
+      "2026-08-30T22:20:45.261+02:00 [undo] requested event=live-undo",
+      "2026-08-30T22:20:45.263+02:00 [undo] deleted event=live-undo blobs_deleted=0 blobs_preserved=0",
+      "2026-08-30T22:20:45.270+02:00 [capture] saved event=live-children inserted=true source_type=text attachments=0",
+      "2026-08-30T22:20:45.270+02:00 [queue] pending event=live-children",
+      "2026-08-30T22:21:01.251+02:00 [provider] complete event=live-keys events=1 provider_calls=1 duration=16.000s",
+      "2026-08-30T22:21:01.256+02:00 [memory] updated event=live-keys facts=1 relations=0",
+      "2026-08-30T22:21:01.256+02:00 [attention] updated event=live-keys active_added=0",
+      "2026-08-30T22:21:01.258+02:00 [provider] start event=live-children attempt=1",
+      "2026-08-30T22:21:31.953+02:00 [provider] complete event=live-children events=1 provider_calls=1 duration=30.703s",
+      "2026-08-30T22:21:31.957+02:00 [memory] updated event=live-children facts=1 relations=0",
+      "2026-08-30T22:21:31.957+02:00 [attention] updated event=live-children active_added=1",
+      "2026-08-30T22:21:32.209+02:00 [ask] start request=ask-1517fc2ed768",
+      "2026-08-30T22:21:32.212+02:00 [ask] path request=ask-1517fc2ed768 path=deterministic/retrieval",
+      "2026-08-30T22:21:32.212+02:00 [ask] sources request=ask-1517fc2ed768 count=1 provider_calls=0 duration=0ms",
+      "2026-08-30T22:21:32.212+02:00 [ask] complete request=ask-1517fc2ed768",
+      "2026-08-30T22:21:32.217+02:00 [ask] start request=ask-c9f462ac0220",
+      "2026-08-30T22:21:32.219+02:00 [ask] path request=ask-c9f462ac0220 path=deterministic/attention",
+      "2026-08-30T22:21:32.219+02:00 [ask] sources request=ask-c9f462ac0220 count=1 provider_calls=0 duration=16ms",
+      "2026-08-30T22:21:32.219+02:00 [ask] complete request=ask-c9f462ac0220"
+    ]
+  },
+  "launch_error": null,
+  "structural_ok": false,
+  "provider_tokens_read_or_persisted": false,
+  "benchmark_oracle_accessed": false,
+  "holdout_accessed": false,
+  "started_at": "2026-08-30T20:20:44.540944+00:00",
+  "finished_at": "2026-08-30T20:21:32.234103+00:00"
+}

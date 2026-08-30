@@ -90,10 +90,10 @@ December is presented as confirmed.
 3. Capture `Correction: the spare house key is in the blue suitcase.`
 4. Ask where the spare house key is.
 
-Checkpoint: `PASS` if the hall-drawer statement no longer drives active memory,
-the blue-suitcase statement remains, and the original source is not silently
-erased. `FAIL` if Undo does nothing, erases the later correction, or leaves two
-equally current answers.
+Checkpoint: `PASS` if the hall-drawer capture is permanently forgotten, the
+blue-suitcase statement remains, and no deleted content is exposed. `FAIL` if
+Undo does nothing, erases the later correction, or leaves two equally current
+answers.
 
 ## 18–22 minutes — restart and recover
 

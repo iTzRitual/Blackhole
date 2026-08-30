@@ -863,12 +863,17 @@ class ProductV2SemanticTruthTests(unittest.TestCase):
                 self.assertEqual(item.get("metadata", {}).get(metadata_key), metadata_value, case["name"])
 
         history = {item["source_event_id"]: item for item in state["fact_history"]}
+        deleted = set(case["retract_before"] + case["retract_after"])
         for event_id, expectation in case["history_expected"].items():
+            if event_id in deleted:
+                self.assertNotIn(event_id, history, case["name"])
+                continue
             self.assertIn(event_id, history, case["name"])
             for key, expected in expectation.items():
                 self.assertEqual(history[event_id].get(key), expected, case["name"])
-        for event_id in case["retract_before"] + case["retract_after"]:
-            self.assertIn(event_id, state["retracted_event_ids"], case["name"])
+        for event_id in deleted:
+            self.assertNotIn(event_id, history, case["name"])
+            self.assertNotIn(event_id, state["retracted_event_ids"], case["name"])
 
         attention_state = state["attention"]
         attention_expectation = case["attention_expected"]

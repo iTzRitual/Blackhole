@@ -1,0 +1,66 @@
+{
+  "run_type": "product-v2-undo-and-ops-logs",
+  "scope": "authorized post-freeze Product V2 product task; non-scored",
+  "base_sha": "05c337b46798031adea8ee0f1cf6b34b40572bc1",
+  "final_sha": null,
+  "overall_status": "PARTIAL",
+  "deterministic_status": "PASS",
+  "deterministic": {
+    "baseline_application_tests_before_change": 146,
+    "dedicated_undo_logging_tests": {"passed": 18, "failed": 0, "errors": 0},
+    "application_tests": {"passed": 164, "failed": 0, "errors": 0},
+    "evaluator_tests": {"passed": 10, "failed": 0, "errors": 0},
+    "acceptance_harness_tests": {"passed": 7, "failed": 0, "errors": 0},
+    "integrated_acceptance": {
+      "cases": 50,
+      "pass": 50,
+      "fail": 0,
+      "partial": 0,
+      "not_tested": 0,
+      "latency_gate": "PASS"
+    },
+    "benchmark_structure": {"events": 200, "checkpoints": 4, "status": "PASS"},
+    "qualification": {"hard_failures": 0, "warnings": 4, "status": "PASS"},
+    "compileall": "PASS",
+    "javascript_syntax": "PASS"
+  },
+  "live": {
+    "status": "PARTIAL",
+    "evidence": "trajectories/coding/041-product-v2-undo-and-ops-logs/live-validation.json",
+    "launcher": "python -m app.web_app",
+    "fresh_temp_blackhole_home": true,
+    "capture_limit": 3,
+    "ask_limit": 2,
+    "captures_saved": 3,
+    "undo_capture_2": {"forgotten": true, "deleted": true, "already_deleted": false},
+    "remaining_processed": 2,
+    "remaining_attempts": 1,
+    "provider_failures": 0,
+    "retry_scheduled": 0,
+    "ask_http_200": 2,
+    "ask_provider_calls": 0,
+    "keys_source_remains": true,
+    "deleted_source_absent": true,
+    "children_attention_present": true,
+    "log_content_sanitized": true,
+    "max_log_line_length": 277,
+    "shutdown_log_fragments_observed": false,
+    "known_semantic_limitations": [],
+    "limitation": "The Windows signal-based launcher shutdown did not expose final worker/server stop lines in the captured stream; deterministic clean-stop coverage passed."
+  },
+  "boundary": {
+    "provider_tokens_read_or_persisted": false,
+    "benchmark_oracle_accessed": false,
+    "holdout_accessed": false,
+    "source_worktree_changed": false,
+    "master_changed": false,
+    "v1_benchmark_files_changed": false
+  },
+  "artifacts": [
+    "trajectories/coding/041-product-v2-undo-and-ops-logs/prompt.md",
+    "trajectories/coding/041-product-v2-undo-and-ops-logs/summary.md",
+    "trajectories/coding/041-product-v2-undo-and-ops-logs/live-validation.json",
+    "eval/results/product-v2-undo-and-ops-logs.json",
+    "eval/results/product-v2-integrated-acceptance.json"
+  ]
+}

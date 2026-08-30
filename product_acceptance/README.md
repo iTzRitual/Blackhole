@@ -59,7 +59,7 @@ retry, restart, change the provider fixture, or undo a capture.
 
 Expectations describe what a person can observe: saved confirmation, current
 versus historical wording, evidence, uncertainty, actionable timing, absence of
-false urgency, or preservation after Undo. The harness does not require a
+false urgency, or permanent forgetting after Undo. The harness does not require a
 particular database table, ontology ID, prompt, model, or internal state shape.
 
 Example:
@@ -106,7 +106,7 @@ details in one adapter. The default HTTP mapping is:
 | Ask | `POST /api/query` | Return a human-readable answer with supporting evidence or an explicit no-evidence/uncertainty response |
 | Attention | `GET /api/attention` | Return actionable items with correct time/lifecycle status |
 | Memory | `GET /api/memory` | Return useful current/history facts with evidence |
-| Undo | `POST /api/undo` | Remove a selected capture from active state while retaining source history |
+| Undo | `POST /api/undo` | Permanently forget a selected capture while preserving unrelated state |
 
 Capture requests use JSON with `text` (optional when an attachment is present),
 `captured_at`, `idempotency_key`, `source_type`, and an optional attachment

@@ -153,11 +153,11 @@
     "user_outcome": "Undo removes the mistaken capture from active state, and a later correct location remains available and is not erased by the undo.",
     "steps": [
       {"id": "capture-wrong-location", "type": "capture", "capture_id": "wrong-location", "at": "2026-06-14T09:00:00-04:00", "text": "The spare house key is in the hall drawer.", "idempotency_key": "undo-010-wrong", "expect": {"saved": true, "processing": "pending"}},
-      {"id": "undo-wrong-location", "type": "undo", "at": "2026-06-14T09:01:00-04:00", "target_capture_id": "wrong-location", "expect": {"removed_from_active": ["hall drawer"], "raw_preserved": true}},
+      {"id": "undo-wrong-location", "type": "undo", "at": "2026-06-14T09:01:00-04:00", "target_capture_id": "wrong-location", "expect": {"removed_from_active": ["hall drawer"], "raw_preserved": false}},
       {"id": "capture-correct-location", "type": "capture", "at": "2026-06-14T09:02:00-04:00", "text": "Correction: the spare house key is in the blue suitcase.", "idempotency_key": "undo-010-correct", "expect": {"saved": true, "processing": "pending"}},
       {"id": "ask-after-undo", "type": "ask", "at": "2026-06-14T09:05:00-04:00", "question": "Where is the spare house key?", "expect": {"include": ["blue suitcase"], "exclude": ["hall drawer"], "evidence": "required"}},
       {"id": "memory-after-undo", "type": "memory", "at": "2026-06-14T09:06:00-04:00", "expect": {"include": ["blue suitcase"], "exclude": ["hall drawer as current"], "evidence": "required"}}
     ],
-    "manual_observations": ["Undo is a user correction to active state, not permission to erase the immutable original evidence."]
+    "manual_observations": ["Undo permanently forgets the selected capture while leaving the later correction available."]
   }
 ]
