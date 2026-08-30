@@ -2,7 +2,7 @@
   "run_type": "product-v2-undo-and-ops-logs",
   "scope": "authorized post-freeze Product V2 product task; non-scored",
   "base_sha": "05c337b46798031adea8ee0f1cf6b34b40572bc1",
-  "final_sha": null,
+  "final_sha": "a719e9a",
   "overall_status": "PARTIAL",
   "deterministic_status": "PASS",
   "deterministic": {

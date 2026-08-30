@@ -145,4 +145,4 @@ passes.
 
 ## Related git commit
 
-To be filled with the final coherent commit SHA after the final boundary audit.
+a719e9a (`product: make Product V2 Undo permanent and add ops logs`).
