@@ -127,5 +127,5 @@ the frozen baseline.
 
 ## Related git commit
 
-To be filled with the final commit SHA after the evidence and documentation
-checks complete.
+`046ffa8` (`fix: generalize Product V2 Ask routing`). This summary-reference
+update is recorded in the following documentation-only commit.
