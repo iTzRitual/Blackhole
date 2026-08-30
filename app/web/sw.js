@@ -1,4 +1,4 @@
-const CACHE_NAME = "blackhole-shell-v5";
+const CACHE_NAME = "blackhole-shell-v6";
 const SHELL_ASSETS = [
   "/",
   "/index.html",
