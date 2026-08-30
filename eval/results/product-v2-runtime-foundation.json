@@ -29,6 +29,11 @@
     {
       "command": "git diff --check",
       "status": "pass"
+    },
+    {
+      "command": "python scripts/qualification_check.py --inventory",
+      "status": "pass_with_existing_warnings",
+      "detail": "32 coding and 48 runtime trajectories indexed; 4 warnings concern existing audit/legacy-result artifacts"
     }
   ],
   "scope_notes": [

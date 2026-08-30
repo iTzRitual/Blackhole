@@ -100,6 +100,9 @@ implementation.
 - `python benchmark/dev/generate_benchmark.py --check` — pass; 200 events and
   4 checkpoints structurally checked, with no scoring run.
 - `git diff --check` — pass.
+- `python scripts/qualification_check.py --inventory` — pass; 32 coding and
+  48 runtime trajectories indexed, with four warnings on existing
+  audit/legacy-result artifacts and none on Product V2.
 - No holdout/oracle/scoring worktree or benchmark expected output was
   accessed. The machine-readable non-scored validation record is
   `eval/results/product-v2-runtime-foundation.json`.
