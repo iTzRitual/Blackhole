@@ -48,6 +48,7 @@ now listed below; the local oracle and scoring histories remain separate.
 | ui-001-mobile-pwa | Build the dependency-light mobile-first PWA in an isolated worktree | KEEP; UI workstream preserved and integrated | `0cc6653` | [summary](trajectories/coding/ui-001-mobile-pwa/summary.md) |
 | ui-002-reference-redesign | Correct the Capture surface against the approved mobile reference | KEEP; UI correction preserved and integrated | `0cc6653` | [summary](trajectories/coding/ui-002-reference-redesign/summary.md) |
 | submission-001-hardening | Add offline qualification, CI, evidence index, and submission checklist | KEEP; three non-blocking stale-artifact warnings remain for finalization | `18b123f` | [summary](trajectories/coding/submission-001-hardening/summary.md) |
+| 033-product-v2-dogfood-acceptance | Define independent Product V2 dogfood acceptance | KEEP; 50 cases, deterministic mock gates, and human protocol | `90cb5ff` | [summary](trajectories/coding/033-product-v2-dogfood-acceptance/summary.md) |
 
 The short commit IDs above were resolved from local Git history. The hardening
 implementation is in `18b123f`; the small follow-up metadata commit records

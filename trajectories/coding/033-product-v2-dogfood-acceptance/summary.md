@@ -110,5 +110,6 @@ oracle.
 
 ## Related git commit
 
-Pending commit creation; the final SHA will be added after the coherent branch
-commit and trajectory-index update.
+- `90cb5ff` — `acceptance: add Product V2 dogfood gate`
+- The trajectory index update is the final documentation follow-up on this
+  branch.
