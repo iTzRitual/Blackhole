@@ -94,8 +94,8 @@ without changing code between requests.
   suites; compileall; JavaScript syntax; public benchmark structure
   (`200` events, `4` checkpoints); and non-scored contract smoke.
 - Disposable integrated acceptance: `50/50 PASS`, all seven reliability
-  gates `PASS`, and the asynchronous latency probe `PASS` (`8.493 ms` capture
-  return and `134.276 ms` completion with a `120 ms` fixture delay).
+  gates `PASS`, and the asynchronous latency probe `PASS` (`9.352 ms` capture
+  return and `141.023 ms` completion with a `120 ms` fixture delay).
 - Live smoke: 4/4 captures processed on attempt 1 (`4` provider extraction
   calls, `0` retries); 6/6 authorized Ask requests returned useful `ready`
   results with source references and `0` Ask-time provider calls.

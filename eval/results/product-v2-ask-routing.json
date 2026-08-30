@@ -42,8 +42,8 @@
     "latency_probe": {
       "status": "PASS",
       "provider_delay_ms": 120,
-      "capture_return_ms": 8.493,
-      "processing_completion_ms": 134.276,
+      "capture_return_ms": 9.352,
+      "processing_completion_ms": 141.023,
       "capture_returned_before_processing_finished": true
     },
     "command": "python scripts/run_product_v2_integrated_acceptance.py (executed from a disposable working directory)"
