@@ -49,7 +49,7 @@ compatibility, but the current PWA does not use them.
 ## Acceptance evidence
 
 The reproducible visible acceptance run is recorded in
-[product-v2-integrated-acceptance.json](/C:/Users/natan/OneDrive/Dokumenty/ChatGPT/Blackhole-v2-integration/eval/results/product-v2-integrated-acceptance.json).
+[product-v2-integrated-acceptance.json](../eval/results/product-v2-integrated-acceptance.json).
 It covers 50 public English/Polish product cases and reports:
 
 - `50/50 PASS`, with zero `PARTIAL`, `FAIL`, or `NOT TESTED` cases;
