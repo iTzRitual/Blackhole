@@ -179,6 +179,20 @@ This file records material improvements to the product design, agent workflow, e
 - **Decision:** **KEEP** the deterministic fixes. **REVISE** the provider adapter in a separately authorized follow-up before claiming the human-dogfood gate PASS.
 - **Learning:** A high-scoring fixture acceptance can still miss normal-entrypoint/provider compatibility. The capture boundary, queue observability, and degraded UX need independent real-launch checks; operational failure must remain explicit when semantic state is absent.
 
+## 2026-08-30 — Product V2 live provider adapter follow-up
+
+- **Stage / experiment identifier:** Authorized post-freeze Product V2 provider integration follow-up; not a benchmark optimization and not E006.
+- **Problem observed:** The prior normal-launch smoke returned two immediate captures, but both semantic provider attempts exited with code 1 while the visible diagnostic retained only Windows shell-snapshot and skill warnings.
+- **Hypothesis:** The terminal JSONL failure event, rather than the incidental PowerShell warning, will identify an incompatible adapter flag or structured-output contract; correcting only the proven incompatibility should make authenticated semantic processing succeed.
+- **What changed:** Inspected the real `codex exec` invocation and CLI help/features; confirmed standard ChatGPT login; ran six bounded disposable-directory controls; replaced the permissive Product V2 output schema with a strict typed schema; added terminal JSON failure parsing, sanitized tails, timeout status, and invocation-boundary diagnostics; added deterministic provider regressions. A mandated live Ask also exposed a standalone Polish `do` routing collision, so the smallest deterministic task/time-marker correction and regression were added without changing provider semantics.
+- **Evaluation method:** Six provider-diagnostic tests, 115 application tests, 10 evaluator tests, 7 acceptance-harness tests, compileall, JavaScript syntax, 50-case visible Product V2 acceptance, benchmark structure check, contract smoke, qualification, and one fresh normal-launch live smoke with two captures and two Ask queries. No holdout material or benchmark optimization was used.
+- **Metric before:** Live semantic processing `0/2` captures completed in the preceding dogfood smoke; the prior documented gate was PARTIAL. The first prescribed live keys Ask was not previously run.
+- **Metric after:** Live semantic processing `2/2` captures completed on attempt 1 with zero retries; Memory and Attention contained the required evidence. The first live keys Ask was misrouted, while the second task Ask passed. The deterministic post-smoke router regression passes for both exact questions; no post-fix live Ask was authorized.
+- **Regressions:** The final live gate remains PARTIAL pending a future bounded validation of the corrected keys Ask. The visible deterministic acceptance remains `50/50 PASS`; no frozen V1 or benchmark result changed.
+- **Runtime/cost impact:** Six diagnostic model calls, two live Product V2 provider calls, and no token or dollar-cost access beyond the subscription CLI's normal operation. No retry spin occurred.
+- **Decision:** **KEEP** the provider adapter/schema/diagnostic repair; **REVISE** the overall live gate after a separately authorized normal-launch Ask validation. Do not call this E006 or infer holdout performance.
+- **Learning:** A warning-only stderr view can hide a terminal JSONL failure. Strict structured-output schemas must be validated against the installed CLI, and a successful provider path still needs a black-box language-routing check.
+
 ## Entry template
 
 Use one entry per meaningful improvement:

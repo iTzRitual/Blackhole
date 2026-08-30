@@ -1,0 +1,215 @@
+{
+  "record_type": "sanitized-product-v2-provider-diagnostics",
+  "record_version": "1",
+  "source": {
+    "worktree": "C:\\Users\\natan\\OneDrive\\Dokumenty\\ChatGPT\\Blackhole-v2-dogfood-fixes",
+    "branch": "product/v2-dogfood-fixes",
+    "base_sha": "b9478c6a15752b22c0bee8843381c1bf56bebd45",
+    "protected_worktrees_modified": false
+  },
+  "cli": {
+    "executable": "C:\\Users\\natan\\AppData\\Local\\OpenAI\\Codex\\bin\\fac60c5e9a2ae3df\\codex.exe",
+    "version": "codex-cli 0.150.0-alpha.12.2",
+    "login_status": "Logged in using ChatGPT",
+    "ignore_user_config_used": false,
+    "global_config_changed": false,
+    "reinstalled_or_downgraded": false
+  },
+  "adapter_invocation_before_and_after": {
+    "argv_shape": [
+      "exec",
+      "--ephemeral",
+      "--json",
+      "--model",
+      "gpt-5.6-luna",
+      "-c",
+      "model_reasoning_effort=high",
+      "-s",
+      "read-only",
+      "--ignore-rules",
+      "--skip-git-repo-check",
+      "-C",
+      "<isolated-workspace>",
+      "--add-dir",
+      "<blackhole-home>",
+      "--output-schema",
+      "<temporary-schema>",
+      "[-i <stored-image>]",
+      "-o",
+      "<temporary-output>",
+      "-"
+    ],
+    "process_cwd": "Product V2 process working directory inherited by subprocess.run",
+    "agent_cwd": "temporary isolated workspace passed with -C",
+    "stdin": "UTF-8 prompt bytes passed with subprocess.run(input=...); argv '-' selects stdin; inherited stdin is not used",
+    "environment": {
+      "inherit": true,
+      "modifications": []
+    },
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "high",
+    "sandbox": "read-only",
+    "approval_mode": "CLI default; no explicit approval flag",
+    "config_overrides": ["model_reasoning_effort=high"],
+    "feature_flags": {
+      "shell_snapshot": "default-enabled; no --disable shell_snapshot in final invocation"
+    },
+    "output_mode": {
+      "stdout": "JSONL (--json)",
+      "last_message_file": "temporary -o path",
+      "schema": "strict object schema with closed object properties, required fields, and array items"
+    },
+    "timeout_seconds": 900,
+    "auth_boundary": "standard Codex user configuration and external ChatGPT login; no --ignore-user-config; no token access"
+  },
+  "capability_checks": {
+    "exec_help_inspected": true,
+    "features_list_inspected": true,
+    "shell_snapshot_controllable": true,
+    "diagnostic_model_call_limit": 6,
+    "diagnostic_model_calls_used": 6,
+    "benchmark_prompts_used": false,
+    "blackhole_captures_used": false
+  },
+  "control_matrix": [
+    {
+      "id": "A",
+      "purpose": "simplest authenticated noninteractive exec",
+      "exit_code": 0,
+      "model_response": "OK",
+      "shell_snapshot_warning": true,
+      "terminal_failure": null
+    },
+    {
+      "id": "B",
+      "purpose": "adapter model/reasoning/sandbox settings without schema/output-file flags",
+      "exit_code": 0,
+      "model_response": "OK",
+      "shell_snapshot_warning": true,
+      "terminal_failure": null
+    },
+    {
+      "id": "C",
+      "purpose": "exact Product V2 flags with the original permissive schema",
+      "exit_code": 1,
+      "model_response": null,
+      "shell_snapshot_warning": true,
+      "terminal_event": "turn.failed",
+      "error_type": "invalid_request_error",
+      "error_code": "invalid_json_schema",
+      "error_message": "Invalid schema for response_format 'codex_output_schema': root additionalProperties must be false",
+      "status": 400
+    },
+    {
+      "id": "D",
+      "purpose": "exact Product V2 flags plus --disable shell_snapshot",
+      "exit_code": 1,
+      "model_response": null,
+      "shell_snapshot_warning": false,
+      "terminal_event": "turn.failed",
+      "error_type": "invalid_request_error",
+      "error_code": "invalid_json_schema",
+      "error_message": "The same response schema was rejected; disabling shell_snapshot changed only the warning",
+      "status": 400
+    },
+    {
+      "id": "E",
+      "purpose": "root additionalProperties false, arrays still missing items",
+      "exit_code": 1,
+      "model_response": null,
+      "shell_snapshot_warning": true,
+      "terminal_event": "turn.failed",
+      "error_type": "invalid_request_error",
+      "error_code": "invalid_json_schema",
+      "error_message": "In context=('properties', 'facts'), array schema missing items",
+      "status": 400
+    },
+    {
+      "id": "F",
+      "purpose": "arrays with empty item schemas",
+      "exit_code": 1,
+      "model_response": null,
+      "shell_snapshot_warning": true,
+      "terminal_event": "turn.failed",
+      "error_type": "invalid_request_error",
+      "error_code": "invalid_json_schema",
+      "error_message": "In context=('properties', 'facts', 'items'), schema must have a type key",
+      "status": 400
+    }
+  ],
+  "root_cause": {
+    "actual_fatal_cause": "The Product V2 --output-schema was not valid for the installed Codex structured-output contract: the root allowed additional properties and array properties had no typed items; strict nested object definitions were also required.",
+    "terminal_machine_event": "turn.failed",
+    "terminal_provider_error": "invalid_request_error / invalid_json_schema / HTTP 400",
+    "powershell_shell_snapshot_causal": false,
+    "evidence": "The warning appeared in successful controls A/B, disappeared in control D without changing the schema failure, and the terminal JSON event identified the schema error.",
+    "fix": "Generate a strict Product V2 schema with closed object properties, required fields, typed array items, and nullable representations for optional values; retain non-zero exit handling and parse terminal JSON failures."
+  },
+  "attachment_boundary": {
+    "image_cli_support": "--image forwarded for image MIME attachments",
+    "documents": "document/PDF attachments remain metadata-only; no OCR or provider interpretation claimed"
+  },
+  "live_smoke": {
+    "home": "fresh temporary BLACKHOLE_HOME; path intentionally omitted from durable evidence",
+    "launch": [
+      "python -m app.host init",
+      "python -m app.web_app --host 127.0.0.1 --port <free-port>"
+    ],
+    "captures": [
+      {
+        "text": "Klucze do piwnicy są u mamy.",
+        "returned_immediately": true,
+        "observed_latency_ms": 33.0,
+        "processing_at_return": "pending"
+      },
+      {
+        "text": "Odbieram dzieci za 10 minut.",
+        "returned_immediately": true,
+        "observed_latency_ms": 9.2,
+        "processing_at_return": "pending"
+      }
+    ],
+    "processing": {
+      "processed": 2,
+      "pending": 0,
+      "processing": 0,
+      "failed": 0,
+      "attempt_count_each": 1,
+      "retry_count": 0
+    },
+    "memory": {
+      "fact": "Klucze do piwnicy / location / u mamy",
+      "source_ref": "provider-smoke-basement"
+    },
+    "attention": {
+      "item": "Odebrać dzieci",
+      "kind": "appointment",
+      "relative_due_time": "10 minutes",
+      "source_ref": "provider-smoke-kids"
+    },
+    "ask": {
+      "keys_question": {
+        "question": "Gdzie są klucze do piwnicy?",
+        "observed_result": "unrelated Attention item was returned; no useful key answer",
+        "provider_used": false,
+        "post_smoke_deterministic_fix": "removed standalone 'do' task/time marker and added Polish upcoming/task markers; covered by a regression test; no additional live Ask was issued"
+      },
+      "task_question": {
+        "question": "Co mam niedługo do zrobienia?",
+        "observed_result": "useful Attention answer: Odebrać dzieci",
+        "source_ref": "provider-smoke-kids",
+        "provider_used": false
+      }
+    },
+    "no_uncontrolled_retry_spin": true
+  },
+  "scope_confirmations": {
+    "global_codex_configuration_changed": false,
+    "codex_reinstalled_or_downgraded": false,
+    "source_worktree_modified": false,
+    "master_modified": false,
+    "v1_oracle_or_scoring_worktree_accessed": false,
+    "g01_g02_g03_tuning": false,
+    "provider_tokens_read_copied_exported_or_persisted": false
+  }
+}

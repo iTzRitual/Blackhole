@@ -1,0 +1,101 @@
+{
+  "record_type": "product-v2-runtime-trajectory",
+  "record_version": "1",
+  "run_id": "036-live-provider-fix-smoke",
+  "source_revision": "b9478c6a15752b22c0bee8843381c1bf56bebd45",
+  "launch": {
+    "commands": [
+      "python -m app.host init",
+      "python -m app.web_app --host 127.0.0.1 --port <free-port>"
+    ],
+    "home": "fresh temporary BLACKHOLE_HOME (path omitted)",
+    "provider_auth": "normal Codex ChatGPT login; no token access"
+  },
+  "state_before": {
+    "captures": 0,
+    "memory_facts": 0,
+    "attention_items": 0,
+    "processing": {
+      "processed": 0,
+      "pending": 0,
+      "processing": 0,
+      "failed": 0
+    }
+  },
+  "instructions": {
+    "provider": "Product V2 semantic interpreter prompt with JSONL structured output",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "high",
+    "sandbox": "read-only",
+    "session": "ephemeral",
+    "output_schema": "strict temporary schema",
+    "input": "UTF-8 prompt through stdin"
+  },
+  "events": [
+    {
+      "sequence": 1,
+      "operation": "capture",
+      "text": "Klucze do piwnicy są u mamy.",
+      "source_ref": "provider-smoke-basement",
+      "returned": "Saved.",
+      "processing_at_return": "pending",
+      "observed_latency_ms": 33.0,
+      "provider_result": "structured success; one attempt; no retry"
+    },
+    {
+      "sequence": 2,
+      "operation": "capture",
+      "text": "Odbieram dzieci za 10 minut.",
+      "source_ref": "provider-smoke-kids",
+      "returned": "Saved.",
+      "processing_at_return": "pending",
+      "observed_latency_ms": 9.2,
+      "provider_result": "structured success; one attempt; no retry"
+    }
+  ],
+  "state_after": {
+    "processing": {
+      "processed": 2,
+      "pending": 0,
+      "processing": 0,
+      "failed": 0,
+      "attempt_count_each": 1,
+      "retry_count": 0
+    },
+    "memory": [
+      {
+        "entity": "Klucze do piwnicy",
+        "concept": "location",
+        "knowledge_status": "known",
+        "value": "u mamy",
+        "source_ref": "provider-smoke-basement"
+      }
+    ],
+    "attention": [
+      {
+        "title": "Odebrać dzieci",
+        "kind": "appointment",
+        "status": "open",
+        "due": "10 minutes after capture",
+        "source_ref": "provider-smoke-kids"
+      }
+    ]
+  },
+  "asks": [
+    {
+      "question": "Gdzie są klucze do piwnicy?",
+      "result": "unrelated Attention item returned",
+      "source_ref": "provider-smoke-kids",
+      "provider_used": false,
+      "follow_up": "post-smoke deterministic router correction added; no additional live Ask permitted"
+    },
+    {
+      "question": "Co mam niedługo do zrobienia?",
+      "result": "useful Attention answer: Odebrać dzieci",
+      "source_ref": "provider-smoke-kids",
+      "provider_used": false
+    }
+  ],
+  "approvals": [],
+  "outcome": "provider semantic processing PASS; prescribed live gate PARTIAL pending bounded validation of the corrected keys Ask"
+}

@@ -661,6 +661,59 @@ def _decode_process_output(value: Any) -> str:
     return value if isinstance(value, str) else ""
 
 
+def _redact_provider_text(value: str) -> str:
+    value = re.sub(r"(?i)\bBearer\s+[A-Za-z0-9._~+/=-]+", "Bearer [REDACTED]", value)
+    value = re.sub(
+        r'(?i)(["\']?\b(?:api[_-]?key|access[_-]?token|auth(?:orization)?|cookie|credential|password|secret|token)["\']?\s*:\s*)["\'][^"\']*["\']',
+        r'\1"[REDACTED]"',
+        value,
+    )
+    value = _SECRET_ASSIGNMENT.sub(r"\1[REDACTED]", value)
+    return value
+
+
+def _diagnostic_key_is_secret(value: Any) -> bool:
+    normalized = re.sub(r"[^a-z0-9]+", "_", str(value).casefold()).strip("_")
+    return normalized in {
+        "access_token",
+        "api_key",
+        "apikey",
+        "auth",
+        "authorization",
+        "auth_cookie",
+        "credential",
+        "credentials",
+        "cookie",
+        "password",
+        "secret",
+        "token",
+    } or any(marker in normalized for marker in ("token", "secret", "password", "credential", "cookie"))
+
+
+def _sanitize_diagnostic_value(value: Any, *, depth: int = 0) -> Any:
+    """Bound and redact JSON values copied from provider diagnostics."""
+
+    if depth > 5:
+        return "[TRUNCATED]"
+    if isinstance(value, str):
+        return _redact_provider_text(value)[:500]
+    if value is None or isinstance(value, (bool, int, float)):
+        return value
+    if isinstance(value, list):
+        return [_sanitize_diagnostic_value(item, depth=depth + 1) for item in value[:20]]
+    if isinstance(value, dict):
+        result: dict[str, Any] = {}
+        for key, item in list(value.items())[:30]:
+            safe_key = _redact_provider_text(str(key))[:120]
+            result[safe_key] = (
+                "[REDACTED]"
+                if _diagnostic_key_is_secret(key)
+                else _sanitize_diagnostic_value(item, depth=depth + 1)
+            )
+        return result
+    return _redact_provider_text(str(value))[:500]
+
+
 def _sanitize_provider_output(value: Any) -> str | None:
     """Keep only bounded diagnostic lines and redact credential-shaped values."""
 
@@ -670,13 +723,307 @@ def _sanitize_provider_output(value: Any) -> str | None:
         candidate = line.strip()
         if not candidate or not _DIAGNOSTIC_LINE.search(candidate):
             continue
-        candidate = _SECRET_ASSIGNMENT.sub(r"\1[REDACTED]", candidate)
-        candidate = re.sub(r"(?i)\bBearer\s+[A-Za-z0-9._~+/=-]+", "Bearer [REDACTED]", candidate)
+        candidate = _redact_provider_text(candidate)
         lines.append(candidate[:500])
         if sum(len(item) for item in lines) >= 1000:
             break
     result = "\n".join(lines)[:1000]
     return result or None
+
+
+def _sanitize_provider_tail(value: Any) -> str | None:
+    """Retain a short, redacted tail even when lines have no diagnostic keyword."""
+
+    text = _decode_process_output(value)
+    lines = [_redact_provider_text(line.strip())[:500] for line in text.splitlines() if line.strip()]
+    result = "\n".join(lines)[-1000:]
+    return result or None
+
+
+def _jsonl_objects(value: Any) -> list[dict[str, Any]]:
+    objects: list[dict[str, Any]] = []
+    for line in _decode_process_output(value).splitlines():
+        candidate = line.strip()
+        if not candidate.startswith("{"):
+            continue
+        try:
+            parsed = json.loads(candidate)
+        except (TypeError, ValueError):
+            continue
+        if isinstance(parsed, dict):
+            objects.append(parsed)
+    return objects
+
+
+def _terminal_json_event(value: Any) -> dict[str, Any] | None:
+    """Return the last machine-readable failure event from Codex JSONL output."""
+
+    events = _jsonl_objects(value)
+    candidates = [
+        event
+        for event in reversed(events)
+        if event.get("type") == "turn.failed"
+    ]
+    candidates.extend(
+        event
+        for event in reversed(events)
+        if event.get("type") == "error"
+    )
+    candidates.extend(
+        event
+        for event in reversed(events)
+        if event.get("type") == "item.completed"
+        and isinstance(event.get("item"), dict)
+        and event["item"].get("type") == "error"
+    )
+    for event in candidates:
+        sanitized = _sanitize_diagnostic_value(event)
+        if not isinstance(sanitized, dict):
+            continue
+        raw_error = event.get("error")
+        if isinstance(raw_error, dict) and isinstance(raw_error.get("message"), str):
+            embedded = _parse_model_json(raw_error["message"])
+            if isinstance(embedded, dict):
+                sanitized["parsed_error"] = _sanitize_diagnostic_value(embedded)
+        elif isinstance(event.get("message"), str):
+            embedded = _parse_model_json(event["message"])
+            if isinstance(embedded, dict):
+                sanitized["parsed_error"] = _sanitize_diagnostic_value(embedded)
+        return sanitized
+    return None
+
+
+def _terminal_error_detail(event: dict[str, Any] | None) -> str | None:
+    """Extract a short human-readable detail from a terminal JSON event."""
+
+    if not isinstance(event, dict):
+        return None
+    current: Any = event.get("parsed_error") or event.get("error") or event.get("message")
+    status: Any = event.get("status")
+    for _ in range(4):
+        if isinstance(current, dict) and isinstance(current.get("error"), dict):
+            status = current.get("status", status)
+            current = current["error"]
+            continue
+        if isinstance(current, dict) and isinstance(current.get("message"), str):
+            embedded = _parse_model_json(current["message"])
+            if isinstance(embedded, dict):
+                status = current.get("status", status)
+                current = embedded
+                continue
+        break
+    if isinstance(current, dict):
+        parts = [
+            event.get("type"),
+            current.get("type"),
+            current.get("code"),
+            current.get("message"),
+        ]
+        detail = ": ".join(str(part) for part in parts if isinstance(part, str) and part.strip())
+        if status is not None:
+            detail = f"{detail} (status {status})" if detail else f"status {status}"
+    elif isinstance(current, str):
+        detail = current
+    else:
+        detail = None
+    return _redact_provider_text(detail)[:1000] if detail else None
+
+
+def _nullable_string_schema() -> dict[str, Any]:
+    return {"anyOf": [{"type": "string"}, {"type": "null"}]}
+
+
+def _nullable_number_schema() -> dict[str, Any]:
+    return {"anyOf": [{"type": "number"}, {"type": "null"}]}
+
+
+def _value_schema() -> dict[str, Any]:
+    value_object_properties = {
+        "amount": {"anyOf": [{"type": "number"}, {"type": "string"}, {"type": "null"}]},
+        "currency": _nullable_string_schema(),
+        "billing_period": _nullable_string_schema(),
+        "title": _nullable_string_schema(),
+        "text": _nullable_string_schema(),
+        "task": _nullable_string_schema(),
+        "due_at": _nullable_string_schema(),
+        "deadline": _nullable_string_schema(),
+        "starts_at": _nullable_string_schema(),
+        "start_at": _nullable_string_schema(),
+        "iso": _nullable_string_schema(),
+        "datetime": _nullable_string_schema(),
+        "timestamp": _nullable_string_schema(),
+        "date": _nullable_string_schema(),
+        "relative_minutes": _nullable_number_schema(),
+        "relative_hours": _nullable_number_schema(),
+        "relative_seconds": _nullable_number_schema(),
+        "value": _nullable_string_schema(),
+    }
+    return {
+        "anyOf": [
+            {"type": "string"},
+            {"type": "number"},
+            {"type": "boolean"},
+            {"type": "null"},
+            {
+                "type": "object",
+                "additionalProperties": False,
+                "properties": value_object_properties,
+                "required": list(value_object_properties),
+            },
+            {
+                "type": "array",
+                "items": {"anyOf": [{"type": "string"}, {"type": "number"}, {"type": "boolean"}, {"type": "null"}]},
+            },
+        ]
+    }
+
+
+def _timestamp_schema() -> dict[str, Any]:
+    properties = {
+        "relative_seconds": _nullable_number_schema(),
+        "relative_minutes": _nullable_number_schema(),
+        "relative_hours": _nullable_number_schema(),
+        "iso": _nullable_string_schema(),
+        "datetime": _nullable_string_schema(),
+        "timestamp": _nullable_string_schema(),
+        "date": _nullable_string_schema(),
+        "value": _nullable_string_schema(),
+    }
+    return {
+        "anyOf": [
+            {"type": "string"},
+            {"type": "null"},
+            {
+                "type": "object",
+                "additionalProperties": False,
+                "properties": properties,
+                "required": list(properties),
+            },
+        ]
+    }
+
+
+def _semantic_output_schema() -> dict[str, Any]:
+    entity = {
+        "anyOf": [
+            {"type": "string"},
+            {
+                "type": "object",
+                "additionalProperties": False,
+                "properties": {
+                    "key": _nullable_string_schema(),
+                    "name": _nullable_string_schema(),
+                    "label": _nullable_string_schema(),
+                },
+                "required": ["key", "name", "label"],
+            },
+        ]
+    }
+    fact_properties = {
+        "event_id": {"type": "string"},
+        "entity": entity,
+        "concept": {"type": "string"},
+        "knowledge_status": {"type": "string", "enum": ["known", "inferred", "unknown"]},
+        "value": _value_schema(),
+        "unknown_reason": _nullable_string_schema(),
+        "operation": {"type": "string", "enum": ["set", "correction", "supersede", "contradiction", "duplicate"]},
+        "supersedes_event_id": _nullable_string_schema(),
+        "source_refs": {"type": "array", "items": {"type": "string"}},
+        "temporal": {
+            "type": "object",
+            "additionalProperties": False,
+            "properties": {
+                "valid_from": _nullable_string_schema(),
+                "valid_to": _nullable_string_schema(),
+                "observed_at": _nullable_string_schema(),
+            },
+            "required": ["valid_from", "valid_to", "observed_at"],
+        },
+    }
+    relation_properties = {
+        "source_event_id": {"type": "string"},
+        "event_id": _nullable_string_schema(),
+        "relation_type": {"type": "string"},
+        "type": _nullable_string_schema(),
+        "source_entity_key": _nullable_string_schema(),
+        "target_entity_key": _nullable_string_schema(),
+        "subject": _nullable_string_schema(),
+        "target": _nullable_string_schema(),
+        "reference": _nullable_string_schema(),
+        "target_event_id": _nullable_string_schema(),
+        "knowledge_status": {"type": "string", "enum": ["known", "inferred", "unknown"]},
+        "value": _value_schema(),
+        "source_refs": {"type": "array", "items": {"type": "string"}},
+    }
+    attention_properties = {
+        "event_id": {"type": "string"},
+        "source_event_id": _nullable_string_schema(),
+        "title": {"type": "string"},
+        "text": _nullable_string_schema(),
+        "task": _nullable_string_schema(),
+        "label": _nullable_string_schema(),
+        "kind": {"type": "string"},
+        "type": _nullable_string_schema(),
+        "status": {"type": "string"},
+        "knowledge_status": {"type": "string", "enum": ["known", "inferred", "unknown"]},
+        "due_at": _timestamp_schema(),
+        "deadline": _timestamp_schema(),
+        "starts_at": _timestamp_schema(),
+        "start_at": _timestamp_schema(),
+        "relative_minutes": _nullable_number_schema(),
+        "relative_hours": _nullable_number_schema(),
+        "relative_seconds": _nullable_number_schema(),
+        "value": _value_schema(),
+        "details": {
+            "type": "object",
+            "additionalProperties": False,
+            "properties": {
+                "note": _nullable_string_schema(),
+                "time_expression": _value_schema(),
+                "time_status": _nullable_string_schema(),
+            },
+            "required": ["note", "time_expression", "time_status"],
+        },
+        "source_refs": {"type": "array", "items": {"type": "string"}},
+    }
+    attachment_properties = {
+        "event_id": _nullable_string_schema(),
+        "sha256": _nullable_string_schema(),
+        "status": {"type": "string", "enum": ["read", "unsupported", "unreadable"]},
+        "source_refs": {"type": "array", "items": {"type": "string"}},
+    }
+
+    def strict_items(properties: dict[str, Any]) -> dict[str, Any]:
+        return {
+            "type": "object",
+            "additionalProperties": False,
+            "properties": properties,
+            "required": list(properties),
+        }
+
+    fact_items = strict_items(fact_properties)
+    return {
+        "type": "object",
+        "additionalProperties": False,
+        "properties": {
+            "facts": {"type": "array", "items": fact_items},
+            "observations": {"type": "array", "items": fact_items},
+            "relationships": {"type": "array", "items": strict_items(relation_properties)},
+            "attention": {"type": "array", "items": strict_items(attention_properties)},
+            "attachment_results": {"type": "array", "items": strict_items(attachment_properties)},
+            "answer": _nullable_string_schema(),
+            "source_refs": {"type": "array", "items": {"type": "string"}},
+        },
+        "required": [
+            "facts",
+            "observations",
+            "relationships",
+            "attention",
+            "attachment_results",
+            "answer",
+            "source_refs",
+        ],
+    }
 
 
 def product_database_path(home: str | Path) -> Path:
@@ -690,8 +1037,8 @@ class ProductCodexProvider:
 
     The installed CLI surface observed for this runtime is ``codex exec`` with
     ``--image`` for direct image inputs.  Each call uses an ephemeral session,
-    read-only sandbox, no approval prompts, an isolated temporary workspace,
-    and an explicit read-only additional directory for stored attachments.
+    a read-only sandbox, the CLI's default approval mode, an isolated temporary
+    workspace, and an additional Home directory for stored attachments.
     No auth material or raw provider output is persisted by Blackhole.
     """
 
@@ -720,25 +1067,7 @@ class ProductCodexProvider:
     @staticmethod
     def _schema_path(directory: Path) -> Path:
         path = directory / "product-v2-output-schema.json"
-        path.write_text(
-            json.dumps(
-                {
-                    "type": "object",
-                    "additionalProperties": True,
-                    "properties": {
-                        "facts": {"type": "array"},
-                        "observations": {"type": "array"},
-                        "relationships": {"type": "array"},
-                        "attention": {"type": "array"},
-                        "attachment_results": {"type": "array"},
-                        "answer": {"type": "string"},
-                        "source_refs": {"type": "array"},
-                    },
-                },
-                ensure_ascii=False,
-            ),
-            encoding="utf-8",
-        )
+        path.write_text(json.dumps(_semantic_output_schema(), ensure_ascii=False), encoding="utf-8")
         return path
 
     def _cli_version(self, cli: str) -> str | None:
@@ -826,12 +1155,29 @@ class ProductCodexProvider:
                 "call_number": self.call_count,
                 "executable": str(Path(cli).resolve()),
                 "cli_version": self._cli_version(cli),
+                "cwd": str(Path.cwd()),
+                "agent_cwd": str(workspace),
+                "stdin_behavior": "UTF-8 prompt bytes via a subprocess pipe; argv '-' selects stdin",
+                "environment": {"inherit": True, "modifications": []},
                 "model": self.model,
                 "reasoning_effort": self.reasoning_effort,
+                "sandbox": "read-only",
+                "approval_mode": "CLI default; no explicit approval flag",
+                "config_overrides": [f"model_reasoning_effort={self.reasoning_effort}"],
+                "feature_flags": {"shell_snapshot": "default-enabled; not explicitly disabled"},
+                "output_mode": {
+                    "stdout": "JSONL (--json)",
+                    "last_message_file": "<temporary-output>",
+                    "output_schema": "<temporary-schema>",
+                },
+                "timeout_seconds": self.timeout,
                 "invocation": self._invocation_summary(len(image_paths or [])),
                 "image_count": len(image_paths or []),
                 "returncode": None,
                 "timed_out": False,
+                "terminal_event": None,
+                "stdout_tail": None,
+                "stderr_tail": None,
             }
             try:
                 completed = subprocess.run(
@@ -848,6 +1194,9 @@ class ProductCodexProvider:
                         "timed_out": True,
                         "stdout": _sanitize_provider_output(getattr(error, "stdout", None)),
                         "stderr": _sanitize_provider_output(getattr(error, "stderr", None)),
+                        "stdout_tail": _sanitize_provider_output(getattr(error, "stdout", None)),
+                        "stderr_tail": _sanitize_provider_tail(getattr(error, "stderr", None)),
+                        "terminal_event": _terminal_json_event(getattr(error, "stdout", None)),
                     }
                 )
                 raise ProductProviderExecutionError(
@@ -860,6 +1209,7 @@ class ProductCodexProvider:
                         "duration_seconds": round(time.monotonic() - started, 3),
                         "error_type": type(error).__name__,
                         "stderr": _sanitize_provider_output(str(error)),
+                        "stderr_tail": _sanitize_provider_tail(str(error)),
                     }
                 )
                 raise ProductProviderExecutionError(
@@ -874,10 +1224,19 @@ class ProductCodexProvider:
                     "returncode": completed.returncode,
                     "stdout": _sanitize_provider_output(stdout),
                     "stderr": _sanitize_provider_output(stderr),
+                    "stdout_tail": _sanitize_provider_output(stdout),
+                    "stderr_tail": _sanitize_provider_tail(stderr),
+                    "terminal_event": _terminal_json_event(stdout),
                 }
             )
             if completed.returncode != 0:
-                detail = self.last_call.get("stderr") or self.last_call.get("stdout") or f"exit code {completed.returncode}"
+                detail = (
+                    _terminal_error_detail(self.last_call.get("terminal_event"))
+                    or self.last_call.get("stderr_tail")
+                    or self.last_call.get("stderr")
+                    or self.last_call.get("stdout_tail")
+                    or f"exit code {completed.returncode}"
+                )
                 raise ProductProviderExecutionError(
                     f"semantic provider failed (exit code {completed.returncode}): {detail}; retry available",
                     diagnostic=self.last_call,
@@ -1588,8 +1947,8 @@ class ProductRuntime:
         question_tokens = _tokens(question)
         attention = [item for item in snapshot.get("attention", []) if item.get("status") == "open"]
         is_today = bool(question_tokens & {"today", "dzisiaj", "dziś"})
-        is_upcoming = bool(question_tokens & {"upcoming", "coming", "week", "tydzień", "tydzien", "nadchodzący", "nadchodzacy"})
-        is_task = bool(question_tokens & {"need", "task", "tasks", "do", "todo", "muszę", "musze", "zrobić", "zrobic"})
+        is_upcoming = bool(question_tokens & {"upcoming", "coming", "week", "tydzień", "tydzien", "nadchodzący", "nadchodzacy", "niedługo", "niedlugo"})
+        is_task = bool(question_tokens & {"need", "task", "tasks", "todo", "muszę", "musze", "zrobić", "zrobic", "zrobienia"})
         if (is_today and is_task) or (is_upcoming and is_task):
             now = self._now()
             horizon = now + timedelta(days=7 if is_upcoming else 1)
@@ -1610,7 +1969,7 @@ class ProductRuntime:
 
         is_time_question = bool(
             question_tokens
-            & {"when", "kiedy", "deadline", "due", "date", "termin", "datę", "date", "until", "do"}
+            & {"when", "kiedy", "deadline", "due", "date", "termin", "datę", "date", "until"}
         )
         if attention and (is_time_question or is_task):
             attention_tokens = [

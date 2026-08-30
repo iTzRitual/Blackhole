@@ -113,3 +113,95 @@ not live-provider evidence.
 UX, and service-worker fixes. **REVISE** the live Codex adapter before calling
 the human-dogfood gate PASS: the remaining CLI exit-code-1 condition needs an
 explicitly authorized follow-up diagnosis and a new bounded live run.
+
+## Authorized provider-fix follow-up — 2026-08-30
+
+The preceding **PARTIAL** result is preserved as historical evidence. This
+follow-up used the exact source HEAD
+`b9478c6a15752b22c0bee8843381c1bf56bebd45` and the isolated
+`product/v2-provider-fix` branch. The sanitized control matrix and invocation
+record are in
+`trajectories/coding/036-product-v2-live-provider-fix/provider-diagnostics.json`.
+
+### Actual provider root cause
+
+The fatal condition was not the PowerShell shell-snapshot warning. The Product
+V2 adapter's output schema was incompatible with the installed Codex
+structured-output contract: its root object allowed additional properties,
+its arrays did not declare `items`, and its nested objects were not strict.
+Codex emitted a terminal `turn.failed` event containing
+`invalid_request_error` / `invalid_json_schema` with status 400 and exited with
+code 1 before generating a model message. The earlier bounded diagnostic chose
+stderr warning lines first, which obscured that terminal error.
+
+Controls A and B completed with `OK` while emitting the shell-snapshot warning.
+Control D added `--disable shell_snapshot`; the warning disappeared, but the
+same schema failure and exit code 1 remained. The final adapter therefore does
+not disable shell snapshots merely to silence the warning.
+
+The adapter now generates a strict schema with typed array items, closed object
+properties, required fields, and nullable representations for optional semantic
+values. It also preserves the terminal JSON failure event, a bounded sanitized
+stdout/stderr tail, return code, and timeout state. Non-zero exits remain
+retryable failures.
+
+### Final invocation boundary
+
+The final Product V2 call shape is:
+
+```text
+codex exec --ephemeral --json --model gpt-5.6-luna
+  -c model_reasoning_effort=high
+  -s read-only --ignore-rules --skip-git-repo-check
+  -C <temporary-isolated-workspace>
+  --add-dir <BLACKHOLE_HOME>
+  --output-schema <temporary-strict-schema>
+  [-i <stored-image>]
+  -o <temporary-last-message-file> -
+```
+
+The subprocess inherits the environment without modification, sends UTF-8
+prompt bytes through a pipe, and uses the normal externally authenticated
+Codex configuration. It does not use `--ignore-user-config`,
+`--disable shell_snapshot`, or any workspace-write/dangerous sandbox flag.
+There is no explicit approval flag; the sandbox is read-only. The default
+timeout is 900 seconds. The exact resolved executable path, version, argv
+placeholders, and all boundary fields are recorded in the sanitized diagnostic
+artifact.
+
+The installed CLI exposes local image support through `--image`; the adapter
+forwards image attachments through that flag and leaves document/PDF
+attachments as explicit metadata-only records. No OCR or unverified document
+interpretation was added, so this limitation remains visible rather than being
+presented as a successful read.
+
+### Follow-up live smoke
+
+`python -m app.host init` succeeded in a fresh temporary Home and reported the
+normal ChatGPT login. The normal `python -m app.web_app` launch accepted both
+authorized captures immediately: approximately 33.0 ms and 9.2 ms, each with
+`processing: pending`. The managed worker then processed both on their first
+attempt, with 2 processed, 0 pending, 0 processing, 0 failed, and zero retries.
+
+Memory contained the known fact `Klucze do piwnicy / location / u mamy` with
+source reference `provider-smoke-basement`. Attention contained the open
+appointment `Odebrać dzieci`, due ten minutes after capture, with source
+reference `provider-smoke-kids`.
+
+The second prescribed Ask returned the useful children Attention item with
+evidence. The first prescribed Ask, `Gdzie są klucze do piwnicy?`, was instead
+routed to the unrelated Attention item by an existing deterministic Polish
+router rule that treated the standalone preposition `do` as a task/time
+marker. That narrow router bug was corrected and covered by a deterministic
+regression test after the live run; no additional live Ask was made because
+the authorized two-Ask limit had been reached.
+
+### Follow-up decision
+
+The real provider adapter change is **KEEP**: the authenticated normal worker
+now produces useful semantic Memory and Attention state without retries. The
+overall prescribed live provider gate remains **PARTIAL / REVISE** because the
+first live Ask was not useful and the corrected routing rule could not be
+revalidated live within the authorized two-Ask limit. No benchmark, baseline,
+holdout, V1 oracle, G01/G02/G03 run, global Codex configuration, or protected
+worktree was changed or accessed.

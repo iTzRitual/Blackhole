@@ -377,6 +377,58 @@ class ProductV2Tests(unittest.TestCase):
                 self.assertEqual(provider.answer_calls, 0)
                 self.assertIn("v2-open-1", answer["source_refs"])
 
+    def test_polish_memory_question_is_not_misrouted_to_unrelated_attention(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            class PolishProvider(ProductFakeProvider):
+                def extract(
+                    self,
+                    *,
+                    events: list[dict[str, Any]],
+                    prior_memory: dict[str, Any],
+                    time_context: dict[str, Any],
+                    contract: dict[str, Any],
+                ) -> dict[str, Any]:
+                    del prior_memory, time_context, contract
+                    return {
+                        "facts": [
+                            {
+                                "event_id": events[0]["event_id"],
+                                "entity": "Klucze do piwnicy",
+                                "concept": "location",
+                                "knowledge_status": "known",
+                                "value": "u mamy",
+                            }
+                        ],
+                        "attention": [
+                            {
+                                "event_id": events[1]["event_id"],
+                                "kind": "appointment",
+                                "title": "Odebrać dzieci",
+                                "status": "open",
+                                "relative_minutes": 10,
+                            }
+                        ],
+                    }
+
+            provider = PolishProvider()
+            with self.runtime(directory, provider) as runtime:
+                runtime.capture("Klucze do piwnicy są u mamy.", event_id="v2-polish-keys")
+                runtime.capture("Odbieram dzieci za 10 minut.", event_id="v2-polish-kids")
+                runtime.process_pending()
+
+                answer = runtime.ask("Gdzie są klucze do piwnicy?")
+
+                self.assertEqual(answer["mode"], "retrieval")
+                self.assertIn("v2-polish-keys", answer["source_refs"])
+                self.assertNotIn("v2-polish-kids", answer["source_refs"])
+                self.assertIn("u mamy", answer["answer"])
+
+                task_answer = runtime.ask("Co mam niedługo do zrobienia?")
+
+                self.assertEqual(task_answer["mode"], "attention")
+                self.assertIn("v2-polish-kids", task_answer["source_refs"])
+                self.assertNotIn("v2-polish-keys", task_answer["source_refs"])
+
     def test_semantic_ask_uses_bounded_mock_provider_and_source_refs(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             provider = ProductFakeProvider()

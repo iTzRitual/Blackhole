@@ -1,0 +1,70 @@
+{
+  "result_type": "product-v2-live-provider-fix",
+  "status": "PARTIAL",
+  "scope": "post-freeze provider integration; not a benchmark optimization and not E006",
+  "base_sha": "b9478c6a15752b22c0bee8843381c1bf56bebd45",
+  "branch": "product/v2-provider-fix",
+  "provider": {
+    "executable": "C:\\Users\\natan\\AppData\\Local\\OpenAI\\Codex\\bin\\fac60c5e9a2ae3df\\codex.exe",
+    "version": "codex-cli 0.150.0-alpha.12.2",
+    "authentication": "normal Codex login status reported Logged in using ChatGPT",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "high",
+    "sandbox": "read-only",
+    "shell_snapshot_disabled": false,
+    "ignore_user_config": false
+  },
+  "root_cause": {
+    "terminal_event": "turn.failed",
+    "error_type": "invalid_request_error",
+    "error_code": "invalid_json_schema",
+    "status_code": 400,
+    "summary": "The original output schema allowed additional properties and omitted typed array items; the installed CLI rejected it before model generation.",
+    "powershell_shell_snapshot_warning_causal": false
+  },
+  "live_smoke": {
+    "normal_launch": true,
+    "capture_count": 2,
+    "capture_return_ms": [33.0, 9.2],
+    "processed": 2,
+    "failed": 0,
+    "pending": 0,
+    "processing": 0,
+    "retry_count": 0,
+    "memory_fact_source": "provider-smoke-basement",
+    "memory_fact": "Klucze do piwnicy / location / u mamy",
+    "attention_source": "provider-smoke-kids",
+    "attention_item": "Odebrać dzieci",
+    "ask_keys": "PARTIAL: first prescribed Ask returned unrelated Attention before the post-smoke deterministic router correction",
+    "ask_tasks": "PASS: returned the children Attention item with source evidence"
+  },
+  "validation": {
+    "provider_adapter_tests": {"status": "PASS", "count": 6},
+    "application_tests": {"status": "PASS", "count": 115},
+    "evaluator_tests": {"status": "PASS", "count": 10},
+    "product_acceptance_harness_tests": {"status": "PASS", "count": 7},
+    "integrated_acceptance": {"status": "PASS", "cases": 50, "passed": 50},
+    "benchmark_structure": {"status": "PASS", "events": 200, "checkpoints": 4},
+    "contract_smoke": {"status": "PASS", "semantic_score": 1.0, "tp": 6, "fp": 0, "fn": 0},
+    "qualification": {"status": "PASS_WITH_WARNINGS", "hard_failures": 0, "warnings": 4},
+    "compileall": "PASS",
+    "javascript_syntax": "PASS"
+  },
+  "decision": {
+    "provider_adapter": "KEEP",
+    "overall_gate": "REVISE",
+    "reason": "The real provider path now works, but the mandated live keys Ask was not useful; its deterministic routing fix is covered offline and needs one future bounded normal-launch validation.",
+    "live_diagnostic_model_calls": 6,
+    "live_product_captures": 2,
+    "live_product_asks": 2
+  },
+  "protected_boundaries": {
+    "global_codex_config_changed": false,
+    "codex_reinstalled_or_downgraded": false,
+    "source_worktree_modified": false,
+    "master_changed": false,
+    "v1_oracle_accessed": false,
+    "g01_g02_g03_tuned": false,
+    "credentials_recorded": false
+  }
+}
