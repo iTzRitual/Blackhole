@@ -1,0 +1,745 @@
+{
+  "evidence_records": [
+    {
+      "event_id": "g01-e041",
+      "text_length": 53,
+      "anchors": []
+    },
+    {
+      "event_id": "g01-e042",
+      "text_length": 60,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "31.00",
+          "currency": "eur",
+          "context": "GreenGlass Market purchase: EUR 31.00 for cleaning supplies."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "GreenGlass Market purchase: EUR 31.00 for cleaning supplies."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e043",
+      "text_length": 53,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "31.00",
+          "currency": "eur",
+          "context": "Used one item from the EUR 31.00 GreenGlass purchase."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Used one item from the EUR 31.00 GreenGlass purchase."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e044",
+      "text_length": 40,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "renewal",
+          "context": "Mira should check the Emberline renewal."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e045",
+      "text_length": 51,
+      "anchors": [
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "active",
+          "context": "Emberline policy remains active through 2026-12-31."
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "through",
+          "context": "Emberline policy remains active through 2026-12-31."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-12-31",
+          "context": "Emberline policy remains active through 2026-12-31.",
+          "cue_type": "temporal_cue",
+          "cue": "through"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e046",
+      "text_length": 58,
+      "anchors": []
+    },
+    {
+      "event_id": "g01-e047",
+      "text_length": 64,
+      "anchors": [
+        {
+          "type": "action_cue",
+          "raw_value": "approval",
+          "context": "Approval for the bank-mandate change has still not been"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e048",
+      "text_length": 63,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "renewal",
+          "context": "Permit renewal history: open, then in progress, then completed"
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "completed",
+          "context": "t renewal history: open, then in progress, then completed."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e049",
+      "text_length": 37,
+      "anchors": []
+    },
+    {
+      "event_id": "g01-e050",
+      "text_length": 56,
+      "anchors": []
+    },
+    {
+      "event_id": "g01-e051",
+      "text_length": 52,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "31.00",
+          "currency": "eur",
+          "context": "GreenGlass ledger copy: EUR 31.00 cleaning supplies."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "GreenGlass ledger copy: EUR 31.00 cleaning supplies."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e052",
+      "text_length": 68,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "30.50",
+          "currency": "eur",
+          "context": "GreenGlass shop purchase: EUR 30.50 for a different cleaning bundle."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "GreenGlass shop purchase: EUR 30.50 for a different cleaning bundle."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e053",
+      "text_length": 65,
+      "anchors": []
+    },
+    {
+      "event_id": "g01-e054",
+      "text_length": 48,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "45.00",
+          "currency": "eur",
+          "context": "Copperline Fiber invoice for 2026-06: EUR 45.00."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Copperline Fiber invoice for 2026-06: EUR 45.00."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e055",
+      "text_length": 48,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "45.00",
+          "currency": "eur",
+          "context": "Copperline Fiber invoice for 2026-06: EUR 45.00."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Copperline Fiber invoice for 2026-06: EUR 45.00."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e056",
+      "text_length": 35,
+      "anchors": []
+    },
+    {
+      "event_id": "g01-e057",
+      "text_length": 51,
+      "anchors": [
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "active",
+          "context": "Do not pause Moonbeam+; the service remains active."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e058",
+      "text_length": 73,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "cancelled",
+          "context": "The cancelled meter visit is reopened for 2026-06-10; Devon P"
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "reopened",
+          "context": "The cancelled meter visit is reopened for 2026-06-10; Devon Park owns it."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-06-10",
+          "context": "The cancelled meter visit is reopened for 2026-06-10; Devon Park owns it.",
+          "cue_type": "temporal_cue",
+          "cue": "reopened"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e059",
+      "text_length": 45,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "renewal",
+          "context": "Mira says the permit renewal is already done."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e060",
+      "text_length": 39,
+      "anchors": []
+    }
+  ],
+  "gap_records": [
+    {
+      "event_id": "g01-e041",
+      "subjects": [
+        "copperline_fiber"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "copperline_fiber",
+          "predicate": "missing_periods",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": [
+            "2026-06"
+          ]
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e042",
+      "subjects": [
+        "greenglass_market"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "greenglass_market",
+          "predicate": "purchase_count",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 1
+        },
+        {
+          "subject": "greenglass_market",
+          "predicate": "purchased_total",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "31",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e043",
+      "subjects": [
+        "greenglass_market"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "greenglass_market",
+          "predicate": "confirmed_consumption_quantity",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 1
+        },
+        {
+          "subject": "greenglass_market",
+          "predicate": "consumption_observation_count",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e044",
+      "subjects": [
+        "renewal_check"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "renewal_check",
+          "predicate": "needs_attention",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "reason": "emberline renewal should be checked"
+          }
+        },
+        {
+          "subject": "renewal_check",
+          "predicate": "status",
+          "knowledge_status": "inferred",
+          "operation": "set",
+          "value": "not_started"
+        },
+        {
+          "subject": "renewal_check",
+          "predicate": "owner",
+          "knowledge_status": "unknown",
+          "operation": "set",
+          "unknown_reason": "ambiguous_person"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e045",
+      "subjects": [
+        "emberline"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "emberline",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "active"
+        },
+        {
+          "subject": "emberline",
+          "predicate": "expiry_date",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "2026-12-31"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e046",
+      "subjects": [
+        "emberline"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "emberline",
+          "predicate": "beneficiary",
+          "knowledge_status": "unknown",
+          "operation": "contradiction",
+          "unknown_reason": "unreadable"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e047",
+      "subjects": [
+        "change_fiber_payment"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "change_fiber_payment",
+          "predicate": "approved",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": false
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e048",
+      "subjects": [
+        "permit_renewal"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "permit_renewal",
+          "predicate": "status_history",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": [
+            "open",
+            "in_progress",
+            "completed"
+          ]
+        },
+        {
+          "subject": "permit_renewal",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "completed"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e049",
+      "subjects": [
+        "meter_visit"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "meter_visit",
+          "predicate": "retroactive_observation",
+          "knowledge_status": "unknown",
+          "operation": "set",
+          "unknown_reason": "no_capture_for_period"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e050",
+      "subjects": [
+        "copperline_fiber"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "copperline_fiber",
+          "predicate": "historical_status",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "paid"
+        },
+        {
+          "subject": "copperline_fiber",
+          "predicate": "last_charge",
+          "knowledge_status": "unknown",
+          "operation": "set",
+          "unknown_reason": "not_available"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e051",
+      "subjects": [
+        "greenglass_market"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "greenglass_market",
+          "predicate": "purchase_count",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": 1
+        },
+        {
+          "subject": "greenglass_market",
+          "predicate": "purchased_total",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": {
+            "amount": "31",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e052",
+      "subjects": [
+        "greenglass_market"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "greenglass_market",
+          "predicate": "purchase_count",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 1
+        },
+        {
+          "subject": "greenglass_market",
+          "predicate": "purchased_total",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "30.5",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e053",
+      "subjects": [],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": []
+    },
+    {
+      "event_id": "g01-e054",
+      "subjects": [
+        "copperline_fiber"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_bill_count",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 1
+        },
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_periods",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": [
+            "2026-06"
+          ]
+        },
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_total",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "45",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e055",
+      "subjects": [
+        "copperline_fiber"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_bill_count",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": 1
+        },
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_periods",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": [
+            "2026-06"
+          ]
+        },
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_total",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": {
+            "amount": "45",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e056",
+      "subjects": [
+        "moonbeam_plus"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "cancellation_intent",
+          "knowledge_status": "inferred",
+          "operation": "set",
+          "value": true
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e057",
+      "subjects": [
+        "moonbeam_plus"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "cancellation_intent",
+          "knowledge_status": "known",
+          "operation": "correction",
+          "value": false
+        },
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "active"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e058",
+      "subjects": [
+        "meter_visit"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "meter_visit",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "2026-06-10"
+        },
+        {
+          "subject": "meter_visit",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "devon_park"
+        },
+        {
+          "subject": "meter_visit",
+          "predicate": "status",
+          "knowledge_status": "inferred",
+          "operation": "supersede",
+          "value": "in_progress"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e059",
+      "subjects": [
+        "permit_renewal"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "permit_renewal",
+          "predicate": "status",
+          "knowledge_status": "inferred",
+          "operation": "set",
+          "value": "completed"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e060",
+      "subjects": [],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": []
+    }
+  ],
+  "batch_record": {
+    "checkpoint": 60,
+    "batch": 1,
+    "scanner_version": "experiment-004-evidence-scanner-v1",
+    "completion_version": "experiment-004-deterministic-completion-v1",
+    "verifier_version": null,
+    "event_ids": [
+      "g01-e041",
+      "g01-e042",
+      "g01-e043",
+      "g01-e044",
+      "g01-e045",
+      "g01-e046",
+      "g01-e047",
+      "g01-e048",
+      "g01-e049",
+      "g01-e050",
+      "g01-e051",
+      "g01-e052",
+      "g01-e053",
+      "g01-e054",
+      "g01-e055",
+      "g01-e056",
+      "g01-e057",
+      "g01-e058",
+      "g01-e059",
+      "g01-e060"
+    ],
+    "scanned_count": 20,
+    "flagged_count": 0,
+    "flagged_events": [],
+    "deterministic_proposal_count": 0,
+    "deterministic_inserted_count": 0,
+    "residual_events": [],
+    "verifier_records": [],
+    "final_residual": []
+  }
+}

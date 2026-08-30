@@ -1,0 +1,868 @@
+{
+  "evidence_records": [
+    {
+      "event_id": "g01-e021",
+      "text_length": 34,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "11.90",
+          "currency": "eur",
+          "context": "Moonbeam+ April charge: EUR 11.90."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Moonbeam+ April charge: EUR 11.90."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e022",
+      "text_length": 56,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "7.20",
+          "currency": "eur",
+          "context": "GreenGlass Market purchase: EUR 7.20 for fruit and soap."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "GreenGlass Market purchase: EUR 7.20 for fruit and soap."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e023",
+      "text_length": 63,
+      "anchors": []
+    },
+    {
+      "event_id": "g01-e024",
+      "text_length": 54,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "42.00",
+          "currency": "eur",
+          "context": "Copperline ledger note: April service total EUR 42.00."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Copperline ledger note: April service total EUR 42.00."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e025",
+      "text_length": 62,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "renewal",
+          "context": "Permit renewal completed; confirmation uploaded by Mira Solen."
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "completed",
+          "context": "Permit renewal completed; confirmation uploaded by Mira Solen."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e026",
+      "text_length": 80,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "renewal",
+          "context": "Emberline renewal notice: premium will become EUR 21.00 monthly f"
+        },
+        {
+          "type": "amount",
+          "raw_value": "21.00",
+          "currency": "eur",
+          "context": "Emberline renewal notice: premium will become EUR 21.00 monthly from 2026-07-01."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Emberline renewal notice: premium will become EUR 21.00 monthly from 2026-07-01."
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "monthly",
+          "context": "e renewal notice: premium will become EUR 21.00 monthly from 2026-07-01."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-07-01",
+          "context": "ice: premium will become EUR 21.00 monthly from 2026-07-01.",
+          "cue_type": "temporal_cue",
+          "cue": "monthly"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e027",
+      "text_length": 70,
+      "anchors": [
+        {
+          "type": "date",
+          "raw_value": "2026-04-15",
+          "context": "Backdated meter note: the reading observed on 2026-04-15 was zero kWh."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e028",
+      "text_length": 53,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "due",
+          "context": "Meter visit opened, due 2026-05-12; owner not stated."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-05-12",
+          "context": "Meter visit opened, due 2026-05-12; owner not stated.",
+          "cue_type": "temporal_cue",
+          "cue": "due"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e029",
+      "text_length": 39,
+      "anchors": []
+    },
+    {
+      "event_id": "g01-e030",
+      "text_length": 37,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "renewal",
+          "context": "Moonbeam+ next renewal is 2026-05-30."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-05-30",
+          "context": "Moonbeam+ next renewal is 2026-05-30.",
+          "cue_type": "temporal_cue",
+          "cue": "renewal"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e031",
+      "text_length": 48,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "43.50",
+          "currency": "eur",
+          "context": "Copperline Fiber invoice for 2026-05: EUR 43.50."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Copperline Fiber invoice for 2026-05: EUR 43.50."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e032",
+      "text_length": 59,
+      "anchors": []
+    },
+    {
+      "event_id": "g01-e033",
+      "text_length": 33,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "43,50",
+          "currency": "eur",
+          "context": "Copperline / 2026-05 / 43,50 EUR."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Copperline / 2026-05 / 43,50 EUR."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e034",
+      "text_length": 60,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "44.10",
+          "currency": "eur",
+          "context": "copied summary says the May Copperline bill was EUR 44.10."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "copied summary says the May Copperline bill was EUR 44.10."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e035",
+      "text_length": 95,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "43.50",
+          "currency": "eur",
+          "context": "orrection confirmed: the May Copperline bill is EUR 43.50; EUR 44.10 was a separate meter fee."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "orrection confirmed: the May Copperline bill is EUR 43.50; EUR 44.10 was a separate meter fee."
+        },
+        {
+          "type": "amount",
+          "raw_value": "44.10",
+          "currency": "eur",
+          "context": "onfirmed: the May Copperline bill is EUR 43.50; EUR 44.10 was a separate meter fee."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "onfirmed: the May Copperline bill is EUR 43.50; EUR 44.10 was a separate meter fee."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e036",
+      "text_length": 52,
+      "anchors": [
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "active",
+          "context": "Moonbeam+ is active at EUR 13.50 per month from May."
+        },
+        {
+          "type": "amount",
+          "raw_value": "13.50",
+          "currency": "eur",
+          "context": "Moonbeam+ is active at EUR 13.50 per month from May."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Moonbeam+ is active at EUR 13.50 per month from May."
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "per month",
+          "context": "Moonbeam+ is active at EUR 13.50 per month from May."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e037",
+      "text_length": 74,
+      "anchors": [
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "proposal",
+          "context": "The Copperline mandate proposal still needs approval; nothing was changed."
+        },
+        {
+          "type": "action_cue",
+          "raw_value": "approval",
+          "context": "The Copperline mandate proposal still needs approval; nothing was changed."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e038",
+      "text_length": 27,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "renewal",
+          "context": "Permit renewal is complete."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e039",
+      "text_length": 63,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "cancelled",
+          "context": "Meter visit cancelled; no replacement appointment was recorded."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e040",
+      "text_length": 47,
+      "anchors": []
+    }
+  ],
+  "gap_records": [
+    {
+      "event_id": "g01-e021",
+      "subjects": [
+        "moonbeam_plus"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "last_charge",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "11.9",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e022",
+      "subjects": [
+        "greenglass_market"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "greenglass_market",
+          "predicate": "purchase_count",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 1
+        },
+        {
+          "subject": "greenglass_market",
+          "predicate": "purchased_total",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "7.2",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e023",
+      "subjects": [
+        "greenglass_market"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "greenglass_market",
+          "predicate": "confirmed_consumption_quantity",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 0
+        },
+        {
+          "subject": "greenglass_market",
+          "predicate": "explicit_zero_is_supported",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": true
+        },
+        {
+          "subject": "greenglass_market",
+          "predicate": "consumption_observation_count",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e024",
+      "subjects": [
+        "copperline_fiber"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_bill_count",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": 1
+        },
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_periods",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": [
+            "2026-04"
+          ]
+        },
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_total",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": {
+            "amount": "42",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e025",
+      "subjects": [
+        "permit_renewal"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "permit_renewal",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "completed"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e026",
+      "subjects": [
+        "emberline"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "emberline",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "21",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "emberline",
+          "predicate": "price_effective",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2026-07-01"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e027",
+      "subjects": [
+        "meter_visit"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "meter_visit",
+          "predicate": "retroactive_observation",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "observed_date": "2026-04-15",
+            "unit": "kwh",
+            "value": "0"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e028",
+      "subjects": [
+        "meter_visit"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "meter_visit",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2026-05-12"
+        },
+        {
+          "subject": "meter_visit",
+          "predicate": "owner",
+          "knowledge_status": "unknown",
+          "operation": "set",
+          "unknown_reason": "not_stated"
+        },
+        {
+          "subject": "meter_visit",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "not_started"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e029",
+      "subjects": [
+        "meter_visit"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "meter_visit",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "mira_solen"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e030",
+      "subjects": [
+        "moonbeam_plus"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "next_renewal",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "2026-05-30"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e031",
+      "subjects": [
+        "copperline_fiber"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_bill_count",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 1
+        },
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_periods",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": [
+            "2026-05"
+          ]
+        },
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_total",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "43.5",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e032",
+      "subjects": [
+        "capture_g01_e032"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "capture_g01_e032",
+          "predicate": "last_charge",
+          "knowledge_status": "unknown",
+          "operation": "set",
+          "unknown_reason": "the may copperline payment is not shown in the bank list, so no direct charge is observed."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e033",
+      "subjects": [
+        "copperline_fiber"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_bill_count",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": 1
+        },
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_periods",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": [
+            "2026-05"
+          ]
+        },
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_total",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": {
+            "amount": "43.5",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e034",
+      "subjects": [
+        "copperline_fiber"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_total",
+          "knowledge_status": "known",
+          "operation": "contradiction",
+          "value": {
+            "amount": "44.1",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e035",
+      "subjects": [
+        "copperline_fiber"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_total",
+          "knowledge_status": "known",
+          "operation": "correction",
+          "value": {
+            "amount": "43.5",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "copperline_fiber",
+          "predicate": "correction",
+          "knowledge_status": "known",
+          "operation": "correction",
+          "value": {
+            "prior_value": {
+              "amount": "44.1",
+              "currency": "eur"
+            },
+            "replacement_value": {
+              "amount": "43.5",
+              "currency": "eur"
+            },
+            "source_event_id": "g01-e035",
+            "target_event_id": "observed_total"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e036",
+      "subjects": [
+        "moonbeam_plus"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "current_price",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": {
+            "amount": "13.5",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "price_effective",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "2026-05-01"
+        },
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "active"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e037",
+      "subjects": [
+        "change_fiber_payment"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "change_fiber_payment",
+          "predicate": "approval_required",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": true
+        },
+        {
+          "subject": "change_fiber_payment",
+          "predicate": "approved",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": false
+        },
+        {
+          "subject": "change_fiber_payment",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": false
+        },
+        {
+          "subject": "change_fiber_payment",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "proposed"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e038",
+      "subjects": [
+        "permit_renewal"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "permit_renewal",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "completed"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e039",
+      "subjects": [
+        "meter_visit"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "meter_visit",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "cancelled"
+        },
+        {
+          "subject": "meter_visit",
+          "predicate": "deadline",
+          "knowledge_status": "unknown",
+          "operation": "supersede",
+          "unknown_reason": "the meter visit was cancelled and no replacement appointment was recorded."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e040",
+      "subjects": [],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": []
+    }
+  ],
+  "batch_record": {
+    "checkpoint": 40,
+    "batch": 1,
+    "scanner_version": "experiment-004-evidence-scanner-v1",
+    "completion_version": "experiment-004-deterministic-completion-v1",
+    "verifier_version": null,
+    "event_ids": [
+      "g01-e021",
+      "g01-e022",
+      "g01-e023",
+      "g01-e024",
+      "g01-e025",
+      "g01-e026",
+      "g01-e027",
+      "g01-e028",
+      "g01-e029",
+      "g01-e030",
+      "g01-e031",
+      "g01-e032",
+      "g01-e033",
+      "g01-e034",
+      "g01-e035",
+      "g01-e036",
+      "g01-e037",
+      "g01-e038",
+      "g01-e039",
+      "g01-e040"
+    ],
+    "scanned_count": 20,
+    "flagged_count": 0,
+    "flagged_events": [],
+    "deterministic_proposal_count": 0,
+    "deterministic_inserted_count": 0,
+    "residual_events": [],
+    "verifier_records": [],
+    "final_residual": []
+  }
+}

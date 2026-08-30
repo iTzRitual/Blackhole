@@ -1,0 +1,908 @@
+{
+  "evidence_records": [
+    {
+      "event_id": "g03-e061",
+      "text_length": 48,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "31.00",
+          "currency": "eur",
+          "context": "Marbleleaf Water invoice for 2026-07: EUR 31.00."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Marbleleaf Water invoice for 2026-07: EUR 31.00."
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e062",
+      "text_length": 30,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "31,00",
+          "currency": "eur",
+          "context": "Marbleleaf / July / 31,00 EUR."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Marbleleaf / July / 31,00 EUR."
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e063",
+      "text_length": 71,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "33.00",
+          "currency": "eur",
+          "context": "A preliminary July water note said EUR 33.00; the invoice is different."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "A preliminary July water note said EUR 33.00; the invoice is different."
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e064",
+      "text_length": 61,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "16.00",
+          "currency": "eur",
+          "context": "Silvermeadow July charge: EUR 16.00; next renewal 2026-07-31."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Silvermeadow July charge: EUR 16.00; next renewal 2026-07-31."
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "renewal",
+          "context": "Silvermeadow July charge: EUR 16.00; next renewal 2026-07-31."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-07-31",
+          "context": "lvermeadow July charge: EUR 16.00; next renewal 2026-07-31.",
+          "cue_type": "temporal_cue",
+          "cue": "renewal"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e065",
+      "text_length": 70,
+      "anchors": [
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "proposal",
+          "context": "The insurance-claim filing proposal was withdrawn; no filing occurred."
+        },
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "withdrawn",
+          "context": "The insurance-claim filing proposal was withdrawn; no filing occurred."
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e066",
+      "text_length": 40,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "completed",
+          "context": "Claim follow-up completed on 2026-07-01."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-07-01",
+          "context": "Claim follow-up completed on 2026-07-01.",
+          "cue_type": "temporal_cue",
+          "cue": "completed"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e067",
+      "text_length": 58,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "renewal",
+          "context": "Renewal check is reassigned to Lara Wells; due 2026-07-"
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "due",
+          "context": "Renewal check is reassigned to Lara Wells; due 2026-07-08."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-07-08",
+          "context": "Renewal check is reassigned to Lara Wells; due 2026-07-08.",
+          "cue_type": "temporal_cue",
+          "cue": "due"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e068",
+      "text_length": 45,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "renewal",
+          "context": "Renewal check deadline changed to 2026-07-10."
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "deadline",
+          "context": "Renewal check deadline changed to 2026-07-10."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-07-10",
+          "context": "Renewal check deadline changed to 2026-07-10.",
+          "cue_type": "temporal_cue",
+          "cue": "deadline"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e069",
+      "text_length": 59,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "renewal",
+          "context": "Renewal check remains open; no cancellation capture exi"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e070",
+      "text_length": 48,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "13.30",
+          "currency": "eur",
+          "context": "TideGlass Outlet purchase: EUR 13.30 for a vase."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "TideGlass Outlet purchase: EUR 13.30 for a vase."
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e071",
+      "text_length": 37,
+      "anchors": []
+    },
+    {
+      "event_id": "g03-e072",
+      "text_length": 29,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "13,30",
+          "currency": "eur",
+          "context": "TideGlass / 13,30 EUR / vase."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "TideGlass / 13,30 EUR / vase."
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e073",
+      "text_length": 66,
+      "anchors": [
+        {
+          "type": "identifier",
+          "raw_value": "CL-4412",
+          "context": "SableHarbor claim CL-4412 is current; beneficiary remains unknown.",
+          "cue_type": "lifecycle_cue",
+          "cue": "current"
+        },
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "current",
+          "context": "SableHarbor claim CL-4412 is current; beneficiary remains unknown."
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e074",
+      "text_length": 71,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "signed",
+          "context": "Driftwood replacement contract signed 2026-06-10, effective 2026-08-01."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-06-10",
+          "context": "Driftwood replacement contract signed 2026-06-10, effective 2026-08-01.",
+          "cue_type": "temporal_cue",
+          "cue": "signed"
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "effective",
+          "context": "iftwood replacement contract signed 2026-06-10, effective 2026-08-01."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-08-01",
+          "context": "placement contract signed 2026-06-10, effective 2026-08-01.",
+          "cue_type": "temporal_cue",
+          "cue": "effective"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e075",
+      "text_length": 75,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "31.00",
+          "currency": "eur",
+          "context": "rrection confirmed: the July Marbleleaf bill is EUR 31.00, not EUR 33.00."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "rrection confirmed: the July Marbleleaf bill is EUR 31.00, not EUR 33.00."
+        },
+        {
+          "type": "amount",
+          "raw_value": "33.00",
+          "currency": "eur",
+          "context": "med: the July Marbleleaf bill is EUR 31.00, not EUR 33.00."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "med: the July Marbleleaf bill is EUR 31.00, not EUR 33.00."
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e076",
+      "text_length": 59,
+      "anchors": [
+        {
+          "type": "action_cue",
+          "raw_value": "approval",
+          "context": "No approval was granted; the insurance claim was not filed."
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e077",
+      "text_length": 52,
+      "anchors": []
+    },
+    {
+      "event_id": "g03-e078",
+      "text_length": 117,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "signed",
+          "context": "Driftwood replacement contract dates: signed 2026-06-10, effective 2026-08-01, renewal 2026-"
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-06-10",
+          "context": "Driftwood replacement contract dates: signed 2026-06-10, effective 2026-08-01, renewal 2026-12-01, expi",
+          "cue_type": "temporal_cue",
+          "cue": "signed"
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "effective",
+          "context": "replacement contract dates: signed 2026-06-10, effective 2026-08-01, renewal 2026-12-01, expiry 2027-07-"
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-08-01",
+          "context": "nt contract dates: signed 2026-06-10, effective 2026-08-01, renewal 2026-12-01, expiry 2027-07-31.",
+          "cue_type": "temporal_cue",
+          "cue": "effective"
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "renewal",
+          "context": "dates: signed 2026-06-10, effective 2026-08-01, renewal 2026-12-01, expiry 2027-07-31."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-12-01",
+          "context": "igned 2026-06-10, effective 2026-08-01, renewal 2026-12-01, expiry 2027-07-31.",
+          "cue_type": "temporal_cue",
+          "cue": "renewal"
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "expiry",
+          "context": "6-10, effective 2026-08-01, renewal 2026-12-01, expiry 2027-07-31."
+        },
+        {
+          "type": "date",
+          "raw_value": "2027-07-31",
+          "context": "ffective 2026-08-01, renewal 2026-12-01, expiry 2027-07-31.",
+          "cue_type": "temporal_cue",
+          "cue": "expiry"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e079",
+      "text_length": 63,
+      "anchors": [
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "active",
+          "context": "Silvermeadow Pass remains active; no cancellation was executed."
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e080",
+      "text_length": 87,
+      "anchors": []
+    }
+  ],
+  "gap_records": [
+    {
+      "event_id": "g03-e061",
+      "subjects": [
+        "marbleleaf_water"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "marbleleaf_water",
+          "predicate": "current_amount",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": {
+            "amount": "31",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "marbleleaf_water",
+          "predicate": "observed_periods",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": [
+            "2026-07"
+          ]
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e062",
+      "subjects": [
+        "marbleleaf_water"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "marbleleaf_water",
+          "predicate": "current_amount",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": {
+            "amount": "31",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "marbleleaf_water",
+          "predicate": "observed_periods",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": [
+            "2026-07"
+          ]
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e063",
+      "subjects": [
+        "marbleleaf_water"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "marbleleaf_water",
+          "predicate": "current_amount",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "33",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "marbleleaf_water",
+          "predicate": "contradiction",
+          "knowledge_status": "unknown",
+          "operation": "contradiction",
+          "unknown_reason": "conflicting"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e064",
+      "subjects": [
+        "silvermeadow_pass"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "silvermeadow_pass",
+          "predicate": "last_charge",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": {
+            "amount": "16",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "silvermeadow_pass",
+          "predicate": "next_renewal",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "2026-07-31"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e065",
+      "subjects": [
+        "file_insurance_claim"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "file_insurance_claim",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "withdrawn"
+        },
+        {
+          "subject": "file_insurance_claim",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": false
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e066",
+      "subjects": [
+        "claim_followup"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "claim_followup",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "completed"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e067",
+      "subjects": [
+        "renewal_check"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "renewal_check",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "lara_wells"
+        },
+        {
+          "subject": "renewal_check",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "2026-07-08"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e068",
+      "subjects": [
+        "renewal_check"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "renewal_check",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "2026-07-10"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e069",
+      "subjects": [
+        "renewal_check"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "renewal_check",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "open"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e070",
+      "subjects": [
+        "tideglass_outlet"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "tideglass_outlet",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "13.3"
+        },
+        {
+          "subject": "tideglass_outlet",
+          "predicate": "currency",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "eur"
+        },
+        {
+          "subject": "tideglass_outlet",
+          "predicate": "confirmed_consumption_quantity",
+          "knowledge_status": "unknown",
+          "operation": "set",
+          "unknown_reason": "no_consumption_observation"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e071",
+      "subjects": [
+        "tideglass_outlet"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "tideglass_outlet",
+          "predicate": "confirmed_consumption_quantity",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e072",
+      "subjects": [
+        "tideglass_outlet"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "tideglass_outlet",
+          "predicate": "amount",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "13.3"
+        },
+        {
+          "subject": "tideglass_outlet",
+          "predicate": "currency",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "eur"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e073",
+      "subjects": [
+        "sableharbor"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "sableharbor",
+          "predicate": "claim_number",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "cl-4412"
+        },
+        {
+          "subject": "sableharbor",
+          "predicate": "beneficiary",
+          "knowledge_status": "unknown",
+          "operation": "duplicate",
+          "unknown_reason": "conflicting"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e074",
+      "subjects": [
+        "driftwood_studio"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "driftwood_studio",
+          "predicate": "signed_date",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "2026-06-10"
+        },
+        {
+          "subject": "driftwood_studio",
+          "predicate": "effective_date",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "2026-08-01"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e075",
+      "subjects": [
+        "marbleleaf_water"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "marbleleaf_water",
+          "predicate": "correction",
+          "knowledge_status": "known",
+          "operation": "correction",
+          "value": {
+            "prior_value": {
+              "amount": "33",
+              "currency": "eur"
+            },
+            "replacement_value": {
+              "amount": "31",
+              "currency": "eur"
+            },
+            "source_event_id": "g03-e075",
+            "target_predicate": "current_amount",
+            "target_subject": "marbleleaf_water"
+          }
+        },
+        {
+          "subject": "marbleleaf_water",
+          "predicate": "current_amount",
+          "knowledge_status": "known",
+          "operation": "correction",
+          "value": {
+            "amount": "31",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e076",
+      "subjects": [
+        "file_insurance_claim"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "file_insurance_claim",
+          "predicate": "approved",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": false
+        },
+        {
+          "subject": "file_insurance_claim",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": false
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e077",
+      "subjects": [
+        "marbleleaf_water"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "marbleleaf_water",
+          "predicate": "unobserved_periods",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": [
+            "2026-08"
+          ]
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e078",
+      "subjects": [
+        "driftwood_studio"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "driftwood_studio",
+          "predicate": "signed_date",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "2026-06-10"
+        },
+        {
+          "subject": "driftwood_studio",
+          "predicate": "effective_date",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "2026-08-01"
+        },
+        {
+          "subject": "driftwood_studio",
+          "predicate": "renewal_date",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "2026-12-01"
+        },
+        {
+          "subject": "driftwood_studio",
+          "predicate": "expiry_date",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "2027-07-31"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e079",
+      "subjects": [
+        "silvermeadow_pass"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "silvermeadow_pass",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "active"
+        }
+      ]
+    },
+    {
+      "event_id": "g03-e080",
+      "subjects": [
+        "file_insurance_claim",
+        "lara_reference"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "file_insurance_claim",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": false
+        },
+        {
+          "subject": "lara_reference",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "operation": "set",
+          "unknown_reason": "ambiguous_person"
+        }
+      ]
+    }
+  ],
+  "batch_record": {
+    "checkpoint": 80,
+    "batch": 1,
+    "scanner_version": "experiment-004-evidence-scanner-v1",
+    "completion_version": "experiment-004-deterministic-completion-v1",
+    "verifier_version": null,
+    "event_ids": [
+      "g03-e061",
+      "g03-e062",
+      "g03-e063",
+      "g03-e064",
+      "g03-e065",
+      "g03-e066",
+      "g03-e067",
+      "g03-e068",
+      "g03-e069",
+      "g03-e070",
+      "g03-e071",
+      "g03-e072",
+      "g03-e073",
+      "g03-e074",
+      "g03-e075",
+      "g03-e076",
+      "g03-e077",
+      "g03-e078",
+      "g03-e079",
+      "g03-e080"
+    ],
+    "scanned_count": 20,
+    "flagged_count": 0,
+    "flagged_events": [],
+    "deterministic_proposal_count": 0,
+    "deterministic_inserted_count": 0,
+    "residual_events": [],
+    "verifier_records": [],
+    "final_residual": []
+  }
+}

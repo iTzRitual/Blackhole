@@ -1,0 +1,892 @@
+{
+  "evidence_records": [
+    {
+      "event_id": "g01-e001",
+      "text_length": 64,
+      "anchors": [
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "active",
+          "context": "Moonbeam+ active: EUR 11.90 each month; next renewal 2026-04-30."
+        },
+        {
+          "type": "amount",
+          "raw_value": "11.90",
+          "currency": "eur",
+          "context": "Moonbeam+ active: EUR 11.90 each month; next renewal 2026-04-30."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Moonbeam+ active: EUR 11.90 each month; next renewal 2026-04-30."
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "renewal",
+          "context": "Moonbeam+ active: EUR 11.90 each month; next renewal 2026-04-30."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-04-30",
+          "context": "eam+ active: EUR 11.90 each month; next renewal 2026-04-30.",
+          "cue_type": "temporal_cue",
+          "cue": "renewal"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e002",
+      "text_length": 48,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "42.00",
+          "currency": "eur",
+          "context": "Copperline Fiber invoice for 2026-04: EUR 42.00."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Copperline Fiber invoice for 2026-04: EUR 42.00."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e003",
+      "text_length": 76,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "18.40",
+          "currency": "eur",
+          "context": "GreenGlass Market receipt, EUR 18.40, pantry staples and three coffee packs."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "GreenGlass Market receipt, EUR 18.40, pantry staples and three coffee packs."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e004",
+      "text_length": 58,
+      "anchors": []
+    },
+    {
+      "event_id": "g01-e005",
+      "text_length": 83,
+      "anchors": [
+        {
+          "type": "identifier",
+          "raw_value": "EL-4821",
+          "context": "Emberline home cover, policy EL-4821, premium EUR 19.75 monthly, expiry 2026-12-31.",
+          "cue_type": "temporal_cue",
+          "cue": "monthly"
+        },
+        {
+          "type": "amount",
+          "raw_value": "19.75",
+          "currency": "eur",
+          "context": "Emberline home cover, policy EL-4821, premium EUR 19.75 monthly, expiry 2026-12-31."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Emberline home cover, policy EL-4821, premium EUR 19.75 monthly, expiry 2026-12-31."
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "monthly",
+          "context": "e home cover, policy EL-4821, premium EUR 19.75 monthly, expiry 2026-12-31."
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "expiry",
+          "context": "ver, policy EL-4821, premium EUR 19.75 monthly, expiry 2026-12-31."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-12-31",
+          "context": "licy EL-4821, premium EUR 19.75 monthly, expiry 2026-12-31.",
+          "cue_type": "temporal_cue",
+          "cue": "expiry"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e006",
+      "text_length": 59,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "renewal",
+          "context": "Permit renewal is open. Devon Park owns it; due 2026-04-28."
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "due",
+          "context": "Permit renewal is open. Devon Park owns it; due 2026-04-28."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-04-28",
+          "context": "Permit renewal is open. Devon Park owns it; due 2026-04-28.",
+          "cue_type": "temporal_cue",
+          "cue": "due"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e007",
+      "text_length": 35,
+      "anchors": [
+        {
+          "type": "action_cue",
+          "raw_value": "send",
+          "context": "Mira should send the meter reading."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e008",
+      "text_length": 76,
+      "anchors": [
+        {
+          "type": "date",
+          "raw_value": "2026-05-01",
+          "context": "Moonbeam+ price notice: from 2026-05-01 the monthly price will be EUR 13.50.",
+          "cue_type": "temporal_cue",
+          "cue": "monthly"
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "monthly",
+          "context": "Moonbeam+ price notice: from 2026-05-01 the monthly price will be EUR 13.50."
+        },
+        {
+          "type": "amount",
+          "raw_value": "13.50",
+          "currency": "eur",
+          "context": "tice: from 2026-05-01 the monthly price will be EUR 13.50."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "tice: from 2026-05-01 the monthly price will be EUR 13.50."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e009",
+      "text_length": 50,
+      "anchors": []
+    },
+    {
+      "event_id": "g01-e010",
+      "text_length": 97,
+      "anchors": [
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "proposed",
+          "context": "Proposed change to the Copperline bank mandate: approval"
+        },
+        {
+          "type": "action_cue",
+          "raw_value": "approval",
+          "context": "Proposed change to the Copperline bank mandate: approval required; not approved and not executed."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e011",
+      "text_length": 48,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "42.00",
+          "currency": "eur",
+          "context": "Copperline Fiber invoice for 2026-04: EUR 42.00."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Copperline Fiber invoice for 2026-04: EUR 42.00."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e012",
+      "text_length": 70,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "18,40",
+          "currency": "eur",
+          "context": "GreenGlass Market — 18,40 EUR — pantry staples and three coffee packs."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "GreenGlass Market — 18,40 EUR — pantry staples and three coffee packs."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e013",
+      "text_length": 65,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "renewal",
+          "context": "The permit renewal is now assigned to Mira Solen, not Devon Park."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e014",
+      "text_length": 41,
+      "anchors": []
+    },
+    {
+      "event_id": "g01-e015",
+      "text_length": 53,
+      "anchors": []
+    },
+    {
+      "event_id": "g01-e016",
+      "text_length": 40,
+      "anchors": []
+    },
+    {
+      "event_id": "g01-e017",
+      "text_length": 56,
+      "anchors": []
+    },
+    {
+      "event_id": "g01-e018",
+      "text_length": 60,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "deadline",
+          "context": "Actually, the permit deadline is 2026-04-30, not 2026-04-28."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-04-30",
+          "context": "Actually, the permit deadline is 2026-04-30, not 2026-04-28.",
+          "cue_type": "temporal_cue",
+          "cue": "deadline"
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-04-28",
+          "context": "ctually, the permit deadline is 2026-04-30, not 2026-04-28.",
+          "cue_type": "temporal_cue",
+          "cue": "deadline"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e019",
+      "text_length": 30,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "renewal",
+          "context": "Permit renewal is in progress."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e020",
+      "text_length": 53,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "deadline",
+          "context": "Mira Solen confirmed the permit deadline: 2026-04-30."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-04-30",
+          "context": "Mira Solen confirmed the permit deadline: 2026-04-30.",
+          "cue_type": "temporal_cue",
+          "cue": "deadline"
+        }
+      ]
+    }
+  ],
+  "gap_records": [
+    {
+      "event_id": "g01-e001",
+      "subjects": [
+        "moonbeam_plus"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "active"
+        },
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "current_price",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "11.9",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "next_renewal",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2026-04-30"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e002",
+      "subjects": [
+        "copperline_fiber"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_bill_count",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 1
+        },
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_periods",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": [
+            "2026-04"
+          ]
+        },
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_total",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "42",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e003",
+      "subjects": [
+        "greenglass_market"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "greenglass_market",
+          "predicate": "purchase_count",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 1
+        },
+        {
+          "subject": "greenglass_market",
+          "predicate": "purchased_total",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "18.4",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e004",
+      "subjects": [
+        "greenglass_market"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "greenglass_market",
+          "predicate": "confirmed_consumption_quantity",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e005",
+      "subjects": [
+        "emberline"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "emberline",
+          "predicate": "policy_id",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "el-4821"
+        },
+        {
+          "subject": "emberline",
+          "predicate": "premium",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "19.75",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "emberline",
+          "predicate": "expiry_date",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2026-12-31"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e006",
+      "subjects": [
+        "permit_renewal"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "permit_renewal",
+          "predicate": "status",
+          "knowledge_status": "unknown",
+          "operation": "set",
+          "unknown_reason": "the capture says open but does not specify a public lifecycle status."
+        },
+        {
+          "subject": "permit_renewal",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "devon_park"
+        },
+        {
+          "subject": "permit_renewal",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2026-04-28"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e007",
+      "subjects": [
+        "meter_visit"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "meter_visit",
+          "predicate": "owner",
+          "knowledge_status": "unknown",
+          "operation": "set",
+          "unknown_reason": "the unqualified mira cannot be resolved between the public mira identities."
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e008",
+      "subjects": [
+        "moonbeam_plus"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "13.5",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "moonbeam_plus",
+          "predicate": "price_effective",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2026-05-01"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e009",
+      "subjects": [
+        "copperline_fiber"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "copperline_fiber",
+          "predicate": "unobserved_periods",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": [
+            "2026-05"
+          ]
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e010",
+      "subjects": [
+        "change_fiber_payment"
+      ],
+      "reasons": [
+        "lifecycle cue supports status proposed"
+      ],
+      "mappings": [
+        {
+          "kind": "lifecycle",
+          "subject": "change_fiber_payment",
+          "predicate": "status",
+          "raw_value": "proposed",
+          "reason": "lifecycle cue supports status proposed"
+        }
+      ],
+      "existing_observations": [
+        {
+          "subject": "change_fiber_payment",
+          "predicate": "approval_scope",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "change copperline bank mandate"
+        },
+        {
+          "subject": "change_fiber_payment",
+          "predicate": "approval_required",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": true
+        },
+        {
+          "subject": "change_fiber_payment",
+          "predicate": "approved",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": false
+        },
+        {
+          "subject": "change_fiber_payment",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": false
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e011",
+      "subjects": [
+        "copperline_fiber"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_bill_count",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": 1
+        },
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_periods",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": [
+            "2026-04"
+          ]
+        },
+        {
+          "subject": "copperline_fiber",
+          "predicate": "observed_total",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": {
+            "amount": "42",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e012",
+      "subjects": [
+        "greenglass_market"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "greenglass_market",
+          "predicate": "purchase_count",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": 1
+        },
+        {
+          "subject": "greenglass_market",
+          "predicate": "purchased_total",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": {
+            "amount": "18.4",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e013",
+      "subjects": [
+        "permit_renewal"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "permit_renewal",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "operation": "correction",
+          "value": "mira_solen"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e014",
+      "subjects": [
+        "meter_visit"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "meter_visit",
+          "predicate": "status",
+          "knowledge_status": "unknown",
+          "operation": "set",
+          "unknown_reason": "not_available"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e015",
+      "subjects": [
+        "greenglass_market"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "greenglass_market",
+          "predicate": "confirmed_consumption_quantity",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 0
+        },
+        {
+          "subject": "greenglass_market",
+          "predicate": "explicit_zero_is_supported",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": true
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e016",
+      "subjects": [
+        "emberline"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "emberline",
+          "predicate": "beneficiary",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "mira_solen"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e017",
+      "subjects": [
+        "emberline"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "emberline",
+          "predicate": "beneficiary",
+          "knowledge_status": "inferred",
+          "operation": "set",
+          "value": "mira_sorin"
+        },
+        {
+          "subject": "emberline",
+          "predicate": "contradiction",
+          "knowledge_status": "known",
+          "operation": "contradiction",
+          "value": {
+            "conflicting_event_ids": [
+              "g01-e016",
+              "g01-e017"
+            ],
+            "field": "beneficiary",
+            "resolution_status": "unresolved"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e018",
+      "subjects": [
+        "permit_renewal"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "permit_renewal",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "operation": "correction",
+          "value": "2026-04-30"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e019",
+      "subjects": [
+        "permit_renewal"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "permit_renewal",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "in_progress"
+        }
+      ]
+    },
+    {
+      "event_id": "g01-e020",
+      "subjects": [
+        "permit_renewal"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "permit_renewal",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2026-04-30"
+        }
+      ]
+    }
+  ],
+  "batch_record": {
+    "checkpoint": 20,
+    "batch": 1,
+    "scanner_version": "experiment-004-evidence-scanner-v1",
+    "completion_version": "experiment-004-deterministic-completion-v1",
+    "verifier_version": null,
+    "event_ids": [
+      "g01-e001",
+      "g01-e002",
+      "g01-e003",
+      "g01-e004",
+      "g01-e005",
+      "g01-e006",
+      "g01-e007",
+      "g01-e008",
+      "g01-e009",
+      "g01-e010",
+      "g01-e011",
+      "g01-e012",
+      "g01-e013",
+      "g01-e014",
+      "g01-e015",
+      "g01-e016",
+      "g01-e017",
+      "g01-e018",
+      "g01-e019",
+      "g01-e020"
+    ],
+    "scanned_count": 20,
+    "flagged_count": 1,
+    "flagged_events": [
+      {
+        "event_id": "g01-e010",
+        "reasons": [
+          "lifecycle cue supports status proposed"
+        ],
+        "mapping_count": 1,
+        "evidence_digest": "1bdd4290619b9f961e7a1e840ecd9dffe54aa613527d0ef668f61780be75d766"
+      }
+    ],
+    "deterministic_proposal_count": 1,
+    "deterministic_inserted_count": 1,
+    "residual_events": [
+      {
+        "event_id": "g01-e010",
+        "reasons": []
+      }
+    ],
+    "verifier_records": [],
+    "final_residual": [
+      {
+        "event_id": "g01-e010",
+        "reasons": []
+      }
+    ]
+  }
+}

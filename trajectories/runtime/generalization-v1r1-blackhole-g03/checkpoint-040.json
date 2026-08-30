@@ -1,0 +1,524 @@
+{
+  "response_contract": "response-contract-v2",
+  "scenario_id": "g03",
+  "checkpoint": 40,
+  "queries": {
+    "q-subscriptions-current": {
+      "assertions": [
+        {
+          "subject": "silvermeadow_pass",
+          "predicate": "current_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e005"
+          ],
+          "value": {
+            "amount": "15",
+            "billing_period": "month",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "silvermeadow_pass",
+          "predicate": "next_renewal",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e005"
+          ],
+          "value": "2026-05-31"
+        },
+        {
+          "subject": "silvermeadow_pass",
+          "predicate": "price_effective",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e024"
+          ],
+          "value": "2026-06-15"
+        },
+        {
+          "subject": "silvermeadow_pass",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e005"
+          ],
+          "value": "active"
+        },
+        {
+          "subject": "silvermeadow_pass",
+          "predicate": "currency",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e005"
+          ],
+          "value": "eur"
+        },
+        {
+          "subject": "silvermeadow_pass",
+          "predicate": "billing_period",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e005"
+          ],
+          "value": "month"
+        }
+      ]
+    },
+    "q-subscriptions-history": {
+      "assertions": [
+        {
+          "subject": "silvermeadow_pass",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e005"
+          ],
+          "value": {
+            "amount": "15",
+            "billing_period": "month",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "silvermeadow_pass",
+          "predicate": "historical_price",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e024"
+          ],
+          "value": {
+            "amount": "16",
+            "billing_period": "month",
+            "currency": "eur",
+            "effective_date": "2026-06-15"
+          }
+        }
+      ]
+    },
+    "q-attention-14d": {
+      "assertions": [
+        {
+          "subject": "file_insurance_claim",
+          "predicate": "needs_attention",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e008",
+            "g03-e029"
+          ],
+          "value": {
+            "executed": false,
+            "reason": "approval required"
+          }
+        }
+      ]
+    },
+    "q-insurance-current": {
+      "assertions": [
+        {
+          "subject": "sableharbor",
+          "predicate": "beneficiary",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "g03-e017",
+            "g03-e018"
+          ],
+          "unknown_reason": "conflicting"
+        },
+        {
+          "subject": "sableharbor",
+          "predicate": "claim_number",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e037"
+          ],
+          "value": "cl-4412"
+        },
+        {
+          "subject": "sableharbor",
+          "predicate": "expiry_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e027"
+          ],
+          "value": "2026-11-30"
+        },
+        {
+          "subject": "sableharbor",
+          "predicate": "policy_id",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e002"
+          ],
+          "value": "sh-9088"
+        },
+        {
+          "subject": "sableharbor",
+          "predicate": "premium",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e038"
+          ],
+          "value": {
+            "amount": "35",
+            "billing_period": "month",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "sableharbor",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e002"
+          ],
+          "value": "active"
+        }
+      ]
+    },
+    "q-service-costs": {
+      "assertions": []
+    },
+    "q-purchase-consumption": {
+      "assertions": [
+        {
+          "subject": "tideglass_outlet",
+          "predicate": "confirmed_consumption_quantity",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e004",
+            "g03-e023"
+          ],
+          "value": 1
+        },
+        {
+          "subject": "tideglass_outlet",
+          "predicate": "consumption_observation_count",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e004",
+            "g03-e023"
+          ],
+          "value": 2
+        },
+        {
+          "subject": "tideglass_outlet",
+          "predicate": "explicit_zero_is_supported",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e023"
+          ],
+          "value": true
+        },
+        {
+          "subject": "tideglass_outlet",
+          "predicate": "unobserved_consumption",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "g03-e004",
+            "g03-e023"
+          ],
+          "unknown_reason": "no_consumption_observation"
+        }
+      ]
+    },
+    "q-tasks-state": {
+      "assertions": [
+        {
+          "subject": "claim_followup",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e026"
+          ],
+          "value": "2026-05-20"
+        },
+        {
+          "subject": "claim_followup",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e019"
+          ],
+          "value": "lara_quill"
+        },
+        {
+          "subject": "claim_followup",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e036"
+          ],
+          "value": "in_progress"
+        },
+        {
+          "subject": "return_package",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e031"
+          ],
+          "value": "2026-06-05"
+        },
+        {
+          "subject": "return_package",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e015"
+          ],
+          "value": "lara_quill"
+        },
+        {
+          "subject": "return_package",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e031"
+          ],
+          "value": "open"
+        },
+        {
+          "subject": "capture_g03_e019",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e007",
+            "g03-e019"
+          ],
+          "value": {
+            "changed_fields": [
+              "owner"
+            ],
+            "relation_type": "task_reassignment",
+            "source_event_id": "g03-e019",
+            "target_event_id": "g03-e007"
+          }
+        },
+        {
+          "subject": "capture_g03_e030",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e015",
+            "g03-e030"
+          ],
+          "value": {
+            "changed_fields": [
+              "lifecycle"
+            ],
+            "relation_type": "task_cancellation",
+            "source_event_id": "g03-e030",
+            "target_event_id": "g03-e015"
+          }
+        },
+        {
+          "subject": "capture_g03_e031",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e030",
+            "g03-e031"
+          ],
+          "value": {
+            "changed_fields": [
+              "lifecycle"
+            ],
+            "relation_type": "task_reopened",
+            "source_event_id": "g03-e031",
+            "target_event_id": "g03-e030"
+          }
+        },
+        {
+          "subject": "capture_g03_e036",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e007",
+            "g03-e036"
+          ],
+          "value": {
+            "changed_fields": [
+              "lifecycle"
+            ],
+            "relation_type": "task_reopened",
+            "source_event_id": "g03-e036",
+            "target_event_id": "g03-e007"
+          }
+        },
+        {
+          "subject": "capture_g03_e031",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e015",
+            "g03-e031"
+          ],
+          "value": {
+            "changed_fields": [
+              "lifecycle"
+            ],
+            "relation_type": "task_reopened",
+            "source_event_id": "g03-e031",
+            "target_event_id": "g03-e015"
+          }
+        }
+      ]
+    },
+    "q-unresolved": {
+      "assertions": [
+        {
+          "subject": "capture_g03_e013",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "g03-e013"
+          ],
+          "unknown_reason": "ambiguous_person"
+        },
+        {
+          "subject": "sableharbor",
+          "predicate": "beneficiary",
+          "knowledge_status": "unknown",
+          "source_refs": [
+            "g03-e017",
+            "g03-e018"
+          ],
+          "unknown_reason": "conflicting"
+        }
+      ]
+    },
+    "q-duplicates-changes": {
+      "assertions": [
+        {
+          "subject": "scenario",
+          "predicate": "duplicate_event_count",
+          "knowledge_status": "known",
+          "source_refs": [],
+          "value": 0
+        },
+        {
+          "subject": "scenario",
+          "predicate": "duplicate_group_count",
+          "knowledge_status": "known",
+          "source_refs": [],
+          "value": 0
+        },
+        {
+          "subject": "scenario",
+          "predicate": "meaningful_change_event_count",
+          "knowledge_status": "known",
+          "source_refs": [],
+          "value": 0
+        }
+      ]
+    },
+    "q-contract-dates": {
+      "assertions": [
+        {
+          "subject": "driftwood_studio",
+          "predicate": "effective_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e001",
+            "g03-e033"
+          ],
+          "value": "2026-05-01"
+        },
+        {
+          "subject": "driftwood_studio",
+          "predicate": "expiry_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e001"
+          ],
+          "value": "2026-10-31"
+        },
+        {
+          "subject": "driftwood_studio",
+          "predicate": "signed_date",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e001",
+            "g03-e033"
+          ],
+          "value": "2026-04-20"
+        },
+        {
+          "subject": "driftwood_studio",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e028"
+          ],
+          "value": "needs_review"
+        }
+      ]
+    },
+    "q-approval-boundary": {
+      "assertions": [
+        {
+          "subject": "file_insurance_claim",
+          "predicate": "approval_required",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e008",
+            "g03-e029"
+          ],
+          "value": true
+        },
+        {
+          "subject": "file_insurance_claim",
+          "predicate": "approved",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e008",
+            "g03-e029"
+          ],
+          "value": false
+        },
+        {
+          "subject": "file_insurance_claim",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e008",
+            "g03-e029"
+          ],
+          "value": false
+        },
+        {
+          "subject": "file_insurance_claim",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e008",
+            "g03-e029"
+          ],
+          "value": "proposed"
+        }
+      ]
+    },
+    "q-recent-changes": {
+      "assertions": [
+        {
+          "subject": "capture_g03_e024",
+          "predicate": "relationship",
+          "knowledge_status": "known",
+          "source_refs": [
+            "g03-e005",
+            "g03-e024"
+          ],
+          "value": {
+            "changed_fields": [
+              "amount"
+            ],
+            "relation_type": "price_change",
+            "source_event_id": "g03-e024",
+            "target_event_id": "g03-e005"
+          }
+        }
+      ]
+    }
+  }
+}

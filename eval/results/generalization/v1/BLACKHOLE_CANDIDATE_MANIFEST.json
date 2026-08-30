@@ -1,0 +1,291 @@
+{
+  "manifest_type": "BLACKHOLE_CANDIDATE_MANIFEST",
+  "revision": "v1r1",
+  "public_head": "79bea04e432e6566e3d6989e8fa411e7c613908b",
+  "frozen_implementation_reference": "generalization/public-v1r1@79bea04e432e6566e3d6989e8fa411e7c613908b",
+  "fresh_clone": {
+    "path": "C:\\Users\\natan\\OneDrive\\Dokumenty\\ChatGPT\\Blackhole-gen-advanced-v1r1",
+    "single_branch": true,
+    "source_branch": "generalization/public-v1r1"
+  },
+  "run_branch": "generalization/blind-blackhole-v1r1",
+  "frozen_configuration": {
+    "provider": "Codex CLI",
+    "model": "gpt-5.6-luna",
+    "semantic_reasoning": "high",
+    "max_events": 80,
+    "batch_size": 50,
+    "relation_recovery": "retrieval",
+    "completeness": "deterministic",
+    "duplicate_evidence": "consolidate",
+    "query_projection": "deterministic ResponseProjector",
+    "response_contract": "response-contract-v2",
+    "query_bundle": "benchmark/generalization/v1/query-bundle-v2.json",
+    "timeout_seconds": 900,
+    "use_query_model": false
+  },
+  "structural_validation": {
+    "status": "PASS",
+    "scope": [
+      "JSON parsing",
+      "response contract name",
+      "scenario ID",
+      "checkpoints 20/40/60/80",
+      "query shape",
+      "source references limited to public scenario events"
+    ],
+    "scenarios": [
+      {
+        "scenario_id": "g01",
+        "json_parsed": true,
+        "response_contract": "response-contract-v2",
+        "checkpoints": [20, 40, 60, 80],
+        "query_shape": "PASS",
+        "assertions_checked": 194,
+        "source_refs_checked": 323,
+        "source_refs_public_only": true
+      },
+      {
+        "scenario_id": "g02",
+        "json_parsed": true,
+        "response_contract": "response-contract-v2",
+        "checkpoints": [20, 40, 60, 80],
+        "query_shape": "PASS",
+        "assertions_checked": 201,
+        "source_refs_checked": 278,
+        "source_refs_public_only": true
+      },
+      {
+        "scenario_id": "g03",
+        "json_parsed": true,
+        "response_contract": "response-contract-v2",
+        "checkpoints": [20, 40, 60, 80],
+        "query_shape": "PASS",
+        "assertions_checked": 196,
+        "source_refs_checked": 283,
+        "source_refs_public_only": true
+      }
+    ]
+  },
+  "candidates": [
+    {
+      "scenario_id": "g01",
+      "run_id": "generalization-v1r1-blackhole-g01",
+      "label": "POST-FREEZE GENERALIZATION V1R1 / BLIND / BLACKHOLE G01",
+      "candidate_path": "eval/results/generalization/v1/blackhole-g01-candidate.json",
+      "trajectory_path": "trajectories/runtime/generalization-v1r1-blackhole-g01",
+      "candidate_sha256": "ab80ab7a3f096c456f1f18c6839141809ed51751c1968c5a12e16115e601c361",
+      "successful_candidate": true,
+      "runner_attempts": 1,
+      "operational_retries": 0,
+      "provider_calls": {
+        "extraction": 4,
+        "completeness": 0,
+        "query": 0,
+        "total_model_calls": 4
+      },
+      "provider": "Codex CLI",
+      "model": "gpt-5.6-luna",
+      "reasoning": "high",
+      "checkpoints": [20, 40, 60, 80],
+      "runtime": {
+        "extraction_call_durations_seconds": [206.86, 220.234, 218.39, 218.344],
+        "provider_runtime_seconds": 863.828,
+        "total_run_runtime_seconds": 864.525625
+      },
+      "usage": {
+        "input_tokens": 125233,
+        "output_tokens": 47093,
+        "reasoning_output_tokens": 37161
+      },
+      "relation_recovery": {
+        "mode": "retrieval",
+        "calls": 4,
+        "per_checkpoint": [
+          {"checkpoint": 20, "deterministic_candidates": 0, "deterministic_inserted": 0, "candidate_sets": 0, "replacements": 0, "replacement_inserted": 0},
+          {"checkpoint": 40, "deterministic_candidates": 1, "deterministic_inserted": 1, "candidate_sets": 0, "replacements": 0, "replacement_inserted": 0},
+          {"checkpoint": 60, "deterministic_candidates": 1, "deterministic_inserted": 1, "candidate_sets": 0, "replacements": 0, "replacement_inserted": 0},
+          {"checkpoint": 80, "deterministic_candidates": 0, "deterministic_inserted": 0, "candidate_sets": 0, "replacements": 0, "replacement_inserted": 0}
+        ]
+      },
+      "completeness": {
+        "mode": "deterministic",
+        "provider_calls": 0,
+        "provider_input_tokens": 0,
+        "provider_output_tokens": 0,
+        "provider_reasoning_output_tokens": 0,
+        "provider_runtime_seconds": 0.0,
+        "total_captures": 80,
+        "captures_scanned": 80,
+        "captures_flagged": 2,
+        "captures_repaired_deterministically": 1,
+        "observations_added": 1,
+        "observations_replaced": 0
+      },
+      "duplicate_evidence": {
+        "mode": "consolidate",
+        "projection_version": "experiment-005-duplicate-evidence-projection-v1",
+        "component_count": 13,
+        "member_event_count": 30,
+        "noncanonical_event_count": 17,
+        "observations_recovered_from_duplicate_events": 35,
+        "consolidated_identical_observations": 33,
+        "conflicts_preserved": 1
+      },
+      "final_state_counts": {
+        "current_facts": 48,
+        "history_observations": 145,
+        "relationships": 66,
+        "duplicate_components": 13
+      }
+    },
+    {
+      "scenario_id": "g02",
+      "run_id": "generalization-v1r1-blackhole-g02",
+      "label": "POST-FREEZE GENERALIZATION V1R1 / BLIND / BLACKHOLE G02",
+      "candidate_path": "eval/results/generalization/v1/blackhole-g02-candidate.json",
+      "trajectory_path": "trajectories/runtime/generalization-v1r1-blackhole-g02",
+      "candidate_sha256": "3a69cb75b287ac999ef0cc66f10f6e9fd3bf8588fe2c65c4b0922cc12ac1d667",
+      "successful_candidate": true,
+      "runner_attempts": 1,
+      "operational_retries": 0,
+      "provider_calls": {
+        "extraction": 4,
+        "completeness": 0,
+        "query": 0,
+        "total_model_calls": 4
+      },
+      "provider": "Codex CLI",
+      "model": "gpt-5.6-luna",
+      "reasoning": "high",
+      "checkpoints": [20, 40, 60, 80],
+      "runtime": {
+        "extraction_call_durations_seconds": [192.36, 241.766, 238.015, 240.437],
+        "provider_runtime_seconds": 912.578,
+        "total_run_runtime_seconds": 913.252582
+      },
+      "usage": {
+        "input_tokens": 125736,
+        "output_tokens": 49831,
+        "reasoning_output_tokens": 37163
+      },
+      "relation_recovery": {
+        "mode": "retrieval",
+        "calls": 4,
+        "per_checkpoint": [
+          {"checkpoint": 20, "deterministic_candidates": 0, "deterministic_inserted": 0, "candidate_sets": 0, "replacements": 0, "replacement_inserted": 0},
+          {"checkpoint": 40, "deterministic_candidates": 3, "deterministic_inserted": 3, "candidate_sets": 0, "replacements": 0, "replacement_inserted": 0},
+          {"checkpoint": 60, "deterministic_candidates": 4, "deterministic_inserted": 4, "candidate_sets": 0, "replacements": 0, "replacement_inserted": 0},
+          {"checkpoint": 80, "deterministic_candidates": 0, "deterministic_inserted": 0, "candidate_sets": 0, "replacements": 0, "replacement_inserted": 0}
+        ]
+      },
+      "completeness": {
+        "mode": "deterministic",
+        "provider_calls": 0,
+        "provider_input_tokens": 0,
+        "provider_output_tokens": 0,
+        "provider_reasoning_output_tokens": 0,
+        "provider_runtime_seconds": 0.0,
+        "total_captures": 80,
+        "captures_scanned": 80,
+        "captures_flagged": 2,
+        "captures_repaired_deterministically": 1,
+        "observations_added": 1,
+        "observations_replaced": 0
+      },
+      "duplicate_evidence": {
+        "mode": "consolidate",
+        "projection_version": "experiment-005-duplicate-evidence-projection-v1",
+        "component_count": 16,
+        "member_event_count": 36,
+        "noncanonical_event_count": 20,
+        "observations_recovered_from_duplicate_events": 37,
+        "consolidated_identical_observations": 32,
+        "conflicts_preserved": 2
+      },
+      "final_state_counts": {
+        "current_facts": 46,
+        "history_observations": 140,
+        "relationships": 75,
+        "duplicate_components": 16
+      }
+    },
+    {
+      "scenario_id": "g03",
+      "run_id": "generalization-v1r1-blackhole-g03",
+      "label": "POST-FREEZE GENERALIZATION V1R1 / BLIND / BLACKHOLE G03",
+      "candidate_path": "eval/results/generalization/v1/blackhole-g03-candidate.json",
+      "trajectory_path": "trajectories/runtime/generalization-v1r1-blackhole-g03",
+      "candidate_sha256": "07557d68f3361daa9d4c03567f4bb6de52e9fc4a14f803a4d4f376fdfc76d208",
+      "successful_candidate": true,
+      "runner_attempts": 1,
+      "operational_retries": 0,
+      "provider_calls": {
+        "extraction": 4,
+        "completeness": 0,
+        "query": 0,
+        "total_model_calls": 4
+      },
+      "provider": "Codex CLI",
+      "model": "gpt-5.6-luna",
+      "reasoning": "high",
+      "checkpoints": [20, 40, 60, 80],
+      "runtime": {
+        "extraction_call_durations_seconds": [202.891, 189.938, 261.141, 259.578],
+        "provider_runtime_seconds": 913.548,
+        "total_run_runtime_seconds": 914.154316
+      },
+      "usage": {
+        "input_tokens": 126251,
+        "output_tokens": 49939,
+        "reasoning_output_tokens": 37354
+      },
+      "relation_recovery": {
+        "mode": "retrieval",
+        "calls": 4,
+        "per_checkpoint": [
+          {"checkpoint": 20, "deterministic_candidates": 0, "deterministic_inserted": 0, "candidate_sets": 0, "replacements": 0, "replacement_inserted": 0},
+          {"checkpoint": 40, "deterministic_candidates": 2, "deterministic_inserted": 2, "candidate_sets": 0, "replacements": 0, "replacement_inserted": 0},
+          {"checkpoint": 60, "deterministic_candidates": 2, "deterministic_inserted": 2, "candidate_sets": 0, "replacements": 0, "replacement_inserted": 0},
+          {"checkpoint": 80, "deterministic_candidates": 3, "deterministic_inserted": 3, "candidate_sets": 0, "replacements": 0, "replacement_inserted": 0}
+        ]
+      },
+      "completeness": {
+        "mode": "deterministic",
+        "provider_calls": 0,
+        "provider_input_tokens": 0,
+        "provider_output_tokens": 0,
+        "provider_reasoning_output_tokens": 0,
+        "provider_runtime_seconds": 0.0,
+        "total_captures": 80,
+        "captures_scanned": 80,
+        "captures_flagged": 1,
+        "captures_repaired_deterministically": 1,
+        "observations_added": 1,
+        "observations_replaced": 1
+      },
+      "duplicate_evidence": {
+        "mode": "consolidate",
+        "projection_version": "experiment-005-duplicate-evidence-projection-v1",
+        "component_count": 14,
+        "member_event_count": 35,
+        "noncanonical_event_count": 21,
+        "observations_recovered_from_duplicate_events": 38,
+        "consolidated_identical_observations": 36,
+        "conflicts_preserved": 0
+      },
+      "final_state_counts": {
+        "current_facts": 52,
+        "history_observations": 143,
+        "relationships": 72,
+        "duplicate_components": 14
+      }
+    }
+  ],
+  "oracle_boundary": {
+    "generalization_oracle_accessed": false,
+    "generalization_expected_outputs_accessed": false,
+    "scoring_invoked": false,
+    "statement": "These frozen Blackhole candidates were sealed before any V1R1 generalization expected output was available in this clone and before any scoring."
+  }
+}

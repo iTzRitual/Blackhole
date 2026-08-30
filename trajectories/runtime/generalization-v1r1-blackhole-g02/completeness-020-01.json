@@ -1,0 +1,914 @@
+{
+  "evidence_records": [
+    {
+      "event_id": "g02-e001",
+      "text_length": 72,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "deadline",
+          "context": "rant packet is open; Omar Kline owns it and the deadline is 2026-07-10."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-07-10",
+          "context": "is open; Omar Kline owns it and the deadline is 2026-07-10.",
+          "cue_type": "temporal_cue",
+          "cue": "deadline"
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e002",
+      "text_length": 54,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "due",
+          "context": "Clinic call is open, due 2026-07-16; owner not stated."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-07-16",
+          "context": "Clinic call is open, due 2026-07-16; owner not stated.",
+          "cue_type": "temporal_cue",
+          "cue": "due"
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e003",
+      "text_length": 20,
+      "anchors": [
+        {
+          "type": "action_cue",
+          "raw_value": "sign",
+          "context": "Nina should sign it."
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e004",
+      "text_length": 72,
+      "anchors": [
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "active",
+          "context": "Harborlight Reading is active at EUR 8.00 per month; renewal 2026-07-31."
+        },
+        {
+          "type": "amount",
+          "raw_value": "8.00",
+          "currency": "eur",
+          "context": "Harborlight Reading is active at EUR 8.00 per month; renewal 2026-07-31."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Harborlight Reading is active at EUR 8.00 per month; renewal 2026-07-31."
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "per month",
+          "context": "Harborlight Reading is active at EUR 8.00 per month; renewal 2026-07-31."
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "renewal",
+          "context": "rlight Reading is active at EUR 8.00 per month; renewal 2026-07-31."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-07-31",
+          "context": "eading is active at EUR 8.00 per month; renewal 2026-07-31.",
+          "cue_type": "temporal_cue",
+          "cue": "renewal"
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e005",
+      "text_length": 49,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "61.20",
+          "currency": "eur",
+          "context": "SpruceGrid Energy invoice for 2026-07: EUR 61.20."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "SpruceGrid Energy invoice for 2026-07: EUR 61.20."
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e006",
+      "text_length": 56,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "24.00",
+          "currency": "eur",
+          "context": "QuietStone Books purchase: EUR 24.00 for three journals."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "QuietStone Books purchase: EUR 24.00 for three journals."
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e007",
+      "text_length": 54,
+      "anchors": []
+    },
+    {
+      "event_id": "g02-e008",
+      "text_length": 89,
+      "anchors": [
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "proposed",
+          "context": "Proposed action: send the lease notice. Approval require"
+        },
+        {
+          "type": "action_cue",
+          "raw_value": "send",
+          "context": "Proposed action: send the lease notice. Approval required; not approv"
+        },
+        {
+          "type": "action_cue",
+          "raw_value": "approval",
+          "context": "Proposed action: send the lease notice. Approval required; not approved and not executed."
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e009",
+      "text_length": 41,
+      "anchors": []
+    },
+    {
+      "event_id": "g02-e010",
+      "text_length": 59,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "deadline",
+          "context": "Actually, the grant deadline is 2026-07-12, not 2026-07-10."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-07-12",
+          "context": "Actually, the grant deadline is 2026-07-12, not 2026-07-10.",
+          "cue_type": "temporal_cue",
+          "cue": "deadline"
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-07-10",
+          "context": "Actually, the grant deadline is 2026-07-12, not 2026-07-10.",
+          "cue_type": "temporal_cue",
+          "cue": "deadline"
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e011",
+      "text_length": 72,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "deadline",
+          "context": "rant packet is open; Omar Kline owns it and the deadline is 2026-07-10."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-07-10",
+          "context": "is open; Omar Kline owns it and the deadline is 2026-07-10.",
+          "cue_type": "temporal_cue",
+          "cue": "deadline"
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e012",
+      "text_length": 46,
+      "anchors": [
+        {
+          "type": "amount",
+          "raw_value": "24,00",
+          "currency": "eur",
+          "context": "QuietStone Books — 24,00 EUR — three journals."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "QuietStone Books — 24,00 EUR — three journals."
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e013",
+      "text_length": 54,
+      "anchors": []
+    },
+    {
+      "event_id": "g02-e014",
+      "text_length": 73,
+      "anchors": [
+        {
+          "type": "identifier",
+          "raw_value": "CD-7330",
+          "context": "Cedarward policy CD-7330 is active, premium EUR 28.40, expiry 2026-12-31",
+          "cue_type": "lifecycle_cue",
+          "cue": "active"
+        },
+        {
+          "type": "lifecycle_cue",
+          "raw_value": "active",
+          "context": "Cedarward policy CD-7330 is active, premium EUR 28.40, expiry 2026-12-31."
+        },
+        {
+          "type": "amount",
+          "raw_value": "28.40",
+          "currency": "eur",
+          "context": "Cedarward policy CD-7330 is active, premium EUR 28.40, expiry 2026-12-31."
+        },
+        {
+          "type": "currency",
+          "raw_value": "eur",
+          "context": "Cedarward policy CD-7330 is active, premium EUR 28.40, expiry 2026-12-31."
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "expiry",
+          "context": "rd policy CD-7330 is active, premium EUR 28.40, expiry 2026-12-31."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-12-31",
+          "context": "cy CD-7330 is active, premium EUR 28.40, expiry 2026-12-31.",
+          "cue_type": "temporal_cue",
+          "cue": "expiry"
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e015",
+      "text_length": 107,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "signed",
+          "context": "Bellwether Studio agreement signed 2026-06-15, effective 2026-07-01, renews 2026-1"
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-06-15",
+          "context": "Bellwether Studio agreement signed 2026-06-15, effective 2026-07-01, renews 2026-12-01, expir",
+          "cue_type": "temporal_cue",
+          "cue": "signed"
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "effective",
+          "context": "Bellwether Studio agreement signed 2026-06-15, effective 2026-07-01, renews 2026-12-01, expires 2026-12-"
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-07-01",
+          "context": "r Studio agreement signed 2026-06-15, effective 2026-07-01, renews 2026-12-01, expires 2026-12-31.",
+          "cue_type": "temporal_cue",
+          "cue": "effective"
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "renews",
+          "context": "eement signed 2026-06-15, effective 2026-07-01, renews 2026-12-01, expires 2026-12-31."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-12-01",
+          "context": "signed 2026-06-15, effective 2026-07-01, renews 2026-12-01, expires 2026-12-31.",
+          "cue_type": "temporal_cue",
+          "cue": "renews"
+        },
+        {
+          "type": "temporal_cue",
+          "raw_value": "expires",
+          "context": "06-15, effective 2026-07-01, renews 2026-12-01, expires 2026-12-31."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-12-31",
+          "context": "ffective 2026-07-01, renews 2026-12-01, expires 2026-12-31.",
+          "cue_type": "temporal_cue",
+          "cue": "expires"
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e016",
+      "text_length": 41,
+      "anchors": [
+        {
+          "type": "temporal_cue",
+          "raw_value": "deadline",
+          "context": "Clinic call deadline moved to 2026-07-18."
+        },
+        {
+          "type": "date",
+          "raw_value": "2026-07-18",
+          "context": "Clinic call deadline moved to 2026-07-18.",
+          "cue_type": "temporal_cue",
+          "cue": "deadline"
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e017",
+      "text_length": 53,
+      "anchors": []
+    },
+    {
+      "event_id": "g02-e018",
+      "text_length": 47,
+      "anchors": []
+    },
+    {
+      "event_id": "g02-e019",
+      "text_length": 50,
+      "anchors": []
+    },
+    {
+      "event_id": "g02-e020",
+      "text_length": 54,
+      "anchors": []
+    }
+  ],
+  "gap_records": [
+    {
+      "event_id": "g02-e001",
+      "subjects": [
+        "grant_packet"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "grant_packet",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "open"
+        },
+        {
+          "subject": "grant_packet",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "omar_kline"
+        },
+        {
+          "subject": "grant_packet",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2026-07-10"
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e002",
+      "subjects": [
+        "clinic_call"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "clinic_call",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "open"
+        },
+        {
+          "subject": "clinic_call",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2026-07-16"
+        },
+        {
+          "subject": "clinic_call",
+          "predicate": "owner",
+          "knowledge_status": "unknown",
+          "operation": "set",
+          "unknown_reason": "not_stated"
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e003",
+      "subjects": [
+        "capture_g02_e003"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "capture_g02_e003",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "operation": "set",
+          "unknown_reason": "ambiguous_person"
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e004",
+      "subjects": [
+        "harborlight_reading"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "harborlight_reading",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "active"
+        },
+        {
+          "subject": "harborlight_reading",
+          "predicate": "current_price",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "8",
+            "billing_period": "monthly",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "harborlight_reading",
+          "predicate": "next_renewal",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2026-07-31"
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e005",
+      "subjects": [
+        "sprucegrid_energy"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "sprucegrid_energy",
+          "predicate": "current_amount",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "61.2",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "sprucegrid_energy",
+          "predicate": "observed_periods",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": [
+            "2026-07"
+          ]
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e006",
+      "subjects": [
+        "quietstone_books"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "quietstone_books",
+          "predicate": "purchase_count",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 1
+        },
+        {
+          "subject": "quietstone_books",
+          "predicate": "purchased_total",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "24",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e007",
+      "subjects": [
+        "quietstone_books"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "quietstone_books",
+          "predicate": "confirmed_consumption_quantity",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "quantity": 2,
+            "unit": "chapters"
+          }
+        },
+        {
+          "subject": "quietstone_books",
+          "predicate": "consumption_observation_count",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e008",
+      "subjects": [
+        "send_lease_notice"
+      ],
+      "reasons": [
+        "lifecycle cue supports status proposed"
+      ],
+      "mappings": [
+        {
+          "kind": "lifecycle",
+          "subject": "send_lease_notice",
+          "predicate": "status",
+          "raw_value": "proposed",
+          "reason": "lifecycle cue supports status proposed"
+        }
+      ],
+      "existing_observations": [
+        {
+          "subject": "send_lease_notice",
+          "predicate": "approval_required",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": true
+        },
+        {
+          "subject": "send_lease_notice",
+          "predicate": "approved",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": false
+        },
+        {
+          "subject": "send_lease_notice",
+          "predicate": "executed",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": false
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e009",
+      "subjects": [
+        "grant_packet"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "grant_packet",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "nina_arden"
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e010",
+      "subjects": [
+        "grant_packet"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "grant_packet",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "operation": "correction",
+          "value": "2026-07-12"
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e011",
+      "subjects": [
+        "grant_packet"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "grant_packet",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "open"
+        },
+        {
+          "subject": "grant_packet",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "omar_kline"
+        },
+        {
+          "subject": "grant_packet",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": "2026-07-10"
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e012",
+      "subjects": [
+        "quietstone_books"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "quietstone_books",
+          "predicate": "purchase_count",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": 1
+        },
+        {
+          "subject": "quietstone_books",
+          "predicate": "purchased_total",
+          "knowledge_status": "known",
+          "operation": "duplicate",
+          "value": {
+            "amount": "24",
+            "currency": "eur"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e013",
+      "subjects": [
+        "grant_packet"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "grant_packet",
+          "predicate": "entity_link",
+          "knowledge_status": "unknown",
+          "operation": "set",
+          "unknown_reason": "ambiguous_person"
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e014",
+      "subjects": [
+        "cedarward"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "cedarward",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "active"
+        },
+        {
+          "subject": "cedarward",
+          "predicate": "policy_id",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "cd-7330"
+        },
+        {
+          "subject": "cedarward",
+          "predicate": "premium",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": {
+            "amount": "28.4",
+            "currency": "eur"
+          }
+        },
+        {
+          "subject": "cedarward",
+          "predicate": "expiry_date",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2026-12-31"
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e015",
+      "subjects": [
+        "bellwether_studio"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "bellwether_studio",
+          "predicate": "signed_date",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2026-06-15"
+        },
+        {
+          "subject": "bellwether_studio",
+          "predicate": "effective_date",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2026-07-01"
+        },
+        {
+          "subject": "bellwether_studio",
+          "predicate": "renewal_date",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2026-12-01"
+        },
+        {
+          "subject": "bellwether_studio",
+          "predicate": "expiry_date",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "2026-12-31"
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e016",
+      "subjects": [
+        "clinic_call"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "clinic_call",
+          "predicate": "deadline",
+          "knowledge_status": "known",
+          "operation": "supersede",
+          "value": "2026-07-18"
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e017",
+      "subjects": [
+        "clinic_call"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "clinic_call",
+          "predicate": "owner",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "nina_bell"
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e018",
+      "subjects": [
+        "grant_packet"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "grant_packet",
+          "predicate": "status",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": "needs_review"
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e019",
+      "subjects": [
+        "sprucegrid_energy"
+      ],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": [
+        {
+          "subject": "sprucegrid_energy",
+          "predicate": "unobserved_periods",
+          "knowledge_status": "known",
+          "operation": "set",
+          "value": [
+            "2026-08"
+          ]
+        }
+      ]
+    },
+    {
+      "event_id": "g02-e020",
+      "subjects": [],
+      "reasons": [],
+      "mappings": [],
+      "existing_observations": []
+    }
+  ],
+  "batch_record": {
+    "checkpoint": 20,
+    "batch": 1,
+    "scanner_version": "experiment-004-evidence-scanner-v1",
+    "completion_version": "experiment-004-deterministic-completion-v1",
+    "verifier_version": null,
+    "event_ids": [
+      "g02-e001",
+      "g02-e002",
+      "g02-e003",
+      "g02-e004",
+      "g02-e005",
+      "g02-e006",
+      "g02-e007",
+      "g02-e008",
+      "g02-e009",
+      "g02-e010",
+      "g02-e011",
+      "g02-e012",
+      "g02-e013",
+      "g02-e014",
+      "g02-e015",
+      "g02-e016",
+      "g02-e017",
+      "g02-e018",
+      "g02-e019",
+      "g02-e020"
+    ],
+    "scanned_count": 20,
+    "flagged_count": 1,
+    "flagged_events": [
+      {
+        "event_id": "g02-e008",
+        "reasons": [
+          "lifecycle cue supports status proposed"
+        ],
+        "mapping_count": 1,
+        "evidence_digest": "8171c85a2c2667f0e4aa2e94e8bc95e82960d02a0d588ceeed9f9e44011de021"
+      }
+    ],
+    "deterministic_proposal_count": 1,
+    "deterministic_inserted_count": 1,
+    "residual_events": [
+      {
+        "event_id": "g02-e008",
+        "reasons": []
+      }
+    ],
+    "verifier_records": [],
+    "final_residual": [
+      {
+        "event_id": "g02-e008",
+        "reasons": []
+      }
+    ]
+  }
+}

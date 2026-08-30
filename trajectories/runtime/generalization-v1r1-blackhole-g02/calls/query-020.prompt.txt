@@ -1,0 +1,18 @@
+DETERMINISTIC QUERY PROJECTION
+{
+  "checkpoint": 20,
+  "query_ids": [
+    "q-subscriptions-current",
+    "q-subscriptions-history",
+    "q-attention-14d",
+    "q-insurance-current",
+    "q-service-costs",
+    "q-purchase-consumption",
+    "q-tasks-state",
+    "q-unresolved",
+    "q-duplicates-changes",
+    "q-contract-dates",
+    "q-approval-boundary",
+    "q-recent-changes"
+  ]
+}
