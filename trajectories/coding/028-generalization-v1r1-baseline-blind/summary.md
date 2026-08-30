@@ -123,4 +123,4 @@ submission artifact set, not a scored result.
 
 ## Related git commit
 
-To be recorded after the sealing commit.
+Artifact sealing commit: `72294cd81bdd47939d5794bf036b37e7f5cb6816`.
