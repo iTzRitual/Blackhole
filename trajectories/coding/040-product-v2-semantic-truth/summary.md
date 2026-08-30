@@ -144,5 +144,5 @@ as `PARTIAL`; do not reopen the frozen benchmark or infer holdout performance.
 
 ## Related git commit
 
-To be filled with the coherent commit created for this task after final
-validation.
+`104787313d535e8e5c855070eb790ab3654b7879` (`experiment: add Product V2
+semantic truth`).

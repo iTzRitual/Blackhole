@@ -2,7 +2,7 @@
   "report_type": "product-v2-semantic-truth",
   "evidence_scope": "post-freeze product generalization; non-scored",
   "base_sha": "7a76a1b660b49d28cb5aa29ab9e9b5099238aaee",
-  "tested_revision": "7a76a1b660b49d28cb5aa29ab9e9b5099238aaee",
+  "tested_revision": "104787313d535e8e5c855070eb790ab3654b7879",
   "source_worktree": "C:/Users/natan/OneDrive/Dokumenty/ChatGPT/Blackhole-v2-provenance-fix",
   "target_branch": "product/v2-semantic-truth",
   "suite": {
@@ -18,5 +18,5 @@
   "benchmark_oracle_accessed": false,
   "holdout_accessed": false,
   "official_baseline_changed": false,
-  "stdout": "----------------------------------------------------------------------\nRan 8 tests in 4.208s\n\nOK\n"
+  "stdout": "----------------------------------------------------------------------\nRan 8 tests in 4.040s\n\nOK\n"
 }
