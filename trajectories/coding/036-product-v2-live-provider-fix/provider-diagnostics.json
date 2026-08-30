@@ -192,7 +192,7 @@
         "question": "Gdzie są klucze do piwnicy?",
         "observed_result": "unrelated Attention item was returned; no useful key answer",
         "provider_used": false,
-        "post_smoke_deterministic_fix": "removed standalone 'do' task/time marker and added Polish upcoming/task markers; covered by a regression test; no additional live Ask was issued"
+        "post_smoke_follow_up": "the standalone Polish 'do' task/time collision was recorded as an unrelated product issue; no semantic router change was retained and no additional live Ask was issued"
       },
       "task_question": {
         "question": "Co mam niedługo do zrobienia?",

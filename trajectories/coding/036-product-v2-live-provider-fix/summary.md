@@ -28,10 +28,10 @@ structured-output schema, retains terminal JSONL failures and bounded
 sanitized tails, and records the invocation boundary without reading provider
 credentials or changing global configuration. The final invocation keeps the
 normal ChatGPT-authenticated CLI, read-only sandbox, inherited environment, and
-default shell-snapshot behavior. A separate deterministic Polish Ask routing
-collision found during the live smoke was fixed narrowly and covered by a
-regression; it was not provider or benchmark tuning. Image attachments use the
-installed `--image` surface, while document/PDF attachments remain explicit
+default shell-snapshot behavior. An unrelated deterministic Polish Ask routing
+collision found during the live smoke remains outside this provider-only task;
+no semantic router tuning was retained. Image attachments use the installed
+`--image` surface, while document/PDF attachments remain explicit
 metadata-only limitations without OCR.
 
 ## Tools/actions used
@@ -45,8 +45,8 @@ metadata-only limitations without OCR.
 - Ran six disposable-directory diagnostic controls, the maximum authorized
   diagnostic model-call budget.
 - Implemented and tested the provider schema, terminal-error diagnostics,
-  invocation boundary, redaction, image forwarding, and deterministic Ask
-  routing correction.
+  invocation boundary, redaction, and image forwarding. Recorded the unrelated
+  Ask-routing finding without retaining a semantic router change.
 - Ran the normal web-app smoke with exactly two captures and two Ask queries;
   recorded the representative execution in the runtime trajectory.
 
@@ -58,8 +58,8 @@ metadata-only limitations without OCR.
   execution; the same checks were rerun as separate bounded commands.
 - The first live keys Ask was misrouted to an unrelated Attention item because
   the deterministic router treated standalone Polish `do` as a task/time
-  marker. The narrow correction passed offline, but the live two-Ask limit
-  prevented revalidation.
+  marker. No semantic router change was retained because that work is outside
+  this provider-only scope.
 
 ## Retries or changed approaches
 
@@ -80,7 +80,7 @@ No additional human feedback or checkpoint has occurred.
 Performed:
 
 - Provider diagnostic suite: 6 passing tests.
-- Full application suite: 115 passing tests.
+- Full application suite: 114 passing tests.
 - Evaluator suite: 10 passing tests.
 - Product acceptance harness: 7 passing tests.
 - Integrated Product V2 acceptance: 50/50 PASS.
@@ -91,27 +91,29 @@ Performed:
 - `node --check app/web/app.js`: PASS.
 - Live smoke: both captures processed on the first attempt with no retries;
   Memory and Attention were populated. The task Ask passed; the keys Ask did
-  not, before its offline correction.
+  not.
 
 ## Result
 
 The provider adapter repair is evidenced and the deterministic suites pass.
-The overall prescribed live gate is PARTIAL because the corrected keys Ask
-could not be run live within the authorized two-Ask limit.
+The overall prescribed live gate is PARTIAL because the first keys Ask was not
+useful and the unrelated routing issue was not authorized for this provider-
+only task.
 
 ## Regressions or unresolved issues
 
-The corrected Polish keys Ask still needs one separately authorized bounded
-normal-launch validation. Document/PDF attachments remain metadata-only and
-unread/unverified by the provider; OCR was not added. Qualification retains
-four pre-existing warnings.
+The Polish keys Ask needs separately authorized product-scope routing work and
+bounded normal-launch validation. Document/PDF attachments remain
+metadata-only and unread/unverified by the provider; OCR was not added.
+Qualification retains four pre-existing warnings.
 
 ## Final decision
 
-KEEP the provider adapter/schema/diagnostic repair. REVISE the overall live
-gate pending the bounded Ask validation described above. This follow-up is not
-E006 and did not alter frozen V1 benchmark, baseline, evaluator, calibration,
-holdout, or protected-worktree material.
+KEEP the provider adapter/schema/diagnostic repair as the authorized provider
+change. REVISE the overall live gate; separate product-scope authorization is
+needed before changing and live-validating the Ask router. This follow-up is
+not E006 and did not alter frozen V1 benchmark, baseline, evaluator,
+calibration, holdout, or protected-worktree material.
 
 ## Related git commit
 

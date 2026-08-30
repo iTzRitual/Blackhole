@@ -192,16 +192,17 @@ The second prescribed Ask returned the useful children Attention item with
 evidence. The first prescribed Ask, `Gdzie są klucze do piwnicy?`, was instead
 routed to the unrelated Attention item by an existing deterministic Polish
 router rule that treated the standalone preposition `do` as a task/time
-marker. That narrow router bug was corrected and covered by a deterministic
-regression test after the live run; no additional live Ask was made because
-the authorized two-Ask limit had been reached.
+marker. This is recorded as an unrelated product-routing issue; no semantic
+router change is retained in this provider-only branch, and no additional live
+Ask was made because the authorized two-Ask limit had been reached.
 
 ### Follow-up decision
 
-The real provider adapter change is **KEEP**: the authenticated normal worker
-now produces useful semantic Memory and Attention state without retries. The
-overall prescribed live provider gate remains **PARTIAL / REVISE** because the
-first live Ask was not useful and the corrected routing rule could not be
-revalidated live within the authorized two-Ask limit. No benchmark, baseline,
+The real provider adapter repair is **KEEP as a provider-boundary change**: the
+authenticated normal worker now produces useful semantic Memory and Attention
+state without retries. The overall prescribed live provider gate remains
+**PARTIAL / REVISE** because the first live Ask was not useful; fixing that
+unrelated router issue requires separate product-scope authorization and a
+fresh bounded validation. No benchmark, baseline,
 holdout, V1 oracle, G01/G02/G03 run, global Codex configuration, or protected
 worktree was changed or accessed.

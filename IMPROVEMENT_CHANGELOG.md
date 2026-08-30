@@ -193,6 +193,20 @@ This file records material improvements to the product design, agent workflow, e
 - **Decision:** **KEEP** the provider adapter/schema/diagnostic repair; **REVISE** the overall live gate after a separately authorized normal-launch Ask validation. Do not call this E006 or infer holdout performance.
 - **Learning:** A warning-only stderr view can hide a terminal JSONL failure. Strict structured-output schemas must be validated against the installed CLI, and a successful provider path still needs a black-box language-routing check.
 
+## 2026-08-30 — Product V2 provider follow-up scope correction
+
+- **Stage / experiment identifier:** Scope correction for the authorized Product V2 provider integration follow-up; not a benchmark optimization and not E006.
+- **Problem observed:** The live smoke exposed an unrelated deterministic Polish Ask-routing collision. A post-smoke router edit would have been too close to the task's explicit prohibition on semantic tuning from the prescribed wording.
+- **Hypothesis:** Removing that unrelated edit and its exact-query regression will leave the provider-boundary evidence intact while keeping this branch within the authorized adapter scope.
+- **What changed:** Removed the post-smoke deterministic Ask-router change and its application test. Retained the strict provider schema, terminal diagnostics, attachment boundary, live evidence, and honest PARTIAL gate.
+- **Evaluation method:** Re-ran the provider suite, full application suite, evaluator suite, acceptance harness, compileall, JavaScript syntax, qualification, and benchmark structure checks. No additional live provider call, capture, or Ask was issued.
+- **Metric before:** The provider follow-up commit contained 115 application tests, including the out-of-scope router regression; the real live keys Ask remained unsuccessful.
+- **Metric after:** The provider follow-up contains 114 application tests, with the live result unchanged: 2/2 semantic captures succeeded, the task Ask passed, and the keys Ask remained unresolved.
+- **Regressions:** The overall live gate remains PARTIAL; the unrelated Polish routing issue now requires separate product-scope authorization and validation.
+- **Runtime/cost impact:** No live calls were added; provider and diagnostic call counts remain six diagnostic calls and two Product V2 provider calls.
+- **Decision:** **KEEP** the provider-boundary repair; **REVISE** the overall gate and do not retain semantic routing tuning in this branch.
+- **Learning:** Passing an offline regression for a prescribed query is not sufficient authorization to change unrelated product semantics during an adapter investigation.
+
 ## Entry template
 
 Use one entry per meaningful improvement:

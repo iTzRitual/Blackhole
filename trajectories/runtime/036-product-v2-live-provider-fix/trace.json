@@ -87,7 +87,7 @@
       "result": "unrelated Attention item returned",
       "source_ref": "provider-smoke-kids",
       "provider_used": false,
-      "follow_up": "post-smoke deterministic router correction added; no additional live Ask permitted"
+      "follow_up": "unrelated router collision recorded; no semantic router change retained and no additional live Ask permitted"
     },
     {
       "question": "Co mam niedługo do zrobienia?",
@@ -97,5 +97,5 @@
     }
   ],
   "approvals": [],
-  "outcome": "provider semantic processing PASS; prescribed live gate PARTIAL pending bounded validation of the corrected keys Ask"
+  "outcome": "provider semantic processing PASS; prescribed live gate PARTIAL pending separately authorized product-routing work and bounded validation of the keys Ask"
 }

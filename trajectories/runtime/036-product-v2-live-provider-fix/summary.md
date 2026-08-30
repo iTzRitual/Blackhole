@@ -50,12 +50,13 @@ reference `provider-smoke-kids`. Processing ended at 2 processed, 0 pending,
 The task question returned the useful children Attention item with its source
 reference. The keys question was incorrectly routed to that unrelated
 Attention item because the deterministic router treated the standalone Polish
-preposition `do` as a task/time marker. This was not a provider failure. A
-small deterministic router correction and regression test were added after the
-smoke; no further live Ask or capture was run because the authorized limit had
-already been reached.
+preposition `do` as a task/time marker. This was not a provider failure. The
+unrelated router issue was not changed in this provider-only task; no further
+live Ask or capture was run because the authorized limit had already been
+reached.
 
 ## Outcome
 
 Provider semantic processing: PASS. Overall prescribed live Product V2 gate:
-PARTIAL pending a fresh normal-launch validation of the corrected keys Ask.
+PARTIAL pending separately authorized product-routing work and fresh normal-
+launch validation of the keys Ask.

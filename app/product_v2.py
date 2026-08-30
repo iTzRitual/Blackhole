@@ -1947,8 +1947,8 @@ class ProductRuntime:
         question_tokens = _tokens(question)
         attention = [item for item in snapshot.get("attention", []) if item.get("status") == "open"]
         is_today = bool(question_tokens & {"today", "dzisiaj", "dziś"})
-        is_upcoming = bool(question_tokens & {"upcoming", "coming", "week", "tydzień", "tydzien", "nadchodzący", "nadchodzacy", "niedługo", "niedlugo"})
-        is_task = bool(question_tokens & {"need", "task", "tasks", "todo", "muszę", "musze", "zrobić", "zrobic", "zrobienia"})
+        is_upcoming = bool(question_tokens & {"upcoming", "coming", "week", "tydzień", "tydzien", "nadchodzący", "nadchodzacy"})
+        is_task = bool(question_tokens & {"need", "task", "tasks", "do", "todo", "muszę", "musze", "zrobić", "zrobic"})
         if (is_today and is_task) or (is_upcoming and is_task):
             now = self._now()
             horizon = now + timedelta(days=7 if is_upcoming else 1)
@@ -1969,7 +1969,7 @@ class ProductRuntime:
 
         is_time_question = bool(
             question_tokens
-            & {"when", "kiedy", "deadline", "due", "date", "termin", "datę", "date", "until"}
+            & {"when", "kiedy", "deadline", "due", "date", "termin", "datę", "date", "until", "do"}
         )
         if attention and (is_time_question or is_task):
             attention_tokens = [
