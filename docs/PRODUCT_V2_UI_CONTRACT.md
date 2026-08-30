@@ -67,3 +67,19 @@ the evidence is stored under
 `trajectories/coding/042-product-v2-final-human-dogfood-fixes/`. The fixture is
 presentation-only and does not alter Host, API, SQLite, provenance, or
 semantic truth contracts.
+
+## Fix-first review correction — 2026-08-31
+
+The presentation contract is executable through the opt-in dependency-free
+Node hook used by the final Product V2 tests. It verifies that `[object
+Object]`, `undefined`, and `null` do not become user-facing artifacts;
+structured related memories normalize into subordinate groups; history without
+an entity/topic is omitted while contextual history stays under its card;
+capture-time due/overdue copy remains human-readable; stable disclosure IDs
+restore an open detail after rerender; and Ask examples disappear after the
+first conversation message. The hook is inert in normal browser operation.
+
+All versioned shell assets now use `v8` consistently: manifest, Apple touch
+icon, CSS, JavaScript, service-worker registration, and service-worker cache
+entries. This is a static-cache correction only; the existing UI/API DTO and
+the PARTIAL/REVISE live gate remain unchanged.

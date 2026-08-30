@@ -66,5 +66,16 @@
   "gate": "PARTIAL / REVISE",
   "raw_inputs_persisted": false,
   "protected_material_accessed": false,
+  "fix_first_review_correction": {
+    "provider_calls": 0,
+    "measured_live_values_changed": false,
+    "focused_correction_tests": {"passed": 12, "failed": 0},
+    "combined_focused_product_ui_tests": {"passed": 105, "failed": 0},
+    "extraction_context": "relevance-ranked by current capture terms, then sequence/capture-time recency with canonical stable ties",
+    "privacy_policy": "human summaries retained; credential-like, generic, nested, opaque, and raw-like values become non-content placeholders",
+    "ui_test_mode": "production helpers executed through opt-in inert dependency-free Node hook",
+    "pwa_shell_version": "v8",
+    "gate_unchanged": "PARTIAL / REVISE"
+  },
   "notes": "Semantic and UI repairs are kept. The observed burst interval did not demonstrate material end-to-end latency improvement; no semantic regression was observed."
 }

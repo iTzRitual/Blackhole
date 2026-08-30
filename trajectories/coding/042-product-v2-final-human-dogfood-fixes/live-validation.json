@@ -115,5 +115,16 @@
       "ask_related_disclosures": 1
     }
   },
-  "raw_outputs": "Provider prompts, full captures, questions, files, stdout, and credentials were not persisted in this evidence file."
+  "raw_outputs": "Provider prompts, full captures, questions, files, stdout, and credentials were not persisted in this evidence file.",
+  "fix_first_review_correction": {
+    "provider_calls": 0,
+    "measured_live_values_changed": false,
+    "focused_correction_tests": {"passed": 12, "failed": 0},
+    "combined_focused_product_ui_tests": {"passed": 105, "failed": 0},
+    "extraction_context": "relevance to current capture terms, then sequence/captured-time recency and canonical stable tie-breaking",
+    "privacy_guards": "credential-like concepts, generic captures, nested payloads, opaque values, and raw-like echoes are metadata-only; benign scalar location/cost summaries remain",
+    "ui_coverage": "production normalization/time/disclosure/example helpers executed through an opt-in inert Node hook",
+    "pwa_versions": "all versioned HTML and service-worker shell references aligned to v8",
+    "gate_unchanged": "PARTIAL / REVISE"
+  }
 }

@@ -818,27 +818,55 @@
     }
   };
 
-  const rememberDisclosureState = (root) => {
-    if (!root) return;
-    $$('details[data-disclosure-id]', root).forEach((details) => {
-      const id = details.dataset.disclosureId;
-      if (!id) return;
-      if (details.open) state.openDisclosures.add(id);
-      else state.openDisclosures.delete(id);
-    });
+  const createDisclosureState = (initial = new Set()) => {
+    const openDisclosures = initial instanceof Set ? initial : new Set(initial);
+    const detailsFor = (root) => {
+      if (!root || typeof root.querySelectorAll !== "function") return [];
+      return [...root.querySelectorAll('details[data-disclosure-id]')];
+    };
+    const idFor = (details) => details?.dataset?.disclosureId || "";
+    return {
+      remember(root) {
+        detailsFor(root).forEach((details) => {
+          const id = idFor(details);
+          if (!id) return;
+          if (details.open) openDisclosures.add(id);
+          else openDisclosures.delete(id);
+        });
+        return this;
+      },
+      bind(root) {
+        this.remember(root);
+        detailsFor(root).forEach((details) => {
+          if (typeof details.addEventListener !== "function") return;
+          details.addEventListener("toggle", () => {
+            const id = idFor(details);
+            if (!id) return;
+            if (details.open) openDisclosures.add(id);
+            else openDisclosures.delete(id);
+          });
+        });
+        return this;
+      },
+      restore(root) {
+        detailsFor(root).forEach((details) => {
+          const id = idFor(details);
+          if (id) details.open = openDisclosures.has(id);
+        });
+        return this;
+      },
+      has(id) {
+        return openDisclosures.has(id);
+      },
+      values() {
+        return [...openDisclosures];
+      },
+    };
   };
 
-  const bindDisclosureState = (root) => {
-    if (!root) return;
-    $$('details[data-disclosure-id]', root).forEach((details) => {
-      details.addEventListener("toggle", () => {
-        const id = details.dataset.disclosureId;
-        if (!id) return;
-        if (details.open) state.openDisclosures.add(id);
-        else state.openDisclosures.delete(id);
-      });
-    });
-  };
+  const disclosureState = createDisclosureState(state.openDisclosures);
+  const rememberDisclosureState = (root) => disclosureState.remember(root);
+  const bindDisclosureState = (root) => disclosureState.bind(root);
 
   const disclosureChevron = '<span class="disclosure-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#icon-chevron"></use></svg></span>';
 
@@ -1469,11 +1497,13 @@
     if (button) button.hidden = true;
   };
 
+  const shouldShowAskExamples = (messages) => !Array.isArray(messages) || messages.length === 0;
+
   const renderQuestionExamples = () => {
     const element = $("#question-chips");
     if (!element) return;
     const heading = $("#ask-examples-heading");
-    const hasConversation = state.askMessages.length > 0;
+    const hasConversation = !shouldShowAskExamples(state.askMessages);
     element.hidden = hasConversation;
     if (heading) heading.hidden = hasConversation;
     if (hasConversation) return;
@@ -1485,6 +1515,25 @@
     ];
     element.innerHTML = examples.map((question) => '<button class="question-chip" type="button" data-question="' + escapeHtml(question) + '">' + escapeHtml(question) + '</button>').join("");
   };
+
+  // The hook is intentionally opt-in and inert in production. It lets the
+  // dependency-free UI contract tests execute the same normalization and
+  // disclosure behavior without requiring a browser or a brittle source scan.
+  if (window.__BLACKHOLE_V2_TEST__) {
+    window.BlackholeV2 = {
+      fixtureMode,
+      normalizeAttention,
+      normalizeMemory,
+      normalizeAnswer,
+      formatAttentionTime,
+      displayText,
+      createDisclosureState,
+      shouldShowAskExamples,
+      formatMoney,
+      humanize,
+    };
+    return;
+  }
 
   $$(".nav-item, .brand-button").forEach((button) => button.addEventListener("click", () => showView(button.dataset.view || "capture")));
   $("#capture-input")?.addEventListener("input", resizeTextarea);
@@ -1593,6 +1642,8 @@
       normalizeAnswer,
       formatAttentionTime,
       displayText,
+      createDisclosureState,
+      shouldShowAskExamples,
       formatMoney,
       humanize,
     };

@@ -323,3 +323,32 @@ material end-to-end latency improvement, and the live launcher stream lacks
 complete shutdown evidence. This is product evidence only; frozen benchmark,
 baseline, evaluator, calibration, holdout, V1 oracle, and protected
 worktrees remain outside scope.
+
+## Fix-first review correction — 2026-08-31
+
+The fresh review identified four narrow follow-ups, all completed without a
+provider call or a change to the live measurements. Extraction context remains
+bounded, but rows are now ranked by deterministic term relevance to the
+captures being linked and then by sequence/capture time with canonical stable
+tie-breaking. An over-limit correction test proves that an older matching
+entity/current fact remains available and that rebuild preserves current and
+historical truth.
+
+Default human-readable learned summaries remain enabled as required for local
+dogfooding. They now guard concept/key/value fields: private credential-like
+concepts, access codes, generic notes/captures, nested payloads, long opaque
+strings, and raw-like echoes become non-content placeholders, while benign
+scalar location and cost summaries remain useful. Direct human-log sanitizing
+also redacts labeled private values.
+
+The UI contract tests now execute the production normalization/time helpers,
+structured related-memory handling, contextual history filtering, disclosure
+state restore, and Ask example visibility through an opt-in dependency-free
+Node hook rather than relying on source-string assertions. Every versioned
+shell reference in the HTML and service worker is aligned to `v8`, including
+the manifest and Apple touch icon.
+
+The correction focused suite is `105/105`; the full application suite is
+rerun separately below. The overall live gate remains **PARTIAL / REVISE**:
+the prior bounded smoke values are unchanged and no new provider/live smoke
+was authorized.

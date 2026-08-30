@@ -21,6 +21,10 @@ _SECRET_ASSIGNMENT = re.compile(
 )
 _BEARER = re.compile(r"(?i)\bBearer\s+[A-Za-z0-9._~+/=-]+")
 _SECRET_COMPOUND = re.compile(r"(?i)\bsecret(?:[-_][A-Za-z0-9._~+/=-]+)+")
+_HUMAN_PRIVATE_VALUE = re.compile(
+    r"(?i)\b(password|passcode|access[\s_-]*code|security[\s_-]*code|otp|pin|token|secret|credential|"
+    r"api[\s_-]*key|private[\s_-]*key|authorization)\b\s*(?:(?:is|was|are)\s+|[:=→]\s*)[^\r\n·]+"
+)
 _SENSITIVE_FIELD = re.compile(
     r"(?i)(?:token|secret|password|credential|cookie|api[_-]?key|access[_-]?token|authorization|prompt|payload|content|capture[_-]?text|question|stdout|stderr)"
 )
@@ -36,6 +40,7 @@ def sanitize_error(value: Any, *, limit: int = 240) -> str:
     text = _BEARER.sub("Bearer [REDACTED]", text)
     text = _SECRET_ASSIGNMENT.sub(r"\1[REDACTED]", text)
     text = _SECRET_COMPOUND.sub("[REDACTED]", text)
+    text = _HUMAN_PRIVATE_VALUE.sub(r"\1 → [REDACTED]", text)
     return text[:limit] or "operation failed"
 
 
@@ -68,6 +73,7 @@ def sanitize_human_text(value: Any, *, limit: int = 220) -> str:
     text = _BEARER.sub("Bearer [REDACTED]", text)
     text = _SECRET_ASSIGNMENT.sub(r"\1[REDACTED]", text)
     text = _SECRET_COMPOUND.sub("[REDACTED]", text)
+    text = _HUMAN_PRIVATE_VALUE.sub(r"\1 → [REDACTED]", text)
     # Control characters can make a terminal line misleading even when they
     # are not a newline.  Keep normal Unicode labels and punctuation intact.
     text = "".join(character for character in text if character.isprintable())

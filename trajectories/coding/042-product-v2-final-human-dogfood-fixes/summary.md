@@ -137,3 +137,35 @@ human-dogfood gate **PARTIAL / REVISE** rather than claiming full completion.
 The implementation and evidence are committed on
 `product/v2-final-dogfood-fixes` in `e5ca77f`
 (`e5ca77f8f95be5363be0e88bb8b56e8eb05fe9ad`).
+
+## Fix-first review correction — 2026-08-31
+
+### Findings addressed
+
+The correction stayed within the original architecture and made no provider
+calls. Extraction context selection now scores deterministic overlap with the
+current capture terms, then sequence/capture-time recency and canonical stable
+ties, rather than taking list tails. The new over-limit test fills the Home
+with unrelated facts, processes a correction, verifies the old matching fact
+was supplied to the provider, and verifies current/history truth after rebuild.
+
+Default human-readable learned summaries remain enabled. Concept/key/value
+guards replace credential-like concepts, access codes, generic notes/captures,
+nested payloads, long opaque strings, and raw-like echoes with non-content
+placeholders; benign scalar location/cost values remain human-readable. The
+human logger additionally redacts labeled private values.
+
+The UI now exposes an opt-in, inert dependency-free Node hook for the same
+production normalization/time/disclosure/example helpers. Tests execute
+`[object Object]`/`undefined`/`null` omission, structured related memories,
+contextual history, due/overdue copy, stable disclosure restoration, and Ask
+example visibility. HTML and service-worker shell references, including the
+manifest and Apple touch icon, are uniformly `v8`.
+
+### Correction evaluation
+
+The focused correction set is `12/12`; the combined focused Product V2/UI
+regression is `105/105`. No live values in `live-validation.json` were
+changed, and no new provider/live smoke was made. The overall gate remains
+**PARTIAL / REVISE** for the already-recorded burst-latency and launcher
+shutdown limitations.

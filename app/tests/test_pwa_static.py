@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 import unittest
 from pathlib import Path
 
@@ -43,8 +44,22 @@ class PWAStaticTests(unittest.TestCase):
         html = (WEB_ROOT / "index.html").read_text(encoding="utf-8")
         self.assertIn('register("/sw.js?v=8", { updateViaCache: "none" })', app_js)
         self.assertIn('controllerchange', app_js)
-        self.assertIn('app.js?v=8', html)
-        self.assertIn('styles.css?v=8', html)
+        self.assertEqual(set(re.findall(r'[?&]v=(\d+)', html)), {"8"})
+
+    def test_every_versioned_shell_asset_uses_v8(self) -> None:
+        html = (WEB_ROOT / "index.html").read_text(encoding="utf-8")
+        service_worker = (WEB_ROOT / "sw.js").read_text(encoding="utf-8")
+        expected_html_assets = (
+            "/manifest.webmanifest?v=8",
+            "/icons/icon.svg?v=8",
+            "/styles.css?v=8",
+            "/app.js?v=8",
+        )
+        for asset in expected_html_assets:
+            self.assertIn(asset, html)
+        self.assertIn('const SHELL_VERSION = "v8"', service_worker)
+        for asset in ("/index.html", "/styles.css", "/app.js", "/manifest.webmanifest", "/icons/icon.svg", "/icons/icon-maskable.svg"):
+            self.assertIn('"' + asset + '?v=" + SHELL_VERSION', service_worker)
 
 
 if __name__ == "__main__":

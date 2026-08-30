@@ -76,6 +76,13 @@ MAX_EXTRACTION_HISTORY = 12
 MAX_EXTRACTION_RELATIONS = 12
 MAX_EXTRACTION_ATTENTION = 16
 MAX_EXTRACTION_SOURCES = 12
+_HUMAN_PRIVATE_LABELS = re.compile(
+    r"(?i)\b(?:password|passcode|access[\s_-]*code|security[\s_-]*code|"
+    r"one[\s_-]*time[\s_-]*password|otp|pin|token|secret|credential|"
+    r"api[\s_-]*key|private[\s_-]*key|authentication|authorization|login)\b"
+)
+_HUMAN_CODE_LABEL = re.compile(r"(?i)\b(?:door|entry|gate|wifi|security|access)\s+code\b")
+_HUMAN_OPAQUE_VALUE = re.compile(r"^[A-Za-z0-9+/=_-]{24,}$")
 _EVENT_REFERENCE_KEYS = frozenset(
     {
         "event_id",
@@ -298,16 +305,66 @@ def _fact_summary(item: dict[str, Any]) -> str:
     return f"{label} {concept}: {display}"
 
 
+def _human_safe_label(value: Any, fallback: str) -> str:
+    """Keep a derived log label useful without echoing raw/provider text."""
+
+    label = _clean_text(value, limit=80)
+    normalized = re.sub(r"[_-]+", " ", label)
+    if (
+        not label
+        or _HUMAN_PRIVATE_LABELS.search(normalized)
+        or _HUMAN_CODE_LABEL.search(normalized)
+        or len(label.split()) > 10
+    ):
+        return fallback
+    return label
+
+
 def _human_fact_summary(item: dict[str, Any]) -> str:
     """Render a short derived fact for the local operational log."""
 
-    label = _clean_text(item.get("entity_label") or item.get("entity_key") or "memory", limit=80)
+    raw_label = item.get("entity_label") or item.get("entity_key") or "memory"
+    label = _human_safe_label(raw_label, "Memory")
     concept = str(item.get("concept") or "").casefold()
+    metadata = item.get("metadata", item.get("semantic_metadata", {}))
+    if not isinstance(metadata, dict):
+        metadata = {}
+    labels = [
+        str(item.get("concept") or ""),
+        str(item.get("entity_label") or ""),
+        str(item.get("entity_key") or ""),
+        str(item.get("operation") or ""),
+        " ".join(str(key) for key in metadata),
+    ]
+    label_text = re.sub(r"[_-]+", " ", " ".join(labels))
+    private_label = _HUMAN_PRIVATE_LABELS.search(label_text) or _HUMAN_CODE_LABEL.search(label_text)
+    value = item.get("value")
+    value_text = value if isinstance(value, str) else ""
+    value_label_text = re.sub(r"[_-]+", " ", value_text)
+    if private_label or _HUMAN_PRIVATE_LABELS.search(value_label_text) or _HUMAN_CODE_LABEL.search(value_label_text):
+        return "Private value captured"
     # Generic notes can contain the entire user capture as their value.  Keep
     # the operational line useful without echoing that private source text.
     if concept in {"note", "note_from_user", "observation", "capture"}:
         return f"{label} → captured"
+    if isinstance(value, (dict, list, tuple)):
+        # Monetary facts have a compact, human-useful shape.  Other nested
+        # values may be payloads or provider echoes, so expose only metadata.
+        is_money = isinstance(value, dict) and any(
+            key in value for key in ("amount", "price", "total", "currency", "currency_code")
+        )
+        if not is_money:
+            return f"{label} → structured value"
     display = _clean_text(_display_fact_value(item), limit=120)
+    if (
+        not display
+        or len(display) > 96
+        or "\n" in display
+        or display.lstrip().startswith(("{", "["))
+        or _HUMAN_OPAQUE_VALUE.fullmatch(display.strip())
+        or len(display.split()) > 18
+    ):
+        return f"{label} → captured value"
     status = str(item.get("knowledge_status") or "known").casefold()
     if status == "unknown":
         reason = _clean_text(item.get("unknown_reason") or "not stated", limit=60)
@@ -320,7 +377,7 @@ def _human_fact_summary(item: dict[str, Any]) -> str:
 def _human_attention_summary(item: dict[str, Any], *, now: datetime | None = None) -> str:
     """Render a short actionable summary without exposing raw timestamps."""
 
-    title = _clean_text(item.get("title") or item.get("kind") or "open item", limit=100)
+    title = _human_safe_label(item.get("title") or item.get("kind"), "Attention item")
     due_value = item.get("due_at") or item.get("starts_at")
     if due_value is None:
         return title
@@ -361,22 +418,136 @@ def _safe_json_value(value: Any, *, depth: int = 0) -> Any:
     return None
 
 
+def _capture_context_terms(events: Iterable[dict[str, Any]]) -> set[str]:
+    """Collect deterministic semantic terms from the captures being linked."""
+
+    terms: set[str] = set()
+    for event in events:
+        payload = event.get("payload")
+        if isinstance(payload, dict):
+            terms.update(search_terms(payload.get("text", "")))
+            attachments = payload.get("attachments")
+            if isinstance(attachments, list):
+                for attachment in attachments:
+                    if isinstance(attachment, dict):
+                        terms.update(search_terms(attachment.get("original_filename", "")))
+        metadata = event.get("metadata")
+        if isinstance(metadata, dict):
+            # Metadata is already a structured capture field.  Only its terms
+            # are used for ranking; the raw metadata remains in the normal
+            # provider payload and is not copied into this selection helper.
+            terms.update(search_terms(metadata))
+    return terms
+
+
+def _projection_source_metadata(snapshot: dict[str, Any]) -> dict[str, tuple[int, float]]:
+    """Index source sequence/time for projections without relying on row order."""
+
+    result: dict[str, tuple[int, float]] = {}
+    sources = snapshot.get("sources", [])
+    if not isinstance(sources, list):
+        return result
+    for source in sources:
+        if not isinstance(source, dict):
+            continue
+        event_id = source.get("event_id")
+        if not isinstance(event_id, str) or not event_id:
+            continue
+        sequence = int(source.get("sequence", 0) or 0)
+        captured_at = source.get("captured_at")
+        timestamp = float("-inf")
+        if isinstance(captured_at, str):
+            try:
+                parsed = datetime.fromisoformat(captured_at.replace("Z", "+00:00"))
+                if parsed.tzinfo is None:
+                    parsed = parsed.replace(tzinfo=timezone.utc)
+                timestamp = parsed.timestamp()
+            except (TypeError, ValueError, OverflowError):
+                pass
+        result[event_id] = (sequence, timestamp)
+    return result
+
+
+def _projection_recency(
+    row: dict[str, Any],
+    source_metadata: dict[str, tuple[int, float]],
+) -> tuple[int, float]:
+    """Return stable sequence/time recency for any projection row shape."""
+
+    sequence = 0
+    for key in ("latest_sequence", "sequence"):
+        try:
+            sequence = max(sequence, int(row.get(key, 0) or 0))
+        except (TypeError, ValueError):
+            continue
+    timestamp = float("-inf")
+    for key in ("captured_at", "created_at", "updated_at"):
+        value = row.get(key)
+        if not isinstance(value, str):
+            continue
+        try:
+            parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+            if parsed.tzinfo is None:
+                parsed = parsed.replace(tzinfo=timezone.utc)
+            timestamp = max(timestamp, parsed.timestamp())
+        except (TypeError, ValueError, OverflowError):
+            continue
+    references: list[str] = []
+    for key in ("source_event_id", "event_id"):
+        value = row.get(key)
+        if isinstance(value, str):
+            references.append(value)
+    source_refs = row.get("source_refs")
+    if isinstance(source_refs, list):
+        references.extend(ref for ref in source_refs if isinstance(ref, str))
+    for reference in references:
+        source_sequence, source_timestamp = source_metadata.get(reference, (0, float("-inf")))
+        sequence = max(sequence, source_sequence)
+        timestamp = max(timestamp, source_timestamp)
+    return sequence, timestamp
+
+
+def _projection_relevance(row: dict[str, Any], terms: set[str]) -> int:
+    """Score structured overlap, weighting entity identity for corrections."""
+
+    if not terms:
+        return 0
+    entity_text = " ".join(
+        str(row.get(key, ""))
+        for key in ("entity_key", "entity_label", "source_entity_key", "target_entity_key")
+    )
+    entity_overlap = terms & search_terms(entity_text)
+    all_overlap = terms & search_terms(row)
+    return (4 * len(entity_overlap)) + len(all_overlap - entity_overlap)
+
+
 def _bounded_projection_rows(
     snapshot: dict[str, Any],
     key: str,
     limit: int,
+    *,
+    relevance_terms: set[str] | None = None,
 ) -> list[dict[str, Any]]:
-    """Return only recent structured rows for the extraction prompt."""
+    """Select relevant structured rows, then recency, with stable tie-breaking."""
 
     rows = snapshot.get(key, [])
-    if not isinstance(rows, list):
+    if not isinstance(rows, list) or limit <= 0:
         return []
-    return [
-        safe
-        for row in rows[-limit:]
-        for safe in [_safe_json_value(row)]
-        if isinstance(safe, dict)
-    ]
+    terms = relevance_terms or set()
+    source_metadata = _projection_source_metadata(snapshot)
+    scored: list[tuple[int, int, float, str, dict[str, Any]]] = []
+    for row in rows:
+        safe = _safe_json_value(row)
+        if not isinstance(safe, dict):
+            continue
+        relevance = _projection_relevance(safe, terms)
+        sequence, timestamp = _projection_recency(safe, source_metadata)
+        # Canonical JSON gives deterministic ordering when semantic scores and
+        # capture timestamps are identical, independent of SQLite/list order.
+        stable = canonical_json(safe)
+        scored.append((relevance, sequence, timestamp, stable, safe))
+    scored.sort(key=lambda item: (-item[0], -item[1], -item[2], item[3]))
+    return [item[-1] for item in scored[:limit]]
 
 
 def local_timezone_name() -> str:
@@ -2293,16 +2464,19 @@ class ProductRuntime:
             for digest in stored_attachment_hashes:
                 self.store.remove_blob_if_unreferenced(digest)
             raise
+        human_source_type = source_type.strip().casefold()
+        if human_source_type not in {"text", "image", "document", "audio", "file"}:
+            human_source_type = "capture"
         self._log(
             "capture",
             "saved",
             event=event_id,
             inserted=inserted,
-            source_type=source_type.strip(),
+            source_type=human_source_type,
             attachments=len(attachment_descriptors),
         )
         self._log("queue", "pending", event=event_id)
-        self._human(f"Saved capture · {source_type.strip()}")
+        self._human(f"Saved capture · {human_source_type}")
         if self._auto_start_on_capture:
             self.start_worker()
         self._worker_wake.set()
@@ -2393,13 +2567,44 @@ class ProductRuntime:
             if isinstance(event.get("event_id"), str)
         }
         snapshot = self.store.snapshot(now=self._now())
+        context_terms = _capture_context_terms(events)
         prior_memory = {
-            "entities": _bounded_projection_rows(snapshot, "entities", MAX_EXTRACTION_ENTITIES),
-            "current_facts": _bounded_projection_rows(snapshot, "current_facts", MAX_EXTRACTION_FACTS),
-            "fact_history": _bounded_projection_rows(snapshot, "fact_history", MAX_EXTRACTION_HISTORY),
-            "relationships": _bounded_projection_rows(snapshot, "relationships", MAX_EXTRACTION_RELATIONS),
-            "attention": _bounded_projection_rows(snapshot, "attention", MAX_EXTRACTION_ATTENTION),
-            "recent_sources": _bounded_projection_rows(snapshot, "sources", MAX_EXTRACTION_SOURCES),
+            "entities": _bounded_projection_rows(
+                snapshot,
+                "entities",
+                MAX_EXTRACTION_ENTITIES,
+                relevance_terms=context_terms,
+            ),
+            "current_facts": _bounded_projection_rows(
+                snapshot,
+                "current_facts",
+                MAX_EXTRACTION_FACTS,
+                relevance_terms=context_terms,
+            ),
+            "fact_history": _bounded_projection_rows(
+                snapshot,
+                "fact_history",
+                MAX_EXTRACTION_HISTORY,
+                relevance_terms=context_terms,
+            ),
+            "relationships": _bounded_projection_rows(
+                snapshot,
+                "relationships",
+                MAX_EXTRACTION_RELATIONS,
+                relevance_terms=context_terms,
+            ),
+            "attention": _bounded_projection_rows(
+                snapshot,
+                "attention",
+                MAX_EXTRACTION_ATTENTION,
+                relevance_terms=context_terms,
+            ),
+            "recent_sources": _bounded_projection_rows(
+                snapshot,
+                "sources",
+                MAX_EXTRACTION_SOURCES,
+                relevance_terms=context_terms,
+            ),
         }
         time_context = {
             "now_utc": self._now().isoformat(),
