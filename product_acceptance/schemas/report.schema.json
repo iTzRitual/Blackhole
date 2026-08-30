@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blackhole.local/product-v2-dogfood/report.schema.json",
+  "title": "Blackhole Product V2 dogfood acceptance report",
+  "type": "object",
+  "required": ["report_type", "suite", "adapter", "case_count", "case_status_counts", "coverage", "quality_gates", "cases"],
+  "properties": {
+    "report_type": {"const": "product-v2-dogfood-acceptance"},
+    "suite": {"type": "string"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "adapter": {"type": "string", "enum": ["mock", "http"]},
+    "live_provider_used": {"type": "boolean"},
+    "case_count": {"type": "integer", "minimum": 0},
+    "case_status_counts": {"type": "object"},
+    "coverage": {"type": "object"},
+    "quality_gates": {"type": "array"},
+    "cases": {"type": "array"}
+  }
+}

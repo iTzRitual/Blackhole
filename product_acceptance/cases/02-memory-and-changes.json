@@ -1,0 +1,158 @@
+[
+  {
+    "case_id": "MEM-001",
+    "title": "Remember where the basement keys are",
+    "locale": "pl-PL",
+    "tags": ["memory", "location", "possession", "polish"],
+    "initial_time": "2026-03-01T08:00:00+01:00",
+    "timezone": "Europe/Warsaw",
+    "user_outcome": "Later, the user can ask where the basement keys are and get the location at Mum's desk or home, backed by the original note.",
+    "steps": [
+      {"id": "capture-keys", "type": "capture", "at": "2026-03-01T08:00:00+01:00", "text": "Klucze do piwnicy są u mamy.", "idempotency_key": "mem-001-keys", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-keys", "type": "ask", "at": "2026-03-01T18:00:00+01:00", "question": "Gdzie są klucze do piwnicy?", "expect": {"include": ["mamy"], "evidence": "required"}},
+      {"id": "memory-keys", "type": "memory", "at": "2026-03-01T18:01:00+01:00", "expect": {"include": ["klucze", "mamy"], "evidence": "required"}}
+    ],
+    "manual_observations": ["Location is useful memory even though it is not a task, subscription, or financial record."]
+  },
+  {
+    "case_id": "MEM-002",
+    "title": "Connect a car noise with a cautious mechanic opinion",
+    "locale": "pl-PL",
+    "tags": ["memory", "people", "vehicle", "uncertain", "cross-capture", "polish"],
+    "initial_time": "2026-03-02T09:00:00+01:00",
+    "timezone": "Europe/Warsaw",
+    "user_outcome": "The system connects the observed front-left knocking with the mechanic's probable bearing diagnosis while keeping the diagnosis clearly probable.",
+    "steps": [
+      {"id": "capture-noise", "type": "capture", "at": "2026-03-02T09:00:00+01:00", "text": "Samochód zaczął stukać z przodu po lewej.", "idempotency_key": "mem-002-noise", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "capture-mechanic", "type": "capture", "at": "2026-03-03T14:00:00+01:00", "text": "The mechanic said the left bearing is probably the noise.", "idempotency_key": "mem-002-mechanic", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-noise", "type": "ask", "at": "2026-03-03T18:00:00+01:00", "question": "What did the mechanic think was causing the front-left noise?", "expect": {"include": ["left bearing"], "evidence": "required", "uncertainty": "required"}},
+      {"id": "attention-noise", "type": "attention", "at": "2026-03-03T18:01:00+01:00", "expect": {"include": ["noise"], "uncertainty": "required"}}
+    ],
+    "manual_observations": ["Do not report the bearing as a confirmed repair diagnosis unless the source says it was confirmed."]
+  },
+  {
+    "case_id": "MEM-003",
+    "title": "Keep a casual food preference",
+    "locale": "pl-PL",
+    "tags": ["memory", "preference", "people", "open-world", "polish"],
+    "initial_time": "2026-03-04T12:00:00+01:00",
+    "timezone": "Europe/Warsaw",
+    "user_outcome": "When choosing food for Kuba, the user can recall that he likes the green Lidl pasta without having created a contact preference form.",
+    "steps": [
+      {"id": "capture-pasta", "type": "capture", "at": "2026-03-04T12:00:00+01:00", "text": "Kuba lubi ten zielony makaron z Lidla.", "idempotency_key": "mem-003-pasta", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-kuba", "type": "ask", "at": "2026-03-05T12:00:00+01:00", "question": "What pasta does Kuba like?", "expect": {"include": ["green", "Lidl"], "evidence": "required"}},
+      {"id": "memory-kuba", "type": "memory", "at": "2026-03-05T12:01:00+01:00", "expect": {"include": ["Kuba", "pasta"], "evidence": "required"}}
+    ],
+    "manual_observations": ["The product should retain useful social details even when they do not fit a predefined business category."]
+  },
+  {
+    "case_id": "MEM-004",
+    "title": "Show the current PocketWave price and its history",
+    "locale": "en-GB",
+    "tags": ["memory", "changed-fact", "subscription", "history", "current-value"],
+    "initial_time": "2026-08-20T09:00:00+01:00",
+    "timezone": "Europe/London",
+    "user_outcome": "After the September change, a current-price question returns 11 EUR per month and a history question can still show that it used to be 9 EUR.",
+    "steps": [
+      {"id": "capture-old-price", "type": "capture", "at": "2026-08-20T09:00:00+01:00", "text": "PocketWave kosztuje 9 EUR miesięcznie.", "idempotency_key": "mem-004-pocketwave-old", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "capture-new-price", "type": "capture", "at": "2026-09-01T09:00:00+01:00", "text": "PocketWave od 1 września będzie kosztować 11 EUR.", "idempotency_key": "mem-004-pocketwave-new", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-current-price", "type": "ask", "at": "2026-09-02T09:00:00+01:00", "question": "What am I paying for PocketWave now?", "expect": {"include": ["PocketWave", "11 EUR"], "exclude": ["9 EUR as the current price"], "evidence": "required"}},
+      {"id": "ask-price-history", "type": "ask", "at": "2026-09-02T09:01:00+01:00", "question": "What changed about PocketWave's price?", "expect": {"include": ["9 EUR", "11 EUR"], "evidence": "required", "uncertainty": "not_required"}}
+    ],
+    "manual_observations": ["The old amount belongs in history, not in the current-value answer. The change date should be interpreted in the case timezone."]
+  },
+  {
+    "case_id": "MEM-005",
+    "title": "Find the spare charger in a named suitcase",
+    "locale": "en-US",
+    "tags": ["memory", "location", "possession", "cross-capture"],
+    "initial_time": "2026-03-06T08:00:00-05:00",
+    "timezone": "America/New_York",
+    "user_outcome": "The user can retrieve the storage location of a spare charger from an ordinary sentence.",
+    "steps": [
+      {"id": "capture-charger-location", "type": "capture", "at": "2026-03-06T08:00:00-05:00", "text": "I left the spare charger in the blue suitcase.", "idempotency_key": "mem-005-charger", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-charger-location", "type": "ask", "at": "2026-03-07T08:00:00-05:00", "question": "Where did I leave the spare charger?", "expect": {"include": ["blue suitcase"], "evidence": "required"}},
+      {"id": "memory-charger-location", "type": "memory", "at": "2026-03-07T08:01:00-05:00", "expect": {"include": ["spare charger", "blue suitcase"], "evidence": "required"}}
+    ],
+    "manual_observations": ["Do not require a tag such as 'travel' or 'electronics' to recall the location."]
+  },
+  {
+    "case_id": "MEM-006",
+    "title": "Preserve a birthday as a personal fact",
+    "locale": "en-US",
+    "tags": ["memory", "people", "date", "simple-recall"],
+    "initial_time": "2026-03-08T08:00:00-05:00",
+    "timezone": "America/New_York",
+    "user_outcome": "The user's later question about Marta returns November 3 and cites the birthday capture.",
+    "steps": [
+      {"id": "capture-birthday", "type": "capture", "at": "2026-03-08T08:00:00-05:00", "text": "Marta's birthday is November 3.", "idempotency_key": "mem-006-marta", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-birthday", "type": "ask", "at": "2026-04-01T08:00:00-04:00", "question": "When is Marta's birthday?", "expect": {"include": ["November 3"], "evidence": "required"}},
+      {"id": "memory-birthday", "type": "memory", "at": "2026-04-01T08:01:00-04:00", "expect": {"include": ["Marta", "November 3"], "evidence": "required"}}
+    ],
+    "manual_observations": ["Date formatting can be localized, but the stored day and month must remain correct."]
+  },
+  {
+    "case_id": "MEM-007",
+    "title": "A moved dentist appointment replaces the old time",
+    "locale": "en-US",
+    "tags": ["memory", "appointment", "correction", "rescheduled", "attention"],
+    "initial_time": "2026-03-09T09:00:00-04:00",
+    "timezone": "America/New_York",
+    "user_outcome": "The Thursday 16:30 appointment is treated as current, while Tuesday is retained as history and no stale Tuesday reminder remains active.",
+    "steps": [
+      {"id": "capture-old-appointment", "type": "capture", "at": "2026-03-09T09:00:00-04:00", "text": "The dentist is on Tuesday at 10:00.", "idempotency_key": "mem-007-dentist-old", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "capture-moved-appointment", "type": "capture", "at": "2026-03-10T09:00:00-04:00", "text": "The dentist moved my appointment from Tuesday to Thursday at 16:30.", "idempotency_key": "mem-007-dentist-new", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "check-new-appointment", "type": "attention", "at": "2026-03-10T09:05:00-04:00", "expect": {"include": ["Thursday", "16:30"], "exclude": ["Tuesday at 10:00"], "actionable": true, "evidence": "required"}},
+      {"id": "ask-dentist", "type": "ask", "at": "2026-03-10T09:06:00-04:00", "question": "When is my dentist appointment now?", "expect": {"include": ["Thursday", "16:30"], "exclude": ["Tuesday"], "evidence": "required"}}
+    ],
+    "manual_observations": ["A correction should update the active reminder without erasing the original evidence or presenting both times as equally current."]
+  },
+  {
+    "case_id": "MEM-008",
+    "title": "A direct correction changes the key location",
+    "locale": "en-US",
+    "tags": ["memory", "correction", "contradiction", "location", "undo-adjacent"],
+    "initial_time": "2026-03-11T08:00:00-04:00",
+    "timezone": "America/New_York",
+    "user_outcome": "The later correction makes the desk the current location while keeping the earlier Mum's-house statement auditable as superseded evidence.",
+    "steps": [
+      {"id": "capture-old-keys", "type": "capture", "at": "2026-03-11T08:00:00-04:00", "text": "Klucze do piwnicy są u mamy.", "idempotency_key": "mem-008-keys-old", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "capture-correction", "type": "capture", "at": "2026-03-11T08:30:00-04:00", "text": "Actually ignore what I said about the keys, I found them in my desk.", "idempotency_key": "mem-008-keys-corrected", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-current-keys", "type": "ask", "at": "2026-03-11T09:00:00-04:00", "question": "Where are the basement keys now?", "expect": {"include": ["desk"], "exclude": ["at Mum's"], "evidence": "required"}},
+      {"id": "memory-key-history", "type": "memory", "at": "2026-03-11T09:01:00-04:00", "expect": {"include": ["desk", "correction"], "evidence": "required"}}
+    ],
+    "manual_observations": ["The word 'actually' and explicit retraction language should be respected without deleting the raw first capture."]
+  },
+  {
+    "case_id": "MEM-009",
+    "title": "Keep a warranty date visibly uncertain",
+    "locale": "en-GB",
+    "tags": ["memory", "uncertain", "unknown", "maintenance", "date"],
+    "initial_time": "2026-03-12T08:00:00+00:00",
+    "timezone": "Europe/London",
+    "user_outcome": "The possible December warranty expiry is surfaced as uncertain, not presented as a confirmed date or silently omitted.",
+    "steps": [
+      {"id": "capture-warranty", "type": "capture", "at": "2026-03-12T08:00:00+00:00", "text": "I think the boiler warranty might expire in December, not sure.", "idempotency_key": "mem-009-warranty", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-warranty", "type": "ask", "at": "2026-03-13T08:00:00+00:00", "question": "When does the boiler warranty expire?", "expect": {"include": ["December"], "evidence": "required", "uncertainty": "required"}},
+      {"id": "check-warranty-attention", "type": "attention", "at": "2026-03-13T08:01:00+00:00", "expect": {"include": ["boiler", "uncertain"], "uncertainty": "required"}}
+    ],
+    "manual_observations": ["Unknown or uncertain must be a first-class answer state; do not convert it to a definite December deadline."]
+  },
+  {
+    "case_id": "MEM-010",
+    "title": "A renewal note can say not to cancel yet",
+    "locale": "en-US",
+    "tags": ["memory", "subscription", "preference", "approval-boundary", "duplicate"],
+    "initial_time": "2026-03-13T08:00:00-04:00",
+    "timezone": "America/New_York",
+    "user_outcome": "The user can recall the instruction not to cancel Netflix and the repeated USB-cable purchase, while the product does not cancel anything autonomously.",
+    "steps": [
+      {"id": "capture-netflix", "type": "capture", "at": "2026-03-13T08:00:00-04:00", "text": "Don't cancel Netflix yet.", "idempotency_key": "mem-010-netflix", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "capture-usb-repeat", "type": "capture", "at": "2026-03-13T08:02:00-04:00", "text": "Bought the same USB cable again.", "idempotency_key": "mem-010-usb-repeat", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-netflix", "type": "ask", "at": "2026-03-14T08:00:00-04:00", "question": "What did I say about Netflix?", "expect": {"include": ["don't cancel", "yet"], "evidence": "required"}},
+      {"id": "ask-usb-repeat", "type": "ask", "at": "2026-03-14T08:01:00-04:00", "question": "What did I buy again?", "expect": {"include": ["USB cable", "again"], "evidence": "required"}},
+      {"id": "check-netflix-attention", "type": "attention", "at": "2026-03-14T08:01:00-04:00", "expect": {"exclude": ["cancelled"], "not_urgent": true}}
+    ],
+    "manual_observations": ["This is a user instruction or preference, not permission for Blackhole to perform a cancellation."]
+  }
+]

@@ -1,0 +1,163 @@
+[
+  {
+    "case_id": "ASK-001",
+    "title": "Answer a simple spend question from a receipt note",
+    "locale": "pl-PL",
+    "tags": ["ask", "simple-recall", "purchase", "financial", "polish"],
+    "initial_time": "2026-06-01T09:00:00+02:00",
+    "timezone": "Europe/Warsaw",
+    "user_outcome": "The user can ask what the 74 zł payment was for and receive petrol as the observed purchase, with source evidence.",
+    "steps": [
+      {"id": "capture-petrol", "type": "capture", "at": "2026-06-01T09:00:00+02:00", "text": "Paid 74 zł for petrol.", "idempotency_key": "ask-001-petrol", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-petrol", "type": "ask", "at": "2026-06-01T12:00:00+02:00", "question": "What did I pay 74 zł for?", "expect": {"include": ["petrol", "74 zł"], "evidence": "required"}},
+      {"id": "memory-petrol", "type": "memory", "at": "2026-06-01T12:01:00+02:00", "expect": {"include": ["petrol"], "evidence": "required"}}
+    ],
+    "manual_observations": ["The answer should distinguish an observed payment from a guessed category or financial advice."]
+  },
+  {
+    "case_id": "ASK-002",
+    "title": "Current subscription value wins over an old value",
+    "locale": "en-GB",
+    "tags": ["ask", "current-value", "changed-fact", "subscription", "history"],
+    "initial_time": "2026-06-02T09:00:00+01:00",
+    "timezone": "Europe/London",
+    "user_outcome": "A current-value question returns the latest observed PocketWave amount and does not answer with the earlier price.",
+    "steps": [
+      {"id": "capture-pocketwave-old", "type": "capture", "at": "2026-06-02T09:00:00+01:00", "text": "PocketWave costs 9 EUR per month.", "idempotency_key": "ask-002-pocketwave-old", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "capture-pocketwave-current", "type": "capture", "at": "2026-06-15T09:00:00+01:00", "text": "PocketWave costs 11 EUR per month starting today.", "idempotency_key": "ask-002-pocketwave-current", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-pocketwave-current", "type": "ask", "at": "2026-06-16T09:00:00+01:00", "question": "What am I paying for PocketWave now?", "expect": {"include": ["11 EUR"], "exclude": ["9 EUR as the current price"], "evidence": "required"}}
+    ],
+    "manual_observations": ["Current state and historical state should be visibly distinct, especially when a user is checking a bill."]
+  },
+  {
+    "case_id": "ASK-003",
+    "title": "Explain what changed across two observations",
+    "locale": "en-US",
+    "tags": ["ask", "history", "what-changed", "changed-fact"],
+    "initial_time": "2026-06-03T09:00:00-04:00",
+    "timezone": "America/New_York",
+    "user_outcome": "A change question identifies both the old and new value and does not collapse the history into only the latest number.",
+    "steps": [
+      {"id": "capture-storage-old", "type": "capture", "at": "2026-06-03T09:00:00-04:00", "text": "The storage unit is 2 metres wide.", "idempotency_key": "ask-003-storage-old", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "capture-storage-new", "type": "capture", "at": "2026-06-04T09:00:00-04:00", "text": "Correction: the storage unit is 2.4 metres wide, not 2 metres.", "idempotency_key": "ask-003-storage-new", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-storage-change", "type": "ask", "at": "2026-06-05T09:00:00-04:00", "question": "What changed about the storage unit's width?", "expect": {"include": ["2 metres", "2.4 metres"], "evidence": "required"}},
+      {"id": "memory-storage-change", "type": "memory", "at": "2026-06-05T09:01:00-04:00", "expect": {"include": ["correction"], "evidence": "required"}}
+    ],
+    "manual_observations": ["The correction should be understandable to a user and should not silently rewrite the original capture."]
+  },
+  {
+    "case_id": "ASK-004",
+    "title": "Cross-entity question combines a preference and a gift idea",
+    "locale": "en-US",
+    "tags": ["ask", "cross-entity", "people", "gift-idea", "preference", "safety"],
+    "initial_time": "2026-06-06T09:00:00-04:00",
+    "timezone": "America/New_York",
+    "user_outcome": "When preparing a gift for Adam, the answer remembers both the suggested gift and that Adam does not eat peanuts.",
+    "steps": [
+      {"id": "capture-adam-diet", "type": "capture", "at": "2026-06-06T09:00:00-04:00", "text": "Remind me that Adam doesn't eat peanuts.", "idempotency_key": "ask-004-adam-diet", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "capture-adam-gift", "type": "capture", "at": "2026-06-06T09:05:00-04:00", "text": "Adam would probably like the blue hiking socks.", "idempotency_key": "ask-004-adam-gift", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-adam-gift", "type": "ask", "at": "2026-06-20T09:00:00-04:00", "question": "What should I remember when choosing a gift for Adam?", "expect": {"include": ["blue hiking socks", "doesn't eat peanuts"], "evidence": "required"}},
+      {"id": "attention-adam", "type": "attention", "at": "2026-06-20T09:01:00-04:00", "expect": {"exclude": ["urgent"], "not_urgent": true}}
+    ],
+    "manual_observations": ["Cross-capture retrieval should preserve the safety-relevant preference without inventing an allergy diagnosis."]
+  },
+  {
+    "case_id": "ASK-005",
+    "title": "List remembered locations across different objects",
+    "locale": "en-US",
+    "tags": ["ask", "list-question", "cross-entity", "location", "possession"],
+    "initial_time": "2026-06-07T09:00:00-04:00",
+    "timezone": "America/New_York",
+    "user_outcome": "A list question returns both stored-object locations instead of answering only with the most recently captured item.",
+    "steps": [
+      {"id": "capture-charger-list", "type": "capture", "at": "2026-06-07T09:00:00-04:00", "text": "The spare charger is in the blue suitcase.", "idempotency_key": "ask-005-charger", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "capture-keys-list", "type": "capture", "at": "2026-06-07T09:01:00-04:00", "text": "The garden keys are in the ceramic bowl by the door.", "idempotency_key": "ask-005-keys", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-locations", "type": "ask", "at": "2026-06-08T09:00:00-04:00", "question": "What locations have I recorded for things I might need?", "expect": {"include": ["blue suitcase", "ceramic bowl"], "evidence": "required"}}
+    ],
+    "manual_observations": ["A list answer should retain distinct objects and locations, not merge them into one vague 'near the door' result."]
+  },
+  {
+    "case_id": "ASK-006",
+    "title": "A question with no supporting evidence stays unanswered",
+    "locale": "en-GB",
+    "tags": ["ask", "no-evidence", "unknown", "safety"],
+    "initial_time": "2026-06-08T09:00:00+01:00",
+    "timezone": "Europe/London",
+    "user_outcome": "When no passport number was captured, Blackhole says it does not have supporting evidence instead of inventing one.",
+    "steps": [
+      {"id": "capture-unrelated-note", "type": "capture", "at": "2026-06-08T09:00:00+01:00", "text": "I should renew my library card sometime this summer.", "idempotency_key": "ask-006-unrelated", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-passport", "type": "ask", "at": "2026-06-09T09:00:00+01:00", "question": "What is my passport number?", "expect": {"exclude": ["123", "passport number"], "evidence": "required", "uncertainty": "required"}},
+      {"id": "check-no-passport-attention", "type": "attention", "at": "2026-06-09T09:01:00+01:00", "expect": {"exclude": ["passport number"], "not_urgent": true}}
+    ],
+    "manual_observations": ["The product should explicitly say when it lacks evidence; an empty or confidently formatted answer is not acceptable."]
+  },
+  {
+    "case_id": "ASK-007",
+    "title": "An ambiguous keys question asks for clarification",
+    "locale": "pl-PL",
+    "tags": ["ask", "ambiguous", "uncertain", "location", "polish"],
+    "initial_time": "2026-06-10T09:00:00+02:00",
+    "timezone": "Europe/Warsaw",
+    "user_outcome": "With house keys in one place and bike-lock keys in another, a vague 'where are the keys?' question remains explicit about the ambiguity.",
+    "steps": [
+      {"id": "capture-house-keys", "type": "capture", "at": "2026-06-10T09:00:00+02:00", "text": "Klucze do domu są w kieszeni kurtki.", "idempotency_key": "ask-007-house-keys", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "capture-bike-keys", "type": "capture", "at": "2026-06-10T09:01:00+02:00", "text": "Kluczyk do blokady roweru jest w szufladzie przy wejściu.", "idempotency_key": "ask-007-bike-keys", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-ambiguous-keys", "type": "ask", "at": "2026-06-11T09:00:00+02:00", "question": "Gdzie są klucze?", "expect": {"include": ["niejednoznacz"], "evidence": "required", "uncertainty": "required"}}
+    ],
+    "manual_observations": ["The answer may ask which keys the user means or list both clearly; silently choosing one is unsafe."]
+  },
+  {
+    "case_id": "TIME-008",
+    "title": "Today and tomorrow remain separate attention dates",
+    "locale": "en-US",
+    "tags": ["attention", "today", "tomorrow", "temporal", "ask", "deadline"],
+    "initial_time": "2026-06-12T09:00:00-04:00",
+    "timezone": "America/New_York",
+    "user_outcome": "The today item is surfaced now, the tomorrow item is not mislabeled as due today, and the next day's view changes correctly.",
+    "steps": [
+      {"id": "capture-school-call", "type": "capture", "at": "2026-06-12T09:00:00-04:00", "text": "Call the school today before 17:00.", "idempotency_key": "time-008-school", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "capture-library-return", "type": "capture", "at": "2026-06-12T09:01:00-04:00", "text": "Return the library books tomorrow.", "idempotency_key": "time-008-library", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "check-today", "type": "attention", "at": "2026-06-12T09:05:00-04:00", "expect": {"include": ["school", "today"], "exclude": ["library books as due today"], "actionable": true, "evidence": "required"}},
+      {"id": "ask-today", "type": "ask", "at": "2026-06-12T09:06:00-04:00", "question": "What do I need to do today?", "expect": {"include": ["school"], "exclude": ["library books"], "evidence": "required"}},
+      {"id": "advance-next-day", "type": "advance_time", "to": "2026-06-13T09:00:00-04:00"},
+      {"id": "check-tomorrow-now", "type": "attention", "at": "2026-06-13T09:01:00-04:00", "expect": {"include": ["library books"], "actionable": true, "evidence": "required"}}
+    ],
+    "manual_observations": ["Relative dates should be resolved against the capture and user timezone, not against an unrelated server clock."]
+  },
+  {
+    "case_id": "TIME-009",
+    "title": "Overdue, completed, and cancelled items change state honestly",
+    "locale": "en-GB",
+    "tags": ["attention", "overdue", "completed", "cancelled", "correction", "lifecycle"],
+    "initial_time": "2026-06-09T09:00:00+01:00",
+    "timezone": "Europe/London",
+    "user_outcome": "An uncompleted deadline becomes overdue, a completion removes its overdue status, and a cancelled appointment does not remain active.",
+    "steps": [
+      {"id": "capture-expense-deadline", "type": "capture", "at": "2026-06-09T09:00:00+01:00", "text": "Submit the expense report by June 10.", "idempotency_key": "time-009-expense", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "advance-past-deadline", "type": "advance_time", "to": "2026-06-11T09:00:00+01:00"},
+      {"id": "check-overdue", "type": "attention", "at": "2026-06-11T09:01:00+01:00", "expect": {"include": ["expense", "overdue"], "actionable": true, "evidence": "required"}},
+      {"id": "capture-completion", "type": "capture", "at": "2026-06-11T09:05:00+01:00", "text": "I submitted the expense report this morning.", "idempotency_key": "time-009-expense-done", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "check-completed", "type": "attention", "at": "2026-06-11T09:06:00+01:00", "expect": {"include": ["completed"], "exclude": ["overdue"], "evidence": "required"}},
+      {"id": "capture-cancelled-dentist", "type": "capture", "at": "2026-06-11T09:10:00+01:00", "text": "The dentist appointment for June 20 is cancelled.", "idempotency_key": "time-009-dentist-cancelled", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "check-cancelled", "type": "attention", "at": "2026-06-11T09:11:00+01:00", "expect": {"exclude": ["dentist as an active appointment"], "not_urgent": true}}
+    ],
+    "manual_observations": ["Lifecycle words such as submitted and cancelled should change active attention while preserving their source history."]
+  },
+  {
+    "case_id": "UNDO-010",
+    "title": "Undo a mistaken location but keep the later correction",
+    "locale": "en-US",
+    "tags": ["undo", "correction", "location", "memory", "evidence"],
+    "initial_time": "2026-06-14T09:00:00-04:00",
+    "timezone": "America/New_York",
+    "user_outcome": "Undo removes the mistaken capture from active state, and a later correct location remains available and is not erased by the undo.",
+    "steps": [
+      {"id": "capture-wrong-location", "type": "capture", "capture_id": "wrong-location", "at": "2026-06-14T09:00:00-04:00", "text": "The spare house key is in the hall drawer.", "idempotency_key": "undo-010-wrong", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "undo-wrong-location", "type": "undo", "at": "2026-06-14T09:01:00-04:00", "target_capture_id": "wrong-location", "expect": {"removed_from_active": ["hall drawer"], "raw_preserved": true}},
+      {"id": "capture-correct-location", "type": "capture", "at": "2026-06-14T09:02:00-04:00", "text": "Correction: the spare house key is in the blue suitcase.", "idempotency_key": "undo-010-correct", "expect": {"saved": true, "processing": "pending"}},
+      {"id": "ask-after-undo", "type": "ask", "at": "2026-06-14T09:05:00-04:00", "question": "Where is the spare house key?", "expect": {"include": ["blue suitcase"], "exclude": ["hall drawer"], "evidence": "required"}},
+      {"id": "memory-after-undo", "type": "memory", "at": "2026-06-14T09:06:00-04:00", "expect": {"include": ["blue suitcase"], "exclude": ["hall drawer as current"], "evidence": "required"}}
+    ],
+    "manual_observations": ["Undo is a user correction to active state, not permission to erase the immutable original evidence."]
+  }
+]

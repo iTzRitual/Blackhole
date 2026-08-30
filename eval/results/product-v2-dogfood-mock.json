@@ -1,0 +1,4682 @@
+{
+  "report_type": "product-v2-dogfood-acceptance",
+  "suite": "Product V2 dogfood / acceptance suite",
+  "generated_at": "2026-08-30T10:39:23.674526+00:00",
+  "adapter": "mock",
+  "live_provider_used": false,
+  "target_provider_calls_possible": false,
+  "case_count": 50,
+  "case_status_counts": {
+    "PASS": 2,
+    "FAIL": 0,
+    "PARTIAL": 48,
+    "NOT TESTED": 0
+  },
+  "coverage": {
+    "capture": {
+      "case_count": 50,
+      "case_ids": [
+        "CAP-001",
+        "CAP-002",
+        "CAP-003",
+        "CAP-004",
+        "CAP-005",
+        "CAP-006",
+        "CAP-007",
+        "CAP-008",
+        "CAP-009",
+        "CAP-010",
+        "MEM-001",
+        "MEM-002",
+        "MEM-003",
+        "MEM-004",
+        "MEM-005",
+        "MEM-006",
+        "MEM-007",
+        "MEM-008",
+        "MEM-009",
+        "MEM-010",
+        "OW-001",
+        "OW-002",
+        "OW-003",
+        "OW-004",
+        "OW-005",
+        "OW-006",
+        "OW-007",
+        "OW-008",
+        "OW-009",
+        "OW-010",
+        "ATT-001",
+        "ATT-002",
+        "ATT-003",
+        "ATT-004",
+        "ATT-005",
+        "REL-006",
+        "REL-007",
+        "REL-008",
+        "REL-009",
+        "REL-010",
+        "ASK-001",
+        "ASK-002",
+        "ASK-003",
+        "ASK-004",
+        "ASK-005",
+        "ASK-006",
+        "ASK-007",
+        "TIME-008",
+        "TIME-009",
+        "UNDO-010"
+      ]
+    },
+    "memory": {
+      "case_count": 30,
+      "case_ids": [
+        "CAP-009",
+        "MEM-001",
+        "MEM-002",
+        "MEM-003",
+        "MEM-004",
+        "MEM-005",
+        "MEM-006",
+        "MEM-007",
+        "MEM-008",
+        "MEM-009",
+        "MEM-010",
+        "OW-001",
+        "OW-002",
+        "OW-003",
+        "OW-004",
+        "OW-005",
+        "OW-006",
+        "OW-007",
+        "OW-008",
+        "OW-009",
+        "OW-010",
+        "ATT-001",
+        "ATT-002",
+        "ATT-003",
+        "ATT-004",
+        "ATT-005",
+        "REL-008",
+        "ASK-001",
+        "ASK-003",
+        "UNDO-010"
+      ]
+    },
+    "attention": {
+      "case_count": 19,
+      "case_ids": [
+        "CAP-001",
+        "CAP-002",
+        "CAP-003",
+        "CAP-004",
+        "CAP-005",
+        "CAP-006",
+        "CAP-007",
+        "MEM-002",
+        "MEM-007",
+        "MEM-009",
+        "MEM-010",
+        "OW-003",
+        "OW-005",
+        "OW-009",
+        "OW-010",
+        "ASK-004",
+        "ASK-006",
+        "TIME-008",
+        "TIME-009"
+      ]
+    },
+    "ask": {
+      "case_count": 46,
+      "case_ids": [
+        "CAP-001",
+        "CAP-002",
+        "CAP-003",
+        "CAP-004",
+        "CAP-005",
+        "CAP-006",
+        "CAP-007",
+        "CAP-009",
+        "CAP-010",
+        "MEM-001",
+        "MEM-002",
+        "MEM-003",
+        "MEM-004",
+        "MEM-005",
+        "MEM-006",
+        "MEM-007",
+        "MEM-008",
+        "MEM-009",
+        "MEM-010",
+        "OW-001",
+        "OW-002",
+        "OW-003",
+        "OW-004",
+        "OW-005",
+        "OW-006",
+        "OW-007",
+        "OW-008",
+        "OW-009",
+        "OW-010",
+        "ATT-001",
+        "ATT-002",
+        "ATT-003",
+        "ATT-005",
+        "REL-006",
+        "REL-007",
+        "REL-008",
+        "REL-009",
+        "ASK-001",
+        "ASK-002",
+        "ASK-003",
+        "ASK-004",
+        "ASK-005",
+        "ASK-006",
+        "ASK-007",
+        "TIME-008",
+        "UNDO-010"
+      ]
+    },
+    "undo": {
+      "case_count": 1,
+      "case_ids": [
+        "UNDO-010"
+      ]
+    },
+    "attachments": {
+      "case_count": 6,
+      "case_ids": [
+        "OW-006",
+        "ATT-001",
+        "ATT-002",
+        "ATT-003",
+        "ATT-004",
+        "ATT-005"
+      ]
+    },
+    "reliability": {
+      "case_count": 9,
+      "case_ids": [
+        "CAP-008",
+        "CAP-010",
+        "ATT-004",
+        "ATT-005",
+        "REL-006",
+        "REL-007",
+        "REL-008",
+        "REL-009",
+        "REL-010"
+      ]
+    },
+    "open_world": {
+      "case_count": 11,
+      "case_ids": [
+        "MEM-003",
+        "OW-001",
+        "OW-002",
+        "OW-003",
+        "OW-004",
+        "OW-005",
+        "OW-006",
+        "OW-007",
+        "OW-008",
+        "OW-009",
+        "OW-010"
+      ]
+    },
+    "false_positive_attention": {
+      "case_count": 4,
+      "case_ids": [
+        "CAP-004",
+        "CAP-005",
+        "CAP-006",
+        "CAP-007"
+      ]
+    }
+  },
+  "quality_gates": [
+    {
+      "gate_id": "capture_durable_save",
+      "status": "PASS",
+      "detail": "saved=True, processing='pending'"
+    },
+    {
+      "gate_id": "capture_does_not_wait_for_provider",
+      "status": "PASS",
+      "detail": "provider_calls_during_capture=0"
+    },
+    {
+      "gate_id": "duplicate_submit_has_one_active_capture",
+      "status": "PASS",
+      "detail": "capture_count=1, duplicate=True"
+    },
+    {
+      "gate_id": "provider_failure_is_retryable",
+      "status": "PASS",
+      "detail": "failure_ok=False, retry_ok=True, processed=1"
+    },
+    {
+      "gate_id": "restart_preserves_pending_state",
+      "status": "PASS",
+      "detail": "state_preserved=True, captures=1"
+    },
+    {
+      "gate_id": "attachment_receipt_has_content_fingerprint",
+      "status": "PASS",
+      "detail": "fingerprint_present=True"
+    },
+    {
+      "gate_id": "harness_does_not_call_live_provider",
+      "status": "PASS",
+      "detail": "MockHostAdapter has no provider client; provider_calls measures only simulated failures."
+    }
+  ],
+  "limitations": [
+    "Cases are visible development acceptance tests, not unseen generalization evidence.",
+    "The mock adapter covers transport and reliability plumbing only; absent semantic surfaces are reported as NOT TESTED.",
+    "The HTTP adapter does not reset or restart a target Host; isolate a real run outside the harness."
+  ],
+  "cases": [
+    {
+      "case_id": "CAP-001",
+      "title": "A taxi in ten minutes is an actionable near-term reminder",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-taxi",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture has durable-looking receipt",
+              "detail": "saved=True, event_id='mock-CAP-001-capture-taxi'"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            },
+            {
+              "status": "PASS",
+              "name": "capture message",
+              "detail": "expected substring 'Saved.', observed 'Saved.'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-CAP-001-capture-taxi",
+              "capture_id": "capture-taxi",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "check-attention",
+          "type": "attention",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "attention surface",
+              "detail": "mock semantic Attention surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Attention surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "ask-next",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "A normal person should not need to create a task or choose a category before the taxi note is safely saved."
+      ]
+    },
+    {
+      "case_id": "CAP-002",
+      "title": "Picking up the children in ten minutes",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-pickup",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-CAP-002-capture-pickup",
+              "capture_id": "capture-pickup",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "check-pickup",
+          "type": "attention",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "attention surface",
+              "detail": "mock semantic Attention surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Attention surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "ask-pickup",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "The relative time should be shown against the user's local clock and should not drift by an hour."
+      ]
+    },
+    {
+      "case_id": "CAP-003",
+      "title": "Parking permit renewal has a real deadline",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-parking",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-CAP-003-capture-parking",
+              "capture_id": "capture-parking",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "check-parking",
+          "type": "attention",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "attention surface",
+              "detail": "mock semantic Attention surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Attention surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "ask-parking",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "A clear deadline should not disappear just because it was captured as an ordinary sentence."
+      ]
+    },
+    {
+      "case_id": "CAP-004",
+      "title": "A brother's flight next month is context, not urgent attention",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-flight",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-CAP-004-capture-flight",
+              "capture_id": "capture-flight",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "check-no-urgent-flight",
+          "type": "attention",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "attention surface",
+              "detail": "mock semantic Attention surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Attention surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "ask-flight",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "The note may be useful memory, but it should not interrupt the user as if a task were due now."
+      ]
+    },
+    {
+      "case_id": "CAP-005",
+      "title": "A possible bike purchase next year is not a task",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-bike",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-CAP-005-capture-bike",
+              "capture_id": "capture-bike",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "check-no-urgent-bike",
+          "type": "attention",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "attention surface",
+              "detail": "mock semantic Attention surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Attention surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "ask-bike",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "Do not silently turn 'might' into a commitment or a deadline."
+      ]
+    },
+    {
+      "case_id": "CAP-006",
+      "title": "A contract's notice clause is background information",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-notice",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-CAP-006-capture-notice",
+              "capture_id": "capture-notice",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "check-no-urgent-notice",
+          "type": "attention",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "attention surface",
+              "detail": "mock semantic Attention surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Attention surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "ask-notice",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "A mentioned duration is not necessarily a user commitment or a dated deadline."
+      ]
+    },
+    {
+      "case_id": "CAP-007",
+      "title": "A past outing should stay a memory",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-outing",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-CAP-007-capture-outing",
+              "capture_id": "capture-outing",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "check-no-urgent-outing",
+          "type": "attention",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "attention surface",
+              "detail": "mock semantic Attention surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Attention surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "ask-outing",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "Past-tense recall should not be misread as an outstanding action."
+      ]
+    },
+    {
+      "case_id": "CAP-008",
+      "title": "Capture remains available while the provider is unavailable",
+      "status": "PASS",
+      "steps": [
+        {
+          "step_id": "provider-offline",
+          "type": "set_provider",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "provider fixture configured",
+              "detail": "unavailable"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "provider_mode": "unavailable"
+          }
+        },
+        {
+          "step_id": "capture-leak",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture has durable-looking receipt",
+              "detail": "saved=True, event_id='mock-CAP-008-capture-leak'"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-CAP-008-capture-leak",
+              "capture_id": "capture-leak",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "process-fails",
+          "type": "process",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "processing failure is retryable",
+              "detail": "response=_supported true ok false _status 503 code provider_unavailable error provider unavailable; retry available processing status failed failed 1 failed_count 1 pending 0"
+            },
+            {
+              "status": "PASS",
+              "name": "processing status",
+              "detail": "expected 'failed', observed 'failed'"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "code": "provider_unavailable",
+            "error": "provider unavailable; retry available",
+            "processing": {
+              "status": "failed",
+              "failed": 1,
+              "failed_count": 1,
+              "pending": 0
+            }
+          }
+        },
+        {
+          "step_id": "provider-back",
+          "type": "set_provider",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "provider fixture configured",
+              "detail": "available"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "provider_mode": "available"
+          }
+        },
+        {
+          "step_id": "retry-leak",
+          "type": "retry",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "processing completes work",
+              "detail": "ok=True, processed=1"
+            },
+            {
+              "status": "PASS",
+              "name": "processing status",
+              "detail": "expected 'processed', observed 'processed'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "processing": {
+              "status": "processed",
+              "processed": 1,
+              "pending": 0,
+              "failed": 0
+            }
+          }
+        }
+      ],
+      "manual_observations": [
+        "The user should see an honest retryable processing message, not a lost capture or a fabricated interpretation."
+      ]
+    },
+    {
+      "case_id": "CAP-009",
+      "title": "Two quick captures remain two distinct thoughts",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-charger",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-CAP-009-capture-charger",
+              "capture_id": "capture-charger",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "capture-birthday",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-CAP-009-capture-birthday",
+              "capture_id": "capture-birthday",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-charger",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "Neither capture should overwrite the other or force the user into a queue-management screen."
+      ]
+    },
+    {
+      "case_id": "CAP-010",
+      "title": "A double click does not duplicate the active note",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "first-submit",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            },
+            {
+              "status": "PASS",
+              "name": "duplicate response",
+              "detail": "expected False, observed False"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-CAP-010-first-submit",
+              "capture_id": "first-submit",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "second-submit",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "duplicate response",
+              "detail": "expected True, observed True"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-CAP-010-first-submit",
+              "capture_id": "first-submit",
+              "duplicate": true
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "process-oat-milk",
+          "type": "process",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "processing completes work",
+              "detail": "ok=True, processed=1"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "processing": {
+              "status": "processed",
+              "processed": 1,
+              "pending": 0,
+              "failed": 0
+            }
+          }
+        },
+        {
+          "step_id": "process-oat-milk-again",
+          "type": "process",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "repeated processing is a no-op",
+              "detail": "ok=True, processed=0"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "processing": {
+              "status": "fresh",
+              "processed": 0,
+              "pending": 0,
+              "failed": 0
+            }
+          }
+        },
+        {
+          "step_id": "ask-oat-milk",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "The user should be able to trust that tapping twice did not silently create two reminders."
+      ]
+    },
+    {
+      "case_id": "MEM-001",
+      "title": "Remember where the basement keys are",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-keys",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-MEM-001-capture-keys",
+              "capture_id": "capture-keys",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-keys",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "memory-keys",
+          "type": "memory",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "memory surface",
+              "detail": "mock semantic Memory surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Memory surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "Location is useful memory even though it is not a task, subscription, or financial record."
+      ]
+    },
+    {
+      "case_id": "MEM-002",
+      "title": "Connect a car noise with a cautious mechanic opinion",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-noise",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-MEM-002-capture-noise",
+              "capture_id": "capture-noise",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "capture-mechanic",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-MEM-002-capture-mechanic",
+              "capture_id": "capture-mechanic",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-noise",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "attention-noise",
+          "type": "attention",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "attention surface",
+              "detail": "mock semantic Attention surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Attention surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "Do not report the bearing as a confirmed repair diagnosis unless the source says it was confirmed."
+      ]
+    },
+    {
+      "case_id": "MEM-003",
+      "title": "Keep a casual food preference",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-pasta",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-MEM-003-capture-pasta",
+              "capture_id": "capture-pasta",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-kuba",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "memory-kuba",
+          "type": "memory",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "memory surface",
+              "detail": "mock semantic Memory surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Memory surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "The product should retain useful social details even when they do not fit a predefined business category."
+      ]
+    },
+    {
+      "case_id": "MEM-004",
+      "title": "Show the current PocketWave price and its history",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-old-price",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-MEM-004-capture-old-price",
+              "capture_id": "capture-old-price",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "capture-new-price",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-MEM-004-capture-new-price",
+              "capture_id": "capture-new-price",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-current-price",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "ask-price-history",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "The old amount belongs in history, not in the current-value answer. The change date should be interpreted in the case timezone."
+      ]
+    },
+    {
+      "case_id": "MEM-005",
+      "title": "Find the spare charger in a named suitcase",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-charger-location",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-MEM-005-capture-charger-location",
+              "capture_id": "capture-charger-location",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-charger-location",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "memory-charger-location",
+          "type": "memory",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "memory surface",
+              "detail": "mock semantic Memory surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Memory surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "Do not require a tag such as 'travel' or 'electronics' to recall the location."
+      ]
+    },
+    {
+      "case_id": "MEM-006",
+      "title": "Preserve a birthday as a personal fact",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-birthday",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-MEM-006-capture-birthday",
+              "capture_id": "capture-birthday",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-birthday",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "memory-birthday",
+          "type": "memory",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "memory surface",
+              "detail": "mock semantic Memory surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Memory surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "Date formatting can be localized, but the stored day and month must remain correct."
+      ]
+    },
+    {
+      "case_id": "MEM-007",
+      "title": "A moved dentist appointment replaces the old time",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-old-appointment",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-MEM-007-capture-old-appointment",
+              "capture_id": "capture-old-appointment",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "capture-moved-appointment",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-MEM-007-capture-moved-appointment",
+              "capture_id": "capture-moved-appointment",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "check-new-appointment",
+          "type": "attention",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "attention surface",
+              "detail": "mock semantic Attention surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Attention surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "ask-dentist",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "A correction should update the active reminder without erasing the original evidence or presenting both times as equally current."
+      ]
+    },
+    {
+      "case_id": "MEM-008",
+      "title": "A direct correction changes the key location",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-old-keys",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-MEM-008-capture-old-keys",
+              "capture_id": "capture-old-keys",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "capture-correction",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-MEM-008-capture-correction",
+              "capture_id": "capture-correction",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-current-keys",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "memory-key-history",
+          "type": "memory",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "memory surface",
+              "detail": "mock semantic Memory surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Memory surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "The word 'actually' and explicit retraction language should be respected without deleting the raw first capture."
+      ]
+    },
+    {
+      "case_id": "MEM-009",
+      "title": "Keep a warranty date visibly uncertain",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-warranty",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-MEM-009-capture-warranty",
+              "capture_id": "capture-warranty",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-warranty",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "check-warranty-attention",
+          "type": "attention",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "attention surface",
+              "detail": "mock semantic Attention surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Attention surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "Unknown or uncertain must be a first-class answer state; do not convert it to a definite December deadline."
+      ]
+    },
+    {
+      "case_id": "MEM-010",
+      "title": "A renewal note can say not to cancel yet",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-netflix",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-MEM-010-capture-netflix",
+              "capture_id": "capture-netflix",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "capture-usb-repeat",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-MEM-010-capture-usb-repeat",
+              "capture_id": "capture-usb-repeat",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-netflix",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "ask-usb-repeat",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "check-netflix-attention",
+          "type": "attention",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "attention surface",
+              "detail": "mock semantic Attention surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Attention surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "This is a user instruction or preference, not permission for Blackhole to perform a cancellation."
+      ]
+    },
+    {
+      "case_id": "OW-001",
+      "title": "A recipe change is a useful household memory",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-recipe",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-OW-001-capture-recipe",
+              "capture_id": "capture-recipe",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-recipe",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "memory-recipe",
+          "type": "memory",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "memory surface",
+              "detail": "mock semantic Memory surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Memory surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "A free-form cooking note should remain useful without being forced into a task or shopping category."
+      ]
+    },
+    {
+      "case_id": "OW-002",
+      "title": "A Wi-Fi workaround should be retrievable",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-wifi",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-OW-002-capture-wifi",
+              "capture_id": "capture-wifi",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-wifi",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "memory-wifi",
+          "type": "memory",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "memory surface",
+              "detail": "mock semantic Memory surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Memory surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "The system should preserve the detail as an observation, not claim that restarting always fixes the network."
+      ]
+    },
+    {
+      "case_id": "OW-003",
+      "title": "Remember a gift idea for a friend",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-gift",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-OW-003-capture-gift",
+              "capture_id": "capture-gift",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-gift",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "check-gift-attention",
+          "type": "attention",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "attention surface",
+              "detail": "mock semantic Attention surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Attention surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "A gift idea is memory until the user asks for a task or purchase action."
+      ]
+    },
+    {
+      "case_id": "OW-004",
+      "title": "Store a shoe size from a casual conversation",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-shoe-size",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-OW-004-capture-shoe-size",
+              "capture_id": "capture-shoe-size",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-shoe-size",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "memory-shoe-size",
+          "type": "memory",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "memory surface",
+              "detail": "mock semantic Memory surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Memory surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "The detail should be retrievable even though it is neither a deadline nor a subscription."
+      ]
+    },
+    {
+      "case_id": "OW-005",
+      "title": "Recall a small conversation detail",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-conversation",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-OW-005-capture-conversation",
+              "capture_id": "capture-conversation",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-noor",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "check-noor-attention",
+          "type": "attention",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "attention surface",
+              "detail": "mock semantic Attention surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Attention surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "Conversation memory should not be lost simply because it lacks a predefined entity type."
+      ]
+    },
+    {
+      "case_id": "OW-006",
+      "title": "Understand what a landlord PDF represents",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-lease",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            },
+            {
+              "status": "PASS",
+              "name": "attachment receipt",
+              "detail": "attachment receipt present=True"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-OW-006-capture-lease",
+              "capture_id": "capture-lease",
+              "duplicate": false,
+              "attachment": {
+                "filename": "landlord-new-lease.pdf",
+                "mime_type": "application/pdf",
+                "sha256": "5cf65dc756b6308e63462411e03853e5f1f4f92a5229249ce5f2f5dcc3f27968",
+                "bytes": 649
+              }
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-lease",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "memory-lease",
+          "type": "memory",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "memory surface",
+              "detail": "mock semantic Memory surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Memory surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "The answer should link to or clearly identify the attached source; a bare unsupported label is not enough."
+      ]
+    },
+    {
+      "case_id": "OW-007",
+      "title": "Keep a pet-care observation",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-pet",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-OW-007-capture-pet",
+              "capture_id": "capture-pet",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-pet",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "memory-pet",
+          "type": "memory",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "memory surface",
+              "detail": "mock semantic Memory surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Memory surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "Do not infer an allergy, illness, or treatment from this observation alone."
+      ]
+    },
+    {
+      "case_id": "OW-008",
+      "title": "Recall a travel detail without a booking form",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-travel",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-OW-008-capture-travel",
+              "capture_id": "capture-travel",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-travel",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "memory-travel",
+          "type": "memory",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "memory surface",
+              "detail": "mock semantic Memory surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Memory surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "Place-specific travel knowledge should survive as memory even without importing a reservation."
+      ]
+    },
+    {
+      "case_id": "OW-009",
+      "title": "Remember a household maintenance detail",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-radiator",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-OW-009-capture-radiator",
+              "capture_id": "capture-radiator",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-radiator",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "attention-radiator",
+          "type": "attention",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "attention surface",
+              "detail": "mock semantic Attention surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Attention surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "The product should distinguish a useful workaround from a confirmed repair or an automatically scheduled maintenance job."
+      ]
+    },
+    {
+      "case_id": "OW-010",
+      "title": "Preserve a vague observation without overclaiming",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-vague",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-OW-010-capture-vague",
+              "capture_id": "capture-vague",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-vague",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "attention-vague",
+          "type": "attention",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "attention surface",
+              "detail": "mock semantic Attention surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Attention surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "Missing cause must remain unknown; a useful recall answer can still quote the observation."
+      ]
+    },
+    {
+      "case_id": "ATT-001",
+      "title": "Image-only capture keeps a visual location clue",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-image",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture has durable-looking receipt",
+              "detail": "saved=True, event_id='mock-ATT-001-capture-image'"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            },
+            {
+              "status": "PASS",
+              "name": "attachment receipt",
+              "detail": "attachment receipt present=True"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-ATT-001-capture-image",
+              "capture_id": "capture-image",
+              "duplicate": false,
+              "attachment": {
+                "filename": "blue-suitcase.svg",
+                "mime_type": "image/svg+xml",
+                "sha256": "82195324ec85b9216d9d63a8d8f2f5db0aaaa7e372037772b450a8b214cf69da",
+                "bytes": 591
+              }
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-image",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "memory-image",
+          "type": "memory",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "memory surface",
+              "detail": "mock semantic Memory surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Memory surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "The user should get a saved confirmation even when the capture contains no text field."
+      ]
+    },
+    {
+      "case_id": "ATT-002",
+      "title": "PDF-only capture preserves the document",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-pdf",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture has durable-looking receipt",
+              "detail": "saved=True, event_id='mock-ATT-002-capture-pdf'"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            },
+            {
+              "status": "PASS",
+              "name": "attachment receipt",
+              "detail": "attachment receipt present=True"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-ATT-002-capture-pdf",
+              "capture_id": "capture-pdf",
+              "duplicate": false,
+              "attachment": {
+                "filename": "lease.pdf",
+                "mime_type": "application/pdf",
+                "sha256": "5cf65dc756b6308e63462411e03853e5f1f4f92a5229249ce5f2f5dcc3f27968",
+                "bytes": 649
+              }
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-pdf",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "memory-pdf",
+          "type": "memory",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "memory surface",
+              "detail": "mock semantic Memory surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Memory surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "The attachment should remain downloadable or otherwise inspectable as the source of the answer."
+      ]
+    },
+    {
+      "case_id": "ATT-003",
+      "title": "Text context travels with an attachment",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-context-pdf",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            },
+            {
+              "status": "PASS",
+              "name": "attachment receipt",
+              "detail": "attachment receipt present=True"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-ATT-003-capture-context-pdf",
+              "capture_id": "capture-context-pdf",
+              "duplicate": false,
+              "attachment": {
+                "filename": "landlord-lease.pdf",
+                "mime_type": "application/pdf",
+                "sha256": "5cf65dc756b6308e63462411e03853e5f1f4f92a5229249ce5f2f5dcc3f27968",
+                "bytes": 649
+              }
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-context-pdf",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "memory-context-pdf",
+          "type": "memory",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "memory surface",
+              "detail": "mock semantic Memory surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Memory surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "The product should not drop either the text context or the attachment when both are submitted together."
+      ]
+    },
+    {
+      "case_id": "ATT-004",
+      "title": "Unsupported format gets an honest outcome",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-unsupported",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture has durable-looking receipt",
+              "detail": "saved=True, event_id='mock-ATT-004-capture-unsupported'"
+            },
+            {
+              "status": "PASS",
+              "name": "attachment receipt",
+              "detail": "attachment receipt present=True"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-ATT-004-capture-unsupported",
+              "capture_id": "capture-unsupported",
+              "duplicate": false,
+              "attachment": {
+                "filename": "sample.bin",
+                "mime_type": "application/octet-stream",
+                "sha256": "6c75f3581321e9c482b36aed935b210bd6779cd5a8519db1fea325bd0aa0037b",
+                "bytes": 56
+              }
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "memory-unsupported",
+          "type": "memory",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "memory surface",
+              "detail": "mock semantic Memory surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Memory surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "If semantic reading is unavailable, say so plainly and keep the raw file or a recoverable failure record."
+      ]
+    },
+    {
+      "case_id": "ATT-005",
+      "title": "The same attachment twice does not create two active facts",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-first-image",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            },
+            {
+              "status": "PASS",
+              "name": "attachment receipt",
+              "detail": "attachment receipt present=True"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-ATT-005-capture-first-image",
+              "capture_id": "capture-first-image",
+              "duplicate": false,
+              "attachment": {
+                "filename": "suitcase.svg",
+                "mime_type": "image/svg+xml",
+                "sha256": "82195324ec85b9216d9d63a8d8f2f5db0aaaa7e372037772b450a8b214cf69da",
+                "bytes": 591
+              }
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "capture-second-image",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            },
+            {
+              "status": "PASS",
+              "name": "attachment receipt",
+              "detail": "attachment receipt present=True"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-ATT-005-capture-second-image",
+              "capture_id": "capture-second-image",
+              "duplicate": false,
+              "attachment": {
+                "filename": "suitcase-copy.svg",
+                "mime_type": "image/svg+xml",
+                "sha256": "82195324ec85b9216d9d63a8d8f2f5db0aaaa7e372037772b450a8b214cf69da",
+                "bytes": 591
+              }
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "process-images",
+          "type": "process",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "processing completes work",
+              "detail": "ok=True, processed=2"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "processing": {
+              "status": "processed",
+              "processed": 2,
+              "pending": 0,
+              "failed": 0
+            }
+          }
+        },
+        {
+          "step_id": "ask-one-location",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "Do not delete raw duplicate evidence just to make the active view concise; consolidate only the active interpretation."
+      ]
+    },
+    {
+      "case_id": "REL-006",
+      "title": "A provider failure leaves a retry path",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "provider-fails-once",
+          "type": "set_provider",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "provider fixture configured",
+              "detail": "fail_once"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "provider_mode": "fail_once"
+          }
+        },
+        {
+          "step_id": "capture-garden",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-REL-006-capture-garden",
+              "capture_id": "capture-garden",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "first-processing",
+          "type": "process",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "processing failure is retryable",
+              "detail": "response=_supported true ok false _status 503 code provider_unavailable error provider unavailable; retry available processing status failed failed 1 failed_count 1 pending 0"
+            },
+            {
+              "status": "PASS",
+              "name": "processing status",
+              "detail": "expected 'failed', observed 'failed'"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "code": "provider_unavailable",
+            "error": "provider unavailable; retry available",
+            "processing": {
+              "status": "failed",
+              "failed": 1,
+              "failed_count": 1,
+              "pending": 0
+            }
+          }
+        },
+        {
+          "step_id": "retry-processing",
+          "type": "retry",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "processing completes work",
+              "detail": "ok=True, processed=1"
+            },
+            {
+              "status": "PASS",
+              "name": "processing status",
+              "detail": "expected 'processed', observed 'processed'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "processing": {
+              "status": "processed",
+              "processed": 1,
+              "pending": 0,
+              "failed": 0
+            }
+          }
+        },
+        {
+          "step_id": "ask-garden",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "No retry should require the user to retype the original note."
+      ]
+    },
+    {
+      "case_id": "REL-007",
+      "title": "Restart with pending work does not lose the capture",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-restart-pending",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-REL-007-capture-restart-pending",
+              "capture_id": "capture-restart-pending",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "restart-pending",
+          "type": "restart",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "restart preserves state",
+              "detail": "expected True, observed True"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "restart": {
+              "state_preserved": true,
+              "counts": {
+                "pending": 1,
+                "failed": 0,
+                "processed": 0,
+                "active": 1
+              }
+            }
+          }
+        },
+        {
+          "step_id": "process-after-restart",
+          "type": "process",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "processing completes work",
+              "detail": "ok=True, processed=1"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "processing": {
+              "status": "processed",
+              "processed": 1,
+              "pending": 0,
+              "failed": 0
+            }
+          }
+        },
+        {
+          "step_id": "ask-batteries",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "A restart should not reset the inbox or create a second copy of the pending item."
+      ]
+    },
+    {
+      "case_id": "REL-008",
+      "title": "Restart after processing still keeps usable state",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-restart-processing",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-REL-008-capture-restart-processing",
+              "capture_id": "capture-restart-processing",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "process-before-restart",
+          "type": "process",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "processing completes work",
+              "detail": "ok=True, processed=1"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "processing": {
+              "status": "processed",
+              "processed": 1,
+              "pending": 0,
+              "failed": 0
+            }
+          }
+        },
+        {
+          "step_id": "restart-processing",
+          "type": "restart",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "restart preserves state",
+              "detail": "expected True, observed True"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "restart": {
+              "state_preserved": true,
+              "counts": {
+                "pending": 0,
+                "failed": 0,
+                "processed": 1,
+                "active": 1
+              }
+            }
+          }
+        },
+        {
+          "step_id": "ask-library-card",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "The product should return to the same usable state after a normal restart, not a blank onboarding state."
+      ]
+    },
+    {
+      "case_id": "REL-009",
+      "title": "Repeating process is safe",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-process-repeat",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-REL-009-capture-process-repeat",
+              "capture_id": "capture-process-repeat",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "process-once",
+          "type": "process",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "processing completes work",
+              "detail": "ok=True, processed=1"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "processing": {
+              "status": "processed",
+              "processed": 1,
+              "pending": 0,
+              "failed": 0
+            }
+          }
+        },
+        {
+          "step_id": "process-again",
+          "type": "process",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "repeated processing is a no-op",
+              "detail": "ok=True, processed=0"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "processing": {
+              "status": "fresh",
+              "processed": 0,
+              "pending": 0,
+              "failed": 0
+            }
+          }
+        },
+        {
+          "step_id": "ask-notebook",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "A repeated button click or scheduled process retry should not inflate counts or create another memory card."
+      ]
+    },
+    {
+      "case_id": "REL-010",
+      "title": "Retrying a completed item does not duplicate it",
+      "status": "PASS",
+      "steps": [
+        {
+          "step_id": "provider-fails",
+          "type": "set_provider",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "provider fixture configured",
+              "detail": "fail_once"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "provider_mode": "fail_once"
+          }
+        },
+        {
+          "step_id": "capture-retry-item",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-REL-010-capture-retry-item",
+              "capture_id": "capture-retry-item",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "process-failure",
+          "type": "process",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "processing failure is retryable",
+              "detail": "response=_supported true ok false _status 503 code provider_unavailable error provider unavailable; retry available processing status failed failed 1 failed_count 1 pending 0"
+            },
+            {
+              "status": "PASS",
+              "name": "processing status",
+              "detail": "expected 'failed', observed 'failed'"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "code": "provider_unavailable",
+            "error": "provider unavailable; retry available",
+            "processing": {
+              "status": "failed",
+              "failed": 1,
+              "failed_count": 1,
+              "pending": 0
+            }
+          }
+        },
+        {
+          "step_id": "retry-completes",
+          "type": "retry",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "processing completes work",
+              "detail": "ok=True, processed=1"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "processing": {
+              "status": "processed",
+              "processed": 1,
+              "pending": 0,
+              "failed": 0
+            }
+          }
+        },
+        {
+          "step_id": "retry-no-op",
+          "type": "retry",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "repeated processing is a no-op",
+              "detail": "ok=True, processed=0"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "processing": {
+              "status": "fresh",
+              "processed": 0,
+              "pending": 0,
+              "failed": 0
+            }
+          }
+        }
+      ],
+      "manual_observations": [
+        "The user should not have to decide whether a retry already succeeded before trusting the active state."
+      ]
+    },
+    {
+      "case_id": "ASK-001",
+      "title": "Answer a simple spend question from a receipt note",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-petrol",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-ASK-001-capture-petrol",
+              "capture_id": "capture-petrol",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-petrol",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "memory-petrol",
+          "type": "memory",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "memory surface",
+              "detail": "mock semantic Memory surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Memory surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "The answer should distinguish an observed payment from a guessed category or financial advice."
+      ]
+    },
+    {
+      "case_id": "ASK-002",
+      "title": "Current subscription value wins over an old value",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-pocketwave-old",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-ASK-002-capture-pocketwave-old",
+              "capture_id": "capture-pocketwave-old",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "capture-pocketwave-current",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-ASK-002-capture-pocketwave-current",
+              "capture_id": "capture-pocketwave-current",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-pocketwave-current",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "Current state and historical state should be visibly distinct, especially when a user is checking a bill."
+      ]
+    },
+    {
+      "case_id": "ASK-003",
+      "title": "Explain what changed across two observations",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-storage-old",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-ASK-003-capture-storage-old",
+              "capture_id": "capture-storage-old",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "capture-storage-new",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-ASK-003-capture-storage-new",
+              "capture_id": "capture-storage-new",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-storage-change",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "memory-storage-change",
+          "type": "memory",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "memory surface",
+              "detail": "mock semantic Memory surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Memory surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "The correction should be understandable to a user and should not silently rewrite the original capture."
+      ]
+    },
+    {
+      "case_id": "ASK-004",
+      "title": "Cross-entity question combines a preference and a gift idea",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-adam-diet",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-ASK-004-capture-adam-diet",
+              "capture_id": "capture-adam-diet",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "capture-adam-gift",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-ASK-004-capture-adam-gift",
+              "capture_id": "capture-adam-gift",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-adam-gift",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "attention-adam",
+          "type": "attention",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "attention surface",
+              "detail": "mock semantic Attention surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Attention surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "Cross-capture retrieval should preserve the safety-relevant preference without inventing an allergy diagnosis."
+      ]
+    },
+    {
+      "case_id": "ASK-005",
+      "title": "List remembered locations across different objects",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-charger-list",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-ASK-005-capture-charger-list",
+              "capture_id": "capture-charger-list",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "capture-keys-list",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-ASK-005-capture-keys-list",
+              "capture_id": "capture-keys-list",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-locations",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "A list answer should retain distinct objects and locations, not merge them into one vague 'near the door' result."
+      ]
+    },
+    {
+      "case_id": "ASK-006",
+      "title": "A question with no supporting evidence stays unanswered",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-unrelated-note",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-ASK-006-capture-unrelated-note",
+              "capture_id": "capture-unrelated-note",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-passport",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "check-no-passport-attention",
+          "type": "attention",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "attention surface",
+              "detail": "mock semantic Attention surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Attention surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "The product should explicitly say when it lacks evidence; an empty or confidently formatted answer is not acceptable."
+      ]
+    },
+    {
+      "case_id": "ASK-007",
+      "title": "An ambiguous keys question asks for clarification",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-house-keys",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-ASK-007-capture-house-keys",
+              "capture_id": "capture-house-keys",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "capture-bike-keys",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-ASK-007-capture-bike-keys",
+              "capture_id": "capture-bike-keys",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-ambiguous-keys",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "The answer may ask which keys the user means or list both clearly; silently choosing one is unsafe."
+      ]
+    },
+    {
+      "case_id": "TIME-008",
+      "title": "Today and tomorrow remain separate attention dates",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-school-call",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-TIME-008-capture-school-call",
+              "capture_id": "capture-school-call",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "capture-library-return",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-TIME-008-capture-library-return",
+              "capture_id": "capture-library-return",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "check-today",
+          "type": "attention",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "attention surface",
+              "detail": "mock semantic Attention surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Attention surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "ask-today",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "advance-next-day",
+          "type": "advance_time",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "test clock advances",
+              "detail": "2026-06-13T09:00:00-04:00"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "time": "2026-06-13T09:00:00-04:00"
+          }
+        },
+        {
+          "step_id": "check-tomorrow-now",
+          "type": "attention",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "attention surface",
+              "detail": "mock semantic Attention surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Attention surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "Relative dates should be resolved against the capture and user timezone, not against an unrelated server clock."
+      ]
+    },
+    {
+      "case_id": "TIME-009",
+      "title": "Overdue, completed, and cancelled items change state honestly",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-expense-deadline",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-TIME-009-capture-expense-deadline",
+              "capture_id": "capture-expense-deadline",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "advance-past-deadline",
+          "type": "advance_time",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "test clock advances",
+              "detail": "2026-06-11T09:00:00+01:00"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "time": "2026-06-11T09:00:00+01:00"
+          }
+        },
+        {
+          "step_id": "check-overdue",
+          "type": "attention",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "attention surface",
+              "detail": "mock semantic Attention surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Attention surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "capture-completion",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-TIME-009-capture-completion",
+              "capture_id": "capture-completion",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "check-completed",
+          "type": "attention",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "attention surface",
+              "detail": "mock semantic Attention surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Attention surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "capture-cancelled-dentist",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-TIME-009-capture-cancelled-dentist",
+              "capture_id": "capture-cancelled-dentist",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "check-cancelled",
+          "type": "attention",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "attention surface",
+              "detail": "mock semantic Attention surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Attention surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "Lifecycle words such as submitted and cancelled should change active attention while preserving their source history."
+      ]
+    },
+    {
+      "case_id": "UNDO-010",
+      "title": "Undo a mistaken location but keep the later correction",
+      "status": "PARTIAL",
+      "steps": [
+        {
+          "step_id": "capture-wrong-location",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-UNDO-010-wrong-location",
+              "capture_id": "wrong-location",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "undo-wrong-location",
+          "type": "undo",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "undo preserves raw evidence",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "undo removes item from active state",
+              "detail": "active=False; expected removal of ['hall drawer']"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "undo": {
+              "capture_id": "wrong-location",
+              "active": false,
+              "raw_preserved": true
+            }
+          }
+        },
+        {
+          "step_id": "capture-correct-location",
+          "type": "capture",
+          "checks": [
+            {
+              "status": "PASS",
+              "name": "capture saved",
+              "detail": "expected True, observed True"
+            },
+            {
+              "status": "PASS",
+              "name": "capture processing status",
+              "detail": "expected 'pending', observed 'pending'"
+            }
+          ],
+          "response": {
+            "ok": true,
+            "saved": true,
+            "message": "Saved.",
+            "capture": {
+              "event_id": "mock-UNDO-010-capture-correct-location",
+              "capture_id": "capture-correct-location",
+              "duplicate": false,
+              "attachment": null
+            },
+            "processing": {
+              "status": "pending"
+            }
+          }
+        },
+        {
+          "step_id": "ask-after-undo",
+          "type": "ask",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "ask surface",
+              "detail": "mock semantic Ask surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Ask surface is intentionally not implemented"
+          }
+        },
+        {
+          "step_id": "memory-after-undo",
+          "type": "memory",
+          "checks": [
+            {
+              "status": "NOT TESTED",
+              "name": "memory surface",
+              "detail": "mock semantic Memory surface is intentionally not implemented"
+            }
+          ],
+          "response": {
+            "ok": false,
+            "reason": "mock semantic Memory surface is intentionally not implemented"
+          }
+        }
+      ],
+      "manual_observations": [
+        "Undo is a user correction to active state, not permission to erase the immutable original evidence."
+      ]
+    }
+  ]
+}
