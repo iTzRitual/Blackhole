@@ -183,6 +183,16 @@ duplicate-aware evidence consolidation over the existing raw/derived boundary;
 its kept replay made zero provider calls. The treatment remains experimental
 and does not expose holdout material or perform provider-assisted resolution.
 
+`implementation-freeze-v1` remains the evaluated frozen version. The final
+Generalization V1R1 result is now public in
+[docs/GENERALIZATION_V1R1_REPORT.md](docs/GENERALIZATION_V1R1_REPORT.md); the
+blind baseline and Blackhole candidates were sealed before oracle scoring. It
+is a post-freeze shadow/generalization set of three fresh synthetic worlds, not
+an organizer-provided official holdout and not evidence of statistical
+significance. The large DEV improvement did not transfer strongly to unseen
+worlds. Subsequent Product v2 work is post-evaluation product development,
+not retroactive tuning of the reported V1R1 score.
+
 See [docs/EVALUATION.md](docs/EVALUATION.md) for the contract and metrics,
 [docs/REPRODUCTION.md](docs/REPRODUCTION.md) for judge-facing commands,
 [`eval/results/experiment-005-duplicate-evidence-full.json`](eval/results/experiment-005-duplicate-evidence-full.json)

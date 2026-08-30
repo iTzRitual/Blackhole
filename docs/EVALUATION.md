@@ -1007,3 +1007,21 @@ idempotency, failure/retry, bounded batches, ask-time freshness, and the
 approval boundary. No benchmark case, expected output, query bundle, response
 contract, evaluator behavior, baseline result, calibration evidence, UI asset,
 or prior experiment result was changed.
+
+## 29. Public Generalization V1R1 result
+
+The public repository now includes the sealed Generalization V1R1 candidate
+history and the deterministic scoring report at
+[`docs/GENERALIZATION_V1R1_REPORT.md`](GENERALIZATION_V1R1_REPORT.md), with the
+machine-readable result at
+[`eval/results/generalization/v1/GENERALIZATION_V1R1_RESULT.json`](../eval/results/generalization/v1/GENERALIZATION_V1R1_RESULT.json).
+`implementation-freeze-v1` remains the evaluated frozen version. The blind
+baseline and Blackhole candidates were sealed before oracle scoring; the final
+V1R1 result is public, but the scoring/oracle Git history remains separate.
+
+This is a post-freeze shadow/generalization set of three fresh synthetic worlds,
+not an organizer-provided official holdout and not evidence of statistical
+significance. The large DEV improvement did not transfer strongly to unseen
+worlds: the Blackhole macro-LQA lead is only `+0.0120635896` and Blackhole
+trails in G03. Subsequent Product v2 work is post-evaluation product
+development, not retroactive tuning of the reported V1R1 score.

@@ -1,0 +1,2358 @@
+{
+  "artifact_paths": {
+    "human_report": "docs/GENERALIZATION_V1R1_REPORT.md",
+    "machine_report": "eval/results/generalization/v1/GENERALIZATION_V1R1_RESULT.json",
+    "trajectory": "trajectories/coding/030-generalization-v1r1-scoring"
+  },
+  "candidate_manifests": {
+    "baseline": {
+      "frozen_configuration_match": true,
+      "no_oracle_access_before_sealing": true,
+      "no_scoring_before_sealing": true,
+      "path": "eval/results/generalization/v1/BASELINE_CANDIDATE_MANIFEST.json",
+      "public_head_match": true,
+      "sha256": "233e450631fc178c0c93e0ca13e307f0723241c407ca4af589b5bdd5bd9a8b6d"
+    },
+    "blackhole": {
+      "frozen_configuration_match": true,
+      "no_oracle_access_before_sealing": true,
+      "no_scoring_before_sealing": true,
+      "path": "eval/results/generalization/v1/BLACKHOLE_CANDIDATE_MANIFEST.json",
+      "public_head_match": true,
+      "sha256": "456f7e6c6d1522f26f78d391ba80c67108f745650ed1fc485103e34bb082d41c"
+    }
+  },
+  "chronology": [
+    "implementation freeze",
+    "V1 test-world creation",
+    "zero-call payload schema repair / V1R1 reseal",
+    "blind baseline + blind Blackhole candidate sealing",
+    "oracle opened only after both candidate sets were sealed",
+    "deterministic scoring",
+    "no post-result semantic tuning"
+  ],
+  "comparison": {
+    "absolute_lqa_delta": 0.01206358955531217,
+    "absolute_lqa_delta_formula": "Blackhole macro_LQA_0M - Baseline macro_LQA_0M",
+    "baseline_error": 0.7408288535024646,
+    "blackhole_error": 0.7287652639471525,
+    "error_rate_reduction": 0.016283908892422816,
+    "error_rate_reduction_formula": "1 - (Blackhole error / Baseline error), where error = 1 - LQA and Baseline error > 0",
+    "relative_lqa_improvement": 0.046546807846246464,
+    "relative_lqa_improvement_formula": "(Blackhole macro_LQA_0M - Baseline macro_LQA_0M) / Baseline macro_LQA_0M"
+  },
+  "efficiency_reliability": {
+    "baseline": {
+      "configuration": {
+        "architecture": "one persistent chronological general-purpose conversation",
+        "checkpoint_isolation": "native Codex CLI fork; query forks are discarded and never resumed",
+        "max_events": 80,
+        "model": "gpt-5.6-luna",
+        "prompt": "prompts/runtime/baseline-v1.md",
+        "provider": "Codex CLI",
+        "query_bundle": "benchmark/generalization/v1/query-bundle-v2.json",
+        "query_ids": "all public query IDs",
+        "reasoning_effort": "max",
+        "response_contract": "benchmark/generalization/v1/response-contract-v2.json",
+        "runner": "baseline/run_baseline.py",
+        "runner_prompt": "prompts/runtime/baseline-runner-v2.md",
+        "timeout_seconds_per_provider_invocation": 900,
+        "workspace": "isolated / read-only"
+      },
+      "failed_attempt_runtime_included": false,
+      "mean_successful_candidate_runtime_seconds": 3066.475526,
+      "model": "gpt-5.6-luna",
+      "operational_retries_by_scenario": {
+        "g01": 0,
+        "g02": 2,
+        "g03": 1
+      },
+      "operational_retry_total": 3,
+      "provider": "Codex CLI",
+      "reasoning_effort": "max",
+      "semantic_quality_retries": 0,
+      "successful_candidates": [
+        {
+          "operational_retries": 0,
+          "provider_usage": {
+            "cache_write_input_tokens": 0,
+            "cached_input_tokens": 87040,
+            "input_tokens": 110669,
+            "output_tokens": 72,
+            "reasoning_output_tokens": 32
+          },
+          "scenario_id": "g01",
+          "successful_attempt": 1,
+          "successful_candidate_runtime_seconds": 3060.775933
+        },
+        {
+          "operational_retries": 2,
+          "provider_usage": {
+            "cache_write_input_tokens": 0,
+            "cached_input_tokens": 92160,
+            "input_tokens": 110927,
+            "output_tokens": 97,
+            "reasoning_output_tokens": 53
+          },
+          "scenario_id": "g02",
+          "successful_attempt": 3,
+          "successful_candidate_runtime_seconds": 2960.018914
+        },
+        {
+          "operational_retries": 1,
+          "provider_usage": {
+            "cache_write_input_tokens": 0,
+            "cached_input_tokens": 87040,
+            "input_tokens": 110857,
+            "output_tokens": 86,
+            "reasoning_output_tokens": 42
+          },
+          "scenario_id": "g03",
+          "successful_attempt": 2,
+          "successful_candidate_runtime_seconds": 3178.631731
+        }
+      ],
+      "token_usage_totals": {
+        "cache_write_input_tokens": 0,
+        "cached_input_tokens": 266240,
+        "input_tokens": 332453,
+        "output_tokens": 255,
+        "reasoning_output_tokens": 127
+      },
+      "total_successful_candidate_runtime_seconds": 9199.426578
+    },
+    "blackhole": {
+      "configuration": {
+        "batch_size": 50,
+        "completeness": "deterministic",
+        "duplicate_evidence": "consolidate",
+        "max_events": 80,
+        "model": "gpt-5.6-luna",
+        "provider": "Codex CLI",
+        "query_bundle": "benchmark/generalization/v1/query-bundle-v2.json",
+        "query_projection": "deterministic ResponseProjector",
+        "relation_recovery": "retrieval",
+        "response_contract": "response-contract-v2",
+        "semantic_reasoning": "high",
+        "timeout_seconds": 900,
+        "use_query_model": false
+      },
+      "failed_attempt_runtime_included": false,
+      "mean_successful_candidate_runtime_seconds": 897.310841,
+      "model": "gpt-5.6-luna",
+      "operational_retries_by_scenario": {
+        "g01": 0,
+        "g02": 0,
+        "g03": 0
+      },
+      "operational_retry_total": 0,
+      "provider": "Codex CLI",
+      "reasoning_effort": "high",
+      "semantic_quality_retries": 0,
+      "successful_candidates": [
+        {
+          "operational_retries": 0,
+          "provider_usage": {
+            "input_tokens": 125233,
+            "output_tokens": 47093,
+            "reasoning_output_tokens": 37161
+          },
+          "runner_attempts": 1,
+          "scenario_id": "g01",
+          "successful_candidate_runtime_seconds": 864.525625
+        },
+        {
+          "operational_retries": 0,
+          "provider_usage": {
+            "input_tokens": 125736,
+            "output_tokens": 49831,
+            "reasoning_output_tokens": 37163
+          },
+          "runner_attempts": 1,
+          "scenario_id": "g02",
+          "successful_candidate_runtime_seconds": 913.252582
+        },
+        {
+          "operational_retries": 0,
+          "provider_usage": {
+            "input_tokens": 126251,
+            "output_tokens": 49939,
+            "reasoning_output_tokens": 37354
+          },
+          "runner_attempts": 1,
+          "scenario_id": "g03",
+          "successful_candidate_runtime_seconds": 914.154316
+        }
+      ],
+      "token_usage_totals": {
+        "input_tokens": 377220,
+        "output_tokens": 146863,
+        "reasoning_output_tokens": 111678
+      },
+      "total_successful_candidate_runtime_seconds": 2691.932523
+    }
+  },
+  "failure_analysis": {
+    "attention": {
+      "baseline": {
+        "aggregate": {
+          "candidate_assertions": 16,
+          "expected_assertions": 25,
+          "false_positive_rate": 0.6875,
+          "fn": 20,
+          "fp": 11,
+          "tp": 5
+        },
+        "per_scenario": {
+          "g01": {
+            "candidate_assertions": 3,
+            "expected_assertions": 5,
+            "false_positive_rate": 0.6666666666666666,
+            "fn": 4,
+            "fp": 2,
+            "tp": 1
+          },
+          "g02": {
+            "candidate_assertions": 5,
+            "expected_assertions": 10,
+            "false_positive_rate": 1.0,
+            "fn": 10,
+            "fp": 5,
+            "tp": 0
+          },
+          "g03": {
+            "candidate_assertions": 8,
+            "expected_assertions": 10,
+            "false_positive_rate": 0.5,
+            "fn": 6,
+            "fp": 4,
+            "tp": 4
+          }
+        }
+      },
+      "blackhole": {
+        "aggregate": {
+          "candidate_assertions": 17,
+          "expected_assertions": 25,
+          "false_positive_rate": 1.0,
+          "fn": 25,
+          "fp": 17,
+          "tp": 0
+        },
+        "per_scenario": {
+          "g01": {
+            "candidate_assertions": 6,
+            "expected_assertions": 5,
+            "false_positive_rate": 1.0,
+            "fn": 5,
+            "fp": 6,
+            "tp": 0
+          },
+          "g02": {
+            "candidate_assertions": 5,
+            "expected_assertions": 10,
+            "false_positive_rate": 1.0,
+            "fn": 10,
+            "fp": 5,
+            "tp": 0
+          },
+          "g03": {
+            "candidate_assertions": 6,
+            "expected_assertions": 10,
+            "false_positive_rate": 1.0,
+            "fn": 10,
+            "fp": 6,
+            "tp": 0
+          }
+        }
+      }
+    },
+    "duplicate_change_and_relation": {
+      "baseline": {
+        "category_metrics": {
+          "duplicate_change": {
+            "f1": 0.0,
+            "fn": 0,
+            "fp": 13,
+            "precision": 0.0,
+            "recall": 1.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "relation_reconciliation": {
+            "f1": 0.0,
+            "fn": 0,
+            "fp": 170,
+            "precision": 0.0,
+            "recall": 1.0,
+            "score": 0.0,
+            "tp": 0
+          }
+        },
+        "query_family": {
+          "candidate_assertions": 154,
+          "f1": 0.057971014492753624,
+          "fn": 114,
+          "fp": 146,
+          "mean_query_score": 0.04115945782612449,
+          "missing_query_observations": 5,
+          "observations": 12,
+          "precision": 0.05194805194805195,
+          "recall": 0.06557377049180328,
+          "schema_invalid_observations": 5,
+          "tp": 8
+        }
+      },
+      "blackhole": {
+        "category_metrics": {
+          "duplicate_change": {
+            "f1": 0.0,
+            "fn": 0,
+            "fp": 32,
+            "precision": 0.0,
+            "recall": 1.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "entity_resolution": {
+            "f1": 0.0,
+            "fn": 0,
+            "fp": 19,
+            "precision": 0.0,
+            "recall": 1.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "relation_reconciliation": {
+            "f1": 0.0,
+            "fn": 0,
+            "fp": 102,
+            "precision": 0.0,
+            "recall": 1.0,
+            "score": 0.0,
+            "tp": 0
+          }
+        },
+        "query_family": {
+          "candidate_assertions": 36,
+          "f1": 0.05063291139240506,
+          "fn": 118,
+          "fp": 32,
+          "mean_query_score": 0.04404761904761905,
+          "missing_query_observations": 0,
+          "observations": 12,
+          "precision": 0.1111111111111111,
+          "recall": 0.03278688524590164,
+          "schema_invalid_observations": 0,
+          "tp": 4
+        }
+      }
+    },
+    "failure_type_summary": {
+      "A_semantic_correctness": {
+        "candidates_with_nonperfect_lqa": 6,
+        "candidates_with_nonzero_fp_or_fn": 6,
+        "description": "All six successful candidates have semantic false positives and/or false negatives; this is measured by the deterministic assertion comparison, not by a tuning judgment."
+      },
+      "B_schema_or_output": {
+        "baseline_schema_error_count": 60,
+        "baseline_schema_invalid_scenarios": 3,
+        "blackhole_schema_error_count": 0,
+        "blackhole_schema_invalid_scenarios": 0,
+        "description": "Baseline has missing query objects at checkpoints; Blackhole is schema-valid in all three scored worlds."
+      },
+      "C_source_or_provenance": {
+        "baseline_mean_provenance_recall": 0.9736689814814815,
+        "baseline_provenance_exact_rate": 0.3333333333333333,
+        "baseline_source_integrity_failures": 0,
+        "blackhole_mean_provenance_recall": 0.9000578703703703,
+        "blackhole_provenance_exact_rate": 0.4166666666666667,
+        "blackhole_source_integrity_failures": 0,
+        "description": "All six candidates remain source-integrity valid; provenance exactness and recall are reported separately as evaluator evidence."
+      },
+      "D_operational_reliability": {
+        "baseline_operational_retries": 3,
+        "blackhole_operational_retries": 0,
+        "description": "Baseline had three operational retries across the worlds; Blackhole had none. Failed-attempt runtime was not estimated.",
+        "failed_attempt_runtime_estimated": false,
+        "semantic_quality_retries_baseline": 0,
+        "semantic_quality_retries_blackhole": 0
+      }
+    },
+    "knowledge_status_metrics": {
+      "baseline": {
+        "inferred": {
+          "f1": 0.0,
+          "fn": 4,
+          "fp": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "score": 0.0,
+          "tp": 0
+        },
+        "known": {
+          "f1": 0.33015267175572516,
+          "fn": 348,
+          "fp": 354,
+          "precision": 0.32827324478178366,
+          "recall": 0.33205374280230326,
+          "score": 0.1977142857142857,
+          "tp": 173
+        },
+        "unknown": {
+          "f1": 0.23008849557522124,
+          "fn": 24,
+          "fp": 63,
+          "precision": 0.17105263157894737,
+          "recall": 0.35135135135135137,
+          "score": 0.13,
+          "tp": 13
+        }
+      },
+      "blackhole": {
+        "inferred": {
+          "f1": 0.0,
+          "fn": 4,
+          "fp": 7,
+          "precision": 0.0,
+          "recall": 0.0,
+          "score": 0.0,
+          "tp": 0
+        },
+        "known": {
+          "f1": 0.39503816793893126,
+          "fn": 314,
+          "fp": 320,
+          "precision": 0.3927893738140417,
+          "recall": 0.39731285988483683,
+          "score": 0.24613555291319858,
+          "tp": 207
+        },
+        "unknown": {
+          "f1": 0.14893617021276595,
+          "fn": 30,
+          "fp": 50,
+          "precision": 0.12280701754385964,
+          "recall": 0.1891891891891892,
+          "score": 0.08045977011494253,
+          "tp": 7
+        }
+      }
+    },
+    "largest_query_family_improvements": [
+      {
+        "baseline_mean_score": 0.45,
+        "blackhole_mean_score": 0.8083333333333332,
+        "delta": 0.3583333333333332,
+        "query_id": "q-approval-boundary"
+      },
+      {
+        "baseline_mean_score": 0.30277777777777776,
+        "blackhole_mean_score": 0.542063492063492,
+        "delta": 0.23928571428571427,
+        "query_id": "q-insurance-current"
+      },
+      {
+        "baseline_mean_score": 0.31220238095238095,
+        "blackhole_mean_score": 0.43333333333333335,
+        "delta": 0.1211309523809524,
+        "query_id": "q-purchase-consumption"
+      },
+      {
+        "baseline_mean_score": 0.5198412698412699,
+        "blackhole_mean_score": 0.6127976190476191,
+        "delta": 0.09295634920634921,
+        "query_id": "q-contract-dates"
+      },
+      {
+        "baseline_mean_score": 0.0,
+        "blackhole_mean_score": 0.08333333333333333,
+        "delta": 0.08333333333333333,
+        "query_id": "q-recent-changes"
+      }
+    ],
+    "largest_query_family_regressions": [
+      {
+        "baseline_mean_score": 0.3884920634920635,
+        "blackhole_mean_score": 0.10119047619047618,
+        "delta": -0.28730158730158734,
+        "query_id": "q-service-costs"
+      },
+      {
+        "baseline_mean_score": 0.4375,
+        "blackhole_mean_score": 0.22656325156325155,
+        "delta": -0.21093674843674845,
+        "query_id": "q-subscriptions-current"
+      },
+      {
+        "baseline_mean_score": 0.19027777777777777,
+        "blackhole_mean_score": 0.0,
+        "delta": -0.19027777777777777,
+        "query_id": "q-attention-14d"
+      },
+      {
+        "baseline_mean_score": 0.08333333333333333,
+        "blackhole_mean_score": 0.0,
+        "delta": -0.08333333333333333,
+        "query_id": "q-subscriptions-history"
+      },
+      {
+        "baseline_mean_score": 0.14871031746031746,
+        "blackhole_mean_score": 0.14732142857142858,
+        "delta": -0.001388888888888884,
+        "query_id": "q-unresolved"
+      }
+    ],
+    "query_family_mean_scores_and_deltas": {
+      "q-approval-boundary": {
+        "baseline_mean_score": 0.45,
+        "blackhole_mean_score": 0.8083333333333332,
+        "delta": 0.3583333333333332
+      },
+      "q-attention-14d": {
+        "baseline_mean_score": 0.19027777777777777,
+        "blackhole_mean_score": 0.0,
+        "delta": -0.19027777777777777
+      },
+      "q-contract-dates": {
+        "baseline_mean_score": 0.5198412698412699,
+        "blackhole_mean_score": 0.6127976190476191,
+        "delta": 0.09295634920634921
+      },
+      "q-duplicates-changes": {
+        "baseline_mean_score": 0.04115945782612449,
+        "blackhole_mean_score": 0.04404761904761905,
+        "delta": 0.002888161221494559
+      },
+      "q-insurance-current": {
+        "baseline_mean_score": 0.30277777777777776,
+        "blackhole_mean_score": 0.542063492063492,
+        "delta": 0.23928571428571427
+      },
+      "q-purchase-consumption": {
+        "baseline_mean_score": 0.31220238095238095,
+        "blackhole_mean_score": 0.43333333333333335,
+        "delta": 0.1211309523809524
+      },
+      "q-recent-changes": {
+        "baseline_mean_score": 0.0,
+        "blackhole_mean_score": 0.08333333333333333,
+        "delta": 0.08333333333333333
+      },
+      "q-service-costs": {
+        "baseline_mean_score": 0.3884920634920635,
+        "blackhole_mean_score": 0.10119047619047618,
+        "delta": -0.28730158730158734
+      },
+      "q-subscriptions-current": {
+        "baseline_mean_score": 0.4375,
+        "blackhole_mean_score": 0.22656325156325155,
+        "delta": -0.21093674843674845
+      },
+      "q-subscriptions-history": {
+        "baseline_mean_score": 0.08333333333333333,
+        "blackhole_mean_score": 0.0,
+        "delta": -0.08333333333333333
+      },
+      "q-tasks-state": {
+        "baseline_mean_score": 0.23575937950937953,
+        "blackhole_mean_score": 0.25583294615028357,
+        "delta": 0.02007356664090404
+      },
+      "q-unresolved": {
+        "baseline_mean_score": 0.14871031746031746,
+        "blackhole_mean_score": 0.14732142857142858,
+        "delta": -0.001388888888888884
+      }
+    },
+    "weakest_query_families_by_scenario": {
+      "baseline": {
+        "g01": [
+          {
+            "mean_query_score": 0.0,
+            "query_id": "q-recent-changes"
+          },
+          {
+            "mean_query_score": 0.0,
+            "query_id": "q-subscriptions-history"
+          },
+          {
+            "mean_query_score": 0.06118881118881119,
+            "query_id": "q-duplicates-changes"
+          },
+          {
+            "mean_query_score": 0.1625,
+            "query_id": "q-unresolved"
+          },
+          {
+            "mean_query_score": 0.17424242424242425,
+            "query_id": "q-tasks-state"
+          }
+        ],
+        "g02": [
+          {
+            "mean_query_score": 0.0,
+            "query_id": "q-attention-14d"
+          },
+          {
+            "mean_query_score": 0.0,
+            "query_id": "q-recent-changes"
+          },
+          {
+            "mean_query_score": 0.007575757575757576,
+            "query_id": "q-duplicates-changes"
+          },
+          {
+            "mean_query_score": 0.07291666666666666,
+            "query_id": "q-unresolved"
+          },
+          {
+            "mean_query_score": 0.17261904761904762,
+            "query_id": "q-tasks-state"
+          }
+        ],
+        "g03": [
+          {
+            "mean_query_score": 0.0,
+            "query_id": "q-recent-changes"
+          },
+          {
+            "mean_query_score": 0.0,
+            "query_id": "q-subscriptions-history"
+          },
+          {
+            "mean_query_score": 0.054713804713804715,
+            "query_id": "q-duplicates-changes"
+          },
+          {
+            "mean_query_score": 0.21071428571428572,
+            "query_id": "q-unresolved"
+          },
+          {
+            "mean_query_score": 0.2375,
+            "query_id": "q-attention-14d"
+          }
+        ]
+      },
+      "blackhole": {
+        "g01": [
+          {
+            "mean_query_score": 0.0,
+            "query_id": "q-attention-14d"
+          },
+          {
+            "mean_query_score": 0.0,
+            "query_id": "q-recent-changes"
+          },
+          {
+            "mean_query_score": 0.0,
+            "query_id": "q-subscriptions-history"
+          },
+          {
+            "mean_query_score": 0.03571428571428571,
+            "query_id": "q-duplicates-changes"
+          },
+          {
+            "mean_query_score": 0.16666666666666666,
+            "query_id": "q-unresolved"
+          }
+        ],
+        "g02": [
+          {
+            "mean_query_score": 0.0,
+            "query_id": "q-attention-14d"
+          },
+          {
+            "mean_query_score": 0.0,
+            "query_id": "q-recent-changes"
+          },
+          {
+            "mean_query_score": 0.0,
+            "query_id": "q-service-costs"
+          },
+          {
+            "mean_query_score": 0.0,
+            "query_id": "q-subscriptions-history"
+          },
+          {
+            "mean_query_score": 0.060714285714285714,
+            "query_id": "q-duplicates-changes"
+          }
+        ],
+        "g03": [
+          {
+            "mean_query_score": 0.0,
+            "query_id": "q-attention-14d"
+          },
+          {
+            "mean_query_score": 0.0,
+            "query_id": "q-service-costs"
+          },
+          {
+            "mean_query_score": 0.0,
+            "query_id": "q-subscriptions-history"
+          },
+          {
+            "mean_query_score": 0.03571428571428571,
+            "query_id": "q-duplicates-changes"
+          },
+          {
+            "mean_query_score": 0.18731060606060607,
+            "query_id": "q-subscriptions-current"
+          }
+        ]
+      }
+    },
+    "weakest_query_families_over_12_checkpoints_per_world": {
+      "baseline": [
+        {
+          "mean_query_score": 0.0,
+          "query_id": "q-recent-changes"
+        },
+        {
+          "mean_query_score": 0.04115945782612449,
+          "query_id": "q-duplicates-changes"
+        },
+        {
+          "mean_query_score": 0.08333333333333333,
+          "query_id": "q-subscriptions-history"
+        },
+        {
+          "mean_query_score": 0.14871031746031746,
+          "query_id": "q-unresolved"
+        },
+        {
+          "mean_query_score": 0.19027777777777777,
+          "query_id": "q-attention-14d"
+        }
+      ],
+      "blackhole": [
+        {
+          "mean_query_score": 0.0,
+          "query_id": "q-attention-14d"
+        },
+        {
+          "mean_query_score": 0.0,
+          "query_id": "q-subscriptions-history"
+        },
+        {
+          "mean_query_score": 0.04404761904761905,
+          "query_id": "q-duplicates-changes"
+        },
+        {
+          "mean_query_score": 0.08333333333333333,
+          "query_id": "q-recent-changes"
+        },
+        {
+          "mean_query_score": 0.10119047619047618,
+          "query_id": "q-service-costs"
+        }
+      ]
+    }
+  },
+  "gate": "PASS",
+  "macro_metrics": {
+    "baseline": {
+      "attention": {
+        "candidate_assertions": 16,
+        "expected_assertions": 25,
+        "false_positive_rate": 0.6875,
+        "fn": 20,
+        "fp": 11,
+        "tp": 5
+      },
+      "category_metrics_aggregate": {
+        "duplicate_change": {
+          "f1": 0.0,
+          "fn": 0,
+          "fp": 13,
+          "precision": 0.0,
+          "recall": 1.0,
+          "score": 0.0,
+          "tp": 0
+        },
+        "obligation_deadline": {
+          "f1": 0.0,
+          "fn": 0,
+          "fp": 11,
+          "precision": 0.0,
+          "recall": 1.0,
+          "score": 0.0,
+          "tp": 0
+        },
+        "relation_reconciliation": {
+          "f1": 0.0,
+          "fn": 0,
+          "fp": 170,
+          "precision": 0.0,
+          "recall": 1.0,
+          "score": 0.0,
+          "tp": 0
+        },
+        "state_maintenance": {
+          "f1": 0.38193018480492813,
+          "fn": 376,
+          "fp": 226,
+          "precision": 0.45145631067961167,
+          "recall": 0.3309608540925267,
+          "score": 0.23604060913705585,
+          "tp": 186
+        }
+      },
+      "checkpoint_mean_lqa": {
+        "20": 0.3545951733451733,
+        "40": 0.4029227459783015,
+        "60": 0.027777777777777776,
+        "80": 0.2513888888888889
+      },
+      "dscr_per_100_events_over_240": 239.58333333333334,
+      "dscr_total": 575,
+      "hard_failure_count": 0,
+      "knowledge_status_metrics_aggregate": {
+        "inferred": {
+          "f1": 0.0,
+          "fn": 4,
+          "fp": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "score": 0.0,
+          "tp": 0
+        },
+        "known": {
+          "f1": 0.33015267175572516,
+          "fn": 348,
+          "fp": 354,
+          "precision": 0.32827324478178366,
+          "recall": 0.33205374280230326,
+          "score": 0.1977142857142857,
+          "tp": 173
+        },
+        "unknown": {
+          "f1": 0.23008849557522124,
+          "fn": 24,
+          "fp": 63,
+          "precision": 0.17105263157894737,
+          "recall": 0.35135135135135137,
+          "score": 0.13,
+          "tp": 13
+        }
+      },
+      "macro_lqa_0m": 0.25917114649753537,
+      "mean_per_scenario_dscr": 191.66666666666666,
+      "micro_precision_recall_f1": {
+        "f1": 0.3184931506849315,
+        "precision": 0.3069306930693069,
+        "recall": 0.3309608540925267
+      },
+      "provenance": {
+        "mean_provenance_recall": 0.9736689814814815,
+        "provenance_exact_false": 96,
+        "provenance_exact_rate": 0.3333333333333333,
+        "provenance_exact_true": 48,
+        "query_observations": 144,
+        "zero_provenance_recall_observations": 1
+      },
+      "query_family_metrics_aggregate": {
+        "q-approval-boundary": {
+          "candidate_assertions": 25,
+          "f1": 0.6301369863013699,
+          "fn": 25,
+          "fp": 2,
+          "mean_query_score": 0.45,
+          "missing_query_observations": 5,
+          "observations": 12,
+          "precision": 0.92,
+          "recall": 0.4791666666666667,
+          "schema_invalid_observations": 5,
+          "tp": 23
+        },
+        "q-attention-14d": {
+          "candidate_assertions": 16,
+          "f1": 0.24390243902439027,
+          "fn": 20,
+          "fp": 11,
+          "mean_query_score": 0.19027777777777777,
+          "missing_query_observations": 5,
+          "observations": 12,
+          "precision": 0.3125,
+          "recall": 0.2,
+          "schema_invalid_observations": 5,
+          "tp": 5
+        },
+        "q-contract-dates": {
+          "candidate_assertions": 25,
+          "f1": 0.43478260869565216,
+          "fn": 29,
+          "fp": 10,
+          "mean_query_score": 0.5198412698412699,
+          "missing_query_observations": 5,
+          "observations": 12,
+          "precision": 0.6,
+          "recall": 0.3409090909090909,
+          "schema_invalid_observations": 5,
+          "tp": 15
+        },
+        "q-duplicates-changes": {
+          "candidate_assertions": 154,
+          "f1": 0.057971014492753624,
+          "fn": 114,
+          "fp": 146,
+          "mean_query_score": 0.04115945782612449,
+          "missing_query_observations": 5,
+          "observations": 12,
+          "precision": 0.05194805194805195,
+          "recall": 0.06557377049180328,
+          "schema_invalid_observations": 5,
+          "tp": 8
+        },
+        "q-insurance-current": {
+          "candidate_assertions": 39,
+          "f1": 0.5176470588235293,
+          "fn": 24,
+          "fp": 17,
+          "mean_query_score": 0.30277777777777776,
+          "missing_query_observations": 5,
+          "observations": 12,
+          "precision": 0.5641025641025641,
+          "recall": 0.4782608695652174,
+          "schema_invalid_observations": 5,
+          "tp": 22
+        },
+        "q-purchase-consumption": {
+          "candidate_assertions": 46,
+          "f1": 0.5154639175257731,
+          "fn": 26,
+          "fp": 21,
+          "mean_query_score": 0.31220238095238095,
+          "missing_query_observations": 5,
+          "observations": 12,
+          "precision": 0.5434782608695652,
+          "recall": 0.49019607843137253,
+          "schema_invalid_observations": 5,
+          "tp": 25
+        },
+        "q-recent-changes": {
+          "candidate_assertions": 91,
+          "f1": 0.0,
+          "fn": 29,
+          "fp": 91,
+          "mean_query_score": 0.0,
+          "missing_query_observations": 5,
+          "observations": 12,
+          "precision": 0.0,
+          "recall": 0.0,
+          "schema_invalid_observations": 5,
+          "tp": 0
+        },
+        "q-service-costs": {
+          "candidate_assertions": 36,
+          "f1": 0.6136363636363638,
+          "fn": 25,
+          "fp": 9,
+          "mean_query_score": 0.3884920634920635,
+          "missing_query_observations": 5,
+          "observations": 12,
+          "precision": 0.75,
+          "recall": 0.5192307692307693,
+          "schema_invalid_observations": 5,
+          "tp": 27
+        },
+        "q-subscriptions-current": {
+          "candidate_assertions": 21,
+          "f1": 0.6206896551724138,
+          "fn": 19,
+          "fp": 3,
+          "mean_query_score": 0.4375,
+          "missing_query_observations": 5,
+          "observations": 12,
+          "precision": 0.8571428571428571,
+          "recall": 0.4864864864864865,
+          "schema_invalid_observations": 5,
+          "tp": 18
+        },
+        "q-subscriptions-history": {
+          "candidate_assertions": 37,
+          "f1": 0.0,
+          "fn": 14,
+          "fp": 37,
+          "mean_query_score": 0.08333333333333333,
+          "missing_query_observations": 5,
+          "observations": 12,
+          "precision": 0.0,
+          "recall": 0.0,
+          "schema_invalid_observations": 5,
+          "tp": 0
+        },
+        "q-tasks-state": {
+          "candidate_assertions": 72,
+          "f1": 0.4558823529411765,
+          "fn": 33,
+          "fp": 41,
+          "mean_query_score": 0.23575937950937953,
+          "missing_query_observations": 5,
+          "observations": 12,
+          "precision": 0.4305555555555556,
+          "recall": 0.484375,
+          "schema_invalid_observations": 5,
+          "tp": 31
+        },
+        "q-unresolved": {
+          "candidate_assertions": 44,
+          "f1": 0.3243243243243243,
+          "fn": 18,
+          "fp": 32,
+          "mean_query_score": 0.14871031746031746,
+          "missing_query_observations": 5,
+          "observations": 12,
+          "precision": 0.2727272727272727,
+          "recall": 0.4,
+          "schema_invalid_observations": 5,
+          "tp": 12
+        }
+      },
+      "safety_failure_count": 0,
+      "scenario_lqa": {
+        "g01": 0.28931172993672993,
+        "g02": 0.18369182900432898,
+        "g03": 0.3045098805515472
+      },
+      "schema_error_count": 60,
+      "schema_invalid_scenario_count": 3,
+      "schema_valid_scenario_count": 0,
+      "source_integrity_failure_count": 0,
+      "totals": {
+        "fn": 376,
+        "fp": 420,
+        "tp": 186
+      }
+    },
+    "blackhole": {
+      "attention": {
+        "candidate_assertions": 17,
+        "expected_assertions": 25,
+        "false_positive_rate": 1.0,
+        "fn": 25,
+        "fp": 17,
+        "tp": 0
+      },
+      "category_metrics_aggregate": {
+        "duplicate_change": {
+          "f1": 0.0,
+          "fn": 0,
+          "fp": 32,
+          "precision": 0.0,
+          "recall": 1.0,
+          "score": 0.0,
+          "tp": 0
+        },
+        "entity_resolution": {
+          "f1": 0.0,
+          "fn": 0,
+          "fp": 19,
+          "precision": 0.0,
+          "recall": 1.0,
+          "score": 0.0,
+          "tp": 0
+        },
+        "obligation_deadline": {
+          "f1": 0.0,
+          "fn": 0,
+          "fp": 17,
+          "precision": 0.0,
+          "recall": 1.0,
+          "score": 0.0,
+          "tp": 0
+        },
+        "relation_reconciliation": {
+          "f1": 0.0,
+          "fn": 0,
+          "fp": 102,
+          "precision": 0.0,
+          "recall": 1.0,
+          "score": 0.0,
+          "tp": 0
+        },
+        "state_maintenance": {
+          "f1": 0.43540183112919634,
+          "fn": 348,
+          "fp": 207,
+          "precision": 0.5083135391923991,
+          "recall": 0.3807829181494662,
+          "score": 0.27828348504551365,
+          "tp": 214
+        }
+      },
+      "checkpoint_mean_lqa": {
+        "20": 0.3382275132275132,
+        "40": 0.2780833080175185,
+        "60": 0.22237974987974987,
+        "80": 0.24624837308660838
+      },
+      "dscr_per_100_events_over_240": 165.41666666666666,
+      "dscr_total": 397,
+      "hard_failure_count": 0,
+      "knowledge_status_metrics_aggregate": {
+        "inferred": {
+          "f1": 0.0,
+          "fn": 4,
+          "fp": 7,
+          "precision": 0.0,
+          "recall": 0.0,
+          "score": 0.0,
+          "tp": 0
+        },
+        "known": {
+          "f1": 0.39503816793893126,
+          "fn": 314,
+          "fp": 320,
+          "precision": 0.3927893738140417,
+          "recall": 0.39731285988483683,
+          "score": 0.24613555291319858,
+          "tp": 207
+        },
+        "unknown": {
+          "f1": 0.14893617021276595,
+          "fn": 30,
+          "fp": 50,
+          "precision": 0.12280701754385964,
+          "recall": 0.1891891891891892,
+          "score": 0.08045977011494253,
+          "tp": 7
+        }
+      },
+      "macro_lqa_0m": 0.27123473605284754,
+      "mean_per_scenario_dscr": 132.33333333333334,
+      "micro_precision_recall_f1": {
+        "f1": 0.3712055507372073,
+        "precision": 0.36209813874788493,
+        "recall": 0.3807829181494662
+      },
+      "provenance": {
+        "mean_provenance_recall": 0.9000578703703703,
+        "provenance_exact_false": 84,
+        "provenance_exact_rate": 0.4166666666666667,
+        "provenance_exact_true": 60,
+        "query_observations": 144,
+        "zero_provenance_recall_observations": 5
+      },
+      "query_family_metrics_aggregate": {
+        "q-approval-boundary": {
+          "candidate_assertions": 52,
+          "f1": 0.8799999999999999,
+          "fn": 4,
+          "fp": 8,
+          "mean_query_score": 0.8083333333333332,
+          "missing_query_observations": 0,
+          "observations": 12,
+          "precision": 0.8461538461538461,
+          "recall": 0.9166666666666666,
+          "schema_invalid_observations": 0,
+          "tp": 44
+        },
+        "q-attention-14d": {
+          "candidate_assertions": 17,
+          "f1": 0.0,
+          "fn": 25,
+          "fp": 17,
+          "mean_query_score": 0.0,
+          "missing_query_observations": 0,
+          "observations": 12,
+          "precision": 0.0,
+          "recall": 0.0,
+          "schema_invalid_observations": 0,
+          "tp": 0
+        },
+        "q-contract-dates": {
+          "candidate_assertions": 27,
+          "f1": 0.5352112676056339,
+          "fn": 25,
+          "fp": 8,
+          "mean_query_score": 0.6127976190476191,
+          "missing_query_observations": 0,
+          "observations": 12,
+          "precision": 0.7037037037037037,
+          "recall": 0.4318181818181818,
+          "schema_invalid_observations": 0,
+          "tp": 19
+        },
+        "q-duplicates-changes": {
+          "candidate_assertions": 36,
+          "f1": 0.05063291139240506,
+          "fn": 118,
+          "fp": 32,
+          "mean_query_score": 0.04404761904761905,
+          "missing_query_observations": 0,
+          "observations": 12,
+          "precision": 0.1111111111111111,
+          "recall": 0.03278688524590164,
+          "schema_invalid_observations": 0,
+          "tp": 4
+        },
+        "q-insurance-current": {
+          "candidate_assertions": 61,
+          "f1": 0.691588785046729,
+          "fn": 9,
+          "fp": 24,
+          "mean_query_score": 0.542063492063492,
+          "missing_query_observations": 0,
+          "observations": 12,
+          "precision": 0.6065573770491803,
+          "recall": 0.8043478260869565,
+          "schema_invalid_observations": 0,
+          "tp": 37
+        },
+        "q-purchase-consumption": {
+          "candidate_assertions": 50,
+          "f1": 0.5940594059405941,
+          "fn": 21,
+          "fp": 20,
+          "mean_query_score": 0.43333333333333335,
+          "missing_query_observations": 0,
+          "observations": 12,
+          "precision": 0.6,
+          "recall": 0.5882352941176471,
+          "schema_invalid_observations": 0,
+          "tp": 30
+        },
+        "q-recent-changes": {
+          "candidate_assertions": 13,
+          "f1": 0.0,
+          "fn": 29,
+          "fp": 13,
+          "mean_query_score": 0.08333333333333333,
+          "missing_query_observations": 0,
+          "observations": 12,
+          "precision": 0.0,
+          "recall": 0.0,
+          "schema_invalid_observations": 0,
+          "tp": 0
+        },
+        "q-service-costs": {
+          "candidate_assertions": 22,
+          "f1": 0.24324324324324326,
+          "fn": 43,
+          "fp": 13,
+          "mean_query_score": 0.10119047619047618,
+          "missing_query_observations": 0,
+          "observations": 12,
+          "precision": 0.4090909090909091,
+          "recall": 0.17307692307692307,
+          "schema_invalid_observations": 0,
+          "tp": 9
+        },
+        "q-subscriptions-current": {
+          "candidate_assertions": 82,
+          "f1": 0.3529411764705882,
+          "fn": 16,
+          "fp": 61,
+          "mean_query_score": 0.22656325156325155,
+          "missing_query_observations": 0,
+          "observations": 12,
+          "precision": 0.25609756097560976,
+          "recall": 0.5675675675675675,
+          "schema_invalid_observations": 0,
+          "tp": 21
+        },
+        "q-subscriptions-history": {
+          "candidate_assertions": 24,
+          "f1": 0.0,
+          "fn": 14,
+          "fp": 24,
+          "mean_query_score": 0.0,
+          "missing_query_observations": 0,
+          "observations": 12,
+          "precision": 0.0,
+          "recall": 0.0,
+          "schema_invalid_observations": 0,
+          "tp": 0
+        },
+        "q-tasks-state": {
+          "candidate_assertions": 179,
+          "f1": 0.3539094650205761,
+          "fn": 21,
+          "fp": 136,
+          "mean_query_score": 0.25583294615028357,
+          "missing_query_observations": 0,
+          "observations": 12,
+          "precision": 0.24022346368715083,
+          "recall": 0.671875,
+          "schema_invalid_observations": 0,
+          "tp": 43
+        },
+        "q-unresolved": {
+          "candidate_assertions": 28,
+          "f1": 0.2413793103448276,
+          "fn": 23,
+          "fp": 21,
+          "mean_query_score": 0.14732142857142858,
+          "missing_query_observations": 0,
+          "observations": 12,
+          "precision": 0.25,
+          "recall": 0.23333333333333334,
+          "schema_invalid_observations": 0,
+          "tp": 7
+        }
+      },
+      "safety_failure_count": 0,
+      "scenario_lqa": {
+        "g01": 0.2989223909260674,
+        "g02": 0.24186064118629907,
+        "g03": 0.27292117604617605
+      },
+      "schema_error_count": 0,
+      "schema_invalid_scenario_count": 0,
+      "schema_valid_scenario_count": 3,
+      "source_integrity_failure_count": 0,
+      "totals": {
+        "fn": 348,
+        "fp": 377,
+        "tp": 214
+      }
+    }
+  },
+  "no_tuning_statement": "This report is deterministic verification, scoring, and descriptive analysis only. No runtime, prompt, candidate, benchmark case, response contract, query bundle, expected output, or evaluator was modified after observing results; no model/provider calls were made during scoring.",
+  "per_scenario_metrics": {
+    "baseline": {
+      "g01": {
+        "attention": {
+          "candidate_assertions": 3,
+          "expected_assertions": 5,
+          "false_positive_rate": 0.6666666666666666,
+          "fn": 4,
+          "fp": 2,
+          "tp": 1
+        },
+        "candidate_path": "eval/results/generalization/v1/baseline-g01-candidate.json",
+        "candidate_sha256": "943571f22882429a0518005ba41cbc9ffba3d3a73153ac2aae9f18e1287bc71b",
+        "category_metrics": {
+          "duplicate_change": {
+            "f1": 0.0,
+            "fn": 0,
+            "fp": 2,
+            "precision": 0.0,
+            "recall": 1.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "obligation_deadline": {
+            "f1": 0.0,
+            "fn": 0,
+            "fp": 2,
+            "precision": 0.0,
+            "recall": 1.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "relation_reconciliation": {
+            "f1": 0.0,
+            "fn": 0,
+            "fp": 25,
+            "precision": 0.0,
+            "recall": 1.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "state_maintenance": {
+            "f1": 0.36630036630036633,
+            "fn": 121,
+            "fp": 52,
+            "precision": 0.49019607843137253,
+            "recall": 0.29239766081871343,
+            "score": 0.2242152466367713,
+            "tp": 50
+          }
+        },
+        "checkpoint_lqa": {
+          "20": 0.4822649572649573,
+          "40": 0.42498196248196246,
+          "60": 0.08333333333333333,
+          "80": 0.16666666666666666
+        },
+        "contract_version": "1.0-post-freeze-generalization-v1",
+        "dscr": {
+          "category_counts": {
+            "contradiction": 3,
+            "current_state": 4,
+            "duplicate_change": 17,
+            "entity_resolution": 1,
+            "financial": 15,
+            "obligation_deadline": 11,
+            "relation_reconciliation": 25,
+            "safety": 8,
+            "state_maintenance": 48,
+            "temporal_history": 3
+          },
+          "count": 135,
+          "per_100_events": 168.75
+        },
+        "hard_failure": false,
+        "knowledge_status_metrics": {
+          "inferred": {
+            "f1": 0.0,
+            "fn": 2,
+            "fp": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "known": {
+            "f1": 0.3432835820895523,
+            "fn": 111,
+            "fp": 65,
+            "precision": 0.4144144144144144,
+            "recall": 0.2929936305732484,
+            "score": 0.2072072072072072,
+            "tp": 46
+          },
+          "unknown": {
+            "f1": 0.25,
+            "fn": 8,
+            "fp": 16,
+            "precision": 0.2,
+            "recall": 0.3333333333333333,
+            "score": 0.14285714285714285,
+            "tp": 4
+          }
+        },
+        "lqa_0m": 0.28931172993672993,
+        "precision_recall_f1": {
+          "f1": 0.3311258278145695,
+          "precision": 0.3816793893129771,
+          "recall": 0.29239766081871343
+        },
+        "response_contract": "response-contract-v2",
+        "safety": {
+          "count": 0,
+          "passed": true,
+          "violations": []
+        },
+        "scenario_id": "g01",
+        "schema_error_count": 24,
+        "schema_errors": [
+          "checkpoint 60: missing query q-subscriptions-current",
+          "checkpoint 60: missing query q-subscriptions-history",
+          "checkpoint 60: missing query q-attention-14d",
+          "checkpoint 60: missing query q-insurance-current",
+          "checkpoint 60: missing query q-service-costs",
+          "checkpoint 60: missing query q-purchase-consumption",
+          "checkpoint 60: missing query q-tasks-state",
+          "checkpoint 60: missing query q-unresolved",
+          "checkpoint 60: missing query q-duplicates-changes",
+          "checkpoint 60: missing query q-contract-dates",
+          "checkpoint 60: missing query q-approval-boundary",
+          "checkpoint 60: missing query q-recent-changes",
+          "checkpoint 80: missing query q-subscriptions-current",
+          "checkpoint 80: missing query q-subscriptions-history",
+          "checkpoint 80: missing query q-attention-14d",
+          "checkpoint 80: missing query q-insurance-current",
+          "checkpoint 80: missing query q-service-costs",
+          "checkpoint 80: missing query q-purchase-consumption",
+          "checkpoint 80: missing query q-tasks-state",
+          "checkpoint 80: missing query q-unresolved",
+          "checkpoint 80: missing query q-duplicates-changes",
+          "checkpoint 80: missing query q-contract-dates",
+          "checkpoint 80: missing query q-approval-boundary",
+          "checkpoint 80: missing query q-recent-changes"
+        ],
+        "schema_valid": false,
+        "score_artifact_path": "eval/results/generalization/v1/scored/baseline-g01-v1r1-score.json",
+        "score_artifact_sha256": "4142b84e28c812d973ff6c707fc086bae6c6623d18dc60a9f35ec8986f6f299a",
+        "scorer_version": "lqa-0m-v2",
+        "source_integrity": {
+          "errors": [],
+          "mismatch_count": 0,
+          "valid": true
+        },
+        "system": "baseline",
+        "totals": {
+          "fn": 121,
+          "fp": 81,
+          "tp": 50
+        }
+      },
+      "g02": {
+        "attention": {
+          "candidate_assertions": 5,
+          "expected_assertions": 10,
+          "false_positive_rate": 1.0,
+          "fn": 10,
+          "fp": 5,
+          "tp": 0
+        },
+        "candidate_path": "eval/results/generalization/v1/baseline-g02-candidate.json",
+        "candidate_sha256": "2bdc02ab4f0d51b612ede8281d9dedafba837c0e2d56608ba16248740626f59c",
+        "category_metrics": {
+          "duplicate_change": {
+            "f1": 0.0,
+            "fn": 0,
+            "fp": 5,
+            "precision": 0.0,
+            "recall": 1.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "obligation_deadline": {
+            "f1": 0.0,
+            "fn": 0,
+            "fp": 5,
+            "precision": 0.0,
+            "recall": 1.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "relation_reconciliation": {
+            "f1": 0.0,
+            "fn": 0,
+            "fp": 59,
+            "precision": 0.0,
+            "recall": 1.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "state_maintenance": {
+            "f1": 0.3119266055045871,
+            "fn": 139,
+            "fp": 86,
+            "precision": 0.3722627737226277,
+            "recall": 0.26842105263157895,
+            "score": 0.18478260869565216,
+            "tp": 51
+          }
+        },
+        "checkpoint_lqa": {
+          "20": 0.08333333333333333,
+          "40": 0.37821969696969693,
+          "60": 0.0,
+          "80": 0.2732142857142857
+        },
+        "contract_version": "1.0-post-freeze-generalization-v1",
+        "dscr": {
+          "category_counts": {
+            "contradiction": 2,
+            "current_state": 8,
+            "duplicate_change": 20,
+            "entity_resolution": 1,
+            "financial": 20,
+            "obligation_deadline": 24,
+            "relation_reconciliation": 59,
+            "safety": 7,
+            "state_maintenance": 81,
+            "temporal_history": 8
+          },
+          "count": 230,
+          "per_100_events": 287.5
+        },
+        "hard_failure": false,
+        "knowledge_status_metrics": {
+          "inferred": {
+            "f1": 0.0,
+            "fn": 0,
+            "fp": 3,
+            "precision": 0.0,
+            "recall": 1.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "known": {
+            "f1": 0.26740947075208915,
+            "fn": 130,
+            "fp": 133,
+            "precision": 0.26519337016574585,
+            "recall": 0.2696629213483146,
+            "score": 0.15434083601286175,
+            "tp": 48
+          },
+          "unknown": {
+            "f1": 0.1764705882352941,
+            "fn": 9,
+            "fp": 19,
+            "precision": 0.13636363636363635,
+            "recall": 0.25,
+            "score": 0.0967741935483871,
+            "tp": 3
+          }
+        },
+        "lqa_0m": 0.18369182900432898,
+        "precision_recall_f1": {
+          "f1": 0.25757575757575757,
+          "precision": 0.24757281553398058,
+          "recall": 0.26842105263157895
+        },
+        "response_contract": "response-contract-v2",
+        "safety": {
+          "count": 0,
+          "passed": true,
+          "violations": []
+        },
+        "scenario_id": "g02",
+        "schema_error_count": 24,
+        "schema_errors": [
+          "checkpoint 20: missing query q-subscriptions-current",
+          "checkpoint 20: missing query q-subscriptions-history",
+          "checkpoint 20: missing query q-attention-14d",
+          "checkpoint 20: missing query q-insurance-current",
+          "checkpoint 20: missing query q-service-costs",
+          "checkpoint 20: missing query q-purchase-consumption",
+          "checkpoint 20: missing query q-tasks-state",
+          "checkpoint 20: missing query q-unresolved",
+          "checkpoint 20: missing query q-duplicates-changes",
+          "checkpoint 20: missing query q-contract-dates",
+          "checkpoint 20: missing query q-approval-boundary",
+          "checkpoint 20: missing query q-recent-changes",
+          "checkpoint 60: missing query q-subscriptions-current",
+          "checkpoint 60: missing query q-subscriptions-history",
+          "checkpoint 60: missing query q-attention-14d",
+          "checkpoint 60: missing query q-insurance-current",
+          "checkpoint 60: missing query q-service-costs",
+          "checkpoint 60: missing query q-purchase-consumption",
+          "checkpoint 60: missing query q-tasks-state",
+          "checkpoint 60: missing query q-unresolved",
+          "checkpoint 60: missing query q-duplicates-changes",
+          "checkpoint 60: missing query q-contract-dates",
+          "checkpoint 60: missing query q-approval-boundary",
+          "checkpoint 60: missing query q-recent-changes"
+        ],
+        "schema_valid": false,
+        "score_artifact_path": "eval/results/generalization/v1/scored/baseline-g02-v1r1-score.json",
+        "score_artifact_sha256": "396366dc78f0dc87ea83a357cbe4a4e0e3926e93c46f48a6c6a7c9f35c3aba75",
+        "scorer_version": "lqa-0m-v2",
+        "source_integrity": {
+          "errors": [],
+          "mismatch_count": 0,
+          "valid": true
+        },
+        "system": "baseline",
+        "totals": {
+          "fn": 139,
+          "fp": 155,
+          "tp": 51
+        }
+      },
+      "g03": {
+        "attention": {
+          "candidate_assertions": 8,
+          "expected_assertions": 10,
+          "false_positive_rate": 0.5,
+          "fn": 6,
+          "fp": 4,
+          "tp": 4
+        },
+        "candidate_path": "eval/results/generalization/v1/baseline-g03-candidate.json",
+        "candidate_sha256": "0a1e1674aab9e80a59c3318e83693b151fab1f6c79a6b153024e33f1269f0e3f",
+        "category_metrics": {
+          "duplicate_change": {
+            "f1": 0.0,
+            "fn": 0,
+            "fp": 6,
+            "precision": 0.0,
+            "recall": 1.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "obligation_deadline": {
+            "f1": 0.0,
+            "fn": 0,
+            "fp": 4,
+            "precision": 0.0,
+            "recall": 1.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "relation_reconciliation": {
+            "f1": 0.0,
+            "fn": 0,
+            "fp": 86,
+            "precision": 0.0,
+            "recall": 1.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "state_maintenance": {
+            "f1": 0.45454545454545453,
+            "fn": 116,
+            "fp": 88,
+            "precision": 0.4913294797687861,
+            "recall": 0.4228855721393035,
+            "score": 0.29411764705882354,
+            "tp": 85
+          }
+        },
+        "checkpoint_lqa": {
+          "20": 0.49818722943722943,
+          "40": 0.4055665784832452,
+          "60": 0.0,
+          "80": 0.3142857142857143
+        },
+        "contract_version": "1.0-post-freeze-generalization-v1",
+        "dscr": {
+          "category_counts": {
+            "contradiction": 3,
+            "current_state": 8,
+            "duplicate_change": 22,
+            "entity_resolution": 1,
+            "financial": 17,
+            "obligation_deadline": 19,
+            "relation_reconciliation": 49,
+            "safety": 7,
+            "state_maintenance": 77,
+            "temporal_history": 7
+          },
+          "count": 210,
+          "per_100_events": 262.5
+        },
+        "hard_failure": false,
+        "knowledge_status_metrics": {
+          "inferred": {
+            "f1": 0.0,
+            "fn": 2,
+            "fp": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "known": {
+            "f1": 0.3752969121140142,
+            "fn": 107,
+            "fp": 156,
+            "precision": 0.33617021276595743,
+            "recall": 0.42473118279569894,
+            "score": 0.2309941520467836,
+            "tp": 79
+          },
+          "unknown": {
+            "f1": 0.25531914893617025,
+            "fn": 7,
+            "fp": 28,
+            "precision": 0.17647058823529413,
+            "recall": 0.46153846153846156,
+            "score": 0.14634146341463414,
+            "tp": 6
+          }
+        },
+        "lqa_0m": 0.3045098805515472,
+        "precision_recall_f1": {
+          "f1": 0.3617021276595745,
+          "precision": 0.3159851301115242,
+          "recall": 0.4228855721393035
+        },
+        "response_contract": "response-contract-v2",
+        "safety": {
+          "count": 0,
+          "passed": true,
+          "violations": []
+        },
+        "scenario_id": "g03",
+        "schema_error_count": 12,
+        "schema_errors": [
+          "checkpoint 60: missing query q-subscriptions-current",
+          "checkpoint 60: missing query q-subscriptions-history",
+          "checkpoint 60: missing query q-attention-14d",
+          "checkpoint 60: missing query q-insurance-current",
+          "checkpoint 60: missing query q-service-costs",
+          "checkpoint 60: missing query q-purchase-consumption",
+          "checkpoint 60: missing query q-tasks-state",
+          "checkpoint 60: missing query q-unresolved",
+          "checkpoint 60: missing query q-duplicates-changes",
+          "checkpoint 60: missing query q-contract-dates",
+          "checkpoint 60: missing query q-approval-boundary",
+          "checkpoint 60: missing query q-recent-changes"
+        ],
+        "schema_valid": false,
+        "score_artifact_path": "eval/results/generalization/v1/scored/baseline-g03-v1r1-score.json",
+        "score_artifact_sha256": "0548c58aaa221348075f20c93452a785a6de4ef85b2a3df5a8720fbb4592b071",
+        "scorer_version": "lqa-0m-v2",
+        "source_integrity": {
+          "errors": [],
+          "mismatch_count": 0,
+          "valid": true
+        },
+        "system": "baseline",
+        "totals": {
+          "fn": 116,
+          "fp": 184,
+          "tp": 85
+        }
+      }
+    },
+    "blackhole": {
+      "g01": {
+        "attention": {
+          "candidate_assertions": 6,
+          "expected_assertions": 5,
+          "false_positive_rate": 1.0,
+          "fn": 5,
+          "fp": 6,
+          "tp": 0
+        },
+        "candidate_path": "eval/results/generalization/v1/blackhole-g01-candidate.json",
+        "candidate_sha256": "ab80ab7a3f096c456f1f18c6839141809ed51751c1968c5a12e16115e601c361",
+        "category_metrics": {
+          "duplicate_change": {
+            "f1": 0.0,
+            "fn": 0,
+            "fp": 11,
+            "precision": 0.0,
+            "recall": 1.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "obligation_deadline": {
+            "f1": 0.0,
+            "fn": 0,
+            "fp": 6,
+            "precision": 0.0,
+            "recall": 1.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "relation_reconciliation": {
+            "f1": 0.0,
+            "fn": 0,
+            "fp": 25,
+            "precision": 0.0,
+            "recall": 1.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "state_maintenance": {
+            "f1": 0.42105263157894735,
+            "fn": 103,
+            "fp": 84,
+            "precision": 0.4473684210526316,
+            "recall": 0.39766081871345027,
+            "score": 0.26666666666666666,
+            "tp": 68
+          }
+        },
+        "checkpoint_lqa": {
+          "20": 0.32490079365079366,
+          "40": 0.29583333333333334,
+          "60": 0.2888888888888889,
+          "80": 0.2860665478312537
+        },
+        "contract_version": "1.0-post-freeze-generalization-v1",
+        "dscr": {
+          "category_counts": {
+            "contradiction": 3,
+            "current_state": 2,
+            "duplicate_change": 18,
+            "entity_resolution": 1,
+            "financial": 11,
+            "obligation_deadline": 11,
+            "relation_reconciliation": 8,
+            "safety": 2,
+            "state_maintenance": 58,
+            "temporal_history": 3
+          },
+          "count": 117,
+          "per_100_events": 146.25
+        },
+        "hard_failure": false,
+        "knowledge_status_metrics": {
+          "inferred": {
+            "f1": 0.0,
+            "fn": 2,
+            "fp": 7,
+            "precision": 0.0,
+            "recall": 0.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "known": {
+            "f1": 0.40366972477064217,
+            "fn": 91,
+            "fp": 104,
+            "precision": 0.38823529411764707,
+            "recall": 0.42038216560509556,
+            "score": 0.25287356321839083,
+            "tp": 66
+          },
+          "unknown": {
+            "f1": 0.13793103448275862,
+            "fn": 10,
+            "fp": 15,
+            "precision": 0.11764705882352941,
+            "recall": 0.16666666666666666,
+            "score": 0.07407407407407407,
+            "tp": 2
+          }
+        },
+        "lqa_0m": 0.2989223909260674,
+        "precision_recall_f1": {
+          "f1": 0.37260273972602737,
+          "precision": 0.35051546391752575,
+          "recall": 0.39766081871345027
+        },
+        "response_contract": "response-contract-v2",
+        "safety": {
+          "count": 0,
+          "passed": true,
+          "violations": []
+        },
+        "scenario_id": "g01",
+        "schema_error_count": 0,
+        "schema_errors": [],
+        "schema_valid": true,
+        "score_artifact_path": "eval/results/generalization/v1/scored/blackhole-g01-v1r1-score.json",
+        "score_artifact_sha256": "c711b2c734ef9ff2c409b734c0da6eeceda0ed972f55933b3d54ee0d3d3365a6",
+        "scorer_version": "lqa-0m-v2",
+        "source_integrity": {
+          "errors": [],
+          "mismatch_count": 0,
+          "valid": true
+        },
+        "system": "blackhole",
+        "totals": {
+          "fn": 103,
+          "fp": 126,
+          "tp": 68
+        }
+      },
+      "g02": {
+        "attention": {
+          "candidate_assertions": 5,
+          "expected_assertions": 10,
+          "false_positive_rate": 1.0,
+          "fn": 10,
+          "fp": 5,
+          "tp": 0
+        },
+        "candidate_path": "eval/results/generalization/v1/blackhole-g02-candidate.json",
+        "candidate_sha256": "3a69cb75b287ac999ef0cc66f10f6e9fd3bf8588fe2c65c4b0922cc12ac1d667",
+        "category_metrics": {
+          "duplicate_change": {
+            "f1": 0.0,
+            "fn": 0,
+            "fp": 10,
+            "precision": 0.0,
+            "recall": 1.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "entity_resolution": {
+            "f1": 0.0,
+            "fn": 0,
+            "fp": 14,
+            "precision": 0.0,
+            "recall": 1.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "obligation_deadline": {
+            "f1": 0.0,
+            "fn": 0,
+            "fp": 5,
+            "precision": 0.0,
+            "recall": 1.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "relation_reconciliation": {
+            "f1": 0.0,
+            "fn": 0,
+            "fp": 46,
+            "precision": 0.0,
+            "recall": 1.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "state_maintenance": {
+            "f1": 0.43670886075949367,
+            "fn": 121,
+            "fp": 57,
+            "precision": 0.5476190476190477,
+            "recall": 0.3631578947368421,
+            "score": 0.2793522267206478,
+            "tp": 69
+          }
+        },
+        "checkpoint_lqa": {
+          "20": 0.2896825396825397,
+          "40": 0.26591478696741855,
+          "60": 0.19607142857142856,
+          "80": 0.21577380952380953
+        },
+        "contract_version": "1.0-post-freeze-generalization-v1",
+        "dscr": {
+          "category_counts": {
+            "contradiction": 1,
+            "current_state": 5,
+            "duplicate_change": 18,
+            "entity_resolution": 6,
+            "financial": 21,
+            "obligation_deadline": 19,
+            "relation_reconciliation": 20,
+            "safety": 3,
+            "state_maintenance": 49,
+            "temporal_history": 6
+          },
+          "count": 148,
+          "per_100_events": 185.0
+        },
+        "hard_failure": false,
+        "knowledge_status_metrics": {
+          "known": {
+            "f1": 0.37325905292479106,
+            "fn": 111,
+            "fp": 114,
+            "precision": 0.3701657458563536,
+            "recall": 0.37640449438202245,
+            "score": 0.22945205479452055,
+            "tp": 67
+          },
+          "unknown": {
+            "f1": 0.125,
+            "fn": 10,
+            "fp": 18,
+            "precision": 0.1,
+            "recall": 0.16666666666666666,
+            "score": 0.06666666666666667,
+            "tp": 2
+          }
+        },
+        "lqa_0m": 0.24186064118629907,
+        "precision_recall_f1": {
+          "f1": 0.35294117647058826,
+          "precision": 0.34328358208955223,
+          "recall": 0.3631578947368421
+        },
+        "response_contract": "response-contract-v2",
+        "safety": {
+          "count": 0,
+          "passed": true,
+          "violations": []
+        },
+        "scenario_id": "g02",
+        "schema_error_count": 0,
+        "schema_errors": [],
+        "schema_valid": true,
+        "score_artifact_path": "eval/results/generalization/v1/scored/blackhole-g02-v1r1-score.json",
+        "score_artifact_sha256": "ab4e925c91e9c379ac62020d8dcf3c9043b85c2736c8204b947ad125649c9b4f",
+        "scorer_version": "lqa-0m-v2",
+        "source_integrity": {
+          "errors": [],
+          "mismatch_count": 0,
+          "valid": true
+        },
+        "system": "blackhole",
+        "totals": {
+          "fn": 121,
+          "fp": 132,
+          "tp": 69
+        }
+      },
+      "g03": {
+        "attention": {
+          "candidate_assertions": 6,
+          "expected_assertions": 10,
+          "false_positive_rate": 1.0,
+          "fn": 10,
+          "fp": 6,
+          "tp": 0
+        },
+        "candidate_path": "eval/results/generalization/v1/blackhole-g03-candidate.json",
+        "candidate_sha256": "07557d68f3361daa9d4c03567f4bb6de52e9fc4a14f803a4d4f376fdfc76d208",
+        "category_metrics": {
+          "duplicate_change": {
+            "f1": 0.0,
+            "fn": 0,
+            "fp": 11,
+            "precision": 0.0,
+            "recall": 1.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "entity_resolution": {
+            "f1": 0.0,
+            "fn": 0,
+            "fp": 5,
+            "precision": 0.0,
+            "recall": 1.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "obligation_deadline": {
+            "f1": 0.0,
+            "fn": 0,
+            "fp": 6,
+            "precision": 0.0,
+            "recall": 1.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "relation_reconciliation": {
+            "f1": 0.0,
+            "fn": 0,
+            "fp": 31,
+            "precision": 0.0,
+            "recall": 1.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "state_maintenance": {
+            "f1": 0.44767441860465107,
+            "fn": 124,
+            "fp": 66,
+            "precision": 0.5384615384615384,
+            "recall": 0.38308457711442784,
+            "score": 0.2883895131086142,
+            "tp": 77
+          }
+        },
+        "checkpoint_lqa": {
+          "20": 0.40009920634920637,
+          "40": 0.2725018037518037,
+          "60": 0.1821789321789322,
+          "80": 0.23690476190476192
+        },
+        "contract_version": "1.0-post-freeze-generalization-v1",
+        "dscr": {
+          "category_counts": {
+            "contradiction": 3,
+            "current_state": 4,
+            "duplicate_change": 19,
+            "entity_resolution": 3,
+            "financial": 22,
+            "obligation_deadline": 17,
+            "relation_reconciliation": 13,
+            "safety": 2,
+            "state_maintenance": 44,
+            "temporal_history": 5
+          },
+          "count": 132,
+          "per_100_events": 165.0
+        },
+        "hard_failure": false,
+        "knowledge_status_metrics": {
+          "inferred": {
+            "f1": 0.0,
+            "fn": 2,
+            "fp": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "score": 0.0,
+            "tp": 0
+          },
+          "known": {
+            "f1": 0.4088397790055248,
+            "fn": 112,
+            "fp": 102,
+            "precision": 0.42045454545454547,
+            "recall": 0.3978494623655914,
+            "score": 0.2569444444444444,
+            "tp": 74
+          },
+          "unknown": {
+            "f1": 0.18181818181818185,
+            "fn": 10,
+            "fp": 17,
+            "precision": 0.15,
+            "recall": 0.23076923076923078,
+            "score": 0.1,
+            "tp": 3
+          }
+        },
+        "lqa_0m": 0.27292117604617605,
+        "precision_recall_f1": {
+          "f1": 0.3879093198992443,
+          "precision": 0.39285714285714285,
+          "recall": 0.38308457711442784
+        },
+        "response_contract": "response-contract-v2",
+        "safety": {
+          "count": 0,
+          "passed": true,
+          "violations": []
+        },
+        "scenario_id": "g03",
+        "schema_error_count": 0,
+        "schema_errors": [],
+        "schema_valid": true,
+        "score_artifact_path": "eval/results/generalization/v1/scored/blackhole-g03-v1r1-score.json",
+        "score_artifact_sha256": "c1bd94ae3be7bfe52f806ab3e71981709b0f77120c998b1876b20e4a81b0028c",
+        "scorer_version": "lqa-0m-v2",
+        "source_integrity": {
+          "errors": [],
+          "mismatch_count": 0,
+          "valid": true
+        },
+        "system": "blackhole",
+        "totals": {
+          "fn": 124,
+          "fp": 119,
+          "tp": 77
+        }
+      }
+    }
+  },
+  "report_revision": "1",
+  "report_type": "blackhole_generalization_v1r1_result",
+  "scope": {
+    "checkpoints": [
+      20,
+      40,
+      60,
+      80
+    ],
+    "events_per_scenario": 80,
+    "name": "GENERALIZATION V1R1",
+    "official_holdout": false,
+    "queries_per_checkpoint": 12,
+    "scenarios": [
+      "g01",
+      "g02",
+      "g03"
+    ],
+    "statistical_significance_claimed": false,
+    "total_fresh_events": 240
+  },
+  "score_artifacts": [
+    {
+      "path": "eval/results/generalization/v1/scored/baseline-g01-v1r1-score.json",
+      "scenario_id": "g01",
+      "sha256": "4142b84e28c812d973ff6c707fc086bae6c6623d18dc60a9f35ec8986f6f299a",
+      "system": "baseline"
+    },
+    {
+      "path": "eval/results/generalization/v1/scored/baseline-g02-v1r1-score.json",
+      "scenario_id": "g02",
+      "sha256": "396366dc78f0dc87ea83a357cbe4a4e0e3926e93c46f48a6c6a7c9f35c3aba75",
+      "system": "baseline"
+    },
+    {
+      "path": "eval/results/generalization/v1/scored/baseline-g03-v1r1-score.json",
+      "scenario_id": "g03",
+      "sha256": "0548c58aaa221348075f20c93452a785a6de4ef85b2a3df5a8720fbb4592b071",
+      "system": "baseline"
+    },
+    {
+      "path": "eval/results/generalization/v1/scored/blackhole-g01-v1r1-score.json",
+      "scenario_id": "g01",
+      "sha256": "c711b2c734ef9ff2c409b734c0da6eeceda0ed972f55933b3d54ee0d3d3365a6",
+      "system": "blackhole"
+    },
+    {
+      "path": "eval/results/generalization/v1/scored/blackhole-g02-v1r1-score.json",
+      "scenario_id": "g02",
+      "sha256": "ab4e925c91e9c379ac62020d8dcf3c9043b85c2736c8204b947ad125649c9b4f",
+      "system": "blackhole"
+    },
+    {
+      "path": "eval/results/generalization/v1/scored/blackhole-g03-v1r1-score.json",
+      "scenario_id": "g03",
+      "sha256": "c1bd94ae3be7bfe52f806ab3e71981709b0f77120c998b1876b20e4a81b0028c",
+      "system": "blackhole"
+    }
+  ],
+  "scorer": {
+    "evaluator_modified": false,
+    "formula": "per-query TP / (TP + FP + FN), with LQA-0M as the arithmetic mean over all fixed query scores at checkpoints",
+    "module": "python -m eval.score",
+    "provider_calls": false,
+    "response_contract": "response-contract-v2",
+    "version": "lqa-0m-v2"
+  },
+  "verification": {
+    "candidate_seal_evidence_path": "trajectories/coding/030-generalization-v1r1-scoring/seal-verification.json",
+    "candidate_seal_evidence_sha256": "3e43b8ff82765233748927af080d8f4f59bc1c37d2d764b63becb63cb1b94c3d",
+    "candidate_seal_status": "PASS",
+    "oracle_expected_outputs_opened_after_candidate_seal_evidence": true,
+    "oracle_hashes": {
+      "expected_g01": {
+        "path": "benchmark/generalization/v1/expected/scenario-g01.json",
+        "sha256": "f8e488e0da1c2b2348ba801532ba4276564a4b0041d41e8a47d766770d55a3e6"
+      },
+      "expected_g02": {
+        "path": "benchmark/generalization/v1/expected/scenario-g02.json",
+        "sha256": "6176df7f65af0e3398225f26b86dd1be870e5d49302b59aa9c6e85a6c41d2dba"
+      },
+      "expected_g03": {
+        "path": "benchmark/generalization/v1/expected/scenario-g03.json",
+        "sha256": "7507692a6944f3b03cfa7300a0d0dc1ce72916607a0b4af560f751ef42be169d"
+      },
+      "public_case_g01": {
+        "path": "benchmark/generalization/v1/cases/scenario-g01.json",
+        "sha256": "c0dd1c6255c3591fb4467e8ac6bb4e46bffbd37661cf38bcb6ba67a9247a3cb5"
+      },
+      "public_case_g02": {
+        "path": "benchmark/generalization/v1/cases/scenario-g02.json",
+        "sha256": "22747fe3e01b4ed4ae41e5a0682cc584e72c487f7c9cff53a29d233d9d35f938"
+      },
+      "public_case_g03": {
+        "path": "benchmark/generalization/v1/cases/scenario-g03.json",
+        "sha256": "ca19c548d60c0a77ba742aa6c00532fac26d335dadcfdca86d209786744c3fec"
+      },
+      "query_bundle": {
+        "path": "benchmark/generalization/v1/query-bundle-v2.json",
+        "sha256": "6e5a0295b239f1029e2f38b713e1cba9f6ca6c921e9f712c5022b5f34814d366"
+      },
+      "response_contract": {
+        "path": "benchmark/generalization/v1/response-contract-v2.json",
+        "sha256": "c26d063189be0f44a7f099b49206d1731d0f933c60ece066c58630ce25ff0534"
+      }
+    },
+    "oracle_head": "fc707cb485629919434dc41f4014f10d5065b4db",
+    "oracle_status": "PASS",
+    "public_head": "79bea04e432e6566e3d6989e8fa411e7c613908b",
+    "sealed_baseline_head": "f58466a2605d38e324cfc565c011eb84591a2fee",
+    "sealed_blackhole_head": "9d2ee431079fc7ad7b1921677eac3d15123cbe34",
+    "semantic_repair_record": {
+      "all_240_event_digests_equal": true,
+      "audit_path": "trajectories/coding/026-generalization-schema-repair/schema-repair-audit.json",
+      "coverage_byte_equal": true,
+      "g01_expected_semantic_assertions_byte_equal": true,
+      "g02_expected_semantic_assertions_byte_equal": true,
+      "g03_expected_semantic_assertions_byte_equal": true,
+      "manifest_only_allowed_changes": true,
+      "query_bundle_byte_equal": true,
+      "repair_statement": "V1R1 changes only the public payload container from string to {text: string} and recomputes dependent source hashes. Event text and all expected semantic assertions are unchanged.",
+      "response_contract_byte_equal": true
+    }
+  },
+  "verified_candidate_hashes": {
+    "baseline/g01": {
+      "manifest_hash_match": true,
+      "path": "eval/results/generalization/v1/baseline-g01-candidate.json",
+      "raw_git_blob_sha256": "6bd2f8a1d3a5eda2a04770868faaa8faee21870a88d9d041f95d556d9785189e",
+      "sha256": "943571f22882429a0518005ba41cbc9ffba3d3a73153ac2aae9f18e1287bc71b",
+      "source_commit": "f58466a2605d38e324cfc565c011eb84591a2fee"
+    },
+    "baseline/g02": {
+      "manifest_hash_match": true,
+      "path": "eval/results/generalization/v1/baseline-g02-candidate.json",
+      "raw_git_blob_sha256": "8c5ad1d3dae6148952ab6fd3036df9fc64a1b793c01a2058a8c0df8dda809248",
+      "sha256": "2bdc02ab4f0d51b612ede8281d9dedafba837c0e2d56608ba16248740626f59c",
+      "source_commit": "f58466a2605d38e324cfc565c011eb84591a2fee"
+    },
+    "baseline/g03": {
+      "manifest_hash_match": true,
+      "path": "eval/results/generalization/v1/baseline-g03-candidate.json",
+      "raw_git_blob_sha256": "24baab4785167539bb82849e3cec126640458beadf08edfa5b65b1fdcb5176e2",
+      "sha256": "0a1e1674aab9e80a59c3318e83693b151fab1f6c79a6b153024e33f1269f0e3f",
+      "source_commit": "f58466a2605d38e324cfc565c011eb84591a2fee"
+    },
+    "blackhole/g01": {
+      "manifest_hash_match": true,
+      "path": "eval/results/generalization/v1/blackhole-g01-candidate.json",
+      "raw_git_blob_sha256": "501374379f2352920535354cf88aabef882b68723a1ca5c7b714737eb8d2f135",
+      "sha256": "ab80ab7a3f096c456f1f18c6839141809ed51751c1968c5a12e16115e601c361",
+      "source_commit": "9d2ee431079fc7ad7b1921677eac3d15123cbe34"
+    },
+    "blackhole/g02": {
+      "manifest_hash_match": true,
+      "path": "eval/results/generalization/v1/blackhole-g02-candidate.json",
+      "raw_git_blob_sha256": "8228c3963cf2bc5192500806517a972f299c6f5f999171b13922d8a153910443",
+      "sha256": "3a69cb75b287ac999ef0cc66f10f6e9fd3bf8588fe2c65c4b0922cc12ac1d667",
+      "source_commit": "9d2ee431079fc7ad7b1921677eac3d15123cbe34"
+    },
+    "blackhole/g03": {
+      "manifest_hash_match": true,
+      "path": "eval/results/generalization/v1/blackhole-g03-candidate.json",
+      "raw_git_blob_sha256": "3676a40426b9e16b873a711c78d4de602892bbc6ee3683b838726dfefad469d3",
+      "sha256": "07557d68f3361daa9d4c03567f4bb6de52e9fc4a14f803a4d4f376fdfc76d208",
+      "source_commit": "9d2ee431079fc7ad7b1921677eac3d15123cbe34"
+    }
+  }
+}

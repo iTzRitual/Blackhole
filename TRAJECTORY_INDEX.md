@@ -10,7 +10,8 @@ The Host/PWA integration, submission hardening, reproduction refresh, and
 frozen-runtime audit workstreams are included below. Their source branches and
 worktrees remain preserved for auditability. Private or not-yet-submission-
 visible generalization trajectories are intentionally not listed unless their
-evidence is present in this checkout.
+evidence is present in this checkout. The public Generalization V1R1 archive is
+now listed below; the local oracle and scoring histories remain separate.
 
 ## Coding trajectories
 
@@ -39,6 +40,11 @@ evidence is present in this checkout.
 | 022-reproduction-refresh | Refresh judge-facing Host/PWA reproduction instructions | Documentation-only; no runtime, benchmark, evaluation, or metric changes | `abb8f80` | [summary](trajectories/coding/022-reproduction-refresh/summary.md) |
 | 024-frozen-runtime-audit | Read-only adversarial audit of the frozen runtime | P0 `0`; P1 `10`; P2 `4`; findings preserved, no fixes | `59d1914` | [audit](docs/audits/FROZEN_RUNTIME_AUDIT.md), [summary](trajectories/coding/024-frozen-runtime-audit/summary.md) |
 | 025-post-freeze-evidence-merge | Merge approved post-freeze documentation and independent audit evidence | Documentation/evidence merge; no runtime or benchmark change | `6bdb4ef` | [summary](trajectories/coding/025-post-freeze-evidence-merge/summary.md) |
+| 026-generalization-v1r1-public-archive | Consolidate public-safe V1R1 evidence and remote history | Archive/remote-hygiene task; no runtime or benchmark change | `archive commit` | [summary](trajectories/coding/026-generalization-v1r1-public-archive/summary.md) |
+| 027-generalization-public-v1r1-seal | Publish and seal the public V1R1 synthetic worlds and contracts | Public inputs sealed before blind runs | `6efbacc` | [summary](trajectories/coding/027-generalization-public-v1r1-seal/summary.md) |
+| 028-generalization-v1r1-baseline-blind | Run and seal the stateless baseline candidates | Three candidates sealed before oracle/scoring access | `72294cd` | [summary](trajectories/coding/028-generalization-v1r1-baseline-blind/summary.md) |
+| 029-generalization-v1r1-blackhole-blind | Run and seal the Blackhole candidates | Three candidates sealed before oracle/scoring access | `94e635f` | [summary](trajectories/coding/029-generalization-v1r1-blackhole-blind/summary.md) |
+| 030-generalization-v1r1-scoring | Score sealed V1R1 candidates and analyze generalization | PASS; six deterministic results and public report; scoring history remains local | `47f1449` (local-only) | [report](docs/GENERALIZATION_V1R1_REPORT.md), [summary](trajectories/coding/030-generalization-v1r1-scoring/summary.md) |
 | ui-001-mobile-pwa | Build the dependency-light mobile-first PWA in an isolated worktree | KEEP; UI workstream preserved and integrated | `0cc6653` | [summary](trajectories/coding/ui-001-mobile-pwa/summary.md) |
 | ui-002-reference-redesign | Correct the Capture surface against the approved mobile reference | KEEP; UI correction preserved and integrated | `0cc6653` | [summary](trajectories/coding/ui-002-reference-redesign/summary.md) |
 | submission-001-hardening | Add offline qualification, CI, evidence index, and submission checklist | KEEP; three non-blocking stale-artifact warnings remain for finalization | `18b123f` | [summary](trajectories/coding/submission-001-hardening/summary.md) |
@@ -68,9 +74,12 @@ the final handoff state of that trajectory. The integrated product merge is
 | 018-host-foundation-e005-regression | Regression replay after Host foundation | None; deterministic replay | Matches E005 reference: LQA-0M `0.8695006212`, DSCR `40` | [runtime files](trajectories/runtime/018-host-foundation-e005-regression/), [result](eval/results/host-foundation-e005-regression.json) |
 | 019-host-pwa-real-neutral | Real neutral Host/PWA-equivalent smoke | Authenticated local Codex CLI | HTTP transport and deferred processing worked; novel-entity linking limitation recorded | [summary](trajectories/runtime/019-host-pwa-real-neutral/summary.md), [trace](trajectories/runtime/019-host-pwa-real-neutral/trace.json) |
 | 020-consolidation-real-neutral | Post-consolidation neutral Host/PWA-equivalent smoke | Authenticated local Codex CLI | HTTP transport and deferred processing worked; known novel-entity linking limitation reproduced | [summary](trajectories/runtime/020-consolidation-real-neutral/summary.md), [trace](trajectories/runtime/020-consolidation-real-neutral/trace.json) |
+| generalization-v1r1-baseline-g01/g02/g03 | Sealed stateless baseline executions over three fresh worlds | Codex CLI | Candidates sealed before oracle/scoring; retries and checkpoint evidence preserved | [g01](trajectories/runtime/generalization-v1r1-baseline-g01/), [g02](trajectories/runtime/generalization-v1r1-baseline-g02/), [g03](trajectories/runtime/generalization-v1r1-baseline-g03/) |
+| generalization-v1r1-blackhole-g01/g02/g03 | Sealed Blackhole executions over three fresh worlds | Codex CLI plus deterministic processing | Candidates sealed before oracle/scoring; provider traces and derived-state evidence preserved | [g01](trajectories/runtime/generalization-v1r1-blackhole-g01/), [g02](trajectories/runtime/generalization-v1r1-blackhole-g02/), [g03](trajectories/runtime/generalization-v1r1-blackhole-g03/) |
+| generalization-v1r1 scoring | Deterministic scoring and descriptive analysis of the sealed V1R1 set | None; frozen evaluator | Public result; no post-result tuning | [report](docs/GENERALIZATION_V1R1_REPORT.md), [machine result](eval/results/generalization/v1/GENERALIZATION_V1R1_RESULT.json) |
 | other recorded fast/replay directories | Intermediate extraction, projector, retry, and diagnostic runs | Mixed; recorded per directory | Preserved as historical evidence, including failed/invalid attempts | [runtime root](trajectories/runtime/) |
 
-The current filesystem inventory contains 26 coding trajectories and 42 runtime
+The current filesystem inventory contains 31 coding trajectories and 48 runtime
 trajectories. The index does not require every runtime directory to have a root `summary.md`:
 the runtime inventory records whether a summary, prompt-like call file, raw
 trace, and other artifacts are present. No transcript is fabricated for a
@@ -110,6 +119,11 @@ transcript, or recorded `*.raw.txt` provider output.
 | 022-reproduction-refresh | coding | yes | yes | n/a | no | 2 |
 | 024-frozen-runtime-audit | coding | yes | yes | n/a | no | 3 |
 | 025-post-freeze-evidence-merge | coding | yes | yes | n/a | no | 2 |
+| 026-generalization-v1r1-public-archive | coding | yes | yes | n/a | no | 2 |
+| 027-generalization-public-v1r1-seal | coding | yes | yes | n/a | no | 2 |
+| 028-generalization-v1r1-baseline-blind | coding | yes | yes | n/a | no | 3 |
+| 029-generalization-v1r1-blackhole-blind | coding | yes | yes | n/a | no | 2 |
+| 030-generalization-v1r1-scoring | coding | yes | yes | n/a | no | 3 |
 | ui-001-mobile-pwa | coding | yes | yes | n/a | no | 2 |
 | ui-002-reference-redesign | coding | yes | yes | n/a | no | 2 |
 | submission-001-hardening | coding | yes | yes | n/a | no | 2 |
@@ -131,6 +145,12 @@ transcript, or recorded `*.raw.txt` provider output.
 | 018-host-foundation-e005-regression | runtime | yes | no | yes | yes | 29 |
 | 019-host-pwa-real-neutral | runtime | no | yes | yes | yes | 2 |
 | 020-consolidation-real-neutral | runtime | no | yes | yes | yes | 2 |
+| generalization-v1r1-baseline-g01 | runtime | no | no | yes | no | 4 |
+| generalization-v1r1-baseline-g02 | runtime | no | no | yes | no | 10 |
+| generalization-v1r1-baseline-g03 | runtime | no | no | yes | no | 6 |
+| generalization-v1r1-blackhole-g01 | runtime | yes | no | yes | yes | 29 |
+| generalization-v1r1-blackhole-g02 | runtime | yes | no | yes | yes | 29 |
+| generalization-v1r1-blackhole-g03 | runtime | yes | no | yes | yes | 29 |
 | experiment-001-fast-dev | runtime | yes | yes | yes | yes | 3 |
 | experiment-001-fast-dev-deterministic | runtime | yes | yes | yes | yes | 7 |
 | experiment-001-fast-dev-deterministic-v2 | runtime | yes | yes | yes | yes | 7 |

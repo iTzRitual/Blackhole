@@ -1,0 +1,118 @@
+{
+  "evidence_type": "v1r1_candidate_seal_verification",
+  "status": "PASS",
+  "verified_at_utc": "2026-08-30T07:30:49.7904897Z",
+  "scoring_worktree": {
+    "path": "C:\\Users\\natan\\OneDrive\\Dokumenty\\ChatGPT\\Blackhole-generalization-scoring-v1r1",
+    "branch": "generalization/score-v1r1",
+    "base_commit": "fc707cb485629919434dc41f4014f10d5065b4db",
+    "pushed": false
+  },
+  "remote_heads": {
+    "generalization/public-v1r1": "79bea04e432e6566e3d6989e8fa411e7c613908b",
+    "generalization/blind-baseline-v1r1": "f58466a2605d38e324cfc565c011eb84591a2fee",
+    "generalization/blind-blackhole-v1r1": "9d2ee431079fc7ad7b1921677eac3d15123cbe34"
+  },
+  "candidate_materialization": {
+    "basis": "checked-out file bytes from disposable detached worktrees rooted at the exact sealed commits",
+    "checkout_config": "core.autocrlf=true",
+    "byte_preserving": true,
+    "json_parsed_before_hash": false,
+    "raw_git_blob_hashes_also_recorded": true,
+    "line_ending_note": "The raw Git blobs are LF-normalized; the sealed Windows checkout bytes are CRLF and match the hashes recorded by both sealed manifests.",
+    "candidates": [
+      {
+        "system": "baseline",
+        "scenario_id": "g01",
+        "source_commit": "f58466a2605d38e324cfc565c011eb84591a2fee",
+        "path": "eval/results/generalization/v1/baseline-g01-candidate.json",
+        "raw_git_blob_sha256": "6bd2f8a1d3a5eda2a04770868faaa8faee21870a88d9d041f95d556d9785189e",
+        "checked_out_file_sha256": "943571f22882429a0518005ba41cbc9ffba3d3a73153ac2aae9f18e1287bc71b",
+        "stated_sha256": "943571f22882429a0518005ba41cbc9ffba3d3a73153ac2aae9f18e1287bc71b",
+        "hash_match": true
+      },
+      {
+        "system": "baseline",
+        "scenario_id": "g02",
+        "source_commit": "f58466a2605d38e324cfc565c011eb84591a2fee",
+        "path": "eval/results/generalization/v1/baseline-g02-candidate.json",
+        "raw_git_blob_sha256": "8c5ad1d3dae6148952ab6fd3036df9fc64a1b793c01a2058a8c0df8dda809248",
+        "checked_out_file_sha256": "2bdc02ab4f0d51b612ede8281d9dedafba837c0e2d56608ba16248740626f59c",
+        "stated_sha256": "2bdc02ab4f0d51b612ede8281d9dedafba837c0e2d56608ba16248740626f59c",
+        "hash_match": true
+      },
+      {
+        "system": "baseline",
+        "scenario_id": "g03",
+        "source_commit": "f58466a2605d38e324cfc565c011eb84591a2fee",
+        "path": "eval/results/generalization/v1/baseline-g03-candidate.json",
+        "raw_git_blob_sha256": "24baab4785167539bb82849e3cec126640458beadf08edfa5b65b1fdcb5176e2",
+        "checked_out_file_sha256": "0a1e1674aab9e80a59c3318e83693b151fab1f6c79a6b153024e33f1269f0e3f",
+        "stated_sha256": "0a1e1674aab9e80a59c3318e83693b151fab1f6c79a6b153024e33f1269f0e3f",
+        "hash_match": true
+      },
+      {
+        "system": "blackhole",
+        "scenario_id": "g01",
+        "source_commit": "9d2ee431079fc7ad7b1921677eac3d15123cbe34",
+        "path": "eval/results/generalization/v1/blackhole-g01-candidate.json",
+        "raw_git_blob_sha256": "501374379f2352920535354cf88aabef882b68723a1ca5c7b714737eb8d2f135",
+        "checked_out_file_sha256": "ab80ab7a3f096c456f1f18c6839141809ed51751c1968c5a12e16115e601c361",
+        "stated_sha256": "ab80ab7a3f096c456f1f18c6839141809ed51751c1968c5a12e16115e601c361",
+        "hash_match": true
+      },
+      {
+        "system": "blackhole",
+        "scenario_id": "g02",
+        "source_commit": "9d2ee431079fc7ad7b1921677eac3d15123cbe34",
+        "path": "eval/results/generalization/v1/blackhole-g02-candidate.json",
+        "raw_git_blob_sha256": "8228c3963cf2bc5192500806517a972f299c6f5f999171b13922d8a153910443",
+        "checked_out_file_sha256": "3a69cb75b287ac999ef0cc66f10f6e9fd3bf8588fe2c65c4b0922cc12ac1d667",
+        "stated_sha256": "3a69cb75b287ac999ef0cc66f10f6e9fd3bf8588fe2c65c4b0922cc12ac1d667",
+        "hash_match": true
+      },
+      {
+        "system": "blackhole",
+        "scenario_id": "g03",
+        "source_commit": "9d2ee431079fc7ad7b1921677eac3d15123cbe34",
+        "path": "eval/results/generalization/v1/blackhole-g03-candidate.json",
+        "raw_git_blob_sha256": "3676a40426b9e16b873a711c78d4de602892bbc6ee3683b838726dfefad469d3",
+        "checked_out_file_sha256": "07557d68f3361daa9d4c03567f4bb6de52e9fc4a14f803a4d4f376fdfc76d208",
+        "stated_sha256": "07557d68f3361daa9d4c03567f4bb6de52e9fc4a14f803a4d4f376fdfc76d208",
+        "hash_match": true
+      }
+    ]
+  },
+  "manifest_verification": {
+    "baseline": {
+      "path": "eval/results/generalization/v1/BASELINE_CANDIDATE_MANIFEST.json",
+      "source_commit": "f58466a2605d38e324cfc565c011eb84591a2fee",
+      "checked_out_file_sha256": "233e450631fc178c0c93e0ca13e307f0723241c407ca4af589b5bdd5bd9a8b6d",
+      "public_head_match": true,
+      "frozen_configuration_match": true,
+      "candidate_hash_claims_match": true,
+      "no_oracle_expected_output_access_before_sealing": true,
+      "no_scoring_before_sealing": true
+    },
+    "blackhole": {
+      "path": "eval/results/generalization/v1/BLACKHOLE_CANDIDATE_MANIFEST.json",
+      "source_commit": "9d2ee431079fc7ad7b1921677eac3d15123cbe34",
+      "checked_out_file_sha256": "456f7e6c6d1522f26f78d391ba80c67108f745650ed1fc485103e34bb082d41c",
+      "public_head_match": true,
+      "frozen_configuration_match": true,
+      "candidate_hash_claims_match": true,
+      "no_oracle_expected_output_access_before_sealing": true,
+      "no_scoring_before_sealing": true
+    }
+  },
+  "candidate_branch_boundary": {
+    "baseline_forbidden_v1r1_expected_oracle_paths": 0,
+    "blackhole_forbidden_v1r1_expected_oracle_paths": 0,
+    "historical_dev_expected_material_ignored": true
+  },
+  "phase_boundary": {
+    "oracle_expected_outputs_opened_before_this_evidence": false,
+    "scoring_invoked_before_this_evidence": false,
+    "provider_or_model_calls_made_by_scoring_agent": false
+  }
+}
