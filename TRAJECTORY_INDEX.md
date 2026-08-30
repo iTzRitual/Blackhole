@@ -51,14 +51,14 @@ now listed below; the local oracle and scoring histories remain separate.
 | ui-001-mobile-pwa | Build the dependency-light mobile-first PWA in an isolated worktree | KEEP; UI workstream preserved and integrated | `0cc6653` | [summary](trajectories/coding/ui-001-mobile-pwa/summary.md) |
 | ui-002-reference-redesign | Correct the Capture surface against the approved mobile reference | KEEP; UI correction preserved and integrated | `0cc6653` | [summary](trajectories/coding/ui-002-reference-redesign/summary.md) |
 | submission-001-hardening | Add offline qualification, CI, evidence index, and submission checklist | KEEP; three non-blocking stale-artifact warnings remain for finalization | `18b123f` | [summary](trajectories/coding/submission-001-hardening/summary.md) |
-| 034-product-v2-integration | Integrate the Product V2 runtime, PWA, and dogfood contract | KEEP; 50/50 visible acceptance cases and all quality gates passed | pending final integration commit | [prompt](trajectories/coding/034-product-v2-integration/prompt.md), [summary](trajectories/coding/034-product-v2-integration/summary.md), [result](eval/results/product-v2-integrated-acceptance.json) |
+| 034-product-v2-integration | Integrate the Product V2 runtime, PWA, and dogfood contract | KEEP; 50/50 visible acceptance cases and all quality gates passed | `43426e8` | [prompt](trajectories/coding/034-product-v2-integration/prompt.md), [summary](trajectories/coding/034-product-v2-integration/summary.md), [result](eval/results/product-v2-integrated-acceptance.json) |
 
 The short commit IDs above were resolved from local Git history. The hardening
 implementation is in `18b123f`; the small follow-up metadata commit records
 the final handoff state of that trajectory. The historical integrated product
 merge is `20e4540`, and the hardening merge is `bc4ef78`. The Product V2
 integration merge of the three source branches is `2ff1156`; the final
-integration commit is recorded after the last documentation and boundary audit.
+integration commit is `43426e8`.
 
 ## Runtime trajectories
 

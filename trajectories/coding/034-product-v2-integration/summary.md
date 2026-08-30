@@ -126,5 +126,4 @@ experiment and must not be used to infer holdout or generalization performance.
 
 ## Related git commit
 
-To be filled with the final coherent integration commit after documentation,
-validation, and the protected-boundary audit are complete.
+`43426e8` — `product: integrate Product V2 Host, PWA, and acceptance`

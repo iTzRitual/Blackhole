@@ -4,6 +4,8 @@ Status: integrated Product V2 Host/PWA and dogfood acceptance evidence on the
 isolated `product/v2-integration` branch. This is post-evaluation product work;
 it does not reopen the frozen V1 benchmark or runtime.
 
+Final coherent integration commit: `43426e8`.
+
 ## Scope and sources
 
 The integration worktree was created from the frozen base
