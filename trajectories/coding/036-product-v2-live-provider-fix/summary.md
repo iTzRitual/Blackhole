@@ -115,7 +115,9 @@ needed before changing and live-validating the Ask router. This follow-up is
 not E006 and did not alter frozen V1 benchmark, baseline, evaluator,
 calibration, holdout, or protected-worktree material.
 
-## Related git commit
+## Related git commits
 
-`37e56d3b3a465859b959d30dec947ea2ddfe971d` — `fix: repair Product V2
-Codex provider boundary`.
+- `37e56d3b3a465859b959d30dec947ea2ddfe971d` — `fix: repair Product V2
+  Codex provider boundary`.
+- `5e216b0f30947f2d22a07abe42a3a26e0eb1c529` — `scope: remove post-smoke
+  query tuning from provider fix`.
