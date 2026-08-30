@@ -616,3 +616,40 @@ The authentic runtime record, when the real smoke is executed, belongs under
 validation record belong under
 `trajectories/coding/019-host-pwa-integration/`. This work is not Experiment
 006 and must not be interpreted as a benchmark optimization.
+
+## 21. Product V2 deterministic runtime checks
+
+Product V2 is a post-evaluation product foundation in the isolated
+`product/v2-runtime` worktree. These checks do not run the frozen benchmark,
+read benchmark expected outputs, access holdout material, or alter the
+official V1R1 result. They use temporary Blackhole Homes and fake semantic
+providers, so they do not require a live provider or provider credentials:
+
+```text
+python -m unittest app.tests.test_product_v2 -v
+python -m unittest app.tests.test_product_v2_http -v
+python -m unittest discover -s app/tests -p "test_*.py" -q
+```
+
+The deterministic V2 suite covers immediate capture, durable pending work,
+chronological single-owner processing, stale-lease recovery, retry after
+failure, idempotence, open-world facts, relative-time Attention, deterministic
+Ask paths, bounded synthesis references, immutable content-addressed
+attachments, attachment-only capture, retraction, and read-only V1 migration.
+The HTTP checks additionally verify that V2 state/processing GETs do not start
+semantic work, while `POST /api/v2/ask` is the semantic Ask boundary.
+
+For a local Home, the UI-independent V2 command boundary is:
+
+```text
+python -m app.product_process --home <blackhole-home> init
+python -m app.product_process --home <blackhole-home> status
+python -m app.product_process --home <blackhole-home> process
+python -m app.product_process --home <blackhole-home> retry
+```
+
+`blackhole-v2.db` and `blobs/` are created inside the selected Home. A normal
+runtime may start its daemon worker after capture; read-only V2 state,
+processing, and attachment routes do not start a provider. Any real Codex CLI
+smoke must be separately authorized and recorded as a non-scored runtime
+trajectory; it must not be mixed into the deterministic evidence above.

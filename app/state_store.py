@@ -35,7 +35,12 @@ class StateStore:
     def __init__(self, path: str | Path) -> None:
         self.path = Path(path)
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        self.connection = sqlite3.connect(self.path)
+        # HostServer may keep one runtime alive while request handlers run in
+        # worker threads.  Domain operations remain serialized at the Host
+        # boundary; disabling SQLite's thread-affinity guard lets that scoped
+        # ownership model close cleanly without changing the V1 schema or
+        # projection semantics.
+        self.connection = sqlite3.connect(self.path, check_same_thread=False)
         self.connection.row_factory = sqlite3.Row
         self.connection.execute("PRAGMA foreign_keys = ON")
         self._last_duplicate_evidence_stats: dict[str, Any] = {

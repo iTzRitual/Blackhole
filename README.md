@@ -111,7 +111,9 @@ through the existing semantic extraction, deterministic completeness, relation
 recovery, duplicate-aware consolidation, and rebuildable SQLite projection.
 `ensure_state_fresh()` is the backend boundary an Ask caller can use when it
 needs current state. Failures are recorded per capture and can be retried; no
-background scheduler is included.
+background scheduler is included in this legacy V1-compatible ingestion
+engine. The separate Product V2 runtime adds a bounded daemon worker after
+capture without changing that frozen V1 path.
 
 ## Non-negotiable boundaries
 
@@ -153,6 +155,11 @@ The current integrated application slice is intentionally scoped:
 - `app/response_projector.py` — generic, query-scoped deterministic projections;
 - `app/provider.py` and `app/advanced_runner.py` — the subscription-first
   local Codex CLI boundary for separately authorized semantic runs;
+- `app/product_v2.py` and `app/product_v2_store.py` — the isolated Product V2
+  open-world runtime, durable queue, attachment blobs, Attention, Ask, and
+  rebuildable projections;
+- `app/product_process.py` — the UI-independent Product V2 init/status/process/
+  retry command boundary;
 - `app/web_app.py` — the same-origin Host HTTP transport and static PWA server;
 - `app/web/` — the mobile-first PWA interface, manifest, and service worker; and
 - `app/demo.py` and `scripts/seed_demo.py` — the historical deterministic demo
@@ -164,6 +171,49 @@ package in this repository. There is no pairing, device-authentication, TLS,
 remote-access, or public-Internet deployment boundary. The Host reports only
 safe provider readiness metadata and never reads or persists authentication
 material.
+
+## Post-evaluation Product V2 runtime foundation
+
+The explicitly authorized Product V2 work is isolated on the
+`product/v2-runtime` branch/worktree. It is a backend/API foundation, not a
+claim that the PWA has been redesigned. V2 uses a separate `blackhole-v2.db`
+and `blobs/` store inside Blackhole Home, so the frozen V1 `blackhole.db`,
+benchmark, evaluator, baseline, and recorded results remain unchanged.
+
+V2 adds immediate text/attachment capture, durable chronological processing
+with lease recovery and retry, generic open-world memory, deterministic
+Attention and arithmetic/date paths, bounded natural Ask retrieval, and
+append-only semantic retraction. The explicit routes are:
+
+```text
+POST /api/v2/capture
+GET  /api/v2/state
+GET  /api/v2/processing
+POST /api/v2/process
+POST /api/v2/retry
+POST /api/v2/ask
+POST /api/v2/retract
+POST /api/v2/attention/status
+GET  /api/v2/attachments/<sha256>
+```
+
+The read-only V2 GET routes do not start provider work; semantic Ask is
+POST-only. The UI-independent command boundary is:
+
+```text
+python -m app.product_process --home <blackhole-home> init
+python -m app.product_process --home <blackhole-home> status
+python -m app.product_process --home <blackhole-home> process
+python -m app.product_process --home <blackhole-home> retry
+```
+
+The product default is the configured `gpt-5.6-luna` model at `high`
+reasoning, distinct from the frozen benchmark's `max` configuration.
+
+V2 deterministic tests use fake providers and temporary Homes. No live
+provider call, benchmark expected output, holdout material, OCR guarantee,
+production hosting, Claude adapter, or consequential action execution is part
+of this foundation.
 
 ## Benchmark status
 

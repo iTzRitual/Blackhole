@@ -651,7 +651,7 @@ The integrated domain routes are:
 | `POST /api/process` | Explicitly processes pending captures and returns a bounded summary. |
 | `POST /api/retry` | Explicitly retries failed processing. |
 | `POST /api/query` | Validates a bounded question, calls `ensure_state_fresh()`, then routes to a deterministic QueryService. |
-| `GET /api/query?q=...` | Compatibility read route; the PWA uses the POST route. |
+| `GET /api/query?q=...` | Read-only compatibility route; it never refreshes pending work. The PWA uses the POST route. |
 
 The QueryService is database-free and receives only a Host snapshot. It reuses
 the deterministic `ResponseProjector` boundary and bounded question families
@@ -689,3 +689,81 @@ support, or public-Internet safety. The PWA service worker caches shell assets
 only and deliberately bypasses `/api/`; it makes no offline capture-sync
 claim. Attachment selection remains metadata/preview interaction and does not
 persist arbitrary bytes or perform OCR.
+
+## 19. Post-evaluation Product V2 open-world runtime
+
+Product V2 is a separately authorized post-evaluation product foundation. It
+does not replace the frozen V1R1 runtime, benchmark, response contract,
+evaluator, baseline evidence, or calibration evidence, and its behavior is not
+reported as a new benchmark experiment.
+
+The V2 runtime is exposed through `app/product_v2.py` and
+`app/product_v2_store.py`. It uses a separate `blackhole-v2.db` inside the
+configured Blackhole Home so that V1's `blackhole.db` and its projections stay
+unchanged. On first open, a read-only migration may copy V1 raw events and
+available derived observations/relationships into the V2 store. The source
+database is never updated and migration conflicts fail closed.
+
+The V2 persistence boundary is:
+
+```text
+capture request
+  -> content-addressed blob write (if an attachment exists)
+  -> immutable source_events row
+  -> pending processing_state row
+  -> immediate Saved. response
+
+worker / explicit process
+  -> chronological lease claim
+  -> bounded local Codex semantic call
+  -> normalized generic facts, relations, attention, attachment status
+  -> one atomic semantic commit and derived rebuild
+```
+
+`source_events`, blob files, and capture descriptors are append-only source
+evidence. Processing rows contain leases, attempts, retry timing, version
+identifiers, and concise failure state. A stale owner is recoverable; only one
+owner can process an event at a time. Provider failure leaves the source and
+pending/failed status intact. Facts, relations, Attention candidates, current
+projections, and retractions are derived data and can be rebuilt from source
+inputs plus versioned rules. Retraction is an append-only semantic event: it
+removes an event from active projections while retaining the raw evidence and
+history.
+
+The semantic contract is deliberately open-world. It accepts generic entities,
+facts, events, tasks, deadlines, relations, documents, transactions,
+observations, and proposed actions rather than benchmark subject IDs. Values
+carry `known`, `inferred`, or `unknown` status. Corrections, supersession,
+contradictions, duplicates, and source references remain explicit. Attention
+dates are normalized deterministically with timezone and relative-time context;
+upcoming/overdue status is recomputed from the current clock and task status.
+Arithmetic and cost totals use deterministic Decimal/date logic.
+
+V2 Ask is a POST semantic route (`POST /api/v2/ask`). The runtime first uses
+bounded retrieval over processed current state, relevant history, relations,
+Attention, and source metadata. Deterministic intents such as cost totals,
+upcoming work, last mentions, and recent changes do not call a provider. Only
+bounded synthesis questions may use the local Codex CLI, and the CLI receives
+the retrieved context rather than a full replay. Provider output is never
+authoritative for arithmetic, dates, or action execution.
+
+The V2 transport routes are:
+
+| Route | Behavior |
+| --- | --- |
+| `POST /api/v2/capture` | Immediate text, attachment-only, or combined capture; accepts bounded base64 inputs and returns `Saved.` plus pending status. The local Python API also accepts a caller-supplied path. |
+| `GET /api/v2/state` | Read-only Memory/Attention/source/processing snapshot; does not start semantic work. |
+| `GET /api/v2/processing` | Read-only processing status with stale-lease recovery. |
+| `POST /api/v2/process` | Explicit bounded chronological processing. |
+| `POST /api/v2/retry` | Explicit retry of failed work. |
+| `POST /api/v2/ask` | Natural retrieval and bounded synthesis over processed V2 memory. |
+| `POST /api/v2/retract` | Append a semantic retraction and rebuild active projections. |
+| `POST /api/v2/attention/status` | Append a user status event for an Attention candidate. |
+| `GET /api/v2/attachments/<sha256>` | Serve a verified immutable blob by content hash. |
+
+`app.product_process` is the UI-independent local CLI for V2 initialization,
+status, explicit processing, and retry. The default runtime may run a daemon
+worker after capture, while read-only status/state/attachment routes do not
+start a provider. The V2 provider adapter uses the already-installed,
+already-authenticated local Codex CLI, an ephemeral isolated invocation, a
+versioned prompt, bounded structured output, and no provider-token access.

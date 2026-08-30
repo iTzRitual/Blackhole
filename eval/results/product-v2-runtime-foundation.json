@@ -1,0 +1,44 @@
+{
+  "result_type": "non-scored-product-runtime-validation",
+  "runtime": "blackhole-product-v2-runtime-v1",
+  "branch": "product/v2-runtime",
+  "base_sha": "68b7b15d353b12cffb65a770f8583aa0ebb849dd",
+  "benchmark_score": null,
+  "provider_calls_in_deterministic_tests": 0,
+  "frozen_historical_artifacts_changed": false,
+  "checks": [
+    {
+      "command": "python -m unittest discover -s app/tests -p test_*.py -q",
+      "status": "pass",
+      "tests": 92
+    },
+    {
+      "command": "python -m unittest discover -s . -p test_*.py -q",
+      "status": "pass",
+      "tests": 102
+    },
+    {
+      "command": "python -m compileall -q app eval scripts",
+      "status": "pass"
+    },
+    {
+      "command": "python benchmark/dev/generate_benchmark.py --check",
+      "status": "pass",
+      "detail": "checked 200 events and 4 checkpoints; not a score"
+    },
+    {
+      "command": "git diff --check",
+      "status": "pass"
+    },
+    {
+      "command": "python scripts/qualification_check.py --inventory",
+      "status": "pass_with_existing_warnings",
+      "detail": "32 coding and 48 runtime trajectories indexed; 4 warnings concern existing audit/legacy-result artifacts"
+    }
+  ],
+  "scope_notes": [
+    "No live semantic provider was used by the deterministic tests.",
+    "No benchmark expected output, holdout material, oracle, or scoring worktree was accessed.",
+    "This result is Product V2 foundation evidence, not V1R1 evaluation evidence."
+  ]
+}

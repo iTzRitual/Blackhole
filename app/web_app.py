@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import ipaddress
 import json
+import re
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -17,13 +18,14 @@ from typing import Any
 from urllib.parse import unquote, urlparse
 
 from app.host import HOST_VERSION, HostRuntime
+from app.product_v2 import MAX_ATTACHMENT_BYTES, MAX_CAPTURE_TEXT, PRODUCT_RUNTIME_VERSION
 from app.query_service import answer_question_from_snapshot, build_state_view
 from app.runtime_config import RuntimeConfig, resolve_home
 
 
 WEB_ROOT = Path(__file__).resolve().parent / "web"
 MAX_BODY_BYTES = 1_000_000
-MAX_CAPTURE_TEXT = 100_000
+MAX_V2_BODY_BYTES = 30 * 1024 * 1024
 MAX_QUESTION_LENGTH = 4_000
 SUPPORTED_SOURCE_TYPES = frozenset({"text", "image", "document"})
 STATIC_CONTENT_TYPES = {
@@ -84,20 +86,45 @@ class HostServer(ThreadingHTTPServer):
         self.discovery_fn = discovery_fn
         self.trusted_lan_demo = trusted_lan_demo
         self.request_lock = threading.RLock()
+        self._runtime: HostRuntime | None = None
         super().__init__(address, handler)
 
     def open_runtime(self) -> HostRuntime:
-        """Open a request-scoped HostRuntime on the configured Blackhole Home."""
+        """Open the configured HostRuntime with managed default ownership."""
 
-        config = RuntimeConfig.load_or_create(self.home)
-        if self.database_path is not None:
-            config.database_path = self.database_path
-        return HostRuntime(
-            config,
-            contract=self.contract,
-            provider=self.provider,
-            discovery_fn=self.discovery_fn,
-        )
+        with self.request_lock:
+            # The default Home-backed product server keeps one runtime alive
+            # so its Product V2 worker survives between HTTP requests.  The
+            # explicit db_path/contract forms are legacy compatibility
+            # surfaces (demo and V1 tests), so they retain request-scoped
+            # ownership and lifecycle.
+            if self.contract is None and self.database_path is None:
+                if self._runtime is None:
+                    config = RuntimeConfig.load_or_create(self.home)
+                    self._runtime = HostRuntime(
+                        config,
+                        contract=self.contract,
+                        provider=self.provider,
+                        discovery_fn=self.discovery_fn,
+                        _managed=True,
+                    )
+                return self._runtime
+            config = RuntimeConfig.load_or_create(self.home)
+            if self.database_path is not None:
+                config.database_path = self.database_path
+            return HostRuntime(
+                config,
+                contract=self.contract,
+                provider=self.provider,
+                discovery_fn=self.discovery_fn,
+            )
+
+    def server_close(self) -> None:
+        runtime = self._runtime
+        self._runtime = None
+        if runtime is not None:
+            runtime.shutdown()
+        super().server_close()
 
 
 class HostRequestHandler(BaseHTTPRequestHandler):
@@ -130,12 +157,12 @@ class HostRequestHandler(BaseHTTPRequestHandler):
         payload.update(extra)
         self._send_json(payload, status)
 
-    def _read_json(self) -> dict[str, Any]:
+    def _read_json(self, max_bytes: int = MAX_BODY_BYTES) -> dict[str, Any]:
         try:
             length = int(self.headers.get("Content-Length", "0"))
         except ValueError as error:
             raise ValueError("invalid content length") from error
-        if length < 0 or length > MAX_BODY_BYTES:
+        if length < 0 or length > max_bytes:
             raise ValueError("request body is too large")
         raw = self.rfile.read(length)
         if not raw:
@@ -185,7 +212,7 @@ class HostRequestHandler(BaseHTTPRequestHandler):
             state = build_state_view(host.snapshot(), contract=host.contract)
         self._send_json({"ok": True, "state": state})
 
-    def _query_response(self, question: Any) -> None:
+    def _query_response(self, question: Any, *, refresh: bool = True) -> None:
         if not isinstance(question, str) or not question.strip():
             self._error("question must not be empty", 400, code="invalid_question")
             return
@@ -195,7 +222,20 @@ class HostRequestHandler(BaseHTTPRequestHandler):
         with self.host_server.request_lock, self._with_host() as host:
             before = host.processing_status() or {"counts": {}}
             before_pending = int(before.get("counts", {}).get("pending", 0))
-            freshness = host.ensure_state_fresh()
+            if refresh:
+                freshness = host.ensure_state_fresh()
+            else:
+                # Keep the legacy GET compatibility route read-only. Product
+                # V2 Ask is POST-only; a browser prefetch or URL visit must
+                # never turn into provider work.
+                freshness = {
+                    "fresh": before_pending == 0,
+                    "processed": 0,
+                    "pending_before": before_pending,
+                    "pending_after": before_pending,
+                    "failed": 0,
+                    "error": None,
+                }
             if before_pending and not freshness.get("fresh", False):
                 detail = str(freshness.get("error") or "")
                 provider_failure = "provider unavailable" in detail.casefold()
@@ -237,6 +277,29 @@ class HostRequestHandler(BaseHTTPRequestHandler):
                 return
         self._send_json({"ok": True, "answer": answer, "processing": freshness})
 
+    def _product_state_response(self) -> None:
+        with self.host_server.request_lock, self._with_host() as host:
+            state = host.product_state()
+        self._send_json({"ok": True, "runtime": PRODUCT_RUNTIME_VERSION, "state": state})
+
+    def _product_ask_response(self, question: Any) -> None:
+        if not isinstance(question, str) or not question.strip():
+            self._error("question must not be empty", 400, code="invalid_question")
+            return
+        if len(question) > MAX_QUESTION_LENGTH:
+            self._error("question is too long", 400, code="invalid_question")
+            return
+        try:
+            with self.host_server.request_lock, self._with_host() as host:
+                answer = host.product_ask(question)
+        except ValueError as error:
+            self._error(str(error), 400, code="invalid_question")
+            return
+        except Exception:
+            self._error("Blackhole couldn't answer that yet.", 500, code="query_failed", state_available=True)
+            return
+        self._send_json({"ok": True, "runtime": PRODUCT_RUNTIME_VERSION, "answer": answer})
+
     def do_GET(self) -> None:  # noqa: N802 - stdlib handler API
         parsed = urlparse(self.path)
         if parsed.path == "/api/health":
@@ -252,13 +315,33 @@ class HostRequestHandler(BaseHTTPRequestHandler):
             with self.host_server.request_lock, self._with_host() as host:
                 self._send_json({"ok": True, "processing": host.processing_status()})
             return
+        if parsed.path == "/api/v2/processing":
+            with self.host_server.request_lock, self._with_host() as host:
+                self._send_json({"ok": True, "runtime": PRODUCT_RUNTIME_VERSION, "processing": host.product_processing_status()})
+            return
+        if parsed.path == "/api/v2/state":
+            self._product_state_response()
+            return
+        if parsed.path.startswith("/api/v2/attachments/"):
+            digest = unquote(parsed.path.rsplit("/", 1)[-1])
+            if not re.fullmatch(r"[0-9a-f]{64}", digest):
+                self._error("attachment not found", 404, code="not_found")
+                return
+            try:
+                with self.host_server.request_lock, self._with_host() as host:
+                    content, metadata = host.product_attachment_bytes(digest)
+            except (FileNotFoundError, IOError):
+                self._error("attachment not found", 404, code="not_found")
+                return
+            self._send_bytes(content, metadata.get("mime_type", "application/octet-stream"))
+            return
         if parsed.path == "/api/state":
             self._state_response()
             return
         if parsed.path == "/api/query":
             from urllib.parse import parse_qs
 
-            self._query_response(parse_qs(parsed.query).get("q", [""])[0])
+            self._query_response(parse_qs(parsed.query).get("q", [""])[0], refresh=False)
             return
         static = self._static_file(parsed.path)
         if static is None:
@@ -273,7 +356,105 @@ class HostRequestHandler(BaseHTTPRequestHandler):
     def do_POST(self) -> None:  # noqa: N802 - stdlib handler API
         parsed = urlparse(self.path)
         try:
-            body = self._read_json()
+            body = self._read_json(MAX_V2_BODY_BYTES if parsed.path.startswith("/api/v2/") else MAX_BODY_BYTES)
+            if parsed.path == "/api/v2/capture":
+                text = body.get("text")
+                if text is not None and (not isinstance(text, str) or not text.strip()):
+                    raise ValueError("text must be a non-empty string when supplied")
+                if isinstance(text, str) and len(text) > MAX_CAPTURE_TEXT:
+                    raise ValueError("capture text is too long")
+                attachments = body.get("attachments", [])
+                if "attachment" in body:
+                    attachments = list(attachments) if isinstance(attachments, list) else []
+                    attachments.append(body["attachment"])
+                if not isinstance(attachments, list):
+                    raise ValueError("attachments must be an array")
+                if len(attachments) > 8:
+                    raise ValueError("too many attachments")
+                for attachment in attachments:
+                    if not isinstance(attachment, dict):
+                        raise ValueError("attachment must be an object")
+                    if "path" in attachment:
+                        raise ValueError("path attachments are accepted only by the local Python API")
+                    filename = attachment.get("filename", attachment.get("original_filename"))
+                    if filename is not None and (
+                        not isinstance(filename, str)
+                        or not filename.strip()
+                        or len(filename) > 255
+                        or "/" in filename
+                        or "\\" in filename
+                        or "\x00" in filename
+                    ):
+                        raise ValueError("attachment filename must be a safe file name")
+                    encoded = attachment.get("data_base64")
+                    if isinstance(encoded, str) and len(encoded) > ((MAX_ATTACHMENT_BYTES * 4 // 3) + 4096):
+                        raise ValueError("attachment is too large")
+                source_type = body.get("source_type")
+                if source_type is not None and (not isinstance(source_type, str) or not source_type.strip()):
+                    raise ValueError("source_type must be a non-empty string")
+                with self.host_server.request_lock, self._with_host() as host:
+                    capture = host.product_capture(
+                        text,
+                        attachments=attachments,
+                        source_type=source_type,
+                        event_id=body.get("event_id"),
+                        captured_at=body.get("captured_at"),
+                        observed_at=body.get("observed_at"),
+                        timezone_name=body.get("timezone"),
+                        metadata=body.get("metadata"),
+                    )
+                    processing = host.product_processing_status(capture["event_id"])
+                self._send_json(
+                    {
+                        "ok": True,
+                        "runtime": PRODUCT_RUNTIME_VERSION,
+                        "saved": True,
+                        "message": "Saved.",
+                        "capture": capture,
+                        "processing": {"status": (processing or {}).get("status", "pending")},
+                    }
+                )
+                return
+            if parsed.path == "/api/v2/process":
+                limit = self._limit(body.get("limit"), "limit")
+                with self.host_server.request_lock, self._with_host() as host:
+                    result = host.product_process_pending(limit=limit)
+                self._processing_result(result)
+                return
+            if parsed.path == "/api/v2/retry":
+                event_id = body.get("event_id")
+                if event_id is not None and (not isinstance(event_id, str) or not event_id.strip()):
+                    raise ValueError("event_id must be a non-empty string")
+                limit = self._limit(body.get("limit"), "limit")
+                with self.host_server.request_lock, self._with_host() as host:
+                    result = host.product_retry_failed(event_id, limit=limit)
+                self._processing_result(result)
+                return
+            if parsed.path == "/api/v2/retract":
+                event_id = body.get("event_id")
+                if not isinstance(event_id, str) or not event_id.strip():
+                    raise ValueError("event_id must be a non-empty string")
+                reason = body.get("reason", "user undo")
+                if not isinstance(reason, str) or not reason.strip():
+                    raise ValueError("reason must be a non-empty string")
+                with self.host_server.request_lock, self._with_host() as host:
+                    result = host.product_retract(event_id, reason=reason)
+                self._send_json({"ok": True, "runtime": PRODUCT_RUNTIME_VERSION, "retraction": result})
+                return
+            if parsed.path == "/api/v2/attention/status":
+                fingerprint = body.get("fingerprint")
+                status = body.get("status")
+                if not isinstance(fingerprint, str) or not fingerprint.strip():
+                    raise ValueError("fingerprint must be a non-empty string")
+                if not isinstance(status, str):
+                    raise ValueError("status must be a string")
+                with self.host_server.request_lock, self._with_host() as host:
+                    result = host.product_set_attention_status(fingerprint, status, note=body.get("note"))
+                self._send_json({"ok": True, "runtime": PRODUCT_RUNTIME_VERSION, "attention": result})
+                return
+            if parsed.path == "/api/v2/ask":
+                self._product_ask_response(body.get("question"))
+                return
             if parsed.path == "/api/capture":
                 text = body.get("text")
                 if not isinstance(text, str) or not text.strip():
