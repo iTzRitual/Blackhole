@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import base64
 import copy
+from dataclasses import replace
 import hashlib
 import inspect
 import json
@@ -30,7 +31,7 @@ from pathlib import Path
 from typing import Any, Protocol
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-from app.ask_planner import AskPlan, plan_ask, search_terms
+from app.ask_planner import AskPlan, plan_ask, search_terms, word_tokens
 from app.codex_discovery import ProviderStatus, discover_codex, discover_product_v2
 from app.ops_logging import ProductOpsLogger
 from app.prompts import product_v2_extraction_instruction
@@ -353,7 +354,7 @@ def _human_value(value: Any, *, depth: int = 0) -> str:
     return " · ".join(parts)[:800]
 
 
-def _display_fact_value(item: dict[str, Any]) -> str:
+def _display_fact_value(item: dict[str, Any], *, include_attribution: bool = False) -> str:
     metadata = item.get("metadata", item.get("semantic_metadata", {}))
     if not isinstance(metadata, dict):
         metadata = {}
@@ -394,11 +395,12 @@ def _display_fact_value(item: dict[str, Any]) -> str:
         display = f"not {display}"
     if item.get("knowledge_status") == "inferred":
         display = f"possibly {display} (not confirmed)"
-    attribution = item.get("attribution", metadata.get("attribution"))
-    if attribution is not None:
-        attribution_label = _human_value(attribution)
-        if attribution_label:
-            display += f" (reported by {attribution_label})"
+    if include_attribution:
+        attribution = item.get("attribution", metadata.get("attribution"))
+        if attribution is not None:
+            attribution_label = _human_value(attribution)
+            if attribution_label:
+                display += f" (reported by {attribution_label})"
     return display
 
 
@@ -407,6 +409,48 @@ def _fact_answer_label(item: dict[str, Any]) -> str:
     label = _clean_text(raw_label, limit=180)
     label = re.sub(r"[_-]+", " ", label).strip()
     return label or "This memory"
+
+
+def _english_location_phrase(value: str) -> str:
+    """Return a simple English location phrase without translating evidence."""
+
+    text = _clean_text(value, limit=500)
+    if not text:
+        return "in an unspecified place"
+    if re.match(r"(?i)^(?:in|at|on|inside|near|by|under|behind|with)\b", text):
+        return text
+    if re.match(r"(?i)^(?:the|a|an|my|your|our|their|his|her|this|that)\b", text):
+        return "in " + text
+    # Capitalized names and possessive phrases read more naturally with `at`;
+    # ordinary lower-case locations use the neutral `in the` construction.
+    if text[:1].isupper() or re.search(r"(?:['’]s|\bhome\b|\bplace\b)", text, flags=re.IGNORECASE):
+        return "at " + text
+    return "in the " + text
+
+
+def _english_location_summary(label: str, display: str) -> str:
+    """Render a location fact as a short assistant sentence."""
+
+    subject = label.strip()
+    if subject and subject[:1].isupper() and not subject.isupper():
+        subject = subject[:1].lower() + subject[1:]
+    article = "" if re.match(r"(?i)^(?:the|a|an|my|your|our|their|his|her)\b", subject) else "The "
+    normalized_display = display.strip().casefold()
+    if normalized_display == "needs clarification" or not normalized_display:
+        return f"The location of {subject or 'this memory'} needs clarification"
+    # A conservative plural heuristic avoids a noun dictionary while keeping
+    # the common plural subject in a natural form.
+    head = re.sub(r"[^\w]+$", "", subject.split()[-1] if subject else "")
+    verb = "are" if head.casefold().endswith("s") and not head.casefold().endswith(("ss", "us")) else "is"
+    return f"{article}{subject or 'this memory'} {verb} {_english_location_phrase(display)}"
+
+
+def _polish_location_summary(label: str, display: str) -> str:
+    """Keep Polish location evidence together without inventing inflection."""
+
+    if display.strip().casefold() == "needs clarification" or not display.strip():
+        return f"Lokalizacja {label or 'tego wspomnienia'} wymaga doprecyzowania"
+    return f"{label or 'To wspomnienie'} — {display}"
 
 
 def _fact_summary(
@@ -438,8 +482,8 @@ def _fact_summary(
         return f"Previously, {label} was {display}"
     if concept in location_concepts:
         if language == "pl":
-            return f"Lokalizacja {label}: {display}"
-        return f"The location of {label} is {display}"
+            return _polish_location_summary(label, display)
+        return _english_location_summary(label, display)
     if concept in cost_concepts:
         if language == "pl":
             return f"{label}: {display}"
@@ -455,7 +499,12 @@ def _fact_summary(
     return f"{label}: {display}"
 
 
-def _fact_answer(items: Iterable[dict[str, Any]], plan: AskPlan, *, historical: bool = False) -> str:
+def _fact_answer(
+    items: Iterable[dict[str, Any]],
+    plan: AskPlan,
+    *,
+    historical: bool = False,
+) -> str:
     lines = [
         _fact_summary(item, language=plan.language, historical=historical)
         for item in items
@@ -4080,6 +4129,43 @@ class ProductRuntime:
         )
 
     @staticmethod
+    def _needs_semantic_naturalization(
+        question: str,
+        plan: AskPlan,
+        items: Iterable[dict[str, Any]],
+    ) -> bool:
+        """Use the existing answer renderer for a likely surface-language gap.
+
+        Stable semantic retrieval can select the right fact without knowing
+        how to turn a foreign source label into fluent English prose. A
+        meaningful surface-token mismatch is enough to defer rendering; no
+        translation table or raw capture text is needed. Aggregates, broad
+        questions, and non-generic high-confidence paths retain their
+        deterministic renderers.
+        """
+
+        if (
+            plan.language != "en"
+            or plan.intent != "generic"
+            or plan.broad
+            or ProductRuntime._is_aggregation_question(question)
+        ):
+            return False
+        question_tokens = word_tokens(question)
+        if not question_tokens:
+            return False
+        for item in items:
+            if not isinstance(item, dict) or item.get("knowledge_status") != "known":
+                continue
+            label = _clean_text(item.get("entity_label") or item.get("entity_key"), limit=180)
+            label_tokens = word_tokens(label)
+            if label_tokens and not any(
+                len(token) > 2 for token in question_tokens & label_tokens
+            ):
+                return True
+        return False
+
+    @staticmethod
     def _occurrence_amount(item: dict[str, Any]) -> tuple[Decimal, str]:
         value = item.get("value")
         if isinstance(value, dict):
@@ -4141,24 +4227,55 @@ class ProductRuntime:
         ]
 
     @staticmethod
+    def _natural_join(parts: list[str], *, language: str) -> str:
+        if len(parts) <= 1:
+            return parts[0] if parts else ""
+        conjunction = " i " if language == "pl" else " and "
+        if len(parts) == 2:
+            return conjunction.join(parts)
+        return ", ".join(parts[:-1]) + conjunction + parts[-1]
+
+    @staticmethod
+    def _occurrence_object_hint(question: str, *, language: str) -> str:
+        """Keep a clear quantity object in the language the user typed."""
+
+        if not isinstance(question, str):
+            return ""
+        tokens = re.findall(r"[^\W_]+", question.strip(), flags=re.UNICODE)
+        folded = [_temporal_fold(token) for token in tokens]
+        if language == "pl" and folded and folded[0] in {"ile", "ilu", "ilez"}:
+            return tokens[1] if len(tokens) > 1 else ""
+        if language == "en" and len(folded) >= 3 and folded[:2] == ["how", "many"]:
+            return tokens[2]
+        return ""
+
+    @staticmethod
     def _occurrence_answer(
         totals: Iterable[dict[str, Any]],
         *,
         plan: AskPlan,
         now: datetime,
+        question: str = "",
     ) -> str:
         answers: list[str] = []
         for total in totals:
             label = _fact_answer_label({"entity_label": total.get("entity_label")})
             unit = _clean_text(total.get("unit"), limit=80)
-            total_text = f"{total.get('total')} {unit}".strip()
+            total_value = _clean_text(total.get("total"), limit=80)
+            total_text = f"{total_value} {unit}".strip()
+            if not unit:
+                object_label = ProductRuntime._occurrence_object_hint(question, language=plan.language) or label
+                if plan.language == "pl":
+                    total_text = f"{total_text} ({object_label[:1].lower() + object_label[1:]})"
+                else:
+                    total_text = f"{total_text} entries for {object_label}"
             members = [item for item in total.get("items", []) if isinstance(item, dict)]
             count = len(members)
             if plan.language == "pl":
                 sentence = f"Łącznie {total_text}"
             else:
                 instance_label = "instance" if count == 1 else "instances"
-                sentence = f"You recorded {total_text} across {count} {instance_label} of {label}"
+                sentence = f"You recorded {total_text} across {count} {instance_label}"
             details: list[str] = []
             for item in members:
                 value = _display_fact_value(item)
@@ -4167,8 +4284,7 @@ class ProductRuntime:
                 if detail:
                     details.append(detail)
             if details:
-                separator = " — "
-                sentence += separator + "; ".join(details)
+                sentence += " — " + ProductRuntime._natural_join(details, language=plan.language)
             elif plan.language == "pl":
                 sentence += f" w {count} zapisanych zdarzeniach"
             return sentence + "."
@@ -4302,7 +4418,7 @@ class ProductRuntime:
                 for total in occurrence_totals:
                     items.extend(total["items"])
                 return (
-                    self._occurrence_answer(occurrence_totals, plan=plan, now=self._now()),
+                    self._occurrence_answer(occurrence_totals, plan=plan, now=self._now(), question=question),
                     "occurrence_totals",
                     items[:MAX_ASK_CONTEXT_FACTS],
                     self._source_refs(items),
@@ -4542,6 +4658,13 @@ class ProductRuntime:
                 "processing": processing,
             }
         context, selected_facts, _normalized = self._retrieval_context(question, plan, thread_context)
+        naturalization_requested = self._needs_semantic_naturalization(question, plan, selected_facts)
+        if naturalization_requested:
+            # Retrieval has already selected the evidence. Only the bounded
+            # semantic answer renderer is re-used for fluent cross-language
+            # presentation; raw captures never enter this context.
+            plan = replace(plan, requires_synthesis=True)
+            context["plan"] = plan.as_dict()
         deterministic, mode, items, refs = self._deterministic_answer(
             question,
             snapshot,
@@ -4610,6 +4733,7 @@ class ProductRuntime:
         provider_used = False
         answer: str | None = None
         supporting_items: list[dict[str, Any]] = []
+        provider_evidence_ids: list[Any] = []
         provider: Any | None = None
         if plan.requires_synthesis:
             try:
@@ -4640,7 +4764,7 @@ class ProductRuntime:
                                 raw = method(question, context)
                             if isinstance(raw, str):
                                 answer = raw.strip()
-                                provider_evidence_ids: list[Any] = []
+                                provider_evidence_ids = []
                             elif isinstance(raw, dict):
                                 answer = _clean_text(raw.get("answer"), limit=4000)
                                 provider_evidence_ids = (
@@ -4659,6 +4783,13 @@ class ProductRuntime:
                                 # stale IDs cannot safely be rendered. Empty
                                 # IDs remain valid for an explicit limitation
                                 # answer such as "no supporting evidence".
+                                answer = None
+                                supporting_items = []
+                            elif answer and naturalization_requested and not provider_evidence_ids:
+                                # A renderer that cannot name one of the
+                                # already-selected facts must not replace a
+                                # usable deterministic answer with an
+                                # unsupported limitation or invented prose.
                                 answer = None
                                 supporting_items = []
                             refs = self._source_refs(supporting_items) if answer else []

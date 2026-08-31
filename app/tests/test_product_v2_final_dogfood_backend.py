@@ -5,6 +5,7 @@ import unittest
 from datetime import datetime, timezone
 from typing import Any
 
+from app.ask_planner import plan_ask
 from app.product_v2 import ProductRuntime, _display_fact_value
 
 
@@ -200,6 +201,52 @@ class ProductV2LastDogfoodBackendTests(unittest.TestCase):
                 self.assertEqual(answer["mode"], "occurrence_totals")
                 self.assertIn("3 glass", answer["answer"])
                 self.assertFalse(answer["provider_used"])
+
+    def test_occurrence_copy_keeps_generic_object_and_hides_attribution(self) -> None:
+        answer = ProductRuntime._occurrence_answer(
+            [
+                {
+                    "entity_label": "X",
+                    "concept": "consumed",
+                    "total": "3",
+                    "unit": "",
+                    "items": [
+                        {
+                            "value": {"amount": 2},
+                            "metadata": {"semantic_state": "occurrence", "attribution": "self"},
+                            "attribution": "self",
+                            "temporal": {"expression": "yesterday"},
+                        },
+                        {
+                            "value": {"amount": 1},
+                            "metadata": {"semantic_state": "occurrence", "attribution": "self"},
+                            "attribution": "self",
+                            "temporal": {"expression": "today"},
+                        },
+                    ],
+                }
+            ],
+            plan=plan_ask("How many X did I consume in total?"),
+            now=BASE_NOW,
+        )
+        self.assertIn("3 entries for X", answer)
+        self.assertIn("2 yesterday and 1 today", answer)
+        self.assertNotIn("reported by", answer)
+
+        polish_answer = ProductRuntime._occurrence_answer(
+            [{
+                "entity_label": "coffee",
+                "concept": "consumed",
+                "total": "3",
+                "unit": "",
+                "items": [],
+            }],
+            plan=plan_ask("Ile kaw wypiłem łącznie?"),
+            now=BASE_NOW,
+            question="Ile kaw wypiłem łącznie?",
+        )
+        self.assertIn("Łącznie 3 (kaw)", polish_answer)
+        self.assertNotIn("coffee", polish_answer)
 
     def test_generic_occurrence_markers_stay_events_and_do_not_conflict_with_state(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

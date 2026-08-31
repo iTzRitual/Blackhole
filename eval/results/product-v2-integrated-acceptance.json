@@ -1,7 +1,7 @@
 {
   "report_type": "product-v2-dogfood-acceptance",
   "suite": "Product V2 dogfood / acceptance suite",
-  "generated_at": "2026-08-31T09:28:48.911949+00:00",
+  "generated_at": "2026-08-31T11:00:26.990482+00:00",
   "adapter": "http",
   "live_provider_used": false,
   "target_provider_calls_possible": true,
@@ -469,12 +469,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:17.415974+00:00",
-                    "last_successful_at": "2026-08-31T09:28:17.421169+00:00",
+                    "last_attempted_at": "2026-08-31T10:59:55.703063+00:00",
+                    "last_successful_at": "2026-08-31T10:59:55.708091+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:17.421174+00:00"
+                    "updated_at": "2026-08-31T10:59:55.708096+00:00"
                   }
                 ]
               }
@@ -670,12 +670,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:17.975834+00:00",
-                    "last_successful_at": "2026-08-31T09:28:17.980077+00:00",
+                    "last_attempted_at": "2026-08-31T10:59:56.297451+00:00",
+                    "last_successful_at": "2026-08-31T10:59:56.300579+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:17.980102+00:00"
+                    "updated_at": "2026-08-31T10:59:56.300584+00:00"
                   }
                 ]
               }
@@ -871,12 +871,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:18.538723+00:00",
-                    "last_successful_at": "2026-08-31T09:28:18.546530+00:00",
+                    "last_attempted_at": "2026-08-31T10:59:56.850037+00:00",
+                    "last_successful_at": "2026-08-31T10:59:56.854199+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:18.546543+00:00"
+                    "updated_at": "2026-08-31T10:59:56.854204+00:00"
                   }
                 ]
               }
@@ -1016,12 +1016,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:19.101388+00:00",
-                    "last_successful_at": "2026-08-31T09:28:19.104554+00:00",
+                    "last_attempted_at": "2026-08-31T10:59:57.420539+00:00",
+                    "last_successful_at": "2026-08-31T10:59:57.422924+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:19.104563+00:00"
+                    "updated_at": "2026-08-31T10:59:57.422930+00:00"
                   }
                 ]
               }
@@ -1171,12 +1171,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:19.647944+00:00",
-                    "last_successful_at": "2026-08-31T09:28:19.651007+00:00",
+                    "last_attempted_at": "2026-08-31T10:59:57.995585+00:00",
+                    "last_successful_at": "2026-08-31T10:59:57.998504+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:19.651013+00:00"
+                    "updated_at": "2026-08-31T10:59:57.998509+00:00"
                   }
                 ]
               }
@@ -1321,12 +1321,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:20.214006+00:00",
-                    "last_successful_at": "2026-08-31T09:28:20.216858+00:00",
+                    "last_attempted_at": "2026-08-31T10:59:58.563768+00:00",
+                    "last_successful_at": "2026-08-31T10:59:58.566252+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:20.216863+00:00"
+                    "updated_at": "2026-08-31T10:59:58.566352+00:00"
                   }
                 ]
               }
@@ -1471,12 +1471,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:20.768308+00:00",
-                    "last_successful_at": "2026-08-31T09:28:20.770547+00:00",
+                    "last_attempted_at": "2026-08-31T10:59:59.129682+00:00",
+                    "last_successful_at": "2026-08-31T10:59:59.132036+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:20.770552+00:00"
+                    "updated_at": "2026-08-31T10:59:59.132041+00:00"
                   }
                 ]
               }
@@ -1750,7 +1750,7 @@
               "question": "Where is the spare charger and when is Marta's birthday?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Marta: November 3; The location of spare charger is blue suitcase.",
+              "answer": "Marta: November 3; The spare charger is in the blue suitcase.",
               "items": [
                 {
                   "entity_key": "marta",
@@ -1819,12 +1819,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:21.881780+00:00",
-                    "last_successful_at": "2026-08-31T09:28:21.885402+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:00.257828+00:00",
+                    "last_successful_at": "2026-08-31T11:00:00.261587+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:21.885411+00:00"
+                    "updated_at": "2026-08-31T11:00:00.261593+00:00"
                   },
                   {
                     "event_id": "acceptance-CAP-009-capture-birthday",
@@ -1834,12 +1834,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:21.881780+00:00",
-                    "last_successful_at": "2026-08-31T09:28:21.885508+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:00.257828+00:00",
+                    "last_successful_at": "2026-08-31T11:00:00.261648+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:21.885512+00:00"
+                    "updated_at": "2026-08-31T11:00:00.261652+00:00"
                   }
                 ]
               }
@@ -2064,12 +2064,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:22.452995+00:00",
-                    "last_successful_at": "2026-08-31T09:28:22.463521+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:00.816390+00:00",
+                    "last_successful_at": "2026-08-31T11:00:00.818943+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:22.463545+00:00"
+                    "updated_at": "2026-08-31T11:00:00.818951+00:00"
                   }
                 ]
               }
@@ -2142,7 +2142,7 @@
               "question": "Gdzie są klucze do piwnicy?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Lokalizacja klucze do piwnicy basement keys: u mamy.",
+              "answer": "klucze do piwnicy basement keys — u mamy.",
               "items": [
                 {
                   "entity_key": "klucze_do_piwnicy_basement_keys",
@@ -2188,12 +2188,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:23.031327+00:00",
-                    "last_successful_at": "2026-08-31T09:28:23.033658+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:01.378796+00:00",
+                    "last_successful_at": "2026-08-31T11:00:01.380984+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:23.033663+00:00"
+                    "updated_at": "2026-08-31T11:00:01.380989+00:00"
                   }
                 ]
               }
@@ -2423,12 +2423,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:23.663620+00:00",
-                    "last_successful_at": "2026-08-31T09:28:23.668235+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:01.945289+00:00",
+                    "last_successful_at": "2026-08-31T11:00:01.948594+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:23.668243+00:00"
+                    "updated_at": "2026-08-31T11:00:01.948600+00:00"
                   },
                   {
                     "event_id": "acceptance-MEM-002-capture-mechanic",
@@ -2438,12 +2438,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:23.663620+00:00",
-                    "last_successful_at": "2026-08-31T09:28:23.668309+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:01.945289+00:00",
+                    "last_successful_at": "2026-08-31T11:00:01.948652+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:23.668313+00:00"
+                    "updated_at": "2026-08-31T11:00:01.948656+00:00"
                   }
                 ]
               }
@@ -2634,12 +2634,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:24.230975+00:00",
-                    "last_successful_at": "2026-08-31T09:28:24.233917+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:02.497758+00:00",
+                    "last_successful_at": "2026-08-31T11:00:02.500960+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:24.233927+00:00"
+                    "updated_at": "2026-08-31T11:00:02.500969+00:00"
                   }
                 ]
               }
@@ -2878,12 +2878,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:24.788393+00:00",
-                    "last_successful_at": "2026-08-31T09:28:24.793931+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:03.071471+00:00",
+                    "last_successful_at": "2026-08-31T11:00:03.075446+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:24.793936+00:00"
+                    "updated_at": "2026-08-31T11:00:03.075451+00:00"
                   },
                   {
                     "event_id": "acceptance-MEM-004-capture-new-price",
@@ -2893,12 +2893,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:24.788393+00:00",
-                    "last_successful_at": "2026-08-31T09:28:24.793998+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:03.071471+00:00",
+                    "last_successful_at": "2026-08-31T11:00:03.075507+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:24.794002+00:00"
+                    "updated_at": "2026-08-31T11:00:03.075511+00:00"
                   }
                 ]
               }
@@ -2949,7 +2949,7 @@
                   "operation": "set",
                   "temporal": {},
                   "extractor_version": "blackhole-product-v2-extractor-v3",
-                  "created_at": "2026-08-31T09:28:24.793281+00:00",
+                  "created_at": "2026-08-31T11:00:03.074933+00:00",
                   "sequence": 1,
                   "retracted": false,
                   "value": {
@@ -2981,7 +2981,7 @@
                   "operation": "correction",
                   "temporal": {},
                   "extractor_version": "blackhole-product-v2-extractor-v3",
-                  "created_at": "2026-08-31T09:28:24.793462+00:00",
+                  "created_at": "2026-08-31T11:00:03.075053+00:00",
                   "supersedes_event_id": "acceptance-MEM-004-capture-old-price",
                   "sequence": 2,
                   "retracted": false,
@@ -3019,12 +3019,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:24.788393+00:00",
-                    "last_successful_at": "2026-08-31T09:28:24.793931+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:03.071471+00:00",
+                    "last_successful_at": "2026-08-31T11:00:03.075446+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:24.793936+00:00"
+                    "updated_at": "2026-08-31T11:00:03.075451+00:00"
                   },
                   {
                     "event_id": "acceptance-MEM-004-capture-new-price",
@@ -3034,12 +3034,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:24.788393+00:00",
-                    "last_successful_at": "2026-08-31T09:28:24.793998+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:03.071471+00:00",
+                    "last_successful_at": "2026-08-31T11:00:03.075507+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:24.794002+00:00"
+                    "updated_at": "2026-08-31T11:00:03.075511+00:00"
                   }
                 ]
               }
@@ -3112,7 +3112,7 @@
               "question": "Where did I leave the spare charger?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "The location of spare charger is blue suitcase.",
+              "answer": "The spare charger is in the blue suitcase.",
               "items": [
                 {
                   "entity_key": "spare_charger",
@@ -3158,12 +3158,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:25.353489+00:00",
-                    "last_successful_at": "2026-08-31T09:28:25.356837+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:03.640240+00:00",
+                    "last_successful_at": "2026-08-31T11:00:03.642821+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:25.356846+00:00"
+                    "updated_at": "2026-08-31T11:00:03.642827+00:00"
                   }
                 ]
               }
@@ -3354,12 +3354,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:25.913651+00:00",
-                    "last_successful_at": "2026-08-31T09:28:25.916345+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:04.215616+00:00",
+                    "last_successful_at": "2026-08-31T11:00:04.218653+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:25.916351+00:00"
+                    "updated_at": "2026-08-31T11:00:04.218658+00:00"
                   }
                 ]
               }
@@ -3678,12 +3678,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:26.475553+00:00",
-                    "last_successful_at": "2026-08-31T09:28:26.481930+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:04.779059+00:00",
+                    "last_successful_at": "2026-08-31T11:00:04.782310+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:26.481936+00:00"
+                    "updated_at": "2026-08-31T11:00:04.782315+00:00"
                   },
                   {
                     "event_id": "acceptance-MEM-007-capture-moved-appointment",
@@ -3693,12 +3693,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:26.475553+00:00",
-                    "last_successful_at": "2026-08-31T09:28:26.482034+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:04.779059+00:00",
+                    "last_successful_at": "2026-08-31T11:00:04.782379+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:26.482044+00:00"
+                    "updated_at": "2026-08-31T11:00:04.782383+00:00"
                   }
                 ]
               }
@@ -3810,7 +3810,7 @@
               "question": "Where are the basement keys now?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "The location of klucze do piwnicy basement keys is desk.",
+              "answer": "The klucze do piwnicy basement keys are in the desk.",
               "items": [
                 {
                   "entity_key": "klucze_do_piwnicy_basement_keys",
@@ -3856,12 +3856,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:27.042857+00:00",
-                    "last_successful_at": "2026-08-31T09:28:27.048146+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:05.353426+00:00",
+                    "last_successful_at": "2026-08-31T11:00:05.357355+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:27.048152+00:00"
+                    "updated_at": "2026-08-31T11:00:05.357361+00:00"
                   },
                   {
                     "event_id": "acceptance-MEM-008-capture-correction",
@@ -3871,12 +3871,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:27.042857+00:00",
-                    "last_successful_at": "2026-08-31T09:28:27.048215+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:05.353426+00:00",
+                    "last_successful_at": "2026-08-31T11:00:05.357422+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:27.048220+00:00"
+                    "updated_at": "2026-08-31T11:00:05.357426+00:00"
                   }
                 ]
               }
@@ -4071,12 +4071,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:27.616234+00:00",
-                    "last_successful_at": "2026-08-31T09:28:27.618823+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:05.923469+00:00",
+                    "last_successful_at": "2026-08-31T11:00:05.926193+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:27.618829+00:00"
+                    "updated_at": "2026-08-31T11:00:05.926199+00:00"
                   }
                 ]
               }
@@ -4306,12 +4306,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:28.184280+00:00",
-                    "last_successful_at": "2026-08-31T09:28:28.191326+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:06.492001+00:00",
+                    "last_successful_at": "2026-08-31T11:00:06.495066+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:28.191340+00:00"
+                    "updated_at": "2026-08-31T11:00:06.495072+00:00"
                   },
                   {
                     "event_id": "acceptance-MEM-010-capture-usb-repeat",
@@ -4321,12 +4321,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:28.184280+00:00",
-                    "last_successful_at": "2026-08-31T09:28:28.191447+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:06.492001+00:00",
+                    "last_successful_at": "2026-08-31T11:00:06.495129+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:28.191453+00:00"
+                    "updated_at": "2026-08-31T11:00:06.495133+00:00"
                   }
                 ]
               }
@@ -4358,9 +4358,9 @@
             "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What did I buy again?",
-              "mode": "retrieval",
+              "mode": "semantic",
               "status": "ready",
-              "answer": "USB cable again.",
+              "answer": "Based on captured evidence: USB cable: USB cable again.",
               "items": [
                 {
                   "entity_key": "usb_cable",
@@ -4390,7 +4390,7 @@
               "source_refs": [
                 "acceptance-MEM-010-capture-usb-repeat"
               ],
-              "provider_used": false,
+              "provider_used": true,
               "answer_language": "en",
               "processing": {
                 "counts": {
@@ -4408,12 +4408,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:28.184280+00:00",
-                    "last_successful_at": "2026-08-31T09:28:28.191326+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:06.492001+00:00",
+                    "last_successful_at": "2026-08-31T11:00:06.495066+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:28.191340+00:00"
+                    "updated_at": "2026-08-31T11:00:06.495072+00:00"
                   },
                   {
                     "event_id": "acceptance-MEM-010-capture-usb-repeat",
@@ -4423,12 +4423,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:28.184280+00:00",
-                    "last_successful_at": "2026-08-31T09:28:28.191447+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:06.492001+00:00",
+                    "last_successful_at": "2026-08-31T11:00:06.495129+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:28.191453+00:00"
+                    "updated_at": "2026-08-31T11:00:06.495133+00:00"
                   }
                 ]
               }
@@ -4573,12 +4573,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:28.795792+00:00",
-                    "last_successful_at": "2026-08-31T09:28:28.801712+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:07.062337+00:00",
+                    "last_successful_at": "2026-08-31T11:00:07.064998+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:28.801724+00:00"
+                    "updated_at": "2026-08-31T11:00:07.065003+00:00"
                   }
                 ]
               }
@@ -4769,12 +4769,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:29.377617+00:00",
-                    "last_successful_at": "2026-08-31T09:28:29.380719+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:07.625133+00:00",
+                    "last_successful_at": "2026-08-31T11:00:07.627579+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:29.380725+00:00"
+                    "updated_at": "2026-08-31T11:00:07.627585+00:00"
                   }
                 ]
               }
@@ -4970,12 +4970,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:29.934154+00:00",
-                    "last_successful_at": "2026-08-31T09:28:29.939662+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:08.191748+00:00",
+                    "last_successful_at": "2026-08-31T11:00:08.193956+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:29.939670+00:00"
+                    "updated_at": "2026-08-31T11:00:08.193962+00:00"
                   }
                 ]
               }
@@ -5115,12 +5115,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:30.504317+00:00",
-                    "last_successful_at": "2026-08-31T09:28:30.507389+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:08.753880+00:00",
+                    "last_successful_at": "2026-08-31T11:00:08.756593+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:30.507394+00:00"
+                    "updated_at": "2026-08-31T11:00:08.756598+00:00"
                   }
                 ]
               }
@@ -5316,12 +5316,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:31.061252+00:00",
-                    "last_successful_at": "2026-08-31T09:28:31.064675+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:09.321256+00:00",
+                    "last_successful_at": "2026-08-31T11:00:09.323763+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:31.064690+00:00"
+                    "updated_at": "2026-08-31T11:00:09.323768+00:00"
                   }
                 ]
               }
@@ -5496,12 +5496,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:31.634021+00:00",
-                    "last_successful_at": "2026-08-31T09:28:31.639466+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:09.892049+00:00",
+                    "last_successful_at": "2026-08-31T11:00:09.895210+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:31.639477+00:00"
+                    "updated_at": "2026-08-31T11:00:09.895215+00:00"
                   }
                 ]
               }
@@ -5741,12 +5741,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:32.197353+00:00",
-                    "last_successful_at": "2026-08-31T09:28:32.205130+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:10.461269+00:00",
+                    "last_successful_at": "2026-08-31T11:00:10.463770+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:32.205148+00:00"
+                    "updated_at": "2026-08-31T11:00:10.463775+00:00"
                   }
                 ]
               }
@@ -5891,7 +5891,7 @@
               "question": "Którędy wejść do mieszkania w Krakowie?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Lokalizacja mieszkanie w Krakowie: wejście od podwórka.",
+              "answer": "mieszkanie w Krakowie — wejście od podwórka.",
               "items": [
                 {
                   "entity_key": "mieszkanie_w_krakowie",
@@ -5937,12 +5937,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:32.755108+00:00",
-                    "last_successful_at": "2026-08-31T09:28:32.758704+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:11.034752+00:00",
+                    "last_successful_at": "2026-08-31T11:00:11.037907+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:32.758715+00:00"
+                    "updated_at": "2026-08-31T11:00:11.037913+00:00"
                   }
                 ]
               }
@@ -6143,12 +6143,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:33.324976+00:00",
-                    "last_successful_at": "2026-08-31T09:28:33.327776+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:11.602044+00:00",
+                    "last_successful_at": "2026-08-31T11:00:11.605234+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:33.327782+00:00"
+                    "updated_at": "2026-08-31T11:00:11.605242+00:00"
                   }
                 ]
               }
@@ -6298,12 +6298,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:33.892274+00:00",
-                    "last_successful_at": "2026-08-31T09:28:33.894697+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:12.170779+00:00",
+                    "last_successful_at": "2026-08-31T11:00:12.173923+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:33.894703+00:00"
+                    "updated_at": "2026-08-31T11:00:12.173929+00:00"
                   }
                 ]
               }
@@ -6420,7 +6420,7 @@
               "question": "What does the suitcase image tell me?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "The location of blue suitcase image is blue suitcase.",
+              "answer": "The blue suitcase image is in the blue suitcase.",
               "items": [
                 {
                   "entity_key": "blue_suitcase_image",
@@ -6466,12 +6466,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:34.450129+00:00",
-                    "last_successful_at": "2026-08-31T09:28:34.454426+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:12.737196+00:00",
+                    "last_successful_at": "2026-08-31T11:00:12.740377+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:34.454436+00:00"
+                    "updated_at": "2026-08-31T11:00:12.740382+00:00"
                   }
                 ]
               }
@@ -6675,12 +6675,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:35.004256+00:00",
-                    "last_successful_at": "2026-08-31T09:28:35.007437+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:13.305971+00:00",
+                    "last_successful_at": "2026-08-31T11:00:13.308762+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:35.007442+00:00"
+                    "updated_at": "2026-08-31T11:00:13.308770+00:00"
                   }
                 ]
               }
@@ -6916,12 +6916,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:35.557177+00:00",
-                    "last_successful_at": "2026-08-31T09:28:35.560915+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:13.872179+00:00",
+                    "last_successful_at": "2026-08-31T11:00:13.875455+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:35.560921+00:00"
+                    "updated_at": "2026-08-31T11:00:13.875460+00:00"
                   }
                 ]
               }
@@ -7322,7 +7322,7 @@
               "question": "What location clue was in the suitcase image?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "The location of blue suitcase image is blue suitcase.",
+              "answer": "The blue suitcase image is in the blue suitcase.",
               "items": [
                 {
                   "entity_key": "blue_suitcase_image",
@@ -7371,12 +7371,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:36.678029+00:00",
-                    "last_successful_at": "2026-08-31T09:28:36.690371+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:15.007356+00:00",
+                    "last_successful_at": "2026-08-31T11:00:15.010904+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:36.690380+00:00"
+                    "updated_at": "2026-08-31T11:00:15.010909+00:00"
                   },
                   {
                     "event_id": "acceptance-ATT-005-capture-second-image",
@@ -7386,12 +7386,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:36.678029+00:00",
-                    "last_successful_at": "2026-08-31T09:28:36.690671+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:15.007356+00:00",
+                    "last_successful_at": "2026-08-31T11:00:15.010962+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:36.690711+00:00"
+                    "updated_at": "2026-08-31T11:00:15.010966+00:00"
                   }
                 ]
               }
@@ -7608,12 +7608,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 2,
-                    "last_attempted_at": "2026-08-31T09:28:37.261168+00:00",
-                    "last_successful_at": "2026-08-31T09:28:37.263032+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:15.577953+00:00",
+                    "last_successful_at": "2026-08-31T11:00:15.580957+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:37.263037+00:00"
+                    "updated_at": "2026-08-31T11:00:15.580968+00:00"
                   }
                 ]
               }
@@ -7805,12 +7805,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:38.327081+00:00",
-                    "last_successful_at": "2026-08-31T09:28:38.330314+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:16.668860+00:00",
+                    "last_successful_at": "2026-08-31T11:00:16.671847+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:38.330321+00:00"
+                    "updated_at": "2026-08-31T11:00:16.671855+00:00"
                   }
                 ]
               }
@@ -8002,12 +8002,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:38.879687+00:00",
-                    "last_successful_at": "2026-08-31T09:28:38.884562+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:17.233368+00:00",
+                    "last_successful_at": "2026-08-31T11:00:17.236024+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:38.884569+00:00"
+                    "updated_at": "2026-08-31T11:00:17.236029+00:00"
                   }
                 ]
               }
@@ -8192,12 +8192,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:39.941399+00:00",
-                    "last_successful_at": "2026-08-31T09:28:39.943625+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:18.297176+00:00",
+                    "last_successful_at": "2026-08-31T11:00:18.299751+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:39.943629+00:00"
+                    "updated_at": "2026-08-31T11:00:18.299756+00:00"
                   }
                 ]
               }
@@ -8483,12 +8483,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:41.068471+00:00",
-                    "last_successful_at": "2026-08-31T09:28:41.073012+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:19.402935+00:00",
+                    "last_successful_at": "2026-08-31T11:00:19.405496+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:41.073026+00:00"
+                    "updated_at": "2026-08-31T11:00:19.405502+00:00"
                   }
                 ]
               }
@@ -8723,12 +8723,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:41.629672+00:00",
-                    "last_successful_at": "2026-08-31T09:28:41.634987+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:19.963339+00:00",
+                    "last_successful_at": "2026-08-31T11:00:19.966525+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:41.635001+00:00"
+                    "updated_at": "2026-08-31T11:00:19.966532+00:00"
                   },
                   {
                     "event_id": "acceptance-ASK-002-capture-pocketwave-current",
@@ -8738,12 +8738,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:41.629672+00:00",
-                    "last_successful_at": "2026-08-31T09:28:41.635110+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:19.963339+00:00",
+                    "last_successful_at": "2026-08-31T11:00:19.966591+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:41.635117+00:00"
+                    "updated_at": "2026-08-31T11:00:19.966595+00:00"
                   }
                 ]
               }
@@ -8872,7 +8872,7 @@
                   "operation": "set",
                   "temporal": {},
                   "extractor_version": "blackhole-product-v2-extractor-v3",
-                  "created_at": "2026-08-31T09:28:42.198802+00:00",
+                  "created_at": "2026-08-31T11:00:20.531047+00:00",
                   "sequence": 1,
                   "retracted": false,
                   "value": "2 metres",
@@ -8900,7 +8900,7 @@
                   "operation": "correction",
                   "temporal": {},
                   "extractor_version": "blackhole-product-v2-extractor-v3",
-                  "created_at": "2026-08-31T09:28:42.198969+00:00",
+                  "created_at": "2026-08-31T11:00:20.531166+00:00",
                   "supersedes_event_id": "acceptance-ASK-003-capture-storage-old",
                   "sequence": 2,
                   "retracted": false,
@@ -8934,12 +8934,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:42.193376+00:00",
-                    "last_successful_at": "2026-08-31T09:28:42.199691+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:20.527846+00:00",
+                    "last_successful_at": "2026-08-31T11:00:20.531577+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:42.199705+00:00"
+                    "updated_at": "2026-08-31T11:00:20.531582+00:00"
                   },
                   {
                     "event_id": "acceptance-ASK-003-capture-storage-new",
@@ -8949,12 +8949,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:42.193376+00:00",
-                    "last_successful_at": "2026-08-31T09:28:42.199783+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:20.527846+00:00",
+                    "last_successful_at": "2026-08-31T11:00:20.531639+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:42.199787+00:00"
+                    "updated_at": "2026-08-31T11:00:20.531643+00:00"
                   }
                 ]
               }
@@ -9202,12 +9202,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:42.767037+00:00",
-                    "last_successful_at": "2026-08-31T09:28:42.772278+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:21.072153+00:00",
+                    "last_successful_at": "2026-08-31T11:00:21.076460+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:42.772289+00:00"
+                    "updated_at": "2026-08-31T11:00:21.076480+00:00"
                   },
                   {
                     "event_id": "acceptance-ASK-004-capture-adam-gift",
@@ -9217,12 +9217,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:42.767037+00:00",
-                    "last_successful_at": "2026-08-31T09:28:42.772359+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:21.072153+00:00",
+                    "last_successful_at": "2026-08-31T11:00:21.076667+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:42.772364+00:00"
+                    "updated_at": "2026-08-31T11:00:21.076691+00:00"
                   }
                 ]
               }
@@ -9353,9 +9353,9 @@
             "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What locations have I recorded for things I might need?",
-              "mode": "retrieval",
+              "mode": "semantic",
               "status": "ready",
-              "answer": "The location of spare charger is blue suitcase; The garden keys are in the ceramic bowl by the door..",
+              "answer": "Based on captured evidence: spare charger: blue suitcase; The garden keys are in the ceramic bowl by the door.: The garden keys are in the ceramic bowl by the door..",
               "items": [
                 {
                   "entity_key": "spare_charger",
@@ -9406,7 +9406,7 @@
                 "acceptance-ASK-005-capture-charger-list",
                 "acceptance-ASK-005-capture-keys-list"
               ],
-              "provider_used": false,
+              "provider_used": true,
               "answer_language": "en",
               "processing": {
                 "counts": {
@@ -9424,12 +9424,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:43.332781+00:00",
-                    "last_successful_at": "2026-08-31T09:28:43.336953+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:21.618480+00:00",
+                    "last_successful_at": "2026-08-31T11:00:21.622186+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:43.336961+00:00"
+                    "updated_at": "2026-08-31T11:00:21.622191+00:00"
                   },
                   {
                     "event_id": "acceptance-ASK-005-capture-keys-list",
@@ -9439,12 +9439,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:43.332781+00:00",
-                    "last_successful_at": "2026-08-31T09:28:43.337031+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:21.618480+00:00",
+                    "last_successful_at": "2026-08-31T11:00:21.622247+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:43.337035+00:00"
+                    "updated_at": "2026-08-31T11:00:21.622250+00:00"
                   }
                 ]
               }
@@ -9548,12 +9548,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:43.883872+00:00",
-                    "last_successful_at": "2026-08-31T09:28:43.887247+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:22.157788+00:00",
+                    "last_successful_at": "2026-08-31T11:00:22.161358+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:43.887257+00:00"
+                    "updated_at": "2026-08-31T11:00:22.161366+00:00"
                   }
                 ]
               }
@@ -9755,12 +9755,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:44.459820+00:00",
-                    "last_successful_at": "2026-08-31T09:28:44.466034+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:22.702839+00:00",
+                    "last_successful_at": "2026-08-31T11:00:22.705853+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:44.466041+00:00"
+                    "updated_at": "2026-08-31T11:00:22.705858+00:00"
                   },
                   {
                     "event_id": "acceptance-ASK-007-capture-bike-keys",
@@ -9770,12 +9770,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:44.459820+00:00",
-                    "last_successful_at": "2026-08-31T09:28:44.466149+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:22.702839+00:00",
+                    "last_successful_at": "2026-08-31T11:00:22.705913+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:44.466155+00:00"
+                    "updated_at": "2026-08-31T11:00:22.705916+00:00"
                   }
                 ]
               },
@@ -10063,12 +10063,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:45.042392+00:00",
-                    "last_successful_at": "2026-08-31T09:28:45.057236+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:23.245508+00:00",
+                    "last_successful_at": "2026-08-31T11:00:23.249703+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:45.057278+00:00"
+                    "updated_at": "2026-08-31T11:00:23.249710+00:00"
                   },
                   {
                     "event_id": "acceptance-TIME-008-capture-library-return",
@@ -10078,12 +10078,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:45.042392+00:00",
-                    "last_successful_at": "2026-08-31T09:28:45.057479+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:23.245508+00:00",
+                    "last_successful_at": "2026-08-31T11:00:23.249776+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:45.057506+00:00"
+                    "updated_at": "2026-08-31T11:00:23.249780+00:00"
                   }
                 ]
               }
@@ -10772,7 +10772,7 @@
               "question": "Where is the spare house key?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "The location of spare house key is blue suitcase.",
+              "answer": "The spare house key is in the blue suitcase.",
               "items": [
                 {
                   "entity_key": "spare_house_key",
@@ -10818,12 +10818,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T09:28:46.224534+00:00",
-                    "last_successful_at": "2026-08-31T09:28:46.227272+00:00",
+                    "last_attempted_at": "2026-08-31T11:00:24.373389+00:00",
+                    "last_successful_at": "2026-08-31T11:00:24.376824+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T09:28:46.227290+00:00"
+                    "updated_at": "2026-08-31T11:00:24.376829+00:00"
                   }
                 ]
               }
@@ -10913,8 +10913,8 @@
   "latency_evidence": {
     "status": "PASS",
     "provider_delay_ms": 120,
-    "capture_return_ms": 2.575,
-    "processing_completion_ms": 136.999,
+    "capture_return_ms": 2.628,
+    "processing_completion_ms": 132.578,
     "processing_completed": true,
     "status_at_capture": "pending",
     "provider_calls_at_capture": 1,

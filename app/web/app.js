@@ -189,7 +189,7 @@
       return date ? "Renew by " + formatDate(date) : "A deadline is coming up";
     }
     if (predicate.includes("owner") || predicate.includes("location") || predicate.includes("place")) {
-      return "At " + displayName(formatValue(value));
+      return displayText(formatValue(value), "Needs clarification");
     }
     if (predicate.includes("status")) return humanize(formatValue(value));
     if (predicate.includes("missing") || predicate.includes("unobserved")) {
@@ -961,7 +961,6 @@
     processing: null,
     processingPollTimer: null,
     attentionTimer: null,
-    captureStatusVisible: false,
     toastTimer: null,
     toastAction: null,
     undoRecord: null,
@@ -1064,7 +1063,8 @@
     if (!region) return;
     clearToast();
     const icon = kind === "error" ? "error" : "check";
-    region.innerHTML = '<div class="toast' + (kind ? " is-" + escapeHtml(kind) : "") + '" role="status">' +
+    const role = kind === "error" ? "alert" : "status";
+    region.innerHTML = '<div class="toast' + (kind ? " is-" + escapeHtml(kind) : "") + '" role="' + role + '">' +
       '<span class="toast-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-' + icon + '"></use></svg></span>' +
       '<span class="toast-message">' + escapeHtml(message) + '</span>' +
       (actionLabel ? '<button class="toast-action" type="button" data-toast-action>' + escapeHtml(actionLabel) + '</button>' : "") +
@@ -1079,25 +1079,7 @@
     state.toastTimer = window.setTimeout(clearToast, kind === "error" ? 5600 : actionLabel ? 5200 : 3400);
   };
 
-  const setFeedback = (message, kind = "") => {
-    const element = $("#capture-feedback");
-    if (!element) return;
-    element.textContent = message;
-    element.className = "inline-feedback" + (kind ? " is-" + kind : "");
-  };
-
   const processingCounts = (processing) => processing?.counts || {};
-
-  const processingFeedback = (processing) => {
-    const counts = processingCounts(processing);
-    const status = String(processing?.status || "").toLowerCase();
-    const failed = Number(counts.failed || 0);
-    const pending = Number(counts.pending || 0);
-    const active = Number(counts.processing || 0);
-    if (failed > 0 || status === "failed") return { message: "Some recent captures couldn't be understood yet. Your captures are still saved.", kind: "error" };
-    if (pending > 0 || active > 0 || status === "pending" || status === "processing") return { message: "Saved. Understanding in the background…", kind: "" };
-    return { message: "Saved.", kind: "" };
-  };
 
   const processingNotice = (processing) => {
     const counts = processingCounts(processing);
@@ -1151,12 +1133,6 @@
     }, 650);
   };
 
-  const updateCaptureProcessingFeedback = () => {
-    if (!state.captureStatusVisible || state.submitting) return;
-    const feedback = processingFeedback(state.processing);
-    setFeedback(feedback.message, feedback.kind);
-  };
-
   const updateCapturePlaceholder = () => {
     const input = $("#capture-input");
     if (input) input.placeholder = state.attachment ? "Add a note (optional)…" : "Capture it…";
@@ -1207,7 +1183,7 @@
   const handleAttachment = (file) => {
     if (!file) return;
     if (file.size > maxAttachmentBytes) {
-      setFeedback("That attachment is over 10 MB. Choose a smaller file.", "error");
+      showToast("That attachment is over 10 MB. Choose a smaller file.", "error");
       const fileInput = $("#file-input");
       if (fileInput) fileInput.value = "";
       return;
@@ -1224,7 +1200,6 @@
       state.objectUrl = window.URL.createObjectURL(file);
     }
     renderAttachment();
-    setFeedback("");
     const input = $("#capture-input");
     if (input) input.focus();
   };
@@ -1490,7 +1465,6 @@
     }
     scheduleAttentionTicker();
     renderMemory();
-    updateCaptureProcessingFeedback();
     scheduleProcessingPoll();
     setConnectionStatus(fixtureMode ? "Fixture" : "Connected", "online");
   };
@@ -1514,7 +1488,7 @@
     const output = $("#answer-output");
     if (!output) return;
     output.setAttribute("aria-busy", "true");
-    renderAskConversation(true);
+    renderAskConversation(true, { forceFollow: true, behavior: "smooth" });
   };
 
   const answerIcon = (kind) => kind === "error" ? "error" : kind === "no-match" ? "search" : "spark";
@@ -1525,7 +1499,11 @@
     const input = $("#ask-input");
     if (!input) return;
     input.value = text;
-    input.focus();
+    try {
+      input.focus({ preventScroll: true });
+    } catch (_error) {
+      input.focus();
+    }
     if (typeof input.setSelectionRange === "function") {
       const end = text.length;
       input.setSelectionRange(end, end);
@@ -1570,29 +1548,42 @@
     const clarification = normalized.clarificationPrompt
       ? '<button class="quiet-button clarify-button" type="button" data-clarify-answer-index="' + messageIndex + '" data-clarify-question="' + escapeHtml(normalized.clarificationPrompt) + '">Clarify in Ask</button>'
       : "";
-    return '<article class="chat-message assistant-message"><div class="chat-assistant-primary"><span class="answer-spark"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-spark"></use></svg></span><div><p>' + escapeHtml(displayText(normalized.summary, "Here’s what I found in your memory:")) + '</p>' + clarification + '</div></div>' + related + '<p class="answer-grounding">Based on what you’ve captured so far.</p></article>';
+    return '<article class="chat-message assistant-message"><div class="chat-assistant-primary"><span class="answer-spark"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-spark"></use></svg></span><div><p>' + escapeHtml(displayText(normalized.summary, "Here’s what I found in your memory:")) + '</p>' + clarification + '</div></div>' + related + '</article>';
   };
+
+  const askScrollThreshold = 180;
+
+  const askDocumentHeight = () => Math.max(document.body?.scrollHeight || 0, document.documentElement?.scrollHeight || 0);
 
   const askIsNearBottom = () => {
     if (typeof document === "undefined" || typeof window === "undefined") return true;
-    const documentHeight = Math.max(document.body?.scrollHeight || 0, document.documentElement?.scrollHeight || 0);
-    return documentHeight - (window.scrollY + window.innerHeight) < 180;
+    return askDocumentHeight() - (window.scrollY + window.innerHeight) < askScrollThreshold;
   };
 
-  const settleAskScroll = (shouldStick) => {
-    if (!shouldStick || typeof window === "undefined" || typeof window.scrollTo !== "function") return;
+  const scrollAskToLatest = (behavior = "smooth") => {
+    if (typeof window === "undefined" || typeof window.scrollTo !== "function") return;
     const move = () => window.scrollTo({
-      top: Math.max(document.documentElement?.scrollHeight || 0, document.body?.scrollHeight || 0),
-      behavior: prefersReducedMotion() ? "auto" : "smooth",
+      top: Math.max(0, askDocumentHeight() - window.innerHeight),
+      behavior: prefersReducedMotion() ? "auto" : behavior,
     });
     if (typeof window.requestAnimationFrame === "function") window.requestAnimationFrame(move);
     else move();
   };
 
-  const renderAskConversation = (loading = false) => {
+  const scrollAskToTop = () => {
+    if (typeof window === "undefined" || typeof window.scrollTo !== "function") return;
+    window.scrollTo({ top: 0, behavior: "auto" });
+  };
+
+  const settleAskScroll = (shouldStick, behavior = "smooth") => {
+    if (!shouldStick || typeof window === "undefined" || typeof window.scrollTo !== "function") return;
+    scrollAskToLatest(behavior);
+  };
+
+  const renderAskConversation = (loading = false, options = {}) => {
     const output = $("#answer-output");
     if (!output) return;
-    const shouldStick = askIsNearBottom();
+    const shouldStick = options.forceFollow === true || askIsNearBottom();
     const messages = state.askMessages.map((message, index) => {
       if (message.role === "user") {
         return '<article class="chat-message user-message"><p>' + escapeHtml(displayText(message.text, "")) + '</p></article>';
@@ -1604,7 +1595,7 @@
     }
     output.innerHTML = messages.join("");
     bindDisclosureState(output);
-    settleAskScroll(shouldStick);
+    settleAskScroll(shouldStick, options.behavior || "smooth");
     $$("[data-answer-action-index]", output).forEach((button) => {
       const index = Number(button.dataset.answerActionIndex);
       const message = state.askMessages[index];
@@ -1665,8 +1656,15 @@
     state.askGeneration += 1;
     renderQuestionExamples();
     renderAskConversation();
+    scrollAskToTop();
     const input = $("#ask-input");
-    if (input) input.focus();
+    if (input) {
+      try {
+        input.focus({ preventScroll: true });
+      } catch (_error) {
+        input.focus();
+      }
+    }
   };
 
   const ask = async (question) => {
@@ -1728,7 +1726,7 @@
     const text = input ? input.value : "";
     const attachment = state.attachment;
     if (!text.trim() && !attachment) {
-      setFeedback("Add a thought or choose an attachment.", "error");
+      showToast("Add a thought or choose an attachment.", "error");
       if (input) input.focus();
       return;
     }
@@ -1738,7 +1736,6 @@
     if (plus) plus.disabled = true;
     const composer = $("#composer");
     if (composer) composer.setAttribute("aria-busy", "true");
-    setFeedback("Saving…");
     try {
       const result = await client.capture({ text, attachment });
       const captureId = String(firstValue(result?.capture?.event_id, result?.capture?.id, result?.event_id, "capture"));
@@ -1748,11 +1745,9 @@
         input.style.height = "";
       }
       clearAttachment();
-      state.captureStatusVisible = true;
       state.undoRecord = { id: captureId, inFlight: false };
       state.processing = result.processing || { status: result.capture?.processing_status || "pending" };
-      updateCaptureProcessingFeedback();
-      showToast("+1 off your mind", "", "Undo", undoCapture);
+      showToast("Out of mind", "", "Undo", undoCapture);
       await refreshState();
     } catch (error) {
       const code = String(error?.code || "");
@@ -1763,7 +1758,6 @@
         : code === "invalid_request" && attachment && !text.trim()
           ? "Blackhole could not save that attachment. Choose a smaller or supported file and retry."
           : "Couldn’t save that yet. Your capture is still here.";
-      setFeedback(message, "error");
       showToast(message, "error");
     } finally {
       state.submitting = false;
@@ -1793,7 +1787,11 @@
     });
     persistLocalState();
     if (updateHash && window.location.hash !== "#" + nextView) history.replaceState(null, "", "#" + nextView);
-    if (typeof window.scrollTo === "function") window.scrollTo({ top: 0, behavior: "auto" });
+    if (nextView === "ask" && state.askMessages.length) {
+      scrollAskToLatest("auto");
+    } else if (typeof window.scrollTo === "function") {
+      scrollAskToTop();
+    }
   };
 
   const triggerInstall = async () => {
@@ -1843,6 +1841,9 @@
       shouldShowAskExamples,
       formatMoney,
       humanize,
+      askIsNearBottom,
+      settleAskScroll,
+      renderAssistantMarkup,
     };
     return;
   }
@@ -1974,6 +1975,9 @@
       shouldShowAskExamples,
       formatMoney,
       humanize,
+      askIsNearBottom,
+      settleAskScroll,
+      renderAssistantMarkup,
     };
   }
 })();

@@ -397,7 +397,7 @@ class ProductV2AskRoutingTests(unittest.TestCase):
 
                 location = runtime.ask("Where are the basement keys?")
                 self.assertEqual(location["mode"], "retrieval")
-                self.assertEqual(location["answer"], "The location of basement keys is backpack.")
+                self.assertEqual(location["answer"], "The basement keys are in the backpack.")
                 self.assertNotIn("relevant memory", location["answer"].casefold())
                 self.assertNotRegex(location["answer"], r"\d{4}-\d{2}-\d{2}T")
 

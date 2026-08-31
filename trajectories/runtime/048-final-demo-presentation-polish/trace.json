@@ -1,0 +1,64 @@
+{
+  "record_type": "product-v2-runtime-trajectory",
+  "record_version": "1",
+  "run_id": "048-final-demo-presentation-polish-live-smoke-attempt",
+  "source_revision": "0ecd49443ef7c85367a4375b0b8dacbcccc2d0c6 plus the uncommitted scoped presentation hotfix",
+  "scope": "bounded synthetic live-validation attempt; no private data, benchmark scoring, or holdout access",
+  "launch": {
+    "home": "fresh temporary BLACKHOLE_HOME (path omitted)",
+    "server": "app.web_app.create_server on loopback with an ephemeral port",
+    "provider_auth": "already-authenticated local Codex CLI boundary; no token values were requested, read, copied, exported, or persisted",
+    "provider_discovery": "the local app server had reported provider=READY during the preceding local review"
+  },
+  "bounded_limits": {
+    "capture_limit": 3,
+    "ask_limit": 4,
+    "planned_capture_requests": [
+      {
+        "event_id": "live-demo-location-pl",
+        "text": "Klucze do piwnicy są w plecaku.",
+        "captured_at": "2026-08-31T08:00:00+02:00",
+        "timezone": "Europe/Warsaw"
+      },
+      {
+        "event_id": "live-demo-coffee-yesterday",
+        "text": "Wczoraj wypiłem 2 kawy.",
+        "captured_at": "2026-08-31T08:01:00+02:00",
+        "timezone": "Europe/Warsaw"
+      },
+      {
+        "event_id": "live-demo-coffee-today",
+        "text": "Dzisiaj wypiłem 1 kawę.",
+        "captured_at": "2026-08-31T08:02:00+02:00",
+        "timezone": "Europe/Warsaw"
+      }
+    ],
+    "planned_questions": [
+      "Where are the basement keys?",
+      "Ile kaw wypiłem łącznie?",
+      "Co to znaczy?",
+      "A po hiszpańsku?"
+    ],
+    "used_counts": "not recoverable from the terminated shell invocation"
+  },
+  "execution": {
+    "harness": "inline HTTP smoke using a fresh temporary Home and the normal app.web_app Host path",
+    "tool_observation": "the shell wait returned after 30.2 seconds with no stdout, no exit code, and no retained session handle",
+    "temporary_home_removed": true,
+    "follow_up_live_run": "not attempted, so the stated capture/question allowance was not exceeded by a second run"
+  },
+  "observed_result": {
+    "status": "incomplete",
+    "processing": "not recoverable",
+    "answers": "not recoverable",
+    "final_state": "not recoverable",
+    "reason": "the bounded process result was not returned before its temporary execution context disappeared; no live PASS is claimed"
+  },
+  "boundary_checks": {
+    "benchmark_oracle_accessed": false,
+    "holdout_material_accessed": false,
+    "provider_tokens_accessed": false,
+    "repository_artifacts_written_by_live_attempt": false
+  },
+  "outcome": "PARTIAL: live validation was attempted with the authorized synthetic inputs, but its result was not captured; rely on the deterministic regression suite and local browser review until a separately authorized live run can be recorded."
+}

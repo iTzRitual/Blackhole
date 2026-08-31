@@ -18,6 +18,7 @@ from app.product_v2 import (
     ProductCodexProvider,
     ProductProviderUnavailableError,
     ProductRuntime,
+    _display_fact_value,
     _human_fact_summary,
 )
 from app.runtime_config import (
@@ -456,7 +457,7 @@ process.stdout.write(JSON.stringify(result));
         self.assertEqual(result["memoryGroups"], 1)
         self.assertEqual(
             [item.casefold() for item in result["memoryFacts"]],
-            ["at mum's place", "changed from at the old flat"],
+            ["mum's place", "changed from the old flat"],
         )
         self.assertEqual(result["answerGroups"], 1)
         self.assertEqual(result["relatedItems"], 1)
@@ -564,6 +565,37 @@ process.stdout.write(JSON.stringify(result));
         self.assertIn("3 units total across 2 captured occurrences", result["summary"])
         self.assertEqual(result["unknownText"], "Needs clarification")
         self.assertEqual(result["clarificationPrompt"], "Can you clarify which memory you mean?")
+
+    def test_ask_primary_markup_has_supporting_disclosure_without_footer_copy(self) -> None:
+        result = self._run_ui_hooks(r"""(() => {
+  const normalized = api.normalizeAnswer({
+    answer: {
+      mode: "retrieval",
+      answer: "The basement keys are in your backpack.",
+      items: [{
+        entity_label: "Basement keys",
+        concept: "location",
+        knowledge_status: "known",
+        value: "your backpack",
+        source_refs: ["capture:keys"],
+      }],
+    },
+  });
+  return api.renderAssistantMarkup({ answer: normalized }, 0);
+})()""")
+        self.assertIn("The basement keys are in your backpack.", result)
+        self.assertIn("Supporting memories · 1", result)
+        self.assertNotIn("Based on what you’ve captured so far.", result)
+
+    def test_attribution_is_available_to_provenance_but_not_primary_fact_copy(self) -> None:
+        item = {
+            "value": {"amount": 2},
+            "metadata": {"attribution": "self"},
+            "attribution": "self",
+            "knowledge_status": "known",
+        }
+        self.assertEqual(_display_fact_value(item), "2")
+        self.assertIn("reported by self", _display_fact_value(item, include_attribution=True))
 
     def test_raw_language_is_preserved_and_deterministic_ask_stays_provider_free(self) -> None:
         provider = ProductFakeProvider()

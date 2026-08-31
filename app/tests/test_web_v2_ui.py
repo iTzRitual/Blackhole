@@ -47,7 +47,7 @@ class ProductV2UIContractTests(unittest.TestCase):
         self.assertNotIn("file.text()", APP_JS)
 
     def test_success_undo_and_reduced_motion_are_explicit(self) -> None:
-        self.assertIn('showToast("+1 off your mind", "", "Undo", undoCapture)', APP_JS)
+        self.assertIn('showToast("Out of mind", "", "Undo", undoCapture)', APP_JS)
         self.assertIn("retractCapture", APP_JS)
         self.assertIn('/api/v2/retract', APP_JS)
         self.assertIn("prefers-reduced-motion: reduce", CSS)
@@ -70,6 +70,15 @@ class ProductV2UIContractTests(unittest.TestCase):
         self.assertIn('status: "processing"', APP_JS)
         self.assertIn('status: "processing_failed"', APP_JS)
 
+    def test_capture_feedback_is_transient_and_accessible(self) -> None:
+        self.assertNotIn('id="capture-feedback"', HTML)
+        self.assertNotIn("inline-feedback", APP_JS)
+        self.assertNotIn("inline-feedback", CSS)
+        self.assertNotIn("setFeedback", APP_JS)
+        self.assertIn('const role = kind === "error" ? "alert" : "status"', APP_JS)
+        self.assertIn('showToast("That attachment is over 10 MB. Choose a smaller file.", "error")', APP_JS)
+        self.assertIn('showToast("Add a thought or choose an attachment.", "error")', APP_JS)
+
     def test_attention_is_human_oriented_and_badge_is_count_gated(self) -> None:
         self.assertIn("updateAttentionBadge", APP_JS)
         self.assertIn("count > 0", APP_JS)
@@ -84,6 +93,8 @@ class ProductV2UIContractTests(unittest.TestCase):
         self.assertIn("attention-action-area", APP_JS)
         self.assertIn("attention-card-footer", CSS)
         self.assertIn("attention-complete", CSS)
+        self.assertIn("align-self: center", CSS)
+        self.assertIn("align-items: center", CSS)
 
     def test_attention_clock_and_ask_thread_behaviors_are_live_bounded_and_calm(self) -> None:
         self.assertIn("scheduleAttentionTicker", APP_JS)
@@ -93,8 +104,13 @@ class ProductV2UIContractTests(unittest.TestCase):
         self.assertIn("askGeneration", APP_JS)
         self.assertIn("slice(-8)", APP_JS)
         self.assertIn("settleAskScroll", APP_JS)
-        self.assertIn("const shouldStick = askIsNearBottom()", APP_JS)
+        self.assertIn("const shouldStick = options.forceFollow === true || askIsNearBottom()", APP_JS)
+        self.assertIn('renderAskConversation(true, { forceFollow: true, behavior: "smooth" })', APP_JS)
+        self.assertIn("scrollAskToTop", APP_JS)
+        self.assertIn("scrollAskToLatest", APP_JS)
         self.assertRegex(CSS, r"\.ask-form\s*\{[\s\S]*?position: sticky")
+        self.assertIn("--ask-nav-gap: 14px", CSS)
+        self.assertIn("var(--ask-nav-gap)", CSS)
         self.assertIn("loading-dots", APP_JS)
         self.assertIn("@keyframes loading-dot", CSS)
         self.assertIn("@media (prefers-reduced-motion: reduce)", CSS)
@@ -125,7 +141,13 @@ class ProductV2UIContractTests(unittest.TestCase):
         self.assertIn("chat-assistant-primary", APP_JS)
         self.assertIn("clarify-answer-index", APP_JS)
         self.assertIn("Clarify in Ask", APP_JS)
+        self.assertNotIn("answer-grounding", APP_JS)
+        self.assertNotIn("Based on what you’ve captured so far.", APP_JS)
         self.assertIn("prefers-reduced-motion: reduce", CSS)
+
+    def test_capture_geometry_has_no_brittle_vertical_offsets(self) -> None:
+        self.assertRegex(CSS, r"\.composer textarea\s*\{[\s\S]*?padding: 14px 2px")
+        self.assertNotIn("transform: translateY(-1px)", CSS)
 
     def test_ask_has_natural_examples_and_distinct_failure_copy(self) -> None:
         self.assertIn("What do I need to do today?", APP_JS)

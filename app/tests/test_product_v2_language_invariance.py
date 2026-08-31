@@ -217,6 +217,8 @@ ANSWERS: dict[str, tuple[str, str, str]] = {
     "Quand est mon rendez-vous avec Marek?": ("FR", "marek_meeting", "2026-09-03T16:00:00+02:00"),
     "Was ist mit dem Auto passiert?": ("DE", "car", "knocking at the front left"),
     "¿Qué pasó con el coche?": ("ES", "car", "knocking at the front left"),
+    "Where are the basement keys?": ("EN", "basement_keys", "The basement keys are at mum's place"),
+    "What did I say about the car?": ("EN", "car", "The car was knocking at the front left"),
     "Co się stało z czerwonym segregatorem?": ("PL", "red_folder", "the study"),
     "¿Qué tengo que hacer pronto?": ("ES", "children_pickup", "Pick up the children"),
     "Was muss ich bald erledigen?": ("DE", "children_pickup", "Pick up the children"),
@@ -239,11 +241,11 @@ ANSWERS: dict[str, tuple[str, str, str]] = {
 MATRIX_CASES = (
     # Location and cross-language entity resolution.
     ("same-pl", "Gdzie są klucze do piwnicy?", "mum's place", "language-pl-basement", "pl", False),
-    ("pl-to-en", "Where are the basement keys?", "mum's place", "language-pl-basement", "en", False),
+    ("pl-to-en", "Where are the basement keys?", "mum's place", "language-pl-basement", "en", True),
     ("pl-to-es", "¿Dónde están las llaves del sótano?", "mum's place", "language-pl-basement", "same_as_question", True),
     ("pl-to-de", "Wo sind die Kellerschlüssel?", "mum's place", "language-pl-basement", "same_as_question", True),
     ("pl-to-fr", "Où sont les clés de la cave?", "mum's place", "language-pl-basement", "same_as_question", True),
-    ("uk-to-en", "Where are the basement keys?", "mum's place", "language-pl-basement", "en", False),
+    ("uk-to-en", "Where are the basement keys?", "mum's place", "language-pl-basement", "en", True),
     ("same-en-charger", "Where is the spare charger?", "blue suitcase", "language-en-charger", "en", False),
     ("en-to-pl", "Gdzie jest zapasowa ładowarka?", "blue suitcase", "language-en-charger", "pl", False),
     ("en-to-es", "¿Dónde está el cargador de repuesto?", "blue suitcase", "language-en-charger", "same_as_question", True),
@@ -264,7 +266,7 @@ MATRIX_CASES = (
     ("mixed-to-de", "Wann ist mein Meeting mit Marek?", "2026-09-03T16:00:00+02:00", "language-mixed-meeting", "same_as_question", True),
     ("mixed-to-es", "¿Cuándo es mi reunión con Marek?", "2026-09-03T16:00:00+02:00", "language-mixed-meeting", "same_as_question", True),
     ("mixed-to-fr", "Quand est mon rendez-vous avec Marek?", "2026-09-03T16:00:00+02:00", "language-mixed-meeting", "same_as_question", True),
-    ("pl-car-to-en", "What did I say about the car?", "knocking at the front left", "language-pl-car", "en", False),
+    ("pl-car-to-en", "What did I say about the car?", "knocking at the front left", "language-pl-car", "en", True),
     ("pl-car-same", "Co mówiłem o samochodzie?", "knocking at the front left", "language-pl-car", "pl", False),
     ("pl-car-to-de", "Was ist mit dem Auto passiert?", "knocking at the front left", "language-pl-car", "same_as_question", True),
     ("pl-car-to-es", "¿Qué pasó con el coche?", "knocking at the front left", "language-pl-car", "same_as_question", True),
@@ -344,6 +346,18 @@ class ProductV2LanguageInvarianceTests(unittest.TestCase):
                 self.assertIn(source_id, result["source_refs"])
                 self.assertEqual(result["answer_language"], answer_language)
                 self.assertEqual(self.provider.answer_calls, before_calls + int(provider_expected))
+
+    def test_cross_language_naturalization_uses_selected_structured_candidates_only(self) -> None:
+        result = self.runtime.ask("Where are the basement keys?")
+        self.assertTrue(result["provider_used"])
+        self.assertEqual(result["answer_language"], "en")
+        self.assertIn("[EN]", result["answer"])
+        context = self.provider.answer_contexts[-1]["context"]
+        serialized = json.dumps(context, ensure_ascii=False)
+        self.assertTrue(context["plan"]["requires_synthesis"])
+        self.assertIn("basement_keys", serialized)
+        self.assertNotIn("Klucze do piwnicy są u mamy.", serialized)
+        self.assertNotIn("payload", serialized)
 
     def test_unknown_language_uses_general_fallback_with_bounded_structured_memory(self) -> None:
         result = self.runtime.ask("地下室の鍵はどこですか？")
