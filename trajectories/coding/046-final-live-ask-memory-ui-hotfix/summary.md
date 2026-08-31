@@ -96,11 +96,13 @@ disclosed; no follow-up live retry was run beyond the authorized bounded cap.
 ## Final decision
 
 KEEP. This is an explicitly authorized post-freeze product UX/generalization
-hotfix, not E006 and not a change to the frozen benchmark track. Documentation,
-commit, push, and release-tag verification are completed in the follow-up
-handoff commit(s).
+hotfix, not E006 and not a change to the frozen benchmark track. The
+implementation/evidence stage is committed as
+`93e497abf10be08bc7186fa97f071c6d20c3a9aa`; the final documentation/tag
+handoff is recorded in the follow-up commit.
 
 ## Related git commit
 
-Implementation/evidence commit and final documentation/tag commit are recorded
-in the final handoff after Git finalization.
+Implementation/evidence commit:
+`93e497abf10be08bc7186fa97f071c6d20c3a9aa`.
+Final documentation/tag commit: recorded below after Git finalization.
