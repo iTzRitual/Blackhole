@@ -77,5 +77,57 @@
     "pwa_shell_version": "v8",
     "gate_unchanged": "PARTIAL / REVISE"
   },
-  "notes": "Semantic and UI repairs are kept. The observed burst interval did not demonstrate material end-to-end latency improvement; no semantic regression was observed."
+  "notes": "Semantic and UI repairs are kept. The observed burst interval did not demonstrate material end-to-end latency improvement; no semantic regression was observed.",
+  "config_boundary_correction": {
+    "provider_calls": 0,
+    "measured_live_values_changed": false,
+    "historical_first_review_correction": {
+      "focused_product_ui_tests": {"passed": 105, "failed": 0},
+      "application_tests": {"passed": 172, "failed": 0}
+    },
+    "historical_parent_post_correction_acceptance": {
+      "passed": 50,
+      "failed": 0,
+      "latency_probe": {
+        "capture_return_ms": 7.066,
+        "processing_completion_ms": 136.504
+      }
+    },
+    "post_config_fix_deterministic": {
+      "focused_final_dogfood_pwa": {"passed": 16, "failed": 0, "wall_seconds": 2.002},
+      "combined_product_config_and_regression": {"passed": 120, "failed": 0, "wall_seconds": 22.358},
+      "application_tests": {"passed": 176, "failed": 0, "wall_seconds": 26.528},
+      "acceptance_harness_tests": {"passed": 7, "failed": 0, "wall_seconds": 0.428},
+      "evaluator_tests": {"passed": 10, "failed": 0, "wall_seconds": 2.430},
+      "integrated_acceptance": {
+        "passed": 50,
+        "failed": 0,
+        "reliability_gates": "PASS",
+        "latency_probe": {
+          "capture_return_ms": 7.320,
+          "processing_completion_ms": 137.041,
+          "processing_completed": true,
+          "status_at_capture": "pending",
+          "provider_calls_at_capture": 1
+        }
+      },
+      "hard_checks": {
+        "compileall": {"status": "PASS", "wall_seconds": 0.406},
+        "javascript_syntax": {"status": "PASS", "wall_seconds": 0.422},
+        "qualification": {"status": "PASS", "warnings": 4, "wall_seconds": 3.701},
+        "benchmark_structure": {"status": "PASS", "events": 200, "checkpoints": 4, "wall_seconds": 0.484},
+        "contract_smoke": {"status": "PASS", "wall_seconds": 0.393},
+        "diff_check": "PASS"
+      }
+    },
+    "config_boundary": {
+      "legacy_defaults": {"reasoning_effort": "high", "batch_size": 10},
+      "product_v2_defaults": {"reasoning_effort": "low", "batch_size": 2},
+      "legacy_supported_efforts": ["max", "high", "medium"],
+      "product_v2_supported_efforts": ["max", "high", "medium", "low"],
+      "fresh_config_persists_both": true,
+      "existing_config_without_product_fields": "legacy values retained; Product V2 low/two supplied in memory"
+    },
+    "gate_unchanged": "PARTIAL / REVISE"
+  }
 }

@@ -11,7 +11,7 @@ import argparse
 import json
 from pathlib import Path
 
-from app.codex_discovery import discover_codex
+from app.codex_discovery import discover_product_v2
 from app.product_v2 import PRODUCT_RUNTIME_VERSION, ProductRuntime, product_database_path
 from app.runtime_config import RuntimeConfig
 
@@ -29,11 +29,11 @@ def main(argv: list[str] | None = None) -> int:
         with ProductRuntime(
             config.home,
             db_path=product_database_path(config.home),
-            discovery_fn=discover_codex,
+            discovery_fn=discover_product_v2,
             model=config.model,
-            reasoning_effort=config.reasoning_effort,
+            reasoning_effort=config.product_reasoning_effort,
             timeout_seconds=config.timeout_seconds,
-            batch_size=config.batch_size,
+            batch_size=config.product_batch_size,
             start_worker=False,
         ) as runtime:
             if args.command == "init":

@@ -17,6 +17,7 @@ from app.codex_discovery import (
     MISSING,
     ProviderStatus,
     discover_codex,
+    discover_product_v2,
 )
 from app.ingestion_engine import CodexCLIProvider, IngestionEngine, SemanticProvider
 from app.ops_logging import ProductOpsLogger
@@ -341,15 +342,18 @@ class HostRuntime:
 
         with self._lock:
             if self._product_runtime is None:
+                product_discovery = self._discovery_fn
+                if product_discovery is discover_codex:
+                    product_discovery = discover_product_v2
                 self._product_runtime = ProductRuntime(
                     self.config.home,
                     db_path=product_database_path(self.config.home),
                     provider=self._provider,
-                    discovery_fn=self._discovery_fn,
+                    discovery_fn=product_discovery,
                     model=self.config.model,
-                    reasoning_effort=self.config.reasoning_effort,
+                    reasoning_effort=self.config.product_reasoning_effort,
                     timeout_seconds=self.config.timeout_seconds,
-                    batch_size=self.config.batch_size,
+                    batch_size=self.config.product_batch_size,
                     start_worker=False,
                     auto_start_on_capture=self._auto_start_product_worker,
                     clock=self._clock,

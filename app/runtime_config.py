@@ -13,12 +13,15 @@ from typing import Any
 RUNTIME_CONFIG_VERSION = "blackhole-runtime-config-v1"
 DEFAULT_PROVIDER = "codex"
 DEFAULT_MODEL = "gpt-5.6-luna"
-DEFAULT_REASONING_EFFORT = "low"
+DEFAULT_REASONING_EFFORT = "high"
 DEFAULT_TIMEOUT_SECONDS = 900
-DEFAULT_BATCH_SIZE = 2
+DEFAULT_BATCH_SIZE = 10
 DEFAULT_DATABASE_NAME = "blackhole.db"
 CONFIG_FILENAME = "config.json"
-SUPPORTED_REASONING_EFFORTS = frozenset({"max", "high", "medium", "low"})
+SUPPORTED_REASONING_EFFORTS = frozenset({"max", "high", "medium"})
+PRODUCT_V2_DEFAULT_REASONING_EFFORT = "low"
+PRODUCT_V2_DEFAULT_BATCH_SIZE = 2
+PRODUCT_V2_SUPPORTED_REASONING_EFFORTS = frozenset({"max", "high", "medium", "low"})
 SENSITIVE_CONFIG_KEYS = frozenset(
     {
         "access_token",
@@ -78,6 +81,8 @@ class RuntimeConfig:
     timeout_seconds: int = DEFAULT_TIMEOUT_SECONDS
     batch_size: int = DEFAULT_BATCH_SIZE
     version: str = RUNTIME_CONFIG_VERSION
+    product_reasoning_effort: str = PRODUCT_V2_DEFAULT_REASONING_EFFORT
+    product_batch_size: int = PRODUCT_V2_DEFAULT_BATCH_SIZE
 
     def __post_init__(self) -> None:
         self.home = resolve_home(self.home)
@@ -111,6 +116,12 @@ class RuntimeConfig:
             raise ValueError(f"unsupported reasoning effort: {self.reasoning_effort}")
         _positive_integer(self.timeout_seconds, "timeout_seconds")
         _positive_integer(self.batch_size, "batch_size")
+        if (
+            not isinstance(self.product_reasoning_effort, str)
+            or self.product_reasoning_effort not in PRODUCT_V2_SUPPORTED_REASONING_EFFORTS
+        ):
+            raise ValueError(f"unsupported Product V2 reasoning effort: {self.product_reasoning_effort}")
+        _positive_integer(self.product_batch_size, "product_batch_size")
 
     def to_dict(self) -> dict[str, Any]:
         """Return exactly the fields Blackhole is allowed to persist."""
@@ -123,6 +134,8 @@ class RuntimeConfig:
             "reasoning_effort": self.reasoning_effort,
             "timeout_seconds": self.timeout_seconds,
             "batch_size": self.batch_size,
+            "product_reasoning_effort": self.product_reasoning_effort,
+            "product_batch_size": self.product_batch_size,
             "database": database,
         }
 
@@ -178,6 +191,10 @@ class RuntimeConfig:
             timeout_seconds=value.get("timeout_seconds", value.get("timeout", DEFAULT_TIMEOUT_SECONDS)),
             batch_size=value.get("batch_size", DEFAULT_BATCH_SIZE),
             version=value.get("config_version", RUNTIME_CONFIG_VERSION),
+            product_reasoning_effort=value.get(
+                "product_reasoning_effort", PRODUCT_V2_DEFAULT_REASONING_EFFORT
+            ),
+            product_batch_size=value.get("product_batch_size", PRODUCT_V2_DEFAULT_BATCH_SIZE),
         )
         return config
 
@@ -200,6 +217,9 @@ __all__ = [
     "DEFAULT_PROVIDER",
     "DEFAULT_REASONING_EFFORT",
     "DEFAULT_TIMEOUT_SECONDS",
+    "PRODUCT_V2_DEFAULT_BATCH_SIZE",
+    "PRODUCT_V2_DEFAULT_REASONING_EFFORT",
+    "PRODUCT_V2_SUPPORTED_REASONING_EFFORTS",
     "RUNTIME_CONFIG_VERSION",
     "RuntimeConfig",
     "SUPPORTED_REASONING_EFFORTS",

@@ -5,13 +5,30 @@ import subprocess
 import tempfile
 import time
 import unittest
+from contextlib import redirect_stdout
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+from unittest.mock import patch
 
+from app.codex_discovery import MISSING, ProviderStatus, discover_codex, discover_product_v2
+from app.host import HostRuntime
 from app.ops_logging import ProductOpsLogger, sanitize_human_text
-from app.product_v2 import ProductRuntime, _human_fact_summary
-from app.runtime_config import DEFAULT_BATCH_SIZE, DEFAULT_REASONING_EFFORT, SUPPORTED_REASONING_EFFORTS
+from app.product_v2 import (
+    ProductCodexProvider,
+    ProductProviderUnavailableError,
+    ProductRuntime,
+    _human_fact_summary,
+)
+from app.runtime_config import (
+    DEFAULT_BATCH_SIZE,
+    DEFAULT_REASONING_EFFORT,
+    PRODUCT_V2_DEFAULT_BATCH_SIZE,
+    PRODUCT_V2_DEFAULT_REASONING_EFFORT,
+    PRODUCT_V2_SUPPORTED_REASONING_EFFORTS,
+    RuntimeConfig,
+    SUPPORTED_REASONING_EFFORTS,
+)
 from app.tests.test_product_v2 import ProductFakeProvider
 
 
@@ -235,9 +252,143 @@ process.stdout.write(JSON.stringify(result));
                 )
 
     def test_product_runtime_uses_conservative_product_defaults(self) -> None:
-        self.assertEqual(DEFAULT_REASONING_EFFORT, "low")
-        self.assertEqual(DEFAULT_BATCH_SIZE, 2)
-        self.assertIn("low", SUPPORTED_REASONING_EFFORTS)
+        self.assertEqual(DEFAULT_REASONING_EFFORT, "high")
+        self.assertEqual(DEFAULT_BATCH_SIZE, 10)
+        self.assertNotIn("low", SUPPORTED_REASONING_EFFORTS)
+        self.assertEqual(PRODUCT_V2_DEFAULT_REASONING_EFFORT, "low")
+        self.assertEqual(PRODUCT_V2_DEFAULT_BATCH_SIZE, 2)
+        self.assertIn("low", PRODUCT_V2_SUPPORTED_REASONING_EFFORTS)
+        with tempfile.TemporaryDirectory() as directory:
+            with ProductRuntime(directory, start_worker=False) as runtime:
+                self.assertEqual(runtime.reasoning_effort, PRODUCT_V2_DEFAULT_REASONING_EFFORT)
+                self.assertEqual(runtime.batch_size, PRODUCT_V2_DEFAULT_BATCH_SIZE)
+            provider = ProductCodexProvider(home=directory)
+            self.assertEqual(provider.reasoning_effort, PRODUCT_V2_DEFAULT_REASONING_EFFORT)
+        with patch("app.codex_discovery.shutil.which", return_value=None):
+            self.assertFalse(
+                discover_codex(configured_model="gpt-5.6-luna", configured_reasoning="low").configured_runtime
+            )
+            self.assertTrue(
+                discover_product_v2(
+                    configured_model="gpt-5.6-luna", configured_reasoning="low"
+                ).configured_runtime
+            )
+
+    def test_fresh_home_persists_independent_legacy_and_product_defaults(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            config = RuntimeConfig.load_or_create(directory)
+            persisted = json.loads(config.config_path.read_text(encoding="utf-8"))
+
+            self.assertEqual(config.reasoning_effort, "high")
+            self.assertEqual(config.batch_size, 10)
+            self.assertEqual(config.product_reasoning_effort, "low")
+            self.assertEqual(config.product_batch_size, 2)
+            self.assertEqual(persisted["reasoning_effort"], "high")
+            self.assertEqual(persisted["batch_size"], 10)
+            self.assertEqual(persisted["product_reasoning_effort"], "low")
+            self.assertEqual(persisted["product_batch_size"], 2)
+            self.assertEqual(persisted["config_version"], "blackhole-runtime-config-v1")
+
+    def test_existing_home_without_product_fields_keeps_legacy_values_and_gets_product_defaults(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            home = Path(directory)
+            path = home / "config.json"
+            path.write_text(
+                json.dumps(
+                    {
+                        "config_version": "blackhole-runtime-config-v1",
+                        "provider": "codex",
+                        "model": "gpt-5.6-luna",
+                        "reasoning_effort": "high",
+                        "timeout_seconds": 900,
+                        "batch_size": 10,
+                        "database": "blackhole.db",
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            config = RuntimeConfig.load_or_create(home)
+            self.assertEqual(config.reasoning_effort, "high")
+            self.assertEqual(config.batch_size, 10)
+            self.assertEqual(config.product_reasoning_effort, "low")
+            self.assertEqual(config.product_batch_size, 2)
+
+            # A later normal save upgrades the persisted shape without changing
+            # the old fields or the config-version contract.
+            config.save()
+            persisted = json.loads(path.read_text(encoding="utf-8"))
+            self.assertEqual(persisted["reasoning_effort"], "high")
+            self.assertEqual(persisted["batch_size"], 10)
+            self.assertEqual(persisted["product_reasoning_effort"], "low")
+            self.assertEqual(persisted["product_batch_size"], 2)
+
+    def test_host_legacy_and_product_runtime_boundaries_are_independent(self) -> None:
+        calls: list[dict[str, str]] = []
+
+        def discovery(**kwargs: str) -> ProviderStatus:
+            calls.append(kwargs)
+            return ProviderStatus(
+                status=MISSING,
+                installed=False,
+                authenticated=None,
+                version=None,
+                auth_check_available=False,
+                configured_runtime=True,
+                ready=False,
+                error_code="binary_not_found",
+            )
+
+        with tempfile.TemporaryDirectory() as directory:
+            with HostRuntime.open(
+                directory,
+                provider=None,
+                discovery_fn=discovery,
+                auto_start_product_worker=False,
+            ) as host:
+                self.assertEqual(host.engine.batch_size, 10)
+                host.status(refresh_provider=True)
+                product = host.product_runtime
+                self.assertEqual(product.reasoning_effort, "low")
+                self.assertEqual(product.batch_size, 2)
+
+                with self.assertRaises(ProductProviderUnavailableError):
+                    product._provider()
+
+            self.assertEqual([call["configured_reasoning"] for call in calls], ["high", "low"])
+
+    def test_product_process_uses_product_config_fields(self) -> None:
+        class RuntimeSpy:
+            kwargs: dict[str, Any] = {}
+
+            def __init__(self, _home: str | Path, **kwargs: Any) -> None:
+                RuntimeSpy.kwargs = kwargs
+                self.store = type("Store", (), {"path": Path(_home) / "blackhole-v2.db"})()
+
+            def __enter__(self) -> "RuntimeSpy":
+                return self
+
+            def __exit__(self, *_exc: object) -> None:
+                return None
+
+            def processing_status(self) -> dict[str, Any]:
+                return {"counts": {"pending": 0, "processing": 0, "processed": 0, "failed": 0}}
+
+        with tempfile.TemporaryDirectory() as directory:
+            config = RuntimeConfig.defaults(directory)
+            config.reasoning_effort = "max"
+            config.batch_size = 7
+            config.product_reasoning_effort = "medium"
+            config.product_batch_size = 4
+            config.save()
+
+            from app import product_process
+
+            with redirect_stdout(io.StringIO()), patch.object(product_process, "ProductRuntime", RuntimeSpy):
+                self.assertEqual(product_process.main(["--home", directory, "status"]), 0)
+
+            self.assertEqual(RuntimeSpy.kwargs["reasoning_effort"], "medium")
+            self.assertEqual(RuntimeSpy.kwargs["batch_size"], 4)
 
     def test_attention_and_disclosure_contract_is_human_and_stable(self) -> None:
         result = self._run_ui_hooks(r"""(() => {

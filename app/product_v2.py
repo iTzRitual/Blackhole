@@ -30,7 +30,7 @@ from typing import Any, Protocol
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from app.ask_planner import AskPlan, plan_ask, search_terms
-from app.codex_discovery import ProviderStatus
+from app.codex_discovery import ProviderStatus, discover_codex, discover_product_v2
 from app.ops_logging import ProductOpsLogger
 from app.prompts import product_v2_extraction_instruction
 from app.product_v2_store import (
@@ -43,10 +43,11 @@ from app.product_v2_store import (
     utc_now,
 )
 from app.runtime_config import (
-    DEFAULT_BATCH_SIZE,
     DEFAULT_MODEL,
-    DEFAULT_REASONING_EFFORT,
     DEFAULT_TIMEOUT_SECONDS,
+    PRODUCT_V2_DEFAULT_BATCH_SIZE,
+    PRODUCT_V2_DEFAULT_REASONING_EFFORT,
+    PRODUCT_V2_SUPPORTED_REASONING_EFFORTS,
 )
 
 
@@ -1915,13 +1916,13 @@ class ProductCodexProvider:
         home: str | Path,
         timeout: int = DEFAULT_TIMEOUT_SECONDS,
         model: str = DEFAULT_MODEL,
-        reasoning_effort: str = DEFAULT_REASONING_EFFORT,
+        reasoning_effort: str = PRODUCT_V2_DEFAULT_REASONING_EFFORT,
     ) -> None:
         if timeout < 1:
             raise ValueError("timeout must be positive")
         if not isinstance(model, str) or not model.strip():
             raise ValueError("model must be non-empty")
-        if reasoning_effort not in {"low", "medium", "high", "max"}:
+        if reasoning_effort not in PRODUCT_V2_SUPPORTED_REASONING_EFFORTS:
             raise ValueError("unsupported reasoning effort")
         self.home = Path(home).expanduser().resolve()
         self.timeout = timeout
@@ -2212,9 +2213,9 @@ class ProductRuntime:
         provider_factory: Callable[[], Any] | None = None,
         discovery_fn: Callable[..., Any] | None = None,
         model: str = DEFAULT_MODEL,
-        reasoning_effort: str = DEFAULT_REASONING_EFFORT,
+        reasoning_effort: str = PRODUCT_V2_DEFAULT_REASONING_EFFORT,
         timeout_seconds: int = DEFAULT_TIMEOUT_SECONDS,
-        batch_size: int = DEFAULT_BATCH_SIZE,
+        batch_size: int = PRODUCT_V2_DEFAULT_BATCH_SIZE,
         lease_seconds: int = 120,
         start_worker: bool = True,
         auto_start_on_capture: bool | None = None,
@@ -2508,7 +2509,15 @@ class ProductRuntime:
         if self.discovery_fn is not None:
             if not self._discovery_ready:
                 try:
-                    status = self.discovery_fn(
+                    discovery_fn = self.discovery_fn
+                    # ``discover_codex`` is the legacy Host discovery seam. A
+                    # Product V2 caller may still pass it directly, so map
+                    # that exact built-in function to the product-specific
+                    # capability boundary while leaving injected test/custom
+                    # seams untouched.
+                    if discovery_fn is discover_codex:
+                        discovery_fn = discover_product_v2
+                    status = discovery_fn(
                         configured_model=self.model,
                         configured_reasoning=self.reasoning_effort,
                     )

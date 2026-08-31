@@ -8,6 +8,11 @@ import subprocess
 from dataclasses import dataclass
 from typing import Any
 
+from app.runtime_config import (
+    PRODUCT_V2_SUPPORTED_REASONING_EFFORTS,
+    SUPPORTED_REASONING_EFFORTS,
+)
+
 
 CODEX_PROVIDER_TYPE = "codex-cli"
 MISSING = "MISSING"
@@ -15,7 +20,6 @@ INSTALLED_NOT_AUTHENTICATED = "INSTALLED_NOT_AUTHENTICATED"
 READY = "READY"
 ERROR = "ERROR"
 DISCOVERY_TIMEOUT_SECONDS = 5
-SUPPORTED_REASONING_EFFORTS = frozenset({"max", "high", "medium", "low"})
 VALID_STATUSES = frozenset({MISSING, INSTALLED_NOT_AUTHENTICATED, READY, ERROR})
 
 
@@ -132,10 +136,13 @@ def discover_codex(
     *,
     configured_model: str,
     configured_reasoning: str,
+    supported_reasoning_efforts: frozenset[str] = SUPPORTED_REASONING_EFFORTS,
 ) -> ProviderStatus:
     """Discover PATH/version/login status without reading credential material."""
 
-    configured_runtime = bool(configured_model.strip()) and configured_reasoning in SUPPORTED_REASONING_EFFORTS
+    configured_runtime = (
+        bool(configured_model.strip()) and configured_reasoning in supported_reasoning_efforts
+    )
     executable = shutil.which("codex")
     if not executable:
         return ProviderStatus(
@@ -193,11 +200,27 @@ def discover_codex(
     )
 
 
+def discover_product_v2(
+    *,
+    configured_model: str,
+    configured_reasoning: str,
+) -> ProviderStatus:
+    """Discover the Product V2 runtime using its independent effort boundary."""
+
+    return discover_codex(
+        configured_model=configured_model,
+        configured_reasoning=configured_reasoning,
+        supported_reasoning_efforts=PRODUCT_V2_SUPPORTED_REASONING_EFFORTS,
+    )
+
+
 __all__ = [
     "ERROR",
     "INSTALLED_NOT_AUTHENTICATED",
     "MISSING",
+    "PRODUCT_V2_SUPPORTED_REASONING_EFFORTS",
     "READY",
     "ProviderStatus",
     "discover_codex",
+    "discover_product_v2",
 ]

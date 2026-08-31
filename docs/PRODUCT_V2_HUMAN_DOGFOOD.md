@@ -352,3 +352,34 @@ The correction focused suite is `105/105`; the full application suite is
 rerun separately below. The overall live gate remains **PARTIAL / REVISE**:
 the prior bounded smoke values are unchanged and no new provider/live smoke
 was authorized.
+
+## Configuration-boundary correction — 2026-08-31
+
+A follow-up review found that the final Product V2 low-effort/two-item tuning
+had been placed in shared runtime defaults. The correction restores the
+legacy/frozen Host boundary to high reasoning and batch size ten, keeps its
+max/high/medium supported-effort set, and adds independent Product V2
+reasoning/batch fields with low/two defaults. Fresh Homes persist both sets;
+older config JSON without the new fields retains its legacy values in memory
+while Product V2 receives low/two. Host status and the legacy engine use the
+legacy fields, while Product V2 lazy readiness, queue processing, and direct
+runtime/provider defaults use the Product V2 fields. The config version and
+legacy field names remain unchanged.
+
+The historical first review correction remains recorded as `105/105` focused
+Product V2/UI tests and `172/172` full application tests. The parent’s
+post-correction provider-free acceptance remains `50/50`, with its latency
+probe at `7.066 ms` capture return and `136.504 ms` processing completion.
+Those historical values were not rewritten. This correction made no provider
+or live calls. The new focused final-dogfood/PWA run is `16/16` in `2.002s`
+wall time; the combined focused Product V2/config/UI regression is `120/120`
+in `22.358s`, the full application suite is `176/176` in `26.528s`, the
+acceptance harness is `7/7` in `0.428s`, and the evaluator suite is `10/10`
+in `2.430s`. The provider-free integrated acceptance remains `50/50`, with
+this run's fixture latency probe at `7.320 ms` capture return and `137.041 ms`
+processing completion. The complete command/evidence record is in the
+trajectory summary and machine-readable files.
+
+The overall live gate remains **PARTIAL / REVISE**. The prior live first-use
+value (`23.031s`), remaining burst (`129.562s`), and incomplete Windows
+shutdown evidence remain unchanged.

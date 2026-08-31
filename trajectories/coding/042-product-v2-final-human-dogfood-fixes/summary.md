@@ -169,3 +169,110 @@ regression is `105/105`. No live values in `live-validation.json` were
 changed, and no new provider/live smoke was made. The overall gate remains
 **PARTIAL / REVISE** for the already-recorded burst-latency and launcher
 shutdown limitations.
+
+## Configuration-boundary correction — 2026-08-31
+
+### Goal
+
+Correct the review-found configuration leak without changing the established
+Product V2 architecture, semantic contract, or honest live PARTIAL/REVISE gate.
+
+### Agent/tool used
+
+Routine Luna/Max implementation lane in the same isolated
+`product/v2-final-dogfood-fixes` worktree. Exact runtime metadata was not
+exposed by this worker context; no model, effort, or native session ID is
+inferred. No provider or live call was made for this correction.
+
+### Important implementation decisions
+
+- Restored shared/legacy `DEFAULT_REASONING_EFFORT` to `high`,
+  `DEFAULT_BATCH_SIZE` to `10`, and legacy supported efforts to
+  `max/high/medium`.
+- Added independent Product V2 defaults (`low`, `2`), supported-effort
+  validation, and `RuntimeConfig.product_reasoning_effort` /
+  `product_batch_size` fields. Fresh config writes both boundaries; an old
+  config without product fields retains its legacy values and supplies Product
+  V2 defaults in memory. The config version and legacy field names are
+  unchanged.
+- Kept legacy Host engine/provider/status on legacy fields. Product V2 lazy
+  Host construction, Product V2 discovery/readiness, queue utility, and direct
+  ProductRuntime/ProductCodexProvider defaults use Product V2 fields. A
+  Product V2 wrapper preserves low support without broadening legacy discovery.
+- Added executable deterministic tests for fresh/existing config migration,
+  Host/runtime separation, direct defaults, Product V2 readiness, and
+  `product_process` wiring.
+
+### Tools/actions used
+
+Inspected the current isolated diff and runtime configuration; edited only the
+owned implementation, test, decision, trajectory, and evaluation files with
+`apply_patch`. Ran all provider-free suites and hard checks. The integrated
+acceptance runner was allowed because it uses its existing deterministic
+fixture provider; its time-varying historical result was restored immediately
+afterward. No live smoke or diagnostic comparison was rerun.
+
+### Failures, retries, and changed approaches
+
+The first focused run after the split exposed one expected stale assertion
+that still treated the shared defaults as Product V2 defaults. It was replaced
+with boundary-aware executable tests. No test hung, no implementation retry
+was needed, and no semantic wording or live measurement was changed.
+
+### Human feedback or checkpoints
+
+The parent required the correction to remain on the same branch, make no new
+provider calls, preserve the PARTIAL/REVISE gate, and explicitly retain the
+historical first-correction and parent acceptance evidence. Those values are
+recorded below and were not rewritten.
+
+### Evaluation performed
+
+Historical evidence retained: first review correction `105/105` focused
+Product V2/UI tests and `172/172` full application tests; parent
+post-correction provider-free acceptance `50/50` with latency probe
+`7.066 ms` capture return and `136.504 ms` processing completion.
+
+New post-config-fix evidence:
+
+- `python -m unittest app.tests.test_product_v2_final_dogfood app.tests.test_pwa_static -q`
+  — `16/16`, `2.002s` wall.
+- Combined focused Product V2/config/UI regression command — `120/120`,
+  `22.358s` wall.
+- `python -m unittest discover -s app/tests -p "test_*.py" -q` — `176/176`,
+  `26.528s` wall.
+- `python -m unittest discover -s product_acceptance/harness -p "test_*.py" -q`
+  — `7/7`, `0.428s` wall; evaluator discovery — `10/10`, `2.430s` wall.
+- `python scripts/run_product_v2_integrated_acceptance.py` — `50/50`, all
+  reliability gates PASS; fixture latency probe `7.320 ms` capture return and
+  `137.041 ms` processing completion, with processing complete and status
+  pending at capture. The generated historical JSON was restored.
+- `python -m compileall -q app eval scripts` PASS (`0.406s`), `node --check
+  app/web/app.js` PASS (`0.422s`), qualification PASS with four pre-existing
+  warnings (`3.701s`), benchmark structure PASS (`200` events/`4` checkpoints,
+  `0.484s`), contract smoke PASS (`0.393s`), and `git diff --check` PASS.
+- The prior visual evidence at `390x844` and `1280x900` remains unchanged;
+  this correction introduced no UI or PWA changes.
+
+### Result
+
+The configuration-boundary correction is complete and keeps the prior live
+gate **PARTIAL / REVISE**. The earlier live values remain first useful
+`23.031s`, remaining burst `129.562s`, and incomplete Windows shutdown
+evidence. No provider/live values were altered.
+
+### Regressions or unresolved issues
+
+No deterministic regression remains. Four qualification warnings are the
+pre-existing repository warnings. The live provider burst latency and
+Windows shutdown evidence remain unresolved and were intentionally not
+retested under the exhausted live-call budget.
+
+### Final decision
+
+**KEEP** the narrow config split; do not upgrade the overall live gate.
+
+### Related git commit
+
+This correction is committed on `product/v2-final-dogfood-fixes` after the
+final scope and boundary checks below.
