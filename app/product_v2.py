@@ -14,6 +14,7 @@ import copy
 import hashlib
 import inspect
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -79,6 +80,19 @@ MAX_EXTRACTION_HISTORY = 12
 MAX_EXTRACTION_RELATIONS = 12
 MAX_EXTRACTION_ATTENTION = 16
 MAX_EXTRACTION_SOURCES = 12
+_MAX_TIMEZONE_NAME_LENGTH = 120
+_MAX_TIMEZONE_METADATA_BYTES = 256
+_LOCALTIME_PATH = Path("/etc/localtime")
+_TIMEZONE_METADATA_PATH = Path("/etc/timezone")
+_ZONEINFO_PATH_MARKER = "/zoneinfo/"
+_WINDOWS_TIMEZONE_ALIASES = {
+    "W. Europe Standard Time": "Europe/Berlin",
+    "W. Europe Summer Time": "Europe/Berlin",
+    "Central Europe Standard Time": "Europe/Budapest",
+    "Central European Standard Time": "Europe/Warsaw",
+    "Romance Standard Time": "Europe/Paris",
+    "GMT Standard Time": "Europe/London",
+}
 _HUMAN_PRIVATE_LABELS = re.compile(
     r"(?i)\b(?:password|passcode|access[\s_-]*code|security[\s_-]*code|"
     r"one[\s_-]*time[\s_-]*password|otp|pin|token|secret|credential|"
@@ -651,29 +665,81 @@ def _bounded_projection_rows(
     return [item[-1] for item in scored[:limit]]
 
 
+def _valid_zoneinfo_name(value: Any) -> str | None:
+    candidate = _clean_text(value, limit=_MAX_TIMEZONE_NAME_LENGTH)
+    if not candidate:
+        return None
+    try:
+        ZoneInfo(candidate)
+    except (ValueError, ZoneInfoNotFoundError):
+        return None
+    return candidate
+
+
+def _zoneinfo_name_from_path(path: str | Path) -> str | None:
+    path_text = str(path)
+    marker_index = path_text.rfind(_ZONEINFO_PATH_MARKER)
+    if marker_index < 0:
+        return None
+    candidate = path_text[marker_index + len(_ZONEINFO_PATH_MARKER) :].strip("/")
+    return _valid_zoneinfo_name(candidate)
+
+
+def _zoneinfo_name_from_metadata(path: Path) -> str | None:
+    try:
+        with path.open("r", encoding="ascii") as stream:
+            value = stream.readline(_MAX_TIMEZONE_METADATA_BYTES)
+    except (OSError, UnicodeError):
+        return None
+    return _valid_zoneinfo_name(value)
+
+
+def _discover_posix_timezone_name(
+    *,
+    localtime_path: Path = _LOCALTIME_PATH,
+    timezone_path: Path = _TIMEZONE_METADATA_PATH,
+) -> str | None:
+    try:
+        resolved_localtime = localtime_path.resolve(strict=True)
+    except (OSError, RuntimeError):
+        resolved_localtime = None
+    if resolved_localtime is not None:
+        discovered = _zoneinfo_name_from_path(resolved_localtime)
+        if discovered is not None:
+            return discovered
+    return _zoneinfo_name_from_metadata(timezone_path)
+
+
+def _utc_offset_timezone_name(offset: timedelta | None) -> str:
+    if offset is None:
+        return "UTC"
+    total_minutes = int(offset.total_seconds() // 60)
+    sign = "+" if total_minutes >= 0 else "-"
+    total_minutes = abs(total_minutes)
+    return f"UTC{sign}{total_minutes // 60:02d}:{total_minutes % 60:02d}"
+
+
 def local_timezone_name() -> str:
-    current = datetime.now().astimezone().tzinfo
-    key = getattr(current, "key", None)
-    if isinstance(key, str) and key:
+    local_now = datetime.now().astimezone()
+    current = local_now.tzinfo
+    key = _valid_zoneinfo_name(getattr(current, "key", None))
+    if key is not None:
         return key
-    name = current.tzname(None) if current is not None else None
-    windows_aliases = {
-        "W. Europe Standard Time": "Europe/Berlin",
-        "W. Europe Summer Time": "Europe/Berlin",
-        "Central Europe Standard Time": "Europe/Budapest",
-        "Central European Standard Time": "Europe/Warsaw",
-        "Romance Standard Time": "Europe/Paris",
-        "GMT Standard Time": "Europe/London",
-    }
-    if name in windows_aliases:
-        return windows_aliases[name]
-    offset = current.utcoffset() if current is not None else None
-    if offset is not None:
-        total_minutes = int(offset.total_seconds() // 60)
-        sign = "+" if total_minutes >= 0 else "-"
-        total_minutes = abs(total_minutes)
-        return f"UTC{sign}{total_minutes // 60:02d}:{total_minutes % 60:02d}"
-    return "UTC"
+
+    environment_name = _valid_zoneinfo_name(os.environ.get("TZ"))
+    if environment_name is not None:
+        return environment_name
+
+    if os.name == "posix":
+        system_name = _discover_posix_timezone_name()
+        if system_name is not None:
+            return system_name
+
+    name = local_now.tzname()
+    alias = _WINDOWS_TIMEZONE_ALIASES.get(name)
+    if alias is not None:
+        return alias
+    return _utc_offset_timezone_name(local_now.utcoffset())
 
 
 def resolve_timezone(value: str | None) -> tuple[str, Any]:
@@ -686,15 +752,7 @@ def resolve_timezone(value: str | None) -> tuple[str, Any]:
         if offset_match.group(1) == "-":
             minutes = -minutes
         return name.upper(), timezone(timedelta(minutes=minutes))
-    aliases = {
-        "W. Europe Standard Time": "Europe/Berlin",
-        "W. Europe Summer Time": "Europe/Berlin",
-        "Central Europe Standard Time": "Europe/Budapest",
-        "Central European Standard Time": "Europe/Warsaw",
-        "Romance Standard Time": "Europe/Paris",
-        "GMT Standard Time": "Europe/London",
-    }
-    name = aliases.get(name, name)
+    name = _WINDOWS_TIMEZONE_ALIASES.get(name, name)
     try:
         return name, ZoneInfo(name)
     except ZoneInfoNotFoundError as error:

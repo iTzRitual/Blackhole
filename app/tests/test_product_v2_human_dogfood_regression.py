@@ -151,7 +151,7 @@ class ProductV2HumanDogfoodRegressionTests(unittest.TestCase):
                     {key: int(product_counts[key]) for key in ("pending", "processing", "processed", "failed")},
                 )
                 self.assertEqual(host_status["product"]["database"], product_status["database"])
-                self.assertEqual(product_status["database"], str(home / "blackhole-v2.db"))
+                self.assertEqual(product_status["database"], str((home / "blackhole-v2.db").resolve()))
 
                 legacy = sqlite3.connect(home / "blackhole.db")
                 try:
