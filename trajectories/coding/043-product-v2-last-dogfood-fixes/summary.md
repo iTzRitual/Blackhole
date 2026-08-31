@@ -143,6 +143,7 @@ post-freeze product scope and do not reopen E006 or the frozen benchmark.
 
 ## Related git commit
 
-The final implementation/documentation commit SHA will be recorded here after
-the commit is created; the trajectory index will be updated in the same final
-documentation handoff.
+`7d695ec` — `product: apply final dogfood corrections`.
+
+The follow-up metadata-only commit records this SHA in the trajectory index
+and does not alter the implementation or evaluation evidence.
