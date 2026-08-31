@@ -141,4 +141,4 @@ regressions, acceptance result, and bounded live/browser evidence.
 
 ## Related git commit
 
-To be recorded after the coherent implementation/evidence commit is created.
+`94bc776` (`feat: complete product coherence demo gate`).
