@@ -330,7 +330,7 @@ class ProductV2AskRoutingTests(unittest.TestCase):
         self.assertFalse(no_match["provider_used"])
         unknown = self.runtime.ask("Who owns the house?")
         self.assertEqual(unknown["mode"], "retrieval")
-        self.assertIn("unknown", unknown["answer"])
+        self.assertIn("needs clarification", unknown["answer"].casefold())
         self.runtime.retract("ask-keys")
         retracted = self.runtime.ask("Where are the basement keys?")
         self.assertEqual(retracted["mode"], "no_match")

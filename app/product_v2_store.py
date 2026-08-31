@@ -24,8 +24,8 @@ from pathlib import Path
 from typing import Any, Iterable, Iterator
 
 
-PRODUCT_STORE_VERSION = "blackhole-product-v2-store-v2"
-PRODUCT_PROJECTION_VERSION = "blackhole-product-v2-projection-v2"
+PRODUCT_STORE_VERSION = "blackhole-product-v2-store-v3"
+PRODUCT_PROJECTION_VERSION = "blackhole-product-v2-projection-v3"
 PRODUCT_PROCESSING_VERSION = "blackhole-product-v2-processing-v1"
 PRODUCT_EXTRACTOR_VERSION = "blackhole-product-v2-extractor-v3"
 PROCESSING_STATUSES = frozenset({"pending", "processing", "processed", "failed"})
@@ -68,6 +68,17 @@ def _legacy_key(value: Any) -> str:
     text = str(value or "").strip().casefold()
     text = re.sub(r"[^\w]+", "_", text, flags=re.UNICODE).strip("_")
     return text[:160] or "unknown_entity"
+
+
+def _attention_timestamp_key(value: Any) -> str:
+    """Return a stable instant key without changing the stored timestamp."""
+
+    if not isinstance(value, str) or not value.strip():
+        return ""
+    try:
+        return _parse_iso(value).isoformat()
+    except (TypeError, ValueError):
+        return value.strip().casefold()
 
 
 class BlobStore:
@@ -351,6 +362,22 @@ class ProductStore:
                     operation TEXT NOT NULL,
                     projection_run_id INTEGER NOT NULL,
                     PRIMARY KEY(entity_key, concept)
+                );
+
+                CREATE TABLE IF NOT EXISTS current_fact_occurrences (
+                    occurrence_id TEXT PRIMARY KEY,
+                    entity_key TEXT NOT NULL,
+                    entity_label TEXT NOT NULL,
+                    concept TEXT NOT NULL,
+                    knowledge_status TEXT NOT NULL,
+                    value_json TEXT,
+                    unknown_reason TEXT,
+                    source_refs_json TEXT NOT NULL,
+                    latest_sequence INTEGER NOT NULL,
+                    fact_ids_json TEXT NOT NULL,
+                    metadata_json TEXT NOT NULL DEFAULT '{}',
+                    operation TEXT NOT NULL,
+                    projection_run_id INTEGER NOT NULL
                 );
 
                 CREATE TABLE IF NOT EXISTS current_attention (
@@ -1695,6 +1722,55 @@ class ProductStore:
         title = re.sub(r"[^\w]+", " ", title, flags=re.UNICODE).strip()
         return "title:" + re.sub(r"\s+", " ", title)
 
+    @classmethod
+    def _attention_projection_keys(cls, row: sqlite3.Row) -> tuple[tuple[str, ...], ...]:
+        """Return conservative equivalence keys for one Attention candidate.
+
+        A provider may emit both a first-class Attention item and an
+        actionable fact for the same capture.  Their titles or kind labels can
+        differ, so the projection uses explicit lifecycle identity first and
+        then only strong same-occurrence signals: entity plus time, title plus
+        time, or same-capture title.  Distinct timed occurrences are never
+        merged merely because their action kind is the same.
+        """
+
+        details = cls._json_object(row["details_json"])
+        source_event_id = str(row["source_event_id"] or "")
+        title = str(row["title"] or "").casefold().strip()
+        title = re.sub(r"^(?:completed|complete|done|finished|cancelled|canceled)\s*[:\-–—]\s*", "", title)
+        title = re.sub(r"[^\w]+", " ", title, flags=re.UNICODE).strip()
+        title = re.sub(r"\s+", " ", title)
+        entity_key = details.get("entity_key")
+        entity = _legacy_key(entity_key) if isinstance(entity_key, str) and entity_key.strip() else ""
+        point = _attention_timestamp_key(row["due_at"] or row["starts_at"])
+        explicit = details.get("lifecycle_key")
+        keys: list[tuple[str, ...]] = []
+        if isinstance(explicit, str) and explicit.strip():
+            keys.append(("lifecycle", _legacy_key(explicit)))
+        if entity and point:
+            keys.append(("entity-point", entity, point))
+        if title and point:
+            keys.append(("title-point", title, point))
+        if source_event_id and title:
+            keys.append(("capture-title", source_event_id, title))
+        if source_event_id and entity:
+            keys.append(("capture-entity", source_event_id, entity))
+        if not point and title:
+            keys.append(("title", title))
+        return tuple(keys)
+
+    @classmethod
+    def _attention_source_refs(cls, row: sqlite3.Row) -> set[str]:
+        try:
+            raw_refs = json.loads(row["source_refs_json"])
+        except (TypeError, ValueError, json.JSONDecodeError):
+            raw_refs = []
+        refs = {ref for ref in raw_refs if isinstance(ref, str) and ref} if isinstance(raw_refs, list) else set()
+        event_id = str(row["source_event_id"] or "")
+        if event_id:
+            refs.add(event_id)
+        return refs
+
     @staticmethod
     def _json_object(value: Any) -> dict[str, Any]:
         if isinstance(value, dict):
@@ -1799,6 +1875,46 @@ class ProductStore:
         except (KeyError, IndexError, TypeError):
             operation = "set"
         return _legacy_key(operation)
+
+    @classmethod
+    def _fact_is_occurrence(cls, row: sqlite3.Row | dict[str, Any]) -> bool:
+        """Recognize an explicit occurrence primitive without an ontology.
+
+        The semantic provider owns deciding whether a claim describes an
+        occurrence or a durable state.  The projector only honors explicit
+        metadata and keeps occurrence rows side by side instead of treating
+        different values as a state conflict.
+        """
+
+        metadata = cls._fact_metadata(row)
+        if metadata.get("occurrence") is True:
+            return True
+        claim_type = metadata.get("claim_type")
+        claim_markers = {
+            "occurrence",
+            "event",
+            "episode",
+            "action",
+            "transaction",
+            "visit",
+            "consumption",
+            "purchase",
+            "payment",
+        }
+        if isinstance(claim_type, str) and _legacy_key(claim_type) in claim_markers:
+            return True
+        semantic_relation = metadata.get("semantic_relation")
+        relation_markers = {
+            "occurrence",
+            "event",
+            "episode",
+            "transaction",
+            "visit",
+            "consumption",
+            "purchase",
+            "payment",
+        }
+        return isinstance(semantic_relation, str) and _legacy_key(semantic_relation) in relation_markers
 
     @classmethod
     def _fact_temporal_bounds(
@@ -2052,7 +2168,43 @@ class ProductStore:
             for row in active_rows:
                 annotations[self._fact_id(row)]["active"] = True
 
-            value_rows = [row for row in active_rows if self._fact_signature(row) is not None]
+            occurrence_rows = [
+                row
+                for row in active_rows
+                if self._fact_is_occurrence(row)
+                and str(row["operation"] or "set") not in {"correction", "supersede", "contradiction"}
+                and self._fact_relation(row) not in {"correction", "supersede", "contradiction", "reschedule", "resolution"}
+            ]
+            if occurrence_rows:
+                for row in occurrence_rows:
+                    annotations[self._fact_id(row)]["current"] = True
+                    metadata = dict(self._fact_metadata(row))
+                    metadata["semantic_state"] = "occurrence"
+                    metadata["occurrence"] = True
+                    projected_occurrence: dict[str, Any] = {
+                        "entity_key": group_key[0],
+                        "entity_label": str(row["entity_label"] or group_key[0]),
+                        "concept": group_key[1],
+                        "knowledge_status": self._fact_status(row),
+                        "unknown_reason": row["unknown_reason"] if self._fact_status(row) == "unknown" else None,
+                        "source_refs": sorted(self._fact_refs(row)),
+                        "latest_sequence": self._fact_sequence(row),
+                        "fact_ids": [self._fact_id(row)],
+                        "operation": str(row["operation"] or "set"),
+                        "temporal": self._fact_temporal(row),
+                        "metadata": metadata,
+                        "source_event_id": self._fact_event_id(row),
+                        "captured_at": row["captured_at"] if "captured_at" in row.keys() else None,
+                    }
+                    value = self._fact_value(row)
+                    if value is not None and self._fact_status(row) != "unknown":
+                        projected_occurrence["value"] = value
+                    projections.append(projected_occurrence)
+            state_active_rows = [row for row in active_rows if row not in occurrence_rows]
+            if not state_active_rows:
+                continue
+
+            value_rows = [row for row in state_active_rows if self._fact_signature(row) is not None]
             known_rows = [row for row in value_rows if self._fact_status(row) == "known"]
             inferred_rows = [row for row in value_rows if self._fact_status(row) == "inferred"]
             known_signatures = {self._fact_signature(row) for row in known_rows}
@@ -2085,12 +2237,12 @@ class ProductStore:
                 output_reason = None
                 state = "uncertain"
             else:
-                chosen_row = max(active_rows, key=self._fact_sort_key)
+                chosen_row = max(state_active_rows, key=self._fact_sort_key)
                 supporting_rows = [chosen_row]
                 output_status = "unknown"
                 output_value = None
                 output_reason = next(
-                    (str(row["unknown_reason"]) for row in reversed(active_rows) if row["unknown_reason"]),
+                    (str(row["unknown_reason"]) for row in reversed(state_active_rows) if row["unknown_reason"]),
                     "not_stated",
                 )
                 state = "unknown"
@@ -2107,7 +2259,7 @@ class ProductStore:
                 )
             uncertainty_rows = [
                 row
-                for row in active_rows
+                for row in state_active_rows
                 if row not in supporting_rows
                 and (
                     self._fact_status(row) in {"unknown", "inferred"}
@@ -2131,11 +2283,13 @@ class ProductStore:
                     if not is_conflict
                     else {ref for row in value_rows for ref in self._fact_refs(row)}
                 ),
-                "latest_sequence": max(self._fact_sequence(row) for row in active_rows),
-                "fact_ids": [self._fact_id(row) for row in active_rows],
+                "latest_sequence": max(self._fact_sequence(row) for row in state_active_rows),
+                "fact_ids": [self._fact_id(row) for row in state_active_rows],
                 "operation": "contradiction" if is_conflict else str(chosen_row["operation"] or "set"),
                 "temporal": temporal,
                 "metadata": metadata,
+                "source_event_id": self._fact_event_id(chosen_row),
+                "captured_at": chosen_row["captured_at"] if "captured_at" in chosen_row.keys() else None,
             }
             if output_value is not None:
                 return_value["value"] = output_value
@@ -2183,6 +2337,7 @@ class ProductStore:
         )
         projection_run_id = int(cursor.lastrowid)
         self.connection.execute("DELETE FROM current_facts")
+        self.connection.execute("DELETE FROM current_fact_occurrences")
         self.connection.execute("DELETE FROM current_attention")
 
         projection_reference = None
@@ -2198,16 +2353,31 @@ class ProductStore:
             now=projection_reference,
         )
         for projected in fact_projections:
+            is_occurrence = projected.get("metadata", {}).get("semantic_state") == "occurrence"
+            target_table = "current_fact_occurrences" if is_occurrence else "current_facts"
+            occurrence_id = None
+            if is_occurrence:
+                occurrence_id = hashlib.sha256(
+                    canonical_json(
+                        {
+                            "entity_key": projected["entity_key"],
+                            "concept": projected["concept"],
+                            "source_event_id": projected.get("source_event_id"),
+                            "fact_ids": projected["fact_ids"],
+                        }
+                    ).encode("utf-8")
+                ).hexdigest()
             self.connection.execute(
-                """
-                INSERT INTO current_facts(
-                    entity_key, entity_label, concept, knowledge_status,
+                f"""
+                INSERT INTO {target_table}(
+                    {"occurrence_id, " if is_occurrence else ""}entity_key, entity_label, concept, knowledge_status,
                     value_json, unknown_reason, source_refs_json,
                     latest_sequence, fact_ids_json, metadata_json, operation,
                     projection_run_id
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES ({"?, " if is_occurrence else ""}?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
+                    *((occurrence_id,) if is_occurrence else ()),
                     projected["entity_key"],
                     projected["entity_label"],
                     projected["concept"],
@@ -2223,47 +2393,108 @@ class ProductStore:
                 ),
             )
 
-        latest_attention_status: dict[str, str] = {}
+        latest_attention_status: dict[str, tuple[int, str]] = {}
         for row in status_rows:
-            latest_attention_status[row["candidate_fingerprint"]] = row["status"]
+            latest_attention_status[row["candidate_fingerprint"]] = (
+                int(row["status_event_id"]),
+                row["status"],
+            )
         source_sequences = {
             row["event_id"]: int(row["sequence"])
             for row in self.connection.execute("SELECT event_id, sequence FROM source_events").fetchall()
         }
-        lifecycle_keys: dict[str, str] = {}
-        lifecycle_rows: dict[str, sqlite3.Row] = {}
-        for row in attention_rows:
-            lifecycle_key = self._attention_lifecycle_key(row)
-            try:
-                details = json.loads(row["details_json"])
-            except (TypeError, ValueError, json.JSONDecodeError):
-                details = {}
-            if isinstance(details, dict):
-                linked_event = details.get("supersedes_event_id", details.get("related_event_id"))
-                if isinstance(linked_event, str) and linked_event in lifecycle_keys:
-                    lifecycle_key = lifecycle_keys[linked_event]
-            lifecycle_keys[str(row["source_event_id"])] = lifecycle_key
-            if row["source_event_id"] in retracted:
+        active_attention_rows = [
+            row for row in attention_rows if row["source_event_id"] not in retracted
+        ]
+        parent = list(range(len(active_attention_rows)))
+
+        def find(index: int) -> int:
+            while parent[index] != index:
+                parent[index] = parent[parent[index]]
+                index = parent[index]
+            return index
+
+        def union(left: int, right: int) -> None:
+            left_root = find(left)
+            right_root = find(right)
+            if left_root != right_root:
+                parent[right_root] = left_root
+
+        key_owner: dict[tuple[str, ...], int] = {}
+        event_rows: dict[str, list[int]] = {}
+        for index, row in enumerate(active_attention_rows):
+            event_rows.setdefault(str(row["source_event_id"]), []).append(index)
+            for key in self._attention_projection_keys(row):
+                owner = key_owner.get(key)
+                if owner is None:
+                    key_owner[key] = index
+                else:
+                    union(owner, index)
+
+        # Related/superseded event links are semantic identity, even when the
+        # linked candidates use different titles or timestamps.
+        for index, row in enumerate(active_attention_rows):
+            details = self._json_object(row["details_json"])
+            linked_event = details.get("supersedes_event_id", details.get("related_event_id"))
+            if not isinstance(linked_event, str):
                 continue
-            current = lifecycle_rows.get(lifecycle_key)
-            candidate_score = (
-                source_sequences.get(row["source_event_id"], 0),
-                int(bool(row["due_at"] or row["starts_at"])),
-                int(row["candidate_id"]),
+            for target_index in event_rows.get(linked_event, []):
+                union(index, target_index)
+
+        grouped_attention: dict[int, list[sqlite3.Row]] = {}
+        for index, row in enumerate(active_attention_rows):
+            grouped_attention.setdefault(find(index), []).append(row)
+
+        def candidate_score(candidate: sqlite3.Row) -> tuple[int, int, int, int]:
+            return (
+                source_sequences.get(candidate["source_event_id"], 0),
+                int(bool(candidate["due_at"] or candidate["starts_at"])),
+                len(str(candidate["title"] or "")),
+                int(candidate["candidate_id"]),
             )
-            current_score = (
+
+        for group_rows in grouped_attention.values():
+            row = max(group_rows, key=candidate_score)
+            status_event = max(
                 (
-                    source_sequences.get(current["source_event_id"], 0),
-                    int(bool(current["due_at"] or current["starts_at"])),
-                    int(current["candidate_id"]),
-                )
-                if current is not None
-                else (-1, -1, -1)
+                    latest_attention_status[candidate["fingerprint"]]
+                    for candidate in group_rows
+                    if candidate["fingerprint"] in latest_attention_status
+                ),
+                default=None,
             )
-            if current is None or candidate_score > current_score:
-                lifecycle_rows[lifecycle_key] = row
-        for row in lifecycle_rows.values():
-            status = latest_attention_status.get(row["fingerprint"], row["status"])
+            status = status_event[1] if status_event is not None else row["status"]
+            lifecycle_action_value = self._json_object(row["details_json"]).get("lifecycle_action")
+            lifecycle_action = lifecycle_action_value.casefold().strip() if isinstance(lifecycle_action_value, str) else ""
+            if lifecycle_action in {"supersede", "superseded", "replaced", "obsolete"}:
+                # Supersession removes the old item from the current
+                # lifecycle projection. Completed and cancelled rows remain
+                # available as explicit lifecycle history; the UI and badge
+                # filter them from active Attention.
+                continue
+            merged_refs = sorted(
+                {
+                    reference
+                    for candidate in group_rows
+                    for reference in self._attention_source_refs(candidate)
+                }
+            )
+            merged_details: dict[str, Any] = {}
+            for candidate in sorted(group_rows, key=candidate_score):
+                details = self._json_object(candidate["details_json"])
+                for key, value in details.items():
+                    if key not in merged_details and value is not None:
+                        merged_details[key] = value
+            starts_at = next(
+                (candidate["starts_at"] for candidate in sorted(group_rows, key=candidate_score, reverse=True)
+                 if candidate["starts_at"]),
+                None,
+            )
+            due_at = next(
+                (candidate["due_at"] for candidate in sorted(group_rows, key=candidate_score, reverse=True)
+                 if candidate["due_at"]),
+                None,
+            )
             self.connection.execute(
                 """
                 INSERT INTO current_attention(
@@ -2279,11 +2510,11 @@ class ProductStore:
                     row["title"],
                     status,
                     row["knowledge_status"],
-                    row["starts_at"],
-                    row["due_at"],
+                    starts_at,
+                    due_at,
                     row["timezone"],
-                    row["source_refs_json"],
-                    row["details_json"],
+                    canonical_json(merged_refs),
+                    canonical_json(merged_details),
                     projection_run_id,
                 ),
             )
@@ -2316,6 +2547,10 @@ class ProductStore:
             "knowledge_status": row["knowledge_status"],
             "source_refs": json.loads(row["source_refs_json"]),
         }
+        if "captured_at" in row.keys():
+            result["captured_at"] = row["captured_at"]
+        if "timezone" in row.keys():
+            result["timezone"] = row["timezone"]
         if current:
             result.update(
                 {
@@ -2422,7 +2657,13 @@ class ProductStore:
                     item["value"] = json.loads(row["value_json"])
                 relations.append(item)
             attention_rows = self.connection.execute(
-                "SELECT * FROM current_attention ORDER BY due_at IS NULL, due_at, fingerprint"
+                """
+                SELECT a.*, s.captured_at AS captured_at, s.observed_at AS observed_at,
+                       s.source_type AS source_type
+                FROM current_attention a
+                LEFT JOIN source_events s ON s.event_id = a.source_event_id
+                ORDER BY a.due_at IS NULL, a.due_at, a.starts_at IS NULL, a.starts_at, a.fingerprint
+                """
             ).fetchall()
             attention = []
             for row in attention_rows:
@@ -2438,6 +2679,9 @@ class ProductStore:
                     "timezone": row["timezone"],
                     "source_refs": json.loads(row["source_refs_json"]),
                     "details": json.loads(row["details_json"]),
+                    "captured_at": row["captured_at"],
+                    "observed_at": row["observed_at"],
+                    "source_type": row["source_type"],
                 }
                 if row["status"] == "open":
                     try:
@@ -2512,7 +2756,8 @@ class ProductStore:
                     "fact_history": len(history),
                     "entities": len(entities),
                     "relationships": len(relations),
-                    "attention": len(attention),
+                    "attention": sum(item["status"] == "open" for item in attention),
+                    "attention_lifecycle": len(attention),
                     "attachments": len(attachments),
                 },
                 "entities": list(entities.values()),

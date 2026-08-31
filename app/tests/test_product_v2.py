@@ -276,7 +276,10 @@ class ProductV2Tests(unittest.TestCase):
                 self.assertEqual(asked["mode"], "attention")
                 self.assertFalse(asked["provider_used"])
                 runtime.set_attention_status(first[0]["fingerprint"], "completed", note="done in test")
-                self.assertEqual(runtime.snapshot()["attention"][0]["state"], "completed")
+                completed = runtime.snapshot()
+                self.assertEqual(len(completed["attention"]), 1)
+                self.assertEqual(completed["attention"][0]["state"], "completed")
+                self.assertEqual(completed["counts"]["attention"], 0)
 
     def test_combined_capture_keeps_text_and_attachment_link(self) -> None:
         content = b"combined-product-v2"

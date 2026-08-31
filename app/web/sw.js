@@ -1,4 +1,4 @@
-const SHELL_VERSION = "v8";
+const SHELL_VERSION = "v9";
 const CACHE_NAME = "blackhole-shell-" + SHELL_VERSION;
 const SHELL_INDEX = "/index.html?v=" + SHELL_VERSION;
 const SHELL_ASSETS = [

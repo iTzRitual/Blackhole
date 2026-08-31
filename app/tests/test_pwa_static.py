@@ -36,28 +36,28 @@ class PWAStaticTests(unittest.TestCase):
         service_worker = (WEB_ROOT / "sw.js").read_text(encoding="utf-8")
         self.assertIn('url.pathname.startsWith("/api/")', service_worker)
         self.assertIn("request.mode === \"navigate\"", service_worker)
-        self.assertIn('const SHELL_VERSION = "v8"', service_worker)
+        self.assertIn('const SHELL_VERSION = "v9"', service_worker)
         self.assertIn("self.addEventListener(\"message\"", service_worker)
 
     def test_client_requests_versioned_shell_and_updates_existing_workers(self) -> None:
         app_js = (WEB_ROOT / "app.js").read_text(encoding="utf-8")
         html = (WEB_ROOT / "index.html").read_text(encoding="utf-8")
-        self.assertIn('register("/sw.js?v=8", { updateViaCache: "none" })', app_js)
+        self.assertIn('register("/sw.js?v=9", { updateViaCache: "none" })', app_js)
         self.assertIn('controllerchange', app_js)
-        self.assertEqual(set(re.findall(r'[?&]v=(\d+)', html)), {"8"})
+        self.assertEqual(set(re.findall(r'[?&]v=(\d+)', html)), {"9"})
 
-    def test_every_versioned_shell_asset_uses_v8(self) -> None:
+    def test_every_versioned_shell_asset_uses_v9(self) -> None:
         html = (WEB_ROOT / "index.html").read_text(encoding="utf-8")
         service_worker = (WEB_ROOT / "sw.js").read_text(encoding="utf-8")
         expected_html_assets = (
-            "/manifest.webmanifest?v=8",
-            "/icons/icon.svg?v=8",
-            "/styles.css?v=8",
-            "/app.js?v=8",
+            "/manifest.webmanifest?v=9",
+            "/icons/icon.svg?v=9",
+            "/styles.css?v=9",
+            "/app.js?v=9",
         )
         for asset in expected_html_assets:
             self.assertIn(asset, html)
-        self.assertIn('const SHELL_VERSION = "v8"', service_worker)
+        self.assertIn('const SHELL_VERSION = "v9"', service_worker)
         for asset in ("/index.html", "/styles.css", "/app.js", "/manifest.webmanifest", "/icons/icon.svg", "/icons/icon-maskable.svg"):
             self.assertIn('"' + asset + '?v=" + SHELL_VERSION', service_worker)
 

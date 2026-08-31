@@ -65,6 +65,7 @@ class ProductV2IntegrationTests(unittest.TestCase):
                 self.assertEqual(attention[0]["status"], "completed")
                 self.assertEqual(attention[0]["state"], "completed")
                 self.assertIn("Completed", attention[0]["title"])
+                self.assertEqual(runtime.snapshot()["counts"]["attention"], 0)
 
     def test_change_answer_contains_before_and_after_values(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

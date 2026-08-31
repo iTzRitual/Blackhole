@@ -81,6 +81,22 @@ class ProductV2UIContractTests(unittest.TestCase):
         self.assertNotIn("item.subject", attention_renderer)
         self.assertNotIn("item.predicate", attention_renderer)
 
+    def test_attention_clock_and_ask_thread_behaviors_are_live_bounded_and_calm(self) -> None:
+        self.assertIn("scheduleAttentionTicker", APP_JS)
+        self.assertIn("state.attentionTimer", APP_JS)
+        self.assertIn("document.hidden", APP_JS)
+        self.assertIn("new-ask-thread", HTML)
+        self.assertIn("askGeneration", APP_JS)
+        self.assertIn("slice(-8)", APP_JS)
+        self.assertIn("settleAskScroll", APP_JS)
+        self.assertIn("const shouldStick = askIsNearBottom()", APP_JS)
+        self.assertRegex(CSS, r"\.ask-form\s*\{[\s\S]*?position: sticky")
+        self.assertIn("loading-dots", APP_JS)
+        self.assertIn("@keyframes loading-dot", CSS)
+        self.assertIn("@media (prefers-reduced-motion: reduce)", CSS)
+        self.assertNotIn("icon-orbit", HTML)
+        self.assertNotIn("icon-orbit", APP_JS)
+
     def test_memory_is_open_world_and_hides_raw_assertions_from_primary_markup(self) -> None:
         self.assertIn("const normalizeMemory", APP_JS)
         self.assertIn("memory.entities", APP_JS)
@@ -90,6 +106,9 @@ class ProductV2UIContractTests(unittest.TestCase):
         self.assertIn("What Blackhole knows.", HTML)
         self.assertIn("Why Blackhole knows this", APP_JS)
         self.assertNotIn("source_refs", HTML)
+        self.assertIn("column-count: 2", CSS)
+        self.assertIn("memory-subsection-label", APP_JS)
+        self.assertIn("memory-history-label", APP_JS)
 
     def test_ask_has_natural_examples_and_distinct_failure_copy(self) -> None:
         self.assertIn("What do I need to do today?", APP_JS)

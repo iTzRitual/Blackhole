@@ -299,7 +299,7 @@ class HostRequestHandler(BaseHTTPRequestHandler):
             state = host.product_state()
         self._send_json({"ok": True, "runtime": PRODUCT_RUNTIME_VERSION, "state": state})
 
-    def _product_ask_response(self, question: Any) -> None:
+    def _product_ask_response(self, question: Any, thread_context: Any = None) -> None:
         if not isinstance(question, str) or not question.strip():
             self._error("question must not be empty", 400, code="invalid_question")
             return
@@ -308,7 +308,7 @@ class HostRequestHandler(BaseHTTPRequestHandler):
             return
         try:
             with self.host_server.request_lock, self._with_host() as host:
-                answer = host.product_ask(question)
+                answer = host.product_ask(question, thread_context=thread_context)
         except ValueError as error:
             self._error(str(error), 400, code="invalid_question")
             return
@@ -470,7 +470,7 @@ class HostRequestHandler(BaseHTTPRequestHandler):
                 self._send_json({"ok": True, "runtime": PRODUCT_RUNTIME_VERSION, "attention": result})
                 return
             if parsed.path == "/api/v2/ask":
-                self._product_ask_response(body.get("question"))
+                self._product_ask_response(body.get("question"), body.get("thread"))
                 return
             if parsed.path == "/api/capture":
                 text = body.get("text")

@@ -336,7 +336,7 @@ class ProductV2ProvenanceTests(unittest.TestCase):
             result = runtime.ask("Where is the blue suitcase?")
 
         self.assertEqual(result["mode"], "retrieval")
-        self.assertIn("unknown", result["answer"])
+        self.assertIn("needs clarification", result["answer"].casefold())
         self.assertEqual(set(result["source_refs"]), {"prov-suitcase-a", "prov-suitcase-b"})
 
     def test_correction_current_answer_is_narrow_but_history_mentions_prior_source(self) -> None:

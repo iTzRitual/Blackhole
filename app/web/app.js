@@ -62,8 +62,9 @@
       : String(amount);
     const prefix = currencySymbol(currency);
     const suffix = prefix ? "" : (currency ? " " + currency : "");
+    const unit = firstValue(source.unit, source.units);
     const period = firstValue(source.billing_period, source.period, source.cadence);
-    return prefix + formatted + suffix + (period ? "/" + lowercaseFirst(humanize(period)) : "");
+    return prefix + formatted + suffix + (unit ? " " + lowercaseFirst(humanize(unit)) : "") + (period ? "/" + lowercaseFirst(humanize(period)) : "");
   };
 
   const formatDate = (value) => {
@@ -74,20 +75,34 @@
     return new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric" }).format(parsed);
   };
 
-  const formatValue = (value) => {
-    if (value === null || value === undefined || value === "") return "Not stated";
+  const privateValueKeys = new Set([
+    "event_id", "source_event_id", "target_event_id", "source_refs", "confirmation_ref",
+    "fact_id", "fact_ids", "relation_id", "id", "entity_id", "entity_key", "source_id", "source_key",
+    "attachment_id", "blob_ref", "sha256", "hash", "fingerprint", "evidence_id", "projection_run_id",
+    "metadata", "semantic_metadata",
+  ]);
+
+  const formatValue = (value, depth = 0) => {
+    if (depth > 2 || value === null || value === undefined || value === "") return "";
     if (typeof value === "boolean") return value ? "Yes" : "No";
-    if (Array.isArray(value)) return value.length ? value.map(formatValue).join(", ") : "Not stated";
-    if (typeof value === "object") {
-      if (firstValue(value.amount, value.total, value.price, value.value) !== undefined) return formatMoney(value);
-      const label = firstValue(value.display, value.label, value.name, value.title, value.summary);
-      if (label) return String(label);
-      const parts = Object.entries(value)
-        .filter(([key]) => !["source_event_id", "target_event_id", "source_refs", "confirmation_ref"].includes(key))
-        .map(([key, item]) => humanize(key) + ": " + formatValue(item));
-      return parts.join(" · ") || "Not stated";
+    if (typeof value === "number") return Number.isFinite(value) ? String(value) : "";
+    if (typeof value === "string") return value.trim();
+    if (Array.isArray(value)) return value.map((item) => formatValue(item, depth + 1)).filter(Boolean).join(", ");
+    if (typeof value !== "object") return "";
+    if (firstValue(value.amount, value.total, value.price, value.value, value.quantity, value.count) !== undefined) {
+      return formatMoney(value);
     }
-    return String(value);
+    const label = firstValue(value.display, value.label, value.name, value.title, value.summary, value.description, value.location, value.date, value.when, value.status);
+    if (label !== undefined && typeof label !== "object") return formatValue(label, depth + 1);
+    const parts = Object.entries(value)
+      .filter(([key, item]) => !privateValueKeys.has(key) && !key.endsWith("_id") && item !== null && item !== undefined && item !== "")
+      .map(([key, item]) => {
+        const rendered = formatValue(item, depth + 1);
+        return rendered ? humanize(key) + ": " + rendered : "";
+      })
+      .filter(Boolean)
+      .slice(0, 4);
+    return parts.join(" · ");
   };
 
   const isDisplayArtifact = (value) => {
@@ -110,21 +125,48 @@
     return extension && extension !== attachment.name ? extension.toUpperCase() : "File";
   };
 
-  const humanStatus = (status) => ({
-    known: "From a capture",
-    inferred: "A considered interpretation",
-    unknown: "Still uncertain",
-  })[String(status || "").toLowerCase()] || "From a capture";
+  const formatCapturedTime = (value, now = new Date()) => {
+    if (!value) return "";
+    const captured = new Date(String(value));
+    if (Number.isNaN(captured.getTime())) return "";
+    const difference = now.getTime() - captured.getTime();
+    if (difference >= 0 && difference < 60 * 60 * 1000) {
+      const minutes = Math.floor(difference / 60000);
+      return minutes < 1 ? "Captured just now" : "Captured " + minutes + " min ago";
+    }
+    const clock = new Intl.DateTimeFormat(undefined, { hour: "2-digit", minute: "2-digit" }).format(captured);
+    const sameDate = captured.toDateString() === now.toDateString();
+    if (sameDate) return "Captured today · " + clock;
+    return "Captured " + new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric" }).format(captured) + " · " + clock;
+  };
+
+  const humanStatus = (status, capturedAt) => {
+    const normalizedStatus = String(status || "").toLowerCase();
+    const captured = formatCapturedTime(capturedAt);
+    if (captured) {
+      const qualifier = normalizedStatus === "inferred"
+        ? " · considered interpretation"
+        : normalizedStatus === "unknown" ? " · needs clarification" : "";
+      return captured + qualifier;
+    }
+    return ({
+      known: "Captured evidence",
+      inferred: "Considered interpretation",
+      unknown: "Needs clarification",
+    })[String(status || "").toLowerCase()] || "Captured evidence";
+  };
 
   const statusClass = (status) => ["known", "inferred", "unknown"].includes(String(status || "").toLowerCase())
     ? String(status).toLowerCase()
     : "known";
 
-  const statusDetails = (status, reason) => {
+  const statusDetails = (status, reason, capturedAt) => {
     if (String(status || "").toLowerCase() === "unknown") {
-      return "Blackhole is still waiting for clearer evidence" + (reason ? ": " + lowercaseFirst(humanize(reason)) : ".");
+      const normalizedReason = String(reason || "").toLowerCase();
+      if (normalizedReason.includes("conflict")) return "Needs clarification — the notes do not agree.";
+      return "Needs clarification";
     }
-    return humanStatus(status) + ".";
+    return humanStatus(status, capturedAt) + ".";
   };
 
   const naturalizeAssertion = (item) => {
@@ -133,6 +175,9 @@
     const subject = displayName(firstValue(item?.entity_name, item?.subject, item?.entity?.name, "This memory"));
     if (item?.summary || item?.display?.summary || item?.text || item?.description) {
       return String(firstValue(item.summary, item.display?.summary, item.text, item.description));
+    }
+    if (predicate.includes("unknown") || String(item?.knowledge_status).toLowerCase() === "unknown") {
+      return "Needs clarification";
     }
     if (predicate.includes("current_price") || predicate.includes("price")) {
       const price = formatMoney(value);
@@ -150,21 +195,23 @@
     if (predicate.includes("missing") || predicate.includes("unobserved")) {
       return "Missing " + lowercaseFirst(formatValue(value));
     }
-    if (predicate.includes("unknown") || String(item?.knowledge_status).toLowerCase() === "unknown") {
-      return "Still unclear" + (item?.unknown_reason ? " — " + lowercaseFirst(humanize(item.unknown_reason)) : "");
-    }
     if (predicate) return humanize(predicate) + ": " + formatValue(value);
     if (value !== undefined) return subject + ": " + formatValue(value);
     return "A memory Blackhole is keeping nearby";
   };
 
   const normalizeEvidence = (item) => {
+    const captured = formatCapturedTime(firstValue(item?.captured_at, item?.capturedAt, item?.observed_at));
     const evidence = firstValue(item?.evidence, item?.source, item?.source_refs, item?.sources);
+    const sourceCount = Array.isArray(evidence)
+      ? evidence.filter((ref) => ref !== null && ref !== undefined && String(ref).trim() !== "").length
+      : 0;
+    if (captured) return captured + (sourceCount > 1 ? " · " + sourceCount + " sources" : "");
     if (Array.isArray(evidence)) {
-      const count = evidence.filter((ref) => ref !== null && ref !== undefined && String(ref).trim() !== "").length;
-      return count === 1 ? "From a captured source" : count + " captured sources";
+      return sourceCount === 1 ? "Captured source" : sourceCount > 1 ? sourceCount + " captured sources" : "";
     }
-    return displayText(evidence, "From a captured source");
+    const rendered = displayText(evidence, "");
+    return rendered && !/^capture[:_-]|^event[:_-]|^[a-f0-9]{24,}$/i.test(rendered) ? rendered : "Captured source";
   };
 
   const formatAttentionTime = (item, now = new Date()) => {
@@ -176,11 +223,13 @@
     const due = timestamp ? new Date(String(timestamp)) : null;
     const explicitState = String(firstValue(item?.state, item?.urgency, "")).toLowerCase();
     if (!due || Number.isNaN(due.getTime())) {
+      if (explicitState === "overdue") return "Overdue — time needs clarification";
+      if (explicitState === "soon") return "Soon — time needs clarification";
       return displayText(firstValue(item?.display?.when, item?.when, item?.relative_time), "Worth a look");
     }
     const difference = due.getTime() - now.getTime();
     const clock = new Intl.DateTimeFormat(undefined, { hour: "2-digit", minute: "2-digit" }).format(due);
-    if (explicitState === "overdue" || difference <= 0) {
+    if (difference <= 0) {
       const minutes = Math.max(1, Math.floor(Math.abs(difference) / 60000));
       return "Overdue by " + minutes + " min · " + clock;
     }
@@ -195,9 +244,24 @@
     return new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric" }).format(due) + " · " + clock;
   };
 
+  const attentionUrgency = (item, now = new Date()) => {
+    const status = String(firstValue(item?.status, "open")).toLowerCase();
+    if (status !== "open") return "upcoming";
+    const timestamp = firstValue(item?.due_at, item?.starts_at, item?.dueAt, item?.startsAt);
+    const due = timestamp ? new Date(String(timestamp)) : null;
+    if (due && !Number.isNaN(due.getTime())) {
+      const difference = due.getTime() - now.getTime();
+      if (difference <= 0) return "overdue";
+      if (difference < 60 * 60 * 1000) return "soon";
+    }
+    const explicit = String(firstValue(item?.urgency, item?.state, "")).toLowerCase();
+    if (["overdue", "soon", "upcoming"].includes(explicit)) return explicit;
+    return "upcoming";
+  };
+
   const normalizeAttention = (items) => {
     const source = Array.isArray(items) ? items : [];
-    return source.map((item, index) => {
+    const normalized = source.map((item, index) => {
       const value = item?.value;
       const display = item?.display || {};
       const subject = displayName(displayText(firstValue(item?.entity_name, item?.subject, item?.entity?.name, item?.title), "Something"));
@@ -214,23 +278,23 @@
           : predicate.includes("deadline") || predicate.includes("due")
             ? "A deadline is coming up."
             : "Worth a look while it is still useful."), "Worth a look while it is still useful.");
-      const rawDetail = firstValue(item?.detail, item?.details, value?.detail, value?.reason);
-      const detail = rawDetail !== undefined
-        ? displayText(rawDetail, "")
-        : (predicate ? humanize(predicate) + " needs a closer look." : "Blackhole found something worth checking.");
       const lifecycleStatus = String(firstValue(item?.status, "open")).toLowerCase();
+      const detailObject = item?.details && typeof item.details === "object" ? item.details : {};
+      const detailParts = [];
+      const capturedLabel = formatCapturedTime(firstValue(item?.captured_at, item?.capturedAt, item?.observed_at));
+      if (capturedLabel) detailParts.push(capturedLabel + ".");
+      if (detailObject.note && typeof detailObject.note === "string") detailParts.push(detailObject.note.trim());
+      if (detailObject.time_status === "coarse_or_ambiguous") detailParts.push("The time is approximate.");
+      if (detailObject.time_status === "unreadable_or_ambiguous") detailParts.push("The time still needs clarification.");
+      const detail = detailParts.filter(Boolean).join(" ") || "Blackhole kept this because it may need action.";
       const lifecycleState = String(firstValue(item?.state, "")).toLowerCase();
       const rawUrgency = String(firstValue(item?.urgency, display.urgency, "")).toLowerCase();
       const dueValue = firstValue(item?.due_at, item?.starts_at, item?.deadline, value?.deadline, value?.when);
       const rawWhen = firstValue(display.when, display.time, display.relative_time, item?.when, item?.relative_time);
-      const urgency = rawUrgency || (lifecycleState === "overdue" || lifecycleState === "past" || String(rawWhen || "").toLowerCase().includes("overdue")
-        ? "overdue"
-        : lifecycleState === "upcoming" || String(rawWhen || "").toLowerCase().includes("min") || dueValue
-          ? "soon"
-          : "upcoming");
+      const urgency = attentionUrgency({ ...item, status: lifecycleStatus, due_at: dueValue }, new Date()) || rawUrgency || (lifecycleState === "overdue" || String(rawWhen || "").toLowerCase().includes("overdue") ? "overdue" : "upcoming");
       const when = formatAttentionTime({ ...item, status: lifecycleStatus, urgency, state: lifecycleState, display });
       return {
-        id: displayText(firstValue(item?.id, item?.fingerprint, item?.event_id, item?.state_key), "attention-" + index),
+        id: String(firstValue(item?.id, item?.fingerprint, item?.event_id, item?.state_key, "attention-" + index)),
         title,
         summary,
         detail,
@@ -240,8 +304,17 @@
         evidence: normalizeEvidence(item),
         status: item?.knowledge_status || "known",
         lifecycleStatus,
-        unknownReason: item?.unknown_reason || "",
+        unknownReason: typeof item?.unknown_reason === "string" ? item.unknown_reason : "",
+        capturedAt: firstValue(item?.captured_at, item?.capturedAt, item?.observed_at) || "",
+        dueAt: firstValue(item?.due_at, item?.deadline, value?.deadline, value?.when) || "",
+        startsAt: firstValue(item?.starts_at, item?.start_at, value?.starts_at, value?.start_at) || "",
       };
+    }).filter((item) => !["completed", "cancelled", "superseded", "done"].includes(item.lifecycleStatus));
+    const seen = new Set();
+    return normalized.filter((item) => {
+      if (seen.has(item.id)) return false;
+      seen.add(item.id);
+      return true;
     });
   };
 
@@ -265,14 +338,16 @@
     return labels[normalized] || humanize(normalized || "Memory");
   };
 
-  const normalizeFact = (item, fallbackEntity) => {
+  const normalizeFact = (item, fallbackEntity, options = {}) => {
     if (typeof item === "string") {
       return {
         text: displayText(item, "Memory"),
         detail: "",
         status: "known",
-        evidence: "From a captured source",
+        evidence: "Captured source",
         unknownReason: "",
+        capturedAt: "",
+        isHistory: Boolean(options.isHistory),
       };
     }
     const source = item || {};
@@ -283,13 +358,19 @@
       entity_name: source.entity_name || source.entity_label || fallbackEntity,
       predicate: source.predicate || source.concept,
     }));
-    const rawDetail = firstValue(source.detail, source.details, source.explanation);
+    const rawDetail = typeof source.detail === "string"
+      ? source.detail
+      : typeof source.explanation === "string" ? source.explanation : "";
+    const metadata = source.metadata && typeof source.metadata === "object" ? source.metadata : source.semantic_metadata && typeof source.semantic_metadata === "object" ? source.semantic_metadata : {};
+    const lifecycle = String(firstValue(source.lifecycle_action, metadata.lifecycle_action, "")).toLowerCase();
     return {
       text,
       detail: displayText(rawDetail, ""),
       status: source.knowledge_status || source.status || "known",
       evidence: normalizeEvidence(source),
       unknownReason: displayText(source.unknown_reason, ""),
+      capturedAt: firstValue(source.captured_at, source.capturedAt, source.observed_at) || "",
+      isHistory: Boolean(options.isHistory || ["complete", "completed", "done", "cancel", "cancelled", "superseded"].includes(lifecycle)),
     };
   };
 
@@ -356,7 +437,7 @@
       if (!name) return;
       const kind = firstValue(fact.entity_kind, fact.entity?.kind, fact.kind, "memory");
       const group = addGroup(fact.entity_key || fact.entity_id || name, name, kind, "", []);
-      const normalized = normalizeFact(fact, name);
+      const normalized = normalizeFact(fact, name, { isHistory: true });
       const operation = String(firstValue(fact.semantic_relation, fact.operation, "")).toLowerCase();
       const prefix = ["correction", "supersede", "supersession", "meaningful_change", "change"].some((marker) => operation.includes(marker))
         ? "Changed from "
@@ -380,7 +461,10 @@
       });
     });
 
-    return [...groups.values()].filter((group) => group.facts.length);
+    return [...groups.values()].filter((group) => group.facts.length).map((group) => ({
+      ...group,
+      facts: [...group.facts].sort((left, right) => Number(left.isHistory) - Number(right.isHistory)),
+    }));
   };
 
   const normalizeSupportItem = (item) => {
@@ -392,6 +476,7 @@
       status: normalized.status,
       evidence: normalized.evidence,
       unknownReason: normalized.unknownReason,
+      capturedAt: normalized.capturedAt,
     };
   };
 
@@ -502,7 +587,7 @@
           summary: "Leave soon for pickup.",
           display: { when: "in 8 min", urgency: "soon" },
           detail: "A reminder you captured for today.",
-          evidence: "From a captured note",
+          captured_at: "2026-08-31T02:56:00Z",
           knowledge_status: "known",
         },
         {
@@ -511,7 +596,7 @@
           summary: "The permit is due on Sep 12.",
           display: { when: "Sep 12", urgency: "upcoming" },
           detail: "A date you mentioned while thinking about the apartment.",
-          evidence: "From a captured note",
+          captured_at: "2026-08-30T13:20:00Z",
           knowledge_status: "known",
         },
         {
@@ -520,7 +605,7 @@
           summary: "A price change is waiting for your decision.",
           display: { when: "Worth a look", urgency: "upcoming" },
           detail: "Blackhole found a proposed change; nothing has been changed for you.",
-          evidence: "From a captured note",
+          captured_at: "2026-08-29T15:10:00Z",
           approval_required: true,
           knowledge_status: "inferred",
         },
@@ -533,7 +618,7 @@
             kind: "person",
             summary: "People and preferences you’ve mentioned.",
             facts: [
-              { summary: "Likes the green pasta from Lidl", status: "known", evidence: "From a captured note" },
+              { summary: "Likes the green pasta from Lidl", status: "known", captured_at: "2026-08-30T12:15:00Z" },
               { summary: "Birthday is still unclear", status: "unknown", unknown_reason: "not stated", evidence: "No clear source yet" },
             ],
           },
@@ -543,7 +628,7 @@
             kind: "thing",
             summary: "A few observations about your car.",
             facts: [
-              { summary: "Started knocking at the front-left", status: "known", evidence: "From a captured note" },
+              { summary: "Started knocking at the front-left", status: "known", captured_at: "2026-08-30T11:42:00Z" },
             ],
           },
           {
@@ -552,7 +637,7 @@
             kind: "thing",
             summary: "A small detail worth being able to find.",
             facts: [
-              { summary: "At Mum’s place", status: "known", evidence: "From a captured note" },
+              { summary: "At Mum’s place", status: "known", captured_at: "2026-08-30T10:05:00Z" },
             ],
           },
           {
@@ -561,8 +646,8 @@
             kind: "money",
             summary: "A recurring cost with a change in its history.",
             facts: [
-              { summary: "€11/month", status: "known", evidence: "From a captured note" },
-              { summary: "Changed from €9 on Sep 1", status: "known", evidence: "From a later captured note" },
+              { summary: "€11/month", status: "known", captured_at: "2026-08-30T09:12:00Z" },
+              { summary: "Changed from €9 on Sep 1", status: "known", captured_at: "2026-08-30T09:18:00Z" },
             ],
           },
           {
@@ -571,7 +656,7 @@
             kind: "task",
             summary: "One deadline to keep nearby.",
             facts: [
-              { summary: "Renew by Sep 12", status: "known", evidence: "From a captured note" },
+              { summary: "Renew by Sep 12", status: "known", captured_at: "2026-08-30T08:40:00Z" },
             ],
           },
         ],
@@ -595,7 +680,7 @@
         groups: [{
           title: "Recurring costs",
           items: [
-            { summary: "PocketWave · €11/month", detail: "Changed from €9 on Sep 1", status: "known", evidence: "From a captured note" },
+            { summary: "PocketWave · €11/month", detail: "Changed from €9 on Sep 1", status: "known", captured_at: "2026-08-30T09:12:00Z" },
           ],
         }],
       };
@@ -606,7 +691,7 @@
         summary: "Here’s what I remember about your car:",
         groups: [{
           title: "Car",
-          items: [{ summary: "Started knocking at the front-left", status: "known", evidence: "From a captured note" }],
+          items: [{ summary: "Started knocking at the front-left", status: "known", captured_at: "2026-08-30T11:42:00Z" }],
         }],
       };
     }
@@ -629,7 +714,7 @@
         groups: [{
           title: "Recent changes",
           items: [
-            { summary: "PocketWave changed from €9 to €11/month", detail: "The new price starts Sep 1.", status: "known", evidence: "From a captured note" },
+            { summary: "PocketWave changed from €9 to €11/month", detail: "The new price starts Sep 1.", status: "known", captured_at: "2026-08-30T09:18:00Z" },
           ],
         }],
       };
@@ -756,7 +841,7 @@
         body: JSON.stringify({ fingerprint, status }),
       });
     },
-    async ask(question) {
+    async ask(question, thread = []) {
       if (fixtureMode) {
         await wait(180);
         if (fixtureUnavailable) {
@@ -766,7 +851,7 @@
       }
       return api("/api/v2/ask", {
         method: "POST",
-        body: JSON.stringify({ question }),
+        body: JSON.stringify({ question, thread }),
       });
     },
   };
@@ -798,12 +883,14 @@
     asking: false,
     processing: null,
     processingPollTimer: null,
+    attentionTimer: null,
     captureStatusVisible: false,
     toastTimer: null,
     toastAction: null,
     undoRecord: null,
     lastAskQuestion: "",
     askMessages: [],
+    askGeneration: 0,
     openDisclosures: new Set(),
   };
 
@@ -966,7 +1053,9 @@
     }
     element.hidden = false;
     element.innerHTML = '<div class="processing-notice is-' + escapeHtml(notice.kind) + '" role="status">' +
-      '<span class="processing-notice-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-' + (notice.kind === "error" ? "error" : "orbit") + '"></use></svg></span>' +
+      (notice.kind === "error"
+        ? '<span class="processing-notice-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-error"></use></svg></span>'
+        : '<span class="processing-dots" aria-hidden="true"><i></i><i></i><i></i></span>') +
       '<div><h3>' + escapeHtml(notice.title) + '</h3><p>' + escapeHtml(notice.message) + '</p></div>' +
       '</div>';
   };
@@ -1090,7 +1179,12 @@
   const renderAttention = () => {
     const element = $("#attention-list");
     renderProcessingNotice("#attention-processing");
-    const items = state.attention;
+    const now = new Date();
+    const items = state.attention.map((item) => ({
+      ...item,
+      urgency: attentionUrgency({ status: item.lifecycleStatus, due_at: item.dueAt, starts_at: item.startsAt }, now),
+      when: formatAttentionTime({ status: item.lifecycleStatus, due_at: item.dueAt, starts_at: item.startsAt, urgency: item.urgency, state: item.urgency }, now),
+    }));
     rememberDisclosureState(element);
     if (!items.length) {
       renderEmpty(element, "Nothing needs your attention.", "Blackhole will only interrupt when something is worth acting on.", "check");
@@ -1116,7 +1210,7 @@
           (item.approval && lifecycleStatus === "open" ? '<span class="attention-state">Needs your decision</span>' : '<span class="attention-state">' + escapeHtml(lifecycleLabel) + '</span>') +
           '<div class="attention-actions">' +
             (lifecycleStatus === "open" ? '<button class="quiet-button attention-complete" type="button" data-attention-complete="' + escapeHtml(item.id) + '">Done</button>' : '') +
-            '<details class="evidence-details" data-disclosure-id="attention:' + escapeHtml(item.id) + '"' + (state.openDisclosures.has("attention:" + item.id) ? " open" : "") + '><summary><span>Why this is here</span>' + disclosureChevron + '</summary><div class="detail-copy"><p>' + escapeHtml(item.detail) + '</p><p class="detail-meta">' + escapeHtml(statusDetails(item.status, item.unknownReason)) + ' · ' + escapeHtml(item.evidence) + '</p></div></details>' +
+            '<details class="evidence-details" data-disclosure-id="attention:' + escapeHtml(item.id) + '"' + (state.openDisclosures.has("attention:" + item.id) ? " open" : "") + '><summary><span>Why this is here</span>' + disclosureChevron + '</summary><div class="detail-copy">' + (item.detail ? '<p>' + escapeHtml(item.detail) + '</p>' : "") + '<p class="detail-meta">' + escapeHtml(statusDetails(item.status, item.unknownReason, item.capturedAt)) + (item.evidence ? ' · ' + escapeHtml(item.evidence) : "") + '</p></div></details>' +
           '</div>' +
         '</div>' +
       '</article>';
@@ -1124,15 +1218,37 @@
     bindDisclosureState(element);
   };
 
+  const scheduleAttentionTicker = () => {
+    if (fixtureMode || state.attentionTimer) return;
+    if (!state.attention.length) return;
+    state.attentionTimer = window.setTimeout(() => {
+      state.attentionTimer = null;
+      if (typeof document !== "undefined" && document.hidden) {
+        scheduleAttentionTicker();
+        return;
+      }
+      renderAttention();
+      updateAttentionBadge();
+      scheduleAttentionTicker();
+    }, Math.min(60000, 60000 - (Date.now() % 60000) + 80));
+  };
+
   const completeAttention = async (button) => {
     const fingerprint = button?.dataset?.attentionComplete;
     if (!fingerprint || button.disabled) return;
     button.disabled = true;
+    const previous = state.attention;
+    state.attention = previous.filter((item) => item.id !== fingerprint);
+    renderAttention();
+    updateAttentionBadge();
     try {
       await client.setAttentionStatus(fingerprint, "completed");
       showToast("Marked done");
       await refreshState();
     } catch (_error) {
+      state.attention = previous;
+      renderAttention();
+      updateAttentionBadge();
       button.disabled = false;
       showToast("Couldn’t update that yet.", "error");
     }
@@ -1141,7 +1257,7 @@
   const updateAttentionBadge = () => {
     const badge = $("#nav-attention");
     if (!badge) return;
-    const count = state.attention.length;
+    const count = state.attention.filter((item) => item.lifecycleStatus === "open").length;
     badge.textContent = count ? String(count) : "";
     badge.classList.toggle("has-count", count > 0);
     badge.setAttribute("aria-hidden", count ? "false" : "true");
@@ -1202,6 +1318,19 @@
     }
     element.innerHTML = filtered.map((entity) => {
       const initial = entity.name.trim().charAt(0).toUpperCase() || "•";
+      const facts = [...entity.facts].sort((left, right) => Number(left.isHistory) - Number(right.isHistory));
+      const currentFacts = facts.filter((fact) => !fact.isHistory);
+      const certainCurrentFacts = currentFacts.filter((fact) => String(fact.status || "").toLowerCase() !== "unknown");
+      const uncertainCurrentFacts = currentFacts.filter((fact) => String(fact.status || "").toLowerCase() === "unknown");
+      const historicalFacts = facts.filter((fact) => fact.isHistory);
+      const renderFact = (fact) => {
+        const status = statusClass(fact.status);
+        return '<li class="memory-fact is-' + status + (fact.isHistory ? " is-history" : "") + '">' +
+          '<span class="fact-marker" aria-hidden="true"></span>' +
+          '<span class="fact-copy"><span>' + escapeHtml(fact.text) + '</span>' +
+          '<span class="fact-status">' + escapeHtml(humanStatus(fact.status, fact.capturedAt)) + '</span></span>' +
+        '</li>';
+      };
       return '<article class="memory-card">' +
         '<header class="memory-card-header">' +
           '<span class="entity-avatar" aria-hidden="true">' + escapeHtml(initial) + '</span>' +
@@ -1209,16 +1338,11 @@
           '<span class="entity-fact-count">' + entity.facts.length + '</span>' +
         '</header>' +
         (entity.summary ? '<p class="memory-card-summary">' + escapeHtml(entity.summary) + '</p>' : "") +
-        '<ul class="memory-facts">' + entity.facts.map((fact) => {
-          const status = statusClass(fact.status);
-          return '<li class="memory-fact is-' + status + '">' +
-            '<span class="fact-marker" aria-hidden="true"></span>' +
-            '<span class="fact-copy"><span>' + escapeHtml(fact.text) + '</span>' +
-            '<span class="fact-status">' + escapeHtml(humanStatus(fact.status)) + '</span></span>' +
-          '</li>';
-        }).join("") + '</ul>' +
+        (certainCurrentFacts.length ? '<div class="memory-subsection-label">Current</div><ul class="memory-facts">' + certainCurrentFacts.map(renderFact).join("") + '</ul>' : "") +
+        (uncertainCurrentFacts.length ? '<div class="memory-subsection-label is-uncertain">Needs clarification</div><ul class="memory-facts memory-uncertain">' + uncertainCurrentFacts.map(renderFact).join("") + '</ul>' : "") +
+        (historicalFacts.length ? '<div class="memory-history-label">History</div><ul class="memory-facts memory-history">' + historicalFacts.map(renderFact).join("") + '</ul>' : "") +
         '<details class="evidence-details memory-evidence" data-disclosure-id="memory:' + escapeHtml(entity.id) + '"' + (state.openDisclosures.has("memory:" + entity.id) ? " open" : "") + '><summary><span>Why Blackhole knows this</span>' + disclosureChevron + '</summary><div class="detail-copy"><p>' +
-          escapeHtml(entity.facts.map((fact) => fact.text + " — " + statusDetails(fact.status, fact.unknownReason) + ". " + fact.evidence).join(" ")) +
+          escapeHtml(facts.map((fact) => fact.text + " — " + statusDetails(fact.status, fact.unknownReason, fact.capturedAt) + (fact.evidence ? ". " + fact.evidence : "")).join(" ")) +
         '</p></div></details>' +
       '</article>';
     }).join("");
@@ -1246,6 +1370,11 @@
     state.memoryEntities = normalizeMemory(rawState?.memory || rawState);
     updateAttentionBadge();
     renderAttention();
+    if (!state.attention.length && state.attentionTimer) {
+      window.clearTimeout(state.attentionTimer);
+      state.attentionTimer = null;
+    }
+    scheduleAttentionTicker();
     renderMemory();
     updateCaptureProcessingFeedback();
     scheduleProcessingPoll();
@@ -1308,15 +1437,32 @@
       group.items.map((item) => '<li class="support-item is-' + statusClass(item.status) + '">' +
         '<span class="fact-marker" aria-hidden="true"></span><span class="support-copy"><span>' + escapeHtml(displayText(item.text, "Memory")) + '</span>' +
         (item.detail ? '<span class="support-detail">' + escapeHtml(displayText(item.detail, "")) + '</span>' : "") +
-        '<span class="support-detail">' + escapeHtml(statusDetails(item.status, item.unknownReason) + " · " + displayText(item.evidence, "From a captured source")) + '</span>' +
+        '<span class="support-detail">' + escapeHtml(statusDetails(item.status, item.unknownReason, item.capturedAt) + (item.evidence ? " · " + item.evidence : "")) + '</span>' +
       '</li>').join("") + '</ul></section>').join("");
     const related = relatedCount ? '<details class="evidence-details related-memories" data-disclosure-id="ask:' + messageIndex + ':related"' + (state.openDisclosures.has("ask:" + messageIndex + ":related") ? " open" : "") + '><summary><span>Supporting memories · ' + relatedCount + '</span>' + disclosureChevron + '</summary><div class="detail-copy answer-groups">' + groupMarkup + '</div></details>' : "";
     return '<article class="chat-message assistant-message"><div class="chat-assistant-primary"><span class="answer-spark"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-spark"></use></svg></span><p>' + escapeHtml(displayText(normalized.summary, "Here’s what I found in your memory:")) + '</p></div>' + related + '<p class="answer-grounding">Based on what you’ve captured so far.</p></article>';
   };
 
+  const askIsNearBottom = () => {
+    if (typeof document === "undefined" || typeof window === "undefined") return true;
+    const documentHeight = Math.max(document.body?.scrollHeight || 0, document.documentElement?.scrollHeight || 0);
+    return documentHeight - (window.scrollY + window.innerHeight) < 180;
+  };
+
+  const settleAskScroll = (shouldStick) => {
+    if (!shouldStick || typeof window === "undefined" || typeof window.scrollTo !== "function") return;
+    const move = () => window.scrollTo({
+      top: Math.max(document.documentElement?.scrollHeight || 0, document.body?.scrollHeight || 0),
+      behavior: prefersReducedMotion() ? "auto" : "smooth",
+    });
+    if (typeof window.requestAnimationFrame === "function") window.requestAnimationFrame(move);
+    else move();
+  };
+
   const renderAskConversation = (loading = false) => {
     const output = $("#answer-output");
     if (!output) return;
+    const shouldStick = askIsNearBottom();
     const messages = state.askMessages.map((message, index) => {
       if (message.role === "user") {
         return '<article class="chat-message user-message"><p>' + escapeHtml(displayText(message.text, "")) + '</p></article>';
@@ -1324,10 +1470,11 @@
       return renderAssistantMarkup(message, index);
     });
     if (loading) {
-      messages.push('<article class="chat-message assistant-message"><div class="answer-loading"><span class="loading-orbit" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#icon-orbit"></use></svg></span><div><h3>Looking through your memory…</h3><p>Just a moment.</p></div></div></article>');
+      messages.push('<article class="chat-message assistant-message"><div class="answer-loading"><span class="loading-dots" aria-hidden="true"><i></i><i></i><i></i></span><div><h3>Looking through your memory…</h3><p>Just a moment.</p></div></div></article>');
     }
     output.innerHTML = messages.join("");
     bindDisclosureState(output);
+    settleAskScroll(shouldStick);
     $$("[data-answer-action-index]", output).forEach((button) => {
       const index = Number(button.dataset.answerActionIndex);
       const message = state.askMessages[index];
@@ -1365,20 +1512,48 @@
     renderAnswerState("I couldn’t answer that yet.", "Try again in a moment, or ask about a different capture.", "error", "Try again", () => ask(state.lastAskQuestion));
   };
 
+  const askThreadContext = () => state.askMessages
+    .map((message) => {
+      if (message.role === "user") return { role: "user", text: displayText(message.text, "") };
+      const answer = message.answer || {};
+      const transient = message.transient || {};
+      return {
+        role: "assistant",
+        text: displayText(firstValue(answer.summary, answer.answer, transient.message), ""),
+      };
+    })
+    .filter((item) => item.text)
+    .slice(-8);
+
+  const resetAskThread = () => {
+    if (state.asking) return;
+    state.askMessages = [];
+    state.lastAskQuestion = "";
+    state.askGeneration += 1;
+    renderQuestionExamples();
+    renderAskConversation();
+    const input = $("#ask-input");
+    if (input) input.focus();
+  };
+
   const ask = async (question) => {
     const normalizedQuestion = String(question || "").trim();
     if (!normalizedQuestion || state.asking) return;
     state.asking = true;
     state.lastAskQuestion = normalizedQuestion;
+    const generation = state.askGeneration;
+    const thread = askThreadContext();
     state.askMessages.push({ role: "user", text: normalizedQuestion });
     renderQuestionExamples();
     const input = $("#ask-input");
     if (input) input.value = "";
     renderAnswerLoading();
     try {
-      const payload = await client.ask(normalizedQuestion);
+      const payload = await client.ask(normalizedQuestion, thread);
+      if (generation !== state.askGeneration) return;
       renderAnswer(normalizeAnswer(payload));
     } catch (error) {
+      if (generation !== state.askGeneration) return;
       answerError(error);
     } finally {
       state.asking = false;
@@ -1526,6 +1701,8 @@
       normalizeMemory,
       normalizeAnswer,
       formatAttentionTime,
+      formatCapturedTime,
+      attentionUrgency,
       displayText,
       createDisclosureState,
       shouldShowAskExamples,
@@ -1564,6 +1741,7 @@
     event.preventDefault();
     ask($("#ask-input")?.value);
   });
+  $("#new-ask-thread")?.addEventListener("click", resetAskThread);
   $("#question-chips")?.addEventListener("click", (event) => {
     const button = event.target.closest("[data-question]");
     if (!button) return;
@@ -1595,6 +1773,12 @@
   });
   window.addEventListener("online", () => { setConnectionStatus("Connected", "online"); refreshState(); });
   window.addEventListener("offline", () => setConnectionStatus("Offline", "offline"));
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) return;
+    renderAttention();
+    scheduleAttentionTicker();
+    scheduleProcessingPoll();
+  });
   window.addEventListener("beforeinstallprompt", (event) => {
     event.preventDefault();
     state.installPrompt = event;
@@ -1624,7 +1808,7 @@
       window.location.reload();
     });
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=8", { updateViaCache: "none" })
+      navigator.serviceWorker.register("/sw.js?v=9", { updateViaCache: "none" })
         .then((registration) => {
           if (registration.waiting) registration.waiting.postMessage({ type: "SKIP_WAITING" });
           if (typeof registration.update === "function") return registration.update();
@@ -1641,6 +1825,8 @@
       normalizeMemory,
       normalizeAnswer,
       formatAttentionTime,
+      formatCapturedTime,
+      attentionUrgency,
       displayText,
       createDisclosureState,
       shouldShowAskExamples,

@@ -15,6 +15,49 @@ from app.tests.test_product_v2 import ProductFakeProvider
 from app.web_app import create_server
 
 
+class AskThreadProvider:
+    def __init__(self) -> None:
+        self.answer_contexts: list[dict[str, Any]] = []
+
+    def extract(
+        self,
+        *,
+        events: list[dict[str, Any]],
+        prior_memory: dict[str, Any],
+        time_context: dict[str, Any],
+        contract: dict[str, Any],
+    ) -> dict[str, Any]:
+        del prior_memory, time_context, contract
+        return {
+            "facts": [
+                {
+                    "event_id": str(event["event_id"]),
+                    "entity": "car",
+                    "concept": "condition",
+                    "knowledge_status": "known",
+                    "value": "knocking at the front left",
+                }
+                for event in events
+            ]
+        }
+
+    def answer(
+        self,
+        *,
+        question: str,
+        context: dict[str, Any],
+        time_context: dict[str, Any],
+    ) -> dict[str, Any]:
+        del question, time_context
+        self.answer_contexts.append(context)
+        evidence_ids = [
+            item["evidence_id"]
+            for item in context.get("facts", [])
+            if isinstance(item, dict) and isinstance(item.get("evidence_id"), str)
+        ]
+        return {"answer": "A bounded provider summary.", "evidence_ids": evidence_ids[:1]}
+
+
 class ProductV2HttpTests(unittest.TestCase):
     @staticmethod
     def request(
@@ -135,6 +178,46 @@ class ProductV2HttpTests(unittest.TestCase):
                 self.assertEqual(answer["answer"]["mode"], "costs")
                 self.assertFalse(answer["answer"]["provider_used"])
                 self.assertEqual(provider.answer_calls, 0)
+            finally:
+                server.shutdown()
+                server.server_close()
+
+    def test_product_ask_accepts_bounded_thread_context_without_persisting_it_as_evidence(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            provider = AskThreadProvider()
+            server = create_server("127.0.0.1", 0, home=Path(directory), provider=provider)
+            thread = threading.Thread(target=server.serve_forever, daemon=True)
+            thread.start()
+            base_url = f"http://127.0.0.1:{server.server_port}"
+            try:
+                self.request(
+                    base_url,
+                    "/api/v2/capture",
+                    method="POST",
+                    body={"event_id": "http-thread-car", "text": "My car is knocking."},
+                )
+                for _ in range(100):
+                    _status, state = self.request(base_url, "/api/v2/state")
+                    if state["state"]["counts"]["facts"]:
+                        break
+                    time.sleep(0.01)
+                thread_context = [
+                    {"role": "user", "text": "What do I know about my car?"},
+                    {"role": "assistant", "text": "The car is knocking at the front left."},
+                ] + [{"role": "user", "text": f"A later conversational aside {index}"} for index in range(6)]
+                status, answer = self.request(
+                    base_url,
+                    "/api/v2/ask",
+                    method="POST",
+                    body={"question": "What does that mean?", "thread": thread_context},
+                )
+                self.assertEqual(status, 200)
+                self.assertTrue(answer["answer"]["provider_used"])
+                sent_thread = provider.answer_contexts[-1]["thread"]
+                self.assertEqual(len(sent_thread), 8)
+                self.assertTrue(any(item["role"] == "assistant" for item in sent_thread))
+                self.assertTrue(all(set(item) == {"role", "text"} for item in sent_thread))
+                self.assertFalse(any("evidence_id" in item for item in sent_thread))
             finally:
                 server.shutdown()
                 server.server_close()

@@ -465,6 +465,68 @@ process.stdout.write(JSON.stringify(result));
         self.assertTrue(result["examplesBefore"])
         self.assertFalse(result["examplesAfter"])
 
+    def test_ui_attention_memory_and_ask_outputs_stay_human_and_current_first(self) -> None:
+        result = self._run_ui_hooks(r"""(() => {
+  const now = new Date("2026-08-31T03:12:00Z");
+  const attention = api.normalizeAttention([
+    {
+      fingerprint: "open-reminder",
+      title: "Pay the water bill",
+      status: "open",
+      due_at: "2026-08-31T03:20:00Z",
+      captured_at: "2026-08-31T03:04:00Z",
+      source_refs: ["capture:private"],
+      details: { note: "A useful note", source_event_id: "event:private", payload: { raw: true } },
+    },
+    { fingerprint: "completed-reminder", title: "Already done", status: "completed" },
+    { fingerprint: "cancelled-reminder", title: "Cancelled", status: "cancelled" },
+    { fingerprint: "superseded-reminder", title: "Replaced", status: "superseded" },
+  ]);
+  const memory = api.normalizeMemory({
+    current_facts: [
+      { entity_key: "water", entity_label: "Water", concept: "drink", summary: "3 glasses today", captured_at: "2026-08-31T03:04:00Z" },
+      { entity_key: "keys", entity_label: "Basement keys", concept: "location", knowledge_status: "unknown", unknown_reason: "conflicting", captured_at: "2026-08-31T02:00:00Z" },
+    ],
+    fact_history: [
+      { entity_key: "water", entity_label: "Water", concept: "drink", summary: "1 glass yesterday", semantic_relation: "correction", captured_at: "2026-08-30T03:04:00Z" },
+    ],
+  });
+  const answer = api.normalizeAnswer({
+    mode: "retrieval",
+    summary: "The recorded amount is below.",
+    groups: [{ title: "Water", items: [{ text: { amount: 3, unit: "glasses", source_event_id: "private" }, source_refs: ["capture:private"] }] }],
+  });
+  return {
+    attentionIds: attention.map((item) => item.id),
+    attentionDetail: attention[0] ? attention[0].detail : "",
+    attentionEvidence: attention[0] ? attention[0].evidence : "",
+    captured: api.formatCapturedTime("2026-08-31T03:04:00Z", now),
+    soon: api.attentionUrgency({ due_at: "2026-08-31T03:20:00Z" }, now),
+    overdue: api.attentionUrgency({ due_at: "2026-08-31T03:00:00Z" }, now),
+    overdueText: api.formatAttentionTime({ due_at: "2026-08-31T03:00:00Z" }, now),
+    memoryFacts: memory.map((group) => ({ name: group.name, facts: group.facts.map((fact) => ({ text: fact.text, history: fact.isHistory })) })),
+    unknownText: memory.find((group) => group.name === "Basement keys")?.facts[0]?.text || "",
+    answerText: answer.groups[0]?.items[0]?.text || "",
+    answerEvidence: answer.groups[0]?.items[0]?.evidence || "",
+  };
+})()""")
+        self.assertEqual(result["attentionIds"], ["open-reminder"])
+        self.assertIn("A useful note", result["attentionDetail"])
+        self.assertNotIn("event:private", result["attentionDetail"])
+        self.assertNotIn("{", result["attentionDetail"])
+        self.assertIn("Captured", result["attentionEvidence"])
+        self.assertEqual(result["captured"], "Captured 8 min ago")
+        self.assertEqual(result["soon"], "soon")
+        self.assertEqual(result["overdue"], "overdue")
+        self.assertTrue(result["overdueText"].startswith("Overdue by "))
+        self.assertEqual(result["memoryFacts"][0]["facts"][0]["history"], False)
+        self.assertEqual(result["memoryFacts"][0]["facts"][1]["history"], True)
+        self.assertEqual(result["unknownText"], "Needs clarification")
+        self.assertEqual(result["answerText"], "3 glasses")
+        self.assertNotIn("private", result["answerText"])
+        self.assertNotIn("{", result["answerText"])
+        self.assertEqual(result["answerEvidence"], "Captured source")
+
     def test_raw_language_is_preserved_and_deterministic_ask_stays_provider_free(self) -> None:
         provider = ProductFakeProvider()
         with tempfile.TemporaryDirectory() as directory:

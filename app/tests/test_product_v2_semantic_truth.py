@@ -1058,7 +1058,7 @@ class ProductV2SemanticTruthTests(unittest.TestCase):
                 self.assertEqual(uncertainty["source_refs"], ["ask-warranty"])
 
                 conflict = runtime.ask("What's causing the car noise?")
-                self.assertIn("conflicting", conflict["answer"])
+                self.assertIn("needs clarification", conflict["answer"].casefold())
                 self.assertEqual(conflict["source_refs"], ["ask-a", "ask-b"])
 
                 negated = runtime.ask("Is Netflix cancelled?")

@@ -391,8 +391,13 @@ class HostRuntime:
     def product_retry_failed(self, event_id: str | None = None, *, limit: int | None = None) -> dict[str, Any]:
         return self.product_runtime.retry_failed(event_id, limit=limit)
 
-    def product_ask(self, question: str) -> dict[str, Any]:
-        return _safe_product_result(self.product_runtime.ask(question))
+    def product_ask(
+        self,
+        question: str,
+        *,
+        thread_context: list[dict[str, Any]] | None = None,
+    ) -> dict[str, Any]:
+        return _safe_product_result(self.product_runtime.ask(question, thread_context=thread_context))
 
     def product_forget(self, event_id: str, *, reason: str = "user undo") -> dict[str, Any]:
         return self.product_runtime.forget(event_id, reason=reason)

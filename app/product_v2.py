@@ -51,7 +51,7 @@ from app.runtime_config import (
 )
 
 
-PRODUCT_RUNTIME_VERSION = "blackhole-product-v2-runtime-v2"
+PRODUCT_RUNTIME_VERSION = "blackhole-product-v2-runtime-v3"
 PRODUCT_DATABASE_NAME = "blackhole-v2.db"
 PRODUCT_PROMPT_VERSION = "blackhole-product-v2-prompt-v5-compact"
 PROCESSING_PENDING_MESSAGE = "Still understanding your recent captures."
@@ -68,6 +68,8 @@ MAX_ASK_CONTEXT_HISTORY = 20
 MAX_ASK_FALLBACK_FACTS = 40
 MAX_ASK_FALLBACK_HISTORY = 20
 MAX_ASK_SUPPORTING_EVIDENCE_IDS = MAX_ASK_CONTEXT_FACTS + MAX_ASK_CONTEXT_HISTORY
+MAX_ASK_THREAD_MESSAGES = 8
+MAX_ASK_THREAD_TEXT = 1200
 # Extraction only needs a recent, compact projection for linking.  Keeping
 # this context bounded prevents an old Home from turning every capture into a
 # large provider request while leaving the immutable source history untouched.
@@ -124,6 +126,7 @@ _ANSWER_COPY = {
         "observed_costs": "Observed costs: ",
         "recorded_history": " Recorded history: ",
         "deterministic_totals": " Deterministic totals: ",
+        "occurrence_totals": "Recorded totals: ",
         "changes_no_match": "No recorded change evidence matches that question.",
         "recent_changes": "Recent changes: ",
         "last_mention_no_match": "No recorded mention evidence matches that question.",
@@ -143,6 +146,7 @@ _ANSWER_COPY = {
         "observed_costs": "Zaobserwowane koszty: ",
         "recorded_history": " Zapisana historia: ",
         "deterministic_totals": " Sumy obliczone deterministycznie: ",
+        "occurrence_totals": "Zapisane sumy: ",
         "changes_no_match": "Nie znaleziono zapisanych zmian pasujących do tego pytania.",
         "recent_changes": "Najnowsze zmiany: ",
         "last_mention_no_match": "Nie znaleziono zapisanej wzmianki pasującej do tego pytania.",
@@ -191,6 +195,25 @@ def _clean_text(value: Any, *, limit: int = 500) -> str:
     return value.strip()[:limit]
 
 
+def _normalize_ask_thread_context(value: Any) -> list[dict[str, str]]:
+    """Keep a small, UI-scoped conversation hint separate from evidence."""
+
+    if not isinstance(value, list):
+        return []
+    normalized: list[dict[str, str]] = []
+    for item in value:
+        if not isinstance(item, dict):
+            continue
+        role = item.get("role")
+        text = item.get("text", item.get("content"))
+        if role not in {"user", "assistant"} or not isinstance(text, str):
+            continue
+        cleaned = _clean_text(text, limit=MAX_ASK_THREAD_TEXT)
+        if cleaned:
+            normalized.append({"role": role, "text": cleaned})
+    return normalized[-MAX_ASK_THREAD_MESSAGES:]
+
+
 def _slug(value: str) -> str:
     normalized = unicodedata.normalize("NFKC", value).casefold()
     normalized = re.sub(r"[^\w]+", "_", normalized, flags=re.UNICODE).strip("_")
@@ -234,25 +257,109 @@ def _is_cost_fact(item: dict[str, Any]) -> bool:
     )
 
 
+_PRIVATE_VALUE_KEYS = frozenset(
+    {
+        "event_id",
+        "source_event_id",
+        "target_event_id",
+        "source_refs",
+        "fact_id",
+        "fact_ids",
+        "relation_id",
+        "id",
+        "entity_id",
+        "entity_key",
+        "source_id",
+        "source_key",
+        "attachment_id",
+        "blob_ref",
+        "sha256",
+        "hash",
+        "fingerprint",
+        "evidence_id",
+        "projection_run_id",
+        "metadata",
+        "semantic_metadata",
+    }
+)
+
+
+def _human_value(value: Any, *, depth: int = 0) -> str:
+    """Render structured values without exposing transport-shaped objects."""
+
+    if depth > 2 or value is None:
+        return ""
+    if isinstance(value, bool):
+        return "yes" if value else "no"
+    if isinstance(value, (int, float, Decimal)) and not isinstance(value, bool):
+        return str(value)
+    if isinstance(value, str):
+        return _clean_text(value, limit=500)
+    if isinstance(value, list):
+        rendered = [_human_value(item, depth=depth + 1) for item in value]
+        return ", ".join(item for item in rendered if item)[:800]
+    if not isinstance(value, dict):
+        return ""
+    amount = next((value.get(key) for key in ("amount", "total", "price", "quantity", "count") if value.get(key) is not None), None)
+    currency = value.get("currency", value.get("currency_code"))
+    unit = value.get("unit", value.get("units"))
+    if amount is not None:
+        amount_text = _human_value(amount, depth=depth + 1)
+        suffix = _human_value(currency, depth=depth + 1) or _human_value(unit, depth=depth + 1)
+        period = _human_value(value.get("billing_period", value.get("period")), depth=depth + 1)
+        if period:
+            suffix = f"{suffix} per {period}" if suffix else f"per {period}"
+        if amount_text:
+            return f"{amount_text} {suffix}".strip()
+    label = next(
+        (
+            value.get(key)
+            for key in ("display", "label", "name", "title", "summary", "description", "location", "date", "when", "status")
+            if value.get(key) not in (None, "")
+        ),
+        None,
+    )
+    if label is not None and not isinstance(label, (dict, list)):
+        return _human_value(label, depth=depth + 1)
+    parts: list[str] = []
+    for key, child in value.items():
+        normalized_key = str(key).casefold()
+        if (
+            normalized_key in _PRIVATE_VALUE_KEYS
+            or normalized_key.endswith("_id")
+            or child in (None, "")
+        ):
+            continue
+        child_text = _human_value(child, depth=depth + 1)
+        if child_text:
+            label_key = re.sub(r"[_-]+", " ", str(key)).strip()
+            parts.append(f"{label_key}: {child_text}")
+        if len(parts) >= 4:
+            break
+    return " · ".join(parts)[:800]
+
+
 def _display_fact_value(item: dict[str, Any]) -> str:
     metadata = item.get("metadata", item.get("semantic_metadata", {}))
     if not isinstance(metadata, dict):
         metadata = {}
     if item.get("knowledge_status") == "unknown":
-        reason = item.get("unknown_reason", "not stated")
+        reason = str(item.get("unknown_reason", "not stated") or "not stated").casefold()
         conflicts = item.get("conflicting_values", metadata.get("conflicting_values", []))
         if reason == "conflicting" and isinstance(conflicts, list):
             alternatives: list[str] = []
             for conflict in conflicts:
                 if not isinstance(conflict, dict) or conflict.get("value") is None:
                     continue
-                alternative = str(conflict["value"])
+                alternative = _human_value(conflict["value"])
+                if not alternative:
+                    continue
                 if conflict.get("negated"):
                     alternative = f"not {alternative}"
                 alternatives.append(alternative)
             if alternatives:
-                return f"unknown (conflicting evidence: {'; '.join(alternatives)})"
-        return f"unknown ({reason})"
+                return f"Needs clarification — the notes differ ({'; '.join(alternatives)})"
+        return "Needs clarification"
     value = item.get("value")
     negated = bool(item.get("negated") or metadata.get("negated"))
     if negated and value is True:
@@ -261,31 +368,21 @@ def _display_fact_value(item: dict[str, Any]) -> str:
     else:
         display = None
     if display is None:
-        if isinstance(value, dict):
-            amount = value.get("amount", value.get("price", value.get("total")))
-            currency = value.get("currency", value.get("currency_code"))
-            if amount is not None and currency:
-                period = value.get("billing_period", value.get("period"))
-                suffix = f" per {period}" if period else ""
-                display = f"{amount} {currency}{suffix}"
-            else:
-                display = json.dumps(value, ensure_ascii=False, sort_keys=True)
-        elif isinstance(value, list):
-            display = json.dumps(value, ensure_ascii=False, sort_keys=True)
+        if isinstance(value, (dict, list)):
+            display = _human_value(value)
         elif value is None:
-            display = "unknown"
+            display = "Needs clarification"
         else:
-            display = str(value)
+            display = _human_value(value)
+    if not display:
+        display = "Needs clarification"
     if negated and display is not None and not display.startswith("not "):
         display = f"not {display}"
     if item.get("knowledge_status") == "inferred":
         display = f"possibly {display} (not confirmed)"
     attribution = item.get("attribution", metadata.get("attribution"))
     if attribution is not None:
-        if isinstance(attribution, dict):
-            attribution_label = attribution.get("name") or attribution.get("role") or attribution.get("organization")
-        else:
-            attribution_label = attribution
+        attribution_label = _human_value(attribution)
         if attribution_label:
             display += f" (reported by {attribution_label})"
     return display
@@ -302,7 +399,10 @@ def _fact_summary(item: dict[str, Any]) -> str:
     if isinstance(normalized, str) and normalized not in display:
         display += f" at {normalized}"
     elif temporal.get("expression") and temporal.get("precision"):
-        display += f" ({temporal['precision']}: {temporal['expression']})"
+        expression = _human_value(temporal.get("expression"))
+        precision = _human_value(temporal.get("precision"))
+        if expression and precision:
+            display += f" ({precision}: {expression})"
     return f"{label} {concept}: {display}"
 
 
@@ -1204,6 +1304,11 @@ def _attention_status(value: Any) -> str:
         return "completed"
     if normalized in {"cancelled", "canceled", "void", "dismissed"}:
         return "cancelled"
+    if normalized in {"superseded", "supersede", "replaced", "obsolete"}:
+        # The durable Attention schema keeps lifecycle status intentionally
+        # small. Supersession is still non-active; its semantic detail is
+        # retained separately and the candidate never enters current view.
+        return "cancelled"
     return "open"
 
 
@@ -1264,8 +1369,14 @@ def normalize_attention(
         item_status = "cancelled"
     elif lifecycle_action in {"complete", "completed", "done", "finished"}:
         item_status = "completed"
+    elif lifecycle_action in {"supersede", "superseded", "replaced", "obsolete"}:
+        item_status = "superseded"
     else:
         item_status = item.get("status")
+        if _temporal_fold(item_status) in {"supersede", "superseded", "replaced", "obsolete"}:
+            # Preserve the distinction after the durable schema normalizes
+            # supersession to a non-active status.
+            detail.setdefault("lifecycle_action", "superseded")
     if raw_due is not None and due_at is None:
         coarse = normalize_temporal(raw_due, captured_at=captured, zone=zone)
         if coarse:
@@ -1299,6 +1410,122 @@ def normalize_attention(
         "source_refs": sorted(refs),
         "details": detail,
     }
+
+
+def _attention_consolidation_keys(item: dict[str, Any]) -> tuple[tuple[str, ...], ...]:
+    """Return strong same-occurrence keys for normalized Attention items."""
+
+    details = item.get("details") if isinstance(item.get("details"), dict) else {}
+    source_event_id = str(item.get("source_event_id") or "")
+    title = re.sub(
+        r"[^\w]+",
+        " ",
+        re.sub(
+            r"^(?:completed|complete|done|finished|cancelled|canceled)\s*[:\-–—]\s*",
+            "",
+            str(item.get("title") or "").casefold().strip(),
+        ),
+        flags=re.UNICODE,
+    )
+    title = re.sub(r"\s+", " ", title).strip()
+    entity = details.get("entity_key")
+    entity_key = _slug(entity) if isinstance(entity, str) and entity.strip() else ""
+    point = item.get("due_at") or item.get("starts_at")
+    point_key = str(point or "").strip().casefold()
+    keys: list[tuple[str, ...]] = []
+    lifecycle = details.get("lifecycle_key")
+    if isinstance(lifecycle, str) and lifecycle.strip():
+        keys.append(("lifecycle", _slug(lifecycle)))
+    if entity_key and point_key:
+        keys.append(("entity-point", entity_key, point_key))
+    if title and point_key:
+        keys.append(("title-point", title, point_key))
+    if source_event_id and title:
+        keys.append(("capture-title", source_event_id, title))
+    if source_event_id and entity_key:
+        keys.append(("capture-entity", source_event_id, entity_key))
+    if not point_key and title:
+        keys.append(("title", title))
+    return tuple(keys)
+
+
+def _consolidate_attention(items: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Merge duplicate raw/fact projections while preserving all evidence."""
+
+    source = [item for item in items if isinstance(item, dict)]
+    if len(source) < 2:
+        return source
+    parent = list(range(len(source)))
+
+    def find(index: int) -> int:
+        while parent[index] != index:
+            parent[index] = parent[parent[index]]
+            index = parent[index]
+        return index
+
+    def union(left: int, right: int) -> None:
+        left_root = find(left)
+        right_root = find(right)
+        if left_root != right_root:
+            parent[right_root] = left_root
+
+    owners: dict[tuple[str, ...], int] = {}
+    for index, item in enumerate(source):
+        for key in _attention_consolidation_keys(item):
+            owner = owners.get(key)
+            if owner is None:
+                owners[key] = index
+            else:
+                union(owner, index)
+    groups: dict[int, list[tuple[int, dict[str, Any]]]] = {}
+    for index, item in enumerate(source):
+        groups.setdefault(find(index), []).append((index, item))
+
+    consolidated: list[tuple[int, dict[str, Any]]] = []
+    for members in groups.values():
+        canonical = max(
+            members,
+            key=lambda pair: (
+                int(bool(pair[1].get("due_at") or pair[1].get("starts_at"))),
+                len(str(pair[1].get("title") or "")),
+                pair[0],
+            ),
+        )[1]
+        merged = dict(canonical)
+        for field in ("starts_at", "due_at"):
+            if not merged.get(field):
+                merged[field] = next(
+                    (
+                        item.get(field)
+                        for _index, item in sorted(members, key=lambda pair: pair[0], reverse=True)
+                        if item.get(field)
+                    ),
+                    None,
+                )
+        refs = {
+            reference
+            for _index, item in members
+            for reference in item.get("source_refs", [])
+            if isinstance(reference, str) and reference
+        }
+        if refs:
+            merged["source_refs"] = sorted(refs)
+        details: dict[str, Any] = {}
+        for _index, item in sorted(members, key=lambda pair: pair[0]):
+            candidate_details = item.get("details")
+            if not isinstance(candidate_details, dict):
+                continue
+            for key, value in candidate_details.items():
+                if key not in details and value is not None:
+                    details[key] = value
+        if details:
+            merged["details"] = details
+        lifecycle_items = [item for _index, item in members if item.get("status") != "open"]
+        if lifecycle_items:
+            merged["status"] = lifecycle_items[-1].get("status", merged.get("status", "open"))
+        consolidated.append((min(index for index, _item in members), merged))
+    consolidated.sort(key=lambda pair: pair[0])
+    return [item for _index, item in consolidated]
 
 
 def normalize_extraction(
@@ -1370,19 +1597,37 @@ def normalize_extraction(
                 continue
             if fact["concept"] not in {"task", "deadline", "reminder", "obligation", "appointment"}:
                 continue
+            fact_details = fact.get("metadata", {})
+            if not isinstance(fact_details, dict):
+                fact_details = {}
+            occurrence_markers = {
+                "occurrence",
+                "event",
+                "episode",
+                "action",
+                "transaction",
+                "visit",
+                "consumption",
+                "purchase",
+                "payment",
+            }
+            claim_type_value = fact_details.get("claim_type")
+            semantic_relation_value = fact_details.get("semantic_relation")
+            claim_type = _slug(claim_type_value) if isinstance(claim_type_value, str) else ""
+            semantic_relation = _slug(semantic_relation_value) if isinstance(semantic_relation_value, str) else ""
+            if fact_details.get("occurrence") is True or claim_type in occurrence_markers or semantic_relation in occurrence_markers:
+                continue
             item: dict[str, Any] = {
                 "event_id": event.get("event_id"),
                 "kind": fact["concept"],
                 "title": fact["entity_label"],
                 "knowledge_status": fact["knowledge_status"],
                 "source_refs": fact["source_refs"],
-                "actionable": fact.get("metadata", {}).get("actionable", True),
+                "actionable": fact_details.get("actionable", True),
                 "details": {
-                    "lifecycle_key": fact.get("metadata", {}).get(
-                        "lifecycle_key", f"{fact['entity_key']}:{fact['concept']}"
-                    ),
                     "entity_key": fact["entity_key"],
                     "semantic_relation": fact.get("semantic_relation"),
+                    "lifecycle_key": fact_details.get("lifecycle_key") or f"{fact['entity_key']}:{fact['concept']}",
                 },
             }
             if isinstance(fact.get("value"), str):
@@ -1399,6 +1644,7 @@ def normalize_extraction(
             normalized = normalize_attention(item, event=event, available_ids=available_ids, now=now)
             if normalized is not None:
                 attention.append(normalized)
+    attention = _consolidate_attention(attention)
     attachment_results = parsed.get("attachment_results", parsed.get("attachments", []))
     if not isinstance(attachment_results, list):
         attachment_results = []
@@ -2183,7 +2429,9 @@ class ProductCodexProvider:
             "reports a correction, historical value, conflict, or uncertainty. Never cite every "
             "candidate merely because it was supplied. The runtime ignores top-level `source_refs` "
             "for answer provenance, so return `source_refs: []` here. If the context is insufficient, "
-            "say so explicitly and select only evidence that supports that limitation."
+            "say so explicitly and select only evidence that supports that limitation. The optional "
+            "`thread` field is a short conversational hint for resolving referents; it is not evidence, "
+            "must not be cited, and must never override the structured memory."
         )
         payload = {"question": question, "time_context": time_context, "context": context}
         return self._call(instruction + "\n\nINPUT:\n" + json.dumps(payload, ensure_ascii=False, indent=2))
@@ -3003,6 +3251,7 @@ class ProductRuntime:
         self,
         question: str,
         plan: AskPlan | None = None,
+        thread_context: list[dict[str, str]] | None = None,
     ) -> tuple[dict[str, Any], list[dict[str, Any]], str]:
         """Return only state that is relevant to one inspected Ask plan.
 
@@ -3014,9 +3263,34 @@ class ProductRuntime:
         """
 
         plan = plan or plan_ask(question)
+        thread_context = _normalize_ask_thread_context(thread_context)
         snapshot = self.store.snapshot(now=self._now())
         query_terms = set(plan.query_terms)
         topic_terms = set(plan.topic_terms)
+        thread_user_plans = [
+            plan_ask(item["text"])
+            for item in thread_context
+            if item.get("role") == "user" and item.get("text")
+        ]
+        thread_query_terms = {
+            term
+            for prior_plan in thread_user_plans
+            for term in prior_plan.query_terms
+        }
+        thread_assistant_terms = {
+            term
+            for item in thread_context
+            if item.get("role") == "assistant"
+            for term in search_terms(item.get("text", ""))
+        }
+        thread_topic_terms = {
+            term
+            for prior_plan in thread_user_plans
+            for term in prior_plan.topic_terms
+        }
+        if not topic_terms:
+            topic_terms.update(thread_topic_terms)
+        retrieval_query_terms = query_terms | thread_query_terms | thread_assistant_terms
 
         def ranked(
             collection: Any,
@@ -3025,14 +3299,14 @@ class ProductRuntime:
             limit: int,
             expand_entities: bool = False,
         ) -> list[dict[str, Any]]:
-            if not isinstance(collection, list) or not query_terms:
+            if not isinstance(collection, list) or not retrieval_query_terms:
                 return []
             scored: list[tuple[int, int, str, str, dict[str, Any]]] = []
             for item in collection:
                 if not isinstance(item, dict) or item.get("retracted"):
                     continue
                 searchable = search_terms(_searchable_text(item, keys))
-                overlap = query_terms & searchable
+                overlap = retrieval_query_terms & searchable
                 if not overlap:
                     continue
                 topic_overlap = overlap & topic_terms
@@ -3059,7 +3333,7 @@ class ProductRuntime:
                     qualified = [
                         row
                         for row in scored
-                        if len(query_terms & search_terms(_searchable_text(row[4], keys)) & topic_terms) >= 2
+                        if len(retrieval_query_terms & search_terms(_searchable_text(row[4], keys)) & topic_terms) >= 2
                     ]
                 if not qualified and plan.lexical_gap:
                     # Cross-language questions often preserve one canonical
@@ -3092,7 +3366,7 @@ class ProductRuntime:
             return [item for _score, _sequence, _entity, _concept, item in scored[:limit]]
 
         facts = [item for item in snapshot.get("current_facts", []) if isinstance(item, dict)]
-        if plan.broad:
+        if plan.broad and not thread_context:
             selected_facts = facts[:MAX_ASK_CONTEXT_FACTS]
         elif plan.intent == "generic" and query_terms == {"location"}:
             # A plural location request is a field-oriented list query.  Some
@@ -3127,6 +3401,27 @@ class ProductRuntime:
                 limit=MAX_ASK_CONTEXT_FACTS,
                 expand_entities=plan.intent == "generic",
             )
+        if self._is_aggregation_question(question) and not selected_facts:
+            occurrence_facts = [
+                item
+                for item in facts
+                if isinstance(item.get("metadata"), dict)
+                and item["metadata"].get("semantic_state") == "occurrence"
+            ]
+            matching_occurrences = [
+                item
+                for item in occurrence_facts
+                if retrieval_query_terms
+                & search_terms(_searchable_text(item, ("entity_key", "entity_label", "concept", "value", "metadata")))
+            ]
+            occurrence_groups = {
+                (item.get("entity_key"), item.get("concept"))
+                for item in occurrence_facts
+            }
+            if matching_occurrences:
+                selected_facts = matching_occurrences[:MAX_ASK_CONTEXT_FACTS]
+            elif len(occurrence_groups) == 1:
+                selected_facts = occurrence_facts[:MAX_ASK_CONTEXT_FACTS]
         if plan.intent == "costs" and not topic_terms:
             selected_facts = [item for item in facts if _is_cost_fact(item)][:MAX_ASK_CONTEXT_FACTS]
 
@@ -3365,13 +3660,16 @@ class ProductRuntime:
             "sources": selected_sources,
             "plan": plan.as_dict(),
             "response_language": plan.language if plan.language in {"en", "pl"} else "same_as_question",
+            # Conversation text is only a bounded referent hint.  It is never
+            # assigned evidence IDs and never replaces captured evidence.
+            "thread": thread_context,
         }
         if plan.language == "unknown":
             context["candidate_facts"] = fallback_facts
             context["candidate_history"] = fallback_history
             context["candidate_relationships"] = fallback_relations
             context["candidate_attention"] = fallback_attention
-        return context, selected_facts, " ".join(sorted(query_terms))
+        return context, selected_facts, " ".join(sorted(retrieval_query_terms))
 
     @staticmethod
     def _money_summary(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -3423,7 +3721,10 @@ class ProductRuntime:
             entity_key = _clean_text(item.get("entity_key"), limit=160)
             concept = _clean_text(item.get("concept"), limit=160)
             if entity_key and concept:
-                return f"current_fact:{_slug(entity_key)}:{_slug(concept)}"
+                fact_ids = item.get("fact_ids")
+                identity = fact_ids if isinstance(fact_ids, list) and fact_ids else item.get("source_event_id")
+                suffix = hashlib.sha256(canonical_json(identity).encode("utf-8")).hexdigest()[:12]
+                return f"current_fact:{_slug(entity_key)}:{_slug(concept)}:{suffix}"
         elif collection == "history":
             fact_id = item.get("fact_id")
             if isinstance(fact_id, (int, str)) and not isinstance(fact_id, bool) and str(fact_id):
@@ -3517,6 +3818,86 @@ class ProductRuntime:
             value.pop("evidence_id", None)
             public.append(value)
         return public
+
+    @staticmethod
+    def _is_aggregation_question(question: str) -> bool:
+        terms = search_terms(question)
+        return bool(
+            terms
+            & {
+                "count",
+                "how",
+                "many",
+                "much",
+                "sum",
+                "total",
+                "totals",
+                "ile",
+                "suma",
+                "razem",
+            }
+        )
+
+    @staticmethod
+    def _occurrence_amount(item: dict[str, Any]) -> tuple[Decimal, str]:
+        value = item.get("value")
+        if isinstance(value, dict):
+            amount = next(
+                (
+                    value.get(key)
+                    for key in ("amount", "quantity", "count", "total")
+                    if value.get(key) is not None
+                ),
+                None,
+            )
+            unit = value.get("unit", value.get("units", ""))
+        elif isinstance(value, (int, float, Decimal)) and not isinstance(value, bool):
+            amount = value
+            unit = ""
+        else:
+            return Decimal("0"), ""
+        try:
+            decimal = Decimal(str(amount))
+        except (InvalidOperation, ValueError, TypeError):
+            return Decimal("0"), ""
+        if not decimal.is_finite():
+            return Decimal("0"), ""
+        return decimal, _clean_text(unit, limit=80)
+
+    @classmethod
+    def _occurrence_totals(
+        cls,
+        items: Iterable[dict[str, Any]],
+    ) -> list[dict[str, Any]]:
+        totals: dict[tuple[str, str, str], tuple[Decimal, str, list[dict[str, Any]]]] = {}
+        for item in items:
+            if not isinstance(item, dict) or item.get("knowledge_status") != "known":
+                continue
+            metadata = item.get("metadata", item.get("semantic_metadata", {}))
+            if not isinstance(metadata, dict) or metadata.get("semantic_state") != "occurrence":
+                continue
+            amount, unit = cls._occurrence_amount(item)
+            if not amount:
+                continue
+            entity_key = _clean_text(item.get("entity_key"), limit=160)
+            concept = _clean_text(item.get("concept"), limit=160)
+            label = _clean_text(item.get("entity_label") or entity_key or concept or "recorded occurrences", limit=180)
+            key = (entity_key, concept, unit.casefold())
+            previous = totals.get(key)
+            if previous is None:
+                totals[key] = (amount, label, [item])
+            else:
+                totals[key] = (previous[0] + amount, previous[1], [*previous[2], item])
+        return [
+            {
+                "entity_label": label,
+                "concept": concept,
+                "total": format(total, "f"),
+                "unit": unit,
+                "items": members,
+            }
+            for (entity_key, concept, unit), (total, label, members) in sorted(totals.items())
+        ]
 
     def _deterministic_answer(
         self,
@@ -3633,6 +4014,23 @@ class ProductRuntime:
             if totals:
                 answer += _answer_copy(plan, "deterministic_totals") + f"{totals}."
             return answer, "costs", items[:MAX_ASK_CONTEXT_FACTS], self._source_refs(items)
+
+        if plan.intent == "generic" and self._is_aggregation_question(question):
+            occurrence_totals = self._occurrence_totals(selected_facts)
+            if occurrence_totals:
+                labels = []
+                items: list[dict[str, Any]] = []
+                for total in occurrence_totals:
+                    label = total["entity_label"]
+                    unit = f" {total['unit']}" if total.get("unit") else ""
+                    labels.append(f"{label}: {total['total']}{unit}")
+                    items.extend(total["items"])
+                return (
+                    _answer_copy(plan, "occurrence_totals") + "; ".join(labels) + ".",
+                    "occurrence_totals",
+                    items[:MAX_ASK_CONTEXT_FACTS],
+                    self._source_refs(items),
+                )
 
         if plan.intent == "changes":
             history_markers = {
@@ -3825,10 +4223,16 @@ class ProductRuntime:
             return _answer_copy(plan, "relevant_attention") + "; ".join(labels) + ".", "retrieval", attention, self._source_refs(attention)
         return None, "generic", [], []
 
-    def _ask(self, question: str) -> dict[str, Any]:
+    def _ask(
+        self,
+        question: str,
+        *,
+        thread_context: list[dict[str, str]] | None = None,
+    ) -> dict[str, Any]:
         if not isinstance(question, str) or not question.strip():
             raise ValueError("question must not be empty")
         question = question.strip()
+        thread_context = _normalize_ask_thread_context(thread_context)
         plan = plan_ask(question)
         snapshot = self.store.snapshot(now=self._now())
         processing = snapshot.get("processing", {})
@@ -3864,7 +4268,7 @@ class ProductRuntime:
                 "answer_language": plan.language if plan.language in {"en", "pl"} else "same_as_question",
                 "processing": processing,
             }
-        context, selected_facts, _normalized = self._retrieval_context(question, plan)
+        context, selected_facts, _normalized = self._retrieval_context(question, plan, thread_context)
         deterministic, mode, items, refs = self._deterministic_answer(
             question,
             snapshot,
@@ -4030,7 +4434,12 @@ class ProductRuntime:
             "processing": snapshot.get("processing", {}),
         }
 
-    def ask(self, question: str) -> dict[str, Any]:
+    def ask(
+        self,
+        question: str,
+        *,
+        thread_context: list[dict[str, Any]] | None = None,
+    ) -> dict[str, Any]:
         """Answer one question and emit bounded operational timing metadata."""
 
         request_id = f"ask-{uuid.uuid4().hex[:12]}"
@@ -4039,13 +4448,13 @@ class ProductRuntime:
         self._log("ask", "start", request=request_id)
         result: dict[str, Any] | None = None
         try:
-            result = self._ask(question)
+            result = self._ask(question, thread_context=_normalize_ask_thread_context(thread_context))
             mode = str(result.get("mode") or "unknown")
             if mode == "semantic":
                 path = "deterministic/retrieval/semantic"
             elif mode in {"processing", "processing_failed"}:
                 path = mode
-            elif mode in {"retrieval", "attention", "costs", "changes", "last_mention", "ambiguous", "no_match", "no_data"}:
+            elif mode in {"retrieval", "attention", "costs", "occurrence_totals", "changes", "last_mention", "ambiguous", "no_match", "no_data"}:
                 path = f"deterministic/{mode}"
             else:
                 path = mode
