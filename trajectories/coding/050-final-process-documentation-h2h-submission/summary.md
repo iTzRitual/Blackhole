@@ -136,5 +136,7 @@ generalization comparison.
 ## Related git commit
 
 Phase 1 process documentation was committed and pushed as `73e0ad7`. The final
-submission/evidence documentation commit and the trajectory-closure commit are
-recorded in the final handoff after Git creates them.
+submission/evidence documentation package was committed and pushed as
+`191f0390d049e6a8003254800eff2c25dc947152`. The subsequent documentation-only
+commit containing this completed trajectory is the closure commit for the
+task.

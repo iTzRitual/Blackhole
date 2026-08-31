@@ -151,9 +151,9 @@ current E005/V1R1 narrative. No obvious committed credential was detected.
 - [PASS] The historical `product-v2-submission-release` tag remains at its
   existing peeled commit `ec7665a98082d0f343d0d8e587c5db7eea185fd0`; this
   handoff does not move it or any frozen tag.
-- [PASS] The final documentation/evidence commit is pushed on `master`; its
-  exact SHA is recorded in the final handoff below and in the closing Git
-  check.
+- [PASS] The final documentation/evidence package is pushed on `master` as
+  `191f0390d049e6a8003254800eff2c25dc947152`; the closing trajectory metadata
+  commit is documentation-only and is checked separately below.
 - [PASS] Remote preflight exposed only `master`; no temporary branch cleanup
   was necessary or safe to infer.
 - [PASS] The final exact local and remote `master` SHA are verified together in
