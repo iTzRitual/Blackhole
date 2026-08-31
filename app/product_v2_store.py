@@ -24,10 +24,10 @@ from pathlib import Path
 from typing import Any, Iterable, Iterator
 
 
-PRODUCT_STORE_VERSION = "blackhole-product-v2-store-v3"
-PRODUCT_PROJECTION_VERSION = "blackhole-product-v2-projection-v3"
+PRODUCT_STORE_VERSION = "blackhole-product-v2-store-v4"
+PRODUCT_PROJECTION_VERSION = "blackhole-product-v2-projection-v4-coherence"
 PRODUCT_PROCESSING_VERSION = "blackhole-product-v2-processing-v1"
-PRODUCT_EXTRACTOR_VERSION = "blackhole-product-v2-extractor-v3"
+PRODUCT_EXTRACTOR_VERSION = "blackhole-product-v2-extractor-v4-coherence"
 PROCESSING_STATUSES = frozenset({"pending", "processing", "processed", "failed"})
 ATTENTION_STATUSES = frozenset({"open", "completed", "cancelled"})
 # Automatic retries are deliberately finite.  The first claim is an attempt;
@@ -1086,6 +1086,12 @@ class ProductStore:
             "actionable",
             "historical",
             "lifecycle_key",
+            "lifecycle_action",
+            "related_event_id",
+            "document_key",
+            "document_type",
+            "document_reference",
+            "document_title",
         ):
             if key in item and key not in metadata:
                 metadata[key] = item[key]
@@ -1154,6 +1160,9 @@ class ProductStore:
             "certainty",
             "negated",
             "semantic_relation",
+            "lifecycle_key",
+            "lifecycle_action",
+            "related_event_id",
         ):
             if key in item and key not in metadata:
                 metadata[key] = item[key]
@@ -1770,29 +1779,6 @@ class ProductStore:
     def _retracted_event_ids_locked(self) -> set[str]:
         return {row["event_id"] for row in self.connection.execute("SELECT event_id FROM retractions").fetchall()}
 
-    @staticmethod
-    def _attention_lifecycle_key(row: sqlite3.Row) -> str:
-        """Return an explicit or conservative key for one attention timeline.
-
-        Providers may give related candidates a stable ``lifecycle_key`` in
-        their details.  The title fallback keeps simple providers useful while
-        still normalizing only punctuation and terminal lifecycle prefixes;
-        unrelated titles remain separate timelines.
-        """
-
-        try:
-            details = json.loads(row["details_json"])
-        except (TypeError, ValueError, json.JSONDecodeError):
-            details = {}
-        if isinstance(details, dict):
-            explicit = details.get("lifecycle_key")
-            if isinstance(explicit, str) and explicit.strip():
-                return "key:" + _legacy_key(explicit)
-        title = str(row["title"] or "").casefold().strip()
-        title = re.sub(r"^(?:completed|complete|done|finished|cancelled|canceled)\s*[:\-–—]\s*", "", title)
-        title = re.sub(r"[^\w]+", " ", title, flags=re.UNICODE).strip()
-        return "title:" + re.sub(r"\s+", " ", title)
-
     @classmethod
     def _attention_projection_keys(cls, row: sqlite3.Row) -> tuple[tuple[str, ...], ...]:
         """Return conservative equivalence keys for one Attention candidate.
@@ -1818,17 +1804,121 @@ class ProductStore:
         keys: list[tuple[str, ...]] = []
         if isinstance(explicit, str) and explicit.strip():
             keys.append(("lifecycle", _legacy_key(explicit)))
-        if entity and point:
-            keys.append(("entity-point", entity, point))
-        if title and point:
-            keys.append(("title-point", title, point))
+        else:
+            if entity and point:
+                keys.append(("entity-point", entity, point))
+            if title and point:
+                keys.append(("title-point", title, point))
         if source_event_id and title:
             keys.append(("capture-title", source_event_id, title))
         if source_event_id and entity:
             keys.append(("capture-entity", source_event_id, entity))
-        if not point and title:
-            keys.append(("title", title))
         return tuple(keys)
+
+    @staticmethod
+    def _lifecycle_transition(value: Any) -> tuple[str, str] | None:
+        """Map a structured lifecycle proposal to a durable status.
+
+        This helper deliberately accepts semantic values only.  Raw capture
+        prose and title similarity are never enough to close an Attention
+        item; the caller must also establish a strong target, lifecycle key,
+        or unique entity match.
+        """
+
+        action = _legacy_key(value)
+        if action in {"complete", "completed", "done", "finished", "paid", "payment_complete", "payment_completed"}:
+            return "completed", action
+        if action in {"cancel", "cancelled", "canceled", "void", "dismissed"}:
+            return "cancelled", action
+        if action in {"supersede", "superseded", "replaced", "obsolete"}:
+            return "superseded", action
+        if action in {"reschedule", "rescheduled", "postpone", "postponed", "moved", "rebook", "rebooked"}:
+            return "open", action
+        return None
+
+    @classmethod
+    def _fact_lifecycle_transition(cls, row: sqlite3.Row) -> dict[str, Any] | None:
+        if cls._fact_status(row) != "known" or cls._fact_metadata(row).get("negated"):
+            return None
+        metadata = cls._fact_metadata(row)
+        transition: tuple[str, str] | None = None
+        for key in ("lifecycle_action", "semantic_relation", "claim_type"):
+            transition = cls._lifecycle_transition(metadata.get(key))
+            if transition is not None:
+                break
+        concept = _legacy_key(row["concept"])
+        value = cls._fact_value(row)
+        if transition is None and (
+            concept in {"status", "state", "lifecycle", "lifecycle_status", "payment_status", "completion_status"}
+            or "status" in concept
+            or "payment" in concept
+            or "completion" in concept
+        ):
+            candidates = [value]
+            if isinstance(value, dict):
+                candidates.extend(
+                    value.get(key)
+                    for key in ("status", "state", "lifecycle_status", "payment_status", "action", "value")
+                )
+            for candidate in candidates:
+                transition = cls._lifecycle_transition(candidate)
+                if transition is not None:
+                    break
+        if transition is None:
+            transition = cls._lifecycle_transition(concept)
+        if transition is None:
+            return None
+        target_event_id = metadata.get("related_event_id")
+        if not isinstance(target_event_id, str) or not target_event_id.strip():
+            target_event_id = row["supersedes_event_id"]
+        return {
+            "status": transition[0],
+            "action": transition[1],
+            "lifecycle_key": metadata.get("lifecycle_key"),
+            "entity_key": row["entity_key"],
+            "target_event_id": target_event_id if isinstance(target_event_id, str) else None,
+            "source_event_id": row["source_event_id"],
+            "source_refs": sorted(cls._fact_refs(row)),
+            "sequence": cls._fact_sequence(row),
+            "captured_at": row["captured_at"] if "captured_at" in row.keys() else None,
+        }
+
+    @classmethod
+    def _relation_lifecycle_transition(cls, row: sqlite3.Row) -> dict[str, Any] | None:
+        metadata = cls._json_object(row["metadata_json"] if "metadata_json" in row.keys() else {})
+        if metadata.get("negated") or row["knowledge_status"] != "known":
+            return None
+        transition: tuple[str, str] | None = None
+        for key in ("lifecycle_action", "semantic_relation"):
+            transition = cls._lifecycle_transition(metadata.get(key))
+            if transition is not None:
+                break
+        if transition is None:
+            transition = cls._lifecycle_transition(row["relation_type"])
+        if transition is None:
+            return None
+        target_event_id = row["target_event_id"]
+        if not isinstance(target_event_id, str) or not target_event_id.strip():
+            candidate = metadata.get("related_event_id")
+            target_event_id = candidate if isinstance(candidate, str) else None
+        try:
+            refs = json.loads(row["source_refs_json"])
+        except (TypeError, ValueError, json.JSONDecodeError):
+            refs = []
+        if not isinstance(refs, list):
+            refs = []
+        refs = sorted({ref for ref in refs if isinstance(ref, str) and ref} | {str(row["source_event_id"])})
+        return {
+            "status": transition[0],
+            "action": transition[1],
+            "lifecycle_key": metadata.get("lifecycle_key"),
+            "entity_key": row["source_entity_key"] or row["target_entity_key"],
+            "target_event_id": target_event_id,
+            "source_event_id": row["source_event_id"],
+            "source_refs": refs,
+            "sequence": int(row["sequence"]) if "sequence" in row.keys() else 0,
+            "captured_at": None,
+        }
 
     @classmethod
     def _attention_source_refs(cls, row: sqlite3.Row) -> set[str]:
@@ -2373,7 +2463,11 @@ class ProductStore:
             """
         ).fetchall()
         relation_rows = self.connection.execute(
-            "SELECT * FROM memory_relations ORDER BY relation_id"
+            """
+            SELECT r.*, s.sequence, s.captured_at
+            FROM memory_relations r JOIN source_events s ON s.event_id = r.source_event_id
+            ORDER BY s.sequence, r.relation_id
+            """
         ).fetchall()
         attention_rows = self.connection.execute(
             "SELECT * FROM attention_candidates ORDER BY candidate_id"
@@ -2451,11 +2545,13 @@ class ProductStore:
                 ),
             )
 
-        latest_attention_status: dict[str, tuple[int, str]] = {}
+        latest_attention_status: dict[str, tuple[int, str, str | None, str | None]] = {}
         for row in status_rows:
             latest_attention_status[row["candidate_fingerprint"]] = (
                 int(row["status_event_id"]),
                 row["status"],
+                row["created_at"],
+                row["note"],
             )
         source_sequences = {
             row["event_id"]: int(row["sequence"])
@@ -2503,6 +2599,82 @@ class ProductStore:
         for index, row in enumerate(active_attention_rows):
             grouped_attention.setdefault(find(index), []).append(row)
 
+        group_for_index = {
+            index: find(index)
+            for index in range(len(active_attention_rows))
+        }
+        group_for_candidate_id = {
+            row["candidate_id"]: group_for_index[index]
+            for index, row in enumerate(active_attention_rows)
+        }
+        group_event_ids: dict[int, set[str]] = {}
+        group_lifecycle_keys: dict[int, set[str]] = {}
+        group_entity_keys: dict[int, set[str]] = {}
+        for index, row in enumerate(active_attention_rows):
+            group = group_for_index[index]
+            group_event_ids.setdefault(group, set()).add(str(row["source_event_id"]))
+            details = self._json_object(row["details_json"])
+            lifecycle_key = details.get("lifecycle_key")
+            if isinstance(lifecycle_key, str) and lifecycle_key.strip():
+                group_lifecycle_keys.setdefault(group, set()).add(_legacy_key(lifecycle_key))
+            entity_key = details.get("entity_key")
+            if isinstance(entity_key, str) and entity_key.strip():
+                group_entity_keys.setdefault(group, set()).add(_legacy_key(entity_key))
+
+        groups_by_event: dict[str, set[int]] = {}
+        groups_by_lifecycle_key: dict[str, set[int]] = {}
+        groups_by_entity_key: dict[str, set[int]] = {}
+        for group, event_ids in group_event_ids.items():
+            for event_id in event_ids:
+                groups_by_event.setdefault(event_id, set()).add(group)
+            for lifecycle_key in group_lifecycle_keys.get(group, set()):
+                groups_by_lifecycle_key.setdefault(lifecycle_key, set()).add(group)
+            for entity_key in group_entity_keys.get(group, set()):
+                groups_by_entity_key.setdefault(entity_key, set()).add(group)
+
+        lifecycle_transitions = [
+            transition
+            for row in fact_rows
+            for transition in [self._fact_lifecycle_transition(row)]
+            if transition is not None and row["source_event_id"] not in retracted
+        ]
+        lifecycle_transitions.extend(
+            transition
+            for row in relation_rows
+            for transition in [self._relation_lifecycle_transition(row)]
+            if transition is not None and row["source_event_id"] not in retracted
+        )
+
+        def transition_for_group(group: int) -> dict[str, Any] | None:
+            matched: list[dict[str, Any]] = []
+            for transition in lifecycle_transitions:
+                target_event_id = transition.get("target_event_id")
+                if isinstance(target_event_id, str) and group in groups_by_event.get(target_event_id, set()):
+                    matched.append(transition)
+                    continue
+                lifecycle_key = transition.get("lifecycle_key")
+                if isinstance(lifecycle_key, str) and lifecycle_key.strip():
+                    if group in groups_by_lifecycle_key.get(_legacy_key(lifecycle_key), set()):
+                        matched.append(transition)
+                        continue
+                entity_key = transition.get("entity_key")
+                if isinstance(entity_key, str) and entity_key.strip():
+                    # Entity matching is only safe when it identifies one
+                    # open timeline.  A title alone is never a lifecycle
+                    # identity and is intentionally not considered here.
+                    entity_groups = groups_by_entity_key.get(_legacy_key(entity_key), set())
+                    if len(entity_groups) == 1 and group in entity_groups:
+                        matched.append(transition)
+            if not matched:
+                return None
+            return max(
+                matched,
+                key=lambda item: (
+                    int(item.get("sequence", 0) or 0),
+                    str(item.get("source_event_id") or ""),
+                ),
+            )
+
         def candidate_score(candidate: sqlite3.Row) -> tuple[int, int, int, int]:
             return (
                 source_sequences.get(candidate["source_event_id"], 0),
@@ -2521,7 +2693,11 @@ class ProductStore:
                 ),
                 default=None,
             )
-            status = status_event[1] if status_event is not None else row["status"]
+            group = group_for_candidate_id[group_rows[0]["candidate_id"]]
+            lifecycle_transition = transition_for_group(group)
+            status = status_event[1] if status_event is not None else (
+                lifecycle_transition["status"] if lifecycle_transition is not None else row["status"]
+            )
             lifecycle_action_value = self._json_object(row["details_json"]).get("lifecycle_action")
             lifecycle_action = lifecycle_action_value.casefold().strip() if isinstance(lifecycle_action_value, str) else ""
             if lifecycle_action in {"supersede", "superseded", "replaced", "obsolete"}:
@@ -2537,12 +2713,26 @@ class ProductStore:
                     for reference in self._attention_source_refs(candidate)
                 }
             )
+            if lifecycle_transition is not None:
+                merged_refs = sorted(
+                    set(merged_refs) | set(lifecycle_transition.get("source_refs", []))
+                )
             merged_details: dict[str, Any] = {}
             for candidate in sorted(group_rows, key=candidate_score):
                 details = self._json_object(candidate["details_json"])
                 for key, value in details.items():
                     if key not in merged_details and value is not None:
                         merged_details[key] = value
+            if status_event is not None:
+                merged_details.setdefault("lifecycle_action", status_event[1])
+                merged_details["lifecycle_updated_at"] = status_event[2]
+                if status_event[3]:
+                    merged_details["lifecycle_note"] = status_event[3]
+            elif lifecycle_transition is not None:
+                merged_details["lifecycle_action"] = lifecycle_transition["action"]
+                merged_details["lifecycle_event_id"] = lifecycle_transition["source_event_id"]
+                if lifecycle_transition.get("captured_at"):
+                    merged_details["lifecycle_captured_at"] = lifecycle_transition["captured_at"]
             starts_at = next(
                 (candidate["starts_at"] for candidate in sorted(group_rows, key=candidate_score, reverse=True)
                  if candidate["starts_at"]),
@@ -2725,6 +2915,9 @@ class ProductStore:
             ).fetchall()
             attention = []
             for row in attention_rows:
+                details = json.loads(row["details_json"])
+                if not isinstance(details, dict):
+                    details = {}
                 item = {
                     "fingerprint": row["fingerprint"],
                     "source_event_id": row["source_event_id"],
@@ -2736,7 +2929,7 @@ class ProductStore:
                     "due_at": row["due_at"],
                     "timezone": row["timezone"],
                     "source_refs": json.loads(row["source_refs_json"]),
-                    "details": json.loads(row["details_json"]),
+                    "details": details,
                     "captured_at": row["captured_at"],
                     "observed_at": row["observed_at"],
                     "source_type": row["source_type"],
@@ -2750,6 +2943,22 @@ class ProductStore:
                 else:
                     item["state"] = row["status"]
                 attention.append(item)
+            attention_history = []
+            for item in attention:
+                if item.get("status") == "open":
+                    continue
+                history_item = dict(item)
+                history_details = history_item.get("details")
+                if not isinstance(history_details, dict):
+                    history_details = {}
+                history_item["lifecycle_at"] = (
+                    history_details.get("lifecycle_updated_at")
+                    or history_details.get("lifecycle_captured_at")
+                    or history_item.get("captured_at")
+                )
+                if history_details.get("lifecycle_note"):
+                    history_item["lifecycle_note"] = history_details["lifecycle_note"]
+                attention_history.append(history_item)
             source_rows = self.connection.execute(
                 "SELECT event_id, sequence, captured_at, timezone, observed_at, source_type FROM source_events ORDER BY sequence"
             ).fetchall()
@@ -2824,6 +3033,7 @@ class ProductStore:
                 "fact_history": history,
                 "relationships": relations,
                 "attention": attention,
+                "attention_history": attention_history,
                 "sources": sources,
                 "attachments": attachments,
                 "processing": processing,
@@ -2839,6 +3049,7 @@ class ProductStore:
             "facts": snapshot["current_facts"],
             "fact_history": active_history,
             "attention": snapshot["attention"],
+            "attention_history": snapshot["attention_history"],
             "sources": [row for row in snapshot["sources"] if not row["retracted"]],
             "relationships": [row for row in snapshot["relationships"] if not row["retracted"]],
         }

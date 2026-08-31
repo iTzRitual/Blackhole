@@ -53,9 +53,9 @@ from app.runtime_config import (
 )
 
 
-PRODUCT_RUNTIME_VERSION = "blackhole-product-v2-runtime-v3"
+PRODUCT_RUNTIME_VERSION = "blackhole-product-v2-runtime-v4-coherence"
 PRODUCT_DATABASE_NAME = "blackhole-v2.db"
-PRODUCT_PROMPT_VERSION = "blackhole-product-v2-prompt-v5-compact"
+PRODUCT_PROMPT_VERSION = "blackhole-product-v2-prompt-v6-coherence"
 PROCESSING_PENDING_MESSAGE = "Still understanding your recent captures."
 PROCESSING_FAILED_MESSAGE = "Some recent captures couldn't be understood yet. Your captures are still saved."
 MAX_CAPTURE_TEXT = 100_000
@@ -208,6 +208,23 @@ def _clean_text(value: Any, *, limit: int = 500) -> str:
     if not isinstance(value, str):
         return ""
     return value.strip()[:limit]
+
+
+_PROVIDER_INTERNAL_ANSWER = re.compile(
+    r"(?i)(?:\bself:\d+\b|\b(?:evidence_id|source_refs|source_event_id|target_event_id|"
+    r"related_event_id|supersedes_event_id|entity_key|semantic_metadata|metadata)\b|"
+    r"\b(?:current_fact|fact|relation|attention|source):[a-z0-9_:-]{1,}|"
+    r"\b\d{4}-\d{2}-\d{2}t\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?(?:z|[+-]\d{2}:?\d{2})?\b)"
+)
+
+
+def _provider_answer_is_human_safe(value: Any) -> bool:
+    """Reject provider prose that exposes transport or audit syntax."""
+
+    answer = _clean_text(value, limit=4000)
+    if not answer:
+        return False
+    return _PROVIDER_INTERNAL_ANSWER.search(answer) is None
 
 
 def _normalize_ask_thread_context(value: Any) -> list[dict[str, str]]:
@@ -1322,6 +1339,16 @@ def normalize_fact(
         return None
     source_event_id = _event_id(item, batch_ids)
     entity = _entity(item)
+    document_key = _clean_text(item.get("document_key"), limit=240)
+    document_type = _clean_text(item.get("document_type"), limit=120)
+    document_reference = _clean_text(item.get("document_reference"), limit=180)
+    document_title = _clean_text(item.get("document_title"), limit=240)
+    if not document_key and document_type and document_reference:
+        document_key = f"document:{_slug(document_type)}:{_slug(document_reference)}"
+    if not document_title and document_type and document_reference:
+        document_title = f"{document_type} · {document_reference}"
+    if document_key and document_title:
+        entity = (_slug(document_key), document_title)
     concept = item.get("concept", item.get("predicate", item.get("fact_type")))
     if source_event_id is None or entity is None or not isinstance(concept, str) or not concept.strip():
         return None
@@ -1418,9 +1445,30 @@ def normalize_fact(
         metadata["negated"] = True
     if semantic_relation is not None:
         metadata["semantic_relation"] = _safe_json_value(semantic_relation)
-    for key in ("actionable", "historical", "lifecycle_key"):
+    lifecycle_key = _clean_text(item.get("lifecycle_key"), limit=240) or None
+    lifecycle_action = _clean_text(item.get("lifecycle_action"), limit=80) or None
+    related_event_id = item.get("related_event_id")
+    if not isinstance(related_event_id, str) or related_event_id not in available_ids:
+        related_event_id = None
+    for key in (
+        "actionable",
+        "historical",
+        "lifecycle_key",
+        "lifecycle_action",
+        "related_event_id",
+        "document_key",
+        "document_type",
+        "document_reference",
+        "document_title",
+    ):
         if key in item:
             metadata[key] = _safe_json_value(item[key])
+    if lifecycle_key is not None:
+        metadata["lifecycle_key"] = lifecycle_key
+    if lifecycle_action is not None:
+        metadata["lifecycle_action"] = lifecycle_action
+    if related_event_id is not None:
+        metadata["related_event_id"] = related_event_id
     result: dict[str, Any] = {
         "source_event_id": source_event_id,
         "entity_key": entity[0],
@@ -1438,6 +1486,12 @@ def normalize_fact(
         result["value"] = _safe_json_value(item.get("value"))
     if supersedes is not None:
         result["supersedes_event_id"] = supersedes
+    if lifecycle_key is not None:
+        result["lifecycle_key"] = lifecycle_key
+    if lifecycle_action is not None:
+        result["lifecycle_action"] = lifecycle_action
+    if related_event_id is not None:
+        result["related_event_id"] = related_event_id
     if attribution is not None:
         result["attribution"] = attribution
     if confidence is not None:
@@ -1495,6 +1549,11 @@ def normalize_relation(
     confidence = item.get("confidence")
     if isinstance(confidence, bool) or not isinstance(confidence, (int, float)) or not 0 <= float(confidence) <= 1:
         confidence = None
+    lifecycle_key = _clean_text(item.get("lifecycle_key"), limit=240) or None
+    lifecycle_action = _clean_text(item.get("lifecycle_action"), limit=80) or None
+    related_event_id = item.get("related_event_id")
+    if not isinstance(related_event_id, str) or related_event_id not in available_ids:
+        related_event_id = None
     metadata: dict[str, Any] = {}
     if attribution is not None:
         metadata["attribution"] = _safe_json_value(attribution)
@@ -1502,10 +1561,23 @@ def normalize_relation(
         metadata["confidence"] = confidence
     if "negated" in item:
         metadata["negated"] = bool(item.get("negated"))
-    for key in ("semantic_relation", "claim_type", "certainty"):
+    for key in (
+        "semantic_relation",
+        "claim_type",
+        "certainty",
+        "lifecycle_key",
+        "lifecycle_action",
+        "related_event_id",
+    ):
         if key in item:
             metadata[key] = _safe_json_value(item[key])
-    return {
+    if lifecycle_key is not None:
+        metadata["lifecycle_key"] = lifecycle_key
+    if lifecycle_action is not None:
+        metadata["lifecycle_action"] = lifecycle_action
+    if related_event_id is not None:
+        metadata["related_event_id"] = related_event_id
+    result = {
         "source_event_id": source_event_id,
         "source_entity_key": _slug(source_entity) if isinstance(source_entity, str) and source_entity else None,
         "relation_type": _slug(relation_type),
@@ -1516,6 +1588,13 @@ def normalize_relation(
         "source_refs": sorted(refs),
         "metadata": metadata,
     }
+    if lifecycle_key is not None:
+        result["lifecycle_key"] = lifecycle_key
+    if lifecycle_action is not None:
+        result["lifecycle_action"] = lifecycle_action
+    if related_event_id is not None:
+        result["related_event_id"] = related_event_id
+    return result
 
 
 def _attention_status(value: Any) -> str:
@@ -1658,16 +1737,15 @@ def _attention_consolidation_keys(item: dict[str, Any]) -> tuple[tuple[str, ...]
     lifecycle = details.get("lifecycle_key")
     if isinstance(lifecycle, str) and lifecycle.strip():
         keys.append(("lifecycle", _slug(lifecycle)))
-    if entity_key and point_key:
-        keys.append(("entity-point", entity_key, point_key))
-    if title and point_key:
-        keys.append(("title-point", title, point_key))
+    else:
+        if entity_key and point_key:
+            keys.append(("entity-point", entity_key, point_key))
+        if title and point_key:
+            keys.append(("title-point", title, point_key))
     if source_event_id and title:
         keys.append(("capture-title", source_event_id, title))
     if source_event_id and entity_key:
         keys.append(("capture-entity", source_event_id, entity_key))
-    if not point_key and title:
-        keys.append(("title", title))
     return tuple(keys)
 
 
@@ -1748,6 +1826,58 @@ def _consolidate_attention(items: Iterable[dict[str, Any]]) -> list[dict[str, An
         consolidated.append((min(index for index, _item in members), merged))
     consolidated.sort(key=lambda pair: pair[0])
     return [item for _index, item in consolidated]
+
+
+def _enrich_attention_title(
+    item: dict[str, Any],
+    facts: Iterable[dict[str, Any]],
+) -> dict[str, Any]:
+    """Add visible same-capture context when an action title is generic."""
+
+    details = item.get("details") if isinstance(item.get("details"), dict) else {}
+    target_entity = _slug(details.get("entity_key")) if isinstance(details.get("entity_key"), str) else ""
+    fields: dict[str, str] = {}
+    field_order = (
+        ("issuer", {"issuer", "sender", "merchant", "provider"}),
+        ("service", {"service", "product", "subject"}),
+    )
+    reference = ""
+    for fact in facts:
+        if not isinstance(fact, dict) or fact.get("knowledge_status") != "known":
+            continue
+        if target_entity and _slug(fact.get("entity_key")) != target_entity:
+            continue
+        metadata = fact.get("metadata")
+        if not isinstance(metadata, dict):
+            metadata = {}
+        concept = _slug(fact.get("concept"))
+        value = _human_value(fact.get("value"))
+        if not value:
+            continue
+        for field, aliases in field_order:
+            if concept in aliases and field not in fields:
+                fields[field] = value
+        if not reference:
+            candidate = metadata.get("document_reference")
+            if isinstance(candidate, str) and candidate.strip():
+                reference = candidate.strip()[:180]
+    context_parts = [fields[field] for field, _aliases in field_order if fields.get(field)]
+    if not context_parts:
+        return item
+    title = _clean_text(item.get("title"), limit=500)
+    title_terms = search_terms(title)
+    context_presence = [
+        bool(title_terms & search_terms(fields[field]))
+        for field, _aliases in field_order
+        if fields.get(field)
+    ]
+    if title and context_presence and all(context_presence):
+        return item
+    parts = [*context_parts]
+    if reference and reference.casefold() not in " ".join(parts).casefold():
+        parts.append(reference)
+    item["title"] = " · ".join(parts)[:500]
+    return item
 
 
 def normalize_extraction(
@@ -1888,9 +2018,11 @@ def normalize_extraction(
                 if normalized_point is not None and "due_at" not in item and "starts_at" not in item:
                     item["starts_at"] = normalized_point
             event_attention.append(item)
+        event_facts = [fact for fact in facts if fact["source_event_id"] == event.get("event_id")]
         for item in event_attention:
             normalized = normalize_attention(item, event=event, available_ids=available_ids, now=now)
             if normalized is not None:
+                normalized = _enrich_attention_title(normalized, event_facts)
                 attention.append(normalized)
     attention = _consolidate_attention(attention)
     attachment_results = parsed.get("attachment_results", parsed.get("attachments", []))
@@ -2262,6 +2394,13 @@ def _semantic_output_schema() -> dict[str, Any]:
         "confidence": _nullable_number_schema(),
         "negated": {"type": "boolean"},
         "semantic_relation": _nullable_string_schema(),
+        "lifecycle_key": _nullable_string_schema(),
+        "lifecycle_action": _nullable_string_schema(),
+        "related_event_id": _nullable_string_schema(),
+        "document_key": _nullable_string_schema(),
+        "document_type": _nullable_string_schema(),
+        "document_reference": _nullable_string_schema(),
+        "document_title": _nullable_string_schema(),
         "source_refs": {"type": "array", "items": {"type": "string"}},
         "temporal": _temporal_semantics_schema(),
     }
@@ -2284,6 +2423,9 @@ def _semantic_output_schema() -> dict[str, Any]:
         "confidence": _nullable_number_schema(),
         "negated": {"type": "boolean"},
         "semantic_relation": _nullable_string_schema(),
+        "lifecycle_key": _nullable_string_schema(),
+        "lifecycle_action": _nullable_string_schema(),
+        "related_event_id": _nullable_string_schema(),
         "source_refs": {"type": "array", "items": {"type": "string"}},
     }
     attention_properties = {
@@ -2665,6 +2807,12 @@ class ProductCodexProvider:
         instruction = (
             "You are Blackhole's bounded personal-memory answerer. Answer the question concisely "
             "using only the supplied structured memory and source references. Do not invent facts. "
+            "For every normal READY question with usable candidates, you are the final user-facing "
+            "renderer, including simple retrieval, occurrence totals, current state, Attention, "
+            "completed-history questions, topic switches, and referential follow-ups. The deterministic "
+            "retrieval layer owns selection, temporal normalization, arithmetic, occurrence totals, "
+            "and lifecycle state; use the supplied `derived` results as authoritative and do not "
+            "recalculate them. "
             "Respond in the same language as the current question unless the question explicitly "
             "requests another language. Mixed-language questions should be answered in the language "
             "of the request's main conversational wording. Keep proper names, numbers, currencies, "
@@ -3656,7 +3804,13 @@ class ProductRuntime:
             return [item for _score, _sequence, _entity, _concept, item in scored[:limit]]
 
         facts = [item for item in snapshot.get("current_facts", []) if isinstance(item, dict)]
-        if plan.broad and not use_thread_context:
+        if plan.intent == "attention":
+            # Attention candidates are the relevant evidence surface for an
+            # Attention question. Keeping unrelated Memory facts out of the
+            # provider context prevents a final renderer from citing them as
+            # actionable items.
+            selected_facts = []
+        elif plan.broad and not use_thread_context:
             selected_facts = facts[:MAX_ASK_CONTEXT_FACTS]
         elif plan.intent == "generic" and query_terms == {"location"}:
             # A plural location request is a field-oriented list query.  Some
@@ -3825,6 +3979,58 @@ class ProductRuntime:
 
         attention = [item for item in snapshot.get("attention", []) if isinstance(item, dict)]
         open_attention = [item for item in attention if item.get("status") == "open"]
+        attention_history = [
+            item
+            for item in snapshot.get("attention_history", [])
+            if isinstance(item, dict) and item.get("status") != "open"
+        ]
+
+        def history_matches_time_window(item: dict[str, Any]) -> bool:
+            if plan.time_window not in {"today", "tomorrow"}:
+                return True
+            target_date = self._now().date()
+            if plan.time_window == "tomorrow":
+                target_date += timedelta(days=1)
+            candidate_dates: list[date] = []
+            for value in (
+                item.get("lifecycle_at"),
+                item.get("captured_at"),
+                item.get("observed_at"),
+            ):
+                if not isinstance(value, str):
+                    continue
+                parsed = parse_datetime(value, zone=timezone.utc)
+                if parsed is not None:
+                    candidate_dates.append(parsed.date())
+            return not candidate_dates or target_date in candidate_dates
+
+        def lifecycle_history_question() -> bool:
+            folded_tokens = {_temporal_fold(token) for token in word_tokens(question)}
+            return bool(
+                folded_tokens
+                & {
+                    "did",
+                    "done",
+                    "completed",
+                    "finished",
+                    "paid",
+                    "zrobilem",
+                    "zrobilam",
+                    "zrobione",
+                    "wykonalem",
+                    "wykonalam",
+                    "ukonczone",
+                    "oplacilem",
+                    "zaplacilem",
+                }
+            )
+
+        wants_lifecycle_history = lifecycle_history_question()
+        selected_attention_history = [
+            item
+            for item in attention_history
+            if wants_lifecycle_history and history_matches_time_window(item)
+        ][:MAX_ASK_CONTEXT_HISTORY]
         if plan.intent == "attention":
             if topic_terms:
                 selected_attention = ranked(
@@ -3885,10 +4091,12 @@ class ProductRuntime:
         fallback_history: list[dict[str, Any]] = []
         fallback_relations: list[dict[str, Any]] = []
         fallback_attention: list[dict[str, Any]] = []
+        fallback_attention_history: list[dict[str, Any]] = []
         provider_facts = selected_facts
         provider_history = selected_history
         provider_relations = selected_relations
         provider_attention = selected_attention
+        provider_attention_history = selected_attention_history
         if plan.semantic_fallback:
             fallback_facts = merge_bounded(
                 selected_facts,
@@ -3910,10 +4118,16 @@ class ProductRuntime:
                 newest(attention, MAX_ASK_FALLBACK_HISTORY),
                 MAX_ASK_FALLBACK_HISTORY,
             )
+            fallback_attention_history = merge_bounded(
+                selected_attention_history,
+                newest(attention_history, MAX_ASK_FALLBACK_HISTORY),
+                MAX_ASK_FALLBACK_HISTORY,
+            )
             provider_facts = fallback_facts
             provider_history = fallback_history
             provider_relations = fallback_relations
             provider_attention = fallback_attention
+            provider_attention_history = fallback_attention_history
 
         # Candidate IDs are provider-facing only. They let synthesis select a
         # structured item without allowing a source-reference list to stand in
@@ -3922,12 +4136,20 @@ class ProductRuntime:
         provider_history = self._tag_candidates("history", provider_history)
         provider_relations = self._tag_candidates("relationships", provider_relations)
         provider_attention = self._tag_candidates("attention", provider_attention)
+        provider_attention_history = self._tag_candidates("attention_history", provider_attention_history)
         fallback_facts = self._tag_candidates("facts", fallback_facts)
         fallback_history = self._tag_candidates("history", fallback_history)
         fallback_relations = self._tag_candidates("relationships", fallback_relations)
         fallback_attention = self._tag_candidates("attention", fallback_attention)
+        fallback_attention_history = self._tag_candidates("attention_history", fallback_attention_history)
 
-        selected_items = [*provider_facts, *provider_history, *provider_relations, *provider_attention]
+        selected_items = [
+            *provider_facts,
+            *provider_history,
+            *provider_relations,
+            *provider_attention,
+            *provider_attention_history,
+        ]
         reference_ids = self._source_refs(selected_items)
         source_limit = (
             MAX_ASK_FALLBACK_FACTS + MAX_ASK_FALLBACK_HISTORY
@@ -3946,6 +4168,7 @@ class ProductRuntime:
             "facts": provider_facts,
             "history": provider_history[:MAX_ASK_CONTEXT_HISTORY],
             "attention": provider_attention,
+            "attention_history": provider_attention_history,
             "relationships": provider_relations[:MAX_ASK_CONTEXT_HISTORY],
             "sources": selected_sources,
             "plan": plan.as_dict(),
@@ -3959,6 +4182,7 @@ class ProductRuntime:
             context["candidate_history"] = fallback_history
             context["candidate_relationships"] = fallback_relations
             context["candidate_attention"] = fallback_attention
+            context["candidate_attention_history"] = fallback_attention_history
         return context, selected_facts, " ".join(sorted(retrieval_query_terms))
 
     @staticmethod
@@ -4065,6 +4289,8 @@ class ProductRuntime:
             "candidate_relationships",
             "attention",
             "candidate_attention",
+            "attention_history",
+            "candidate_attention_history",
             "sources",
         ):
             values = context.get(collection, [])
@@ -4225,6 +4451,82 @@ class ProductRuntime:
             }
             for (entity_key, concept, unit), (total, label, members) in sorted(totals.items())
         ]
+
+    @classmethod
+    def _derived_ask_results(
+        cls,
+        question: str,
+        plan: AskPlan,
+        context: dict[str, Any],
+        selected_facts: list[dict[str, Any]],
+    ) -> dict[str, Any]:
+        """Build deterministic aids for the provider's final answer.
+
+        Retrieval and calculations stay local, but a normal ready answer is
+        rendered by the semantic provider.  The derived block makes exact
+        totals and lifecycle state available without asking the provider to
+        recalculate or infer from raw capture text.
+        """
+
+        facts = [item for item in context.get("facts", []) if isinstance(item, dict)]
+        history = [item for item in context.get("history", []) if isinstance(item, dict)]
+        occurrence_totals = cls._occurrence_totals(facts)
+        derived_occurrences = []
+        for total in occurrence_totals:
+            members = [item for item in total.get("items", []) if isinstance(item, dict)]
+            derived_occurrences.append(
+                {
+                    "entity_label": total.get("entity_label"),
+                    "concept": total.get("concept"),
+                    "total": total.get("total"),
+                    "unit": total.get("unit", ""),
+                    "occurrence_count": len(members),
+                    "supporting_evidence_ids": [
+                        item["evidence_id"]
+                        for item in members
+                        if isinstance(item.get("evidence_id"), str)
+                    ],
+                }
+            )
+        mode_hint = "retrieval"
+        if plan.intent == "generic" and cls._is_aggregation_question(question) and occurrence_totals:
+            mode_hint = "occurrence_totals"
+        elif plan.intent == "last_mention":
+            mode_hint = "last_mention"
+        elif plan.semantic_fallback:
+            mode_hint = "semantic"
+        elif plan.intent == "attention":
+            mode_hint = "attention"
+        elif plan.intent == "costs":
+            mode_hint = "costs"
+        elif plan.intent == "changes":
+            mode_hint = "changes"
+        elif plan.requires_synthesis:
+            mode_hint = "semantic"
+        elif selected_facts or history or context.get("attention"):
+            mode_hint = "retrieval"
+        completed_attention = [
+            {
+                "title": item.get("title"),
+                "kind": item.get("kind"),
+                "status": item.get("status"),
+                "lifecycle_at": item.get("lifecycle_at") or item.get("captured_at"),
+                "evidence_id": item.get("evidence_id"),
+            }
+            for item in context.get("attention_history", [])
+            if isinstance(item, dict)
+        ]
+        return {
+            "mode_hint": mode_hint,
+            "money_totals": cls._money_summary(facts),
+            "occurrence_totals": derived_occurrences,
+            "completed_attention": completed_attention,
+            "open_attention_count": sum(
+                1
+                for item in context.get("attention", [])
+                if isinstance(item, dict) and item.get("status") == "open"
+            ),
+        }
 
     @staticmethod
     def _natural_join(parts: list[str], *, language: str) -> str:
@@ -4660,38 +4962,43 @@ class ProductRuntime:
         context, selected_facts, _normalized = self._retrieval_context(question, plan, thread_context)
         naturalization_requested = self._needs_semantic_naturalization(question, plan, selected_facts)
         if naturalization_requested:
-            # Retrieval has already selected the evidence. Only the bounded
-            # semantic answer renderer is re-used for fluent cross-language
-            # presentation; raw captures never enter this context.
+            # Retrieval has already selected the evidence. The semantic
+            # provider remains the final renderer for this bounded context;
+            # raw captures never enter the answer call.
             plan = replace(plan, requires_synthesis=True)
             context["plan"] = plan.as_dict()
-        deterministic, mode, items, refs = self._deterministic_answer(
+        deterministic, preview_mode, preview_items, preview_refs = self._deterministic_answer(
             question,
             snapshot,
             context,
             selected_facts,
             plan,
         )
-        if deterministic is not None:
+        if preview_mode == "ambiguous" and deterministic is not None:
             result = {
                 "question": question,
-                "mode": mode,
-                "status": "no_match" if mode == "no_match" else "ready",
+                "mode": preview_mode,
+                "status": "ready",
                 "answer": deterministic,
-                "items": items,
-                "source_refs": refs,
+                "items": self._public_items(preview_items),
+                "source_refs": preview_refs,
                 "provider_used": False,
                 "answer_language": plan.language,
                 "processing": snapshot.get("processing", {}),
             }
-            if mode == "ambiguous":
+            if preview_mode == "ambiguous":
                 result["clarification"] = {"prompt": _clarification_prompt(question, plan)}
             return result
 
-        # The deterministic result above already derives refs from the facts it
-        # rendered. Once synthesis is needed, every retrieval item is only a
-        # candidate until the provider selects its explicit evidence IDs.
-        refs = []
+        # Every ready retrieval item is only a candidate until the provider
+        # selects its explicit evidence IDs. Deterministic calculations remain
+        # available as structured aids, never as the normal primary answer.
+        context["derived"] = self._derived_ask_results(
+            question,
+            plan,
+            context,
+            selected_facts,
+        )
         relevant_items = [
             item
             for collection in (
@@ -4704,13 +5011,15 @@ class ProductRuntime:
                 context.get("candidate_relationships", []),
                 context.get("attention", []),
                 context.get("candidate_attention", []),
+                context.get("attention_history", []),
+                context.get("candidate_attention_history", []),
             )
             for item in collection
             if isinstance(item, dict)
         ]
         has_processed_memory = any(
             isinstance(snapshot.get(name), list) and bool(snapshot.get(name))
-            for name in ("current_facts", "fact_history", "relationships", "attention")
+            for name in ("current_facts", "fact_history", "relationships", "attention", "attention_history")
         )
         if not relevant_items:
             if not has_processed_memory:
@@ -4731,85 +5040,134 @@ class ProductRuntime:
                 "processing": snapshot.get("processing", {}),
             }
         provider_used = False
+        provider_status = "unavailable"
         answer: str | None = None
         supporting_items: list[dict[str, Any]] = []
         provider_evidence_ids: list[Any] = []
         provider: Any | None = None
-        if plan.requires_synthesis:
-            try:
-                with self._provider_lock:
-                    provider, owned = self._provider()
-                    try:
-                        method = getattr(provider, "answer", None)
-                        if callable(method):
-                            try:
-                                parameters = inspect.signature(method).parameters
-                            except (TypeError, ValueError):
-                                parameters = {}
-                            if "context" in parameters or any(
-                                parameter.kind == inspect.Parameter.VAR_KEYWORD for parameter in parameters.values()
-                            ):
-                                self._ask_provider_calls += 1
-                                raw = method(
-                                    question=question,
-                                    context=context,
-                                    time_context={
-                                        "now_utc": self._now().isoformat(),
-                                        "timezone": local_timezone_name(),
-                                        "response_language": context.get("response_language", "same_as_question"),
-                                    },
-                                )
-                            else:
-                                self._ask_provider_calls += 1
-                                raw = method(question, context)
-                            if isinstance(raw, str):
-                                answer = raw.strip()
-                                provider_evidence_ids = []
-                            elif isinstance(raw, dict):
-                                answer = _clean_text(raw.get("answer"), limit=4000)
-                                provider_evidence_ids = (
-                                    raw.get("evidence_ids", [])
-                                    if isinstance(raw.get("evidence_ids"), list)
-                                    else []
-                                )
-                            else:
-                                provider_evidence_ids = []
-                            selected_evidence_ids, supporting_items = self._validated_supporting_evidence(
-                                context,
-                                provider_evidence_ids,
+        refs: list[str] = []
+        try:
+            with self._provider_lock:
+                provider, owned = self._provider()
+                try:
+                    method = getattr(provider, "answer", None)
+                    if not callable(method):
+                        provider_status = "answer_unavailable"
+                    else:
+                        provider_status = "called"
+                        try:
+                            parameters = inspect.signature(method).parameters
+                        except (TypeError, ValueError):
+                            parameters = {}
+                        if "context" in parameters or any(
+                            parameter.kind == inspect.Parameter.VAR_KEYWORD for parameter in parameters.values()
+                        ):
+                            self._ask_provider_calls += 1
+                            raw = method(
+                                question=question,
+                                context=context,
+                                time_context={
+                                    "now_utc": self._now().isoformat(),
+                                    "timezone": local_timezone_name(),
+                                    "response_language": context.get("response_language", "same_as_question"),
+                                },
                             )
-                            if answer and provider_evidence_ids and not selected_evidence_ids:
-                                # A provider answer backed only by invented or
-                                # stale IDs cannot safely be rendered. Empty
-                                # IDs remain valid for an explicit limitation
-                                # answer such as "no supporting evidence".
-                                answer = None
-                                supporting_items = []
-                            elif answer and naturalization_requested and not provider_evidence_ids:
-                                # A renderer that cannot name one of the
-                                # already-selected facts must not replace a
-                                # usable deterministic answer with an
-                                # unsupported limitation or invented prose.
-                                answer = None
-                                supporting_items = []
-                            refs = self._source_refs(supporting_items) if answer else []
-                            provider_used = bool(answer)
-                    finally:
-                        if owned and callable(getattr(provider, "close", None)):
-                            provider.close()
-            except (ProductProviderUnavailableError, RuntimeError) as error:
-                diagnostic = getattr(error, "diagnostic", None)
-                if isinstance(diagnostic, dict):
-                    self.last_provider_diagnostic = copy.deepcopy(diagnostic)
-                elif isinstance(getattr(provider, "last_call", None), dict):
-                    self.last_provider_diagnostic = copy.deepcopy(provider.last_call)
-                answer = None
-                supporting_items = []
-                refs = []
-        if not answer:
-            fallback_items = selected_facts or (
-                [] if plan.semantic_fallback else context.get("facts", [])
-            ) or ([] if plan.semantic_fallback else context.get("history", []))
+                        else:
+                            self._ask_provider_calls += 1
+                            raw = method(question, context)
+                        if isinstance(raw, str):
+                            answer = raw.strip()
+                            provider_evidence_ids = []
+                        elif isinstance(raw, dict):
+                            answer = _clean_text(raw.get("answer"), limit=4000)
+                            provider_evidence_ids = (
+                                raw.get("evidence_ids", [])
+                                if isinstance(raw.get("evidence_ids"), list)
+                                else []
+                            )
+                        else:
+                            provider_evidence_ids = []
+                        selected_evidence_ids, supporting_items = self._validated_supporting_evidence(
+                            context,
+                            provider_evidence_ids,
+                        )
+                        if answer and not selected_evidence_ids:
+                            # A ready answer must name at least one bounded
+                            # candidate. Unsupported provider prose is a
+                            # degraded path, not a successful response.
+                            provider_status = "invalid_evidence"
+                            answer = None
+                            supporting_items = []
+                        elif answer and not _provider_answer_is_human_safe(answer):
+                            # Candidate IDs and transport field names are an
+                            # internal bridge only. Fail closed if a provider
+                            # leaks them into the human-facing prose.
+                            provider_status = "unsafe_answer"
+                            answer = None
+                            supporting_items = []
+                        elif answer:
+                            provider_status = "used"
+                            refs = self._source_refs(supporting_items)
+                            provider_used = True
+                        else:
+                            provider_status = "empty_answer"
+                finally:
+                    if owned and callable(getattr(provider, "close", None)):
+                        provider.close()
+        except (ProductProviderUnavailableError, ProductProviderExecutionError, RuntimeError) as error:
+            diagnostic = getattr(error, "diagnostic", None)
+            if isinstance(diagnostic, dict):
+                self.last_provider_diagnostic = copy.deepcopy(diagnostic)
+            elif isinstance(getattr(provider, "last_call", None), dict):
+                self.last_provider_diagnostic = copy.deepcopy(provider.last_call)
+            provider_status = "error"
+            answer = None
+            supporting_items = []
+            refs = []
+
+        if provider_used and answer:
+            mode = str(context.get("derived", {}).get("mode_hint") or "semantic")
+            return {
+                "question": question,
+                "mode": mode,
+                "status": "ready",
+                "answer": answer,
+                "items": self._public_items(supporting_items)[:MAX_ASK_SUPPORTING_EVIDENCE_IDS],
+                "source_refs": refs,
+                "provider_used": True,
+                "degraded_fallback": False,
+                "provider_status": provider_status,
+                "answer_language": plan.language if plan.language in {"en", "pl"} else "same_as_question",
+                "processing": snapshot.get("processing", {}),
+            }
+
+        # Provider unavailable/error/unsupported output is the explicit
+        # degraded path. Keep the deterministic renderer for resilience, but
+        # mark and log it so it can never masquerade as a normal provider-ready
+        # answer.
+        fallback_mode = str(context.get("derived", {}).get("mode_hint") or "retrieval")
+        fallback_items: list[dict[str, Any]] = []
+        if deterministic is not None and preview_mode not in {"no_match", "ambiguous"}:
+            answer = deterministic
+            fallback_mode = preview_mode
+            fallback_items = list(preview_items)
+            refs = preview_refs
+        else:
+            fallback_items = list(
+                selected_facts
+                or (context.get("facts", []) if not plan.semantic_fallback else [])
+                or (context.get("history", []) if not plan.semantic_fallback else [])
+            )
+            if not fallback_items:
+                fallback_items = [
+                    item
+                    for item in context.get("attention_history", [])
+                    if isinstance(item, dict)
+                ] or [
+                    item
+                    for item in context.get("attention", [])
+                    if isinstance(item, dict)
+                ]
             if not fallback_items:
                 message = _answer_copy(plan, "no_match")
                 return {
@@ -4820,21 +5178,39 @@ class ProductRuntime:
                     "items": [],
                     "source_refs": [],
                     "provider_used": False,
+                    "degraded_fallback": True,
+                    "degraded_reason": provider_status,
+                    "provider_status": provider_status,
                     "answer_language": plan.language if plan.language in {"en", "pl"} else "same_as_question",
                     "processing": snapshot.get("processing", {}),
                 }
-            answer = _fact_answer(fallback_items[:10], plan) + "."
-            supporting_items = list(fallback_items)
-            refs = self._source_refs(supporting_items)
-        result_items = self._public_items(supporting_items)
+            if fallback_items and all("entity_key" not in item for item in fallback_items):
+                labels = [
+                    _clean_text(item.get("title") or item.get("kind"), limit=180)
+                    for item in fallback_items[:10]
+                ]
+                answer = (
+                    ("Zakończone: " if plan.language == "pl" else "Completed: ")
+                    + "; ".join(label for label in labels if label)
+                    + "."
+                )
+            else:
+                answer = _fact_answer(fallback_items[:10], plan) + "."
+            refs = self._source_refs(fallback_items)
+        if not answer:
+            answer = _answer_copy(plan, "no_match")
+        supporting_items = fallback_items
         return {
             "question": question,
-            "mode": "semantic" if provider_used else "retrieval",
+            "mode": fallback_mode,
             "status": "ready",
             "answer": answer,
-            "items": result_items[:MAX_ASK_SUPPORTING_EVIDENCE_IDS],
+            "items": self._public_items(supporting_items)[:MAX_ASK_SUPPORTING_EVIDENCE_IDS],
             "source_refs": refs,
-            "provider_used": provider_used,
+            "provider_used": False,
+            "degraded_fallback": True,
+            "degraded_reason": provider_status,
+            "provider_status": provider_status,
             "answer_language": plan.language if plan.language in {"en", "pl"} else "same_as_question",
             "processing": snapshot.get("processing", {}),
         }
@@ -4855,8 +5231,10 @@ class ProductRuntime:
         try:
             result = self._ask(question, thread_context=_normalize_ask_thread_context(thread_context))
             mode = str(result.get("mode") or "unknown")
-            if mode == "semantic":
-                path = "deterministic/retrieval/semantic"
+            if result.get("provider_used"):
+                path = f"provider/{mode}"
+            elif result.get("degraded_fallback"):
+                path = f"degraded/{mode}"
             elif mode in {"processing", "processing_failed"}:
                 path = mode
             elif mode in {"retrieval", "attention", "costs", "occurrence_totals", "changes", "last_mention", "ambiguous", "no_match", "no_data"}:
@@ -4874,7 +5252,14 @@ class ProductRuntime:
                 provider_calls=self._ask_provider_calls,
                 duration=f"{(time.monotonic() - started) * 1000:.0f}ms",
             )
-            human_path = "semantic fallback" if mode == "semantic" else "deterministic retrieval"
+            if result.get("provider_used"):
+                human_path = "provider answer"
+            elif result.get("degraded_fallback"):
+                reason = str(result.get("degraded_reason") or "unavailable")
+                self._log("ask", "degraded_fallback", request=request_id, reason=reason)
+                human_path = "degraded fallback"
+            else:
+                human_path = "deterministic retrieval"
             self._human(f"Ask · {human_path}")
             self._human(
                 f"Answer ready · {source_count} supporting memory"

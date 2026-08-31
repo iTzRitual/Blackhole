@@ -62,6 +62,29 @@ class RelativeDayOccurrenceProvider:
             )
         return {"facts": facts}
 
+    def answer(
+        self,
+        *,
+        question: str,
+        context: dict[str, Any],
+        time_context: dict[str, Any],
+    ) -> dict[str, Any]:
+        del question, time_context
+        derived = context.get("derived", {}) if isinstance(context.get("derived"), dict) else {}
+        total = (derived.get("occurrence_totals") or [{}])[0]
+        details = []
+        for item in context.get("facts", []):
+            if not isinstance(item, dict):
+                continue
+            expression = item.get("temporal", {}).get("expression")
+            amount = item.get("value", {}).get("amount") if isinstance(item.get("value"), dict) else None
+            if expression and amount is not None:
+                details.append(f"{amount} {expression}")
+        return {
+            "answer": f"You recorded {total.get('total')} unit across {len(details)} instances — " + " and ".join(details) + ".",
+            "evidence_ids": list(total.get("supporting_evidence_ids") or []),
+        }
+
 
 class ProductV2TimezoneTests(unittest.TestCase):
     def local_name_for(self, local_now: datetime, *, environment_tz: str = "") -> str:
@@ -232,7 +255,7 @@ class ProductV2TimezoneTests(unittest.TestCase):
 
                 answer = runtime.ask("How many X did I record in total?")
                 self.assertEqual(answer["mode"], "occurrence_totals")
-                self.assertFalse(answer["provider_used"])
+                self.assertTrue(answer["provider_used"])
                 self.assertIn("3 unit", answer["answer"])
                 self.assertIn("yesterday", answer["answer"])
                 self.assertIn("today", answer["answer"])

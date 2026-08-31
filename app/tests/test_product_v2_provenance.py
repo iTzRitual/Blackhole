@@ -380,7 +380,7 @@ class ProductV2ProvenanceTests(unittest.TestCase):
         self.assertEqual(result["source_refs"], [])
         self.assertEqual(provider.answer_calls, 0)
 
-    def test_attention_deterministic_answer_cites_only_the_attention_source(self) -> None:
+    def test_attention_provider_answer_cites_only_the_attention_source(self) -> None:
         provider = ProvenanceFixtureProvider(
             facts_by_event={
                 "prov-unrelated": [fact("prov-unrelated", "car", "car", "condition", "needs service")],
@@ -406,7 +406,7 @@ class ProductV2ProvenanceTests(unittest.TestCase):
         self.assertEqual(result["mode"], "attention")
         self.assertEqual(result["source_refs"], ["prov-parking"])
         self.assertNotIn("prov-unrelated", result["source_refs"])
-        self.assertEqual(provider.answer_calls, 0)
+        self.assertEqual(provider.answer_calls, 1)
 
     def test_entity_retrieval_cites_only_the_matching_entity(self) -> None:
         provider = ProvenanceFixtureProvider(

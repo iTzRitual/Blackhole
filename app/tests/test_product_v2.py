@@ -256,7 +256,7 @@ class ProductV2Tests(unittest.TestCase):
                 self.assertEqual(provider.calls, [["v2-dup-1"]])
                 self.assertEqual(runtime.snapshot()["counts"]["fact_history"], 1)
 
-    def test_relative_attention_is_deterministic_and_upcoming_then_overdue(self) -> None:
+    def test_attention_is_provider_rendered_and_upcoming_then_overdue(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             provider = ProductFakeProvider()
             with self.runtime(directory, provider) as runtime:
@@ -274,7 +274,8 @@ class ProductV2Tests(unittest.TestCase):
                 self.assertEqual(runtime.snapshot()["attention"][0]["state"], "overdue")
                 asked = runtime.ask("What do I need to do today?")
                 self.assertEqual(asked["mode"], "attention")
-                self.assertFalse(asked["provider_used"])
+                self.assertTrue(asked["provider_used"])
+                self.assertEqual(provider.answer_calls, 1)
                 runtime.set_attention_status(first[0]["fingerprint"], "completed", note="done in test")
                 completed = runtime.snapshot()
                 self.assertEqual(len(completed["attention"]), 1)
@@ -375,7 +376,7 @@ class ProductV2Tests(unittest.TestCase):
                 self.assertFalse(second["deleted"])
                 self.assertTrue(second["already_deleted"])
 
-    def test_open_world_fact_and_deterministic_ask_do_not_need_provider_answer(self) -> None:
+    def test_open_world_fact_uses_provider_as_final_renderer(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             provider = ProductFakeProvider()
             with self.runtime(directory, provider) as runtime:
@@ -386,8 +387,8 @@ class ProductV2Tests(unittest.TestCase):
                 self.assertEqual(facts[0]["value"], "mother's place")
                 answer = runtime.ask("What do I know about basement keys?")
                 self.assertEqual(answer["mode"], "retrieval")
-                self.assertFalse(answer["provider_used"])
-                self.assertEqual(provider.answer_calls, 0)
+                self.assertTrue(answer["provider_used"])
+                self.assertEqual(provider.answer_calls, 1)
                 self.assertIn("v2-open-1", answer["source_refs"])
 
     def test_semantic_ask_uses_bounded_mock_provider_and_source_refs(self) -> None:

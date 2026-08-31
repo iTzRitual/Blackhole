@@ -1,0 +1,91 @@
+{
+  "report_type": "product-v2-final-coherence",
+  "scope": "authorized post-freeze Product V2 coherence and demo-ready gate",
+  "observed_on": "2026-08-31",
+  "starting_head": "e71fa2190835063598fdcbc33bfc5835d3dabc25",
+  "status": "PASS",
+  "benchmark_boundary": {
+    "dev_benchmark_touched": false,
+    "v1_oracle_accessed": false,
+    "holdout_material_accessed": false,
+    "baseline_prompt_tuned": false,
+    "evaluator_semantics_changed": false
+  },
+  "provider": {
+    "discovery_status": "READY",
+    "cli_version": "codex-cli 0.151.0",
+    "authentication_owner": "local CLI",
+    "blackhole_token_access": false,
+    "blackhole_token_persistence": false
+  },
+  "deterministic_gates": {
+    "final_coherence_tests": {"passed": 9, "total": 9, "status": "PASS"},
+    "application_tests": {"passed": 216, "total": 216, "status": "PASS"},
+    "evaluator_tests": {"passed": 10, "total": 10, "status": "PASS"},
+    "acceptance_harness_tests": {"passed": 7, "total": 7, "status": "PASS"},
+    "root_tests": {"passed": 233, "total": 233, "status": "PASS"},
+    "integrated_acceptance": {
+      "result_file": "product-v2-integrated-acceptance.json",
+      "passed": 50,
+      "total": 50,
+      "status": "PASS"
+    },
+    "compileall": "PASS",
+    "javascript_syntax": "PASS",
+    "benchmark_structure": {"events": 200, "checkpoints": 4, "status": "PASS"},
+    "contract_smoke": "PASS (non-scored)",
+    "qualification": {"status": "PASS", "pre_existing_warnings": 4},
+    "diff_check": "PASS"
+  },
+  "live_dogfood": {
+    "fresh_synthetic_home": true,
+    "capture_limit": 6,
+    "captures": 5,
+    "ask_limit": 8,
+    "asks": 4,
+    "provider_backed_ready_answers": 4,
+    "degraded_answers": 0,
+    "processing_failures": 0,
+    "processing_retries": 0,
+    "document": {
+      "type": "invoice",
+      "reference": "REF-123",
+      "issuer": "Acme Hosting",
+      "service": "annual hosting",
+      "amount": "19.00 EUR",
+      "due_date": "2026-09-01",
+      "attachment_provenance_preserved": true
+    },
+    "lifecycle": {
+      "payment_closed_matching_document_attention": true,
+      "unrelated_task_remained_open_until_done": true,
+      "active_attention_after_payment": 1,
+      "active_attention_after_explicit_done": 0,
+      "terminal_history_after_explicit_done": 2,
+      "rebuild_restart_persistence_verified": true
+    },
+    "recorded_capture_return_latency_ms": [39, 8, 36],
+    "recorded_ask_latency_ms": [11706, 11514]
+  },
+  "visual_review": {
+    "mobile_viewport": "390x844",
+    "desktop_viewport": "1280x900",
+    "processing_notice_centered": true,
+    "mobile_attention_action_center_px": 187.5,
+    "desktop_action_center_px": 554.859375,
+    "desktop_footer_center_px": 554.359375,
+    "desktop_center_delta_px": 0.5,
+    "done_button_computed_margin_top_px": 0,
+    "document_memory_and_terminal_history_visible": true,
+    "natural_provider_ask_visible": true
+  },
+  "privacy": {
+    "live_content_synthetic_only": true,
+    "private_invoice_committed": false,
+    "provider_tokens_committed": false
+  },
+  "trajectory": {
+    "coding": "trajectories/coding/049-final-product-coherence",
+    "runtime": "trajectories/runtime/049-final-product-coherence"
+  }
+}

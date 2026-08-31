@@ -95,6 +95,7 @@ class ProductV2UIContractTests(unittest.TestCase):
         self.assertIn("attention-complete", CSS)
         self.assertIn("align-self: center", CSS)
         self.assertIn("align-items: center", CSS)
+        self.assertRegex(CSS, r"\.quiet-button\.attention-complete\s*\{[\s\S]*?margin-top:\s*0")
 
     def test_attention_clock_and_ask_thread_behaviors_are_live_bounded_and_calm(self) -> None:
         self.assertIn("scheduleAttentionTicker", APP_JS)
@@ -114,6 +115,7 @@ class ProductV2UIContractTests(unittest.TestCase):
         self.assertIn("loading-dots", APP_JS)
         self.assertIn("@keyframes loading-dot", CSS)
         self.assertIn("@media (prefers-reduced-motion: reduce)", CSS)
+        self.assertRegex(CSS, r"\.processing-notice\s*\{[\s\S]*?flex-direction:\s*column[\s\S]*?justify-content:\s*center[\s\S]*?text-align:\s*center")
         self.assertNotIn("icon-orbit", HTML)
         self.assertNotIn("icon-orbit", APP_JS)
 
@@ -129,6 +131,7 @@ class ProductV2UIContractTests(unittest.TestCase):
         self.assertIn("column-count: 2", CSS)
         self.assertIn("memory-subsection-label", APP_JS)
         self.assertIn("memory-history-label", APP_JS)
+        self.assertIn("attention_history", APP_JS)
         self.assertIn("memory-occurrences", APP_JS)
         self.assertIn("Occurrences · ", APP_JS)
         self.assertIn("memory-history-disclosure", APP_JS)

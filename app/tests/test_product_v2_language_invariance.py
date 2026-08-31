@@ -165,9 +165,46 @@ class LanguageMatrixProvider:
         self.answer_contexts.append(json.loads(json.dumps({"question": question, "context": context, "time_context": time_context}, ensure_ascii=False)))
         target = ANSWERS.get(question)
         if target is None:
-            return {"answer": "No supporting evidence matches that question.", "evidence_ids": []}
+            candidates = [
+                item
+                for collection in ("facts", "history", "attention", "candidate_facts", "candidate_history", "candidate_attention")
+                for item in context.get(collection, [])
+                if isinstance(item, dict) and isinstance(item.get("evidence_id"), str)
+            ]
+            if not candidates:
+                return {"answer": "No supporting evidence matches that question.", "evidence_ids": []}
+            item = candidates[0]
+            source_id = next(
+                (ref for ref in item.get("source_refs", []) if isinstance(ref, str)),
+                item.get("source_event_id", ""),
+            )
+            value = item.get("value")
+            if item.get("knowledge_status") == "unknown" or value is None:
+                rendered_value = "unknown"
+            elif isinstance(value, dict):
+                rendered_value = " ".join(
+                    str(part)
+                    for part in (value.get("amount"), value.get("currency"))
+                    if part is not None
+                ) or str(value)
+            else:
+                rendered_value = str(value)
+                if "T" in rendered_value:
+                    try:
+                        parsed = datetime.fromisoformat(rendered_value.replace("Z", "+00:00"))
+                    except ValueError:
+                        parsed = None
+                    if parsed is not None:
+                        rendered_value = parsed.strftime("%d %B %Y at %H:%M")
+            evidence_ids = [
+                candidate["evidence_id"]
+                for candidate in candidates
+                if source_id in candidate.get("source_refs", [])
+            ][:1]
+            return {"answer": f"[EN] {rendered_value}", "evidence_ids": evidence_ids}
         language, key, value = target
         source_overrides = {
+            "What was the previous PocketWave price?": "language-en-pocket-old",
             "¿Cuánto pago por la suscripción?": "language-en-pocket-new",
             "Was kostet mein Abo?": "language-en-pocket-new",
             "Combien paie-je pour l'abonnement?": "language-en-pocket-new",
@@ -193,7 +230,15 @@ class LanguageMatrixProvider:
             and isinstance(item.get("evidence_id"), str)
             and source_id in item.get("source_refs", [])
         ]
-        return {"answer": f"[{language}] {value}", "evidence_ids": sorted(set(evidence_ids))}
+        display_value = value
+        if isinstance(value, str) and "T" in value:
+            try:
+                parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+            except ValueError:
+                parsed = None
+            if parsed is not None:
+                display_value = parsed.strftime("%d %B %Y at %H:%M")
+        return {"answer": f"[{language}] {display_value}", "evidence_ids": sorted(set(evidence_ids))}
 
 
 ANSWERS: dict[str, tuple[str, str, str]] = {
@@ -223,6 +268,7 @@ ANSWERS: dict[str, tuple[str, str, str]] = {
     "¿Qué tengo que hacer pronto?": ("ES", "children_pickup", "Pick up the children"),
     "Was muss ich bald erledigen?": ("DE", "children_pickup", "Pick up the children"),
     "Combien paie-je pour l'abonnement?": ("FR", "pocketwave", "11 EUR"),
+    "What was the previous PocketWave price?": ("EN", "pocketwave", "9 EUR"),
     "¿Cuánto pago por la suscripción?": ("ES", "pocketwave", "11 EUR"),
     "Was kostet mein Abo?": ("DE", "pocketwave", "11 EUR"),
     "Jaka była poprzednia cena PocketWave?": ("PL", "pocketwave", "9 EUR"),
@@ -336,7 +382,7 @@ class ProductV2LanguageInvarianceTests(unittest.TestCase):
         self.assertTrue(any(case_id.startswith("document") for case_id, *_rest in MATRIX_CASES))
 
     def test_cross_language_matrix_retrieves_semantic_target_and_preserves_answer_language(self) -> None:
-        for case_id, question, expected_value, source_id, answer_language, provider_expected in MATRIX_CASES:
+        for case_id, question, expected_value, source_id, answer_language, _provider_expected in MATRIX_CASES:
             with self.subTest(case_id=case_id, question=question):
                 before_calls = self.provider.answer_calls
                 result = self.runtime.ask(question)
@@ -345,7 +391,8 @@ class ProductV2LanguageInvarianceTests(unittest.TestCase):
                 self.assertIn(expected_value.casefold(), rendered)
                 self.assertIn(source_id, result["source_refs"])
                 self.assertEqual(result["answer_language"], answer_language)
-                self.assertEqual(self.provider.answer_calls, before_calls + int(provider_expected))
+                self.assertTrue(result["provider_used"])
+                self.assertEqual(self.provider.answer_calls, before_calls + 1)
 
     def test_cross_language_naturalization_uses_selected_structured_candidates_only(self) -> None:
         result = self.runtime.ask("Where are the basement keys?")

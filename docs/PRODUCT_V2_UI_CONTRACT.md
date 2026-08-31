@@ -83,3 +83,29 @@ All versioned shell assets now use `v8` consistently: manifest, Apple touch
 icon, CSS, JavaScript, service-worker registration, and service-worker cache
 entries. This is a static-cache correction only; the existing UI/API DTO and
 the PARTIAL/REVISE live gate remain unchanged.
+
+## Final product coherence contract — 2026-08-31
+
+For the final coherence scope, a normal READY Ask with usable bounded evidence
+is rendered by the configured AI provider. Deterministic code owns retrieval,
+temporal normalization, arithmetic, occurrence totals, lifecycle state,
+provenance, and validation; the provider receives structured candidates and
+derived results, selects explicit evidence IDs, and returns human-readable
+prose. Provider-unavailable, invalid, unsafe, unsupported, or empty output is
+an explicitly marked and logged degraded fallback. No internal candidate IDs,
+transport fields, raw timestamps, or `self:1`-style syntax may reach the user.
+
+Completed and cancelled Attention items remain inspectable in Memory/history,
+while active Attention and its badge contain open items only. A user-marked
+Done action records completion and does not claim physical-world proof. Capture
+processing notices are centered as a bounded vertical stack, and the Attention
+footer owns the zero-margin completion action at the cascade boundary so the
+button is centered by layout rather than by a visual offset.
+
+Document and image captures preserve their original attachment bytes and
+provenance while exposing useful identity when visible: document type/reference,
+issuer or sender, recipient, service/product/subject, amount/currency,
+issue/due date, payment status, and relevant account/reference. Unknown or
+unreadable fields stay unknown; role labels are secondary concepts, not primary
+document titles. This section supersedes the earlier provider-free READY Ask
+sentence for this authorized final coherence scope only.

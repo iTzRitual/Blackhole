@@ -515,8 +515,43 @@
       });
     });
 
+    // Terminal Attention state is an inspectable lifecycle record, not an
+    // active reminder. Keep it under a useful memory card so Done remains
+    // durable and visible after the active list/badge removes the item.
+    const attentionHistory = Array.isArray(memory.attention_history) ? memory.attention_history : [];
+    attentionHistory.forEach((item, index) => {
+      if (!item || typeof item !== "object") return;
+      const status = String(firstValue(item.status, "completed") || "completed").toLowerCase();
+      if (!["completed", "cancelled"].includes(status)) return;
+      const title = displayText(firstValue(item.title, item.kind), "Attention item");
+      const details = item.details && typeof item.details === "object" ? item.details : {};
+      const entityKey = firstValue(details.entity_key, item.entity_key, "");
+      const group = addGroup(
+        entityKey || "attention-history:" + firstValue(item.fingerprint, index),
+        title,
+        item.kind || "task",
+        "",
+        [],
+      );
+      const verb = status === "completed" ? "Completed: " : "Cancelled: ";
+      const lifecycleAt = firstValue(item.lifecycle_at, item.captured_at, item.observed_at) || "";
+      group.facts.push({
+        text: verb + title,
+        detail: displayText(item.lifecycle_note, "Lifecycle update kept in memory history."),
+        status: "known",
+        evidence: normalizeEvidence(item),
+        unknownReason: "",
+        capturedAt: lifecycleAt,
+        semanticState: "lifecycle",
+        occurrence: false,
+        value: undefined,
+        temporal: {},
+        isHistory: true,
+      });
+    });
+
     Object.entries(memory).forEach(([sectionKey, sectionItems]) => {
-      if (["entities", "topics", "groups", "items", "facts", "current_facts", "fact_history", "attention", "counts", "approval", "recent_captures", "processing", "relationships", "sources", "attachments", "retracted_event_ids", "store_version", "projection_version", "projection_run_id"].includes(sectionKey)) return;
+      if (["entities", "topics", "groups", "items", "facts", "current_facts", "fact_history", "attention", "attention_history", "counts", "approval", "recent_captures", "processing", "relationships", "sources", "attachments", "retracted_event_ids", "store_version", "projection_version", "projection_run_id"].includes(sectionKey)) return;
       if (!Array.isArray(sectionItems)) return;
       sectionItems.forEach((item, index) => {
         const source = typeof item === "object" && item ? item : { text: String(item) };

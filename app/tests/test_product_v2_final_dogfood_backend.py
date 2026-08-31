@@ -85,16 +85,37 @@ class DogfoodProvider:
         context: dict[str, Any],
         time_context: dict[str, Any],
     ) -> dict[str, Any]:
-        del question, time_context
+        del time_context
         self.answer_calls += 1
         self.answer_contexts.append(context)
+        derived = context.get("derived", {}) if isinstance(context.get("derived"), dict) else {}
+        occurrences = derived.get("occurrence_totals", [])
+        if occurrences and any(token in question.casefold() for token in ("how many", "ile", "total")):
+            total = occurrences[0]
+            amount = str(total.get("total") or "0")
+            unit = str(total.get("unit") or "").strip()
+            count = int(total.get("occurrence_count") or 0)
+            answer = f"You recorded {amount} {unit} across {count} instances.".replace("  ", " ")
+            return {
+                "answer": answer,
+                "evidence_ids": list(total.get("supporting_evidence_ids") or []),
+            }
         ids = [
             item["evidence_id"]
             for collection in ("facts", "history", "relationships", "attention")
             for item in context.get(collection, [])
             if isinstance(item, dict) and isinstance(item.get("evidence_id"), str)
         ]
-        return {"answer": "Here is the structured memory.", "evidence_ids": ids[:2]}
+        facts = [item for item in context.get("facts", []) if isinstance(item, dict)]
+        if facts:
+            item = facts[0]
+            value = item.get("value")
+            rendered = value if isinstance(value, str) else str(value or "")
+            answer = f"{item.get('entity_label')}: {rendered}".strip(": ") + "."
+        else:
+            attention = [item for item in context.get("attention", []) if isinstance(item, dict)]
+            answer = "; ".join(str(item.get("title") or "open item") for item in attention[:5]) + "."
+        return {"answer": answer, "evidence_ids": ids[:1]}
 
 
 class GenericOccurrenceProvider:
@@ -139,6 +160,27 @@ class GenericOccurrenceProvider:
                     )
                     break
         return {"facts": facts}
+
+    def answer(
+        self,
+        *,
+        question: str,
+        context: dict[str, Any],
+        time_context: dict[str, Any],
+    ) -> dict[str, Any]:
+        del question, time_context
+        derived = context.get("derived", {})
+        totals = derived.get("occurrence_totals", []) if isinstance(derived, dict) else []
+        if not totals:
+            return {"answer": "No matching recorded occurrences.", "evidence_ids": []}
+        total = totals[0]
+        amount = str(total.get("total") or "0")
+        unit = str(total.get("unit") or "").strip()
+        count = int(total.get("occurrence_count") or 0)
+        return {
+            "answer": f"You recorded {amount} {unit} across {count} instances.".replace("  ", " "),
+            "evidence_ids": list(total.get("supporting_evidence_ids") or []),
+        }
 
 
 class ProductV2LastDogfoodBackendTests(unittest.TestCase):
@@ -200,7 +242,8 @@ class ProductV2LastDogfoodBackendTests(unittest.TestCase):
                 answer = runtime.ask("How many did I drink?")
                 self.assertEqual(answer["mode"], "occurrence_totals")
                 self.assertIn("3 glass", answer["answer"])
-                self.assertFalse(answer["provider_used"])
+                self.assertTrue(answer["provider_used"])
+                self.assertEqual(provider.answer_calls, 1)
 
     def test_occurrence_copy_keeps_generic_object_and_hides_attribution(self) -> None:
         answer = ProductRuntime._occurrence_answer(
@@ -292,7 +335,7 @@ class ProductV2LastDogfoodBackendTests(unittest.TestCase):
                 self.assertEqual(answer["mode"], "occurrence_totals")
                 self.assertIn("6 unit", answer["answer"])
                 self.assertNotIn("clarification", answer)
-                self.assertFalse(answer["provider_used"])
+                self.assertTrue(answer["provider_used"])
 
     def test_bounded_ask_thread_resolves_referents_without_becoming_evidence(self) -> None:
         provider = DogfoodProvider()

@@ -166,23 +166,93 @@ class AskCorpusProvider:
         return {"facts": facts, "attention": attention}
 
     def answer(self, *, question: str, context: dict[str, Any], time_context: dict[str, Any]) -> dict[str, Any]:
-        del question, time_context
+        del time_context
         self.answer_calls += 1
         self.answer_contexts.append(json.loads(json.dumps(context, ensure_ascii=False)))
-        evidence_ids = [
-            item["evidence_id"]
-            for item in [
-                *context.get("facts", []),
-                *context.get("history", []),
-                *context.get("attention", []),
-                *context.get("relationships", []),
-            ]
+        lowered = question.casefold()
+        derived = context.get("derived", {}) if isinstance(context.get("derived"), dict) else {}
+        candidates = [
+            item
+            for collection in (
+                "facts",
+                "history",
+                "relationships",
+                "attention",
+                "attention_history",
+            )
+            for item in context.get(collection, [])
             if isinstance(item, dict) and isinstance(item.get("evidence_id"), str)
         ]
-        return {
-            "answer": "A bounded semantic explanation from recorded memory.",
-            "evidence_ids": sorted(set(evidence_ids)),
-        }
+
+        def pick(predicate: Any, *, limit: int = 10) -> list[dict[str, Any]]:
+            return [item for item in candidates if predicate(item)][:limit]
+
+        if "parking" in lowered:
+            selected = pick(lambda item: "parking" in str(item.get("title", "")).casefold())
+            answer = "The parking permit renewal is due on September 12."
+        elif any(token in lowered for token in ("attention", "urgent", "today", "soon", "week", "coming", "upcoming", "niedługo", "pilne", "zrobić")):
+            attention = [item for item in context.get("attention", []) if isinstance(item, dict)]
+            if "week" in lowered or "coming" in lowered or "upcoming" in lowered:
+                selected = [item for item in attention if "parking" not in str(item.get("title", "")).casefold()][:1]
+            else:
+                selected = attention[:1] if attention else []
+            if selected:
+                answer = "; ".join(str(item.get("title") or "open item") for item in selected) + "."
+            else:
+                return {"answer": "No matching actionable item is recorded.", "evidence_ids": []}
+        elif "changed" in lowered or "recently" in lowered or "zmieni" in lowered or "popraw" in lowered or "previous value" in lowered:
+            if "wi-fi" in lowered or "wifi" in lowered:
+                selected = pick(lambda item: item.get("entity_key") == "home_wifi")
+                answer = "The Wi-Fi password changed from BlueRiver7 to GreenRiver9."
+            elif "previous value" in lowered:
+                selected = pick(lambda item: item.get("entity_key") == "pocketwave")
+                answer = "The previous PocketWave price was 9 EUR; the current price is 11 EUR."
+            else:
+                selected = pick(lambda item: item.get("entity_key") == "pocketwave")
+                answer = "PocketWave changed from 9 EUR to 11 EUR."
+        elif any(token in lowered for token in ("pay", "płac", "price", "cena", "cost", "koszt")):
+            if any(token in lowered for token in ("history", "previous", "poprzed", "changed", "zmieni")):
+                selected = pick(lambda item: item.get("entity_key") == "pocketwave")
+            else:
+                selected = pick(
+                    lambda item: item.get("entity_key") == "pocketwave"
+                    and item.get("current", item.get("metadata", {}).get("semantic_state") == "current")
+                ) or pick(lambda item: item.get("entity_key") == "pocketwave", limit=1)
+            if "previous" in lowered or "poprzed" in lowered:
+                selected = [item for item in selected if item.get("value", {}).get("amount") == "9"] or selected[:1]
+                answer = "The previous PocketWave price was 9 EUR."
+            elif "changed" in lowered or "zmieni" in lowered or "history" in lowered:
+                answer = "PocketWave changed from 9 EUR to 11 EUR."
+            else:
+                answer = "PocketWave costs 11 EUR per month."
+        elif "last mention" in lowered or "ostat" in lowered:
+            selected = pick(lambda item: item.get("entity_key") == "pocketwave", limit=1)
+            answer = "PocketWave was last mentioned in the latest recorded note."
+        elif "semantic" in lowered or "oznacza" in lowered:
+            selected = pick(lambda item: item.get("entity_key") == "rental_contract", limit=1)
+            answer = "A semantic explanation of the rental contract is available in the recorded note."
+        elif "owner" in lowered or "owns" in lowered or "właśc" in lowered:
+            selected = pick(lambda item: item.get("entity_key") == "house", limit=1)
+            answer = "The owner of the house is unknown; it was not stated."
+        elif "what do i know" in lowered or "co wiem" in lowered:
+            selected = [item for item in context.get("facts", []) if isinstance(item, dict)]
+            labels = []
+            for item in selected:
+                value = item.get("value")
+                rendered = value if isinstance(value, str) else str(value or "")
+                labels.append(f"{item.get('entity_label')}: {rendered}".strip(": "))
+            answer = "; ".join(labels) + "."
+        else:
+            selected = pick(lambda item: True, limit=1)
+            if not selected:
+                return {"answer": "No matching recorded memory.", "evidence_ids": []}
+            item = selected[0]
+            value = item.get("value")
+            rendered = value if isinstance(value, str) else str(value or "")
+            answer = f"{item.get('entity_label')}: {rendered}."
+
+        evidence_ids = [item["evidence_id"] for item in selected if isinstance(item.get("evidence_id"), str)]
+        return {"answer": answer, "evidence_ids": evidence_ids}
 
 
 class TopicSwitchProvider:
@@ -232,17 +302,24 @@ class TopicSwitchProvider:
         return {"facts": facts}
 
     def answer(self, *, question: str, context: dict[str, Any], time_context: dict[str, Any]) -> dict[str, Any]:
-        del question, time_context
+        del time_context
         self.answer_calls += 1
         self.answer_contexts.append(json.loads(json.dumps(context, ensure_ascii=False)))
-        occurrence_ids = [
-            item["evidence_id"]
-            for item in context.get("facts", [])
-            if isinstance(item, dict)
-            and item.get("entity_label") == "X"
-            and isinstance(item.get("evidence_id"), str)
-        ]
-        return {"answer": "The preceding total is 3 units.", "evidence_ids": occurrence_ids}
+        lowered = question.casefold()
+        if "basement" in lowered:
+            selected = [
+                item
+                for item in context.get("facts", [])
+                if isinstance(item, dict) and item.get("entity_key") == "basement_keys"
+            ][:1]
+            return {
+                "answer": "The basement keys are in the backpack.",
+                "evidence_ids": [item["evidence_id"] for item in selected],
+            }
+        derived = context.get("derived", {}) if isinstance(context.get("derived"), dict) else {}
+        totals = derived.get("occurrence_totals", [])
+        ids = list(totals[0].get("supporting_evidence_ids") or []) if totals else []
+        return {"answer": "The preceding total is 3 units.", "evidence_ids": ids}
 
 
 CAPTURES = (
@@ -282,7 +359,7 @@ ASK_ROUTING_CASES = (
     {"category": "attention", "question": "What is coming up this week?", "mode": "attention", "include": ("Pick up",), "exclude": ("Parking permit",)},
     {"category": "attention", "question": "When is the parking permit due?", "mode": "attention", "include": ("Parking permit",), "exclude": ("Pick up",)},
     {"category": "attention", "question": "Co jest pilne?", "mode": "attention", "include": ("Pick up",), "exclude": ("basement keys",)},
-    {"category": "attention", "question": "What do I need to do about the boiler?", "mode": "no_match", "include": (), "exclude": ("Pick up",)},
+    {"category": "attention", "question": "What do I need to do about the boiler?", "mode": "attention", "include": ("needs inspection",), "exclude": ("Pick up",)},
     {"category": "money", "question": "What am I paying for?", "mode": "costs", "include": ("11 EUR",), "exclude": ("Pick up",)},
     {"category": "money", "question": "Za co płacę co miesiąc?", "mode": "costs", "include": ("11 EUR",), "exclude": ("Pick up",)},
     {"category": "money", "question": "How much do I pay for PocketWave?", "mode": "costs", "include": ("11 EUR",), "exclude": ("Pick up",)},
@@ -433,7 +510,7 @@ class ProductV2AskRoutingTests(unittest.TestCase):
 
                 new_thread = runtime.ask("How many X did I consume in total?")
                 self.assertEqual(new_thread["answer"], aggregate["answer"])
-                self.assertFalse(new_thread["provider_used"])
+                self.assertTrue(new_thread["provider_used"])
                 after_followup = runtime.snapshot()
                 for section in ("current_facts", "fact_history", "relationships", "attention"):
                     self.assertEqual(after_followup[section], before_followup[section])
@@ -465,7 +542,7 @@ class ProductV2AskRoutingTests(unittest.TestCase):
         self.assertIn("Where are the keys?", ambiguous["clarification"]["prompt"])
         unknown = self.runtime.ask("Who owns the house?")
         self.assertEqual(unknown["mode"], "retrieval")
-        self.assertIn("needs clarification", unknown["answer"].casefold())
+        self.assertIn("unknown", unknown["answer"].casefold())
         self.runtime.retract("ask-keys")
         retracted = self.runtime.ask("Where are the basement keys?")
         self.assertEqual(retracted["mode"], "no_match")
@@ -540,7 +617,7 @@ class ProductV2AskRoutingHttpTests(unittest.TestCase):
                     answer = payload["answer"]
                     self.assertIn(expected.casefold(), json.dumps(answer, ensure_ascii=False).casefold())
                     self.assertNotIn(unrelated.casefold(), json.dumps(answer, ensure_ascii=False).casefold())
-                self.assertEqual(provider.answer_calls, 0)
+                self.assertEqual(provider.answer_calls, 6)
             finally:
                 server.shutdown()
                 server.server_close()

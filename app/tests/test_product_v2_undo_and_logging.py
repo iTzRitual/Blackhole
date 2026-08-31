@@ -384,7 +384,7 @@ class ProductV2UndoAndLoggingTests(unittest.TestCase):
             self.assertIn(fragment, output)
         self.assertNotIn(capture_text, output)
         self.assertNotIn("secret-token-value", output)
-        self.assertIn("provider_calls=0", output)
+        self.assertIn("provider_calls=1", output)
         self.assertTrue(all(len(line) < 600 for line in output.splitlines()))
 
     def test_provider_failure_logs_bounded_sanitized_error_and_retry(self) -> None:

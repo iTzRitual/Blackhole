@@ -645,12 +645,17 @@ main {
 
 .processing-notice {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 12px;
+  width: min(100%, 560px);
+  margin-inline: auto;
   padding: 15px 16px;
   border: 1px solid rgba(184, 168, 255, .22);
   border-radius: 18px;
   background: rgba(184, 168, 255, .07);
+  text-align: center;
 }
 
 .processing-notice.is-error {
@@ -719,8 +724,8 @@ main {
 }
 
 .processing-notice p {
-  max-width: 56ch;
-  margin: 4px 0 0;
+  max-width: 48ch;
+  margin: 4px auto 0;
   color: var(--muted);
   font-size: .78rem;
 }
@@ -1472,6 +1477,13 @@ main {
   transition: color .16s ease-out, background-color .16s ease-out, border-color .16s ease-out, transform .16s ease-out;
 }
 
+/* The generic quiet-button rhythm is intentionally offset for inline
+   secondary actions. Attention's footer is a centered action row, so its
+   button owns a zero top margin at the cascade boundary. */
+.quiet-button.attention-complete {
+  margin-top: 0;
+}
+
 .clarify-button {
   justify-self: start;
   margin-top: 7px;
@@ -1796,6 +1808,7 @@ button:active:not(:disabled) {
 
   .attention-action-area {
     justify-self: stretch;
+    align-self: center;
     align-items: center;
   }
 

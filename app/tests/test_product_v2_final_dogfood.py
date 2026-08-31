@@ -528,6 +528,36 @@ process.stdout.write(JSON.stringify(result));
         self.assertNotIn("{", result["answerText"])
         self.assertEqual(result["answerEvidence"], "Captured source")
 
+    def test_ui_filters_terminal_attention_from_active_view_but_keeps_memory_history(self) -> None:
+        result = self._run_ui_hooks(r"""(() => {
+  const active = api.normalizeAttention([
+    { fingerprint: "open", title: "Open task", status: "open" },
+    { fingerprint: "done", title: "Call Acme Hosting", status: "completed" },
+  ]);
+  const memory = api.normalizeMemory({
+    current_facts: [],
+    attention_history: [{
+      fingerprint: "done",
+      title: "Call Acme Hosting",
+      kind: "task",
+      status: "completed",
+      lifecycle_at: "2026-08-30T08:10:00Z",
+      details: { lifecycle_note: "Marked done by the user" },
+      source_refs: ["ordinary-task"],
+    }],
+  });
+  return {
+    activeIds: active.map((item) => item.id),
+    historyNames: memory.map((group) => group.name),
+    historyText: memory[0] ? memory[0].facts[0].text : "",
+    historyFlag: memory[0] ? memory[0].facts[0].isHistory : false,
+  };
+})()""")
+        self.assertEqual(result["activeIds"], ["open"])
+        self.assertEqual(result["historyNames"], ["Call Acme Hosting"])
+        self.assertEqual(result["historyText"], "Completed: Call Acme Hosting")
+        self.assertTrue(result["historyFlag"])
+
     def test_ui_keeps_generic_occurrences_secondary_and_drops_duplicate_history_rows(self) -> None:
         result = self._run_ui_hooks(r"""(() => {
   const memory = api.normalizeMemory({
@@ -597,7 +627,7 @@ process.stdout.write(JSON.stringify(result));
         self.assertEqual(_display_fact_value(item), "2")
         self.assertIn("reported by self", _display_fact_value(item, include_attribution=True))
 
-    def test_raw_language_is_preserved_and_deterministic_ask_stays_provider_free(self) -> None:
+    def test_raw_language_is_preserved_and_provider_renders_ask(self) -> None:
         provider = ProductFakeProvider()
         with tempfile.TemporaryDirectory() as directory:
             with ProductRuntime(
@@ -613,9 +643,9 @@ process.stdout.write(JSON.stringify(result));
                 elapsed = time.monotonic() - before
                 raw = runtime.store.raw_event("language-1")
                 self.assertEqual(raw["payload"]["text"], "Klucze do piwnicy są u mamy.")
-                self.assertEqual(provider.answer_calls, 0)
+                self.assertEqual(provider.answer_calls, 1)
                 self.assertLess(elapsed, 0.2)
-                self.assertEqual(answer["provider_used"], False)
+                self.assertEqual(answer["provider_used"], True)
                 self.assertEqual(answer["answer_language"], "pl")
 
     def test_human_operational_logs_are_readable_bounded_and_private(self) -> None:

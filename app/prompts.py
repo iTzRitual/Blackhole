@@ -26,6 +26,21 @@ uncertainty, negation, attribution, contradiction, correction, duplicate, and
 meaningful change when the evidence supports them. A correction preserves the
 old evidence and only supersedes the grounded competing claim. Preserve useful
 entity identity across languages with a stable entity key and a source label.
+For a document or image, extract a useful generic identity only when it is
+actually visible: document kind, visible reference, issuer or sender,
+recipient, service/product/subject, amount and currency, issue or due date,
+payment/status, and relevant account or reference. Use one stable document
+entity key and a human-readable label for related fields (for example,
+"Invoice · REF-123"); keep role labels as concepts or values rather than
+separate primary entities. If a field is not readable or not stated, mark it
+unknown or the attachment unreadable instead of guessing. Preserve the image
+or document source provenance.
+When a capture explicitly reports that an open actionable item was completed,
+paid, cancelled, rescheduled, or superseded, propose a lifecycle_key and
+lifecycle_action and link the related_event_id or supersedes_event_id when
+the evidence identifies it. These are proposals only; do not invent a link
+from a weak title match and do not claim physical-world proof beyond what the
+capture says.
 For relative or weekday time, emit structured fields and let the runtime
 normalize them from that event's captured_at and timezone; never use the later
 processing clock. Preserve coarse or ambiguous dates without fabricating an

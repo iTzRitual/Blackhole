@@ -1017,13 +1017,27 @@ class ProductV2SemanticTruthTests(unittest.TestCase):
         def answer_fn(question: str, context: dict[str, Any]) -> dict[str, Any]:
             lowered = question.casefold()
             if "warranty" in lowered:
-                answer = "It may expire in December; that was not confirmed."
-                collections = ("facts",)
+                answer = "It is possibly due to expire in December; that was not confirmed."
+                ids = [
+                    item["evidence_id"]
+                    for item in context.get("facts", [])
+                    if isinstance(item, dict)
+                    and item.get("concept") == "expiry"
+                    and isinstance(item.get("evidence_id"), str)
+                ]
+                return {"answer": answer, "evidence_ids": ids}
             elif "causing" in lowered or "cause" in lowered:
-                answer = "There are conflicting notes about the left bearing and tyre."
-                collections = ("facts",)
+                answer = "Needs clarification: there are conflicting notes about the left bearing and tyre."
+                ids = [
+                    item["evidence_id"]
+                    for item in context.get("facts", [])
+                    if isinstance(item, dict)
+                    and item.get("concept") == "possible_cause"
+                    and isinstance(item.get("evidence_id"), str)
+                ]
+                return {"answer": answer, "evidence_ids": ids}
             elif "previous" in lowered or "earlier" in lowered:
-                answer = "Previously the keys were at Mum's place."
+                answer = "Previously the keys were at mum's place."
                 ids = [
                     item["evidence_id"]
                     for item in context.get("history", [])
@@ -1032,8 +1046,20 @@ class ProductV2SemanticTruthTests(unittest.TestCase):
                     and isinstance(item.get("evidence_id"), str)
                 ]
                 return {"answer": answer, "evidence_ids": ids}
-            else:
+            elif "netflix" in lowered:
                 answer = "The current fact is not cancelled."
+                collections = ("facts",)
+            else:
+                current = next(
+                    (
+                        item
+                        for item in context.get("facts", [])
+                        if isinstance(item, dict) and item.get("knowledge_status") != "unknown"
+                    ),
+                    None,
+                )
+                value = current.get("value") if current else None
+                answer = f"The current value is {value}."
                 collections = ("facts",)
             return answer_from_collections(answer, *collections)(question, context)
 

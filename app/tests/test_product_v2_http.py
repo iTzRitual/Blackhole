@@ -149,7 +149,7 @@ class ProductV2HttpTests(unittest.TestCase):
                 server.shutdown()
                 server.server_close()
 
-    def test_product_ask_is_post_and_uses_deterministic_path_for_cost_question(self) -> None:
+    def test_product_ask_is_post_and_uses_provider_for_cost_question(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             provider = ProductFakeProvider()
             server = create_server("127.0.0.1", 0, home=Path(directory), provider=provider)
@@ -176,8 +176,8 @@ class ProductV2HttpTests(unittest.TestCase):
                 )
                 self.assertEqual(status, 200)
                 self.assertEqual(answer["answer"]["mode"], "costs")
-                self.assertFalse(answer["answer"]["provider_used"])
-                self.assertEqual(provider.answer_calls, 0)
+                self.assertTrue(answer["answer"]["provider_used"])
+                self.assertEqual(provider.answer_calls, 1)
             finally:
                 server.shutdown()
                 server.server_close()

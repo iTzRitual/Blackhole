@@ -477,6 +477,24 @@ class DeterministicAcceptanceProvider:
         facts = context.get("facts", [])
         if not isinstance(facts, list):
             facts = []
+        history = context.get("history", [])
+        if not isinstance(history, list):
+            history = []
+
+        def display_value(value: Any) -> str:
+            if isinstance(value, dict):
+                parts = [str(value[key]) for key in ("amount", "currency") if value.get(key) is not None]
+                period = value.get("billing_period", value.get("period"))
+                if period:
+                    parts.append(f"per {period}")
+                if parts:
+                    return " ".join(parts)
+                scalar_parts = [str(value[key]) for key in sorted(value) if value.get(key) is not None]
+                return ", ".join(scalar_parts) or "known"
+            if value is None:
+                return "unknown"
+            return str(value)
+
         fact_evidence_ids = [
             item["evidence_id"]
             for item in facts
@@ -491,14 +509,35 @@ class DeterministicAcceptanceProvider:
             return {"answer": "To jest niejednoznaczne — znalazłem więcej niż jeden rodzaj kluczy.", "evidence_ids": fact_evidence_ids}
         if not facts:
             return {"answer": "I have no supporting evidence for that question.", "evidence_ids": []}
+
+        if any(marker in lowered for marker in ("change", "changed", "correction")) and history:
+            history_items = [item for item in history if isinstance(item, dict) and "value" in item]
+            grouped: dict[tuple[Any, Any], list[dict[str, Any]]] = {}
+            for item in history_items:
+                grouped.setdefault((item.get("entity_key"), item.get("concept")), []).append(item)
+            for items in grouped.values():
+                ordered = sorted(items, key=lambda item: int(item.get("sequence", 0) or 0))
+                values: list[str] = []
+                evidence_ids: list[str] = []
+                for item in ordered:
+                    rendered = display_value(item.get("value"))
+                    if rendered not in values:
+                        values.append(rendered)
+                    if isinstance(item.get("evidence_id"), str):
+                        evidence_ids.append(item["evidence_id"])
+                if len(values) > 1:
+                    label = str(items[-1].get("entity_label") or items[-1].get("entity_key") or "memory")
+                    return {
+                        "answer": f"Recorded change: {label} changed from {values[0]} to {values[-1]}.",
+                        "evidence_ids": sorted(set(evidence_ids)),
+                    }
+
         pieces: list[str] = []
         evidence_ids: list[str] = []
         for item in facts[:10]:
             label = item.get("entity_label", item.get("entity_key", "memory"))
             value = item.get("value", item.get("unknown_reason", "unknown"))
-            if isinstance(value, (dict, list)):
-                value = json.dumps(value, ensure_ascii=False, sort_keys=True)
-            pieces.append(f"{label}: {value}")
+            pieces.append(f"{label}: {display_value(value)}")
             if isinstance(item.get("evidence_id"), str):
                 evidence_ids.append(item["evidence_id"])
         return {"answer": "Based on captured evidence: " + "; ".join(pieces) + ".", "evidence_ids": sorted(set(evidence_ids))}
