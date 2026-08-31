@@ -129,4 +129,6 @@ product, baseline, benchmark, evaluator, or scoring contract from this result.
 
 ## Related git commit
 
-The final cleanup commit is recorded after the archive is built and pushed.
+Final cleanup/source commit: `73dc34f` (`chore: clean final submission
+repository`). The final remote SHA and archive verification are recorded in the
+handoff after this metadata update.
