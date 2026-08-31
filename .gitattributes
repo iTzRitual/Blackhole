@@ -1,2 +1,8 @@
 *.pdf binary
 *.bin binary
+
+# Keep historical execution detail in the source repository, but leave
+# generated databases and raw provider-call folders out of source archives.
+trajectories/runtime/**/state.sqlite export-ignore
+trajectories/runtime/**/calls export-ignore
+trajectories/runtime/**/calls/** export-ignore
