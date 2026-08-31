@@ -87,7 +87,7 @@ browser Capture
 
 The final development/dogfood evidence reports:
 
-- application tests: `184/184 PASS`;
+- application tests: `192/192 PASS` (including the macOS timezone regressions);
 - evaluator tests: `10/10 PASS`;
 - Product V2 acceptance harness: `7/7 PASS`;
 - integrated Product V2 acceptance: `50/50 PASS`;
@@ -100,6 +100,32 @@ temporary Homes. It is useful product acceptance evidence, but it is not an
 unseen generalization benchmark. The real authenticated Codex path was also
 validated in bounded dogfood runs; its latency and incomplete semantic cases
 remain disclosed below.
+
+### macOS portability hotfix
+
+The fresh-Mac reproduction supplied for this task exposed a local timezone
+portability failure: before the fix, the application report was `184` tests
+with `5` failures and `120` errors, while the evaluator was `10/10 PASS` and
+the acceptance harness was `7/7 PASS`.
+
+On macOS, `datetime.now().astimezone().tzinfo` can be a fixed-offset
+`datetime.timezone`. The broken implementation called `current.utcoffset()`
+without the required datetime argument, so default Product V2 Capture raised
+`TypeError: timezone.utcoffset() takes exactly one argument (0 given)`.
+
+Hotfix commit `8eb8158c9177114ff66122f98c5bfef1ccd0aeb4` retains the aware
+local datetime, validates IANA names from `tzinfo.key`, `TZ`, and safe POSIX
+metadata, preserves the existing Windows aliases, and uses the actual
+aware-datetime offset only as a last resort. Explicit timezone precedence and
+capture-time-relative normalization remain unchanged. On this Mac,
+`local_timezone_name()` resolved `Europe/Warsaw`, default capture succeeded,
+and `resolve_timezone(None)` returned a usable `ZoneInfo`.
+
+The post-fix deterministic evidence is `192/192` application tests,
+`209/209` root discovery tests, `10/10` evaluator tests, `7/7` acceptance
+harness tests, and `50/50` integrated acceptance cases with no live provider
+call. The machine-readable acceptance result is
+[`eval/results/product-v2-integrated-acceptance.json`](../eval/results/product-v2-integrated-acceptance.json).
 
 ## Measured Improvement
 
@@ -165,8 +191,11 @@ The repository preserves:
   `scripts/prepare_product_v2_demo.py`;
 - coding and runtime evidence in [`TRAJECTORY_INDEX.md`](../TRAJECTORY_INDEX.md);
 - the final Product V2 integration, dogfood, and acceptance records; and
-- the final `product-v2-submission` tag and remote SHA, recorded in
+- the authoritative final `product-v2-submission-final` tag and remote SHA,
+  recorded in
   [`docs/SUBMISSION_CHECKLIST.md`](SUBMISSION_CHECKLIST.md) after finalization.
+  The historical `product-v2-submission` tag remains the pre-Mac portability-
+  check snapshot and is not moved.
 
 The deterministic gate does not require provider credentials and does not run
 new semantic-provider performance experiments:

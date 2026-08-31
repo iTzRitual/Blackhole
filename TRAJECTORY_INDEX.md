@@ -59,6 +59,7 @@ now listed below; the local oracle and scoring histories remain separate.
 | 042-product-v2-final-human-dogfood-fixes | Apply the final bounded Product V2 P0/P1 human-dogfood repair | KEEP implementation; overall live gate PARTIAL/REVISE | `e5ca77f` | [prompt](trajectories/coding/042-product-v2-final-human-dogfood-fixes/prompt.md), [summary](trajectories/coding/042-product-v2-final-human-dogfood-fixes/summary.md), [live](trajectories/coding/042-product-v2-final-human-dogfood-fixes/live-validation.json), [result](eval/results/product-v2-final-human-dogfood-fixes.json) |
 | 043-product-v2-last-dogfood-fixes | Consolidate Product V2 into master and apply the final generic dogfood corrections | KEEP; `184/184` app tests and `50/50` visible acceptance, no live provider | `7d695ec` | [prompt](trajectories/coding/043-product-v2-last-dogfood-fixes/prompt.md), [summary](trajectories/coding/043-product-v2-last-dogfood-fixes/summary.md), [result](eval/results/product-v2-final-dogfood-fixes.json) |
 | 044-submission-finalization | Harden the final judge-facing package and demo path without changing Product V2 semantics | PASS; local deterministic submission gate green; no Product V2 semantic change | `0bd6810` | [prompt](trajectories/coding/044-submission-finalization/prompt.md), [summary](trajectories/coding/044-submission-finalization/summary.md), [result](eval/results/product-v2-integrated-acceptance.json) |
+| 045-macos-timezone-portability-hotfix | Repair macOS fixed-offset timezone discovery and validate cross-platform fallback | KEEP; `192/192` app tests, `209/209` root tests, `50/50` acceptance; no live provider | `8eb8158` | [prompt](trajectories/coding/045-macos-timezone-portability-hotfix/prompt.md), [summary](trajectories/coding/045-macos-timezone-portability-hotfix/summary.md), [result](eval/results/product-v2-integrated-acceptance.json) |
 | ui-001-mobile-pwa | Build the dependency-light mobile-first PWA in an isolated worktree | KEEP; UI workstream preserved and integrated | `0cc6653` | [summary](trajectories/coding/ui-001-mobile-pwa/summary.md) |
 | ui-002-reference-redesign | Correct the Capture surface against the approved mobile reference | KEEP; UI correction preserved and integrated | `0cc6653` | [summary](trajectories/coding/ui-002-reference-redesign/summary.md) |
 | submission-001-hardening | Add offline qualification, CI, evidence index, and submission checklist | KEEP; three non-blocking stale-artifact warnings remain for finalization | `18b123f` | [summary](trajectories/coding/submission-001-hardening/summary.md) |
@@ -100,7 +101,7 @@ remote master and tag identifiers are verified in the final handoff.
 | generalization-v1r1 scoring | Deterministic scoring and descriptive analysis of the sealed V1R1 set | None; frozen evaluator | Public result; no post-result tuning | [report](docs/GENERALIZATION_V1R1_REPORT.md), [machine result](eval/results/generalization/v1/GENERALIZATION_V1R1_RESULT.json) |
 | other recorded fast/replay directories | Intermediate extraction, projector, retry, and diagnostic runs | Mixed; recorded per directory | Preserved as historical evidence, including failed/invalid attempts | [runtime root](trajectories/runtime/) |
 
-The current filesystem inventory contains 45 coding trajectories and 51 runtime
+The current filesystem inventory contains 46 coding trajectories and 51 runtime
 trajectories. The index does not require every runtime directory to have a root `summary.md`:
 the runtime inventory records whether a summary, prompt-like call file, raw
 trace, and other artifacts are present. No transcript is fabricated for a
@@ -159,6 +160,7 @@ transcript, or recorded `*.raw.txt` provider output.
 | 042-product-v2-final-human-dogfood-fixes | coding | yes | yes | n/a | no | 5 |
 | 043-product-v2-last-dogfood-fixes | coding | yes | yes | n/a | no | 2 |
 | 044-submission-finalization | coding | yes | yes | n/a | no | 2 |
+| 045-macos-timezone-portability-hotfix | coding | yes | yes | n/a | no | 2 |
 | ui-001-mobile-pwa | coding | yes | yes | n/a | no | 2 |
 | ui-002-reference-redesign | coding | yes | yes | n/a | no | 2 |
 | submission-001-hardening | coding | yes | yes | n/a | no | 2 |

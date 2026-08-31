@@ -185,7 +185,7 @@ synthetic worlds**, not an official holdout and not a significance claim:
 
 Product V2 development acceptance evidence is separate:
 
-- application tests: `184/184 PASS`;
+- application tests: `192/192 PASS` (including the macOS timezone regressions);
 - evaluator tests: `10/10 PASS`;
 - acceptance harness: `7/7 PASS`;
 - integrated Product V2 acceptance: `50/50 PASS`;

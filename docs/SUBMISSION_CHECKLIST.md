@@ -8,11 +8,11 @@ factual repository gate, not an aspirational feature backlog.
 
 - [PASS] Work is being finalized directly on `master`.
 - [PASS] Starting `master` and `origin/master` were the exact expected clean
-  SHA: `fbb0845c9d73fefc25b1bbf2ea9db3c4750bdb6f`.
-- [PASS] Product V2 implementation semantics were not changed in this pass;
-  the additions are judge-facing docs, a safe synthetic demo-preparation
-  utility, screenshots copied from the existing synthetic UI review, and
-  trajectory/evidence updates.
+  SHA: `e7341066fd00e6209b8b51b4087ea75c1609fc3a`.
+- [PASS] Product V2 runtime changes were limited to cross-platform local
+  timezone discovery; explicit timezone precedence and capture-time temporal
+  semantics remain unchanged. The one unrelated macOS path correction is
+  test-only and canonicalizes an already-resolved database path.
 - [PASS] No provider inference, V1 oracle access, holdout inspection, prompt
   tuning, benchmark optimization, or evaluator-ground-truth change occurred.
 - [PASS] The frozen V1 benchmark, baseline, evaluator, calibration evidence,
@@ -70,10 +70,11 @@ factual repository gate, not an aspirational feature backlog.
 - [PASS] Post-freeze V1R1 is labeled as three fresh synthetic worlds and a
   shadow/generalization result, not an official holdout or significance claim.
 - [PASS] Product V2 development acceptance remains labeled separately:
-  application `184/184`, evaluator `10/10`, acceptance harness `7/7`,
+  application `192/192`, evaluator `10/10`, acceptance harness `7/7`,
   integrated acceptance `50/50`, and quality gates `7/7`.
-- [PASS] [`TRAJECTORY_INDEX.md`](../TRAJECTORY_INDEX.md) inventories `45`
-  coding and `51` runtime trajectories, including the finalization trajectory.
+- [PASS] [`TRAJECTORY_INDEX.md`](../TRAJECTORY_INDEX.md) inventories `46`
+  coding and `51` runtime trajectories, including the finalization and Mac
+  portability-hotfix trajectories.
 - [PASS] The advisory ChatGPT role is documented in
   [`docs/process/CHATGPT_DECISION_LOG.md`](process/CHATGPT_DECISION_LOG.md),
   with [`docs/process/CHATGPT_TRANSCRIPT_NOTE.md`](process/CHATGPT_TRANSCRIPT_NOTE.md)
@@ -86,11 +87,11 @@ factual repository gate, not an aspirational feature backlog.
 ## Deterministic validation
 
 - [PASS] `python -m unittest discover -s app/tests -p "test_*.py" -v` —
-  `184/184`.
+  `192/192` on macOS, including the focused timezone regressions.
 - [PASS] `python -m unittest discover -s eval/tests -v` — `10/10`.
 - [PASS] `python -m unittest product_acceptance.harness.test_harness -v` —
   `7/7`.
-- [PASS] `python -m unittest discover -s . -p "test_*.py" -v` — `201/201`.
+- [PASS] `python -m unittest discover -s . -p "test_*.py" -v` — `209/209`.
 - [PASS] `python scripts/run_product_v2_integrated_acceptance.py` — `50/50`
   PASS, no live provider; the generated result is
   `eval/results/product-v2-integrated-acceptance.json`.
@@ -100,7 +101,7 @@ factual repository gate, not an aspirational feature backlog.
   `4` checkpoints.
 - [PASS] `python eval/contract_smoke.py` — non-scored contract smoke passed.
 - [PASS] `python scripts/qualification_check.py --inventory` — zero hard
-  failures; `45` coding and `51` runtime trajectories documented.
+  failures; `46` coding and `51` runtime trajectories documented.
 - [PASS] `git diff --check`.
 
 ## Qualification warnings retained intentionally
@@ -120,15 +121,21 @@ current E005/V1R1 narrative. No obvious committed credential was detected.
 
 ## Git finalization
 
-- [PASS] No existing `product-v2-submission` tag was present before this run.
-- [PASS] The reviewed submission-hardening tree was committed directly on
-  `master` as `0bd6810`.
-- [PASS] The local tree was clean after that commit.
+- [PASS] The existing annotated `product-v2-submission` tag was preserved and
+  still dereferences to the pre-Mac snapshot
+  `e7341066fd00e6209b8b51b4087ea75c1609fc3a`.
+- [PASS] The timezone portability hotfix was committed directly on `master` as
+  `8eb8158c9177114ff66122f98c5bfef1ccd0aeb4`.
+- [PASS] The authoritative final tag is the new
+  `product-v2-submission-final`; it must point to the final pushed `master`.
+- [PASS] The local tree was clean after the hotfix commit before final
+  submission-documentation finalization.
 - [PASS] Remote preflight exposed only `master`; no temporary branch cleanup
   was necessary or safe to infer.
-- [PASS] The final exact local SHA, remote SHA, and `product-v2-submission`
-  tag target are verified together in the final handoff; the tag is the
-  immutable pointer for the submitted tree.
+- [PASS] The final exact local SHA, remote SHA, and
+  `product-v2-submission-final` tag target are verified together in the final
+  handoff; the tag is the immutable pointer for the submitted tree. The old
+  `product-v2-submission` tag is historical and is not moved.
 
 ## External submission items
 
