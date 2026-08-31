@@ -35,9 +35,6 @@ factual repository gate, not an aspirational feature backlog.
   insights, limitations, and privacy/claim boundaries.
 - [PASS] [`docs/DEMO_SCRIPT.md`](DEMO_SCRIPT.md) provides a realistic five-
   minute flow using synthetic prepared state plus one live immediate Capture.
-- [PASS] `docs/assets/product-v2-capture-desktop.png` and
-  `docs/assets/product-v2-ask-mobile.png` are synthetic copies of the final UI
-  review; no private human dogfood data is published.
 - [PASS] The demo preparation utility populates a new/empty Home through the
   real Product V2 HTTP routes with the visible deterministic fixture provider;
   it does not write benchmark data, fake UI answers, or call a live provider.
@@ -75,7 +72,8 @@ factual repository gate, not an aspirational feature backlog.
 - [PASS] Post-freeze V1R1 is labeled as three fresh synthetic worlds and a
   shadow/generalization result, not an official holdout or significance claim.
 - [PASS] Final H2H-001 is sealed at the frozen Product V2 commit with four new
-  synthetic worlds, 80 captures, 13 queries, PTS scoring, and separate
+  synthetic worlds, 80 captures, 13 queries, Prompt-to-Truth Score (PTS)
+  scoring, and separate
   Attention metrics; raw-memory PTS is `0.8575`, Product V2 PTS is `0.7928`,
   and Product V2 Attention F1 is `0.6795` versus `0.5641`. It is explicitly
   descriptive post-freeze evidence, not V1 scoring, holdout ground truth, or
@@ -83,7 +81,7 @@ factual repository gate, not an aspirational feature backlog.
 - [PASS] Product V2 development acceptance remains labeled separately:
   application `216/216`, evaluator `10/10`, acceptance harness `7/7`, root
   suite `233/233`, integrated acceptance `50/50`, and quality gates `7/7`.
-- [PASS] [`TRAJECTORY_INDEX.md`](../TRAJECTORY_INDEX.md) inventories `51`
+- [PASS] [`TRAJECTORY_INDEX.md`](../TRAJECTORY_INDEX.md) inventories `52`
   coding and `55` runtime trajectories, including the final live UX,
   relative-day correctness, and sealed H2H evidence.
 - [PASS] The advisory ChatGPT role is documented in
@@ -115,7 +113,7 @@ factual repository gate, not an aspirational feature backlog.
   `4` checkpoints.
 - [PASS] `python3 eval/contract_smoke.py` — non-scored contract smoke passed.
 - [PASS] `python3 scripts/qualification_check.py --inventory` — zero hard
-  failures; `51` coding and `55` runtime trajectories indexed, with all
+  failures; `52` coding and `55` runtime trajectories indexed, with all
   coding trajectories documented and four known historical non-blocking
   warnings.
 - [PASS] `git diff --check`.

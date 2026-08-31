@@ -711,9 +711,11 @@ and the methodology/result narrative is
 [`docs/FINAL_H2H_REPORT.md`](FINAL_H2H_REPORT.md).
 
 The run used four new synthetic worlds, 80 captures, 13 queries, and both
-`gpt-5.6-luna` low-reasoning paths. The raw-memory comparator scored PTS
-`0.8575`; frozen Product V2 scored PTS `0.7928`. Product V2 Attention F1 was
-`0.6795` versus `0.5641`, and all 80 captures plus 13 queries completed
-successfully. The raw sealed cases, expected assertions, manifest, full result,
+`gpt-5.6-luna` low-reasoning paths. The raw-memory comparator had a
+Prompt-to-Truth Score (PTS) of `0.8575`; frozen Product V2 scored PTS
+`0.7928`.
+Product V2 Attention F1 was `0.6795` versus `0.5641`, and all 80 captures plus
+13 queries completed successfully. The raw sealed cases, expected assertions,
+manifest, full result,
 and per-world runtime records remain in the disposable local clone used for
 execution; only the sanitized summary is committed here.

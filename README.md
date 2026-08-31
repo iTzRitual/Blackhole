@@ -27,15 +27,19 @@ Attention / Memory
 Ask
 ```
 
-- **Capture** is a zero-friction inbox. `Saved.` means the raw capture is
-  durable; it does not wait for a model.
+- **Capture** is a zero-friction inbox. `Out of mind` confirms that the raw
+  capture has been accepted and durably saved; semantic understanding continues
+  asynchronously.
 - **Attention** contains things that still need the user: open deadlines,
   unresolved uncertainty, meaningful changes, and proposed actions.
 - **Memory** is the current useful state, with history, uncertainty,
   contradictions, and provenance kept visible where they matter.
-- **Ask** is natural, bounded retrieval over personal memory. Deterministic
-  date, time, and arithmetic paths stay deterministic; bounded semantic
-  questions can use the local Codex CLI.
+- **Ask** is natural, bounded retrieval over personal memory. Blackhole owns
+  evidence selection, arithmetic, temporal normalization, lifecycle, occurrence
+  aggregation, and provenance validation deterministically. For a normal READY
+  semantic question with usable evidence, the configured AI provider renders
+  the final answer from that bounded structured result; a degraded deterministic
+  fallback is reserved for provider-unavailable cases.
 - **Undo** permanently forgets the selected Product V2 capture and its
   source-linked state inside the Product V2 Home. It is an explicit user
   action, not automatic cleanup.
@@ -113,17 +117,6 @@ still be entered live during a demo to show the immediate-save boundary.
 The older `?fixture=1` browser mode remains a presentation-only visual-test
 fixture. It is not Product V2 state, benchmark data, or submission evidence.
 
-## Screenshots
-
-These screenshots are safe synthetic Product V2 visuals copied from the final
-UI review:
-
-![Product V2 Capture on desktop](docs/assets/product-v2-capture-desktop.png)
-
-![Product V2 Ask on mobile](docs/assets/product-v2-ask-mobile.png)
-
-No private human dogfood data is included in the published screenshots.
-
 ## Trust boundaries
 
 - Raw source evidence is immutable during normal operation. Explicit Undo is
@@ -189,7 +182,7 @@ normal HTTP path with a fresh stateless raw-memory Codex call over four new
 synthetic worlds (80 captures, checkpoints at 7/14/20, 13 queries), using
 `gpt-5.6-luna` with low reasoning for both systems:
 
-- raw-memory PTS `0.8575`; Product V2 PTS `0.7928`;
+- Prompt-to-Truth Score (PTS): raw-memory `0.8575`; Product V2 `0.7928`;
 - raw-memory Attention F1 `0.5641`; Product V2 Attention F1 `0.6795`;
 - raw-memory: `13/13` schema-valid queries in `130.878 s`;
 - Product V2: `80/80` captures processed on first attempt, `13/13`
@@ -199,9 +192,9 @@ The result is intentionally mixed: the raw comparator recalled more of this
 small authored assertion set, while Product V2 supplied durable state,
 inspectable provenance, active Attention, and permanent Undo. See the
 [sanitized H2H report](docs/FINAL_H2H_REPORT.md) and
-[machine-readable summary](eval/results/final-h2h-001-summary.json). PTS is
-not LQA-0M, and this run is neither an official holdout nor a significance
-claim.
+[machine-readable summary](eval/results/final-h2h-001-summary.json). The
+Prompt-to-Truth Score (PTS) is not LQA-0M, and this run is neither an official
+holdout nor a significance claim.
 
 Product V2 development acceptance evidence is separate:
 

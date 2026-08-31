@@ -22,13 +22,13 @@ Type:
 
 > I need to return the library books tomorrow.
 
-Press Enter and keep the `Saved.` receipt visible.
+Press Enter. Show the normal `Out of mind` feedback briefly; do not wait for
+semantic processing.
 
 Say:
 
-> The raw capture is durable before AI processing. Understanding happens in
-> the background, so a slow or unavailable provider does not erase the user's
-> evidence.
+> Capture returns immediately. The `Out of mind` feedback means the evidence
+> has been accepted and saved; semantic understanding continues asynchronously.
 
 Do not imply that the live capture is already understood.
 
@@ -38,6 +38,9 @@ Open the prepared Attention view. Show an open parking deadline, its date, and
 the `Why this is here` explanation. Then open Memory and show the current key
 location, a Polish preference, and a price correction with the earlier value
 retained under history.
+
+If you mark an Attention item Done, show that it leaves the active list while
+remaining available in Memory/history.
 
 Say:
 
@@ -57,12 +60,19 @@ Show the answer and its supporting source. Ask a bounded follow-up:
 
 Say:
 
-> Ask uses the same structured memory and a small temporary referent hint. The
-> current question wins, the answer stays grounded, and supporting evidence is
-> secondary rather than becoming an audit-shaped wall of text.
+> Ask selects bounded evidence from structured memory, and the current question
+> wins over stale thread context. Deterministic evidence selection, arithmetic,
+> temporal normalization, lifecycle, occurrence aggregation, and provenance
+> validation stay in Blackhole. For a normal READY semantic answer with usable
+> evidence, the configured AI provider turns that bounded result into natural
+> prose. Supporting evidence is secondary rather than becoming an audit-shaped
+> wall of text.
 
 If the local CLI is unavailable, show the honest pending/degraded state; do
 not fabricate an answer.
+
+Allow the normal READY Ask to take real provider time; do not describe Ask as
+instant.
 
 ## 2:15–2:40 — Correction and Undo
 
@@ -88,12 +98,13 @@ Say:
 > 0.3015 to the kept Experiment 005 result of 0.8695, with DSCR improving
 > from 277 to 40. That benchmark is frozen and belongs to V1.
 
-> We also ran a separate post-freeze synthetic head-to-head. Raw-memory PTS
-> was 0.8575 and Product V2 PTS was 0.7928, so Product V2 did not win this
-> small aggregate comparison. Product V2 Attention F1 was 0.6795 versus
-> 0.5641, and all 80 captures and 13 queries completed successfully. We show
-> the mixed result because the product's value is the durable, inspectable
-> state boundary—not a claim that one small set proves generalization.
+> We also ran a separate post-freeze synthetic head-to-head. Raw-memory
+> Prompt-to-Truth Score (PTS) was 0.8575 and Product V2 PTS was 0.7928, so
+> Product V2 did not win this small aggregate comparison. Product V2 Attention
+> F1 was 0.6795 versus 0.5641, and all 80 captures and 13 queries completed
+> successfully. We show the mixed result because the product's value is the
+> durable, inspectable state boundary—not a claim that one small set proves
+> generalization.
 
 ## 3:20–3:45 — Close
 
@@ -113,11 +124,14 @@ Say:
 
 ## Recording guardrails
 
-- Prepare only synthetic state and keep the live capture visible long enough to
-  prove immediate save.
+- Prepare only synthetic state and show the normal `Out of mind` feedback long
+  enough to prove that the raw evidence was accepted and saved.
+- Allow a normal READY semantic Ask to take real provider time; do not describe
+  Ask as instant.
 - Do not wait for a multi-item provider burst on camera or call processing
   instant.
 - Do not present Product V2 acceptance as unseen generalization.
-- Do not call PTS `LQA-0M`; they are different contracts and metrics.
+- Do not call Prompt-to-Truth Score (PTS) `LQA-0M`; these are different
+  contracts and metrics.
 - Do not display raw run records, raw provider output, private transcript text,
   credentials, V1 expected output, or holdout material.

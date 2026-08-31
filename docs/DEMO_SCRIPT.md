@@ -40,14 +40,14 @@ Type one ordinary synthetic note, for example:
 
 > I need to bring the library books back tomorrow.
 
-Press Enter. Point out the immediate `Saved.` response and the `+1 off your
-mind` feedback. Do not wait for semantic processing or imply that the capture
-has already been understood.
+Press Enter. Show the normal `Out of mind` feedback. Do not wait for semantic
+processing or imply that the capture has already been understood.
 
 Say:
 
-> Capture does not wait for AI. The raw evidence is durable first; understanding
-> happens asynchronously in the background.
+> Capture returns immediately. The `Out of mind` feedback means the raw evidence
+> has been accepted and saved; semantic understanding happens asynchronously in
+> the background.
 
 The live capture is the proof of the immediate-save boundary. It may remain
 pending in the prepared demo Home, which is an honest state.
@@ -69,7 +69,7 @@ Say:
 > Attention is not an inbox of everything Blackhole has seen. It is the small
 > set of things that still need the user: a deadline, an unresolved point, a
 > meaningful change, or a proposed action. Completed and cancelled items do not
-> remain active by default.
+> remain active by default, but remain inspectable in Memory/history.
 
 ## 1:30–2:15 — Memory
 
@@ -105,6 +105,12 @@ provider-backed answer is required and the local Codex CLI is unavailable, say
 so and continue with the prepared Memory view; do not turn the failure into a
 fabricated answer and do not start a live multi-capture burst during the
 recording.
+
+The normal READY semantic path may take real provider time. It renders natural
+prose from the bounded structured result; deterministic evidence selection,
+arithmetic, temporal normalization, lifecycle, occurrence aggregation, and
+provenance validation remain local. A provider-unavailable path may show an
+explicitly degraded deterministic fallback.
 
 Say:
 
@@ -179,7 +185,8 @@ Say:
 
 - Use synthetic state only; no private human dogfood capture, screenshot, log,
   or browser profile belongs in the recording or repository.
-- Keep the first live Capture visible long enough to show immediate `Saved.`.
+- Show the normal `Out of mind` feedback long enough to show that the raw
+  evidence was accepted and saved.
 - Do not claim that background understanding is instant. Prior live dogfood
   measured a first useful state around 23 seconds and a remaining burst around
   129.562 seconds.

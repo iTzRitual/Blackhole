@@ -17,15 +17,16 @@ inbox: capture now, organize later.”
 
 ## 0:25–1:05 — Capture
 
-**On screen:** Type a short reminder and click Save capture. Show the `Saved.`
-feedback and the new raw capture in the inbox.
+**On screen:** Type a short reminder and click Save capture. Show the normal
+`Out of mind` feedback and the new raw capture in the inbox.
 
 **Voiceover:**
 
 “The first interaction is intentionally quiet. One universal input accepts a
-fragment without a folder, category, or schema. In this local demo, the capture
-is immediately stored as an immutable raw event. It is not synchronously
-classified, and the demo does not silently call a model.”
+fragment without a folder, category, or schema. Capture returns immediately;
+`Out of mind` means the raw evidence has been accepted and saved. Semantic
+understanding continues asynchronously, and the capture is not synchronously
+classified.”
 
 ## 1:05–2:00 — Attention and memory
 
@@ -50,9 +51,13 @@ information is incomplete?”
 
 **Voiceover:**
 
-“Ask is a structured lookup over the same state, not a second giant chat
-memory. The demo routes a question to a deterministic projection and renders
-the answer with known, inferred, or unknown status and source references.”
+“Ask selects bounded evidence from the same state, not a second giant chat
+memory. Deterministic evidence selection, arithmetic, temporal normalization,
+lifecycle, occurrence aggregation, and provenance validation stay local. For a
+normal READY semantic question with usable evidence, the configured provider
+renders the final natural-language answer from that bounded result. Allow real
+provider time; a degraded deterministic fallback is reserved for provider-
+unavailable cases.”
 
 ## 2:30–3:15 — Architecture and safety
 

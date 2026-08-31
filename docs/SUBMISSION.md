@@ -24,15 +24,19 @@ The product loop is:
 Capture → background understanding → Attention / Memory → Ask
 ```
 
-- **Capture** is a zero-friction inbox. `Saved.` means the raw capture is
-  durable; it does not wait for a model.
+- **Capture** is a zero-friction inbox. `Out of mind` confirms that the raw
+  capture has been accepted and durably saved; semantic understanding continues
+  asynchronously.
 - **Attention** contains things that still need the user: open deadlines,
   unresolved uncertainty, meaningful changes, and proposed actions.
 - **Memory** is the current useful state, with history, uncertainty,
   contradictions, and provenance kept visible where they matter.
-- **Ask** is natural, bounded retrieval over personal memory. Deterministic
-  date, time, and arithmetic paths stay deterministic; bounded semantic
-  questions can use the local Codex CLI.
+- **Ask** is natural, bounded retrieval over personal memory. Blackhole owns
+  evidence selection, arithmetic, temporal normalization, lifecycle, occurrence
+  aggregation, and provenance validation deterministically. For a normal READY
+  semantic question with usable evidence, the configured AI provider renders
+  the final answer from that bounded structured result; a degraded deterministic
+  fallback is reserved for provider-unavailable cases.
 - **Undo** permanently forgets the selected Product V2 capture and its
   source-linked state inside the Product V2 Home. It is an explicit user
   action, not automatic cleanup.
@@ -42,8 +46,8 @@ Capture → background understanding → Attention / Memory → Ask
 Product V2 uses an already-installed, already-authenticated local Codex CLI
 through a narrow provider boundary. The CLI owns authentication; Blackhole
 never requests, reads, copies, exports, or persists provider tokens. Capture is
-provider-independent and returns a durable `Saved.` receipt before semantic
-work.
+provider-independent and returns immediately with `Out of mind` after the raw
+evidence is durably saved; semantic understanding continues asynchronously.
 
 The application then combines:
 
@@ -71,6 +75,13 @@ Raw sources remain immutable during normal operation. Derived state is
 rebuildable from evidence and versioned transformations. Missing information
 stays unknown. No consequential external action is executed without explicit
 approval.
+
+On the normal READY path, a semantic Ask with usable evidence is rendered by
+the configured AI provider from that bounded structured result. Blackhole still
+owns evidence selection, arithmetic, temporal normalization, lifecycle,
+occurrence aggregation, and provenance validation. An explicitly marked
+degraded deterministic fallback is reserved for provider-unavailable or
+otherwise unusable provider output.
 
 ## End-to-End Quality
 
@@ -196,7 +207,7 @@ official holdout, or E006 optimization.
 
 | Result | Raw-memory Codex | Product V2 |
 | --- | ---: | ---: |
-| PTS (macro F1 across 10 families) | `0.8575` | `0.7928` |
+| Prompt-to-Truth Score (PTS; macro F1 across 10 families) | `0.8575` | `0.7928` |
 | Attention precision / recall / F1 | `0.5385 / 0.6154 / 0.5641` | `0.6410 / 0.7692 / 0.6795` |
 | Query schema validity | `13/13` | `13/13` |
 | Operational wall time | `130.878 s` | `1217.334 s` |
