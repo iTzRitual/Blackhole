@@ -58,7 +58,7 @@ now listed below; the local oracle and scoring histories remain separate.
 | 041-product-v2-undo-and-ops-logs | Add permanent Product V2 Undo and operational logging boundaries | KEEP; explicit forget and safe operational evidence preserved | `a719e9a` | [prompt](trajectories/coding/041-product-v2-undo-and-ops-logs/prompt.md), [summary](trajectories/coding/041-product-v2-undo-and-ops-logs/summary.md) |
 | 042-product-v2-final-human-dogfood-fixes | Apply the final bounded Product V2 P0/P1 human-dogfood repair | KEEP implementation; overall live gate PARTIAL/REVISE | `e5ca77f` | [prompt](trajectories/coding/042-product-v2-final-human-dogfood-fixes/prompt.md), [summary](trajectories/coding/042-product-v2-final-human-dogfood-fixes/summary.md), [live](trajectories/coding/042-product-v2-final-human-dogfood-fixes/live-validation.json), [result](eval/results/product-v2-final-human-dogfood-fixes.json) |
 | 043-product-v2-last-dogfood-fixes | Consolidate Product V2 into master and apply the final generic dogfood corrections | KEEP; `184/184` app tests and `50/50` visible acceptance, no live provider | `7d695ec` | [prompt](trajectories/coding/043-product-v2-last-dogfood-fixes/prompt.md), [summary](trajectories/coding/043-product-v2-last-dogfood-fixes/summary.md), [result](eval/results/product-v2-final-dogfood-fixes.json) |
-| 044-submission-finalization | Harden the final judge-facing package and demo path without changing Product V2 semantics | In progress; deterministic submission gate pending | Working tree | [prompt](trajectories/coding/044-submission-finalization/prompt.md), [summary](trajectories/coding/044-submission-finalization/summary.md) |
+| 044-submission-finalization | Harden the final judge-facing package and demo path without changing Product V2 semantics | PASS; local deterministic submission gate green; no Product V2 semantic change | `0bd6810` | [prompt](trajectories/coding/044-submission-finalization/prompt.md), [summary](trajectories/coding/044-submission-finalization/summary.md), [result](eval/results/product-v2-integrated-acceptance.json) |
 | ui-001-mobile-pwa | Build the dependency-light mobile-first PWA in an isolated worktree | KEEP; UI workstream preserved and integrated | `0cc6653` | [summary](trajectories/coding/ui-001-mobile-pwa/summary.md) |
 | ui-002-reference-redesign | Correct the Capture surface against the approved mobile reference | KEEP; UI correction preserved and integrated | `0cc6653` | [summary](trajectories/coding/ui-002-reference-redesign/summary.md) |
 | submission-001-hardening | Add offline qualification, CI, evidence index, and submission checklist | KEEP; three non-blocking stale-artifact warnings remain for finalization | `18b123f` | [summary](trajectories/coding/submission-001-hardening/summary.md) |
@@ -69,7 +69,8 @@ records the final handoff state of that trajectory. The historical integrated
 product merge is `20e4540`, and the hardening merge is `bc4ef78`. The Product V2
 integration merge of the three source branches is `2ff1156`; the final
 pre-submission integration commit is `43426e8`. The current submission
-finalization row is updated with its immutable commit after the final gate.
+finalization row records the local submission-hardening commit. The final
+remote master and tag identifiers are verified in the final handoff.
 
 ## Runtime trajectories
 

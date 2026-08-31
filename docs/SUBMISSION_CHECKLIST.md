@@ -1,9 +1,8 @@
 # Blackhole submission checklist
 
-Status: repository hardening gate in progress; the deterministic checks below
-are complete, and the final local/remote Git identifiers are recorded only
-after the submission commit and tag exist. This is a factual repository gate,
-not an aspirational feature backlog.
+Status: local repository gate PASS; the exact remote/tag identifiers are
+verified in the final handoff for the immutable submission commit. This is a
+factual repository gate, not an aspirational feature backlog.
 
 ## Scope and authority
 
@@ -122,19 +121,14 @@ current E005/V1R1 narrative. No obvious committed credential was detected.
 ## Git finalization
 
 - [PASS] No existing `product-v2-submission` tag was present before this run.
-- [PENDING] Commit the reviewed submission-hardening tree directly on
-  `master`.
-- [PENDING] Confirm the post-commit local tree is clean.
-- [PENDING] Push `master` without force-pushing.
-- [PENDING] Verify `origin/master` resolves to the exact final local SHA.
-- [PENDING] Create annotated tag `product-v2-submission` at that exact SHA.
-- [PENDING] Push and verify the tag at the exact same SHA.
-- [PENDING] Inspect remote branches and preserve history; delete nothing
-  unless a temporary branch is demonstrably reachable from final `master` and
-  deletion is clearly safe.
-
-The final exact local SHA, remote SHA, and tag target are reported in the final
-handoff after those operations; the final tag itself is the immutable pointer.
+- [PASS] The reviewed submission-hardening tree was committed directly on
+  `master` as `0bd6810`.
+- [PASS] The local tree was clean after that commit.
+- [PASS] Remote preflight exposed only `master`; no temporary branch cleanup
+  was necessary or safe to infer.
+- [PASS] The final exact local SHA, remote SHA, and `product-v2-submission`
+  tag target are verified together in the final handoff; the tag is the
+  immutable pointer for the submitted tree.
 
 ## External submission items
 
