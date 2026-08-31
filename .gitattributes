@@ -6,3 +6,11 @@
 trajectories/runtime/**/state.sqlite export-ignore
 trajectories/runtime/**/calls export-ignore
 trajectories/runtime/**/calls/** export-ignore
+trajectories/coding/**/prompt.md export-ignore
+trajectories/runtime/**/prompt.md export-ignore
+trajectories/runtime/**/initial-*.txt export-ignore
+trajectories/runtime/**/query-*.txt export-ignore
+trajectories/runtime/**/checkpoint-*.json export-ignore
+trajectories/runtime/**/completeness-*.json export-ignore
+trajectories/runtime/**/relation-recovery-*.json export-ignore
+trajectories/runtime/**/operational-failure-*.json export-ignore
