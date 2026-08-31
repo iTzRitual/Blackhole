@@ -1,7 +1,7 @@
 {
   "report_type": "product-v2-dogfood-acceptance",
   "suite": "Product V2 dogfood / acceptance suite",
-  "generated_at": "2026-08-30T20:28:04.213821+00:00",
+  "generated_at": "2026-08-31T06:33:46.244391+00:00",
   "adapter": "http",
   "live_provider_used": false,
   "target_provider_calls_possible": true,
@@ -311,7 +311,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -368,6 +368,9 @@
                   "lifecycle_key": "taxi",
                   "source_text": "Taxi za 10 minut."
                 },
+                "captured_at": "2026-01-05T09:00:00+01:00",
+                "observed_at": "2026-01-05",
+                "source_type": "text",
                 "state": "upcoming"
               }
             ],
@@ -389,6 +392,9 @@
                   "lifecycle_key": "taxi",
                   "source_text": "Taxi za 10 minut."
                 },
+                "captured_at": "2026-01-05T09:00:00+01:00",
+                "observed_at": "2026-01-05",
+                "source_type": "text",
                 "state": "upcoming"
               }
             ]
@@ -411,7 +417,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "Co mam zrobić w ciągu najbliższych 15 minut?",
               "mode": "attention",
@@ -435,6 +441,9 @@
                     "lifecycle_key": "taxi",
                     "source_text": "Taxi za 10 minut."
                   },
+                  "captured_at": "2026-01-05T09:00:00+01:00",
+                  "observed_at": "2026-01-05",
+                  "source_type": "text",
                   "state": "upcoming",
                   "evidence_id": "attention:558678608e555e9859211302db3d9b49e81bb2aa1d286c323cb5ba13b186f1e0"
                 }
@@ -460,12 +469,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:27.954585+00:00",
-                    "last_successful_at": "2026-08-30T20:27:27.958586+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:09.910852+00:00",
+                    "last_successful_at": "2026-08-31T06:33:09.914849+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:27.958586+00:00"
+                    "updated_at": "2026-08-31T06:33:09.914849+00:00"
                   }
                 ]
               }
@@ -499,7 +508,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -561,6 +570,9 @@
                   "lifecycle_key": "children-pickup",
                   "source_text": "Odbieram dzieci za 10 minut."
                 },
+                "captured_at": "2026-01-06T15:45:00+01:00",
+                "observed_at": "2026-01-06",
+                "source_type": "text",
                 "state": "upcoming"
               }
             ],
@@ -582,6 +594,9 @@
                   "lifecycle_key": "children-pickup",
                   "source_text": "Odbieram dzieci za 10 minut."
                 },
+                "captured_at": "2026-01-06T15:45:00+01:00",
+                "observed_at": "2026-01-06",
+                "source_type": "text",
                 "state": "upcoming"
               }
             ]
@@ -604,7 +619,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "Kiedy odbieram dzieci?",
               "mode": "retrieval",
@@ -629,6 +644,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-CAP-002-capture-pickup",
+                  "captured_at": "2026-01-06T15:45:00+01:00",
                   "value": "Odbieram dzieci za 10 minut."
                 }
               ],
@@ -653,12 +670,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:28.605760+00:00",
-                    "last_successful_at": "2026-08-30T20:27:28.608765+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:10.565839+00:00",
+                    "last_successful_at": "2026-08-31T06:33:10.569838+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:28.608765+00:00"
+                    "updated_at": "2026-08-31T06:33:10.569838+00:00"
                   }
                 ]
               }
@@ -692,7 +709,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -754,6 +771,9 @@
                   "lifecycle_key": "parking-permit",
                   "source_text": "Muszę odnowić pozwolenie parkingowe do 12 września."
                 },
+                "captured_at": "2026-08-30T10:00:00+02:00",
+                "observed_at": "2026-08-30",
+                "source_type": "text",
                 "state": "upcoming"
               }
             ],
@@ -775,6 +795,9 @@
                   "lifecycle_key": "parking-permit",
                   "source_text": "Muszę odnowić pozwolenie parkingowe do 12 września."
                 },
+                "captured_at": "2026-08-30T10:00:00+02:00",
+                "observed_at": "2026-08-30",
+                "source_type": "text",
                 "state": "upcoming"
               }
             ]
@@ -797,7 +820,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "Do kiedy muszę odnowić pozwolenie parkingowe?",
               "mode": "retrieval",
@@ -822,6 +845,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-CAP-003-capture-parking",
+                  "captured_at": "2026-08-30T10:00:00+02:00",
                   "value": "Muszę odnowić pozwolenie parkingowe do 12 września."
                 }
               ],
@@ -846,12 +871,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:29.258965+00:00",
-                    "last_successful_at": "2026-08-30T20:27:29.261964+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:11.220108+00:00",
+                    "last_successful_at": "2026-08-31T06:33:11.223612+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:29.262965+00:00"
+                    "updated_at": "2026-08-31T06:33:11.223612+00:00"
                   }
                 ]
               }
@@ -885,7 +910,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -940,7 +965,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "When is my brother's flight?",
               "mode": "retrieval",
@@ -965,6 +990,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-CAP-004-capture-flight",
+                  "captured_at": "2026-02-02T08:00:00-05:00",
                   "value": "My brother's flight is next month."
                 }
               ],
@@ -989,12 +1016,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:29.910909+00:00",
-                    "last_successful_at": "2026-08-30T20:27:29.913896+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:11.872359+00:00",
+                    "last_successful_at": "2026-08-31T06:33:11.874868+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:29.913896+00:00"
+                    "updated_at": "2026-08-31T06:33:11.874868+00:00"
                   }
                 ]
               }
@@ -1028,7 +1055,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -1093,7 +1120,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What did I say about buying a bike?",
               "mode": "retrieval",
@@ -1118,6 +1145,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-CAP-005-capture-bike",
+                  "captured_at": "2026-02-03T08:00:00-05:00",
                   "value": "I might buy a bike next year. (uncertain possibility; not confirmed)"
                 }
               ],
@@ -1142,12 +1171,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:30.553908+00:00",
-                    "last_successful_at": "2026-08-30T20:27:30.556905+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:12.521970+00:00",
+                    "last_successful_at": "2026-08-31T06:33:12.525987+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:30.556905+00:00"
+                    "updated_at": "2026-08-31T06:33:12.525987+00:00"
                   }
                 ]
               }
@@ -1181,7 +1210,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -1241,7 +1270,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What does the contract say about notice?",
               "mode": "retrieval",
@@ -1266,6 +1295,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-CAP-006-capture-notice",
+                  "captured_at": "2026-02-04T08:00:00-05:00",
                   "value": "The contract mentions a 30-day notice period."
                 }
               ],
@@ -1290,12 +1321,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:31.204015+00:00",
-                    "last_successful_at": "2026-08-30T20:27:31.207015+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:13.176395+00:00",
+                    "last_successful_at": "2026-08-31T06:33:13.180394+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:31.207015+00:00"
+                    "updated_at": "2026-08-31T06:33:13.180394+00:00"
                   }
                 ]
               }
@@ -1329,7 +1360,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -1389,7 +1420,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "When did we go there?",
               "mode": "retrieval",
@@ -1414,6 +1445,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-CAP-007-capture-outing",
+                  "captured_at": "2026-02-05T08:00:00-05:00",
                   "value": "I remember we went there last Tuesday."
                 }
               ],
@@ -1438,12 +1471,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:31.859076+00:00",
-                    "last_successful_at": "2026-08-30T20:27:31.861254+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:13.828569+00:00",
+                    "last_successful_at": "2026-08-31T06:33:13.831569+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:31.861254+00:00"
+                    "updated_at": "2026-08-31T06:33:13.831569+00:00"
                   }
                 ]
               }
@@ -1497,7 +1530,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -1639,7 +1672,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -1673,7 +1706,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -1712,7 +1745,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "Where is the spare charger and when is Marta's birthday?",
               "mode": "retrieval",
@@ -1737,6 +1770,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-CAP-009-capture-birthday",
+                  "captured_at": "2026-02-07T07:30:04-05:00",
                   "value": "November 3"
                 },
                 {
@@ -1757,6 +1792,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-CAP-009-capture-charger",
+                  "captured_at": "2026-02-07T07:30:00-05:00",
                   "value": "blue suitcase"
                 }
               ],
@@ -1782,12 +1819,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:33.167761+00:00",
-                    "last_successful_at": "2026-08-30T20:27:33.170761+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:15.142267+00:00",
+                    "last_successful_at": "2026-08-31T06:33:15.145340+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:33.170761+00:00"
+                    "updated_at": "2026-08-31T06:33:15.145340+00:00"
                   },
                   {
                     "event_id": "acceptance-CAP-009-capture-birthday",
@@ -1797,12 +1834,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:33.167761+00:00",
-                    "last_successful_at": "2026-08-30T20:27:33.170761+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:15.142267+00:00",
+                    "last_successful_at": "2026-08-31T06:33:15.145340+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:33.170761+00:00"
+                    "updated_at": "2026-08-31T06:33:15.145340+00:00"
                   }
                 ]
               }
@@ -1841,7 +1878,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -1875,7 +1912,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -1976,7 +2013,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What should I buy on the way home?",
               "mode": "retrieval",
@@ -2001,6 +2038,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-CAP-010-first-submit",
+                  "captured_at": "2026-02-08T11:00:00-05:00",
                   "value": "Buy oat milk on the way home."
                 }
               ],
@@ -2025,12 +2064,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:33.820216+00:00",
-                    "last_successful_at": "2026-08-30T20:27:33.822219+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:15.801560+00:00",
+                    "last_successful_at": "2026-08-31T06:33:15.803560+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:33.822219+00:00"
+                    "updated_at": "2026-08-31T06:33:15.803560+00:00"
                   }
                 ]
               }
@@ -2064,7 +2103,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -2098,7 +2137,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "Gdzie są klucze do piwnicy?",
               "mode": "retrieval",
@@ -2123,6 +2162,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-MEM-001-capture-keys",
+                  "captured_at": "2026-03-01T08:00:00+01:00",
                   "value": "u mamy"
                 }
               ],
@@ -2147,12 +2188,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:34.477377+00:00",
-                    "last_successful_at": "2026-08-30T20:27:34.480375+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:16.451972+00:00",
+                    "last_successful_at": "2026-08-31T06:33:16.454971+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:34.480375+00:00"
+                    "updated_at": "2026-08-31T06:33:16.454971+00:00"
                   }
                 ]
               }
@@ -2200,6 +2241,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-MEM-001-capture-keys",
+                "captured_at": "2026-03-01T08:00:00+01:00",
                 "value": "u mamy"
               }
             ],
@@ -2222,6 +2265,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-MEM-001-capture-keys",
+                "captured_at": "2026-03-01T08:00:00+01:00",
                 "value": "u mamy"
               }
             ]
@@ -2254,7 +2299,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -2288,7 +2333,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -2327,7 +2372,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What did the mechanic think was causing the front-left noise?",
               "mode": "retrieval",
@@ -2352,6 +2397,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-MEM-002-capture-mechanic",
+                  "captured_at": "2026-03-03T14:00:00+01:00",
                   "value": "left bearing (uncertain)"
                 }
               ],
@@ -2376,12 +2423,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:35.156283+00:00",
-                    "last_successful_at": "2026-08-30T20:27:35.160290+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:17.149323+00:00",
+                    "last_successful_at": "2026-08-31T06:33:17.152940+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:35.160290+00:00"
+                    "updated_at": "2026-08-31T06:33:17.152940+00:00"
                   },
                   {
                     "event_id": "acceptance-MEM-002-capture-mechanic",
@@ -2391,12 +2438,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:35.156283+00:00",
-                    "last_successful_at": "2026-08-30T20:27:35.160290+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:17.149323+00:00",
+                    "last_successful_at": "2026-08-31T06:33:17.152940+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:35.160290+00:00"
+                    "updated_at": "2026-08-31T06:33:17.152940+00:00"
                   }
                 ]
               }
@@ -2438,6 +2485,9 @@
                   "lifecycle_key": "car-noise",
                   "source_text": "The mechanic said the left bearing is probably the noise."
                 },
+                "captured_at": "2026-03-03T14:00:00+01:00",
+                "observed_at": "2026-03-03",
+                "source_type": "text",
                 "state": "upcoming"
               }
             ],
@@ -2459,6 +2509,9 @@
                   "lifecycle_key": "car-noise",
                   "source_text": "The mechanic said the left bearing is probably the noise."
                 },
+                "captured_at": "2026-03-03T14:00:00+01:00",
+                "observed_at": "2026-03-03",
+                "source_type": "text",
                 "state": "upcoming"
               }
             ]
@@ -2491,7 +2544,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -2530,7 +2583,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What pasta does Kuba like?",
               "mode": "retrieval",
@@ -2555,6 +2608,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-MEM-003-capture-pasta",
+                  "captured_at": "2026-03-04T12:00:00+01:00",
                   "value": "green pasta from Lidl"
                 }
               ],
@@ -2579,12 +2634,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:35.823492+00:00",
-                    "last_successful_at": "2026-08-30T20:27:35.826003+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:17.802954+00:00",
+                    "last_successful_at": "2026-08-31T06:33:17.804953+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:35.826003+00:00"
+                    "updated_at": "2026-08-31T06:33:17.804953+00:00"
                   }
                 ]
               }
@@ -2632,6 +2687,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-MEM-003-capture-pasta",
+                "captured_at": "2026-03-04T12:00:00+01:00",
                 "value": "green pasta from Lidl"
               }
             ],
@@ -2654,6 +2711,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-MEM-003-capture-pasta",
+                "captured_at": "2026-03-04T12:00:00+01:00",
                 "value": "green pasta from Lidl"
               }
             ]
@@ -2686,7 +2745,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -2720,7 +2779,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -2764,7 +2823,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What am I paying for PocketWave now?",
               "mode": "costs",
@@ -2789,6 +2848,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-MEM-004-capture-new-price",
+                  "captured_at": "2026-09-01T09:00:00+01:00",
                   "value": {
                     "amount": "11",
                     "billing_period": "month",
@@ -2817,12 +2878,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:36.475460+00:00",
-                    "last_successful_at": "2026-08-30T20:27:36.478462+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:18.464982+00:00",
+                    "last_successful_at": "2026-08-31T06:33:18.468406+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:36.478462+00:00"
+                    "updated_at": "2026-08-31T06:33:18.468406+00:00"
                   },
                   {
                     "event_id": "acceptance-MEM-004-capture-new-price",
@@ -2832,12 +2893,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:36.475460+00:00",
-                    "last_successful_at": "2026-08-30T20:27:36.478462+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:18.464982+00:00",
+                    "last_successful_at": "2026-08-31T06:33:18.468406+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:36.478462+00:00"
+                    "updated_at": "2026-08-31T06:33:18.468406+00:00"
                   }
                 ]
               }
@@ -2866,7 +2927,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What changed about PocketWave's price?",
               "mode": "changes",
@@ -2881,12 +2942,14 @@
                   "source_refs": [
                     "acceptance-MEM-004-capture-old-price"
                   ],
+                  "captured_at": "2026-08-20T09:00:00+01:00",
+                  "timezone": "Europe/Berlin",
                   "fact_id": 1,
                   "source_event_id": "acceptance-MEM-004-capture-old-price",
                   "operation": "set",
                   "temporal": {},
                   "extractor_version": "blackhole-product-v2-extractor-v3",
-                  "created_at": "2026-08-30T20:27:36.478462+00:00",
+                  "created_at": "2026-08-31T06:33:18.468406+00:00",
                   "sequence": 1,
                   "retracted": false,
                   "value": {
@@ -2911,12 +2974,14 @@
                   "source_refs": [
                     "acceptance-MEM-004-capture-new-price"
                   ],
+                  "captured_at": "2026-09-01T09:00:00+01:00",
+                  "timezone": "Europe/Berlin",
                   "fact_id": 2,
                   "source_event_id": "acceptance-MEM-004-capture-new-price",
                   "operation": "correction",
                   "temporal": {},
                   "extractor_version": "blackhole-product-v2-extractor-v3",
-                  "created_at": "2026-08-30T20:27:36.478462+00:00",
+                  "created_at": "2026-08-31T06:33:18.468406+00:00",
                   "supersedes_event_id": "acceptance-MEM-004-capture-old-price",
                   "sequence": 2,
                   "retracted": false,
@@ -2954,12 +3019,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:36.475460+00:00",
-                    "last_successful_at": "2026-08-30T20:27:36.478462+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:18.464982+00:00",
+                    "last_successful_at": "2026-08-31T06:33:18.468406+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:36.478462+00:00"
+                    "updated_at": "2026-08-31T06:33:18.468406+00:00"
                   },
                   {
                     "event_id": "acceptance-MEM-004-capture-new-price",
@@ -2969,12 +3034,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:36.475460+00:00",
-                    "last_successful_at": "2026-08-30T20:27:36.478462+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:18.464982+00:00",
+                    "last_successful_at": "2026-08-31T06:33:18.468406+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:36.478462+00:00"
+                    "updated_at": "2026-08-31T06:33:18.468406+00:00"
                   }
                 ]
               }
@@ -3008,7 +3073,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -3042,7 +3107,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "Where did I leave the spare charger?",
               "mode": "retrieval",
@@ -3067,6 +3132,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-MEM-005-capture-charger-location",
+                  "captured_at": "2026-03-06T08:00:00-05:00",
                   "value": "blue suitcase"
                 }
               ],
@@ -3091,12 +3158,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:37.131867+00:00",
-                    "last_successful_at": "2026-08-30T20:27:37.134870+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:19.114976+00:00",
+                    "last_successful_at": "2026-08-31T06:33:19.117974+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:37.134870+00:00"
+                    "updated_at": "2026-08-31T06:33:19.117974+00:00"
                   }
                 ]
               }
@@ -3144,6 +3211,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-MEM-005-capture-charger-location",
+                "captured_at": "2026-03-06T08:00:00-05:00",
                 "value": "blue suitcase"
               }
             ],
@@ -3166,6 +3235,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-MEM-005-capture-charger-location",
+                "captured_at": "2026-03-06T08:00:00-05:00",
                 "value": "blue suitcase"
               }
             ]
@@ -3198,7 +3269,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -3232,7 +3303,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "When is Marta's birthday?",
               "mode": "retrieval",
@@ -3257,6 +3328,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-MEM-006-capture-birthday",
+                  "captured_at": "2026-03-08T08:00:00-05:00",
                   "value": "November 3"
                 }
               ],
@@ -3281,12 +3354,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:37.794904+00:00",
-                    "last_successful_at": "2026-08-30T20:27:37.796905+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:19.769077+00:00",
+                    "last_successful_at": "2026-08-31T06:33:19.772077+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:37.796905+00:00"
+                    "updated_at": "2026-08-31T06:33:19.772077+00:00"
                   }
                 ]
               }
@@ -3334,6 +3407,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-MEM-006-capture-birthday",
+                "captured_at": "2026-03-08T08:00:00-05:00",
                 "value": "November 3"
               }
             ],
@@ -3356,6 +3431,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-MEM-006-capture-birthday",
+                "captured_at": "2026-03-08T08:00:00-05:00",
                 "value": "November 3"
               }
             ]
@@ -3388,7 +3465,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -3422,7 +3499,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -3473,7 +3550,7 @@
             "ok": true,
             "items": [
               {
-                "fingerprint": "072f41cd770e6024a2d4cdc61893bff0207b64506e6fa512048e75643c70291e",
+                "fingerprint": "1131545e1c5a637115c429fe0d85730e1ff1e507a562c984a88c4ec820b08d95",
                 "source_event_id": "acceptance-MEM-007-capture-moved-appointment",
                 "kind": "task",
                 "title": "Dentist appointment Thursday at 16:30",
@@ -3483,18 +3560,22 @@
                 "due_at": null,
                 "timezone": "Europe/Berlin",
                 "source_refs": [
-                  "acceptance-MEM-007-capture-moved-appointment"
+                  "acceptance-MEM-007-capture-moved-appointment",
+                  "acceptance-MEM-007-capture-old-appointment"
                 ],
                 "details": {
                   "lifecycle_key": "dentist-appointment",
-                  "source_text": "The dentist moved my appointment from Tuesday to Thursday at 16:30."
+                  "source_text": "The dentist is on Tuesday at 10:00."
                 },
+                "captured_at": "2026-03-10T09:00:00-04:00",
+                "observed_at": "2026-03-10",
+                "source_type": "text",
                 "state": "upcoming"
               }
             ],
             "attention": [
               {
-                "fingerprint": "072f41cd770e6024a2d4cdc61893bff0207b64506e6fa512048e75643c70291e",
+                "fingerprint": "1131545e1c5a637115c429fe0d85730e1ff1e507a562c984a88c4ec820b08d95",
                 "source_event_id": "acceptance-MEM-007-capture-moved-appointment",
                 "kind": "task",
                 "title": "Dentist appointment Thursday at 16:30",
@@ -3504,12 +3585,16 @@
                 "due_at": null,
                 "timezone": "Europe/Berlin",
                 "source_refs": [
-                  "acceptance-MEM-007-capture-moved-appointment"
+                  "acceptance-MEM-007-capture-moved-appointment",
+                  "acceptance-MEM-007-capture-old-appointment"
                 ],
                 "details": {
                   "lifecycle_key": "dentist-appointment",
-                  "source_text": "The dentist moved my appointment from Tuesday to Thursday at 16:30."
+                  "source_text": "The dentist is on Tuesday at 10:00."
                 },
+                "captured_at": "2026-03-10T09:00:00-04:00",
+                "observed_at": "2026-03-10",
+                "source_type": "text",
                 "state": "upcoming"
               }
             ]
@@ -3542,7 +3627,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "When is my dentist appointment now?",
               "mode": "retrieval",
@@ -3567,6 +3652,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-MEM-007-capture-moved-appointment",
+                  "captured_at": "2026-03-10T09:00:00-04:00",
                   "value": "Thursday at 16:30"
                 }
               ],
@@ -3591,12 +3678,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:38.458950+00:00",
-                    "last_successful_at": "2026-08-30T20:27:38.462951+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:20.430974+00:00",
+                    "last_successful_at": "2026-08-31T06:33:20.434973+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:38.462951+00:00"
+                    "updated_at": "2026-08-31T06:33:20.434973+00:00"
                   },
                   {
                     "event_id": "acceptance-MEM-007-capture-moved-appointment",
@@ -3606,12 +3693,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:38.458950+00:00",
-                    "last_successful_at": "2026-08-30T20:27:38.462951+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:20.430974+00:00",
+                    "last_successful_at": "2026-08-31T06:33:20.434973+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:38.462951+00:00"
+                    "updated_at": "2026-08-31T06:33:20.434973+00:00"
                   }
                 ]
               }
@@ -3645,7 +3732,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -3679,7 +3766,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -3718,7 +3805,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "Where are the basement keys now?",
               "mode": "retrieval",
@@ -3743,6 +3830,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-MEM-008-capture-correction",
+                  "captured_at": "2026-03-11T08:30:00-04:00",
                   "value": "desk"
                 }
               ],
@@ -3767,12 +3856,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:39.131453+00:00",
-                    "last_successful_at": "2026-08-30T20:27:39.134225+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:21.100402+00:00",
+                    "last_successful_at": "2026-08-31T06:33:21.104401+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:39.134225+00:00"
+                    "updated_at": "2026-08-31T06:33:21.104401+00:00"
                   },
                   {
                     "event_id": "acceptance-MEM-008-capture-correction",
@@ -3782,12 +3871,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:39.131453+00:00",
-                    "last_successful_at": "2026-08-30T20:27:39.134225+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:21.100402+00:00",
+                    "last_successful_at": "2026-08-31T06:33:21.104401+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:39.134225+00:00"
+                    "updated_at": "2026-08-31T06:33:21.104401+00:00"
                   }
                 ]
               }
@@ -3835,6 +3924,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-MEM-008-capture-correction",
+                "captured_at": "2026-03-11T08:30:00-04:00",
                 "value": "desk"
               }
             ],
@@ -3857,6 +3948,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-MEM-008-capture-correction",
+                "captured_at": "2026-03-11T08:30:00-04:00",
                 "value": "desk"
               }
             ]
@@ -3889,7 +3982,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -3928,12 +4021,12 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "When does the boiler warranty expire?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: boiler warranty expiry: unknown (uncertain: December is not confirmed).",
+              "answer": "Relevant memory: boiler warranty expiry: Needs clarification.",
               "items": [
                 {
                   "entity_key": "boiler_warranty",
@@ -3952,7 +4045,9 @@
                   "temporal": {},
                   "metadata": {
                     "semantic_state": "unknown"
-                  }
+                  },
+                  "source_event_id": "acceptance-MEM-009-capture-warranty",
+                  "captured_at": "2026-03-12T08:00:00+00:00"
                 }
               ],
               "source_refs": [
@@ -3976,12 +4071,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:39.784621+00:00",
-                    "last_successful_at": "2026-08-30T20:27:39.787621+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:21.760202+00:00",
+                    "last_successful_at": "2026-08-31T06:33:21.763443+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:39.787621+00:00"
+                    "updated_at": "2026-08-31T06:33:21.763443+00:00"
                   }
                 ]
               }
@@ -4028,6 +4123,9 @@
                   "lifecycle_key": "boiler-warranty",
                   "source_text": "I think the boiler warranty might expire in December, not sure."
                 },
+                "captured_at": "2026-03-12T08:00:00+00:00",
+                "observed_at": "2026-03-12",
+                "source_type": "text",
                 "state": "upcoming"
               }
             ],
@@ -4049,6 +4147,9 @@
                   "lifecycle_key": "boiler-warranty",
                   "source_text": "I think the boiler warranty might expire in December, not sure."
                 },
+                "captured_at": "2026-03-12T08:00:00+00:00",
+                "observed_at": "2026-03-12",
+                "source_type": "text",
                 "state": "upcoming"
               }
             ]
@@ -4081,7 +4182,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -4115,7 +4216,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -4154,7 +4255,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What did I say about Netflix?",
               "mode": "retrieval",
@@ -4179,6 +4280,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-MEM-010-capture-netflix",
+                  "captured_at": "2026-03-13T08:00:00-04:00",
                   "value": "Don't cancel Netflix yet."
                 }
               ],
@@ -4203,12 +4306,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:40.447499+00:00",
-                    "last_successful_at": "2026-08-30T20:27:40.450499+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:22.416482+00:00",
+                    "last_successful_at": "2026-08-31T06:33:22.419783+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:40.450499+00:00"
+                    "updated_at": "2026-08-31T06:33:22.419783+00:00"
                   },
                   {
                     "event_id": "acceptance-MEM-010-capture-usb-repeat",
@@ -4218,12 +4321,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:40.447499+00:00",
-                    "last_successful_at": "2026-08-30T20:27:40.450499+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:22.416482+00:00",
+                    "last_successful_at": "2026-08-31T06:33:22.419783+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:40.450499+00:00"
+                    "updated_at": "2026-08-31T06:33:22.419783+00:00"
                   }
                 ]
               }
@@ -4252,7 +4355,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What did I buy again?",
               "mode": "retrieval",
@@ -4277,6 +4380,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-MEM-010-capture-usb-repeat",
+                  "captured_at": "2026-03-13T08:02:00-04:00",
                   "value": "USB cable again"
                 }
               ],
@@ -4301,12 +4406,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:40.447499+00:00",
-                    "last_successful_at": "2026-08-30T20:27:40.450499+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:22.416482+00:00",
+                    "last_successful_at": "2026-08-31T06:33:22.419783+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:40.450499+00:00"
+                    "updated_at": "2026-08-31T06:33:22.419783+00:00"
                   },
                   {
                     "event_id": "acceptance-MEM-010-capture-usb-repeat",
@@ -4316,12 +4421,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:40.447499+00:00",
-                    "last_successful_at": "2026-08-30T20:27:40.450499+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:22.416482+00:00",
+                    "last_successful_at": "2026-08-31T06:33:22.419783+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:40.450499+00:00"
+                    "updated_at": "2026-08-31T06:33:22.419783+00:00"
                   }
                 ]
               }
@@ -4376,7 +4481,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -4415,7 +4520,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "How should I change the lentil soup next time?",
               "mode": "retrieval",
@@ -4440,6 +4545,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-OW-001-capture-recipe",
+                  "captured_at": "2026-04-01T18:00:00-04:00",
                   "value": "Next time for the lentil soup: add lemon at the end and use less cumin."
                 }
               ],
@@ -4464,12 +4571,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:41.110757+00:00",
-                    "last_successful_at": "2026-08-30T20:27:41.113759+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:23.082831+00:00",
+                    "last_successful_at": "2026-08-31T06:33:23.084829+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:41.113759+00:00"
+                    "updated_at": "2026-08-31T06:33:23.084829+00:00"
                   }
                 ]
               }
@@ -4512,6 +4619,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-OW-001-capture-recipe",
+                "captured_at": "2026-04-01T18:00:00-04:00",
                 "value": "Next time for the lentil soup: add lemon at the end and use less cumin."
               }
             ],
@@ -4534,6 +4643,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-OW-001-capture-recipe",
+                "captured_at": "2026-04-01T18:00:00-04:00",
                 "value": "Next time for the lentil soup: add lemon at the end and use less cumin."
               }
             ]
@@ -4566,7 +4677,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -4605,7 +4716,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What helped with the office Wi-Fi last time?",
               "mode": "retrieval",
@@ -4630,6 +4741,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-OW-002-capture-wifi",
+                  "captured_at": "2026-04-02T09:00:00-04:00",
                   "value": "Wi-Fi kept dropping in the office; restarting the white mesh unit fixed it last time."
                 }
               ],
@@ -4654,12 +4767,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:41.767765+00:00",
-                    "last_successful_at": "2026-08-30T20:27:41.770766+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:23.734048+00:00",
+                    "last_successful_at": "2026-08-31T06:33:23.737054+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:41.770766+00:00"
+                    "updated_at": "2026-08-31T06:33:23.737054+00:00"
                   }
                 ]
               }
@@ -4707,6 +4820,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-OW-002-capture-wifi",
+                "captured_at": "2026-04-02T09:00:00-04:00",
                 "value": "Wi-Fi kept dropping in the office; restarting the white mesh unit fixed it last time."
               }
             ],
@@ -4729,6 +4844,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-OW-002-capture-wifi",
+                "captured_at": "2026-04-02T09:00:00-04:00",
                 "value": "Wi-Fi kept dropping in the office; restarting the white mesh unit fixed it last time."
               }
             ]
@@ -4761,7 +4878,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -4800,7 +4917,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What gift idea did I have for Priya?",
               "mode": "retrieval",
@@ -4825,6 +4942,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-OW-003-capture-gift",
+                  "captured_at": "2026-04-03T11:00:00+01:00",
                   "value": "Gift idea for Priya: a handmade ceramic mug with a blue glaze."
                 }
               ],
@@ -4849,12 +4968,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:42.421238+00:00",
-                    "last_successful_at": "2026-08-30T20:27:42.424253+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:24.396036+00:00",
+                    "last_successful_at": "2026-08-31T06:33:24.399035+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:42.424253+00:00"
+                    "updated_at": "2026-08-31T06:33:24.399035+00:00"
                   }
                 ]
               }
@@ -4909,7 +5028,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -4943,7 +5062,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "Jaki rozmiar butów nosi Kuba?",
               "mode": "retrieval",
@@ -4968,6 +5087,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-OW-004-capture-shoe-size",
+                  "captured_at": "2026-04-04T12:00:00+02:00",
                   "value": "EU 42"
                 }
               ],
@@ -4992,12 +5113,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:43.073484+00:00",
-                    "last_successful_at": "2026-08-30T20:27:43.075986+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:25.043299+00:00",
+                    "last_successful_at": "2026-08-31T06:33:25.045296+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:43.075986+00:00"
+                    "updated_at": "2026-08-31T06:33:25.045296+00:00"
                   }
                 ]
               }
@@ -5045,6 +5166,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-OW-004-capture-shoe-size",
+                "captured_at": "2026-04-04T12:00:00+02:00",
                 "value": "EU 42"
               }
             ],
@@ -5067,6 +5190,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-OW-004-capture-shoe-size",
+                "captured_at": "2026-04-04T12:00:00+02:00",
                 "value": "EU 42"
               }
             ]
@@ -5099,7 +5224,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -5138,7 +5263,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What did Noor say about moving?",
               "mode": "retrieval",
@@ -5163,6 +5288,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-OW-005-capture-conversation",
+                  "captured_at": "2026-04-05T16:00:00-04:00",
                   "value": "moving to Bristol in June"
                 }
               ],
@@ -5187,12 +5314,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:43.726141+00:00",
-                    "last_successful_at": "2026-08-30T20:27:43.729141+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:25.695092+00:00",
+                    "last_successful_at": "2026-08-31T06:33:25.698092+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:43.729141+00:00"
+                    "updated_at": "2026-08-31T06:33:25.698092+00:00"
                   }
                 ]
               }
@@ -5252,7 +5379,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -5294,7 +5421,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What is the PDF from the landlord?",
               "mode": "retrieval",
@@ -5319,6 +5446,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-OW-006-capture-lease",
+                  "captured_at": "2026-04-06T10:00:00+01:00",
                   "value": "The PDF from the landlord is the new lease."
                 },
                 {
@@ -5339,6 +5468,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-OW-006-capture-lease",
+                  "captured_at": "2026-04-06T10:00:00+01:00",
                   "value": "The PDF from the landlord is the new lease."
                 }
               ],
@@ -5363,12 +5494,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:44.389830+00:00",
-                    "last_successful_at": "2026-08-30T20:27:44.394831+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:26.366058+00:00",
+                    "last_successful_at": "2026-08-31T06:33:26.372059+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:44.394831+00:00"
+                    "updated_at": "2026-08-31T06:33:26.372059+00:00"
                   }
                 ]
               }
@@ -5416,6 +5547,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-OW-006-capture-lease",
+                "captured_at": "2026-04-06T10:00:00+01:00",
                 "value": "The PDF from the landlord is the new lease."
               },
               {
@@ -5436,6 +5569,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-OW-006-capture-lease",
+                "captured_at": "2026-04-06T10:00:00+01:00",
                 "value": "The PDF from the landlord is the new lease."
               }
             ],
@@ -5458,6 +5593,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-OW-006-capture-lease",
+                "captured_at": "2026-04-06T10:00:00+01:00",
                 "value": "The PDF from the landlord is the new lease."
               },
               {
@@ -5478,6 +5615,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-OW-006-capture-lease",
+                "captured_at": "2026-04-06T10:00:00+01:00",
                 "value": "The PDF from the landlord is the new lease."
               }
             ]
@@ -5510,7 +5649,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -5549,7 +5688,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What did I notice about the cat and the salmon treats?",
               "mode": "retrieval",
@@ -5574,6 +5713,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-OW-007-capture-pet",
+                  "captured_at": "2026-04-07T07:00:00-04:00",
                   "value": "The cat stopped eating the salmon treats after we opened the new bag."
                 }
               ],
@@ -5598,12 +5739,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:45.057031+00:00",
-                    "last_successful_at": "2026-08-30T20:27:45.060037+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:27.023409+00:00",
+                    "last_successful_at": "2026-08-31T06:33:27.026441+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:45.060037+00:00"
+                    "updated_at": "2026-08-31T06:33:27.026441+00:00"
                   }
                 ]
               }
@@ -5646,6 +5787,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-OW-007-capture-pet",
+                "captured_at": "2026-04-07T07:00:00-04:00",
                 "value": "The cat stopped eating the salmon treats after we opened the new bag."
               }
             ],
@@ -5668,6 +5811,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-OW-007-capture-pet",
+                "captured_at": "2026-04-07T07:00:00-04:00",
                 "value": "The cat stopped eating the salmon treats after we opened the new bag."
               }
             ]
@@ -5700,7 +5845,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -5739,7 +5884,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "Którędy wejść do mieszkania w Krakowie?",
               "mode": "retrieval",
@@ -5764,6 +5909,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-OW-008-capture-travel",
+                  "captured_at": "2026-04-08T09:00:00+02:00",
                   "value": "wejście od podwórka"
                 }
               ],
@@ -5788,12 +5935,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:45.704415+00:00",
-                    "last_successful_at": "2026-08-30T20:27:45.707414+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:27.678499+00:00",
+                    "last_successful_at": "2026-08-31T06:33:27.681499+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:45.707414+00:00"
+                    "updated_at": "2026-08-31T06:33:27.681499+00:00"
                   }
                 ]
               }
@@ -5841,6 +5988,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-OW-008-capture-travel",
+                "captured_at": "2026-04-08T09:00:00+02:00",
                 "value": "wejście od podwórka"
               }
             ],
@@ -5863,6 +6012,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-OW-008-capture-travel",
+                "captured_at": "2026-04-08T09:00:00+02:00",
                 "value": "wejście od podwórka"
               }
             ]
@@ -5895,7 +6046,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -5939,7 +6090,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "How did I stop the downstairs radiator rattling?",
               "mode": "retrieval",
@@ -5964,6 +6115,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-OW-009-capture-radiator",
+                  "captured_at": "2026-04-09T08:00:00-04:00",
                   "value": "The downstairs radiator rattles unless its valve is turned clockwise halfway."
                 }
               ],
@@ -5988,12 +6141,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:46.362486+00:00",
-                    "last_successful_at": "2026-08-30T20:27:46.365486+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:28.338506+00:00",
+                    "last_successful_at": "2026-08-31T06:33:28.342510+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:46.365486+00:00"
+                    "updated_at": "2026-08-31T06:33:28.342510+00:00"
                   }
                 ]
               }
@@ -6048,7 +6201,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -6092,7 +6245,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What did I notice near the back door yesterday?",
               "mode": "retrieval",
@@ -6117,6 +6270,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-OW-010-capture-vague",
+                  "captured_at": "2026-04-10T17:00:00+01:00",
                   "value": "There was a faint sweet smell near the back door this evening; I don't know why. (uncertain observation; cause unknown)"
                 }
               ],
@@ -6141,12 +6296,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:47.014664+00:00",
-                    "last_successful_at": "2026-08-30T20:27:47.017663+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:28.999979+00:00",
+                    "last_successful_at": "2026-08-31T06:33:29.003978+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:47.017663+00:00"
+                    "updated_at": "2026-08-31T06:33:29.003978+00:00"
                   }
                 ]
               }
@@ -6216,7 +6371,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -6258,7 +6413,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What does the suitcase image tell me?",
               "mode": "retrieval",
@@ -6283,6 +6438,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-ATT-001-capture-image",
+                  "captured_at": "2026-05-01T09:00:00-04:00",
                   "value": "blue suitcase"
                 }
               ],
@@ -6307,12 +6464,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:47.674266+00:00",
-                    "last_successful_at": "2026-08-30T20:27:47.678964+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:29.659207+00:00",
+                    "last_successful_at": "2026-08-31T06:33:29.663934+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:47.678964+00:00"
+                    "updated_at": "2026-08-31T06:33:29.663934+00:00"
                   }
                 ]
               }
@@ -6355,6 +6512,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-ATT-001-capture-image",
+                "captured_at": "2026-05-01T09:00:00-04:00",
                 "value": "blue suitcase"
               }
             ],
@@ -6377,6 +6536,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-ATT-001-capture-image",
+                "captured_at": "2026-05-01T09:00:00-04:00",
                 "value": "blue suitcase"
               }
             ]
@@ -6419,7 +6580,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -6461,7 +6622,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What document did I save from the landlord?",
               "mode": "retrieval",
@@ -6486,6 +6647,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-ATT-002-capture-pdf",
+                  "captured_at": "2026-05-02T10:00:00+01:00",
                   "value": "new lease from the landlord"
                 }
               ],
@@ -6510,12 +6673,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:48.402673+00:00",
-                    "last_successful_at": "2026-08-30T20:27:48.407677+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:30.326524+00:00",
+                    "last_successful_at": "2026-08-31T06:33:30.330523+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:48.407677+00:00"
+                    "updated_at": "2026-08-31T06:33:30.330523+00:00"
                   }
                 ]
               }
@@ -6563,6 +6726,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-ATT-002-capture-pdf",
+                "captured_at": "2026-05-02T10:00:00+01:00",
                 "value": "new lease from the landlord"
               }
             ],
@@ -6585,6 +6750,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-ATT-002-capture-pdf",
+                "captured_at": "2026-05-02T10:00:00+01:00",
                 "value": "new lease from the landlord"
               }
             ]
@@ -6622,7 +6789,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -6674,7 +6841,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "Which lease did I say starts in October?",
               "mode": "retrieval",
@@ -6699,6 +6866,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-ATT-003-capture-context-pdf",
+                  "captured_at": "2026-05-03T11:00:00-04:00",
                   "value": "Keep this lease; the landlord's new version starts in October."
                 },
                 {
@@ -6719,6 +6888,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-ATT-003-capture-context-pdf",
+                  "captured_at": "2026-05-03T11:00:00-04:00",
                   "value": "Keep this lease; the landlord's new version starts in October."
                 }
               ],
@@ -6743,12 +6914,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:49.061945+00:00",
-                    "last_successful_at": "2026-08-30T20:27:49.065942+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:30.997983+00:00",
+                    "last_successful_at": "2026-08-31T06:33:31.002983+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:49.065942+00:00"
+                    "updated_at": "2026-08-31T06:33:31.002983+00:00"
                   }
                 ]
               }
@@ -6791,6 +6962,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-ATT-003-capture-context-pdf",
+                "captured_at": "2026-05-03T11:00:00-04:00",
                 "value": "Keep this lease; the landlord's new version starts in October."
               },
               {
@@ -6811,6 +6984,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-ATT-003-capture-context-pdf",
+                "captured_at": "2026-05-03T11:00:00-04:00",
                 "value": "Keep this lease; the landlord's new version starts in October."
               }
             ],
@@ -6833,6 +7008,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-ATT-003-capture-context-pdf",
+                "captured_at": "2026-05-03T11:00:00-04:00",
                 "value": "Keep this lease; the landlord's new version starts in October."
               },
               {
@@ -6853,6 +7030,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-ATT-003-capture-context-pdf",
+                "captured_at": "2026-05-03T11:00:00-04:00",
                 "value": "Keep this lease; the landlord's new version starts in October."
               }
             ]
@@ -6890,7 +7069,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -6950,7 +7129,9 @@
                 "temporal": {},
                 "metadata": {
                   "semantic_state": "unknown"
-                }
+                },
+                "source_event_id": "acceptance-ATT-004-capture-unsupported",
+                "captured_at": "2026-05-04T12:00:00-04:00"
               }
             ],
             "memory": [
@@ -6971,7 +7152,9 @@
                 "temporal": {},
                 "metadata": {
                   "semantic_state": "unknown"
-                }
+                },
+                "source_event_id": "acceptance-ATT-004-capture-unsupported",
+                "captured_at": "2026-05-04T12:00:00-04:00"
               }
             ]
           }
@@ -7008,7 +7191,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -7055,7 +7238,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -7132,7 +7315,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What location clue was in the suitcase image?",
               "mode": "retrieval",
@@ -7159,6 +7342,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-ATT-005-capture-second-image",
+                  "captured_at": "2026-05-05T09:00:03-04:00",
                   "value": "blue suitcase"
                 }
               ],
@@ -7184,12 +7369,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:50.391990+00:00",
-                    "last_successful_at": "2026-08-30T20:27:50.397990+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:32.324829+00:00",
+                    "last_successful_at": "2026-08-31T06:33:32.331289+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:50.397990+00:00"
+                    "updated_at": "2026-08-31T06:33:32.331289+00:00"
                   },
                   {
                     "event_id": "acceptance-ATT-005-capture-second-image",
@@ -7199,12 +7384,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:50.391990+00:00",
-                    "last_successful_at": "2026-08-30T20:27:50.397990+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:32.324829+00:00",
+                    "last_successful_at": "2026-08-31T06:33:32.331289+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:50.397990+00:00"
+                    "updated_at": "2026-08-31T06:33:32.331289+00:00"
                   }
                 ]
               }
@@ -7253,7 +7438,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -7370,7 +7555,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What did I note about the herb planter?",
               "mode": "retrieval",
@@ -7395,6 +7580,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-REL-006-capture-garden",
+                  "captured_at": "2026-05-06T09:00:00+01:00",
                   "value": "The herb planter needs a sunnier spot."
                 }
               ],
@@ -7419,12 +7606,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 2,
-                    "last_attempted_at": "2026-08-30T20:27:51.054562+00:00",
-                    "last_successful_at": "2026-08-30T20:27:51.056770+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:32.990838+00:00",
+                    "last_successful_at": "2026-08-31T06:33:32.993968+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:51.056770+00:00"
+                    "updated_at": "2026-08-31T06:33:32.993968+00:00"
                   }
                 ]
               }
@@ -7458,7 +7645,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -7497,6 +7684,7 @@
                 "entities": 0,
                 "relationships": 0,
                 "attention": 0,
+                "attention_lifecycle": 0,
                 "attachments": 0
               },
               "after_counts": {
@@ -7507,6 +7695,7 @@
                 "entities": 0,
                 "relationships": 0,
                 "attention": 0,
+                "attention_lifecycle": 0,
                 "attachments": 0
               }
             }
@@ -7563,7 +7752,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "Where are the spare batteries?",
               "mode": "retrieval",
@@ -7588,6 +7777,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-REL-007-capture-restart-pending",
+                  "captured_at": "2026-05-07T10:00:00-04:00",
                   "value": "The spare batteries are in the top drawer."
                 }
               ],
@@ -7612,12 +7803,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:52.236997+00:00",
-                    "last_successful_at": "2026-08-30T20:27:52.239997+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:34.184436+00:00",
+                    "last_successful_at": "2026-08-31T06:33:34.187441+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:52.239997+00:00"
+                    "updated_at": "2026-08-31T06:33:34.187441+00:00"
                   }
                 ]
               }
@@ -7651,7 +7842,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -7724,6 +7915,7 @@
                 "entities": 1,
                 "relationships": 0,
                 "attention": 0,
+                "attention_lifecycle": 0,
                 "attachments": 0
               },
               "after_counts": {
@@ -7734,6 +7926,7 @@
                 "entities": 1,
                 "relationships": 0,
                 "attention": 0,
+                "attention_lifecycle": 0,
                 "attachments": 0
               }
             }
@@ -7756,7 +7949,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "Where is the library card?",
               "mode": "retrieval",
@@ -7781,6 +7974,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-REL-008-capture-restart-processing",
+                  "captured_at": "2026-05-08T10:00:00-04:00",
                   "value": "The library card is in the green wallet."
                 }
               ],
@@ -7805,12 +8000,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:52.891027+00:00",
-                    "last_successful_at": "2026-08-30T20:27:52.894029+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:34.835645+00:00",
+                    "last_successful_at": "2026-08-31T06:33:34.838747+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:52.894029+00:00"
+                    "updated_at": "2026-08-31T06:33:34.838747+00:00"
                   }
                 ]
               }
@@ -7844,7 +8039,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -7944,7 +8139,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "Where is the blue notebook?",
               "mode": "retrieval",
@@ -7969,6 +8164,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-REL-009-capture-process-repeat",
+                  "captured_at": "2026-05-09T10:00:00-04:00",
                   "value": "The blue notebook is on the hall shelf."
                 }
               ],
@@ -7993,12 +8190,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:54.070977+00:00",
-                    "last_successful_at": "2026-08-30T20:27:54.073482+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:36.027717+00:00",
+                    "last_successful_at": "2026-08-31T06:33:36.031719+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:54.073482+00:00"
+                    "updated_at": "2026-08-31T06:33:36.031719+00:00"
                   }
                 ]
               }
@@ -8047,7 +8244,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -8191,7 +8388,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -8230,7 +8427,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What did I pay 74 zł for?",
               "mode": "costs",
@@ -8255,6 +8452,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-ASK-001-capture-petrol",
+                  "captured_at": "2026-06-01T09:00:00+02:00",
                   "value": {
                     "amount": "74",
                     "currency": "zł"
@@ -8282,12 +8481,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:55.379347+00:00",
-                    "last_successful_at": "2026-08-30T20:27:55.382347+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:37.336693+00:00",
+                    "last_successful_at": "2026-08-31T06:33:37.339709+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:55.382347+00:00"
+                    "updated_at": "2026-08-31T06:33:37.339709+00:00"
                   }
                 ]
               }
@@ -8330,6 +8529,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-ASK-001-capture-petrol",
+                "captured_at": "2026-06-01T09:00:00+02:00",
                 "value": {
                   "amount": "74",
                   "currency": "zł"
@@ -8355,6 +8556,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-ASK-001-capture-petrol",
+                "captured_at": "2026-06-01T09:00:00+02:00",
                 "value": {
                   "amount": "74",
                   "currency": "zł"
@@ -8390,7 +8593,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -8424,7 +8627,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -8463,7 +8666,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What am I paying for PocketWave now?",
               "mode": "costs",
@@ -8488,6 +8691,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-ASK-002-capture-pocketwave-current",
+                  "captured_at": "2026-06-15T09:00:00+01:00",
                   "value": {
                     "amount": "11",
                     "billing_period": "month",
@@ -8516,12 +8721,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:56.034462+00:00",
-                    "last_successful_at": "2026-08-30T20:27:56.037972+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:37.992634+00:00",
+                    "last_successful_at": "2026-08-31T06:33:37.996634+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:56.037972+00:00"
+                    "updated_at": "2026-08-31T06:33:37.996634+00:00"
                   },
                   {
                     "event_id": "acceptance-ASK-002-capture-pocketwave-current",
@@ -8531,12 +8736,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:56.034462+00:00",
-                    "last_successful_at": "2026-08-30T20:27:56.037972+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:37.992634+00:00",
+                    "last_successful_at": "2026-08-31T06:33:37.996634+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:56.037972+00:00"
+                    "updated_at": "2026-08-31T06:33:37.996634+00:00"
                   }
                 ]
               }
@@ -8570,7 +8775,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -8604,7 +8809,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -8643,7 +8848,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What changed about the storage unit's width?",
               "mode": "changes",
@@ -8658,12 +8863,14 @@
                   "source_refs": [
                     "acceptance-ASK-003-capture-storage-old"
                   ],
+                  "captured_at": "2026-06-03T09:00:00-04:00",
+                  "timezone": "Europe/Berlin",
                   "fact_id": 1,
                   "source_event_id": "acceptance-ASK-003-capture-storage-old",
                   "operation": "set",
                   "temporal": {},
                   "extractor_version": "blackhole-product-v2-extractor-v3",
-                  "created_at": "2026-08-30T20:27:56.696783+00:00",
+                  "created_at": "2026-08-31T06:33:38.651028+00:00",
                   "sequence": 1,
                   "retracted": false,
                   "value": "2 metres",
@@ -8684,12 +8891,14 @@
                   "source_refs": [
                     "acceptance-ASK-003-capture-storage-new"
                   ],
+                  "captured_at": "2026-06-04T09:00:00-04:00",
+                  "timezone": "Europe/Berlin",
                   "fact_id": 2,
                   "source_event_id": "acceptance-ASK-003-capture-storage-new",
                   "operation": "correction",
                   "temporal": {},
                   "extractor_version": "blackhole-product-v2-extractor-v3",
-                  "created_at": "2026-08-30T20:27:56.697783+00:00",
+                  "created_at": "2026-08-31T06:33:38.651028+00:00",
                   "supersedes_event_id": "acceptance-ASK-003-capture-storage-old",
                   "sequence": 2,
                   "retracted": false,
@@ -8723,12 +8932,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:56.693783+00:00",
-                    "last_successful_at": "2026-08-30T20:27:56.697783+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:38.647659+00:00",
+                    "last_successful_at": "2026-08-31T06:33:38.651028+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:56.697783+00:00"
+                    "updated_at": "2026-08-31T06:33:38.651028+00:00"
                   },
                   {
                     "event_id": "acceptance-ASK-003-capture-storage-new",
@@ -8738,12 +8947,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:56.693783+00:00",
-                    "last_successful_at": "2026-08-30T20:27:56.697783+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:38.647659+00:00",
+                    "last_successful_at": "2026-08-31T06:33:38.651028+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:56.697783+00:00"
+                    "updated_at": "2026-08-31T06:33:38.651028+00:00"
                   }
                 ]
               }
@@ -8786,6 +8995,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-ASK-003-capture-storage-new",
+                "captured_at": "2026-06-04T09:00:00-04:00",
                 "value": "2.4 metres"
               }
             ],
@@ -8808,6 +9019,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-ASK-003-capture-storage-new",
+                "captured_at": "2026-06-04T09:00:00-04:00",
                 "value": "2.4 metres"
               }
             ]
@@ -8840,7 +9053,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -8874,7 +9087,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -8913,7 +9126,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What should I remember when choosing a gift for Adam?",
               "mode": "retrieval",
@@ -8938,6 +9151,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-ASK-004-capture-adam-gift",
+                  "captured_at": "2026-06-06T09:05:00-04:00",
                   "value": "Adam would probably like the blue hiking socks."
                 },
                 {
@@ -8958,6 +9173,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-ASK-004-capture-adam-diet",
+                  "captured_at": "2026-06-06T09:00:00-04:00",
                   "value": "Adam doesn't eat peanuts"
                 }
               ],
@@ -8983,12 +9200,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:57.355446+00:00",
-                    "last_successful_at": "2026-08-30T20:27:57.358449+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:39.328979+00:00",
+                    "last_successful_at": "2026-08-31T06:33:39.333977+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:57.358449+00:00"
+                    "updated_at": "2026-08-31T06:33:39.333977+00:00"
                   },
                   {
                     "event_id": "acceptance-ASK-004-capture-adam-gift",
@@ -8998,12 +9215,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:57.355446+00:00",
-                    "last_successful_at": "2026-08-30T20:27:57.358449+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:39.328979+00:00",
+                    "last_successful_at": "2026-08-31T06:33:39.333977+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:57.358449+00:00"
+                    "updated_at": "2026-08-31T06:33:39.333977+00:00"
                   }
                 ]
               }
@@ -9058,7 +9275,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -9092,7 +9309,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -9131,7 +9348,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What locations have I recorded for things I might need?",
               "mode": "retrieval",
@@ -9156,6 +9373,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-ASK-005-capture-charger-list",
+                  "captured_at": "2026-06-07T09:00:00-04:00",
                   "value": "blue suitcase"
                 },
                 {
@@ -9176,6 +9395,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-ASK-005-capture-keys-list",
+                  "captured_at": "2026-06-07T09:01:00-04:00",
                   "value": "The garden keys are in the ceramic bowl by the door."
                 }
               ],
@@ -9201,12 +9422,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:58.010984+00:00",
-                    "last_successful_at": "2026-08-30T20:27:58.013967+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:40.000918+00:00",
+                    "last_successful_at": "2026-08-31T06:33:40.004918+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:58.013967+00:00"
+                    "updated_at": "2026-08-31T06:33:40.004918+00:00"
                   },
                   {
                     "event_id": "acceptance-ASK-005-capture-keys-list",
@@ -9216,12 +9437,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:58.010984+00:00",
-                    "last_successful_at": "2026-08-30T20:27:58.014968+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:40.000918+00:00",
+                    "last_successful_at": "2026-08-31T06:33:40.004918+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:58.014968+00:00"
+                    "updated_at": "2026-08-31T06:33:40.004918+00:00"
                   }
                 ]
               }
@@ -9255,7 +9476,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -9299,7 +9520,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What is my passport number?",
               "mode": "semantic",
@@ -9325,12 +9546,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:58.651952+00:00",
-                    "last_successful_at": "2026-08-30T20:27:58.654954+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:40.643484+00:00",
+                    "last_successful_at": "2026-08-31T06:33:40.646489+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:58.654954+00:00"
+                    "updated_at": "2026-08-31T06:33:40.646489+00:00"
                   }
                 ]
               }
@@ -9385,7 +9606,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -9419,7 +9640,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -9458,7 +9679,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "Gdzie są klucze?",
               "mode": "ambiguous",
@@ -9483,6 +9704,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-ASK-007-capture-bike-keys",
+                  "captured_at": "2026-06-10T09:01:00+02:00",
                   "value": "szufladzie przy wejściu"
                 },
                 {
@@ -9503,6 +9726,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-ASK-007-capture-house-keys",
+                  "captured_at": "2026-06-10T09:00:00+02:00",
                   "value": "kieszeni kurtki"
                 }
               ],
@@ -9528,12 +9753,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:59.311877+00:00",
-                    "last_successful_at": "2026-08-30T20:27:59.315877+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:41.302979+00:00",
+                    "last_successful_at": "2026-08-31T06:33:41.305980+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:59.315877+00:00"
+                    "updated_at": "2026-08-31T06:33:41.305980+00:00"
                   },
                   {
                     "event_id": "acceptance-ASK-007-capture-bike-keys",
@@ -9543,12 +9768,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:59.311877+00:00",
-                    "last_successful_at": "2026-08-30T20:27:59.315877+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:41.302979+00:00",
+                    "last_successful_at": "2026-08-31T06:33:41.305980+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:59.315877+00:00"
+                    "updated_at": "2026-08-31T06:33:41.305980+00:00"
                   }
                 ]
               }
@@ -9582,7 +9807,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -9616,7 +9841,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -9683,6 +9908,9 @@
                   "lifecycle_key": "school-call",
                   "source_text": "Call the school today before 17:00."
                 },
+                "captured_at": "2026-06-12T09:00:00-04:00",
+                "observed_at": "2026-06-12",
+                "source_type": "text",
                 "state": "upcoming"
               },
               {
@@ -9702,6 +9930,9 @@
                   "lifecycle_key": "library-books",
                   "source_text": "Return the library books tomorrow."
                 },
+                "captured_at": "2026-06-12T09:01:00-04:00",
+                "observed_at": "2026-06-12",
+                "source_type": "text",
                 "state": "upcoming"
               }
             ],
@@ -9723,6 +9954,9 @@
                   "lifecycle_key": "school-call",
                   "source_text": "Call the school today before 17:00."
                 },
+                "captured_at": "2026-06-12T09:00:00-04:00",
+                "observed_at": "2026-06-12",
+                "source_type": "text",
                 "state": "upcoming"
               },
               {
@@ -9742,6 +9976,9 @@
                   "lifecycle_key": "library-books",
                   "source_text": "Return the library books tomorrow."
                 },
+                "captured_at": "2026-06-12T09:01:00-04:00",
+                "observed_at": "2026-06-12",
+                "source_type": "text",
                 "state": "upcoming"
               }
             ]
@@ -9769,7 +10006,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "What do I need to do today?",
               "mode": "attention",
@@ -9793,6 +10030,9 @@
                     "lifecycle_key": "school-call",
                     "source_text": "Call the school today before 17:00."
                   },
+                  "captured_at": "2026-06-12T09:00:00-04:00",
+                  "observed_at": "2026-06-12",
+                  "source_type": "text",
                   "state": "upcoming",
                   "evidence_id": "attention:706dd1a1bc9571d729994dfa618e1e39f50e5bfa4d1972f170619d5b21f08ef4"
                 }
@@ -9818,12 +10058,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:59.963909+00:00",
-                    "last_successful_at": "2026-08-30T20:27:59.966978+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:41.958043+00:00",
+                    "last_successful_at": "2026-08-31T06:33:41.963051+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:59.966978+00:00"
+                    "updated_at": "2026-08-31T06:33:41.963051+00:00"
                   },
                   {
                     "event_id": "acceptance-TIME-008-capture-library-return",
@@ -9833,12 +10073,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:27:59.963909+00:00",
-                    "last_successful_at": "2026-08-30T20:27:59.966978+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:41.958043+00:00",
+                    "last_successful_at": "2026-08-31T06:33:41.963051+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:27:59.966978+00:00"
+                    "updated_at": "2026-08-31T06:33:41.963051+00:00"
                   }
                 ]
               }
@@ -9900,6 +10140,9 @@
                   "lifecycle_key": "school-call",
                   "source_text": "Call the school today before 17:00."
                 },
+                "captured_at": "2026-06-12T09:00:00-04:00",
+                "observed_at": "2026-06-12",
+                "source_type": "text",
                 "state": "overdue"
               },
               {
@@ -9919,6 +10162,9 @@
                   "lifecycle_key": "library-books",
                   "source_text": "Return the library books tomorrow."
                 },
+                "captured_at": "2026-06-12T09:01:00-04:00",
+                "observed_at": "2026-06-12",
+                "source_type": "text",
                 "state": "upcoming"
               }
             ],
@@ -9940,6 +10186,9 @@
                   "lifecycle_key": "school-call",
                   "source_text": "Call the school today before 17:00."
                 },
+                "captured_at": "2026-06-12T09:00:00-04:00",
+                "observed_at": "2026-06-12",
+                "source_type": "text",
                 "state": "overdue"
               },
               {
@@ -9959,6 +10208,9 @@
                   "lifecycle_key": "library-books",
                   "source_text": "Return the library books tomorrow."
                 },
+                "captured_at": "2026-06-12T09:01:00-04:00",
+                "observed_at": "2026-06-12",
+                "source_type": "text",
                 "state": "upcoming"
               }
             ]
@@ -9991,7 +10243,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -10052,33 +10304,14 @@
             "ok": true,
             "items": [
               {
-                "fingerprint": "46ec34bf7817c3a6fb8f37d34cfafcc6ee80baa885cda64c1530f920d4f10496",
-                "source_event_id": "acceptance-TIME-009-capture-expense-deadline",
-                "kind": "task",
-                "title": "Submit the expense report by June 10.",
-                "status": "open",
-                "knowledge_status": "known",
-                "starts_at": null,
-                "due_at": "2026-06-10T00:00:00+02:00",
-                "timezone": "Europe/Berlin",
-                "source_refs": [
-                  "acceptance-TIME-009-capture-expense-deadline"
-                ],
-                "details": {
-                  "lifecycle_key": "expense-report",
-                  "source_text": "Submit the expense report by June 10."
-                },
-                "state": "overdue"
-              },
-              {
-                "fingerprint": "9a026fca0f958456f80595a3fac1491285237fc9138d9ed215bdeccac8aa259b",
+                "fingerprint": "88ce1026c64d3188e8dcc315ef59500f4d9d41f00fc13622e8211a7d30a357f7",
                 "source_event_id": "acceptance-TIME-009-capture-expense-deadline",
                 "kind": "deadline",
                 "title": "Submit the expense report by June 10.",
                 "status": "open",
                 "knowledge_status": "known",
                 "starts_at": "2026-06-10T00:00:00+02:00",
-                "due_at": null,
+                "due_at": "2026-06-10T00:00:00+02:00",
                 "timezone": "Europe/Berlin",
                 "source_refs": [
                   "acceptance-TIME-009-capture-expense-deadline"
@@ -10086,41 +10319,25 @@
                 "details": {
                   "actionable": true,
                   "entity_key": "expense_report",
-                  "lifecycle_key": "expense_report:deadline",
-                  "semantic_relation": null
+                  "lifecycle_key": "expense-report",
+                  "source_text": "Submit the expense report by June 10."
                 },
-                "state": "upcoming"
+                "captured_at": "2026-06-09T09:00:00+01:00",
+                "observed_at": "2026-06-09",
+                "source_type": "text",
+                "state": "overdue"
               }
             ],
             "attention": [
               {
-                "fingerprint": "46ec34bf7817c3a6fb8f37d34cfafcc6ee80baa885cda64c1530f920d4f10496",
-                "source_event_id": "acceptance-TIME-009-capture-expense-deadline",
-                "kind": "task",
-                "title": "Submit the expense report by June 10.",
-                "status": "open",
-                "knowledge_status": "known",
-                "starts_at": null,
-                "due_at": "2026-06-10T00:00:00+02:00",
-                "timezone": "Europe/Berlin",
-                "source_refs": [
-                  "acceptance-TIME-009-capture-expense-deadline"
-                ],
-                "details": {
-                  "lifecycle_key": "expense-report",
-                  "source_text": "Submit the expense report by June 10."
-                },
-                "state": "overdue"
-              },
-              {
-                "fingerprint": "9a026fca0f958456f80595a3fac1491285237fc9138d9ed215bdeccac8aa259b",
+                "fingerprint": "88ce1026c64d3188e8dcc315ef59500f4d9d41f00fc13622e8211a7d30a357f7",
                 "source_event_id": "acceptance-TIME-009-capture-expense-deadline",
                 "kind": "deadline",
                 "title": "Submit the expense report by June 10.",
                 "status": "open",
                 "knowledge_status": "known",
                 "starts_at": "2026-06-10T00:00:00+02:00",
-                "due_at": null,
+                "due_at": "2026-06-10T00:00:00+02:00",
                 "timezone": "Europe/Berlin",
                 "source_refs": [
                   "acceptance-TIME-009-capture-expense-deadline"
@@ -10128,10 +10345,13 @@
                 "details": {
                   "actionable": true,
                   "entity_key": "expense_report",
-                  "lifecycle_key": "expense_report:deadline",
-                  "semantic_relation": null
+                  "lifecycle_key": "expense-report",
+                  "source_text": "Submit the expense report by June 10."
                 },
-                "state": "upcoming"
+                "captured_at": "2026-06-09T09:00:00+01:00",
+                "observed_at": "2026-06-09",
+                "source_type": "text",
+                "state": "overdue"
               }
             ]
           }
@@ -10153,7 +10373,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -10194,85 +10414,55 @@
             "ok": true,
             "items": [
               {
-                "fingerprint": "9a026fca0f958456f80595a3fac1491285237fc9138d9ed215bdeccac8aa259b",
-                "source_event_id": "acceptance-TIME-009-capture-expense-deadline",
-                "kind": "deadline",
-                "title": "Submit the expense report by June 10.",
-                "status": "open",
-                "knowledge_status": "known",
-                "starts_at": "2026-06-10T00:00:00+02:00",
-                "due_at": null,
-                "timezone": "Europe/Berlin",
-                "source_refs": [
-                  "acceptance-TIME-009-capture-expense-deadline"
-                ],
-                "details": {
-                  "actionable": true,
-                  "entity_key": "expense_report",
-                  "lifecycle_key": "expense_report:deadline",
-                  "semantic_relation": null
-                },
-                "state": "upcoming"
-              },
-              {
                 "fingerprint": "a3592fa9d630d38814e3b1176aad977b8f4f8e180cfea8aba77d4587c510c1f8",
                 "source_event_id": "acceptance-TIME-009-capture-completion",
                 "kind": "task",
                 "title": "Completed expense report",
                 "status": "completed",
                 "knowledge_status": "known",
-                "starts_at": null,
-                "due_at": null,
+                "starts_at": "2026-06-10T00:00:00+02:00",
+                "due_at": "2026-06-10T00:00:00+02:00",
                 "timezone": "Europe/Berlin",
                 "source_refs": [
-                  "acceptance-TIME-009-capture-completion"
+                  "acceptance-TIME-009-capture-completion",
+                  "acceptance-TIME-009-capture-expense-deadline"
                 ],
                 "details": {
+                  "actionable": true,
+                  "entity_key": "expense_report",
                   "lifecycle_key": "expense-report",
-                  "source_text": "I submitted the expense report this morning."
+                  "source_text": "Submit the expense report by June 10."
                 },
+                "captured_at": "2026-06-11T09:05:00+01:00",
+                "observed_at": "2026-06-11",
+                "source_type": "text",
                 "state": "completed"
               }
             ],
             "attention": [
               {
-                "fingerprint": "9a026fca0f958456f80595a3fac1491285237fc9138d9ed215bdeccac8aa259b",
-                "source_event_id": "acceptance-TIME-009-capture-expense-deadline",
-                "kind": "deadline",
-                "title": "Submit the expense report by June 10.",
-                "status": "open",
-                "knowledge_status": "known",
-                "starts_at": "2026-06-10T00:00:00+02:00",
-                "due_at": null,
-                "timezone": "Europe/Berlin",
-                "source_refs": [
-                  "acceptance-TIME-009-capture-expense-deadline"
-                ],
-                "details": {
-                  "actionable": true,
-                  "entity_key": "expense_report",
-                  "lifecycle_key": "expense_report:deadline",
-                  "semantic_relation": null
-                },
-                "state": "upcoming"
-              },
-              {
                 "fingerprint": "a3592fa9d630d38814e3b1176aad977b8f4f8e180cfea8aba77d4587c510c1f8",
                 "source_event_id": "acceptance-TIME-009-capture-completion",
                 "kind": "task",
                 "title": "Completed expense report",
                 "status": "completed",
                 "knowledge_status": "known",
-                "starts_at": null,
-                "due_at": null,
+                "starts_at": "2026-06-10T00:00:00+02:00",
+                "due_at": "2026-06-10T00:00:00+02:00",
                 "timezone": "Europe/Berlin",
                 "source_refs": [
-                  "acceptance-TIME-009-capture-completion"
+                  "acceptance-TIME-009-capture-completion",
+                  "acceptance-TIME-009-capture-expense-deadline"
                 ],
                 "details": {
+                  "actionable": true,
+                  "entity_key": "expense_report",
                   "lifecycle_key": "expense-report",
-                  "source_text": "I submitted the expense report this morning."
+                  "source_text": "Submit the expense report by June 10."
                 },
+                "captured_at": "2026-06-11T09:05:00+01:00",
+                "observed_at": "2026-06-11",
+                "source_type": "text",
                 "state": "completed"
               }
             ]
@@ -10295,7 +10485,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -10331,43 +10521,28 @@
             "ok": true,
             "items": [
               {
-                "fingerprint": "9a026fca0f958456f80595a3fac1491285237fc9138d9ed215bdeccac8aa259b",
-                "source_event_id": "acceptance-TIME-009-capture-expense-deadline",
-                "kind": "deadline",
-                "title": "Submit the expense report by June 10.",
-                "status": "open",
-                "knowledge_status": "known",
-                "starts_at": "2026-06-10T00:00:00+02:00",
-                "due_at": null,
-                "timezone": "Europe/Berlin",
-                "source_refs": [
-                  "acceptance-TIME-009-capture-expense-deadline"
-                ],
-                "details": {
-                  "actionable": true,
-                  "entity_key": "expense_report",
-                  "lifecycle_key": "expense_report:deadline",
-                  "semantic_relation": null
-                },
-                "state": "upcoming"
-              },
-              {
                 "fingerprint": "a3592fa9d630d38814e3b1176aad977b8f4f8e180cfea8aba77d4587c510c1f8",
                 "source_event_id": "acceptance-TIME-009-capture-completion",
                 "kind": "task",
                 "title": "Completed expense report",
                 "status": "completed",
                 "knowledge_status": "known",
-                "starts_at": null,
-                "due_at": null,
+                "starts_at": "2026-06-10T00:00:00+02:00",
+                "due_at": "2026-06-10T00:00:00+02:00",
                 "timezone": "Europe/Berlin",
                 "source_refs": [
-                  "acceptance-TIME-009-capture-completion"
+                  "acceptance-TIME-009-capture-completion",
+                  "acceptance-TIME-009-capture-expense-deadline"
                 ],
                 "details": {
+                  "actionable": true,
+                  "entity_key": "expense_report",
                   "lifecycle_key": "expense-report",
-                  "source_text": "I submitted the expense report this morning."
+                  "source_text": "Submit the expense report by June 10."
                 },
+                "captured_at": "2026-06-11T09:05:00+01:00",
+                "observed_at": "2026-06-11",
+                "source_type": "text",
                 "state": "completed"
               },
               {
@@ -10387,48 +10562,36 @@
                   "lifecycle_key": "dentist-appointment",
                   "source_text": "The dentist appointment for June 20 is cancelled."
                 },
+                "captured_at": "2026-06-11T09:10:00+01:00",
+                "observed_at": "2026-06-11",
+                "source_type": "text",
                 "state": "cancelled"
               }
             ],
             "attention": [
               {
-                "fingerprint": "9a026fca0f958456f80595a3fac1491285237fc9138d9ed215bdeccac8aa259b",
-                "source_event_id": "acceptance-TIME-009-capture-expense-deadline",
-                "kind": "deadline",
-                "title": "Submit the expense report by June 10.",
-                "status": "open",
-                "knowledge_status": "known",
-                "starts_at": "2026-06-10T00:00:00+02:00",
-                "due_at": null,
-                "timezone": "Europe/Berlin",
-                "source_refs": [
-                  "acceptance-TIME-009-capture-expense-deadline"
-                ],
-                "details": {
-                  "actionable": true,
-                  "entity_key": "expense_report",
-                  "lifecycle_key": "expense_report:deadline",
-                  "semantic_relation": null
-                },
-                "state": "upcoming"
-              },
-              {
                 "fingerprint": "a3592fa9d630d38814e3b1176aad977b8f4f8e180cfea8aba77d4587c510c1f8",
                 "source_event_id": "acceptance-TIME-009-capture-completion",
                 "kind": "task",
                 "title": "Completed expense report",
                 "status": "completed",
                 "knowledge_status": "known",
-                "starts_at": null,
-                "due_at": null,
+                "starts_at": "2026-06-10T00:00:00+02:00",
+                "due_at": "2026-06-10T00:00:00+02:00",
                 "timezone": "Europe/Berlin",
                 "source_refs": [
-                  "acceptance-TIME-009-capture-completion"
+                  "acceptance-TIME-009-capture-completion",
+                  "acceptance-TIME-009-capture-expense-deadline"
                 ],
                 "details": {
+                  "actionable": true,
+                  "entity_key": "expense_report",
                   "lifecycle_key": "expense-report",
-                  "source_text": "I submitted the expense report this morning."
+                  "source_text": "Submit the expense report by June 10."
                 },
+                "captured_at": "2026-06-11T09:05:00+01:00",
+                "observed_at": "2026-06-11",
+                "source_type": "text",
                 "state": "completed"
               },
               {
@@ -10448,6 +10611,9 @@
                   "lifecycle_key": "dentist-appointment",
                   "source_text": "The dentist appointment for June 20 is cancelled."
                 },
+                "captured_at": "2026-06-11T09:10:00+01:00",
+                "observed_at": "2026-06-11",
+                "source_type": "text",
                 "state": "cancelled"
               }
             ]
@@ -10480,7 +10646,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -10514,7 +10680,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "retraction": {
               "event_id": "acceptance-UNDO-010-wrong-location",
               "forgotten": true,
@@ -10557,7 +10723,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "saved": true,
             "message": "Saved.",
             "capture": {
@@ -10596,7 +10762,7 @@
           ],
           "response": {
             "ok": true,
-            "runtime": "blackhole-product-v2-runtime-v2",
+            "runtime": "blackhole-product-v2-runtime-v3",
             "answer": {
               "question": "Where is the spare house key?",
               "mode": "retrieval",
@@ -10621,6 +10787,8 @@
                   "metadata": {
                     "semantic_state": "current"
                   },
+                  "source_event_id": "acceptance-UNDO-010-capture-correct-location",
+                  "captured_at": "2026-06-14T09:02:00-04:00",
                   "value": "blue suitcase"
                 }
               ],
@@ -10645,12 +10813,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-30T20:28:01.326425+00:00",
-                    "last_successful_at": "2026-08-30T20:28:01.328426+00:00",
+                    "last_attempted_at": "2026-08-31T06:33:43.328719+00:00",
+                    "last_successful_at": "2026-08-31T06:33:43.332719+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-30T20:28:01.328426+00:00"
+                    "updated_at": "2026-08-31T06:33:43.332719+00:00"
                   }
                 ]
               }
@@ -10698,6 +10866,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-UNDO-010-capture-correct-location",
+                "captured_at": "2026-06-14T09:02:00-04:00",
                 "value": "blue suitcase"
               }
             ],
@@ -10720,6 +10890,8 @@
                 "metadata": {
                   "semantic_state": "current"
                 },
+                "source_event_id": "acceptance-UNDO-010-capture-correct-location",
+                "captured_at": "2026-06-14T09:02:00-04:00",
                 "value": "blue suitcase"
               }
             ]
@@ -10736,8 +10908,8 @@
   "latency_evidence": {
     "status": "PASS",
     "provider_delay_ms": 120,
-    "capture_return_ms": 7.607,
-    "processing_completion_ms": 136.475,
+    "capture_return_ms": 10.718,
+    "processing_completion_ms": 148.069,
     "processing_completed": true,
     "status_at_capture": "pending",
     "provider_calls_at_capture": 1,

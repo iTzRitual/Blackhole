@@ -70,7 +70,7 @@ The dashboard reports these separately, using `PASS`, `FAIL`, `PARTIAL`, or
 | No false urgent Attention | Are future context and past observations kept out of automatic urgent attention? |
 | Ask supported by evidence | Does an answer cite or expose supporting capture evidence? |
 | No fabricated answer | Does missing, conflicting, or uncertain information stay explicit? |
-| Retraction correctness | Does Undo remove the selected capture from active state while preserving raw history and later corrections? |
+| Undo/forget correctness | Does explicit Undo permanently forget the selected capture and its source-linked Product V2 state without disturbing unrelated captures? |
 | Attachment integrity | Are image-only, PDF-only, text-plus-file, unsupported, and duplicate files retained or clearly rejected? |
 | Restart survival | Does state survive restart without duplicate active items? |
 | Human-readable contract | Can a normal person understand saved, pending, failed, uncertain, current, and historical states? |

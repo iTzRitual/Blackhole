@@ -13,7 +13,7 @@ retractCapture(captureId) -> UndoResult
 ask(question) -> AnswerResult
 ```
 
-`text` is optional when an attachment is present. An `Attachment` should carry the source handle or upload result plus `name`, `type`, `size`, and whether it is an image. The transport preserves the original source during normal operation; an explicit Undo is the user-authorized deletion exception. The UI must not OCR a file or copy its contents into the text composer as a fallback.
+`text` is optional when an attachment is present. An `Attachment` should carry the source handle or upload result plus `name`, `type`, `size`, and whether it is an image. The transport preserves captures during normal operation; an explicit Undo is the user-authorized permanent-forget exception for the selected capture and its source-linked Product V2 state. The UI must not OCR a file or copy its contents into the text composer as a fallback.
 
 ## Response shapes
 

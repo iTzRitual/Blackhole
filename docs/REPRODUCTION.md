@@ -17,6 +17,24 @@ Use the sections below according to the kind of reproduction being performed:
   here that may consume provider inference; normal documentation validation
   does not run it.
 
+## Submission boundary
+
+This guide documents two deliberately separate reproductions:
+
+- **V1 benchmark reproduction** uses the public 200-event development scenario,
+  its frozen response contract, the stateless baseline, and recorded E001–E005
+  replay paths. V1 is the scientifically evaluated system.
+- **Product V2 local application** uses the Host/PWA, a separate
+  `blackhole-v2.db` and `blobs/` directory inside Blackhole Home, and the
+  product acceptance/runtime checks. Product V2 is the post-evaluation product
+  redesign; its `50/50` acceptance result is development/dogfood evidence, not
+  unseen generalization evidence.
+
+Commands below use repository-relative paths or caller-supplied placeholders.
+They do not depend on a developer's Windows checkout path. Holdout expected
+outputs and evaluator-owned ground truth are never part of the implementation
+checkout or its trajectories.
+
 ## 1. Run identity
 
 Every run should have a stable identifier and record:
@@ -619,11 +637,15 @@ validation record belong under
 
 ## 21. Product V2 deterministic runtime checks
 
-Product V2 is a post-evaluation product foundation in the isolated
-`product/v2-runtime` worktree. These checks do not run the frozen benchmark,
-read benchmark expected outputs, access holdout material, or alter the
-official V1R1 result. They use temporary Blackhole Homes and fake semantic
-providers, so they do not require a live provider or provider credentials:
+Product V2 is the integrated post-evaluation Host/PWA path in the current
+submission tree. These checks do not run the frozen benchmark, read benchmark
+expected outputs, access holdout material, or alter the official V1R1 result.
+They use temporary Blackhole Homes and fake semantic providers, so they do not
+require a live provider or provider credentials:
+
+The final Product V2 runtime defaults are `gpt-5.6-luna`, low reasoning, and
+batch size `2`. The historical V1 commands above intentionally retain their
+recorded legacy/benchmark settings.
 
 ```text
 python -m unittest app.tests.test_product_v2 -v
@@ -635,7 +657,8 @@ The deterministic V2 suite covers immediate capture, durable pending work,
 chronological single-owner processing, stale-lease recovery, retry after
 failure, idempotence, open-world facts, relative-time Attention, deterministic
 Ask paths, bounded synthesis references, immutable content-addressed
-attachments, attachment-only capture, retraction, and read-only V1 migration.
+attachments, attachment-only capture, permanent Undo/forget, and read-only V1
+migration.
 The HTTP checks additionally verify that V2 state/processing GETs do not start
 semantic work, while `POST /api/v2/ask` is the semantic Ask boundary.
 
@@ -653,3 +676,26 @@ runtime may start its daemon worker after capture; read-only V2 state,
 processing, and attachment routes do not start a provider. Any real Codex CLI
 smoke must be separately authorized and recorded as a non-scored runtime
 trajectory; it must not be mixed into the deterministic evidence above.
+
+## 22. Final deterministic submission gate
+
+From the repository root, run the following without live provider inference:
+
+```text
+python -m unittest discover -s . -p "test_*.py" -v
+python -m unittest discover -s eval/tests -v
+python -m unittest product_acceptance.harness.test_harness -v
+python scripts/run_product_v2_integrated_acceptance.py
+python -m compileall -q app eval product_acceptance scripts
+node --check app/web/app.js
+python benchmark/dev/generate_benchmark.py --check
+python eval/contract_smoke.py
+python scripts/qualification_check.py --inventory
+git diff --check
+```
+
+The integrated acceptance runner uses a visible deterministic provider fixture
+and temporary Homes, then writes its report to the recorded result path. The
+qualification command may report understood non-blocking warnings for the
+authentic historical absolute path in the frozen-runtime audit and the three
+preserved stale named result artifacts; it must report zero hard failures.

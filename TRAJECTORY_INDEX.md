@@ -48,20 +48,28 @@ now listed below; the local oracle and scoring histories remain separate.
 | 031-product-v2-runtime-foundation | Build the isolated post-evaluation open-world runtime foundation | PASS; deterministic runtime/API foundation; no benchmark or holdout evaluation | `2ec991d` | [prompt](trajectories/coding/031-product-v2-runtime-foundation/prompt.md), [summary](trajectories/coding/031-product-v2-runtime-foundation/summary.md) |
 | 032-product-v2-ui-redesign | Build the isolated mobile-first Product V2 PWA | KEEP; UI workstream preserved and integrated | `51e6810` | [summary](trajectories/coding/032-product-v2-ui-redesign/summary.md) |
 | 033-product-v2-dogfood-acceptance | Define independent Product V2 dogfood acceptance | KEEP; 50 cases, deterministic mock gates, and human protocol | `90cb5ff` | [summary](trajectories/coding/033-product-v2-dogfood-acceptance/summary.md) |
+| 034-product-v2-integration | Integrate the Product V2 runtime, PWA, and dogfood contract | KEEP; 50/50 visible acceptance cases and all quality gates passed | `43426e8` | [prompt](trajectories/coding/034-product-v2-integration/prompt.md), [summary](trajectories/coding/034-product-v2-integration/summary.md), [result](eval/results/product-v2-integrated-acceptance.json) |
+| 035-product-v2-human-dogfood-p0-fixes | Repair the first human-dogfood Product V2 P0/P1 failures | KEEP; bounded lifecycle, provider, and UI repairs preserved | `41271c9` | [prompt](trajectories/coding/035-product-v2-human-dogfood-p0-fixes/prompt.md), [summary](trajectories/coding/035-product-v2-human-dogfood-p0-fixes/summary.md) |
+| 036-product-v2-live-provider-fix | Repair provider-backed Product V2 processing diagnostics | PARTIAL; offline gates pass, live provider evidence remains bounded | `37e56d3` | [prompt](trajectories/coding/036-product-v2-live-provider-fix/prompt.md), [summary](trajectories/coding/036-product-v2-live-provider-fix/summary.md) |
+| 037-product-v2-ask-routing | Generalize Product V2 Ask routing for grounded retrieval | KEEP; deterministic Ask routing and bounded context preserved | `046ffa8` | [prompt](trajectories/coding/037-product-v2-ask-routing/prompt.md), [summary](trajectories/coding/037-product-v2-ask-routing/summary.md) |
+| 038-product-v2-language-invariance | Generalize Product V2 memory and Ask across capture/query languages | KEEP offline implementation; live gate PARTIAL pending provenance-focused validation | `16aad12` | [prompt](trajectories/coding/038-product-v2-language-invariance/prompt.md), [summary](trajectories/coding/038-product-v2-language-invariance/summary.md), [live](trajectories/coding/038-product-v2-language-invariance/live-validation.json), [result](eval/results/product-v2-language-invariance.json) |
+| 039-product-v2-provenance-precision | Narrow Ask provenance to selected supporting evidence | KEEP; provenance precision and no-fabrication behavior preserved | `c73369b` | [prompt](trajectories/coding/039-product-v2-provenance-precision/prompt.md), [summary](trajectories/coding/039-product-v2-provenance-precision/summary.md) |
+| 040-product-v2-semantic-truth | Preserve correction and temporal meaning in Product V2 projections | KEEP; semantic truth and deterministic occurrence aggregation preserved | `1047873` | [prompt](trajectories/coding/040-product-v2-semantic-truth/prompt.md), [summary](trajectories/coding/040-product-v2-semantic-truth/summary.md) |
+| 041-product-v2-undo-and-ops-logs | Add permanent Product V2 Undo and operational logging boundaries | KEEP; explicit forget and safe operational evidence preserved | `a719e9a` | [prompt](trajectories/coding/041-product-v2-undo-and-ops-logs/prompt.md), [summary](trajectories/coding/041-product-v2-undo-and-ops-logs/summary.md) |
+| 042-product-v2-final-human-dogfood-fixes | Apply the final bounded Product V2 P0/P1 human-dogfood repair | KEEP implementation; overall live gate PARTIAL/REVISE | `e5ca77f` | [prompt](trajectories/coding/042-product-v2-final-human-dogfood-fixes/prompt.md), [summary](trajectories/coding/042-product-v2-final-human-dogfood-fixes/summary.md), [live](trajectories/coding/042-product-v2-final-human-dogfood-fixes/live-validation.json), [result](eval/results/product-v2-final-human-dogfood-fixes.json) |
+| 043-product-v2-last-dogfood-fixes | Consolidate Product V2 into master and apply the final generic dogfood corrections | KEEP; `184/184` app tests and `50/50` visible acceptance, no live provider | `7d695ec` | [prompt](trajectories/coding/043-product-v2-last-dogfood-fixes/prompt.md), [summary](trajectories/coding/043-product-v2-last-dogfood-fixes/summary.md), [result](eval/results/product-v2-final-dogfood-fixes.json) |
+| 044-submission-finalization | Harden the final judge-facing package and demo path without changing Product V2 semantics | In progress; deterministic submission gate pending | Working tree | [prompt](trajectories/coding/044-submission-finalization/prompt.md), [summary](trajectories/coding/044-submission-finalization/summary.md) |
 | ui-001-mobile-pwa | Build the dependency-light mobile-first PWA in an isolated worktree | KEEP; UI workstream preserved and integrated | `0cc6653` | [summary](trajectories/coding/ui-001-mobile-pwa/summary.md) |
 | ui-002-reference-redesign | Correct the Capture surface against the approved mobile reference | KEEP; UI correction preserved and integrated | `0cc6653` | [summary](trajectories/coding/ui-002-reference-redesign/summary.md) |
 | submission-001-hardening | Add offline qualification, CI, evidence index, and submission checklist | KEEP; three non-blocking stale-artifact warnings remain for finalization | `18b123f` | [summary](trajectories/coding/submission-001-hardening/summary.md) |
-| 034-product-v2-integration | Integrate the Product V2 runtime, PWA, and dogfood contract | KEEP; 50/50 visible acceptance cases and all quality gates passed | `43426e8` | [prompt](trajectories/coding/034-product-v2-integration/prompt.md), [summary](trajectories/coding/034-product-v2-integration/summary.md), [result](eval/results/product-v2-integrated-acceptance.json) |
-| 038-product-v2-language-invariance | Generalize Product V2 memory and Ask across capture/query languages | KEEP offline implementation; live gate PARTIAL pending provenance-focused validation | `16aad12` | [prompt](trajectories/coding/038-product-v2-language-invariance/prompt.md), [summary](trajectories/coding/038-product-v2-language-invariance/summary.md), [live](trajectories/coding/038-product-v2-language-invariance/live-validation.json), [result](eval/results/product-v2-language-invariance.json) |
-| 042-product-v2-final-human-dogfood-fixes | Apply the final bounded Product V2 P0/P1 human-dogfood repair | KEEP implementation; overall live gate PARTIAL/REVISE | `e5ca77f` | [prompt](trajectories/coding/042-product-v2-final-human-dogfood-fixes/prompt.md), [summary](trajectories/coding/042-product-v2-final-human-dogfood-fixes/summary.md), [live](trajectories/coding/042-product-v2-final-human-dogfood-fixes/live-validation.json), [result](eval/results/product-v2-final-human-dogfood-fixes.json) |
-| 043-product-v2-last-dogfood-fixes | Consolidate Product V2 into master and apply the final generic dogfood corrections | KEEP; `184/184` app tests and `50/50` visible acceptance, no live provider | `7d695ec` | [prompt](trajectories/coding/043-product-v2-last-dogfood-fixes/prompt.md), [summary](trajectories/coding/043-product-v2-last-dogfood-fixes/summary.md), [result](eval/results/product-v2-final-dogfood-fixes.json) |
 
-The short commit IDs above were resolved from local Git history. The hardening
-implementation is in `18b123f`; the small follow-up metadata commit records
-the final handoff state of that trajectory. The historical integrated product
-merge is `20e4540`, and the hardening merge is `bc4ef78`. The Product V2
+The short commit IDs above were resolved from local Git history. The historical
+hardening implementation is in `18b123f`; the small follow-up metadata commit
+records the final handoff state of that trajectory. The historical integrated
+product merge is `20e4540`, and the hardening merge is `bc4ef78`. The Product V2
 integration merge of the three source branches is `2ff1156`; the final
-integration commit is `43426e8`.
+pre-submission integration commit is `43426e8`. The current submission
+finalization row is updated with its immutable commit after the final gate.
 
 ## Runtime trajectories
 
@@ -81,6 +89,8 @@ integration commit is `43426e8`.
 | 017-deferred-ingestion-fake | Exercise deferred capture/processing with neutral fake provider | Injected fake provider | Deterministic integration behavior; no benchmark score | [summary](trajectories/runtime/017-deferred-ingestion-fake/summary.md) |
 | 017-deferred-ingestion-e005-regression | Regression replay after deferred-ingestion refactor | None; deterministic replay | Matches E005 reference: LQA-0M `0.8695006212`, DSCR `40` | [runtime files](trajectories/runtime/017-deferred-ingestion-e005-regression/), [result](eval/results/deferred-ingestion-e005-regression.json) |
 | 034-product-v2-integrated-acceptance | Exercise the integrated Product V2 Host contract and reliability gates | Deterministic local fixture; no live provider | 50/50 PASS; async latency and exact attachment evidence recorded | [summary](trajectories/runtime/034-product-v2-integrated-acceptance/summary.md), [result](eval/results/product-v2-integrated-acceptance.json) |
+| 035-product-v2-human-dogfood-live-smoke | Exercise the first human-dogfood live Product V2 path | Authenticated local Codex CLI | Live latency/provider observations preserved; not a benchmark score | [trace](trajectories/runtime/035-product-v2-human-dogfood-live-smoke/trace.json) |
+| 036-product-v2-live-provider-fix | Recheck the repaired live provider path and diagnostics | Authenticated local Codex CLI | Live gate remains bounded/partial; no benchmark or holdout material | [summary](trajectories/runtime/036-product-v2-live-provider-fix/summary.md) |
 | 018-host-foundation-e005-regression | Regression replay after Host foundation | None; deterministic replay | Matches E005 reference: LQA-0M `0.8695006212`, DSCR `40` | [runtime files](trajectories/runtime/018-host-foundation-e005-regression/), [result](eval/results/host-foundation-e005-regression.json) |
 | 019-host-pwa-real-neutral | Real neutral Host/PWA-equivalent smoke | Authenticated local Codex CLI | HTTP transport and deferred processing worked; novel-entity linking limitation recorded | [summary](trajectories/runtime/019-host-pwa-real-neutral/summary.md), [trace](trajectories/runtime/019-host-pwa-real-neutral/trace.json) |
 | 020-consolidation-real-neutral | Post-consolidation neutral Host/PWA-equivalent smoke | Authenticated local Codex CLI | HTTP transport and deferred processing worked; known novel-entity linking limitation reproduced | [summary](trajectories/runtime/020-consolidation-real-neutral/summary.md), [trace](trajectories/runtime/020-consolidation-real-neutral/trace.json) |
@@ -89,7 +99,7 @@ integration commit is `43426e8`.
 | generalization-v1r1 scoring | Deterministic scoring and descriptive analysis of the sealed V1R1 set | None; frozen evaluator | Public result; no post-result tuning | [report](docs/GENERALIZATION_V1R1_REPORT.md), [machine result](eval/results/generalization/v1/GENERALIZATION_V1R1_RESULT.json) |
 | other recorded fast/replay directories | Intermediate extraction, projector, retry, and diagnostic runs | Mixed; recorded per directory | Preserved as historical evidence, including failed/invalid attempts | [runtime root](trajectories/runtime/) |
 
-The current filesystem inventory contains 39 coding trajectories and 51 runtime
+The current filesystem inventory contains 45 coding trajectories and 51 runtime
 trajectories. The index does not require every runtime directory to have a root `summary.md`:
 the runtime inventory records whether a summary, prompt-like call file, raw
 trace, and other artifacts are present. No transcript is fabricated for a
@@ -138,7 +148,19 @@ transcript, or recorded `*.raw.txt` provider output.
 | 032-product-v2-ui-redesign | coding | yes | yes | n/a | no | 2 |
 | 033-product-v2-dogfood-acceptance | coding | yes | yes | n/a | no | 2 |
 | 034-product-v2-integration | coding | yes | yes | n/a | no | 2 |
+| 035-product-v2-human-dogfood-p0-fixes | coding | yes | yes | n/a | no | 3 |
+| 036-product-v2-live-provider-fix | coding | yes | yes | n/a | no | 3 |
+| 037-product-v2-ask-routing | coding | yes | yes | n/a | no | 3 |
 | 038-product-v2-language-invariance | coding | yes | yes | n/a | no | 3 |
+| 039-product-v2-provenance-precision | coding | yes | yes | n/a | no | 3 |
+| 040-product-v2-semantic-truth | coding | yes | yes | n/a | no | 3 |
+| 041-product-v2-undo-and-ops-logs | coding | yes | yes | n/a | no | 3 |
+| 042-product-v2-final-human-dogfood-fixes | coding | yes | yes | n/a | no | 5 |
+| 043-product-v2-last-dogfood-fixes | coding | yes | yes | n/a | no | 2 |
+| 044-submission-finalization | coding | yes | yes | n/a | no | 2 |
+| ui-001-mobile-pwa | coding | yes | yes | n/a | no | 2 |
+| ui-002-reference-redesign | coding | yes | yes | n/a | no | 2 |
+| submission-001-hardening | coding | yes | yes | n/a | no | 2 |
 | ui-001-mobile-pwa | coding | yes | yes | n/a | no | 2 |
 | ui-002-reference-redesign | coding | yes | yes | n/a | no | 2 |
 | submission-001-hardening | coding | yes | yes | n/a | no | 2 |
@@ -160,7 +182,9 @@ transcript, or recorded `*.raw.txt` provider output.
 | 018-host-foundation-e005-regression | runtime | yes | no | yes | yes | 29 |
 | 019-host-pwa-real-neutral | runtime | no | yes | yes | yes | 2 |
 | 020-consolidation-real-neutral | runtime | no | yes | yes | yes | 2 |
-| 034-product-v2-integrated-acceptance | runtime | no | yes | yes | no | 2 |
+| 034-product-v2-integrated-acceptance | runtime | no | yes | yes | no | 1 |
+| 035-product-v2-human-dogfood-live-smoke | runtime | no | no | yes | yes | 1 |
+| 036-product-v2-live-provider-fix | runtime | yes | no | yes | yes | 3 |
 | generalization-v1r1-baseline-g01 | runtime | no | no | yes | no | 4 |
 | generalization-v1r1-baseline-g02 | runtime | no | no | yes | no | 10 |
 | generalization-v1r1-baseline-g03 | runtime | no | no | yes | no | 6 |

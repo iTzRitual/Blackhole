@@ -1,288 +1,265 @@
 # Blackhole
 
-Blackhole is a zero-organization personal inbox: capture a fragment now and
-let structured state, history, and attention emerge later.
+## Zero-organization external memory
 
-It is a micro1 Agentic Workflows Hackathon submission focused on one difficult
-product question: can an agent maintain useful personal state as everyday
-information changes over time without making capture another organizational
-task?
+**Capture now.**
+**Understand automatically.**
+**Find it later.**
 
-## Run the current local product
+Blackhole is a local-first personal inbox for the fragments of ordinary life.
+Throw in a reminder, receipt, location, preference, document, or task without
+choosing a folder, tag, or schema. The evidence is saved immediately;
+understanding happens asynchronously; useful Memory, Attention, and grounded
+Ask answers emerge afterward.
 
-The current product is a mobile-first PWA served by the local Blackhole Host.
-From the repository root, initialize the Host, run its safe readiness check,
-and start the same-origin web transport:
+This is a frozen Product V2 hackathon submission. Product V2 is a local
+single-user application, not production infrastructure.
+
+## The product loop
 
 ```text
+Capture
+   ↓
+background understanding
+   ↓
+Attention / Memory
+   ↓
+Ask
+```
+
+- **Capture** is a zero-friction inbox. `Saved.` means the raw capture is
+  durable; it does not wait for a model.
+- **Attention** contains things that still need the user: open deadlines,
+  unresolved uncertainty, meaningful changes, and proposed actions.
+- **Memory** is the current useful state, with history, uncertainty,
+  contradictions, and provenance kept visible where they matter.
+- **Ask** is natural, bounded retrieval over personal memory. Deterministic
+  date, time, and arithmetic paths stay deterministic; bounded semantic
+  questions can use the local Codex CLI.
+- **Undo** permanently forgets the selected Product V2 capture and its
+  source-linked state inside the Product V2 Home. It is an explicit user
+  action, not automatic cleanup.
+
+## Quick start
+
+Requirements:
+
+- Python 3.10 or newer;
+- an already-installed Codex CLI for asynchronous semantic processing and
+  provider-backed Ask; and
+- an existing ChatGPT/Codex subscription login owned by that CLI.
+
+From a clean checkout:
+
+```text
+git clone https://github.com/iTzRitual/Blackhole.git
+cd Blackhole
 python -m app.host init
 python -m app.host doctor
 python -m app.web_app --host 127.0.0.1 --port 8080
 ```
 
-Open `http://127.0.0.1:8080`. The PWA has four views:
+Open [http://127.0.0.1:8080](http://127.0.0.1:8080).
 
-- **Capture** — one universal text box, with an optional small text-file import;
-  the normal response is `Saved.`
-- **Attention** — an open deadline and an approval-gated proposed action;
-- **Memory** — current subscriptions, historical price, task reassignment and
-  cancellation, observed costs, missing periods, duplicates, and unknown data;
-- **Ask Blackhole** — a handful of deterministic structured lookups over the
-  same state.
-
-`app.host init` creates `config.json` and `blackhole.db` inside Blackhole Home
-(`~/.blackhole/` by default). `doctor` reports safe Host, database, and Codex
-readiness metadata without semantic inference. Capture appends immutable raw
-evidence and returns `Saved.` even when Codex processing is unavailable. When
-pending captures exist, Ask needs an authenticated local Codex CLI to make the
-state fresh; a provider failure is reported without presenting stale state as
-fresh.
-
-Codex authentication is external to Blackhole. The current Host path does not
-require `OPENAI_API_KEY`; it discovers and invokes an already-installed local
-Codex CLI, while Blackhole never requests, reads, copies, exports, or persists
-provider tokens.
-
-### Optional trusted-LAN phone demonstration
-
-To open the PWA from a phone on a trusted private network, opt in explicitly:
+If semantic processing is needed, authenticate the CLI outside Blackhole:
 
 ```text
-python -m app.web_app \
-  --host 0.0.0.0 \
-  --port 8080 \
-  --trusted-lan-demo
+codex login
 ```
 
-Warning: this is for a trusted private network only. It has no device
-authentication, pairing, or TLS, and is not safe for the Internet. It is not
-production remote access.
+Blackhole does not ask for an API token and does not read, copy, export, or
+persist provider credentials. If the CLI is unavailable, Capture still saves
+the evidence and the queue reports an honest retryable state.
 
-## Historical deterministic demo utility
+The repository's local runtime uses only the Python standard library. The
+`BLACKHOLE_HOME` environment variable can point the application at a separate
+data directory; otherwise the default is `~/.blackhole/`. For an explicit Home,
+pass `--home <blackhole-home>` to `app.host` and `app.web_app` commands. Data
+and Product V2's `blackhole-v2.db`/`blobs/` live inside that Home.
 
-The earlier seeded demo remains in the repository as reproducibility evidence
-for the deterministic presentation and its historical trajectories. It is not
-the current Host/PWA quickstart:
+Loopback is the supported default. A trusted-private-network phone demo is
+available only with an explicit opt-in:
 
 ```text
-python scripts/seed_demo.py --reset
+python -m app.web_app --host 0.0.0.0 --port 8080 --trusted-lan-demo
 ```
 
-By default this replaces the synthetic database at `data/demo/state.sqlite`.
-The utility and `app/demo.py` are provider-free and retain the earlier 14-event
-demo seed, but the current `app.web_app` does not auto-seed that database and
-does not expose `POST /api/reset`. The integrated Host uses Blackhole Home and
-its Host-owned `blackhole.db` instead.
+This mode has no device authentication, pairing, revocable tokens, or TLS. It
+is not safe for the public Internet and is not a production remote-access
+solution. Cloud sync and pairing are deferred.
 
-## Product idea
+## Safe demo preparation
 
-People routinely accumulate short notes, receipts, documents, tasks,
-subscriptions, contracts, and financial observations without wanting to choose
-a folder, project, tag, or schema first. Blackhole accepts those fragments with
-minimal friction and later aims to:
+The repository includes a small, provider-free preparation utility for a
+repeatable judge/demo state. It uses the normal Product V2 HTTP routes with
+synthetic captures and the visible deterministic acceptance provider; it does
+not write benchmark data, bypass the UI with fake answers, or call a live
+provider.
 
-- extract facts and classifications;
-- link observations to existing entities;
-- preserve current state and longitudinal history;
-- distinguish known, inferred, and unknown information;
-- create tasks, obligations, and deadlines;
-- detect duplicates, corrections, and material changes;
-- aggregate deterministic financial observations; and
-- surface only items that require attention.
-
-The design is intentionally quiet: `capture → saved` is the default interaction.
-Attention is reserved for deadlines, unresolved information, important changes,
-and decisions that need explicit approval.
-
-## Capture now, understand later
-
-The backend product loop is intentionally split:
+Choose a new or empty demo Home, prepare it, then start the normal app against
+that same Home:
 
 ```text
-capture → immutable raw event → pending derived processing state → Saved.
-
-later: process pending → structured Blackhole state → query / attention / memory
+python scripts/prepare_product_v2_demo.py --home <new-empty-demo-home>
+python -m app.web_app --home <new-empty-demo-home> --host 127.0.0.1 --port 8080
 ```
 
-`IngestionEngine.capture()` validates and appends the source, records a pending
-row outside the raw JSON, and returns without invoking a provider or rebuilding
-semantic state. `process_pending()` later handles bounded chronological batches
-through the existing semantic extraction, deterministic completeness, relation
-recovery, duplicate-aware consolidation, and rebuildable SQLite projection.
-`ensure_state_fresh()` is the backend boundary an Ask caller can use when it
-needs current state. Failures are recorded per capture and can be retried; no
-background scheduler is included in this legacy V1-compatible ingestion
-engine. The separate Product V2 runtime adds a bounded daemon worker after
-capture without changing that frozen V1 path.
+The seed contains a parking deadline, a Polish preference, a bilingual key
+correction, a PocketWave price history, and an uncertain boiler-warranty
+mention. The utility refuses a non-empty Home so personal data cannot be
+silently mixed into the prepared state. At least one additional Capture should
+still be entered live during a demo to show the immediate-save boundary.
 
-## Non-negotiable boundaries
+The older `?fixture=1` browser mode remains a presentation-only visual-test
+fixture. It is not Product V2 state, benchmark data, or submission evidence.
 
-- Raw source records are immutable and remain available as evidence.
-- Derived state is versioned and rebuildable from raw inputs and transformation
-  rules.
-- Missing information stays unknown; it never becomes zero, false, empty, or
-  complete by default.
-- Arithmetic, date logic, duplicate checks, comparisons, and financial totals
-  belong to deterministic code or SQL, not an LLM response.
-- Sending, paying, cancelling, signing, changing an account, deleting evidence,
-  or another consequential action requires explicit user approval.
-- Holdout expected outputs remain evaluator-owned and outside the implementation
-  agent's trust boundary.
+## Screenshots
 
-## What is implemented
+These screenshots are safe synthetic Product V2 visuals copied from the final
+UI review:
 
-The current integrated application slice is intentionally scoped:
+![Product V2 Capture on desktop](docs/assets/product-v2-capture-desktop.png)
 
-- `app/host.py` — `HostRuntime` ownership boundary plus the backend commands
-  `init`, `status`, `doctor`, `process`, and `retry`;
-- `app/runtime_config.py` — validated non-sensitive runtime configuration,
-  `BLACKHOLE_HOME`, and the default `~/.blackhole/` home;
-- `app/codex_discovery.py` — safe PATH, version, and external-login readiness
-  discovery for the local Codex CLI;
-- `app/state_store.py` — append-only SQLite raw events, payload hashes,
-  structured observations and relationships, rebuildable projections, and an
-  opt-in duplicate-evidence component layer;
-- `app/semantic.py` — shared public-contract normalization used by both the
-  kept runner and deferred runtime;
-- `app/ingestion_engine.py` — generic synchronous capture, derived processing
-  status, bounded deferred ingestion, retry, and ask-time freshness boundary;
-- `app/process_pending.py` — UI-independent processing command using the
-  externally authenticated Codex CLI when pending work exists;
-- `app/query_service.py` — bounded, database-free question projections over a
-  Host snapshot;
-- `app/completeness.py` — generic raw-source evidence scanning and conservative
-  selective completion helpers;
-- `app/response_projector.py` — generic, query-scoped deterministic projections;
-- `app/provider.py` and `app/advanced_runner.py` — the subscription-first
-  local Codex CLI boundary for separately authorized semantic runs;
-- `app/product_v2.py` and `app/product_v2_store.py` — the isolated Product V2
-  open-world runtime, durable queue, attachment blobs, Attention, Ask, and
-  rebuildable projections;
-- `app/product_process.py` — the UI-independent Product V2 init/status/process/
-  retry command boundary;
-- `app/web_app.py` — the same-origin Host HTTP transport and static PWA server;
-- `app/web/` — the mobile-first PWA interface, manifest, and service worker; and
-- `app/demo.py` and `scripts/seed_demo.py` — the historical deterministic demo
-  utility, separate from the integrated Host database.
+![Product V2 Ask on mobile](docs/assets/product-v2-ask-mobile.png)
 
-This is not production infrastructure. There is no hosted service, account
-system, OCR pipeline, external-action executor, Claude adapter, or holdout
-package in this repository. There is no pairing, device-authentication, TLS,
-remote-access, or public-Internet deployment boundary. The Host reports only
-safe provider readiness metadata and never reads or persists authentication
-material.
+No private human dogfood data is included in the published screenshots.
 
-## Post-evaluation Product V2 integration
+## Trust boundaries
 
-The explicitly authorized Product V2 work is integrated on the isolated
-`product/v2-integration` branch/worktree from the runtime, UI, and dogfood
-source branches. It is a local Host/PWA product path, not a replacement for
-the frozen V1 runtime. V2 uses a separate `blackhole-v2.db` and `blobs/` store
-inside Blackhole Home, so the frozen V1 `blackhole.db`, benchmark, evaluator,
-baseline, and recorded results remain unchanged. See
-[`docs/PRODUCT_V2_INTEGRATION.md`](docs/PRODUCT_V2_INTEGRATION.md) for the
-merge record and acceptance evidence.
+- Raw source evidence is immutable during normal operation. Explicit Undo is
+  the narrow, user-authorized permanent-forget exception.
+- Derived Memory and Attention are rebuildable from source evidence plus
+  versioned rules and semantic output.
+- `known`, `inferred`, and `unknown` remain distinct. Missing information is
+  not silently turned into zero, false, empty, or complete.
+- Arithmetic, dates, comparisons, duplicate checks, lifecycle, and financial
+  aggregation are deterministic responsibilities.
+- Sending, paying, cancelling, signing, changing an account, or another
+  consequential external action is never executed without approval.
+- The local Codex CLI owns authentication. Blackhole only records safe
+  readiness/status information.
 
-V2 adds immediate text/attachment capture, durable chronological processing
-with lease recovery and retry, generic open-world memory, deterministic
-Attention and arithmetic/date paths, bounded natural Ask retrieval, and
-append-only semantic retraction. The explicit routes are:
+## Product V2 implementation
 
-```text
-POST /api/v2/capture
-GET  /api/v2/state
-GET  /api/v2/processing
-POST /api/v2/process
-POST /api/v2/retry
-POST /api/v2/ask
-POST /api/v2/retract
-POST /api/v2/attention/status
-GET  /api/v2/attachments/<sha256>
-```
+The integrated application is a same-origin Host/PWA:
 
-The read-only V2 GET routes do not start provider work; semantic Ask is
-POST-only. The UI-independent command boundary is:
+- `app.host` owns the local Home and safe readiness checks;
+- `app.product_v2` owns immediate capture, the durable queue, bounded worker,
+  open-world semantic state, Attention, Ask, attachments, and permanent Undo;
+- `app.web_app` exposes the Product V2 HTTP contract; and
+- `app/web/` provides the mobile-first PWA.
 
-```text
-python -m app.product_process --home <blackhole-home> init
-python -m app.product_process --home <blackhole-home> status
-python -m app.product_process --home <blackhole-home> process
-python -m app.product_process --home <blackhole-home> retry
-```
+Product V2's final runtime configuration is `gpt-5.6-luna`, low reasoning, and
+batch size 2. These are Product V2 settings. Legacy V1-compatible runtime
+defaults and the frozen benchmark configuration remain separate and unchanged.
 
-The product default is the configured `gpt-5.6-luna` model at `high`
-reasoning, distinct from the frozen benchmark's `max` configuration.
+The current product contract includes language-invariant retrieval, precise
+source provenance, current-first Memory, unique unresolved Attention items,
+bounded Ask thread context, human-readable values, semantic corrections,
+temporal meaning, deterministic occurrence aggregation, attachment persistence,
+and permanent Undo. See
+[`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md) and
+[`docs/PRODUCT_V2_INTEGRATION.md`](docs/PRODUCT_V2_INTEGRATION.md).
 
-V2 deterministic tests use fake providers and temporary Homes. The integrated
-acceptance run also uses a provider-free deterministic fixture and separately
-measures the normal asynchronous worker boundary; it is not benchmark ground
-truth. No live provider credentials, benchmark expected output, holdout
-material, OCR guarantee, production hosting, Claude adapter, or consequential
-action execution is part of this product scope.
+## Evidence: V1 and Product V2 are different claims
 
-## Benchmark status
+V1 is the scientifically evaluated system. Product V2 is the post-evaluation
+product redesign; its acceptance numbers are development/dogfood evidence, not
+unseen generalization benchmark scores.
 
-Gate A is frozen at one public 200-event development scenario with checkpoints
-at 50, 100, 150, and 200. Gate B's `response-contract-v2` repair is valid. The
-official fair comparator remains `baseline-v1` at `LQA-0M=0.3014914553` with
-`DSCR=277`. The latest kept advanced replay is Experiment 005 at
-`LQA-0M=0.8695006212` with `DSCR=40`; it preserves the same frozen benchmark
-and has no safety or source-integrity failure. Experiment 004 remains preserved
-as the preceding kept replay at `LQA-0M=0.8630770101` with `DSCR=41`, and
-Experiment 003 remains preserved at `LQA-0M=0.8157180034` with `DSCR=45`.
+The frozen V1 development track is one public 200-event scenario with
+checkpoints at 50, 100, 150, and 200:
 
-Those are development measurements, not a claim of production readiness or
-holdout superiority. The public benchmark, calibration evidence, baseline
-artifacts, and evaluator behavior are preserved. Experiment 005 tested
-duplicate-aware evidence consolidation over the existing raw/derived boundary;
-its kept replay made zero provider calls. The treatment remains experimental
-and does not expose holdout material or perform provider-assisted resolution.
+- official stateless baseline: `LQA-0M 0.30149145529538973`;
+- final kept V1 development reference (Experiment 005):
+  `LQA-0M 0.8695006212469447`, `DSCR 40`;
+- Experiment 005 made zero provider calls in the recorded replay.
 
-`implementation-freeze-v1` remains the evaluated frozen version. The final
-Generalization V1R1 result is now public in
-[docs/GENERALIZATION_V1R1_REPORT.md](docs/GENERALIZATION_V1R1_REPORT.md); the
-blind baseline and Blackhole candidates were sealed before oracle scoring. It
-is a post-freeze shadow/generalization set of three fresh synthetic worlds, not
-an organizer-provided official holdout and not evidence of statistical
-significance. The large DEV improvement did not transfer strongly to unseen
-worlds. Subsequent Product v2 work is post-evaluation product development,
-not retroactive tuning of the reported V1R1 score.
+The post-freeze V1R1 result is a **shadow/generalization set of three fresh
+synthetic worlds**, not an official holdout and not a significance claim:
 
-See [docs/EVALUATION.md](docs/EVALUATION.md) for the contract and metrics,
-[docs/REPRODUCTION.md](docs/REPRODUCTION.md) for judge-facing commands,
-[`eval/results/experiment-005-duplicate-evidence-full.json`](eval/results/experiment-005-duplicate-evidence-full.json)
-for the current advanced replay, and
-[`eval/results/final-comparison-v1.json`](eval/results/final-comparison-v1.json)
-for the historical/superseded product-phase baseline comparison snapshot, not
-the current final comparison.
+- baseline macro LQA `0.2591711465`; Blackhole macro LQA `0.2712347361`;
+- absolute delta `+0.0120635896` and reported error-rate reduction `+1.6283908892%`;
+- mean successful runtime `3066.475526 s` baseline vs `897.310841 s` Blackhole;
+- retries `3` vs `0`, hard failures `0/0`, and schema validity `0/3` vs `3/3`.
 
-## Repository map
+Product V2 development acceptance evidence is separate:
+
+- application tests: `184/184 PASS`;
+- evaluator tests: `10/10 PASS`;
+- acceptance harness: `7/7 PASS`;
+- integrated Product V2 acceptance: `50/50 PASS`;
+- quality gates: `7/7 PASS`.
+
+The engineering lesson is deliberately preserved:
+
+> Optimizing an agent for measurable structured correctness can accidentally
+> optimize the product away from the user.
+
+The large DEV improvement transferred weakly to fresh worlds. Human dogfooding
+then found real product failures, which led to the Product V2 redesign and the
+subsequent lifecycle, provider-schema, Ask-routing, language, provenance,
+semantic-truth, Undo, and final human-dogfood repairs. The intermediate
+failures are part of the evidence, not hidden from the submission.
+
+## Known limitations
+
+- Capture is immediate, but live background semantic processing is still slower
+  than desired. Prior final dogfood measured a first useful state at about
+  `23.031 s` and the remaining burst at about `129.562 s`.
+- Those are real provider measurements and are not erased by faster
+  deterministic fixture timings. The demo should use prepared state rather
+  than waiting for a four-item live burst on camera.
+- PDFs and other attachments are persisted and surfaced with truthful status,
+  but semantic understanding remains limited where the provider cannot read or
+  interpret them; no blanket OCR/vision guarantee is made.
+- Product V2 is local and single-user. Pairing, cloud sync, hosted deployment,
+  and production remote security are deferred.
+- Graceful Windows terminal stop logging may remain imperfect in a live launcher
+  even though the deterministic clean-stop path is covered.
+
+## Repository and reproducibility map
 
 | Path | Purpose |
 | --- | --- |
-| `docs/` | Product, architecture, decisions, evaluation, reproduction, and video notes |
-| `prompts/` | Versioned runtime and coding prompt artifacts |
-| `benchmark/` | Calibration and public development benchmark boundaries |
-| `baseline/` | Fair stateless provider-baseline harness |
-| `app/` | Host-owned runtime, deferred ingestion service, same-origin transport, PWA, and historical demo utility |
-| `data/synthetic/` | Committed synthetic demo inputs; no personal data |
-| `data/raw/` | Reserved raw-source location |
-| `eval/` | Deterministic scorer, tests, and result artifacts |
-| `trajectories/` | Coding and representative runtime evidence |
-| `scripts/` | Reproduction helpers |
+| `app/` | Host-owned runtime, Product V2, transport, PWA, and legacy V1-compatible code |
+| `benchmark/` | Calibration and public development benchmark; holdout ground truth is not here |
+| `baseline/` | Fair stateless V1 baseline harness |
+| `eval/` | Deterministic evaluator, tests, and recorded result artifacts |
+| `product_acceptance/` | Public Product V2 development acceptance cases and harness |
+| `docs/` | Product, architecture, submission, demo, process, and reproduction notes |
+| `trajectories/` | Coding and runtime evidence, including preserved failures and retries |
+| `scripts/` | Safe local preparation and deterministic reproduction helpers |
 
-## Development checks
+Judge-facing documents:
 
-From the repository root:
+- [`docs/SUBMISSION.md`](docs/SUBMISSION.md) — rubric-aligned narrative;
+- [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md) — a realistic five-minute demo;
+- [`docs/REPRODUCTION.md`](docs/REPRODUCTION.md) — V1 reproduction vs Product V2 local setup;
+- [`TRAJECTORY_INDEX.md`](TRAJECTORY_INDEX.md) — coding/runtime evidence map; and
+- [`docs/SUBMISSION_CHECKLIST.md`](docs/SUBMISSION_CHECKLIST.md) — final gate status.
+
+## Deterministic verification
+
+From the repository root, the final local gate is:
 
 ```text
 python -m unittest discover -s . -p "test_*.py" -v
+python -m unittest discover -s eval/tests -v
+python -m unittest product_acceptance.harness.test_harness -v
+python scripts/run_product_v2_integrated_acceptance.py
+python -m compileall -q app eval product_acceptance scripts
+node --check app/web/app.js
 python benchmark/dev/generate_benchmark.py --check
 python eval/contract_smoke.py
-python -m compileall -q app eval scripts
+python scripts/qualification_check.py --inventory
+git diff --check
 ```
 
-Read [AGENTS.md](AGENTS.md) before making changes. The product contract is in
-[docs/PRODUCT_SPEC.md](docs/PRODUCT_SPEC.md), the trust boundaries are in
-[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), and the short demo narrative is
-in [docs/VIDEO_SCRIPT.md](docs/VIDEO_SCRIPT.md).
+The integrated acceptance runner uses a deterministic in-process provider and
+temporary Homes. It is not a benchmark scorer. Do not run live provider calls
+as part of this deterministic gate.
+
+Read [`AGENTS.md`](AGENTS.md) before changing the repository. The final
+submission state, evidence boundaries, and decision history are recorded in
+the linked documents above.

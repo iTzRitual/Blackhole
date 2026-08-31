@@ -1,179 +1,146 @@
-# Submission checklist
+# Blackhole submission checklist
 
-This is an operational checklist for the final hours before submission. The
-approved Host/PWA integration and submission hardening are now consolidated on
-`master`; the implementation freeze is recorded. This post-freeze merge adds
-documentation and independent audit evidence only. Generalization,
-presentation, and external submission remain open. Checked items are facts
-verified in this checkout; unchecked items remain open.
+Status: repository hardening gate in progress; the deterministic checks below
+are complete, and the final local/remote Git identifiers are recorded only
+after the submission commit and tag exist. This is a factual repository gate,
+not an aspirational feature backlog.
 
-## Repository
+## Scope and authority
 
-- [x] Isolated `submission/hardening` worktree created from backend foundation
-  SHA `11d8a041fedc027ca705e8616085c05ef18d9b57`.
-- [x] Qualification command is available: `python
-  scripts/qualification_check.py`.
-- [x] Protected benchmark, evaluator, expected-output, runtime, and narrative
-  files were not modified by this hardening workstream.
-- [x] The hardening branch's `eval/results/contract-smoke.json` has no
-  committed diff from the pre-merge master version; the existing artifact was
-  preserved rather than regenerated or overwritten as part of consolidation.
-- [x] Record the final integrated implementation SHA:
-  `171a6cc1c656d6ab901f41bda8440ee5d59967e3`.
-- [x] Confirm the final integrated worktree has no unintended changes before
-  the documentation-only freeze record.
-- [x] Create the final Git tag: `implementation-freeze-v1`.
-- [ ] Add an explicit README “main failure mode” statement.
-- [ ] Add an explicit README “hot take” statement.
+- [PASS] Work is being finalized directly on `master`.
+- [PASS] Starting `master` and `origin/master` were the exact expected clean
+  SHA: `fbb0845c9d73fefc25b1bbf2ea9db3c4750bdb6f`.
+- [PASS] Product V2 implementation semantics were not changed in this pass;
+  the additions are judge-facing docs, a safe synthetic demo-preparation
+  utility, screenshots copied from the existing synthetic UI review, and
+  trajectory/evidence updates.
+- [PASS] No provider inference, V1 oracle access, holdout inspection, prompt
+  tuning, benchmark optimization, or evaluator-ground-truth change occurred.
+- [PASS] The frozen V1 benchmark, baseline, evaluator, calibration evidence,
+  and recorded V1 metrics remain separate from Product V2 acceptance evidence.
+- [PASS] No production hosting, Claude adapter, cloud sync, pairing, OCR
+  guarantee, or consequential-action subsystem was added.
 
-## Benchmark and evaluation
+## Judge-facing package
 
-- [x] Preserve the frozen public 200-event development scenario and checkpoints
-  at 50, 100, 150, and 200.
-- [x] Preserve the official valid `baseline-v1` evidence (`LQA-0M` about
-  `0.3014914553`, `DSCR=277`).
-- [x] Preserve the current kept E005 evidence (`LQA-0M=0.8695006212469447`,
-  `DSCR=40`).
-- [x] Do not run benchmark optimization in this hardening workstream.
-- [x] Verify that current DEV score claims in the submission-facing narrative
-  point to the latest kept E005 evidence; older E002 passages are explicitly
-  historical/superseded.
-- [ ] Regenerate the final comparison artifact after implementation and
-  post-freeze generalization are frozen.
-- [ ] Ensure the future final comparison points to E005 or the explicitly
-  approved post-freeze result, not the older E002 snapshot.
-- [ ] Record the post-freeze generalization result, if authorized and run.
-- [ ] Confirm no benchmark optimization occurred after the final freeze.
+- [PASS] [`README.md`](../README.md) leads with the product loop, quick start,
+  subscription-first authentication boundary, final Product V2 defaults, V1
+  versus Product V2 evidence separation, hot take, and known limitations.
+- [PASS] [`docs/SUBMISSION.md`](SUBMISSION.md) contains the problem/user value,
+  engineering solution, end-to-end quality, measured evidence, reproduction,
+  insights, limitations, and privacy/claim boundaries.
+- [PASS] [`docs/DEMO_SCRIPT.md`](DEMO_SCRIPT.md) provides a realistic five-
+  minute flow using synthetic prepared state plus one live immediate Capture.
+- [PASS] `docs/assets/product-v2-capture-desktop.png` and
+  `docs/assets/product-v2-ask-mobile.png` are synthetic copies of the final UI
+  review; no private human dogfood data is published.
+- [PASS] The demo preparation utility populates a new/empty Home through the
+  real Product V2 HTTP routes with the visible deterministic fixture provider;
+  it does not write benchmark data, fake UI answers, or call a live provider.
+- [PASS] The presentation-only `?fixture=1` browser mode is labeled as a
+  visual-test fixture and is not presented as Product V2 state.
 
-## Reproducibility
+## Product V2 contract disclosure
 
-- [x] Keep `docs/REPRODUCTION.md` as the reproduction handoff and review it
-  after integration edits land.
-- [x] Correct the current reproduction path to use the integrated Blackhole
-  Host/PWA, with explicit `BLACKHOLE_HOME` semantics, deferred processing, and
-  external Codex authentication; retain the seeded demo only as historical
-  deterministic evidence.
-- [x] Check the current Host/PWA quickstart, CLI options, and trusted-LAN
-  warning against the implemented commands without provider inference.
-- [x] Keep provider requirements explicit: subscription-first local Codex CLI,
-  external authentication, and no Blackhole token access.
-- [x] Keep approximate runtime/token caveats documented where they are known;
-  do not invent subscription dollar cost.
-- [x] Define CI coverage for offline qualification, unit tests, compileall,
-  benchmark generator determinism, and response-contract smoke; local
-  equivalents pass.
-- [ ] Test the complete reproduction commands from a clean environment after
-  the integrated implementation SHA is frozen.
-- [x] Verify all reproduction commands use repository-relative or user-supplied
-  paths rather than developer-specific absolute paths.
+- [PASS] Current Product V2 defaults are documented as model
+  `gpt-5.6-luna`, low reasoning, and batch size `2`.
+- [PASS] Legacy/V1-compatible high-reasoning and batch-size-ten settings remain
+  described only as historical/separate configuration where applicable.
+- [PASS] Capture is documented as immediate durable raw evidence; semantic
+  processing is asynchronous and live latency is disclosed.
+- [PASS] Attention is described as open/unresolved active state; completed and
+  cancelled lifecycle records do not remain active by default.
+- [PASS] Memory, provenance, language invariance, unknown values, correction,
+  temporal meaning, deterministic aggregation, and bounded Ask context are
+  disclosed without claiming universal language or OCR quality.
+- [PASS] Undo is described accurately as explicit permanent forget for the
+  selected Product V2 capture and source-linked state, without rewriting
+  unrelated evidence.
+- [PASS] The local single-user/trusted-LAN limitations and absence of public
+  remote security are visible.
 
-## Agent trajectories
+## Evidence and trajectories
 
-- [x] Keep `TRAJECTORY_INDEX.md` current with coding and runtime inventory.
-- [x] Keep representative baseline, demo, and advanced runtime evidence
-  discoverable.
-- [x] Keep authentic prompt/summary records for meaningful coding trajectories;
-  do not fabricate full transcripts.
-- [x] Preserve failed/invalid attempts and their lessons, including the v0
-  contract failure and superseded E002 final artifacts.
-- [x] Add/finish the integration trajectory after the active integration task
-  completed.
-- [x] Update the index after final integration freeze; post-freeze
-  generalization is intentionally not part of this task.
-- [x] Merge the independent frozen-runtime audit and preserve its authentic
-  findings: P0 `0`, P1 `10`, P2 `4`.
-- [x] Record that the reproduction refresh was completed separately before
-  the audit; the audit report itself remains unchanged.
-- [x] Ensure the removed/rejected experiment or treatment is mentioned in the
-  final submission narrative where relevant.
+- [PASS] Frozen V1 development benchmark: one public `200`-event scenario with
+  checkpoints at `50`, `100`, `150`, and `200`.
+- [PASS] Official stateless `baseline-v1`: LQA-0M
+  `0.30149145529538973`, DSCR `277`.
+- [PASS] Kept Experiment 005 V1 reference: LQA-0M
+  `0.8695006212469447`, DSCR `40`, with zero provider calls in the recorded
+  replay.
+- [PASS] Post-freeze V1R1 is labeled as three fresh synthetic worlds and a
+  shadow/generalization result, not an official holdout or significance claim.
+- [PASS] Product V2 development acceptance remains labeled separately:
+  application `184/184`, evaluator `10/10`, acceptance harness `7/7`,
+  integrated acceptance `50/50`, and quality gates `7/7`.
+- [PASS] [`TRAJECTORY_INDEX.md`](../TRAJECTORY_INDEX.md) inventories `45`
+  coding and `51` runtime trajectories, including the finalization trajectory.
+- [PASS] The advisory ChatGPT role is documented in
+  [`docs/process/CHATGPT_DECISION_LOG.md`](process/CHATGPT_DECISION_LOG.md),
+  with [`docs/process/CHATGPT_TRANSCRIPT_NOTE.md`](process/CHATGPT_TRANSCRIPT_NOTE.md)
+  explicitly declining to fabricate a transcript.
+- [PASS] `IMPROVEMENT_CHANGELOG.md` was not altered: this is submission
+  preparation, not a benchmark or product experiment.
+- [PASS] `docs/DECISIONS.md` was not rewritten: historical decisions remain
+  authentic, while current submission-facing contract text is explicit.
 
-## Security and privacy
+## Deterministic validation
 
-- [x] Run the conservative tracked-text credential hygiene check.
-- [x] Confirm no credential values are printed by the checker or committed to
-  the repository.
-- [x] Do not inspect or include home-directory, Codex-auth, browser, or OS
-  credential-store data.
-- [x] Keep holdout expected outputs and evaluator-owned ground truth outside
-  implementation-facing evidence.
-- [x] Re-run credential hygiene on the final integrated tree.
-- [ ] Review the final video, screenshots, logs, and repository history for
-  personal data or credentials.
+- [PASS] `python -m unittest discover -s app/tests -p "test_*.py" -v` —
+  `184/184`.
+- [PASS] `python -m unittest discover -s eval/tests -v` — `10/10`.
+- [PASS] `python -m unittest product_acceptance.harness.test_harness -v` —
+  `7/7`.
+- [PASS] `python -m unittest discover -s . -p "test_*.py" -v` — `201/201`.
+- [PASS] `python scripts/run_product_v2_integrated_acceptance.py` — `50/50`
+  PASS, no live provider; the generated result is
+  `eval/results/product-v2-integrated-acceptance.json`.
+- [PASS] `python -m compileall -q app eval product_acceptance scripts`.
+- [PASS] `node --check app/web/app.js`.
+- [PASS] `python benchmark/dev/generate_benchmark.py --check` — `200` events,
+  `4` checkpoints.
+- [PASS] `python eval/contract_smoke.py` — non-scored contract smoke passed.
+- [PASS] `python scripts/qualification_check.py --inventory` — zero hard
+  failures; `45` coding and `51` runtime trajectories documented.
+- [PASS] `git diff --check`.
 
-## Demo and video
+## Qualification warnings retained intentionally
 
-- [ ] Record a realistic end-to-end flow: capture, later processing, attention,
-  memory/history, unknown state, and approval-gated action.
-- [ ] Keep the solution video at or below five minutes.
-- [ ] Show the current approved metric/evidence artifact and its limitations.
-- [ ] Verify the video URL works in an unauthenticated browser.
-- [ ] Enter the final video URL into the HackerEarth submission.
+The qualification checker reports four understood non-blocking warnings:
 
-## HackerEarth submission
+- one authentic developer-specific absolute path in the historical
+  `docs/audits/FROZEN_RUNTIME_AUDIT.md`;
+- `eval/results/final-advanced-candidate.json`, a preserved historical named
+  candidate that predates the kept E005 reference;
+- `eval/results/final-advanced.json`, a preserved E002 result; and
+- `eval/results/final-comparison-v1.json`, a preserved E002 comparison.
 
-- [ ] Confirm the repository URL is correct and publicly accessible as intended.
-- [ ] Confirm the video URL is entered in the submission form.
-- [ ] Confirm the final narrative distinguishes development evidence from
-  holdout and production claims.
-- [ ] Confirm the README, changelog, reproduction guide, trajectory index, and
-  checklist are included in the submitted revision.
-- [ ] Confirm the final submission description names the main failure mode and
-  the concise product hot take.
+These artifacts are not used as current claims, are not silently rewritten,
+and are called out so a judge can distinguish historical evidence from the
+current E005/V1R1 narrative. No obvious committed credential was detected.
 
-## Final freeze
+## Git finalization
 
-- [x] Freeze the integrated implementation SHA in
-  `docs/IMPLEMENTATION_FREEZE.md`.
-- [ ] Freeze the authorized post-freeze generalization result, if any.
-- [ ] Complete blind post-freeze generalization.
-- [ ] Score the authorized blind generalization outputs.
-- [ ] Decide the disposition of the audit's P1 hardening findings after
-  generalization.
-- [ ] Regenerate and inspect `final-comparison.json` or its approved successor.
-- [x] Confirm baseline evidence remains unchanged.
-- [x] Confirm no benchmark optimization was performed after freeze.
-- [x] Confirm the local CI-equivalent gate is green on the exact freeze SHA;
-  no remote CI status is claimed here.
-- [x] Confirm `git status --short` is clean on the exact freeze-record SHA.
-- [x] Create and record the final tag: `implementation-freeze-v1`.
+- [PASS] No existing `product-v2-submission` tag was present before this run.
+- [PENDING] Commit the reviewed submission-hardening tree directly on
+  `master`.
+- [PENDING] Confirm the post-commit local tree is clean.
+- [PENDING] Push `master` without force-pushing.
+- [PENDING] Verify `origin/master` resolves to the exact final local SHA.
+- [PENDING] Create annotated tag `product-v2-submission` at that exact SHA.
+- [PENDING] Push and verify the tag at the exact same SHA.
+- [PENDING] Inspect remote branches and preserve history; delete nothing
+  unless a temporary branch is demonstrably reachable from final `master` and
+  deletion is clearly safe.
 
-## Known finalization items from this audit
+The final exact local SHA, remote SHA, and tag target are reported in the final
+handoff after those operations; the final tag itself is the immutable pointer.
 
-These are intentionally documented rather than overwritten in this workstream:
+## External submission items
 
-- `eval/results/final-advanced-candidate.json` is named as a final candidate
-  but predates the kept E005 result.
-- `eval/results/final-advanced.json` reports the older E002 replay at
-  `LQA-0M=0.7492295899`, `DSCR=72`.
-- `eval/results/final-comparison-v1.json` compares the baseline with the older
-  E002 replay, not current E005 (`LQA-0M=0.8695006212`, `DSCR=40`).
-- No authoritative final comparison is generated during this freeze; it
-  remains a later post-freeze submission task if explicitly authorized.
-- `docs/EVALUATION.md` section 24 and `docs/REPRODUCTION.md` section 14 now
-  label the older E002 material as historical/superseded and retain it for
-  auditability.
-
-## Path and metric audit notes
-
-- No developer-specific absolute paths were found in submission-facing Markdown
-  outside trajectory evidence. Historical trajectory prompts/summaries contain
-  local attachment or skill paths; those are retained as historical evidence,
-  not reproduction instructions, and are not a submission blocker.
-- The official baseline references are consistent at approximately
-  `LQA-0M=0.3014914553` / `DSCR=277`. The current E005 references are
-  consistent at `LQA-0M=0.8695006212` / `DSCR=40`. The three stale named
-  artifacts are historical and are not contradictions in the current
-  narrative; historical changelog scores are expected and are not current
-  claims.
-- The independent audit intentionally preserves its original absolute
-  worktree reference as authentic historical evidence; the resulting
-  qualification warning is understood and is not repaired in this merge.
-
-## Hardening gate result
-
-- [x] Qualification hard checks pass after the hardening trajectory summary is
-  present.
-- [x] Qualification warnings are understood: three stale named artifacts
-  remain; the stale E002 narrative references were relabeled historical.
-- [x] Focused qualification tests pass (5 tests).
-- [ ] Re-run and record the final integrated-tree gate before submission.
+- [NOT VERIFIED IN REPOSITORY] A final narrated video, its unauthenticated URL,
+  and HackerEarth form entry are external actions and cannot be verified from
+  this checkout.
+- [PASS] The repository package is ready for a judge to clone, understand,
+  run, and inspect using the documented local deterministic path, subject to
+  the local Codex CLI requirement for live semantic processing.

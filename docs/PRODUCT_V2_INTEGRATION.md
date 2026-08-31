@@ -1,8 +1,14 @@
 # Product V2 integration record
 
-Status: integrated Product V2 Host/PWA and dogfood acceptance evidence on the
-isolated `product/v2-integration` branch. This is post-evaluation product work;
-it does not reopen the frozen V1 benchmark or runtime.
+Status: historical integration record for the Product V2 Host/PWA and dogfood
+acceptance work. The resulting implementation is now consolidated in the
+submission `master` branch. This is post-evaluation product work; it does not
+reopen the frozen V1 benchmark or runtime.
+
+For the current judge-facing contract and final Product V2 configuration, see
+[`README.md`](../README.md), [`docs/SUBMISSION.md`](SUBMISSION.md), and the
+final dogfood records below. Historical source-branch and merge references in
+this record are intentionally retained for auditability.
 
 Final coherent integration commit: `43426e8`.
 

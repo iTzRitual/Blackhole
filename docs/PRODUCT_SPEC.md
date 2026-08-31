@@ -2,7 +2,7 @@
 
 **Product:** Blackhole
 **Descriptor:** A zero-organization life inbox.
-**Status:** Product design retained; Gate A benchmark frozen, Gate B response contract valid; V1 implementation frozen; Product V2 runtime foundation authorized post-evaluation
+**Status:** Product design retained; Gate A benchmark frozen, Gate B response contract valid; V1 implementation frozen; integrated Product V2 frozen for submission
 **Audience:** Product, engineering, evaluation, and agent-workflow contributors
 
 ## 1. Product intent
@@ -219,9 +219,9 @@ consequential action without explicit user approval.
 ## 13. Post-evaluation Product V2 runtime foundation
 
 Product V2 is the open-world product runtime built after the evaluated V1
-boundary. It is isolated in its own worktree and branch and must not be used
-to tune, rewrite, or replace the frozen V1R1 benchmark, baseline, evaluator,
-calibration evidence, or reported results.
+boundary. The final Host/PWA implementation is integrated in the submission
+branch and must not be used to tune, rewrite, or replace the frozen V1R1
+benchmark, baseline, evaluator, calibration evidence, or reported results.
 
 ### Capture and processing
 
@@ -248,12 +248,16 @@ rebuildable and raw evidence is never rewritten.
 Attention is a deterministic projection of tasks, obligations, deadlines,
 unknowns, changes, conflicts, and proposed actions. Relative dates are
 interpreted with capture timezone/context, and upcoming/overdue status is
-recomputed from the current clock. It does not make medical or ADHD claims.
+recomputed from the current clock. Only open unresolved items appear in the
+active list and badge; completed and cancelled lifecycle records remain
+inspectable without remaining active by default. It does not make medical or
+ADHD claims.
 Ask uses `POST /api/v2/ask` and bounded retrieval over processed state rather
-than replaying the complete history. Cost totals, date comparisons, upcoming
-work, recent changes, and last-mention lookups use deterministic code. Only
-bounded synthesis questions may invoke the local Codex CLI, and references
-must point to known stored evidence.
+than replaying the complete history. Ask follow-ups use bounded, temporary
+thread context; assistant text is not persisted as Product Memory or evidence.
+Cost totals, date comparisons, upcoming work, recent changes, and last-mention
+lookups use deterministic code. Only bounded synthesis questions may invoke the
+local Codex CLI, and references must point to known stored evidence.
 
 #### Language invariance
 
@@ -302,10 +306,10 @@ then rebuilds the remaining projections. A minimal event-ID tombstone prevents
 accidental reuse and makes repeated Undo idempotent; the deleted capture's
 content is not retained by Product V2.
 
-The initial V2 implementation is backend/API and deterministic-test focused.
-It does not claim completion of a redesigned PWA surface, production hosting,
-remote access, multi-user isolation, OCR, a Claude adapter, or consequential
-action execution.
+The integrated V2 implementation includes the Host/PWA surface, deterministic
+acceptance evidence, and the local Product V2 HTTP contract. It does not claim
+production hosting, remote access security, multi-user isolation, OCR, a Claude
+adapter, cloud sync, or consequential action execution.
 
 ### 13.1 Semantic truth and temporal meaning
 
