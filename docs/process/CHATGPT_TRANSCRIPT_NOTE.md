@@ -1,15 +1,20 @@
 # ChatGPT transcript note
 
-The advisory ChatGPT conversation is separate from the required coding-agent
-and runtime trajectories. Those trajectories preserve the authentic prompts,
-summaries, runtime artifacts, and failure/retry evidence supplied by their
-originating coding-agent sessions.
+A complete private advisory ChatGPT transcript exists locally outside this
+repository. It was read as source material for the sanitized process history;
+it is not a coding-agent trajectory and is not an implementation record.
 
-No sanitized export of the complete advisory conversation is included in this
-repository. A full transcript must not be fabricated or reconstructed from
-memory. The submission-safe record of the advisory process is
-[`CHATGPT_DECISION_LOG.md`](CHATGPT_DECISION_LOG.md), together with the
-repository's existing decision log, trajectory index, and documented evidence.
+The raw transcript is deliberately not committed. It may contain private or
+local information, raw working prompts, provider diagnostics, screenshots, and
+other dogfood context that is not appropriate for publication. Original
+ChatGPT prompts are not reproduced here.
+
+The repository contains a sanitized decision-history reconstruction instead:
+[`PRODUCT_DECISION_HISTORY.md`](PRODUCT_DECISION_HISTORY.md),
+[`CHATGPT_DECISION_LOG.md`](CHATGPT_DECISION_LOG.md), and the linked evidence
+map. Coding trajectories under `trajectories/coding/` and runtime trajectories
+under `trajectories/runtime/` remain the authoritative implementation and
+execution records. They are not replaced by advisory-chat recollection.
 
 This note contains no credentials, private human dogfood content, provider raw
 output, V1 oracle material, or evaluator-owned holdout ground truth.

@@ -1,9 +1,11 @@
 # ChatGPT advisory decision log
 
 This is a submission-safe summary of ChatGPT's advisory role in the Blackhole
-project. It is not a coding trajectory, not a provider trace, and not a
-reconstructed transcript. The coding and runtime trajectories in
-`trajectories/` remain the authoritative records of agent implementation work.
+project. A complete private advisory transcript exists locally and informed
+this record, but the transcript is not committed, copied, or published. This
+file is not a coding trajectory, not a provider trace, and not a reconstructed
+transcript. The coding and runtime trajectories in `trajectories/` remain the
+authoritative records of agent implementation work.
 
 ## Role and boundaries
 
@@ -14,6 +16,11 @@ benchmark/evaluator boundaries separate from Product V2 product work. It did
 not own the repository, authenticate a provider, access V1 oracle/scoring
 worktrees, or author the coding trajectories on behalf of the implementation
 agent.
+
+The human remained the product owner and final decision-maker. ChatGPT advice
+could be accepted, rejected, constrained, or redirected; implementation claims
+come from the corresponding Codex trajectory and Git evidence rather than from
+the advisory transcript.
 
 The advice consistently preserved these constraints:
 

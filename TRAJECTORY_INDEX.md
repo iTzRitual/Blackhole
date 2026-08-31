@@ -63,6 +63,7 @@ now listed below; the local oracle and scoring histories remain separate.
 | 046-final-live-ask-memory-ui-hotfix | Repair current-question Ask, generic occurrence Memory, and final live UX surfaces | KEEP; `196/196` app tests, `213/213` root tests, `50/50` acceptance, bounded live gate PASS | `93e497a` | [prompt](trajectories/coding/046-final-live-ask-memory-ui-hotfix/prompt.md), [summary](trajectories/coding/046-final-live-ask-memory-ui-hotfix/summary.md), [runtime](trajectories/runtime/046-final-live-ask-memory-ui-hotfix/summary.md), [result](eval/results/product-v2-final-live-ux-hotfix.json) |
 | 047-relative-day-temporal-hotfix | Repair capture-time relative-day normalization and occurrence rendering | KEEP; `200/200` app tests, `217/217` root tests, `50/50` acceptance; no live provider | `c9aba33` | [prompt](trajectories/coding/047-relative-day-temporal-hotfix/prompt.md), [summary](trajectories/coding/047-relative-day-temporal-hotfix/summary.md), [result](eval/results/product-v2-integrated-acceptance.json) |
 | 048-final-demo-presentation-polish | Polish final Ask, Capture, Attention, and Memory presentation within the freeze boundary | KEEP implementation; `206/206` app tests, `223/223` root tests, `50/50` acceptance, local visual PASS; live smoke PARTIAL because its result was not captured | `13af0d0` | [prompt](trajectories/coding/048-final-demo-presentation-polish/prompt.md), [summary](trajectories/coding/048-final-demo-presentation-polish/summary.md), [runtime](trajectories/runtime/048-final-demo-presentation-polish/trace.json), [result](eval/results/product-v2-integrated-acceptance.json) |
+| 050-final-process-documentation-h2h-submission | Reconstruct process history, run the final frozen head-to-head, and package submission documentation | In progress; documentation-only scope, benchmark evidence pending | current task | [prompt](trajectories/coding/050-final-process-documentation-h2h-submission/prompt.md), [summary](trajectories/coding/050-final-process-documentation-h2h-submission/summary.md) |
 | ui-001-mobile-pwa | Build the dependency-light mobile-first PWA in an isolated worktree | KEEP; UI workstream preserved and integrated | `0cc6653` | [summary](trajectories/coding/ui-001-mobile-pwa/summary.md) |
 | ui-002-reference-redesign | Correct the Capture surface against the approved mobile reference | KEEP; UI correction preserved and integrated | `0cc6653` | [summary](trajectories/coding/ui-002-reference-redesign/summary.md) |
 | submission-001-hardening | Add offline qualification, CI, evidence index, and submission checklist | KEEP; three non-blocking stale-artifact warnings remain for finalization | `18b123f` | [summary](trajectories/coding/submission-001-hardening/summary.md) |
@@ -105,7 +106,7 @@ remote master and tag identifiers are verified in the final handoff.
 | generalization-v1r1 scoring | Deterministic scoring and descriptive analysis of the sealed V1R1 set | None; frozen evaluator | Public result; no post-result tuning | [report](docs/GENERALIZATION_V1R1_REPORT.md), [machine result](eval/results/generalization/v1/GENERALIZATION_V1R1_RESULT.json) |
 | other recorded fast/replay directories | Intermediate extraction, projector, retry, and diagnostic runs | Mixed; recorded per directory | Preserved as historical evidence, including failed/invalid attempts | [runtime root](trajectories/runtime/) |
 
-The current filesystem inventory contains 49 coding trajectories and 53 runtime
+The current filesystem inventory contains 50 coding trajectories and 53 runtime
 trajectories. The index does not require every runtime directory to have a root `summary.md`:
 the runtime inventory records whether a summary, prompt-like call file, raw
 trace, and other artifacts are present. No transcript is fabricated for a
@@ -168,6 +169,7 @@ transcript, or recorded `*.raw.txt` provider output.
 | 046-final-live-ask-memory-ui-hotfix | coding | yes | yes | n/a | no | 2 |
 | 047-relative-day-temporal-hotfix | coding | yes | yes | n/a | no | 2 |
 | 048-final-demo-presentation-polish | coding | yes | yes | n/a | no | 2 |
+| 050-final-process-documentation-h2h-submission | coding | yes | yes | n/a | no | 2 |
 | ui-001-mobile-pwa | coding | yes | yes | n/a | no | 2 |
 | ui-002-reference-redesign | coding | yes | yes | n/a | no | 2 |
 | submission-001-hardening | coding | yes | yes | n/a | no | 2 |
