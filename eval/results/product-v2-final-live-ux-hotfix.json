@@ -1,0 +1,76 @@
+{
+  "result_type": "product-v2-final-live-ux-hotfix",
+  "result_version": "1",
+  "status": "PASS",
+  "scope": "Explicitly authorized post-freeze Product V2 product evidence; not a benchmark, baseline, evaluator, calibration, holdout, V1 oracle, or E006 result.",
+  "starting_revision": "bcf43aed7870c69f0a2501f744641b5fda5778a7",
+  "offline": {
+    "focused_hotfix_tests": {"passed": 39, "failed": 0},
+    "application_tests": {"passed": 196, "failed": 0},
+    "evaluator_tests": {"passed": 10, "failed": 0},
+    "acceptance_harness_tests": {"passed": 7, "failed": 0},
+    "root_tests": {"passed": 213, "failed": 0},
+    "integrated_acceptance": {
+      "status": "PASS",
+      "cases": 50,
+      "failed": 0,
+      "partial": 0,
+      "not_tested": 0,
+      "quality_gates": {"passed": 7, "failed": 0},
+      "latency_gate": "PASS",
+      "provider_used": false,
+      "result_file": "eval/results/product-v2-integrated-acceptance.json"
+    },
+    "benchmark_structure": {"events": 200, "checkpoints": 4, "status": "PASS"},
+    "contract_smoke": {"status": "PASS", "scored": false},
+    "qualification": {
+      "status": "PASS_WITH_4_PREEXISTING_WARNINGS",
+      "hard_failures": 0,
+      "coding_trajectories": 47,
+      "runtime_trajectories": 52
+    },
+    "javascript_syntax": "PASS",
+    "python_compileall": "PASS",
+    "git_diff_check": "PASS"
+  },
+  "browser_review": {
+    "status": "PASS",
+    "viewports": ["390x844", "1280x900"],
+    "surfaces": ["Capture", "Attention", "Memory", "Ask", "clarification navigation"],
+    "reduced_motion_css_checked": true,
+    "browser_server": "temporary local synthetic fixture; stopped after review"
+  },
+  "live_smoke": {
+    "status": "PASS",
+    "synthetic_only": true,
+    "fresh_temporary_home": true,
+    "capture_limit": 4,
+    "ask_limit": 5,
+    "captures_used": 4,
+    "asks_used": 3,
+    "capture_http_200": 4,
+    "ask_http_200": 3,
+    "processed": 4,
+    "failed": 0,
+    "pending_after_completion": 0,
+    "attempt_count_each": 1,
+    "provider_failures": 0,
+    "retries": 0,
+    "topic_switch_current_question_first": true,
+    "real_occurrence_memory_known_without_false_clarification": true,
+    "previous_assistant_used_as_evidence": false,
+    "private_data": false,
+    "token_access": false,
+    "trace_file": "trajectories/runtime/046-final-live-ask-memory-ui-hotfix/trace.json"
+  },
+  "frozen_boundaries": {
+    "benchmark_changed": false,
+    "evaluator_changed": false,
+    "baseline_changed": false,
+    "calibration_changed": false,
+    "holdout_accessed": false,
+    "v1_oracle_accessed": false,
+    "provider_configuration_changed": false,
+    "model_reasoning_batch_policy_changed": false
+  }
+}

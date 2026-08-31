@@ -338,6 +338,55 @@
     return labels[normalized] || humanize(normalized || "Memory");
   };
 
+  const occurrenceMarkers = new Set([
+    "occurrence", "event", "episode", "action", "transaction", "visit", "visited",
+    "consumption", "consume", "consumes", "consumed", "consuming", "drink", "drinks", "drank", "drinking", "purchase", "purchased",
+    "bought", "buy", "buying", "payment", "paid", "pay", "eat", "ate", "eating",
+    "run", "ran", "running", "watch", "watched", "watching", "receive", "received",
+    "receiving",
+  ]);
+  const occurrenceStateQualifiers = new Set([
+    "account", "balance", "cost", "current", "default", "historical", "location", "method",
+    "monthly", "owner", "preferred", "preference", "price", "recurring", "status", "subscription",
+  ]);
+  const hasOccurrenceMarker = (value) => {
+    const normalized = String(value || "").trim().toLowerCase().replace(/[^\w]+/g, "_").replace(/^_+|_+$/g, "");
+    if (!normalized) return false;
+    const tokens = new Set(normalized.split("_"));
+    for (const marker of occurrenceMarkers) {
+      if (normalized === marker || (tokens.has(marker) && ![...tokens].some((token) => occurrenceStateQualifiers.has(token)))) return true;
+    }
+    return false;
+  };
+
+  const isOccurrenceSource = (source, metadata = {}) => {
+    const semanticState = String(firstValue(metadata.semantic_state, source?.semantic_state, "") || "").toLowerCase();
+    if (semanticState === "occurrence" || metadata.occurrence === true || source?.occurrence === true) return true;
+    return hasOccurrenceMarker(firstValue(metadata.claim_type, source?.claim_type))
+      || hasOccurrenceMarker(firstValue(metadata.semantic_relation, source?.semantic_relation))
+      || hasOccurrenceMarker(source?.concept);
+  };
+
+  const occurrenceAmount = (fact) => {
+    const value = fact?.value;
+    if (typeof value === "number" && Number.isFinite(value)) return { amount: value, unit: "" };
+    if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+    const amount = firstValue(value.amount, value.quantity, value.count, value.total);
+    const number = Number(amount);
+    if (amount === undefined || !Number.isFinite(number)) return null;
+    return { amount: number, unit: String(firstValue(value.unit, value.units, "") || "") };
+  };
+
+  const occurrenceSummary = (facts) => {
+    const amounts = facts.map(occurrenceAmount).filter(Boolean);
+    if (!amounts.length) return "";
+    const unit = amounts[0].unit;
+    if (amounts.some((item) => item.unit.toLowerCase() !== unit.toLowerCase())) return "";
+    const total = amounts.reduce((sum, item) => sum + item.amount, 0);
+    const formatted = Number.isInteger(total) ? String(total) : String(Number(total.toFixed(2)));
+    return formatted + (unit ? " " + lowercaseFirst(humanize(unit)) : "") + " total across " + facts.length + " captured occurrences";
+  };
+
   const normalizeFact = (item, fallbackEntity, options = {}) => {
     if (typeof item === "string") {
       return {
@@ -347,6 +396,10 @@
         evidence: "Captured source",
         unknownReason: "",
         capturedAt: "",
+        semanticState: "",
+        occurrence: false,
+        value: undefined,
+        temporal: {},
         isHistory: Boolean(options.isHistory),
       };
     }
@@ -363,6 +416,8 @@
       : typeof source.explanation === "string" ? source.explanation : "";
     const metadata = source.metadata && typeof source.metadata === "object" ? source.metadata : source.semantic_metadata && typeof source.semantic_metadata === "object" ? source.semantic_metadata : {};
     const lifecycle = String(firstValue(source.lifecycle_action, metadata.lifecycle_action, "")).toLowerCase();
+    const occurrence = isOccurrenceSource(source, metadata);
+    const semanticState = occurrence ? "occurrence" : String(firstValue(metadata.semantic_state, source.semantic_state, "") || "").toLowerCase();
     return {
       text,
       detail: displayText(rawDetail, ""),
@@ -370,6 +425,10 @@
       evidence: normalizeEvidence(source),
       unknownReason: displayText(source.unknown_reason, ""),
       capturedAt: firstValue(source.captured_at, source.capturedAt, source.observed_at) || "",
+      semanticState,
+      occurrence,
+      value: source.value,
+      temporal: source.temporal && typeof source.temporal === "object" ? source.temporal : {},
       isHistory: Boolean(options.isHistory || ["complete", "completed", "done", "cancel", "cancelled", "superseded"].includes(lifecycle)),
     };
   };
@@ -433,6 +492,13 @@
     const history = Array.isArray(memory.fact_history) ? memory.fact_history : [];
     history.forEach((fact, index) => {
       if (!fact || typeof fact !== "object") return;
+      const historyMetadata = fact.metadata && typeof fact.metadata === "object" ? fact.metadata : fact.semantic_metadata && typeof fact.semantic_metadata === "object" ? fact.semantic_metadata : {};
+      // Projected occurrence rows are already current evidence. They may also
+      // appear in a generic history payload, but must not be relabeled as
+      // previous state or shown as a conflict.
+      const historyOperation = String(firstValue(fact.semantic_relation, fact.operation, "") || "").toLowerCase();
+      const isCorrection = ["correction", "supersede", "supersession", "contradiction", "resolution", "resolves_uncertainty", "reschedule"].some((marker) => historyOperation.includes(marker));
+      if (isOccurrenceSource(fact, historyMetadata) && !isCorrection) return;
       const name = displayText(firstValue(fact.entity_label, fact.entity_name, fact.entity?.name, fact.subject), "");
       if (!name) return;
       const kind = firstValue(fact.entity_kind, fact.entity?.kind, fact.kind, "memory");
@@ -461,10 +527,15 @@
       });
     });
 
-    return [...groups.values()].filter((group) => group.facts.length).map((group) => ({
-      ...group,
-      facts: [...group.facts].sort((left, right) => Number(left.isHistory) - Number(right.isHistory)),
-    }));
+    return [...groups.values()].filter((group) => group.facts.length).map((group) => {
+      const facts = [...group.facts].sort((left, right) => Number(left.isHistory) - Number(right.isHistory));
+      const occurrenceFacts = facts.filter((fact) => !fact.isHistory && fact.occurrence && String(fact.status || "").toLowerCase() !== "unknown");
+      return {
+        ...group,
+        summary: group.summary || occurrenceSummary(occurrenceFacts),
+        facts,
+      };
+    });
   };
 
   const normalizeSupportItem = (item) => {
@@ -477,6 +548,8 @@
       evidence: normalized.evidence,
       unknownReason: normalized.unknownReason,
       capturedAt: normalized.capturedAt,
+      semanticState: normalized.semanticState,
+      occurrence: normalized.occurrence,
     };
   };
 
@@ -562,11 +635,15 @@
       : "ready";
     const summary = displayText(firstValue(answer.summary, answer.answer, answer.direct_answer, answer.text),
       status === "no_match" ? "I couldn’t find that in your memory yet." : deriveAnswerSummary(answer, meaningfulGroups));
+    const clarification = answer.clarification && typeof answer.clarification === "object"
+      ? displayText(answer.clarification.prompt, "")
+      : "";
     return {
       status,
       summary,
       helper: status === "no_match" ? "Try a person, place, thing, task, or recent change." : "",
       groups: meaningfulGroups,
+      clarificationPrompt: clarification,
     };
   };
 
@@ -1206,13 +1283,17 @@
           '<div class="attention-copy"><h3>' + escapeHtml(item.title) + '</h3><p>' + escapeHtml(item.summary) + '</p></div>' +
           '<span class="attention-when">' + escapeHtml(item.when) + '</span>' +
         '</div>' +
-        '<div class="attention-card-meta">' +
+        '<footer class="attention-card-footer">' +
+          '<div class="attention-card-meta">' +
           (item.approval && lifecycleStatus === "open" ? '<span class="attention-state">Needs your decision</span>' : '<span class="attention-state">' + escapeHtml(lifecycleLabel) + '</span>') +
-          '<div class="attention-actions">' +
-            (lifecycleStatus === "open" ? '<button class="quiet-button attention-complete" type="button" data-attention-complete="' + escapeHtml(item.id) + '">Done</button>' : '') +
             '<details class="evidence-details" data-disclosure-id="attention:' + escapeHtml(item.id) + '"' + (state.openDisclosures.has("attention:" + item.id) ? " open" : "") + '><summary><span>Why this is here</span>' + disclosureChevron + '</summary><div class="detail-copy">' + (item.detail ? '<p>' + escapeHtml(item.detail) + '</p>' : "") + '<p class="detail-meta">' + escapeHtml(statusDetails(item.status, item.unknownReason, item.capturedAt)) + (item.evidence ? ' · ' + escapeHtml(item.evidence) : "") + '</p></div></details>' +
           '</div>' +
-        '</div>' +
+          '<div class="attention-action-area">' +
+            '<div class="attention-actions">' +
+              (lifecycleStatus === "open" ? '<button class="quiet-button attention-complete" type="button" data-attention-complete="' + escapeHtml(item.id) + '">Done</button>' : '') +
+            '</div>' +
+          '</div>' +
+        '</footer>' +
       '</article>';
     }).join("");
     bindDisclosureState(element);
@@ -1296,6 +1377,25 @@
     element.textContent = text;
   };
 
+  const factClarificationPrompt = (entity, fact) => {
+    const name = displayText(entity?.name, "this memory");
+    const text = displayText(fact?.text, "the unresolved detail");
+    return 'Can you clarify this memory about ' + name + ': ' + text + '?';
+  };
+
+  const formatOccurrenceWhen = (fact) => {
+    const temporal = fact?.temporal && typeof fact.temporal === "object" ? fact.temporal : {};
+    const raw = firstValue(temporal.normalized, temporal.date, fact?.capturedAt);
+    if (!raw) return displayText(temporal.expression, "");
+    const parsed = new Date(String(raw));
+    if (Number.isNaN(parsed.getTime())) return displayText(temporal.expression, "");
+    const now = new Date();
+    if (parsed.toDateString() === now.toDateString()) return "Today";
+    const yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+    if (parsed.toDateString() === yesterday.toDateString()) return "Yesterday";
+    return formatDate(raw);
+  };
+
   const renderMemory = () => {
     const element = $("#memory-list");
     if (!element) return;
@@ -1320,17 +1420,31 @@
       const initial = entity.name.trim().charAt(0).toUpperCase() || "•";
       const facts = [...entity.facts].sort((left, right) => Number(left.isHistory) - Number(right.isHistory));
       const currentFacts = facts.filter((fact) => !fact.isHistory);
-      const certainCurrentFacts = currentFacts.filter((fact) => String(fact.status || "").toLowerCase() !== "unknown");
+      const certainCurrentFacts = currentFacts.filter((fact) => String(fact.status || "").toLowerCase() !== "unknown" && !fact.occurrence);
+      const occurrenceFacts = currentFacts.filter((fact) => String(fact.status || "").toLowerCase() !== "unknown" && fact.occurrence);
       const uncertainCurrentFacts = currentFacts.filter((fact) => String(fact.status || "").toLowerCase() === "unknown");
       const historicalFacts = facts.filter((fact) => fact.isHistory);
       const renderFact = (fact) => {
         const status = statusClass(fact.status);
-        return '<li class="memory-fact is-' + status + (fact.isHistory ? " is-history" : "") + '">' +
+        const clarification = String(fact.status || "").toLowerCase() === "unknown" && !fact.isHistory
+          ? '<button class="quiet-button clarify-button" type="button" data-clarify-question="' + escapeHtml(factClarificationPrompt(entity, fact)) + '">Clarify in Ask</button>'
+          : "";
+        const when = fact.occurrence ? formatOccurrenceWhen(fact) : "";
+        return '<li class="memory-fact is-' + status + (fact.isHistory ? " is-history" : "") + (fact.occurrence ? " is-occurrence" : "") + '">' +
           '<span class="fact-marker" aria-hidden="true"></span>' +
           '<span class="fact-copy"><span>' + escapeHtml(fact.text) + '</span>' +
-          '<span class="fact-status">' + escapeHtml(humanStatus(fact.status, fact.capturedAt)) + '</span></span>' +
+          (when ? '<span class="occurrence-when">' + escapeHtml(when) + '</span>' : "") +
+          '<span class="fact-status">' + escapeHtml(humanStatus(fact.status, fact.capturedAt)) + '</span>' + clarification + '</span>' +
         '</li>';
       };
+      const historyId = "memory:" + entity.id + ":history";
+      const occurrenceId = "memory:" + entity.id + ":occurrences";
+      const occurrenceMarkup = occurrenceFacts.length
+        ? '<details class="evidence-details memory-occurrences" data-disclosure-id="' + escapeHtml(occurrenceId) + '"' + (state.openDisclosures.has(occurrenceId) ? " open" : "") + '><summary><span>Occurrences · ' + occurrenceFacts.length + '</span>' + disclosureChevron + '</summary><ul class="memory-facts memory-occurrence-list">' + occurrenceFacts.map(renderFact).join("") + '</ul></details>'
+        : "";
+      const historyMarkup = historicalFacts.length
+        ? '<details class="evidence-details memory-history-disclosure" data-disclosure-id="' + escapeHtml(historyId) + '"' + (state.openDisclosures.has(historyId) ? " open" : "") + '><summary class="memory-history-label"><span>History · ' + historicalFacts.length + '</span>' + disclosureChevron + '</summary><ul class="memory-facts memory-history">' + historicalFacts.map(renderFact).join("") + '</ul></details>'
+        : "";
       return '<article class="memory-card">' +
         '<header class="memory-card-header">' +
           '<span class="entity-avatar" aria-hidden="true">' + escapeHtml(initial) + '</span>' +
@@ -1340,7 +1454,7 @@
         (entity.summary ? '<p class="memory-card-summary">' + escapeHtml(entity.summary) + '</p>' : "") +
         (certainCurrentFacts.length ? '<div class="memory-subsection-label">Current</div><ul class="memory-facts">' + certainCurrentFacts.map(renderFact).join("") + '</ul>' : "") +
         (uncertainCurrentFacts.length ? '<div class="memory-subsection-label is-uncertain">Needs clarification</div><ul class="memory-facts memory-uncertain">' + uncertainCurrentFacts.map(renderFact).join("") + '</ul>' : "") +
-        (historicalFacts.length ? '<div class="memory-history-label">History</div><ul class="memory-facts memory-history">' + historicalFacts.map(renderFact).join("") + '</ul>' : "") +
+        occurrenceMarkup + historyMarkup +
         '<details class="evidence-details memory-evidence" data-disclosure-id="memory:' + escapeHtml(entity.id) + '"' + (state.openDisclosures.has("memory:" + entity.id) ? " open" : "") + '><summary><span>Why Blackhole knows this</span>' + disclosureChevron + '</summary><div class="detail-copy"><p>' +
           escapeHtml(facts.map((fact) => fact.text + " — " + statusDetails(fact.status, fact.unknownReason, fact.capturedAt) + (fact.evidence ? ". " + fact.evidence : "")).join(" ")) +
         '</p></div></details>' +
@@ -1405,6 +1519,19 @@
 
   const answerIcon = (kind) => kind === "error" ? "error" : kind === "no-match" ? "search" : "spark";
 
+  const navigateToAskWithPrompt = (prompt) => {
+    const text = displayText(prompt, "");
+    showView("ask");
+    const input = $("#ask-input");
+    if (!input) return;
+    input.value = text;
+    input.focus();
+    if (typeof input.setSelectionRange === "function") {
+      const end = text.length;
+      input.setSelectionRange(end, end);
+    }
+  };
+
   const renderAssistantMarkup = (message, messageIndex) => {
     if (message.transient) {
       const transient = message.transient;
@@ -1440,7 +1567,10 @@
         '<span class="support-detail">' + escapeHtml(statusDetails(item.status, item.unknownReason, item.capturedAt) + (item.evidence ? " · " + item.evidence : "")) + '</span>' +
       '</li>').join("") + '</ul></section>').join("");
     const related = relatedCount ? '<details class="evidence-details related-memories" data-disclosure-id="ask:' + messageIndex + ':related"' + (state.openDisclosures.has("ask:" + messageIndex + ":related") ? " open" : "") + '><summary><span>Supporting memories · ' + relatedCount + '</span>' + disclosureChevron + '</summary><div class="detail-copy answer-groups">' + groupMarkup + '</div></details>' : "";
-    return '<article class="chat-message assistant-message"><div class="chat-assistant-primary"><span class="answer-spark"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-spark"></use></svg></span><p>' + escapeHtml(displayText(normalized.summary, "Here’s what I found in your memory:")) + '</p></div>' + related + '<p class="answer-grounding">Based on what you’ve captured so far.</p></article>';
+    const clarification = normalized.clarificationPrompt
+      ? '<button class="quiet-button clarify-button" type="button" data-clarify-answer-index="' + messageIndex + '" data-clarify-question="' + escapeHtml(normalized.clarificationPrompt) + '">Clarify in Ask</button>'
+      : "";
+    return '<article class="chat-message assistant-message"><div class="chat-assistant-primary"><span class="answer-spark"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-spark"></use></svg></span><div><p>' + escapeHtml(displayText(normalized.summary, "Here’s what I found in your memory:")) + '</p>' + clarification + '</div></div>' + related + '<p class="answer-grounding">Based on what you’ve captured so far.</p></article>';
   };
 
   const askIsNearBottom = () => {
@@ -1480,6 +1610,9 @@
       const message = state.askMessages[index];
       if (message?.transient?.action) button.addEventListener("click", message.transient.action);
       else if (message?.answer?.status === "processing_failed") button.addEventListener("click", () => refreshState());
+    });
+    $$("[data-clarify-answer-index]", output).forEach((button) => {
+      button.addEventListener("click", () => navigateToAskWithPrompt(button.dataset.clarifyQuestion || ""));
     });
   };
 
@@ -1702,6 +1835,8 @@
       normalizeAnswer,
       formatAttentionTime,
       formatCapturedTime,
+      formatOccurrenceWhen,
+      occurrenceSummary,
       attentionUrgency,
       displayText,
       createDisclosureState,
@@ -1759,6 +1894,11 @@
     state.memoryFilter = button.dataset.memoryFilter || "all";
     persistLocalState();
     renderMemory();
+  });
+  $("#memory-list")?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-clarify-question]");
+    if (!button) return;
+    navigateToAskWithPrompt(button.dataset.clarifyQuestion || "");
   });
   $("#attention-list")?.addEventListener("click", (event) => {
     const button = event.target.closest("[data-attention-complete]");
@@ -1826,6 +1966,8 @@
       normalizeAnswer,
       formatAttentionTime,
       formatCapturedTime,
+      formatOccurrenceWhen,
+      occurrenceSummary,
       attentionUrgency,
       displayText,
       createDisclosureState,

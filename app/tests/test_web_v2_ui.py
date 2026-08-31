@@ -80,6 +80,10 @@ class ProductV2UIContractTests(unittest.TestCase):
         attention_renderer = APP_JS[APP_JS.index("const renderAttention"):APP_JS.index("const updateAttentionBadge")]
         self.assertNotIn("item.subject", attention_renderer)
         self.assertNotIn("item.predicate", attention_renderer)
+        self.assertIn("attention-card-footer", APP_JS)
+        self.assertIn("attention-action-area", APP_JS)
+        self.assertIn("attention-card-footer", CSS)
+        self.assertIn("attention-complete", CSS)
 
     def test_attention_clock_and_ask_thread_behaviors_are_live_bounded_and_calm(self) -> None:
         self.assertIn("scheduleAttentionTicker", APP_JS)
@@ -109,6 +113,19 @@ class ProductV2UIContractTests(unittest.TestCase):
         self.assertIn("column-count: 2", CSS)
         self.assertIn("memory-subsection-label", APP_JS)
         self.assertIn("memory-history-label", APP_JS)
+        self.assertIn("memory-occurrences", APP_JS)
+        self.assertIn("Occurrences · ", APP_JS)
+        self.assertIn("memory-history-disclosure", APP_JS)
+        self.assertIn("data-clarify-question", APP_JS)
+        self.assertIn("navigateToAskWithPrompt", APP_JS)
+
+    def test_capture_and_answer_surfaces_keep_the_final_live_ux_contract(self) -> None:
+        self.assertRegex(CSS, r"\.composer\s*\{[\s\S]*?border-radius: 28px")
+        self.assertRegex(CSS, r"\.composer textarea\s*\{[\s\S]*?line-height: 24px")
+        self.assertIn("chat-assistant-primary", APP_JS)
+        self.assertIn("clarify-answer-index", APP_JS)
+        self.assertIn("Clarify in Ask", APP_JS)
+        self.assertIn("prefers-reduced-motion: reduce", CSS)
 
     def test_ask_has_natural_examples_and_distinct_failure_copy(self) -> None:
         self.assertIn("What do I need to do today?", APP_JS)

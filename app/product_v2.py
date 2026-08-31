@@ -137,17 +137,17 @@ _ANSWER_COPY = {
         "attention_no_match": "No supporting evidence matched that attention request among currently open items.",
         "open_items": "Open items: ",
         "cost_no_match": "No supporting payment or cost evidence matches that question.",
-        "observed_costs": "Observed costs: ",
-        "recorded_history": " Recorded history: ",
-        "deterministic_totals": " Deterministic totals: ",
-        "occurrence_totals": "Recorded totals: ",
+        "observed_costs": "You’re paying for: ",
+        "recorded_history": " Earlier: ",
+        "deterministic_totals": " Total: ",
+        "occurrence_totals": "",
         "changes_no_match": "No recorded change evidence matches that question.",
         "recent_changes": "Recent changes: ",
         "last_mention_no_match": "No recorded mention evidence matches that question.",
         "latest_mention": "The latest matching mention of ",
         "latest_mention_at": " is ",
-        "relevant_memory": "Relevant memory: ",
-        "relevant_attention": "Relevant attention: ",
+        "relevant_memory": "",
+        "relevant_attention": "You have: ",
     },
     "pl": {
         "processing": "Nadal analizuję Twoje ostatnie zapisy.",
@@ -157,17 +157,17 @@ _ANSWER_COPY = {
         "attention_no_match": "Nie znaleziono dowodów pasujących do tej prośby wśród otwartych spraw.",
         "open_items": "Otwarte sprawy: ",
         "cost_no_match": "Nie znaleziono dowodów płatności ani kosztów pasujących do tego pytania.",
-        "observed_costs": "Zaobserwowane koszty: ",
-        "recorded_history": " Zapisana historia: ",
-        "deterministic_totals": " Sumy obliczone deterministycznie: ",
-        "occurrence_totals": "Zapisane sumy: ",
+        "observed_costs": "Płacisz za: ",
+        "recorded_history": " Wcześniej: ",
+        "deterministic_totals": " Łącznie: ",
+        "occurrence_totals": "",
         "changes_no_match": "Nie znaleziono zapisanych zmian pasujących do tego pytania.",
         "recent_changes": "Najnowsze zmiany: ",
         "last_mention_no_match": "Nie znaleziono zapisanej wzmianki pasującej do tego pytania.",
         "latest_mention": "Najnowsza pasująca wzmianka o ",
         "latest_mention_at": " jest z ",
-        "relevant_memory": "Pasujące wspomnienia: ",
-        "relevant_attention": "Pasujące sprawy: ",
+        "relevant_memory": "",
+        "relevant_attention": "Masz: ",
     },
 }
 
@@ -402,22 +402,91 @@ def _display_fact_value(item: dict[str, Any]) -> str:
     return display
 
 
-def _fact_summary(item: dict[str, Any]) -> str:
-    label = item.get("entity_label") or item.get("entity_key") or "memory"
-    concept = item.get("concept") or "fact"
-    display = _display_fact_value(item)
+def _fact_answer_label(item: dict[str, Any]) -> str:
+    raw_label = item.get("entity_label") or item.get("entity_key") or "This memory"
+    label = _clean_text(raw_label, limit=180)
+    label = re.sub(r"[_-]+", " ", label).strip()
+    return label or "This memory"
+
+
+def _fact_summary(
+    item: dict[str, Any],
+    *,
+    language: str = "en",
+    historical: bool = False,
+) -> str:
+    """Render a human answer line without transport fields or raw timestamps."""
+
+    label = _fact_answer_label(item)
+    display = _display_fact_value(item) or "Needs clarification"
+    concept = str(item.get("concept") or "").casefold().replace("_", " ")
+    location_concepts = {"location", "place", "address", "stored location", "entrance"}
+    cost_concepts = {
+        "price",
+        "cost",
+        "monthly cost",
+        "recurring cost",
+        "subscription",
+        "payment",
+        "current price",
+        "historical price",
+    }
+    temporal_concepts = {"appointment", "deadline", "date", "time", "meeting", "reminder"}
+    if historical:
+        if language == "pl":
+            return f"Wcześniej: {label} — {display}"
+        return f"Previously, {label} was {display}"
+    if concept in location_concepts:
+        if language == "pl":
+            return f"Lokalizacja {label}: {display}"
+        return f"The location of {label} is {display}"
+    if concept in cost_concepts:
+        if language == "pl":
+            return f"{label}: {display}"
+        return f"{label} costs {display}"
+    if concept in temporal_concepts:
+        if language == "pl":
+            return f"{label}: {display}"
+        return f"The time for {label} is {display}"
+    normalized_label = re.sub(r"[^\w]+", " ", label, flags=re.UNICODE).strip().casefold()
+    normalized_display = re.sub(r"[^\w]+", " ", display, flags=re.UNICODE).strip().casefold()
+    if normalized_label and normalized_display.startswith(normalized_label):
+        return display
+    return f"{label}: {display}"
+
+
+def _fact_answer(items: Iterable[dict[str, Any]], plan: AskPlan, *, historical: bool = False) -> str:
+    lines = [
+        _fact_summary(item, language=plan.language, historical=historical)
+        for item in items
+        if isinstance(item, dict)
+    ]
+    return "; ".join(lines)
+
+
+def _clarification_prompt(question: str, plan: AskPlan) -> str:
+    quoted = _clean_text(question, limit=180)
+    if plan.language == "pl":
+        return f"Doprecyzuj proszę, o które wspomnienie chodzi: „{quoted}”."
+    return f"Can you clarify which memory you mean by “{quoted}”?"
+
+
+def _occurrence_when(item: dict[str, Any], *, now: datetime, language: str) -> str:
     temporal = item.get("temporal")
     if not isinstance(temporal, dict):
         temporal = {}
-    normalized = temporal.get("normalized")
-    if isinstance(normalized, str) and normalized not in display:
-        display += f" at {normalized}"
-    elif temporal.get("expression") and temporal.get("precision"):
-        expression = _human_value(temporal.get("expression"))
-        precision = _human_value(temporal.get("precision"))
-        if expression and precision:
-            display += f" ({precision}: {expression})"
-    return f"{label} {concept}: {display}"
+    raw = temporal.get("normalized") or temporal.get("date") or item.get("captured_at")
+    parsed = parse_datetime(raw, zone=timezone.utc) if raw is not None else None
+    if parsed is None:
+        expression = temporal.get("expression")
+        return _clean_text(expression, limit=80) if isinstance(expression, str) else ""
+    current = now.astimezone(parsed.tzinfo or timezone.utc)
+    if parsed.date() == current.date():
+        return "dzisiaj" if language == "pl" else "today"
+    if parsed.date() == (current.date() - timedelta(days=1)):
+        return "wczoraj" if language == "pl" else "yesterday"
+    day = parsed.strftime("%d").lstrip("0") or "0"
+    return f"{day} {parsed.strftime('%b')}" if language == "pl" else f"{parsed.strftime('%b')} {day}"
 
 
 def _human_safe_label(value: Any, fallback: str) -> str:
@@ -1665,9 +1734,35 @@ def normalize_extraction(
                 "action",
                 "transaction",
                 "visit",
+                "visited",
                 "consumption",
+                "consume",
+                "consumes",
+                "consumed",
+                "consuming",
                 "purchase",
+                "purchased",
+                "bought",
+                "buy",
+                "buying",
                 "payment",
+                "paid",
+                "pay",
+                "drink",
+                "drank",
+                "drinking",
+                "eat",
+                "ate",
+                "eating",
+                "run",
+                "ran",
+                "running",
+                "watch",
+                "watched",
+                "watching",
+                "receive",
+                "received",
+                "receiving",
             }
             claim_type_value = fact_details.get("claim_type")
             semantic_relation_value = fact_details.get("semantic_relation")
@@ -2489,7 +2584,11 @@ class ProductCodexProvider:
             "for answer provenance, so return `source_refs: []` here. If the context is insufficient, "
             "say so explicitly and select only evidence that supports that limitation. The optional "
             "`thread` field is a short conversational hint for resolving referents; it is not evidence, "
-            "must not be cited, and must never override the structured memory."
+            "must not be cited, and must never override the structured memory. The primary answer is "
+            "for the person, not an audit log: use natural prose, keep supporting memories secondary, "
+            "and do not expose retrieval labels such as `Relevant memory`, candidate/evidence IDs, "
+            "internal field names, raw ISO timestamps, or transport-shaped objects in the answer. "
+            "The current question takes precedence over any earlier thread topic."
         )
         payload = {"question": question, "time_context": time_context, "context": context}
         return self._call(instruction + "\n\nINPUT:\n" + json.dumps(payload, ensure_ascii=False, indent=2))
@@ -3325,6 +3424,10 @@ class ProductRuntime:
         snapshot = self.store.snapshot(now=self._now())
         query_terms = set(plan.query_terms)
         topic_terms = set(plan.topic_terms)
+        # A self-contained question owns retrieval. Prior conversation is a
+        # bounded referent hint only for an explicitly elliptical follow-up;
+        # its text must never broaden an ordinary topic switch.
+        use_thread_context = bool(thread_context and plan.referential)
         thread_user_plans = [
             plan_ask(item["text"])
             for item in thread_context
@@ -3346,9 +3449,24 @@ class ProductRuntime:
             for prior_plan in thread_user_plans
             for term in prior_plan.topic_terms
         }
-        if not topic_terms:
+        thread_focus_terms: set[str] = set()
+        if use_thread_context:
+            for item in reversed(thread_context):
+                if item.get("role") != "user" or not item.get("text"):
+                    continue
+                latest_user_plan = plan_ask(item["text"])
+                thread_focus_terms.update(latest_user_plan.query_terms)
+                thread_focus_terms.update(latest_user_plan.topic_terms)
+                break
+            for item in reversed(thread_context):
+                if item.get("role") == "assistant" and item.get("text"):
+                    thread_focus_terms.update(search_terms(item["text"]))
+                    break
+        if use_thread_context and not topic_terms:
             topic_terms.update(thread_topic_terms)
-        retrieval_query_terms = query_terms | thread_query_terms | thread_assistant_terms
+        retrieval_query_terms = query_terms | (
+            thread_query_terms | thread_assistant_terms if use_thread_context else set()
+        )
 
         def ranked(
             collection: Any,
@@ -3368,7 +3486,14 @@ class ProductRuntime:
                 if not overlap:
                     continue
                 topic_overlap = overlap & topic_terms
-                score = len(overlap) + (2 * len(topic_overlap))
+                current_topic_overlap = query_terms & searchable & set(plan.topic_terms)
+                focus_overlap = overlap & thread_focus_terms
+                score = (
+                    len(overlap)
+                    + (2 * len(topic_overlap))
+                    + len(current_topic_overlap)
+                    + (2 * len(focus_overlap))
+                )
                 scored.append(
                     (
                         score,
@@ -3380,8 +3505,20 @@ class ProductRuntime:
                 )
             scored.sort(key=lambda row: (-row[0], -row[1], row[2], row[3]))
             if scored:
+                if use_thread_context and thread_focus_terms:
+                    focused = [
+                        row
+                        for row in scored
+                        if search_terms(_searchable_text(row[4], keys)) & thread_focus_terms
+                    ]
+                    if focused:
+                        # The most recent turn is the useful referent for an
+                        # elliptical follow-up. Older turns remain a bounded
+                        # fallback only when the latest turn cannot identify
+                        # any stored item.
+                        scored = focused
                 qualified = scored
-                if plan.intent == "generic" and len(topic_terms) >= 2:
+                if plan.intent == "generic" and len(plan.topic_terms) >= 2:
                     # Multiple content terms normally describe one requested
                     # object.  Requiring two matching terms prevents a generic
                     # multi-term object query from falling back to a merely
@@ -3391,7 +3528,7 @@ class ProductRuntime:
                     qualified = [
                         row
                         for row in scored
-                        if len(retrieval_query_terms & search_terms(_searchable_text(row[4], keys)) & topic_terms) >= 2
+                        if len(retrieval_query_terms & search_terms(_searchable_text(row[4], keys)) & set(plan.topic_terms)) >= 2
                     ]
                 if not qualified and plan.lexical_gap:
                     # Cross-language questions often preserve one canonical
@@ -3424,7 +3561,7 @@ class ProductRuntime:
             return [item for _score, _sequence, _entity, _concept, item in scored[:limit]]
 
         facts = [item for item in snapshot.get("current_facts", []) if isinstance(item, dict)]
-        if plan.broad and not thread_context:
+        if plan.broad and not use_thread_context:
             selected_facts = facts[:MAX_ASK_CONTEXT_FACTS]
         elif plan.intent == "generic" and query_terms == {"location"}:
             # A plural location request is a field-oriented list query.  Some
@@ -3957,6 +4094,40 @@ class ProductRuntime:
             for (entity_key, concept, unit), (total, label, members) in sorted(totals.items())
         ]
 
+    @staticmethod
+    def _occurrence_answer(
+        totals: Iterable[dict[str, Any]],
+        *,
+        plan: AskPlan,
+        now: datetime,
+    ) -> str:
+        answers: list[str] = []
+        for total in totals:
+            label = _fact_answer_label({"entity_label": total.get("entity_label")})
+            unit = _clean_text(total.get("unit"), limit=80)
+            total_text = f"{total.get('total')} {unit}".strip()
+            members = [item for item in total.get("items", []) if isinstance(item, dict)]
+            count = len(members)
+            if plan.language == "pl":
+                sentence = f"Łącznie {total_text}"
+            else:
+                instance_label = "instance" if count == 1 else "instances"
+                sentence = f"You recorded {total_text} across {count} {instance_label} of {label}"
+            details: list[str] = []
+            for item in members:
+                value = _display_fact_value(item)
+                when = _occurrence_when(item, now=now, language=plan.language)
+                detail = " ".join(part for part in (value, when) if part)
+                if detail:
+                    details.append(detail)
+            if details:
+                separator = " — "
+                sentence += separator + "; ".join(details)
+            elif plan.language == "pl":
+                sentence += f" w {count} zapisanych zdarzeniach"
+            return sentence + "."
+        return ""
+
     def _deterministic_answer(
         self,
         question: str,
@@ -4042,7 +4213,7 @@ class ProductRuntime:
             if not cost_facts and not history_costs:
                 return _answer_copy(plan, "cost_no_match"), "no_match", [], []
 
-            descriptions = [_fact_summary(item) for item in cost_facts[:10]]
+            descriptions = [_fact_summary(item, language=plan.language) for item in cost_facts[:10]]
             items = list(cost_facts[:10])
             if plan.history_requested:
                 seen = {
@@ -4062,10 +4233,15 @@ class ProductRuntime:
                     if identity not in seen:
                         items.append(item)
                         seen.add(identity)
-                history_descriptions = [_fact_summary(item) for item in items[len(cost_facts[:10]) :10]]
+                history_descriptions = [
+                    _fact_summary(item, language=plan.language, historical=True)
+                    for item in items[len(cost_facts[:10]) :10]
+                ]
             else:
                 history_descriptions = []
-            answer = _answer_copy(plan, "observed_costs") + "; ".join(descriptions or [_fact_summary(item) for item in items[:10]]) + "."
+            answer = _answer_copy(plan, "observed_costs") + "; ".join(
+                descriptions or [_fact_summary(item, language=plan.language) for item in items[:10]]
+            ) + "."
             if history_descriptions:
                 answer += _answer_copy(plan, "recorded_history") + "; ".join(history_descriptions) + "."
             totals = self._money_summary(cost_facts)
@@ -4076,15 +4252,11 @@ class ProductRuntime:
         if plan.intent == "generic" and self._is_aggregation_question(question):
             occurrence_totals = self._occurrence_totals(selected_facts)
             if occurrence_totals:
-                labels = []
                 items: list[dict[str, Any]] = []
                 for total in occurrence_totals:
-                    label = total["entity_label"]
-                    unit = f" {total['unit']}" if total.get("unit") else ""
-                    labels.append(f"{label}: {total['total']}{unit}")
                     items.extend(total["items"])
                 return (
-                    _answer_copy(plan, "occurrence_totals") + "; ".join(labels) + ".",
+                    self._occurrence_answer(occurrence_totals, plan=plan, now=self._now()),
                     "occurrence_totals",
                     items[:MAX_ASK_CONTEXT_FACTS],
                     self._source_refs(items),
@@ -4143,8 +4315,7 @@ class ProductRuntime:
                 if not historical:
                     return _answer_copy(plan, "changes_no_match"), "no_match", [], []
                 return (
-                    _answer_copy(plan, "relevant_memory")
-                    + "; ".join(_fact_summary(item) for item in historical[:10])
+                    _fact_answer(historical[:10], plan, historical=True)
                     + ".",
                     "changes",
                     historical[:MAX_ASK_CONTEXT_HISTORY],
@@ -4201,9 +4372,7 @@ class ProductRuntime:
             expanded_changes.sort(key=lambda item: int(item.get("sequence", 0)))
             labels = []
             for item in expanded_changes[:10]:
-                label = item.get("entity_label", item.get("source_entity_key", "memory"))
-                operation = item.get("operation", item.get("relation_type", "change"))
-                labels.append(f"{label}: {operation} ({_fact_summary(item)})")
+                labels.append(_fact_summary(item, language=plan.language))
             return _answer_copy(plan, "recent_changes") + "; ".join(labels) + ".", "changes", expanded_changes, self._source_refs(expanded_changes)
 
         if plan.intent == "last_mention":
@@ -4215,17 +4384,20 @@ class ProductRuntime:
                     (item for item in snapshot.get("sources", []) if item.get("event_id") in refs),
                     None,
                 )
-                when = source.get("captured_at") if source else "an earlier capture"
-                label = latest.get("entity_label", latest.get("entity_key", "that topic"))
-                return (
-                    _answer_copy(plan, "latest_mention")
-                    + f"{label}"
-                    + _answer_copy(plan, "latest_mention_at")
-                    + f"{when}.",
-                    "last_mention",
-                    [latest],
-                    self._source_refs([latest]),
+                when = _occurrence_when(
+                    source or latest,
+                    now=self._now(),
+                    language=plan.language,
                 )
+                label = _fact_answer_label({"entity_label": latest.get("entity_label", latest.get("entity_key"))})
+                if not when:
+                    when = "wcześniej" if plan.language == "pl" else "earlier"
+                answer = (
+                    f"Ostatnia wzmianka o {label} była {when}."
+                    if plan.language == "pl"
+                    else f"You last mentioned {label} {when}."
+                )
+                return answer, "last_mention", [latest], self._source_refs([latest])
             return _answer_copy(plan, "last_mention_no_match"), "no_match", [], []
 
         if plan.intent == "generic" and not plan.broad and len(plan.topic_terms) <= 1:
@@ -4258,9 +4430,7 @@ class ProductRuntime:
 
         if selected_facts:
             return (
-                _answer_copy(plan, "relevant_memory")
-                + "; ".join(_fact_summary(item) for item in selected_facts[:10])
-                + ".",
+                _fact_answer(selected_facts[:10], plan) + ".",
                 "retrieval",
                 selected_facts,
                 self._source_refs(selected_facts),
@@ -4268,8 +4438,7 @@ class ProductRuntime:
         history = [item for item in context.get("history", []) if isinstance(item, dict)]
         if history:
             return (
-                _answer_copy(plan, "relevant_memory")
-                + "; ".join(_fact_summary(item) for item in history[:10])
+                _fact_answer(history[:10], plan, historical=True)
                 + ".",
                 "retrieval",
                 history[:MAX_ASK_CONTEXT_HISTORY],
@@ -4335,7 +4504,7 @@ class ProductRuntime:
             plan,
         )
         if deterministic is not None:
-            return {
+            result = {
                 "question": question,
                 "mode": mode,
                 "status": "no_match" if mode == "no_match" else "ready",
@@ -4346,6 +4515,9 @@ class ProductRuntime:
                 "answer_language": plan.language,
                 "processing": snapshot.get("processing", {}),
             }
+            if mode == "ambiguous":
+                result["clarification"] = {"prompt": _clarification_prompt(question, plan)}
+            return result
 
         # The deterministic result above already derives refs from the facts it
         # rendered. Once synthesis is needed, every retrieval item is only a
@@ -4474,9 +4646,7 @@ class ProductRuntime:
                     "answer_language": plan.language if plan.language in {"en", "pl"} else "same_as_question",
                     "processing": snapshot.get("processing", {}),
                 }
-            answer = _answer_copy(plan, "relevant_memory") + "; ".join(
-                _fact_summary(item) for item in fallback_items[:10]
-            ) + "."
+            answer = _fact_answer(fallback_items[:10], plan) + "."
             supporting_items = list(fallback_items)
             refs = self._source_refs(supporting_items)
         result_items = self._public_items(supporting_items)

@@ -96,6 +96,50 @@ class DogfoodProvider:
         return {"answer": "Here is the structured memory.", "evidence_ids": ids[:2]}
 
 
+class GenericOccurrenceProvider:
+    """Fixture that uses open-world occurrence markers and one state marker."""
+
+    def extract(
+        self,
+        *,
+        events: list[dict[str, Any]],
+        prior_memory: dict[str, Any],
+        time_context: dict[str, Any],
+        contract: dict[str, Any],
+    ) -> dict[str, Any]:
+        del prior_memory, time_context, contract
+        facts: list[dict[str, Any]] = []
+        for event in events:
+            event_id = str(event["event_id"])
+            text = str(event.get("payload", {}).get("text", "")).casefold()
+            if "preferred drink" in text:
+                facts.append(
+                    {
+                        "event_id": event_id,
+                        "entity": "X",
+                        "concept": "preferred_drink",
+                        "knowledge_status": "known",
+                        "value": "tea",
+                        "claim_type": "preference",
+                    }
+                )
+                continue
+            for marker, amount in (("drank", 1), ("ate", 2), ("bought", 3)):
+                if marker in text:
+                    facts.append(
+                        {
+                            "event_id": event_id,
+                            "entity": "X",
+                            "concept": "activity",
+                            "knowledge_status": "known",
+                            "value": {"amount": amount, "unit": "unit"},
+                            "claim_type": marker,
+                        }
+                    )
+                    break
+        return {"facts": facts}
+
+
 class ProductV2LastDogfoodBackendTests(unittest.TestCase):
     def test_attention_consolidates_raw_and_fact_projections_and_unions_evidence(self) -> None:
         provider = DogfoodProvider()
@@ -155,6 +199,52 @@ class ProductV2LastDogfoodBackendTests(unittest.TestCase):
                 answer = runtime.ask("How many did I drink?")
                 self.assertEqual(answer["mode"], "occurrence_totals")
                 self.assertIn("3 glass", answer["answer"])
+                self.assertFalse(answer["provider_used"])
+
+    def test_generic_occurrence_markers_stay_events_and_do_not_conflict_with_state(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            with ProductRuntime(
+                directory,
+                provider=GenericOccurrenceProvider(),
+                start_worker=False,
+                clock=lambda: BASE_NOW,
+            ) as runtime:
+                runtime.capture("I drank one X yesterday.", event_id="generic-drank")
+                runtime.capture("I ate two X today.", event_id="generic-ate")
+                runtime.capture("I bought three X today.", event_id="generic-bought")
+                runtime.capture("My preferred drink is tea.", event_id="generic-state")
+                self.assertEqual(runtime.process_pending()["processed"], 4)
+
+                current = runtime.snapshot()["current_facts"]
+                occurrences = [
+                    item
+                    for item in current
+                    if item.get("metadata", {}).get("semantic_state") == "occurrence"
+                ]
+                states = [
+                    item
+                    for item in current
+                    if item.get("entity_key") == "x"
+                    and item.get("concept") == "preferred_drink"
+                ]
+                self.assertEqual(len(occurrences), 3)
+                self.assertEqual(
+                    {tuple(item["source_refs"]) for item in occurrences},
+                    {
+                        ("generic-drank",),
+                        ("generic-ate",),
+                        ("generic-bought",),
+                    },
+                )
+                self.assertEqual(len(states), 1)
+                self.assertEqual(states[0]["metadata"].get("semantic_state"), "current")
+                self.assertFalse(any(item.get("knowledge_status") == "unknown" for item in current))
+                self.assertFalse(any(item.get("metadata", {}).get("semantic_state") == "conflict" for item in current))
+
+                answer = runtime.ask("How many X did I record in total?")
+                self.assertEqual(answer["mode"], "occurrence_totals")
+                self.assertIn("6 unit", answer["answer"])
+                self.assertNotIn("clarification", answer)
                 self.assertFalse(answer["provider_used"])
 
     def test_bounded_ask_thread_resolves_referents_without_becoming_evidence(self) -> None:

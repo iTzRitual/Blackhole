@@ -87,7 +87,8 @@ browser Capture
 
 The final development/dogfood evidence reports:
 
-- application tests: `192/192 PASS` (including the macOS timezone regressions);
+- application tests: `196/196 PASS` (including the macOS timezone and live-UX regressions);
+- root discovery suite: `213/213 PASS`;
 - evaluator tests: `10/10 PASS`;
 - Product V2 acceptance harness: `7/7 PASS`;
 - integrated Product V2 acceptance: `50/50 PASS`;
@@ -126,6 +127,28 @@ The post-fix deterministic evidence is `192/192` application tests,
 harness tests, and `50/50` integrated acceptance cases with no live provider
 call. The machine-readable acceptance result is
 [`eval/results/product-v2-integrated-acceptance.json`](../eval/results/product-v2-integrated-acceptance.json).
+
+### Final live Ask + Memory + UI hotfix
+
+The explicitly authorized final live UX hotfix preserves the frozen benchmark
+and Product V2 provider configuration while making Ask current-question-first,
+keeping previous assistant text out of evidence, rendering provenance as
+secondary support, and treating generic event captures as coexisting known
+occurrences. Genuine clarification now navigates to Ask with a prefilled
+question without auto-submitting or persisting a fact. Memory is current-first
+with closed `History · N` and `Occurrences · N` disclosures; Capture and
+Attention use the reviewed mobile-safe geometry.
+
+The bounded live smoke used a fresh temporary Home, four synthetic captures,
+and three Ask requests. All seven HTTP requests returned 200; processing ended
+at four processed, zero failed, one attempt per capture, and zero retries. The
+topic-switch Ask did not reuse the museum-pass fact for the X aggregate, and
+the real X occurrence Memory remained known occurrence state without false
+clarification, conflict, or history duplication. Exact state and answers are
+preserved in
+[`trajectories/runtime/046-final-live-ask-memory-ui-hotfix/trace.json`](../trajectories/runtime/046-final-live-ask-memory-ui-hotfix/trace.json).
+The machine-readable hotfix gate is
+[`eval/results/product-v2-final-live-ux-hotfix.json`](../eval/results/product-v2-final-live-ux-hotfix.json).
 
 ## Measured Improvement
 
@@ -191,11 +214,11 @@ The repository preserves:
   `scripts/prepare_product_v2_demo.py`;
 - coding and runtime evidence in [`TRAJECTORY_INDEX.md`](../TRAJECTORY_INDEX.md);
 - the final Product V2 integration, dogfood, and acceptance records; and
-- the authoritative final `product-v2-submission-final` tag and remote SHA,
+- the authoritative final `product-v2-submission-release` tag and remote SHA,
   recorded in
   [`docs/SUBMISSION_CHECKLIST.md`](SUBMISSION_CHECKLIST.md) after finalization.
-  The historical `product-v2-submission` tag remains the pre-Mac portability-
-  check snapshot and is not moved.
+  The historical `product-v2-submission` and `product-v2-submission-final` tags
+  remain prior snapshots and are not moved.
 
 The deterministic gate does not require provider credentials and does not run
 new semantic-provider performance experiments:

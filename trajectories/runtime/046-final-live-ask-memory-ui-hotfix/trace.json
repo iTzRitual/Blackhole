@@ -1,0 +1,143 @@
+{
+  "record_type": "product-v2-runtime-trajectory",
+  "record_version": "1",
+  "run_id": "046-final-live-ask-memory-ui-hotfix-smoke",
+  "source_revision": "bcf43aed7870c69f0a2501f744641b5fda5778a7 (working tree hotfix)",
+  "scope": "bounded synthetic live validation; no private data",
+  "launch": {
+    "home": "fresh temporary BLACKHOLE_HOME (path omitted)",
+    "server": "normal app.web_app launch on a temporary local port",
+    "provider_auth": "already-authenticated local Codex CLI; no token access"
+  },
+  "state_before": {
+    "captures": 0,
+    "memory_facts": 0,
+    "attention_items": 0,
+    "processing": {
+      "processed": 0,
+      "pending": 0,
+      "processing": 0,
+      "failed": 0
+    }
+  },
+  "bounded_limits": {
+    "capture_limit": 4,
+    "ask_limit": 5,
+    "captures_used": 4,
+    "asks_used": 3
+  },
+  "captures": [
+    {
+      "sequence": 1,
+      "source_ref": "live-location",
+      "text": "The museum pass is in the blue folder.",
+      "http_status": 200,
+      "processing_at_return": "pending"
+    },
+    {
+      "sequence": 2,
+      "source_ref": "live-occurrence-yesterday",
+      "text": "Yesterday I consumed 2 units of X.",
+      "http_status": 200,
+      "processing_at_return": "pending"
+    },
+    {
+      "sequence": 3,
+      "source_ref": "live-occurrence-today",
+      "text": "Today I consumed 1 unit of X.",
+      "http_status": 200,
+      "processing_at_return": "pending"
+    },
+    {
+      "sequence": 4,
+      "source_ref": "live-attention",
+      "text": "Tomorrow I need to submit the travel form.",
+      "http_status": 200,
+      "processing_at_return": "pending"
+    }
+  ],
+  "processing_after": {
+    "processed": 4,
+    "pending": 0,
+    "processing": 0,
+    "failed": 0,
+    "attempt_count_each": 1,
+    "provider_failures": 0,
+    "retries": 0
+  },
+  "asks": [
+    {
+      "sequence": 1,
+      "question": "Where is the museum pass?",
+      "http_status": 200,
+      "mode": "retrieval",
+      "provider_used": false,
+      "answer": "The location of museum pass is blue folder.",
+      "source_refs": ["live-location"],
+      "item_count": 1
+    },
+    {
+      "sequence": 2,
+      "question": "How many X did I consume in total?",
+      "http_status": 200,
+      "mode": "occurrence_totals",
+      "provider_used": false,
+      "answer": "You recorded 3 across 2 instances of X — 1 (reported by self) yesterday; 2 (reported by self) Aug 29.",
+      "source_refs": ["live-occurrence-today", "live-occurrence-yesterday"],
+      "item_count": 2,
+      "topic_switch_check": "museum-pass fact was not reused"
+    },
+    {
+      "sequence": 3,
+      "question": "What does that mean?",
+      "http_status": 200,
+      "mode": "semantic",
+      "provider_used": true,
+      "answer": "It means you consumed 3 X in total: 2 yesterday and 1 today.",
+      "source_refs": ["live-occurrence-yesterday", "live-occurrence-today"],
+      "item_count": 2,
+      "context_check": "latest occurrence topic retained; previous assistant output was not evidence"
+    }
+  ],
+  "state_after": {
+    "current_facts": [
+      {
+        "entity": "museum pass",
+        "concept": "location",
+        "knowledge_status": "known",
+        "semantic_state": "current",
+        "value": "blue folder",
+        "source_ref": "live-location"
+      },
+      {
+        "entity": "X",
+        "concept": "consumption",
+        "knowledge_status": "known",
+        "semantic_state": "occurrence",
+        "value": 2,
+        "temporal": "yesterday",
+        "source_ref": "live-occurrence-yesterday"
+      },
+      {
+        "entity": "X",
+        "concept": "consumption",
+        "knowledge_status": "known",
+        "semantic_state": "occurrence",
+        "value": 1,
+        "temporal": "today",
+        "source_ref": "live-occurrence-today"
+      }
+    ],
+    "fact_history_count": 3,
+    "attention": [
+      {
+        "title": "Submit the travel form",
+        "status": "open",
+        "due_at": "2026-09-01T00:00:00+02:00",
+        "source_ref": "live-attention"
+      }
+    ]
+  },
+  "approvals": [],
+  "outcome": "PASS for the bounded live gate: the topic switch stayed current-question-first, the real occurrence memory remained known occurrence state without false clarification or conflicting history, and no provider failure or retry occurred. The live provider rendered the 2-unit event as Aug 29 in one deterministic aggregate label; this observed temporal wording is preserved here and was not used to change benchmark or provider configuration."
+}

@@ -185,6 +185,66 @@ class AskCorpusProvider:
         }
 
 
+class TopicSwitchProvider:
+    """Deterministic fixture for the final live topic/follow-up path."""
+
+    def __init__(self) -> None:
+        self.answer_contexts: list[dict[str, Any]] = []
+        self.answer_calls = 0
+
+    def extract(
+        self,
+        *,
+        events: list[dict[str, Any]],
+        prior_memory: dict[str, Any],
+        time_context: dict[str, Any],
+        contract: dict[str, Any],
+    ) -> dict[str, Any]:
+        del prior_memory, time_context, contract
+        facts: list[dict[str, Any]] = []
+        for event in events:
+            event_id = str(event["event_id"])
+            text = str(event.get("payload", {}).get("text", ""))
+            lowered = text.casefold()
+            captured_at = str(event.get("captured_at") or "2026-08-30T08:00:00+00:00")
+            if "basement keys" in lowered:
+                facts.append(
+                    {
+                        "event_id": event_id,
+                        "entity": "basement keys",
+                        "concept": "location",
+                        "knowledge_status": "known",
+                        "value": "backpack",
+                    }
+                )
+            elif "consumed" in lowered:
+                facts.append(
+                    {
+                        "event_id": event_id,
+                        "entity": "X",
+                        "concept": "consumed",
+                        "knowledge_status": "known",
+                        "value": {"amount": 2 if "yesterday" in lowered else 1, "unit": "unit"},
+                        "claim_type": "consumed",
+                        "temporal": {"normalized": captured_at, "precision": "day"},
+                    }
+                )
+        return {"facts": facts}
+
+    def answer(self, *, question: str, context: dict[str, Any], time_context: dict[str, Any]) -> dict[str, Any]:
+        del question, time_context
+        self.answer_calls += 1
+        self.answer_contexts.append(json.loads(json.dumps(context, ensure_ascii=False)))
+        occurrence_ids = [
+            item["evidence_id"]
+            for item in context.get("facts", [])
+            if isinstance(item, dict)
+            and item.get("entity_label") == "X"
+            and isinstance(item.get("evidence_id"), str)
+        ]
+        return {"answer": "The preceding total is 3 units.", "evidence_ids": occurrence_ids}
+
+
 CAPTURES = (
     ("ask-keys", "Klucze do piwnicy są u mamy."),
     ("ask-garage", "The garage keys are in the drawer."),
@@ -284,6 +344,9 @@ class ProductV2AskRoutingTests(unittest.TestCase):
         self.assertEqual(plan_ask("Co mam niedługo do zrobienia?").intent, "attention")
         self.assertEqual(plan_ask("Co mam zrobić w ciągu najbliższych 15 minut?").intent, "attention")
         self.assertEqual(plan_ask("When did I last mention PocketWave?").intent, "last_mention")
+        self.assertFalse(plan_ask("What do I know?").referential)
+        self.assertFalse(plan_ask("What do I need to know?").referential)
+        self.assertTrue(plan_ask("What does that mean?").referential)
 
     def test_unmapped_money_modifier_uses_semantic_synthesis(self) -> None:
         plan = plan_ask("Ile kosztuje PocketWave i czy cena się zmieniała?")
@@ -305,6 +368,75 @@ class ProductV2AskRoutingTests(unittest.TestCase):
         self.assertEqual(context["attention"], [])
         self.assertNotIn("ask-children", result["source_refs"])
         self.assertIn("ask-boiler", result["source_refs"])
+
+    def test_current_topic_wins_and_referential_followup_uses_latest_topic_only(self) -> None:
+        provider = TopicSwitchProvider()
+        with tempfile.TemporaryDirectory() as directory:
+            with ProductRuntime(
+                directory,
+                provider=provider,
+                start_worker=False,
+                clock=fixed_clock,
+            ) as runtime:
+                runtime.capture(
+                    "The basement keys are in the backpack.",
+                    event_id="topic-keys",
+                    captured_at="2026-08-30T08:00:00+00:00",
+                )
+                runtime.capture(
+                    "I consumed 2 units yesterday.",
+                    event_id="topic-consumed-yesterday",
+                    captured_at="2026-08-29T08:00:00+00:00",
+                )
+                runtime.capture(
+                    "I consumed 1 unit today.",
+                    event_id="topic-consumed-today",
+                    captured_at="2026-08-30T08:00:00+00:00",
+                )
+                self.assertEqual(runtime.process_pending()["processed"], 3)
+
+                location = runtime.ask("Where are the basement keys?")
+                self.assertEqual(location["mode"], "retrieval")
+                self.assertEqual(location["answer"], "The location of basement keys is backpack.")
+                self.assertNotIn("relevant memory", location["answer"].casefold())
+                self.assertNotRegex(location["answer"], r"\d{4}-\d{2}-\d{2}T")
+
+                aggregate = runtime.ask("How many X did I consume in total?")
+                self.assertEqual(aggregate["mode"], "occurrence_totals")
+                self.assertIn("3 unit", aggregate["answer"])
+                self.assertNotIn("basement", json.dumps(aggregate, ensure_ascii=False).casefold())
+                self.assertEqual(
+                    set(aggregate["source_refs"]),
+                    {"topic-consumed-yesterday", "topic-consumed-today"},
+                )
+
+                before_followup = runtime.snapshot()
+                thread = [
+                    {"role": "user", "text": location["question"]},
+                    {"role": "assistant", "text": location["answer"]},
+                    {"role": "user", "text": aggregate["question"]},
+                    {"role": "assistant", "text": aggregate["answer"]},
+                ]
+                followup = runtime.ask("What does that mean?", thread_context=thread)
+                self.assertTrue(followup["provider_used"])
+                self.assertEqual(followup["answer"], "The preceding total is 3 units.")
+                self.assertEqual(
+                    set(followup["source_refs"]),
+                    {"topic-consumed-yesterday", "topic-consumed-today"},
+                )
+                context = provider.answer_contexts[-1]
+                self.assertEqual(
+                    {item["entity_label"] for item in context["facts"]},
+                    {"X"},
+                )
+                self.assertTrue(all("evidence_id" not in item for item in context["thread"]))
+
+                new_thread = runtime.ask("How many X did I consume in total?")
+                self.assertEqual(new_thread["answer"], aggregate["answer"])
+                self.assertFalse(new_thread["provider_used"])
+                after_followup = runtime.snapshot()
+                for section in ("current_facts", "fact_history", "relationships", "attention"):
+                    self.assertEqual(after_followup[section], before_followup[section])
 
     def test_no_data_no_match_unknown_and_retraction_are_distinct(self) -> None:
         empty_directory = tempfile.TemporaryDirectory()
@@ -328,6 +460,9 @@ class ProductV2AskRoutingTests(unittest.TestCase):
         self.assertEqual(no_match["mode"], "no_match")
         self.assertEqual(no_match["status"], "no_match")
         self.assertFalse(no_match["provider_used"])
+        ambiguous = self.runtime.ask("Where are the keys?")
+        self.assertEqual(ambiguous["mode"], "ambiguous")
+        self.assertIn("Where are the keys?", ambiguous["clarification"]["prompt"])
         unknown = self.runtime.ask("Who owns the house?")
         self.assertEqual(unknown["mode"], "retrieval")
         self.assertIn("needs clarification", unknown["answer"].casefold())

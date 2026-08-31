@@ -1,7 +1,7 @@
 {
   "report_type": "product-v2-dogfood-acceptance",
   "suite": "Product V2 dogfood / acceptance suite",
-  "generated_at": "2026-08-31T07:15:09.700228+00:00",
+  "generated_at": "2026-08-31T08:47:30.821424+00:00",
   "adapter": "http",
   "live_provider_used": false,
   "target_provider_calls_possible": true,
@@ -469,12 +469,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:38.262572+00:00",
-                    "last_successful_at": "2026-08-31T07:14:38.268009+00:00",
+                    "last_attempted_at": "2026-08-31T08:46:59.391294+00:00",
+                    "last_successful_at": "2026-08-31T08:46:59.398702+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:38.268021+00:00"
+                    "updated_at": "2026-08-31T08:46:59.398717+00:00"
                   }
                 ]
               }
@@ -624,7 +624,7 @@
               "question": "Kiedy odbieram dzieci?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Pasujące wspomnienia: Odbieram dzieci za 10 minut. observation: Odbieram dzieci za 10 minut..",
+              "answer": "Odbieram dzieci za 10 minut..",
               "items": [
                 {
                   "entity_key": "odbieram_dzieci_za_10_minut",
@@ -670,12 +670,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:38.830102+00:00",
-                    "last_successful_at": "2026-08-31T07:14:38.832753+00:00",
+                    "last_attempted_at": "2026-08-31T08:46:59.952770+00:00",
+                    "last_successful_at": "2026-08-31T08:46:59.955593+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:38.832758+00:00"
+                    "updated_at": "2026-08-31T08:46:59.955598+00:00"
                   }
                 ]
               }
@@ -825,7 +825,7 @@
               "question": "Do kiedy muszę odnowić pozwolenie parkingowe?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Pasujące wspomnienia: Muszę odnowić pozwolenie parkingowe do 12 września. observation: Muszę odnowić pozwolenie parkingowe do 12 września..",
+              "answer": "Muszę odnowić pozwolenie parkingowe do 12 września..",
               "items": [
                 {
                   "entity_key": "muszę_odnowić_pozwolenie_parkingowe_do_12_września",
@@ -871,12 +871,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:39.397657+00:00",
-                    "last_successful_at": "2026-08-31T07:14:39.403312+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:00.520585+00:00",
+                    "last_successful_at": "2026-08-31T08:47:00.525115+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:39.403319+00:00"
+                    "updated_at": "2026-08-31T08:47:00.525127+00:00"
                   }
                 ]
               }
@@ -970,7 +970,7 @@
               "question": "When is my brother's flight?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: My brother's flight is next month. observation: My brother's flight is next month..",
+              "answer": "My brother's flight is next month..",
               "items": [
                 {
                   "entity_key": "my_brother_s_flight_is_next_month",
@@ -1016,12 +1016,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:39.961995+00:00",
-                    "last_successful_at": "2026-08-31T07:14:39.964190+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:01.087338+00:00",
+                    "last_successful_at": "2026-08-31T08:47:01.091126+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:39.964195+00:00"
+                    "updated_at": "2026-08-31T08:47:01.091131+00:00"
                   }
                 ]
               }
@@ -1125,7 +1125,7 @@
               "question": "What did I say about buying a bike?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: I might buy a bike next year. observation: I might buy a bike next year. (uncertain possibility; not confirmed).",
+              "answer": "I might buy a bike next year. (uncertain possibility; not confirmed).",
               "items": [
                 {
                   "entity_key": "i_might_buy_a_bike_next_year",
@@ -1171,12 +1171,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:40.527210+00:00",
-                    "last_successful_at": "2026-08-31T07:14:40.529644+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:01.634175+00:00",
+                    "last_successful_at": "2026-08-31T08:47:01.636397+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:40.529649+00:00"
+                    "updated_at": "2026-08-31T08:47:01.636403+00:00"
                   }
                 ]
               }
@@ -1275,7 +1275,7 @@
               "question": "What does the contract say about notice?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: The contract mentions a 30-day notice period. observation: The contract mentions a 30-day notice period..",
+              "answer": "The contract mentions a 30-day notice period..",
               "items": [
                 {
                   "entity_key": "the_contract_mentions_a_30_day_notice_period",
@@ -1321,12 +1321,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:41.094093+00:00",
-                    "last_successful_at": "2026-08-31T07:14:41.097350+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:02.186279+00:00",
+                    "last_successful_at": "2026-08-31T08:47:02.188859+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:41.097360+00:00"
+                    "updated_at": "2026-08-31T08:47:02.188864+00:00"
                   }
                 ]
               }
@@ -1425,7 +1425,7 @@
               "question": "When did we go there?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: I remember we went there last Tuesday. observation: I remember we went there last Tuesday..",
+              "answer": "I remember we went there last Tuesday..",
               "items": [
                 {
                   "entity_key": "i_remember_we_went_there_last_tuesday",
@@ -1471,12 +1471,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:41.653238+00:00",
-                    "last_successful_at": "2026-08-31T07:14:41.656606+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:02.742150+00:00",
+                    "last_successful_at": "2026-08-31T08:47:02.745082+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:41.656612+00:00"
+                    "updated_at": "2026-08-31T08:47:02.745088+00:00"
                   }
                 ]
               }
@@ -1750,7 +1750,7 @@
               "question": "Where is the spare charger and when is Marta's birthday?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: Marta birthday: November 3; spare charger location: blue suitcase.",
+              "answer": "Marta: November 3; The location of spare charger is blue suitcase.",
               "items": [
                 {
                   "entity_key": "marta",
@@ -1819,12 +1819,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:42.774057+00:00",
-                    "last_successful_at": "2026-08-31T07:14:42.777627+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:03.937880+00:00",
+                    "last_successful_at": "2026-08-31T08:47:03.941466+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:42.777632+00:00"
+                    "updated_at": "2026-08-31T08:47:03.941471+00:00"
                   },
                   {
                     "event_id": "acceptance-CAP-009-capture-birthday",
@@ -1834,12 +1834,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:42.774057+00:00",
-                    "last_successful_at": "2026-08-31T07:14:42.777695+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:03.937880+00:00",
+                    "last_successful_at": "2026-08-31T08:47:03.941533+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:42.777699+00:00"
+                    "updated_at": "2026-08-31T08:47:03.941538+00:00"
                   }
                 ]
               }
@@ -2018,7 +2018,7 @@
               "question": "What should I buy on the way home?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: Buy oat milk on the way home. observation: Buy oat milk on the way home..",
+              "answer": "Buy oat milk on the way home..",
               "items": [
                 {
                   "entity_key": "buy_oat_milk_on_the_way_home",
@@ -2064,12 +2064,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:43.330912+00:00",
-                    "last_successful_at": "2026-08-31T07:14:43.333679+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:04.494748+00:00",
+                    "last_successful_at": "2026-08-31T08:47:04.498527+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:43.333684+00:00"
+                    "updated_at": "2026-08-31T08:47:04.498535+00:00"
                   }
                 ]
               }
@@ -2142,7 +2142,7 @@
               "question": "Gdzie są klucze do piwnicy?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Pasujące wspomnienia: klucze do piwnicy basement keys location: u mamy.",
+              "answer": "Lokalizacja klucze do piwnicy basement keys: u mamy.",
               "items": [
                 {
                   "entity_key": "klucze_do_piwnicy_basement_keys",
@@ -2188,12 +2188,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:43.896900+00:00",
-                    "last_successful_at": "2026-08-31T07:14:43.900914+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:05.056855+00:00",
+                    "last_successful_at": "2026-08-31T08:47:05.060029+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:43.900919+00:00"
+                    "updated_at": "2026-08-31T08:47:05.060034+00:00"
                   }
                 ]
               }
@@ -2377,7 +2377,7 @@
               "question": "What did the mechanic think was causing the front-left noise?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: front-left noise possible_cause: left bearing (uncertain).",
+              "answer": "front left noise: left bearing (uncertain).",
               "items": [
                 {
                   "entity_key": "front_left_noise",
@@ -2423,12 +2423,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:44.465267+00:00",
-                    "last_successful_at": "2026-08-31T07:14:44.468543+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:05.614691+00:00",
+                    "last_successful_at": "2026-08-31T08:47:05.618578+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:44.468553+00:00"
+                    "updated_at": "2026-08-31T08:47:05.618584+00:00"
                   },
                   {
                     "event_id": "acceptance-MEM-002-capture-mechanic",
@@ -2438,12 +2438,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:44.465267+00:00",
-                    "last_successful_at": "2026-08-31T07:14:44.468620+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:05.614691+00:00",
+                    "last_successful_at": "2026-08-31T08:47:05.618719+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:44.468624+00:00"
+                    "updated_at": "2026-08-31T08:47:05.618729+00:00"
                   }
                 ]
               }
@@ -2588,7 +2588,7 @@
               "question": "What pasta does Kuba like?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: Kuba pasta: green pasta from Lidl.",
+              "answer": "Kuba: green pasta from Lidl.",
               "items": [
                 {
                   "entity_key": "kuba",
@@ -2634,12 +2634,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:45.031603+00:00",
-                    "last_successful_at": "2026-08-31T07:14:45.033806+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:06.175248+00:00",
+                    "last_successful_at": "2026-08-31T08:47:06.178198+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:45.033811+00:00"
+                    "updated_at": "2026-08-31T08:47:06.178203+00:00"
                   }
                 ]
               }
@@ -2828,7 +2828,7 @@
               "question": "What am I paying for PocketWave now?",
               "mode": "costs",
               "status": "ready",
-              "answer": "Observed costs: PocketWave monthly_cost: 11 EUR per month. Deterministic totals: [{'currency': 'EUR', 'billing_period': 'month', 'total': '11'}].",
+              "answer": "You’re paying for: PocketWave costs 11 EUR per month. Total: [{'currency': 'EUR', 'billing_period': 'month', 'total': '11'}].",
               "items": [
                 {
                   "entity_key": "pocketwave",
@@ -2878,12 +2878,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:45.592386+00:00",
-                    "last_successful_at": "2026-08-31T07:14:45.598371+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:06.741806+00:00",
+                    "last_successful_at": "2026-08-31T08:47:06.745149+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:45.598382+00:00"
+                    "updated_at": "2026-08-31T08:47:06.745154+00:00"
                   },
                   {
                     "event_id": "acceptance-MEM-004-capture-new-price",
@@ -2893,12 +2893,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:45.592386+00:00",
-                    "last_successful_at": "2026-08-31T07:14:45.598513+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:06.741806+00:00",
+                    "last_successful_at": "2026-08-31T08:47:06.745215+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:45.598521+00:00"
+                    "updated_at": "2026-08-31T08:47:06.745219+00:00"
                   }
                 ]
               }
@@ -2932,7 +2932,7 @@
               "question": "What changed about PocketWave's price?",
               "mode": "changes",
               "status": "ready",
-              "answer": "Recent changes: PocketWave: set (PocketWave monthly_cost: 9 EUR per month); PocketWave: correction (PocketWave monthly_cost: 11 EUR per month).",
+              "answer": "Recent changes: PocketWave costs 9 EUR per month; PocketWave costs 11 EUR per month.",
               "items": [
                 {
                   "entity_key": "pocketwave",
@@ -2949,7 +2949,7 @@
                   "operation": "set",
                   "temporal": {},
                   "extractor_version": "blackhole-product-v2-extractor-v3",
-                  "created_at": "2026-08-31T07:14:45.597148+00:00",
+                  "created_at": "2026-08-31T08:47:06.744624+00:00",
                   "sequence": 1,
                   "retracted": false,
                   "value": {
@@ -2981,7 +2981,7 @@
                   "operation": "correction",
                   "temporal": {},
                   "extractor_version": "blackhole-product-v2-extractor-v3",
-                  "created_at": "2026-08-31T07:14:45.597531+00:00",
+                  "created_at": "2026-08-31T08:47:06.744750+00:00",
                   "supersedes_event_id": "acceptance-MEM-004-capture-old-price",
                   "sequence": 2,
                   "retracted": false,
@@ -3019,12 +3019,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:45.592386+00:00",
-                    "last_successful_at": "2026-08-31T07:14:45.598371+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:06.741806+00:00",
+                    "last_successful_at": "2026-08-31T08:47:06.745149+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:45.598382+00:00"
+                    "updated_at": "2026-08-31T08:47:06.745154+00:00"
                   },
                   {
                     "event_id": "acceptance-MEM-004-capture-new-price",
@@ -3034,12 +3034,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:45.592386+00:00",
-                    "last_successful_at": "2026-08-31T07:14:45.598513+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:06.741806+00:00",
+                    "last_successful_at": "2026-08-31T08:47:06.745215+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:45.598521+00:00"
+                    "updated_at": "2026-08-31T08:47:06.745219+00:00"
                   }
                 ]
               }
@@ -3112,7 +3112,7 @@
               "question": "Where did I leave the spare charger?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: spare charger location: blue suitcase.",
+              "answer": "The location of spare charger is blue suitcase.",
               "items": [
                 {
                   "entity_key": "spare_charger",
@@ -3158,12 +3158,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:46.155777+00:00",
-                    "last_successful_at": "2026-08-31T07:14:46.158197+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:07.298390+00:00",
+                    "last_successful_at": "2026-08-31T08:47:07.301278+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:46.158202+00:00"
+                    "updated_at": "2026-08-31T08:47:07.301284+00:00"
                   }
                 ]
               }
@@ -3308,7 +3308,7 @@
               "question": "When is Marta's birthday?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: Marta birthday: November 3.",
+              "answer": "Marta: November 3.",
               "items": [
                 {
                   "entity_key": "marta",
@@ -3354,12 +3354,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:46.717904+00:00",
-                    "last_successful_at": "2026-08-31T07:14:46.720222+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:07.860589+00:00",
+                    "last_successful_at": "2026-08-31T08:47:07.862885+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:46.720228+00:00"
+                    "updated_at": "2026-08-31T08:47:07.862890+00:00"
                   }
                 ]
               }
@@ -3632,7 +3632,7 @@
               "question": "When is my dentist appointment now?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: dentist appointment appointment_time: Thursday at 16:30.",
+              "answer": "dentist appointment: Thursday at 16:30.",
               "items": [
                 {
                   "entity_key": "dentist_appointment",
@@ -3678,12 +3678,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:47.290553+00:00",
-                    "last_successful_at": "2026-08-31T07:14:47.298326+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:08.427883+00:00",
+                    "last_successful_at": "2026-08-31T08:47:08.431822+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:47.298334+00:00"
+                    "updated_at": "2026-08-31T08:47:08.431828+00:00"
                   },
                   {
                     "event_id": "acceptance-MEM-007-capture-moved-appointment",
@@ -3693,12 +3693,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:47.290553+00:00",
-                    "last_successful_at": "2026-08-31T07:14:47.298418+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:08.427883+00:00",
+                    "last_successful_at": "2026-08-31T08:47:08.431893+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:47.298422+00:00"
+                    "updated_at": "2026-08-31T08:47:08.431897+00:00"
                   }
                 ]
               }
@@ -3810,7 +3810,7 @@
               "question": "Where are the basement keys now?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: klucze do piwnicy basement keys location: desk.",
+              "answer": "The location of klucze do piwnicy basement keys is desk.",
               "items": [
                 {
                   "entity_key": "klucze_do_piwnicy_basement_keys",
@@ -3856,12 +3856,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:47.849287+00:00",
-                    "last_successful_at": "2026-08-31T07:14:47.853369+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:08.992181+00:00",
+                    "last_successful_at": "2026-08-31T08:47:08.995151+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:47.853374+00:00"
+                    "updated_at": "2026-08-31T08:47:08.995156+00:00"
                   },
                   {
                     "event_id": "acceptance-MEM-008-capture-correction",
@@ -3871,12 +3871,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:47.849287+00:00",
-                    "last_successful_at": "2026-08-31T07:14:47.853432+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:08.992181+00:00",
+                    "last_successful_at": "2026-08-31T08:47:08.995209+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:47.853435+00:00"
+                    "updated_at": "2026-08-31T08:47:08.995212+00:00"
                   }
                 ]
               }
@@ -4026,7 +4026,7 @@
               "question": "When does the boiler warranty expire?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: boiler warranty expiry: Needs clarification.",
+              "answer": "boiler warranty: Needs clarification.",
               "items": [
                 {
                   "entity_key": "boiler_warranty",
@@ -4071,12 +4071,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:48.416555+00:00",
-                    "last_successful_at": "2026-08-31T07:14:48.419481+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:09.543779+00:00",
+                    "last_successful_at": "2026-08-31T08:47:09.546432+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:48.419488+00:00"
+                    "updated_at": "2026-08-31T08:47:09.546438+00:00"
                   }
                 ]
               }
@@ -4260,7 +4260,7 @@
               "question": "What did I say about Netflix?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: Netflix instruction: Don't cancel Netflix yet..",
+              "answer": "Netflix: Don't cancel Netflix yet..",
               "items": [
                 {
                   "entity_key": "netflix",
@@ -4306,12 +4306,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:48.987059+00:00",
-                    "last_successful_at": "2026-08-31T07:14:48.990400+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:10.113215+00:00",
+                    "last_successful_at": "2026-08-31T08:47:10.117061+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:48.990406+00:00"
+                    "updated_at": "2026-08-31T08:47:10.117067+00:00"
                   },
                   {
                     "event_id": "acceptance-MEM-010-capture-usb-repeat",
@@ -4321,12 +4321,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:48.987059+00:00",
-                    "last_successful_at": "2026-08-31T07:14:48.990465+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:10.113215+00:00",
+                    "last_successful_at": "2026-08-31T08:47:10.117134+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:48.990469+00:00"
+                    "updated_at": "2026-08-31T08:47:10.117138+00:00"
                   }
                 ]
               }
@@ -4360,7 +4360,7 @@
               "question": "What did I buy again?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: USB cable purchase: USB cable again.",
+              "answer": "USB cable again.",
               "items": [
                 {
                   "entity_key": "usb_cable",
@@ -4378,7 +4378,8 @@
                   "operation": "set",
                   "temporal": {},
                   "metadata": {
-                    "semantic_state": "current"
+                    "semantic_state": "occurrence",
+                    "occurrence": true
                   },
                   "source_event_id": "acceptance-MEM-010-capture-usb-repeat",
                   "captured_at": "2026-03-13T08:02:00-04:00",
@@ -4406,12 +4407,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:48.987059+00:00",
-                    "last_successful_at": "2026-08-31T07:14:48.990400+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:10.113215+00:00",
+                    "last_successful_at": "2026-08-31T08:47:10.117061+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:48.990406+00:00"
+                    "updated_at": "2026-08-31T08:47:10.117067+00:00"
                   },
                   {
                     "event_id": "acceptance-MEM-010-capture-usb-repeat",
@@ -4421,12 +4422,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:48.987059+00:00",
-                    "last_successful_at": "2026-08-31T07:14:48.990465+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:10.113215+00:00",
+                    "last_successful_at": "2026-08-31T08:47:10.117134+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:48.990469+00:00"
+                    "updated_at": "2026-08-31T08:47:10.117138+00:00"
                   }
                 ]
               }
@@ -4525,7 +4526,7 @@
               "question": "How should I change the lentil soup next time?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: lentil soup recipe: Next time for the lentil soup: add lemon at the end and use less cumin..",
+              "answer": "lentil soup: Next time for the lentil soup: add lemon at the end and use less cumin..",
               "items": [
                 {
                   "entity_key": "lentil_soup",
@@ -4571,12 +4572,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:49.563105+00:00",
-                    "last_successful_at": "2026-08-31T07:14:49.565740+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:10.679241+00:00",
+                    "last_successful_at": "2026-08-31T08:47:10.682511+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:49.565746+00:00"
+                    "updated_at": "2026-08-31T08:47:10.682517+00:00"
                   }
                 ]
               }
@@ -4721,7 +4722,7 @@
               "question": "What helped with the office Wi-Fi last time?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: office Wi-Fi workaround: Wi-Fi kept dropping in the office; restarting the white mesh unit fixed it last time..",
+              "answer": "office Wi Fi: Wi-Fi kept dropping in the office; restarting the white mesh unit fixed it last time..",
               "items": [
                 {
                   "entity_key": "office_wi_fi",
@@ -4767,12 +4768,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:50.126056+00:00",
-                    "last_successful_at": "2026-08-31T07:14:50.129208+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:11.233761+00:00",
+                    "last_successful_at": "2026-08-31T08:47:11.236469+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:50.129214+00:00"
+                    "updated_at": "2026-08-31T08:47:11.236475+00:00"
                   }
                 ]
               }
@@ -4922,7 +4923,7 @@
               "question": "What gift idea did I have for Priya?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: Priya gift_idea: Gift idea for Priya: a handmade ceramic mug with a blue glaze..",
+              "answer": "Priya: Gift idea for Priya: a handmade ceramic mug with a blue glaze..",
               "items": [
                 {
                   "entity_key": "priya",
@@ -4968,12 +4969,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:50.689642+00:00",
-                    "last_successful_at": "2026-08-31T07:14:50.694323+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:11.797619+00:00",
+                    "last_successful_at": "2026-08-31T08:47:11.800860+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:50.694339+00:00"
+                    "updated_at": "2026-08-31T08:47:11.800866+00:00"
                   }
                 ]
               }
@@ -5067,7 +5068,7 @@
               "question": "Jaki rozmiar butów nosi Kuba?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Pasujące wspomnienia: Kuba — rozmiar butów shoe_size: EU 42.",
+              "answer": "Kuba — rozmiar butów: EU 42.",
               "items": [
                 {
                   "entity_key": "kuba_rozmiar_butów",
@@ -5113,12 +5114,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:51.247956+00:00",
-                    "last_successful_at": "2026-08-31T07:14:51.252185+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:12.365642+00:00",
+                    "last_successful_at": "2026-08-31T08:47:12.368820+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:51.252190+00:00"
+                    "updated_at": "2026-08-31T08:47:12.368828+00:00"
                   }
                 ]
               }
@@ -5268,7 +5269,7 @@
               "question": "What did Noor say about moving?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: Noor moving: moving to Bristol in June.",
+              "answer": "Noor: moving to Bristol in June.",
               "items": [
                 {
                   "entity_key": "noor",
@@ -5314,12 +5315,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:51.818347+00:00",
-                    "last_successful_at": "2026-08-31T07:14:51.820981+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:12.930538+00:00",
+                    "last_successful_at": "2026-08-31T08:47:12.933501+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:51.820987+00:00"
+                    "updated_at": "2026-08-31T08:47:12.933511+00:00"
                   }
                 ]
               }
@@ -5426,7 +5427,7 @@
               "question": "What is the PDF from the landlord?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: landlord lease lease: The PDF from the landlord is the new lease.; The PDF from the landlord is the new lease. observation: The PDF from the landlord is the new lease..",
+              "answer": "landlord lease: The PDF from the landlord is the new lease.; The PDF from the landlord is the new lease..",
               "items": [
                 {
                   "entity_key": "landlord_lease",
@@ -5494,12 +5495,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:52.398848+00:00",
-                    "last_successful_at": "2026-08-31T07:14:52.402924+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:13.490656+00:00",
+                    "last_successful_at": "2026-08-31T08:47:13.494680+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:52.402929+00:00"
+                    "updated_at": "2026-08-31T08:47:13.494688+00:00"
                   }
                 ]
               }
@@ -5693,7 +5694,7 @@
               "question": "What did I notice about the cat and the salmon treats?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: The cat stopped eating the salmon treats after we opened the new bag. observation: The cat stopped eating the salmon treats after we opened the new bag..",
+              "answer": "The cat stopped eating the salmon treats after we opened the new bag..",
               "items": [
                 {
                   "entity_key": "the_cat_stopped_eating_the_salmon_treats_after_we_opened_the_new_bag",
@@ -5739,12 +5740,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:52.968525+00:00",
-                    "last_successful_at": "2026-08-31T07:14:52.970931+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:14.104482+00:00",
+                    "last_successful_at": "2026-08-31T08:47:14.110823+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:52.970936+00:00"
+                    "updated_at": "2026-08-31T08:47:14.110852+00:00"
                   }
                 ]
               }
@@ -5889,7 +5890,7 @@
               "question": "Którędy wejść do mieszkania w Krakowie?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Pasujące wspomnienia: mieszkanie w Krakowie entrance: wejście od podwórka.",
+              "answer": "Lokalizacja mieszkanie w Krakowie: wejście od podwórka.",
               "items": [
                 {
                   "entity_key": "mieszkanie_w_krakowie",
@@ -5935,12 +5936,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:53.540030+00:00",
-                    "last_successful_at": "2026-08-31T07:14:53.544866+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:14.671401+00:00",
+                    "last_successful_at": "2026-08-31T08:47:14.675251+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:53.544872+00:00"
+                    "updated_at": "2026-08-31T08:47:14.675262+00:00"
                   }
                 ]
               }
@@ -6095,7 +6096,7 @@
               "question": "How did I stop the downstairs radiator rattling?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: The downstairs radiator rattles unless its valve is turned clockwise halfway. observation: The downstairs radiator rattles unless its valve is turned clockwise halfway..",
+              "answer": "The downstairs radiator rattles unless its valve is turned clockwise halfway..",
               "items": [
                 {
                   "entity_key": "the_downstairs_radiator_rattles_unless_its_valve_is_turned_clockwise_halfway",
@@ -6141,12 +6142,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:54.108323+00:00",
-                    "last_successful_at": "2026-08-31T07:14:54.111965+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:15.235420+00:00",
+                    "last_successful_at": "2026-08-31T08:47:15.237932+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:54.111978+00:00"
+                    "updated_at": "2026-08-31T08:47:15.237937+00:00"
                   }
                 ]
               }
@@ -6250,7 +6251,7 @@
               "question": "What did I notice near the back door yesterday?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: back door observation observation: There was a faint sweet smell near the back door this evening; I don't know why. (uncertain observation; cause unknown).",
+              "answer": "back door observation: There was a faint sweet smell near the back door this evening; I don't know why. (uncertain observation; cause unknown).",
               "items": [
                 {
                   "entity_key": "back_door_observation",
@@ -6296,12 +6297,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:54.676643+00:00",
-                    "last_successful_at": "2026-08-31T07:14:54.679157+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:15.797774+00:00",
+                    "last_successful_at": "2026-08-31T08:47:15.801460+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:54.679163+00:00"
+                    "updated_at": "2026-08-31T08:47:15.801510+00:00"
                   }
                 ]
               }
@@ -6418,7 +6419,7 @@
               "question": "What does the suitcase image tell me?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: blue suitcase image location: blue suitcase.",
+              "answer": "The location of blue suitcase image is blue suitcase.",
               "items": [
                 {
                   "entity_key": "blue_suitcase_image",
@@ -6464,12 +6465,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:55.250414+00:00",
-                    "last_successful_at": "2026-08-31T07:14:55.253476+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:16.370077+00:00",
+                    "last_successful_at": "2026-08-31T08:47:16.373318+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:55.253481+00:00"
+                    "updated_at": "2026-08-31T08:47:16.373324+00:00"
                   }
                 ]
               }
@@ -6627,7 +6628,7 @@
               "question": "What document did I save from the landlord?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: landlord PDF lease document: new lease from the landlord.",
+              "answer": "landlord PDF lease: new lease from the landlord.",
               "items": [
                 {
                   "entity_key": "landlord_pdf_lease",
@@ -6673,12 +6674,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:55.814713+00:00",
-                    "last_successful_at": "2026-08-31T07:14:55.817704+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:16.937919+00:00",
+                    "last_successful_at": "2026-08-31T08:47:16.941452+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:55.817709+00:00"
+                    "updated_at": "2026-08-31T08:47:16.941459+00:00"
                   }
                 ]
               }
@@ -6846,7 +6847,7 @@
               "question": "Which lease did I say starts in October?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: Keep this lease; the landlord's new version starts in October. observation: Keep this lease; the landlord's new version starts in October.; landlord lease lease: Keep this lease; the landlord's new version starts in October..",
+              "answer": "Keep this lease; the landlord's new version starts in October.; landlord lease: Keep this lease; the landlord's new version starts in October..",
               "items": [
                 {
                   "entity_key": "keep_this_lease_the_landlord_s_new_version_starts_in_october",
@@ -6914,12 +6915,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:56.365524+00:00",
-                    "last_successful_at": "2026-08-31T07:14:56.369220+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:17.507771+00:00",
+                    "last_successful_at": "2026-08-31T08:47:17.511062+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:56.369225+00:00"
+                    "updated_at": "2026-08-31T08:47:17.511067+00:00"
                   }
                 ]
               }
@@ -7320,7 +7321,7 @@
               "question": "What location clue was in the suitcase image?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: blue suitcase image location: blue suitcase.",
+              "answer": "The location of blue suitcase image is blue suitcase.",
               "items": [
                 {
                   "entity_key": "blue_suitcase_image",
@@ -7369,12 +7370,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:57.511173+00:00",
-                    "last_successful_at": "2026-08-31T07:14:57.514960+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:18.646563+00:00",
+                    "last_successful_at": "2026-08-31T08:47:18.651930+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:57.514966+00:00"
+                    "updated_at": "2026-08-31T08:47:18.651939+00:00"
                   },
                   {
                     "event_id": "acceptance-ATT-005-capture-second-image",
@@ -7384,12 +7385,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:57.511173+00:00",
-                    "last_successful_at": "2026-08-31T07:14:57.515028+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:18.646563+00:00",
+                    "last_successful_at": "2026-08-31T08:47:18.652008+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:57.515032+00:00"
+                    "updated_at": "2026-08-31T08:47:18.652013+00:00"
                   }
                 ]
               }
@@ -7560,7 +7561,7 @@
               "question": "What did I note about the herb planter?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: The herb planter needs a sunnier spot. observation: The herb planter needs a sunnier spot..",
+              "answer": "The herb planter needs a sunnier spot..",
               "items": [
                 {
                   "entity_key": "the_herb_planter_needs_a_sunnier_spot",
@@ -7606,12 +7607,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 2,
-                    "last_attempted_at": "2026-08-31T07:14:58.079355+00:00",
-                    "last_successful_at": "2026-08-31T07:14:58.081232+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:19.219432+00:00",
+                    "last_successful_at": "2026-08-31T08:47:19.221256+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:58.081238+00:00"
+                    "updated_at": "2026-08-31T08:47:19.221261+00:00"
                   }
                 ]
               }
@@ -7757,7 +7758,7 @@
               "question": "Where are the spare batteries?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: The spare batteries are in the top drawer. observation: The spare batteries are in the top drawer..",
+              "answer": "The spare batteries are in the top drawer..",
               "items": [
                 {
                   "entity_key": "the_spare_batteries_are_in_the_top_drawer",
@@ -7803,12 +7804,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:59.159705+00:00",
-                    "last_successful_at": "2026-08-31T07:14:59.162916+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:20.309475+00:00",
+                    "last_successful_at": "2026-08-31T08:47:20.313635+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:59.162923+00:00"
+                    "updated_at": "2026-08-31T08:47:20.313734+00:00"
                   }
                 ]
               }
@@ -7954,7 +7955,7 @@
               "question": "Where is the library card?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: The library card is in the green wallet. observation: The library card is in the green wallet..",
+              "answer": "The library card is in the green wallet..",
               "items": [
                 {
                   "entity_key": "the_library_card_is_in_the_green_wallet",
@@ -8000,12 +8001,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:14:59.717483+00:00",
-                    "last_successful_at": "2026-08-31T07:14:59.720480+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:20.876720+00:00",
+                    "last_successful_at": "2026-08-31T08:47:20.879873+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:14:59.720490+00:00"
+                    "updated_at": "2026-08-31T08:47:20.879907+00:00"
                   }
                 ]
               }
@@ -8144,7 +8145,7 @@
               "question": "Where is the blue notebook?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: The blue notebook is on the hall shelf. observation: The blue notebook is on the hall shelf..",
+              "answer": "The blue notebook is on the hall shelf..",
               "items": [
                 {
                   "entity_key": "the_blue_notebook_is_on_the_hall_shelf",
@@ -8190,12 +8191,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:15:00.816606+00:00",
-                    "last_successful_at": "2026-08-31T07:15:00.819233+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:21.960724+00:00",
+                    "last_successful_at": "2026-08-31T08:47:21.963849+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:15:00.819238+00:00"
+                    "updated_at": "2026-08-31T08:47:21.963857+00:00"
                   }
                 ]
               }
@@ -8432,7 +8433,7 @@
               "question": "What did I pay 74 zł for?",
               "mode": "costs",
               "status": "ready",
-              "answer": "Observed costs: petrol cost: 74 zł. Deterministic totals: [{'currency': 'ZŁ', 'billing_period': '', 'total': '74'}].",
+              "answer": "You’re paying for: petrol costs 74 zł. Total: [{'currency': 'ZŁ', 'billing_period': '', 'total': '74'}].",
               "items": [
                 {
                   "entity_key": "petrol",
@@ -8481,12 +8482,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:15:01.953337+00:00",
-                    "last_successful_at": "2026-08-31T07:15:01.956306+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:23.087366+00:00",
+                    "last_successful_at": "2026-08-31T08:47:23.090046+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:15:01.956311+00:00"
+                    "updated_at": "2026-08-31T08:47:23.090051+00:00"
                   }
                 ]
               }
@@ -8671,7 +8672,7 @@
               "question": "What am I paying for PocketWave now?",
               "mode": "costs",
               "status": "ready",
-              "answer": "Observed costs: PocketWave monthly_cost: 11 EUR per month. Deterministic totals: [{'currency': 'EUR', 'billing_period': 'month', 'total': '11'}].",
+              "answer": "You’re paying for: PocketWave costs 11 EUR per month. Total: [{'currency': 'EUR', 'billing_period': 'month', 'total': '11'}].",
               "items": [
                 {
                   "entity_key": "pocketwave",
@@ -8721,12 +8722,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:15:02.519599+00:00",
-                    "last_successful_at": "2026-08-31T07:15:02.522830+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:23.640790+00:00",
+                    "last_successful_at": "2026-08-31T08:47:23.645741+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:15:02.522834+00:00"
+                    "updated_at": "2026-08-31T08:47:23.645751+00:00"
                   },
                   {
                     "event_id": "acceptance-ASK-002-capture-pocketwave-current",
@@ -8736,12 +8737,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:15:02.519599+00:00",
-                    "last_successful_at": "2026-08-31T07:15:02.522887+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:23.640790+00:00",
+                    "last_successful_at": "2026-08-31T08:47:23.645826+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:15:02.522891+00:00"
+                    "updated_at": "2026-08-31T08:47:23.645830+00:00"
                   }
                 ]
               }
@@ -8853,7 +8854,7 @@
               "question": "What changed about the storage unit's width?",
               "mode": "changes",
               "status": "ready",
-              "answer": "Recent changes: storage unit: set (storage unit width: 2 metres); storage unit: correction (storage unit width: 2.4 metres).",
+              "answer": "Recent changes: storage unit: 2 metres; storage unit: 2.4 metres.",
               "items": [
                 {
                   "entity_key": "storage_unit",
@@ -8870,7 +8871,7 @@
                   "operation": "set",
                   "temporal": {},
                   "extractor_version": "blackhole-product-v2-extractor-v3",
-                  "created_at": "2026-08-31T07:15:03.079120+00:00",
+                  "created_at": "2026-08-31T08:47:24.202120+00:00",
                   "sequence": 1,
                   "retracted": false,
                   "value": "2 metres",
@@ -8898,7 +8899,7 @@
                   "operation": "correction",
                   "temporal": {},
                   "extractor_version": "blackhole-product-v2-extractor-v3",
-                  "created_at": "2026-08-31T07:15:03.079259+00:00",
+                  "created_at": "2026-08-31T08:47:24.202236+00:00",
                   "supersedes_event_id": "acceptance-ASK-003-capture-storage-old",
                   "sequence": 2,
                   "retracted": false,
@@ -8932,12 +8933,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:15:03.076569+00:00",
-                    "last_successful_at": "2026-08-31T07:15:03.079872+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:24.199141+00:00",
+                    "last_successful_at": "2026-08-31T08:47:24.202619+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:15:03.079880+00:00"
+                    "updated_at": "2026-08-31T08:47:24.202624+00:00"
                   },
                   {
                     "event_id": "acceptance-ASK-003-capture-storage-new",
@@ -8947,12 +8948,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:15:03.076569+00:00",
-                    "last_successful_at": "2026-08-31T07:15:03.079950+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:24.199141+00:00",
+                    "last_successful_at": "2026-08-31T08:47:24.202679+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:15:03.079955+00:00"
+                    "updated_at": "2026-08-31T08:47:24.202684+00:00"
                   }
                 ]
               }
@@ -9131,7 +9132,7 @@
               "question": "What should I remember when choosing a gift for Adam?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: Adam gift_idea: Adam would probably like the blue hiking socks.; Adam dietary_preference: Adam doesn't eat peanuts.",
+              "answer": "Adam would probably like the blue hiking socks.; Adam doesn't eat peanuts.",
               "items": [
                 {
                   "entity_key": "adam",
@@ -9200,12 +9201,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:15:03.642662+00:00",
-                    "last_successful_at": "2026-08-31T07:15:03.646304+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:24.769120+00:00",
+                    "last_successful_at": "2026-08-31T08:47:24.772229+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:15:03.646323+00:00"
+                    "updated_at": "2026-08-31T08:47:24.772234+00:00"
                   },
                   {
                     "event_id": "acceptance-ASK-004-capture-adam-gift",
@@ -9215,12 +9216,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:15:03.642662+00:00",
-                    "last_successful_at": "2026-08-31T07:15:03.646442+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:24.769120+00:00",
+                    "last_successful_at": "2026-08-31T08:47:24.772293+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:15:03.646455+00:00"
+                    "updated_at": "2026-08-31T08:47:24.772298+00:00"
                   }
                 ]
               }
@@ -9353,7 +9354,7 @@
               "question": "What locations have I recorded for things I might need?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: spare charger location: blue suitcase; The garden keys are in the ceramic bowl by the door. observation: The garden keys are in the ceramic bowl by the door..",
+              "answer": "The location of spare charger is blue suitcase; The garden keys are in the ceramic bowl by the door..",
               "items": [
                 {
                   "entity_key": "spare_charger",
@@ -9422,12 +9423,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:15:04.214222+00:00",
-                    "last_successful_at": "2026-08-31T07:15:04.217298+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:25.329098+00:00",
+                    "last_successful_at": "2026-08-31T08:47:25.333081+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:15:04.217303+00:00"
+                    "updated_at": "2026-08-31T08:47:25.333087+00:00"
                   },
                   {
                     "event_id": "acceptance-ASK-005-capture-keys-list",
@@ -9437,12 +9438,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:15:04.214222+00:00",
-                    "last_successful_at": "2026-08-31T07:15:04.217357+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:25.329098+00:00",
+                    "last_successful_at": "2026-08-31T08:47:25.333143+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:15:04.217361+00:00"
+                    "updated_at": "2026-08-31T08:47:25.333147+00:00"
                   }
                 ]
               }
@@ -9546,12 +9547,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:15:04.767978+00:00",
-                    "last_successful_at": "2026-08-31T07:15:04.770407+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:25.887273+00:00",
+                    "last_successful_at": "2026-08-31T08:47:25.889558+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:15:04.770412+00:00"
+                    "updated_at": "2026-08-31T08:47:25.889564+00:00"
                   }
                 ]
               }
@@ -9753,12 +9754,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:15:05.338486+00:00",
-                    "last_successful_at": "2026-08-31T07:15:05.341619+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:26.458150+00:00",
+                    "last_successful_at": "2026-08-31T08:47:26.462616+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:15:05.341624+00:00"
+                    "updated_at": "2026-08-31T08:47:26.462623+00:00"
                   },
                   {
                     "event_id": "acceptance-ASK-007-capture-bike-keys",
@@ -9768,14 +9769,17 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:15:05.338486+00:00",
-                    "last_successful_at": "2026-08-31T07:15:05.341711+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:26.458150+00:00",
+                    "last_successful_at": "2026-08-31T08:47:26.462726+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:15:05.341715+00:00"
+                    "updated_at": "2026-08-31T08:47:26.462730+00:00"
                   }
                 ]
+              },
+              "clarification": {
+                "prompt": "Doprecyzuj proszę, o które wspomnienie chodzi: „Gdzie są klucze?”."
               }
             }
           }
@@ -10058,12 +10062,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:15:05.892149+00:00",
-                    "last_successful_at": "2026-08-31T07:15:05.897536+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:27.016604+00:00",
+                    "last_successful_at": "2026-08-31T08:47:27.020104+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:15:05.897542+00:00"
+                    "updated_at": "2026-08-31T08:47:27.020109+00:00"
                   },
                   {
                     "event_id": "acceptance-TIME-008-capture-library-return",
@@ -10073,12 +10077,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:15:05.892149+00:00",
-                    "last_successful_at": "2026-08-31T07:15:05.897660+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:27.016604+00:00",
+                    "last_successful_at": "2026-08-31T08:47:27.020163+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:15:05.897670+00:00"
+                    "updated_at": "2026-08-31T08:47:27.020166+00:00"
                   }
                 ]
               }
@@ -10767,7 +10771,7 @@
               "question": "Where is the spare house key?",
               "mode": "retrieval",
               "status": "ready",
-              "answer": "Relevant memory: spare house key location: blue suitcase.",
+              "answer": "The location of spare house key is blue suitcase.",
               "items": [
                 {
                   "entity_key": "spare_house_key",
@@ -10813,12 +10817,12 @@
                     "owner_id": null,
                     "lease_until": null,
                     "attempt_count": 1,
-                    "last_attempted_at": "2026-08-31T07:15:07.054578+00:00",
-                    "last_successful_at": "2026-08-31T07:15:07.056819+00:00",
+                    "last_attempted_at": "2026-08-31T08:47:28.167875+00:00",
+                    "last_successful_at": "2026-08-31T08:47:28.170468+00:00",
                     "last_error": null,
                     "next_retry_at": null,
                     "extractor_version": "blackhole-product-v2-extractor-v3",
-                    "updated_at": "2026-08-31T07:15:07.056824+00:00"
+                    "updated_at": "2026-08-31T08:47:28.170474+00:00"
                   }
                 ]
               }
@@ -10908,8 +10912,8 @@
   "latency_evidence": {
     "status": "PASS",
     "provider_delay_ms": 120,
-    "capture_return_ms": 3.063,
-    "processing_completion_ms": 191.668,
+    "capture_return_ms": 3.006,
+    "processing_completion_ms": 150.016,
     "processing_completed": true,
     "status_at_capture": "pending",
     "provider_calls_at_capture": 1,

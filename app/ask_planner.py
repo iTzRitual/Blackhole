@@ -92,10 +92,15 @@ _STOPWORDS = frozenset(
         "tell",
         "thing",
         "things",
+        "that",
         "the",
         "there",
         "this",
+        "those",
+        "these",
         "to",
+        "one",
+        "other",
         "up",
         "w",
         "was",
@@ -249,6 +254,8 @@ _TERM_ALIASES = {
     "today": "today",
     "dzis": "today",
     "dzisiaj": "today",
+    "yesterday": "yesterday",
+    "wczoraj": "yesterday",
     "tomorrow": "tomorrow",
     "jutro": "tomorrow",
     "upcoming": "upcoming",
@@ -290,6 +297,40 @@ _TERM_ALIASES = {
     "koszty": "cost",
     "pay": "pay",
     "paying": "pay",
+    "consume": "consume",
+    "consumes": "consume",
+    "consumed": "consume",
+    "consuming": "consume",
+    "consumption": "consume",
+    "consumptions": "consume",
+    "drink": "drink",
+    "drinks": "drink",
+    "drank": "drink",
+    "drinking": "drink",
+    "eat": "eat",
+    "eats": "eat",
+    "ate": "eat",
+    "eating": "eat",
+    "buy": "buy",
+    "buys": "buy",
+    "bought": "buy",
+    "buying": "buy",
+    "visit": "visit",
+    "visits": "visit",
+    "visited": "visit",
+    "visiting": "visit",
+    "run": "run",
+    "runs": "run",
+    "ran": "run",
+    "running": "run",
+    "watch": "watch",
+    "watches": "watch",
+    "watched": "watch",
+    "watching": "watch",
+    "receive": "receive",
+    "receives": "receive",
+    "received": "receive",
+    "receiving": "receive",
     "subscription": "subscription",
     "subscriptions": "subscription",
     "abonament": "subscription",
@@ -313,6 +354,7 @@ _TERM_ALIASES = {
     "means": "meaning",
     "oznacza": "meaning",
     "znaczenie": "meaning",
+    "znaczy": "meaning",
     "wyjasnij": "explain",
     "podsumuj": "summarize",
 }
@@ -386,7 +428,35 @@ _PLANNER_TERMS = _ATTENTION_TERMS | _COST_TERMS | _CHANGE_TERMS | _SYNTHESIS_TER
     "recently",
     "urgent",
     "value",
+    "yesterday",
 }
+
+_REFERENTIAL_PRONOUNS = frozenset(
+    {
+        "that",
+        "this",
+        "those",
+        "these",
+        "it",
+        "one",
+        "other",
+        "ten",
+        "tamto",
+        "tamten",
+        "tamta",
+        "tamtego",
+        "tego",
+    }
+)
+_REFERENTIAL_TIME_TERMS = frozenset(
+    {
+        "before",
+        "earlier",
+        "history",
+        "previous",
+        "yesterday",
+    }
+)
 
 _LAST_MENTION_TERMS = frozenset({"last", "mention", "mentioned", "wspomnialem", "wspomnialam"})
 
@@ -612,6 +682,7 @@ class AskPlan:
     language: str
     semantic_fallback: bool = False
     lexical_gap: bool = False
+    referential: bool = False
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -625,7 +696,41 @@ class AskPlan:
             "language": self.language,
             "semantic_fallback": self.semantic_fallback,
             "lexical_gap": self.lexical_gap,
+            "referential": self.referential,
         }
+
+
+def _is_referential_question(
+    normalized: str,
+    terms: set[str] | frozenset[str],
+    topic_terms: set[str] | frozenset[str],
+) -> bool:
+    """Detect an elliptical follow-up without naming a product topic.
+
+    The current question remains the primary retrieval input. This marker only
+    authorizes the runtime to use a bounded prior conversation as a referent
+    hint for questions that cannot stand alone, such as ``Why?`` or ``What does
+    that mean?``. A question with a substantive current topic is not treated as
+    an implicit request to retrieve the previous topic.
+    """
+
+    words = normalized.split()
+    topic = set(topic_terms)
+    if re.fullmatch(r"(?:why|dlaczego|czemu)", normalized):
+        return True
+    if not topic and "meaning" in terms:
+        return True
+    if not topic and set(words) & _REFERENTIAL_PRONOUNS:
+        return True
+    if words and words[0] in {"and", "a", "i", "also"}:
+        remaining = set(terms) - _PLANNER_TERMS
+        if not topic:
+            return True
+        if remaining and remaining <= _REFERENTIAL_TIME_TERMS:
+            return True
+    if not topic and set(terms) & _REFERENTIAL_TIME_TERMS:
+        return True
+    return False
 
 
 def plan_ask(question: str) -> AskPlan:
@@ -659,6 +764,7 @@ def plan_ask(question: str) -> AskPlan:
             language="unknown",
             semantic_fallback=True,
             lexical_gap=lexical_gap,
+            referential=_is_referential_question(normalized, terms, topic_terms),
         )
 
     future_advice = bool(
@@ -766,6 +872,7 @@ def plan_ask(question: str) -> AskPlan:
         language=language,
         semantic_fallback=semantic_fallback,
         lexical_gap=lexical_gap,
+        referential=_is_referential_question(normalized, terms, topic_terms),
     )
 
 

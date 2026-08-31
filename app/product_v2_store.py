@@ -36,6 +36,77 @@ ATTENTION_STATUSES = frozenset({"open", "completed", "cancelled"})
 AUTOMATIC_RETRY_BACKOFF_SECONDS = (1, 2, 4, 8)
 MAX_AUTOMATIC_ATTEMPTS = len(AUTOMATIC_RETRY_BACKOFF_SECONDS) + 1
 
+_OCCURRENCE_MARKERS = frozenset(
+    {
+        "occurrence",
+        "event",
+        "episode",
+        "action",
+        "transaction",
+        "visit",
+        "visited",
+        "consumption",
+        "consume",
+        "consumes",
+        "consumed",
+        "consuming",
+        "drink",
+        "drank",
+        "drinking",
+        "purchase",
+        "purchased",
+        "bought",
+        "buy",
+        "buying",
+        "payment",
+        "paid",
+        "pay",
+        "eat",
+        "ate",
+        "eating",
+        "run",
+        "ran",
+        "running",
+        "watch",
+        "watched",
+        "watching",
+        "receive",
+        "received",
+        "receiving",
+    }
+)
+_OCCURRENCE_STATE_QUALIFIERS = frozenset(
+    {
+        "account",
+        "balance",
+        "cost",
+        "current",
+        "default",
+        "historical",
+        "location",
+        "method",
+        "monthly",
+        "owner",
+        "preferred",
+        "preference",
+        "price",
+        "recurring",
+        "status",
+        "subscription",
+    }
+)
+
+
+def _occurrence_marker(value: Any) -> bool:
+    key = _legacy_key(value)
+    if not key:
+        return False
+    tokens = set(key.split("_"))
+    return key in _OCCURRENCE_MARKERS or bool(
+        tokens & _OCCURRENCE_MARKERS
+        and not tokens & _OCCURRENCE_STATE_QUALIFIERS
+    )
+
 
 def canonical_json(value: Any) -> str:
     return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
@@ -1878,43 +1949,29 @@ class ProductStore:
 
     @classmethod
     def _fact_is_occurrence(cls, row: sqlite3.Row | dict[str, Any]) -> bool:
-        """Recognize an explicit occurrence primitive without an ontology.
+        """Recognize an occurrence primitive without a closed ontology.
 
         The semantic provider owns deciding whether a claim describes an
-        occurrence or a durable state.  The projector only honors explicit
-        metadata and keeps occurrence rows side by side instead of treating
-        different values as a state conflict.
+        occurrence or a durable state. The projector honors explicit metadata
+        and generic event/action markers in the provider's claim, relation, or
+        concept fields. It keeps occurrence rows side by side instead of
+        treating different values as a state conflict.
         """
 
         metadata = cls._fact_metadata(row)
         if metadata.get("occurrence") is True:
             return True
         claim_type = metadata.get("claim_type")
-        claim_markers = {
-            "occurrence",
-            "event",
-            "episode",
-            "action",
-            "transaction",
-            "visit",
-            "consumption",
-            "purchase",
-            "payment",
-        }
-        if isinstance(claim_type, str) and _legacy_key(claim_type) in claim_markers:
+        if _occurrence_marker(claim_type):
             return True
         semantic_relation = metadata.get("semantic_relation")
-        relation_markers = {
-            "occurrence",
-            "event",
-            "episode",
-            "transaction",
-            "visit",
-            "consumption",
-            "purchase",
-            "payment",
-        }
-        return isinstance(semantic_relation, str) and _legacy_key(semantic_relation) in relation_markers
+        if _occurrence_marker(semantic_relation):
+            return True
+        try:
+            concept = row["concept"]
+        except (KeyError, IndexError, TypeError):
+            concept = ""
+        return _occurrence_marker(concept)
 
     @classmethod
     def _fact_temporal_bounds(

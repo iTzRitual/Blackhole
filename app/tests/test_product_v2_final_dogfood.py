@@ -527,6 +527,44 @@ process.stdout.write(JSON.stringify(result));
         self.assertNotIn("{", result["answerText"])
         self.assertEqual(result["answerEvidence"], "Captured source")
 
+    def test_ui_keeps_generic_occurrences_secondary_and_drops_duplicate_history_rows(self) -> None:
+        result = self._run_ui_hooks(r"""(() => {
+  const memory = api.normalizeMemory({
+    current_facts: [
+      { entity_key: "x", entity_label: "X", concept: "consumed", claim_type: "consumed", value: { amount: 2, unit: "units" }, captured_at: "2026-08-30T03:04:00Z" },
+      { entity_key: "x", entity_label: "X", concept: "consumed", claim_type: "consumed", value: { amount: 1, unit: "units" }, captured_at: "2026-08-31T03:04:00Z" },
+      { entity_key: "x", entity_label: "X", concept: "preferred_drink", claim_type: "preference", value: "tea" },
+      { entity_key: "charger", entity_label: "Spare charger", concept: "location", knowledge_status: "unknown", unknown_reason: "ambiguous" },
+    ],
+    fact_history: [
+      { entity_key: "x", entity_label: "X", concept: "consumed", claim_type: "consumed", value: { amount: 2, unit: "units" }, semantic_relation: "set", captured_at: "2026-08-30T03:04:00Z" },
+    ],
+  });
+  const answer = api.normalizeAnswer({
+    answer: {
+      mode: "ambiguous",
+      answer: "The question needs a little more detail.",
+      clarification: { prompt: "Can you clarify which memory you mean?" },
+    },
+  });
+  const x = memory.find((group) => group.name === "X");
+  const charger = memory.find((group) => group.name === "Spare charger");
+  return {
+    occurrenceCount: x ? x.facts.filter((fact) => fact.occurrence).length : 0,
+    historyCount: x ? x.facts.filter((fact) => fact.isHistory).length : 0,
+    stateIsOccurrence: x ? x.facts.some((fact) => fact.text.toLowerCase().includes("tea") && fact.occurrence) : true,
+    summary: x ? x.summary : "",
+    unknownText: charger ? charger.facts[0].text : "",
+    clarificationPrompt: answer.clarificationPrompt,
+  };
+})()""")
+        self.assertEqual(result["occurrenceCount"], 2)
+        self.assertEqual(result["historyCount"], 0)
+        self.assertFalse(result["stateIsOccurrence"])
+        self.assertIn("3 units total across 2 captured occurrences", result["summary"])
+        self.assertEqual(result["unknownText"], "Needs clarification")
+        self.assertEqual(result["clarificationPrompt"], "Can you clarify which memory you mean?")
+
     def test_raw_language_is_preserved_and_deterministic_ask_stays_provider_free(self) -> None:
         provider = ProductFakeProvider()
         with tempfile.TemporaryDirectory() as directory:
