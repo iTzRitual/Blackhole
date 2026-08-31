@@ -71,10 +71,11 @@ factual repository gate, not an aspirational feature backlog.
 - [PASS] Post-freeze V1R1 is labeled as three fresh synthetic worlds and a
   shadow/generalization result, not an official holdout or significance claim.
 - [PASS] Product V2 development acceptance remains labeled separately:
-  application `196/196`, evaluator `10/10`, acceptance harness `7/7`, root
-  suite `213/213`, integrated acceptance `50/50`, and quality gates `7/7`.
-- [PASS] [`TRAJECTORY_INDEX.md`](../TRAJECTORY_INDEX.md) inventories `47`
-  coding and `52` runtime trajectories, including the final live UX hotfix.
+  application `200/200`, evaluator `10/10`, acceptance harness `7/7`, root
+  suite `217/217`, integrated acceptance `50/50`, and quality gates `7/7`.
+- [PASS] [`TRAJECTORY_INDEX.md`](../TRAJECTORY_INDEX.md) inventories `48`
+  coding and `52` runtime trajectories, including the final live UX and
+  relative-day correctness hotfixes.
 - [PASS] The advisory ChatGPT role is documented in
   [`docs/process/CHATGPT_DECISION_LOG.md`](process/CHATGPT_DECISION_LOG.md),
   with [`docs/process/CHATGPT_TRANSCRIPT_NOTE.md`](process/CHATGPT_TRANSCRIPT_NOTE.md)
@@ -83,17 +84,18 @@ factual repository gate, not an aspirational feature backlog.
   it is explicitly labeled post-freeze product evidence, not a benchmark
   experiment.
 - [PASS] `docs/DECISIONS.md` contains the durable D-051 current-question-first,
-  occurrence-safe, and UI-boundary decision; historical decisions remain
-  authentic.
+  occurrence-safe, and UI-boundary decision plus D-052 capture-local
+  relative-day semantics; historical decisions remain authentic.
 
 ## Deterministic validation
 
 - [PASS] `python -m unittest discover -s app/tests -p "test_*.py" -v` —
-  `196/196`, including the focused live-UX and timezone regressions.
+  `200/200`, including the focused live-UX, timezone, and relative-day
+  regressions.
 - [PASS] `python -m unittest discover -s eval/tests -v` — `10/10`.
 - [PASS] `python -m unittest product_acceptance.harness.test_harness -v` —
   `7/7`.
-- [PASS] `python -m unittest discover -s . -p "test_*.py" -v` — `213/213`.
+- [PASS] `python -m unittest discover -s . -p "test_*.py" -v` — `217/217`.
 - [PASS] `python scripts/run_product_v2_integrated_acceptance.py` — `50/50`
   PASS, no live provider; the generated result is
   `eval/results/product-v2-integrated-acceptance.json`.
@@ -103,7 +105,7 @@ factual repository gate, not an aspirational feature backlog.
   `4` checkpoints.
 - [PASS] `python eval/contract_smoke.py` — non-scored contract smoke passed.
 - [PASS] `python scripts/qualification_check.py --inventory` — zero hard
-  failures; `47` coding and `52` runtime trajectories documented, with four
+  failures; `48` coding and `52` runtime trajectories documented, with four
   known historical non-blocking warnings.
 - [PASS] `git diff --check`.
 

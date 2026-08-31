@@ -185,8 +185,8 @@ synthetic worlds**, not an official holdout and not a significance claim:
 
 Product V2 development acceptance evidence is separate:
 
-- application tests: `196/196 PASS` (including the macOS timezone and live-UX regressions);
-- root discovery suite: `213/213 PASS`;
+- application tests: `200/200 PASS` (including the macOS timezone, live-UX, and relative-day regressions);
+- root discovery suite: `217/217 PASS`;
 - evaluator tests: `10/10 PASS`;
 - acceptance harness: `7/7 PASS`;
 - integrated Product V2 acceptance: `50/50 PASS`;
@@ -197,6 +197,12 @@ requests in a fresh temporary Home: all requests returned HTTP 200, processing
 completed with zero failures/retries, the topic switch stayed current-question-
 first, and real occurrence Memory did not become false clarification/conflict
 or duplicated history. See the [live runtime trajectory](trajectories/runtime/046-final-live-ask-memory-ui-hotfix/summary.md).
+
+The final relative-day correctness follow-up is recorded in [coding trajectory
+047](trajectories/coding/047-relative-day-temporal-hotfix/summary.md). It
+anchors relative days to the capture-local calendar date, preserves the capture
+timezone for occurrence rendering, and passes the deterministic temporal and
+full regression gates without a live provider call.
 
 The engineering lesson is deliberately preserved:
 

@@ -383,3 +383,31 @@ trajectory summary and machine-readable files.
 The overall live gate remains **PARTIAL / REVISE**. The prior live first-use
 value (`23.031s`), remaining burst (`129.562s`), and incomplete Windows
 shutdown evidence remain unchanged.
+
+## Final relative-day temporal correctness hotfix — 2026-08-31
+
+The final Mac human dogfood after the Ask/Memory/UI hotfix exposed one narrow
+temporal correctness failure. With a capture timestamp of
+`2026-08-31T10:00:00+02:00` in `Europe/Warsaw`, the deterministic occurrence
+Ask path reported a two-unit “yesterday” occurrence on Aug 29 instead of Aug
+30. The observable trace was `mode=occurrence_totals`, `provider_used=false`,
+so this was not a provider-latency or live-model failure. The provider shape
+could include raw `expression: "yesterday"` together with an inconsistent
+absolute `normalized: "2026-08-29"`.
+
+The fix is at the generic temporal normalization boundary. English and Polish
+today/yesterday/tomorrow forms, including the existing compact provider
+temporal shapes, resolve from the capture-local calendar date; raw relative
+expression evidence wins over an inconsistent absolute proposal. Occurrence
+projections retain the capture timezone and the deterministic renderer compares
+dates in that timezone. Local calendar arithmetic also covers the
+Europe/Warsaw ZoneInfo DST boundary without subtracting a fixed UTC 24 hours.
+
+The focused temporal reproduction is `12/12`; the targeted Product V2 suite
+is `47/47`; the application suite is `200/200`; the evaluator is `10/10`; the
+acceptance harness is `7/7`; the root suite is `217/217`; and integrated
+Product V2 acceptance is `50/50 PASS` with all seven quality gates passing.
+No live provider call was made. The machine-readable acceptance evidence is
+`eval/results/product-v2-integrated-acceptance.json`, and the full coding
+record is in
+`trajectories/coding/047-relative-day-temporal-hotfix/summary.md`.
