@@ -476,11 +476,12 @@ def _occurrence_when(item: dict[str, Any], *, now: datetime, language: str) -> s
     if not isinstance(temporal, dict):
         temporal = {}
     raw = temporal.get("normalized") or temporal.get("date") or item.get("captured_at")
-    parsed = parse_datetime(raw, zone=timezone.utc) if raw is not None else None
+    _timezone_name, zone = resolve_timezone(item.get("timezone"))
+    parsed = parse_datetime(raw, zone=zone) if raw is not None else None
     if parsed is None:
         expression = temporal.get("expression")
         return _clean_text(expression, limit=80) if isinstance(expression, str) else ""
-    current = now.astimezone(parsed.tzinfo or timezone.utc)
+    current = now.astimezone(zone)
     if parsed.date() == current.date():
         return "dzisiaj" if language == "pl" else "today"
     if parsed.date() == (current.date() - timedelta(days=1)):
@@ -1070,12 +1071,54 @@ def _coarse_interval(value: Any, *, base: datetime) -> dict[str, Any] | None:
     return None
 
 
+_RELATIVE_DAY_OFFSETS = {
+    "today": 0,
+    "dzisiaj": 0,
+    "dzis": 0,
+    "yesterday": -1,
+    "wczoraj": -1,
+    "tomorrow": 1,
+    "jutro": 1,
+}
+
+
+def _relative_day_offset(value: Any) -> int | None:
+    """Return the bounded relative-day meaning in a provider temporal value."""
+
+    if isinstance(value, dict):
+        # ``expression`` is the raw semantic evidence and therefore has
+        # precedence over a provider-proposed absolute ``normalized`` date.
+        # The remaining keys cover the compact temporal shapes accepted by the
+        # Product V2 provider contract without turning this into a language
+        # keyword subsystem.
+        for key in ("expression", "date", "normalized", "value", "iso", "datetime", "timestamp"):
+            if key in value:
+                offset = _relative_day_offset(value[key])
+                if offset is not None:
+                    return offset
+        return None
+    if not isinstance(value, str):
+        return None
+    folded = _temporal_fold(value).strip(" \t\r\n.,;:!?()[]{}")
+    return _RELATIVE_DAY_OFFSETS.get(folded)
+
+
+def _relative_day_datetime(value: Any, *, base: datetime, zone: Any) -> datetime | None:
+    """Resolve a relative day with local calendar arithmetic in ``zone``."""
+
+    offset = _relative_day_offset(value)
+    if offset is None:
+        return None
+    local_base = base.astimezone(zone)
+    target_date = local_base.date() + timedelta(days=offset)
+    return datetime.combine(target_date, datetime.min.time(), tzinfo=zone)
+
+
 def _natural_date(value: str, *, base: datetime) -> datetime | None:
     lowered = _temporal_fold(value).strip()
-    if lowered in {"today", "dzisiaj", "dzis"}:
-        return base.replace(hour=0, minute=0, second=0, microsecond=0)
-    if lowered in {"tomorrow", "jutro"}:
-        return (base + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+    relative_day = _relative_day_datetime(value, base=base, zone=base.tzinfo or timezone.utc)
+    if relative_day is not None:
+        return relative_day
     weekday = _weekday_datetime(value, base=base)
     if weekday is not None:
         return weekday
@@ -1116,6 +1159,9 @@ def normalize_timestamp(
 ) -> str | None:
     """Normalize explicit and relative model proposals deterministically."""
 
+    relative_day = _relative_day_datetime(value, base=captured_at, zone=zone)
+    if relative_day is not None:
+        return relative_day.isoformat()
     delta = _relative_delta(value)
     if delta is not None:
         return (captured_at + delta).astimezone(zone).isoformat()

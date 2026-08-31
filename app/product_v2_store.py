@@ -2252,6 +2252,7 @@ class ProductStore:
                         "metadata": metadata,
                         "source_event_id": self._fact_event_id(row),
                         "captured_at": row["captured_at"] if "captured_at" in row.keys() else None,
+                        "timezone": row["timezone"] if "timezone" in row.keys() else None,
                     }
                     value = self._fact_value(row)
                     if value is not None and self._fact_status(row) != "unknown":
