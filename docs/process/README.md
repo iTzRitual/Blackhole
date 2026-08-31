@@ -1,7 +1,7 @@
 # Process evidence
 
-This directory contains small, curated process records that help a judge or
-maintainer understand repository decisions and handoffs. It is separate from
+This directory contains small, curated process records that help a maintainer
+understand repository decisions and handoffs. It is separate from
 the coding and runtime trajectory protocol.
 
 Coding trajectories under `trajectories/coding/` document meaningful agent

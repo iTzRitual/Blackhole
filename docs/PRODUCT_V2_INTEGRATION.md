@@ -5,8 +5,8 @@ acceptance work. The resulting implementation is now consolidated in the
 submission `master` branch. This is post-evaluation product work; it does not
 reopen the frozen V1 benchmark or runtime.
 
-For the current judge-facing contract and final Product V2 configuration, see
-[`README.md`](../README.md), [`docs/SUBMISSION.md`](SUBMISSION.md), and the
+For the current Product V2 contract and final configuration, see
+[`README.md`](../README.md), [`docs/PRODUCT_SPEC.md`](PRODUCT_SPEC.md), and the
 final dogfood records below. Historical source-branch and merge references in
 this record are intentionally retained for auditability.
 

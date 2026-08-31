@@ -9,7 +9,7 @@ Use the sections below according to the kind of reproduction being performed:
 - **A. Historical deterministic demo utility:** section 12. This preserves the
   earlier seeded presentation and is not the current Host path.
 - **B. Current integrated Blackhole Host/PWA:** sections 18 and 19. These are
-  the normal judge-facing product setup and local transport instructions.
+  the normal Product V2 setup and local transport instructions.
 - **C. Frozen benchmark reproduction:** sections 7, 9–11, and 13–16. These
   preserve the public development benchmark, baseline, and historical
   experiment replays.
@@ -268,9 +268,9 @@ python eval/score.py --scenario benchmark/dev/cases/scenario-001.json --expected
 ```
 
 The replay uses the public development expected output only because this is a
-local diagnostic. A judge must mount holdout expected output privately and must
-not place it in the implementation checkout, prompt, trajectory, or result
-artifact. The final Experiment 001 replay is recorded at
+local diagnostic. Authorized holdout scoring must mount expected output
+privately and must not place it in the implementation checkout, prompt,
+trajectory, or result artifact. The final Experiment 001 replay is recorded at
 `eval/results/experiment-001-full-v4.json` and its runtime evidence is under
 `trajectories/runtime/experiment-001-full-v4/`; the fresh semantic provider
 usage is recorded under `experiment-001-full-v1`.
@@ -291,8 +291,8 @@ four selected public query IDs, followed by `eval.score_slice`; it is not an
 official score. The final full artifact is
 `eval/results/experiment-002-generic-full.json`, with runtime evidence under
 `trajectories/runtime/experiment-002-generic-full/`. Holdout expected output
-must remain privately mounted by the judge and must never be copied into an
-implementation checkout or trajectory.
+must remain privately mounted for authorized scoring and must never be copied
+into an implementation checkout or trajectory.
 
 ## 12. Historical deterministic demo utility (superseded)
 
@@ -338,9 +338,9 @@ python eval/score.py --scenario benchmark/dev/cases/scenario-001.json --expected
 The resulting development evidence is
 `eval/results/experiment-003-retrieval-full-v3.json`, with runtime records
 under `trajectories/runtime/experiment-003-retrieval-full-v3/`. Candidate
-retrieval is capped at four earlier raw captures per considered relation. A
-judge must mount holdout expected output privately and must not copy it into an
-implementation checkout or trajectory.
+retrieval is capped at four earlier raw captures per considered relation.
+Authorized holdout scoring must mount expected output privately and must not
+copy it into an implementation checkout or trajectory.
 
 ## 14. Historical product-phase submission evidence (superseded)
 
@@ -353,9 +353,9 @@ Experiment 005 result is recorded below, with Experiment 004 and Experiment
 category metrics, and runtime caveats for its respective phase. The
 representative product/runtime behavior is described in
 `trajectories/runtime/013-demo-simple-capture/` through
-`trajectories/runtime/016-demo-correction-reassignment/`. The existing
-`docs/VIDEO_SCRIPT.md` and `docs/VIDEO_SHOT_LIST.md` remain stale pending the
-post-freeze generalization story and are intentionally not rewritten here.
+`trajectories/runtime/016-demo-correction-reassignment/`. These are historical
+local behavior records; current product reproduction is documented in sections
+18 and 19.
 
 ## 15. Experiment 004 selective completeness replay
 
@@ -404,17 +404,17 @@ python eval/score.py --scenario benchmark/dev/cases/scenario-001.json --expected
 The replay records duplicate-component metadata, consolidation counts, and the
 derived SQLite state under
 `trajectories/runtime/experiment-005-duplicate-evidence-full/`. The public
-expected output is used only by the local development scorer. A judge must
-mount holdout expected output privately and must never copy it into an
-implementation checkout, prompt, trajectory, or result artifact. The official
+expected output is used only by the local development scorer. Authorized
+holdout scoring must mount expected output privately and must never copy it into
+an implementation checkout, prompt, trajectory, or result artifact. The official
 `baseline-v1` result and all frozen benchmark artifacts remain unchanged.
 
 ## 17. Deferred ingestion API (backend milestone)
 
 This lower-level product-runtime API is separate from benchmark scoring. It
 requires raw captures and public ontology/configuration, not benchmark expected
-output, the evaluator, or score artifacts. The normal judge-facing product path
-is the Host/PWA quickstart in sections 18 and 19. The deferred service API is
+output, the evaluator, or score artifacts. The normal Product V2 path is the
+Host/PWA quickstart in sections 18 and 19. The deferred service API is
 shown here for backend-level reproduction:
 
 ```python
@@ -438,8 +438,8 @@ with CodexCLIProvider() as provider:
 
 `capture()` returns `Saved.` before any provider call. Authenticate the local
 Codex CLI outside Blackhole when pending work should be processed; Blackhole
-never reads or persists provider credentials. For a concise judge/development
-command, use:
+never reads or persists provider credentials. For a concise development command,
+use:
 
 ```text
 python -m app.process_pending --db data/runtime/state.sqlite --response-contract benchmark/dev/response-contract-v2.json --batch-size 10

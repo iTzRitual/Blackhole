@@ -12,8 +12,8 @@ choosing a folder, tag, or schema. The evidence is saved immediately;
 understanding happens asynchronously; useful Memory, Attention, and grounded
 Ask answers emerge afterward.
 
-This is a frozen Product V2 hackathon submission. Product V2 is a local
-single-user application, not production infrastructure.
+Product V2 is a frozen local single-user application, not production
+infrastructure.
 
 ## The product loop
 
@@ -95,7 +95,7 @@ solution. Cloud sync and pairing are deferred.
 ## Safe demo preparation
 
 The repository includes a small, provider-free preparation utility for a
-repeatable judge/demo state. It uses the normal Product V2 HTTP routes with
+repeatable synthetic state. It uses the normal Product V2 HTTP routes with
 synthetic captures and the visible deterministic acceptance provider; it does
 not write benchmark data, bypass the UI with fake answers, or call a live
 provider.
@@ -111,8 +111,7 @@ python -m app.web_app --home <new-empty-demo-home> --host 127.0.0.1 --port 8080
 The seed contains a parking deadline, a Polish preference, a bilingual key
 correction, a PocketWave price history, and an uncertain boiler-warranty
 mention. The utility refuses a non-empty Home so personal data cannot be
-silently mixed into the prepared state. At least one additional Capture should
-still be entered live during a demo to show the immediate-save boundary.
+silently mixed into the prepared state.
 
 The older `?fixture=1` browser mode remains a presentation-only visual-test
 fixture. It is not Product V2 state, benchmark data, or submission evidence.
@@ -176,24 +175,21 @@ synthetic worlds**, not an official holdout and not a significance claim:
 - mean successful runtime `3066.475526 s` baseline vs `897.310841 s` Blackhole;
 - retries `3` vs `0`, hard failures `0/0`, and schema validity `0/3` vs `3/3`.
 
-The final Product V2 head-to-head is a separate post-freeze descriptive run,
-not a V1 score or an E006 optimization. It compares the frozen Product V2
-normal HTTP path with a fresh stateless raw-memory Codex call over four new
-synthetic worlds (80 captures, checkpoints at 7/14/20, 13 queries), using
-`gpt-5.6-luna` with low reasoning for both systems:
+The final H2H-002 native-chat comparison is a separate post-freeze descriptive
+run, not a V1 score or an E006 optimization. It compares the frozen Product V2
+normal HTTP path with native single-thread chat and augmented raw memory over
+three fresh synthetic worlds (60 captures, checkpoints at 7/14/20), using
+`gpt-5.6-luna` with low reasoning:
 
-- Prompt-to-Truth Score (PTS): raw-memory `0.8575`; Product V2 `0.7928`;
-- raw-memory Attention F1 `0.5641`; Product V2 Attention F1 `0.6795`;
-- raw-memory: `13/13` schema-valid queries in `130.878 s`;
-- Product V2: `80/80` captures processed on first attempt, `13/13`
-  schema-valid queries in `1217.334 s`.
+- active Attention F1: native single thread `0.222`; augmented raw memory
+  `1.000`; Product V2 `0.941`;
+- resolved assertion rate: native `0.596`; augmented raw memory `0.673`;
+  Product V2 `0.615`; and
+- the overall semantic comparison was mixed, so the preregistered video rule
+  selected the Attention result.
 
-The result is intentionally mixed: the raw comparator recalled more of this
-small authored assertion set, while Product V2 supplied durable state,
-inspectable provenance, active Attention, and permanent Undo. See the
-[sanitized H2H report](docs/FINAL_H2H_REPORT.md) and
-[machine-readable summary](eval/results/final-h2h-001-summary.json). The
-Prompt-to-Truth Score (PTS) is not LQA-0M, and this run is neither an official
+See the [H2H-002 report](docs/FINAL_NATIVE_CHAT_H2H.md) and the preserved
+[H2H-001 report](docs/FINAL_H2H_REPORT.md). H2H-002 is neither an official
 holdout nor a significance claim.
 
 Product V2 development acceptance evidence is separate:
@@ -234,8 +230,7 @@ failures are part of the evidence, not hidden from the submission.
   than desired. Prior final dogfood measured a first useful state at about
   `23.031 s` and the remaining burst at about `129.562 s`.
 - Those are real provider measurements and are not erased by faster
-  deterministic fixture timings. The demo should use prepared state rather
-  than waiting for a four-item live burst on camera.
+  deterministic fixture timings.
 - PDFs and other attachments are persisted and surfaced with truthful status,
   but semantic understanding remains limited where the provider cannot read or
   interpret them; no blanket OCR/vision guarantee is made.
@@ -253,23 +248,19 @@ failures are part of the evidence, not hidden from the submission.
 | `baseline/` | Fair stateless V1 baseline harness |
 | `eval/` | Deterministic evaluator, tests, and recorded result artifacts |
 | `product_acceptance/` | Public Product V2 development acceptance cases and harness |
-| `docs/` | Product, architecture, submission, demo, process, and reproduction notes |
+| `docs/` | Product, architecture, evaluation, process, and reproduction notes |
 | `trajectories/` | Coding and runtime evidence, including preserved failures and retries |
 | `scripts/` | Safe local preparation and deterministic reproduction helpers |
 
-Judge-facing documents:
+Key project documents:
 
-- [`docs/SUBMISSION.md`](docs/SUBMISSION.md) — rubric-aligned narrative;
-- [`docs/FINAL_H2H_REPORT.md`](docs/FINAL_H2H_REPORT.md) — sanitized frozen
-  Product V2 head-to-head report;
-- [`docs/SUBMISSION_COPY.md`](docs/SUBMISSION_COPY.md) — concise form-ready
-  submission copy;
-- [`docs/FINAL_VIDEO_SCRIPT.md`](docs/FINAL_VIDEO_SCRIPT.md) — narrated demo
-  script with evidence guardrails;
-- [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md) — a realistic five-minute demo;
-- [`docs/REPRODUCTION.md`](docs/REPRODUCTION.md) — V1 reproduction vs Product V2 local setup;
-- [`TRAJECTORY_INDEX.md`](TRAJECTORY_INDEX.md) — coding/runtime evidence map; and
-- [`docs/SUBMISSION_CHECKLIST.md`](docs/SUBMISSION_CHECKLIST.md) — final gate status.
+- [`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md) — product behavior and safety;
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — runtime and state boundaries;
+- [`docs/EVALUATION.md`](docs/EVALUATION.md) — frozen benchmark and scoring;
+- [`docs/REPRODUCTION.md`](docs/REPRODUCTION.md) — local reproduction paths;
+- [`docs/FINAL_H2H_REPORT.md`](docs/FINAL_H2H_REPORT.md) — H2H-001 report;
+- [`docs/FINAL_NATIVE_CHAT_H2H.md`](docs/FINAL_NATIVE_CHAT_H2H.md) — H2H-002 report; and
+- [`TRAJECTORY_INDEX.md`](TRAJECTORY_INDEX.md) — engineering and runtime evidence map.
 
 ## Deterministic verification
 
@@ -292,6 +283,5 @@ The integrated acceptance runner uses a deterministic in-process provider and
 temporary Homes. It is not a benchmark scorer. Do not run live provider calls
 as part of this deterministic gate.
 
-Read [`AGENTS.md`](AGENTS.md) before changing the repository. The final
-submission state, evidence boundaries, and decision history are recorded in
-the linked documents above.
+Evidence boundaries and decision history are recorded in the linked project
+documents above.

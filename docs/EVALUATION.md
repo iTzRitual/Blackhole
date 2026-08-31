@@ -493,13 +493,13 @@ evaluator-owned ground truth. The calibration oracle is explicitly non-scored an
 separate from both development and holdout boundaries; it must not be treated as
 final holdout ground truth.
 
-## 15. Reproduction by judges
+## 15. Reproduction and authorized scoring
 
 Each final benchmark run should record:
 
 - frozen contract, query-bundle, normalization, and scorer revisions;
 - public scenario manifest and content hashes;
-- private holdout package identifier for authorized judges;
+- private holdout package identifier for authorized scoring;
 - candidate code revision;
 - baseline and runtime/coding prompt revisions;
 - model/provider/version identifiers;
