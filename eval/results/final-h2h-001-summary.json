@@ -1,0 +1,115 @@
+{
+  "result_version": "final-h2h-summary-v1",
+  "run_id": "final-h2h-20260831T143014Z",
+  "frozen_product": {
+    "tag": "hackathon-submission-demo-ready",
+    "commit": "cc0cca8e8d9c3a5ab0955f365ea71c639cac7548"
+  },
+  "sealed_manifest_sha256": "5b38b14aac4e3f4ab88a7cff6a5d5d411f7275c8579e501a3da0ec7128243393",
+  "seed": 20260831,
+  "scope": {
+    "synthetic_worlds": 4,
+    "events": 80,
+    "checkpoints": 12,
+    "queries": 13,
+    "families": 10,
+    "checkpoint_event_counts": [7, 14, 20],
+    "post_checkpoint_undo_queries": 1
+  },
+  "systems": {
+    "raw-memory-codex": {
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "mode": "fresh stateless raw-memory call per query"
+    },
+    "product-v2": {
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "mode": "frozen Product V2 normal HTTP path"
+    }
+  },
+  "scores": {
+    "raw-memory-codex": {
+      "score_name": "PTS",
+      "precision": 0.975,
+      "recall": 0.792718253968254,
+      "pts": 0.8574727047035546,
+      "attention": {
+        "precision": 0.5384615384615384,
+        "recall": 0.6153846153846154,
+        "f1": 0.5641025641025641
+      },
+      "families": {
+        "current_truth": {"precision": 1.0, "recall": 0.9375, "f1": 0.967741935483871},
+        "history_correction": {"precision": 1.0, "recall": 0.8571428571428571, "f1": 0.923076923076923},
+        "attention_lifecycle": {"precision": 1.0, "recall": 0.8, "f1": 0.888888888888889},
+        "temporal_deadline": {"precision": 1.0, "recall": 0.9, "f1": 0.9473684210526316},
+        "occurrences_aggregation": {"precision": 1.0, "recall": 0.6666666666666666, "f1": 0.8},
+        "uncertainty_contradiction": {"precision": 1.0, "recall": 0.5714285714285714, "f1": 0.7272727272727273},
+        "multilingual_retrieval": {"precision": 1.0, "recall": 1.0, "f1": 1.0},
+        "provenance_thread": {"precision": 1.0, "recall": 0.4166666666666667, "f1": 0.5882352941176471},
+        "document_payment": {"precision": 1.0, "recall": 0.7777777777777778, "f1": 0.875},
+        "undo_forget": {"precision": 0.75, "recall": 1.0, "f1": 0.8571428571428571}
+      }
+    },
+    "product-v2": {
+      "score_name": "PTS",
+      "precision": 1.0,
+      "recall": 0.6872619047619047,
+      "pts": 0.7928039933922287,
+      "attention": {
+        "precision": 0.6410256410256411,
+        "recall": 0.7692307692307693,
+        "f1": 0.6794871794871795
+      },
+      "families": {
+        "current_truth": {"precision": 1.0, "recall": 0.875, "f1": 0.9333333333333333},
+        "history_correction": {"precision": 1.0, "recall": 0.8571428571428571, "f1": 0.923076923076923},
+        "attention_lifecycle": {"precision": 1.0, "recall": 0.4, "f1": 0.5714285714285715},
+        "temporal_deadline": {"precision": 1.0, "recall": 0.8, "f1": 0.888888888888889},
+        "occurrences_aggregation": {"precision": 1.0, "recall": 0.4166666666666667, "f1": 0.5882352941176471},
+        "uncertainty_contradiction": {"precision": 1.0, "recall": 0.8571428571428571, "f1": 0.923076923076923},
+        "multilingual_retrieval": {"precision": 1.0, "recall": 1.0, "f1": 1.0},
+        "provenance_thread": {"precision": 1.0, "recall": 0.3333333333333333, "f1": 0.5},
+        "document_payment": {"precision": 1.0, "recall": 0.6666666666666666, "f1": 0.8},
+        "undo_forget": {"precision": 1.0, "recall": 0.6666666666666666, "f1": 0.8}
+      }
+    }
+  },
+  "operational": {
+    "raw-memory-codex": {
+      "wall_time_seconds": 130.878,
+      "queries": 13,
+      "query_failures": 0,
+      "schema_valid_rate": 1.0,
+      "query_latency_median_seconds": 10.276,
+      "query_latency_max_seconds": 12.065,
+      "codex_calls": 13
+    },
+    "product-v2": {
+      "wall_time_seconds": 1217.334,
+      "captures": 80,
+      "capture_failures": 0,
+      "processed_events": 80,
+      "processing_failures": 0,
+      "attempts_per_event": 1,
+      "ask_requests": 13,
+      "query_failures": 0,
+      "schema_valid_rate": 1.0,
+      "query_latency_median_seconds": 30.862,
+      "query_latency_max_seconds": 39.003,
+      "extraction_codex_calls": 80,
+      "total_codex_requests_lower_bound": 93
+    }
+  },
+  "per_world_pts": {
+    "raw-memory-codex": {"w01": 0.635, "w02": 0.5688888888888889, "w03": 0.7690476190476191, "w04": 0.5883333333333333},
+    "product-v2": {"w01": 0.48, "w02": 0.5623529411764705, "w03": 0.7188888888888889, "w04": 0.674047619047619}
+  },
+  "decision": "KEEP as descriptive post-freeze evidence; no Product V2 or V1 benchmark change authorized",
+  "limitations": [
+    "Four small synthetic worlds are not an official holdout and do not establish statistical significance.",
+    "The raw run record, sealed cases, and scorer remain in a disposable clone; this repository stores only this sanitized summary.",
+    "Product V2 extraction-call counts were audited from recorded processing success boundaries after a logger-label collision; semantic scores were unchanged."
+  ]
+}

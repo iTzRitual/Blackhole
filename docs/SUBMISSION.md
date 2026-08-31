@@ -87,8 +87,8 @@ browser Capture
 
 The final development/dogfood evidence reports:
 
-- application tests: `196/196 PASS` (including the macOS timezone and live-UX regressions);
-- root discovery suite: `213/213 PASS`;
+- application tests: `216/216 PASS` (including the macOS timezone, live-UX, and relative-day regressions);
+- root discovery suite: `233/233 PASS`;
 - evaluator tests: `10/10 PASS`;
 - Product V2 acceptance harness: `7/7 PASS`;
 - integrated Product V2 acceptance: `50/50 PASS`;
@@ -184,6 +184,31 @@ a significance claim:
 - schema validity: `0/3` baseline vs `3/3` Blackhole.
 
 The public report is [`docs/GENERALIZATION_V1R1_REPORT.md`](GENERALIZATION_V1R1_REPORT.md).
+
+### Final Product V2 head-to-head
+
+After the implementation freeze, a separate sealed comparison tested the
+frozen Product V2 path against a fresh stateless raw-memory Codex comparator.
+It used four newly authored synthetic worlds, 80 captures, checkpoints at
+7/14/20, and 13 queries. Both systems used `gpt-5.6-luna` with low reasoning.
+This is a descriptive post-freeze generalization result, not a new V1 score,
+official holdout, or E006 optimization.
+
+| Result | Raw-memory Codex | Product V2 |
+| --- | ---: | ---: |
+| PTS (macro F1 across 10 families) | `0.8575` | `0.7928` |
+| Attention precision / recall / F1 | `0.5385 / 0.6154 / 0.5641` | `0.6410 / 0.7692 / 0.6795` |
+| Query schema validity | `13/13` | `13/13` |
+| Operational wall time | `130.878 s` | `1217.334 s` |
+
+The raw-memory comparator recalled more of this small authored assertion set,
+while Product V2 produced the stronger active Attention set and exercised
+durable processing, provenance, and permanent Undo through the normal product
+boundary. The result is intentionally mixed and is not used to tune frozen
+Product V2 or V1 behavior. The complete sanitized report is
+[`docs/FINAL_H2H_REPORT.md`](FINAL_H2H_REPORT.md), with the machine-readable
+summary at
+[`eval/results/final-h2h-001-summary.json`](../eval/results/final-h2h-001-summary.json).
 
 ### The engineering lesson
 

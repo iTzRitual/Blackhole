@@ -699,3 +699,21 @@ and temporary Homes, then writes its report to the recorded result path. The
 qualification command may report understood non-blocking warnings for the
 authentic historical absolute path in the frozen-runtime audit and the three
 preserved stale named result artifacts; it must report zero hard failures.
+
+## 23. Final frozen Product V2 head-to-head record
+
+The final post-freeze comparison was run in a disposable clone of the frozen
+tag with a separate sealed case/expected-output package. It is intentionally
+not part of the public V1 benchmark tree and is not a replacement for the
+deterministic submission gate above. The sanitized result is
+[`eval/results/final-h2h-001-summary.json`](../eval/results/final-h2h-001-summary.json),
+and the methodology/result narrative is
+[`docs/FINAL_H2H_REPORT.md`](FINAL_H2H_REPORT.md).
+
+The run used four new synthetic worlds, 80 captures, 13 queries, and both
+`gpt-5.6-luna` low-reasoning paths. The raw-memory comparator scored PTS
+`0.8575`; frozen Product V2 scored PTS `0.7928`. Product V2 Attention F1 was
+`0.6795` versus `0.5641`, and all 80 captures plus 13 queries completed
+successfully. The raw sealed cases, expected assertions, manifest, full result,
+and per-world runtime records remain in the disposable local clone used for
+execution; only the sanitized summary is committed here.

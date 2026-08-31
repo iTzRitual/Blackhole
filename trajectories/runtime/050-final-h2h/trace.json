@@ -1,0 +1,62 @@
+{
+  "runtime_trajectory_version": "final-h2h-runtime-trace-v1",
+  "run_id": "final-h2h-20260831T143014Z",
+  "frozen_product_commit": "cc0cca8e8d9c3a5ab0955f365ea71c639cac7548",
+  "sealed_manifest_sha256": "5b38b14aac4e3f4ab88a7cff6a5d5d411f7275c8579e501a3da0ec7128243393",
+  "systems": {
+    "raw-memory-codex": {
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "fresh_queries": 13,
+      "successful_queries": 13,
+      "failed_queries": 0,
+      "total_codex_calls": 13,
+      "wall_time_seconds": 130.878
+    },
+    "product-v2": {
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "captures_submitted": 80,
+      "captures_processed": 80,
+      "processing_failures": 0,
+      "attempts_per_capture": 1,
+      "ask_requests": 13,
+      "successful_ask_responses": 13,
+      "extraction_codex_calls": 80,
+      "wall_time_seconds": 1217.334
+    }
+  },
+  "product_v2_checkpoints": {
+    "w01": {
+      "cp07_active_attention": ["w01-e03"],
+      "cp14_active_attention": ["w01-e03", "w01-e10"],
+      "cp20_active_attention": ["w01-e03", "w01-e10"],
+      "query_latencies_seconds": [28.576, 37.387, 36.288]
+    },
+    "w02": {
+      "cp07_active_attention": ["w02-e02", "w02-e07"],
+      "cp14_active_attention": ["w02-e02", "w02-e07", "w02-e14"],
+      "cp20_active_attention": ["w02-e02", "w02-e07", "w02-e14"],
+      "query_latencies_seconds": [30.956, 30.862, 36.773]
+    },
+    "w03": {
+      "cp07_active_attention": ["w03-e03", "w03-e07"],
+      "cp14_active_attention": [],
+      "cp20_active_attention": [],
+      "post_undo_active_attention": [],
+      "query_latencies_seconds": [32.39, 10.446, 18.805, 12.227]
+    },
+    "w04": {
+      "cp07_active_attention": ["w04-e03"],
+      "cp14_active_attention": ["w04-e11"],
+      "cp20_active_attention": ["w04-e11", "w04-e17"],
+      "query_latencies_seconds": [20.967, 30.794, 39.003]
+    }
+  },
+  "observable_decisions": [
+    "System A had no persistent state or derived projection.",
+    "System B was queried only after normal Product V2 queue processing reached zero pending and zero processing rows.",
+    "The w03 post-checkpoint Undo was performed through /api/v2/retract before its final query.",
+    "No provider retry, prompt edit, case edit, or scoring edit followed the sealed run."
+  ]
+}

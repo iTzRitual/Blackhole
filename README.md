@@ -183,10 +183,30 @@ synthetic worlds**, not an official holdout and not a significance claim:
 - mean successful runtime `3066.475526 s` baseline vs `897.310841 s` Blackhole;
 - retries `3` vs `0`, hard failures `0/0`, and schema validity `0/3` vs `3/3`.
 
+The final Product V2 head-to-head is a separate post-freeze descriptive run,
+not a V1 score or an E006 optimization. It compares the frozen Product V2
+normal HTTP path with a fresh stateless raw-memory Codex call over four new
+synthetic worlds (80 captures, checkpoints at 7/14/20, 13 queries), using
+`gpt-5.6-luna` with low reasoning for both systems:
+
+- raw-memory PTS `0.8575`; Product V2 PTS `0.7928`;
+- raw-memory Attention F1 `0.5641`; Product V2 Attention F1 `0.6795`;
+- raw-memory: `13/13` schema-valid queries in `130.878 s`;
+- Product V2: `80/80` captures processed on first attempt, `13/13`
+  schema-valid queries in `1217.334 s`.
+
+The result is intentionally mixed: the raw comparator recalled more of this
+small authored assertion set, while Product V2 supplied durable state,
+inspectable provenance, active Attention, and permanent Undo. See the
+[sanitized H2H report](docs/FINAL_H2H_REPORT.md) and
+[machine-readable summary](eval/results/final-h2h-001-summary.json). PTS is
+not LQA-0M, and this run is neither an official holdout nor a significance
+claim.
+
 Product V2 development acceptance evidence is separate:
 
-- application tests: `200/200 PASS` (including the macOS timezone, live-UX, and relative-day regressions);
-- root discovery suite: `217/217 PASS`;
+- application tests: `216/216 PASS` (including the macOS timezone, live-UX, and relative-day regressions);
+- root discovery suite: `233/233 PASS`;
 - evaluator tests: `10/10 PASS`;
 - acceptance harness: `7/7 PASS`;
 - integrated Product V2 acceptance: `50/50 PASS`;
@@ -247,6 +267,12 @@ failures are part of the evidence, not hidden from the submission.
 Judge-facing documents:
 
 - [`docs/SUBMISSION.md`](docs/SUBMISSION.md) — rubric-aligned narrative;
+- [`docs/FINAL_H2H_REPORT.md`](docs/FINAL_H2H_REPORT.md) — sanitized frozen
+  Product V2 head-to-head report;
+- [`docs/SUBMISSION_COPY.md`](docs/SUBMISSION_COPY.md) — concise form-ready
+  submission copy;
+- [`docs/FINAL_VIDEO_SCRIPT.md`](docs/FINAL_VIDEO_SCRIPT.md) — narrated demo
+  script with evidence guardrails;
 - [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md) — a realistic five-minute demo;
 - [`docs/REPRODUCTION.md`](docs/REPRODUCTION.md) — V1 reproduction vs Product V2 local setup;
 - [`TRAJECTORY_INDEX.md`](TRAJECTORY_INDEX.md) — coding/runtime evidence map; and

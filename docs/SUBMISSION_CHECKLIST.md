@@ -7,15 +7,19 @@ factual repository gate, not an aspirational feature backlog.
 ## Scope and authority
 
 - [PASS] Work is being finalized directly on `master`.
-- [PASS] Starting `master` and `origin/master` were the exact expected clean
-  SHA: `bcf43aed7870c69f0a2501f744641b5fda5778a7`.
+- [PASS] The final documentation phase started from clean, identical
+  `master` and `origin/master` at `73e0ad78498c3c5420d4e8ce0dcd7b44b22e6e1c`.
+  The frozen Product V2 tag still peels to
+  `cc0cca8e8d9c3a5ab0955f365ea71c639cac7548`.
 - [PASS] The authorized Product V2 hotfix changed only current-question-first
   Ask routing/answer boundaries, generic occurrence projection/UI behavior,
   clarification action, and Capture/Attention/Memory presentation; the frozen
   V1 runtime and benchmark behavior remain unchanged.
-- [PASS] No provider inference, V1 oracle access, holdout inspection, prompt
-  tuning, benchmark optimization, evaluator-ground-truth change, provider
-  configuration change, or model/reasoning/batch policy change occurred.
+- [PASS] No V1 oracle access, holdout inspection, prompt tuning, benchmark
+  optimization, evaluator-ground-truth change, provider configuration change,
+  or model/reasoning/batch policy change occurred. The separately authorized
+  H2H used provider inference only on fresh synthetic worlds and did not feed
+  its outputs back into Product V2 or V1 artifacts.
 - [PASS] The frozen V1 benchmark, baseline, evaluator, calibration evidence,
   and recorded V1 metrics remain separate from Product V2 acceptance evidence.
 - [PASS] No production hosting, Claude adapter, cloud sync, pairing, OCR
@@ -70,43 +74,50 @@ factual repository gate, not an aspirational feature backlog.
   replay.
 - [PASS] Post-freeze V1R1 is labeled as three fresh synthetic worlds and a
   shadow/generalization result, not an official holdout or significance claim.
+- [PASS] Final H2H-001 is sealed at the frozen Product V2 commit with four new
+  synthetic worlds, 80 captures, 13 queries, PTS scoring, and separate
+  Attention metrics; raw-memory PTS is `0.8575`, Product V2 PTS is `0.7928`,
+  and Product V2 Attention F1 is `0.6795` versus `0.5641`. It is explicitly
+  descriptive post-freeze evidence, not V1 scoring, holdout ground truth, or
+  E006 optimization.
 - [PASS] Product V2 development acceptance remains labeled separately:
-  application `200/200`, evaluator `10/10`, acceptance harness `7/7`, root
-  suite `217/217`, integrated acceptance `50/50`, and quality gates `7/7`.
-- [PASS] [`TRAJECTORY_INDEX.md`](../TRAJECTORY_INDEX.md) inventories `48`
-  coding and `52` runtime trajectories, including the final live UX and
-  relative-day correctness hotfixes.
+  application `216/216`, evaluator `10/10`, acceptance harness `7/7`, root
+  suite `233/233`, integrated acceptance `50/50`, and quality gates `7/7`.
+- [PASS] [`TRAJECTORY_INDEX.md`](../TRAJECTORY_INDEX.md) inventories `51`
+  coding and `55` runtime trajectories, including the final live UX,
+  relative-day correctness, and sealed H2H evidence.
 - [PASS] The advisory ChatGPT role is documented in
   [`docs/process/CHATGPT_DECISION_LOG.md`](process/CHATGPT_DECISION_LOG.md),
   with [`docs/process/CHATGPT_TRANSCRIPT_NOTE.md`](process/CHATGPT_TRANSCRIPT_NOTE.md)
   explicitly declining to fabricate a transcript.
-- [PASS] `IMPROVEMENT_CHANGELOG.md` contains the final live UX hotfix evidence;
-  it is explicitly labeled post-freeze product evidence, not a benchmark
-  experiment.
+- [PASS] `IMPROVEMENT_CHANGELOG.md` contains the final live UX hotfix and
+  H2H evidence; both are explicitly labeled post-freeze product evidence, not
+  benchmark experiments.
 - [PASS] `docs/DECISIONS.md` contains the durable D-051 current-question-first,
   occurrence-safe, and UI-boundary decision plus D-052 capture-local
   relative-day semantics; historical decisions remain authentic.
 
 ## Deterministic validation
 
-- [PASS] `python -m unittest discover -s app/tests -p "test_*.py" -v` —
-  `200/200`, including the focused live-UX, timezone, and relative-day
+- [PASS] `python3 -m unittest discover -s app/tests -p "test_*.py" -q` —
+  `216/216`, including the focused live-UX, timezone, and relative-day
   regressions.
-- [PASS] `python -m unittest discover -s eval/tests -v` — `10/10`.
-- [PASS] `python -m unittest product_acceptance.harness.test_harness -v` —
+- [PASS] `python3 -m unittest discover -s eval/tests -q` — `10/10`.
+- [PASS] `python3 -m unittest product_acceptance.harness.test_harness -q` —
   `7/7`.
-- [PASS] `python -m unittest discover -s . -p "test_*.py" -v` — `217/217`.
-- [PASS] `python scripts/run_product_v2_integrated_acceptance.py` — `50/50`
+- [PASS] `python3 -m unittest discover -s . -p "test_*.py" -q` — `233/233`.
+- [PASS] `python3 scripts/run_product_v2_integrated_acceptance.py` — `50/50`
   PASS, no live provider; the generated result is
   `eval/results/product-v2-integrated-acceptance.json`.
-- [PASS] `python -m compileall -q app eval product_acceptance scripts`.
+- [PASS] `python3 -m compileall -q app eval product_acceptance scripts`.
 - [PASS] `node --check app/web/app.js`.
-- [PASS] `python benchmark/dev/generate_benchmark.py --check` — `200` events,
+- [PASS] `python3 benchmark/dev/generate_benchmark.py --check` — `200` events,
   `4` checkpoints.
-- [PASS] `python eval/contract_smoke.py` — non-scored contract smoke passed.
-- [PASS] `python scripts/qualification_check.py --inventory` — zero hard
-  failures; `48` coding and `52` runtime trajectories documented, with four
-  known historical non-blocking warnings.
+- [PASS] `python3 eval/contract_smoke.py` — non-scored contract smoke passed.
+- [PASS] `python3 scripts/qualification_check.py --inventory` — zero hard
+  failures; `51` coding and `55` runtime trajectories indexed, with all
+  coding trajectories documented and four known historical non-blocking
+  warnings.
 - [PASS] `git diff --check`.
 
 ## Qualification warnings retained intentionally
@@ -137,15 +148,17 @@ current E005/V1R1 narrative. No obvious committed credential was detected.
   `93e497abf10be08bc7186fa97f071c6d20c3a9aa`, followed by the trajectory and
   evidence handoff commit
   `36315bd10e2d2ffdae8836b9183cc430f8c1b176`.
-- [PASS] The authoritative new `product-v2-submission-release` tag is created
-  at the final pushed `master` commit in the final handoff.
-- [PASS] The local tree was clean after the final documentation/tag handoff.
+- [PASS] The historical `product-v2-submission-release` tag remains at its
+  existing peeled commit `ec7665a98082d0f343d0d8e587c5db7eea185fd0`; this
+  handoff does not move it or any frozen tag.
+- [PASS] The final documentation/evidence commit is pushed on `master`; its
+  exact SHA is recorded in the final handoff below and in the closing Git
+  check.
 - [PASS] Remote preflight exposed only `master`; no temporary branch cleanup
   was necessary or safe to infer.
-- [PASS] The final exact local SHA, remote SHA, and
-  `product-v2-submission-release` tag target are verified together in the final
-  handoff; the tag is the immutable pointer for the submitted tree. Both old
-  submission tags are historical and are not moved.
+- [PASS] The final exact local and remote `master` SHA are verified together in
+  the closing handoff. Historical submission tags are preserved and are not
+  moved.
 
 ## External submission items
 
