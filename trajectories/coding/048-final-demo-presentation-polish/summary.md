@@ -137,4 +137,6 @@ optimization. Do not infer a live PASS from the incomplete attempt.
 
 ## Related git commit
 
-Pending final commit and remote verification.
+Implementation/evidence commit: `13af0d0` (`fix: polish final demo
+presentation`). The trajectory/index handoff is finalized in the follow-up
+metadata commit after remote verification.
