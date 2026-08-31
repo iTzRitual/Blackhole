@@ -130,9 +130,13 @@ current E005/V1R1 narrative. No obvious committed credential was detected.
 - [PASS] The previous annotated `product-v2-submission-final` tag was preserved
   at tag object `07f0fcfb73785756dc509040a3b925aa6e46d445`, peeling to the
   clean pre-hotfix base `bcf43aed7870c69f0a2501f744641b5fda5778a7`.
-- [PASS] The authorized live UX hotfix is committed directly on `master`; the
-  authoritative new `product-v2-submission-release` tag points to the final
-  pushed `master`.
+- [PASS] The authorized live UX hotfix is committed directly on `master` as
+  implementation/evidence commit
+  `93e497abf10be08bc7186fa97f071c6d20c3a9aa`, followed by the trajectory and
+  evidence handoff commit
+  `36315bd10e2d2ffdae8836b9183cc430f8c1b176`.
+- [PASS] The authoritative new `product-v2-submission-release` tag is created
+  at the final pushed `master` commit in the final handoff.
 - [PASS] The local tree was clean after the final documentation/tag handoff.
 - [PASS] Remote preflight exposed only `master`; no temporary branch cleanup
   was necessary or safe to infer.
